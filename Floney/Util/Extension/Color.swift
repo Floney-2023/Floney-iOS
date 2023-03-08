@@ -51,5 +51,24 @@ extension Color {
     static let background2 = Color(hex: "F6F6F6")
     static let background3 = Color(hex: "FAFAFA")
 
+    static let red1 = Color(hex: "AD1F25")
+    static let red2 = Color(hex: "E56E73")
+    static let red3 = Color(hex: "EFA9AB")
+    
+    static let yellow1 = Color(hex: "DDBB09")
+    static let yellow2 = Color(hex: "F8DC4A")
+    static let yellow3 = Color(hex: "FAE784")
+    
+    static let blue1 = Color(hex: "114EEE")
+    static let blue2 = Color(hex: "4373F1")
+    static let blue3 = Color(hex: "A0B8F8")
+    
+    static let indigo1 = Color(hex: "35347F")
+    static let indigo2 = Color(hex: "4A48B0")
+    static let indigo3 = Color(hex: "706EC4")
+    
+    static let purple1 = Color(hex: "654CFF")
+    static let purple2 = Color(hex: "9B8BFF")
+    static let purple3 = Color(hex: "D3CCFF")
 
 }
