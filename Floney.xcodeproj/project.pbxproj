@@ -28,10 +28,12 @@
 		2FD7F3D329B1EC0C00B99CAA /* Pretendard-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2FD7F3BC29B1E44600B99CAA /* Pretendard-Thin.otf */; };
 		2FEA2B6429B73CE700DE8E54 /* ServiceAgreementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEA2B6329B73CE700DE8E54 /* ServiceAgreementView.swift */; };
 		2FEA2BA029B8685E00DE8E54 /* BackButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEA2B9F29B8685E00DE8E54 /* BackButton.swift */; };
-		2FEA2BA229B87A9200DE8E54 /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEA2BA129B87A9200DE8E54 /* SignUpView.swift */; };
+		2FEA2BA229B87A9200DE8E54 /* UserInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEA2BA129B87A9200DE8E54 /* UserInfoView.swift */; };
 		2FEA2BA529B892CB00DE8E54 /* TextFieldModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEA2BA429B892CB00DE8E54 /* TextFieldModifier.swift */; };
 		2FEA2BA729B8969E00DE8E54 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEA2BA629B8969E00DE8E54 /* WelcomeView.swift */; };
 		2FEA2BA929B8970A00DE8E54 /* NextButtonModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEA2BA829B8970A00DE8E54 /* NextButtonModifier.swift */; };
+		2FEA2BAE29B9EC1C00DE8E54 /* FindPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEA2BAD29B9EC1C00DE8E54 /* FindPasswordView.swift */; };
+		2FEA2BB029B9F4B200DE8E54 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEA2BAF29B9F4B200DE8E54 /* MainTabView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -58,10 +60,12 @@
 		2FD7F3CA29B1E5C500B99CAA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		2FEA2B6329B73CE700DE8E54 /* ServiceAgreementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceAgreementView.swift; sourceTree = "<group>"; };
 		2FEA2B9F29B8685E00DE8E54 /* BackButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackButton.swift; sourceTree = "<group>"; };
-		2FEA2BA129B87A9200DE8E54 /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
+		2FEA2BA129B87A9200DE8E54 /* UserInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoView.swift; sourceTree = "<group>"; };
 		2FEA2BA429B892CB00DE8E54 /* TextFieldModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldModifier.swift; sourceTree = "<group>"; };
 		2FEA2BA629B8969E00DE8E54 /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
 		2FEA2BA829B8970A00DE8E54 /* NextButtonModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NextButtonModifier.swift; sourceTree = "<group>"; };
+		2FEA2BAD29B9EC1C00DE8E54 /* FindPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindPasswordView.swift; sourceTree = "<group>"; };
+		2FEA2BAF29B9F4B200DE8E54 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -159,6 +163,7 @@
 		2FD7F3AD29B1E3C200B99CAA /* Main */ = {
 			isa = PBXGroup;
 			children = (
+				2FEA2BAF29B9F4B200DE8E54 /* MainTabView.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -167,6 +172,7 @@
 			isa = PBXGroup;
 			children = (
 				2FD7F3C629B1E50300B99CAA /* SignInView.swift */,
+				2FEA2BAC29B9EC0900DE8E54 /* FindPassword */,
 			);
 			path = SignIn;
 			sourceTree = "<group>";
@@ -175,6 +181,8 @@
 			isa = PBXGroup;
 			children = (
 				2FEA2B6229B73CC500DE8E54 /* ServiceAgreement */,
+				2FEA2BAA29B9EB9300DE8E54 /* UserInfo */,
+				2FEA2BAB29B9EBD300DE8E54 /* Welcome */,
 			);
 			path = SignUp;
 			sourceTree = "<group>";
@@ -221,8 +229,6 @@
 			isa = PBXGroup;
 			children = (
 				2FEA2B6329B73CE700DE8E54 /* ServiceAgreementView.swift */,
-				2FEA2BA129B87A9200DE8E54 /* SignUpView.swift */,
-				2FEA2BA629B8969E00DE8E54 /* WelcomeView.swift */,
 			);
 			path = ServiceAgreement;
 			sourceTree = "<group>";
@@ -234,6 +240,30 @@
 				2FEA2BA829B8970A00DE8E54 /* NextButtonModifier.swift */,
 			);
 			path = ViewModifier;
+			sourceTree = "<group>";
+		};
+		2FEA2BAA29B9EB9300DE8E54 /* UserInfo */ = {
+			isa = PBXGroup;
+			children = (
+				2FEA2BA129B87A9200DE8E54 /* UserInfoView.swift */,
+			);
+			path = UserInfo;
+			sourceTree = "<group>";
+		};
+		2FEA2BAB29B9EBD300DE8E54 /* Welcome */ = {
+			isa = PBXGroup;
+			children = (
+				2FEA2BA629B8969E00DE8E54 /* WelcomeView.swift */,
+			);
+			path = Welcome;
+			sourceTree = "<group>";
+		};
+		2FEA2BAC29B9EC0900DE8E54 /* FindPassword */ = {
+			isa = PBXGroup;
+			children = (
+				2FEA2BAD29B9EC1C00DE8E54 /* FindPasswordView.swift */,
+			);
+			path = FindPassword;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -315,12 +345,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2FEA2BAE29B9EC1C00DE8E54 /* FindPasswordView.swift in Sources */,
 				2FD7F3C529B1E48B00B99CAA /* UIApplication.swift in Sources */,
 				2FD7F3C729B1E50300B99CAA /* SignInView.swift in Sources */,
+				2FEA2BB029B9F4B200DE8E54 /* MainTabView.swift in Sources */,
 				2FD7F39E29B1E26D00B99CAA /* ContentView.swift in Sources */,
 				2FEA2B6429B73CE700DE8E54 /* ServiceAgreementView.swift in Sources */,
 				2FEA2BA029B8685E00DE8E54 /* BackButton.swift in Sources */,
-				2FEA2BA229B87A9200DE8E54 /* SignUpView.swift in Sources */,
+				2FEA2BA229B87A9200DE8E54 /* UserInfoView.swift in Sources */,
 				2FEA2BA529B892CB00DE8E54 /* TextFieldModifier.swift in Sources */,
 				2FEA2BA729B8969E00DE8E54 /* WelcomeView.swift in Sources */,
 				2FD7F3C129B1E46900B99CAA /* Color.swift in Sources */,
