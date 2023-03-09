@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct SignUpView: View {
+struct UserInfoView: View {
     var pageCount = 2
     var pageCountAll = 3
     @State var email = ""
@@ -145,8 +145,8 @@ struct SignUpView: View {
     
 }
 
-struct SignUpView_Previews: PreviewProvider {
+struct UserInfoView_Previews: PreviewProvider {
     static var previews: some View {
-        SignUpView()
+        UserInfoView()
     }
 }

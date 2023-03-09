@@ -81,7 +81,7 @@ struct ServiceAgreementView: View {
             
             Spacer()
             
-            NavigationLink(destination: SignUpView()){
+            NavigationLink(destination: UserInfoView()){
                 Text("다음으로")
                     .padding()
                     .modifier(NextButtonModifier())

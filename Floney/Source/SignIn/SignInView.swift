@@ -48,16 +48,18 @@ struct SignInView: View {
                             .modifier(NextButtonModifier())
                         
                         HStack(spacing:50) {
-                            VStack {
-                                Text("비밀번호 찾기")
-                                    .font(.pretendardFont(.regular, size: 12))
-                                    .foregroundColor(.greyScale6)
-                                
-                                
-                                Divider()
-                                    .padding(EdgeInsets(top: -10, leading: 0, bottom: 0, trailing: 0))
-                                    .frame(width: 70,height: 1.0)
-                                    .foregroundColor(.greyScale6)
+                            NavigationLink(destination: FindPasswordView()){
+                                VStack {
+                                    Text("비밀번호 찾기")
+                                        .font(.pretendardFont(.regular, size: 12))
+                                        .foregroundColor(.greyScale6)
+                                    
+                                    
+                                    Divider()
+                                        .padding(EdgeInsets(top: -10, leading: 0, bottom: 0, trailing: 0))
+                                        .frame(width: 70,height: 1.0)
+                                        .foregroundColor(.greyScale6)
+                                }
                             }
                             
                             NavigationLink(destination: ServiceAgreementView()){
