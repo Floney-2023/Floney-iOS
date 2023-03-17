@@ -8,20 +8,22 @@ import SwiftUI
 
 struct HomeView: View {
     var body: some View {
-        ZStack {
-            Color.background2
-            VStack {
-                HStack
-                {
-                    Image("logo_floney_home")
-                    Spacer()
-                    Image("icon_profile")
+        ScrollView {
+            ZStack {
+                Color.background2
+                VStack {
+                    HStack
+                    {
+                        Image("logo_floney_home")
+                        Spacer()
+                        Image("icon_profile")
+                    }
+                    CalendarView()
                 }
-                CalendarView()
+                .padding(20)
             }
-            .padding(20)
+            .edgesIgnoringSafeArea(.vertical)
         }
-        .edgesIgnoringSafeArea(.vertical)
         
     }
 }
