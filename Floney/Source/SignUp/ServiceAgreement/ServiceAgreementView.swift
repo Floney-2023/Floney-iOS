@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ServiceAgreementView: View {
     var pageCount = 1
-    var pageCountAll = 3
+    var pageCountAll = 4
     var body: some View {
         VStack(spacing: 32) {
             HStack {
@@ -81,7 +81,7 @@ struct ServiceAgreementView: View {
             
             Spacer()
             
-            NavigationLink(destination: UserInfoView()){
+            NavigationLink(destination: EmailAuthView()){
                 Text("다음으로")
                     .padding()
                     .modifier(NextButtonModifier())

@@ -39,6 +39,9 @@
 		2FEA2BBC29BA066D00DE8E54 /* AddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEA2BBB29BA066D00DE8E54 /* AddView.swift */; };
 		2FEA2BBE29BA067800DE8E54 /* CalculateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEA2BBD29BA067800DE8E54 /* CalculateView.swift */; };
 		2FEA2BC029BA068200DE8E54 /* MyPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEA2BBF29BA068200DE8E54 /* MyPageView.swift */; };
+		2FEA2BCC29C43D9500DE8E54 /* EmailAuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEA2BCB29C43D9500DE8E54 /* EmailAuthView.swift */; };
+		2FEA2BCF29C43F2400DE8E54 /* AuthCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEA2BCE29C43F2400DE8E54 /* AuthCodeView.swift */; };
+		2FEA2BD229C4424600DE8E54 /* OTPViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEA2BD129C4424600DE8E54 /* OTPViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -76,6 +79,9 @@
 		2FEA2BBB29BA066D00DE8E54 /* AddView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddView.swift; sourceTree = "<group>"; };
 		2FEA2BBD29BA067800DE8E54 /* CalculateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculateView.swift; sourceTree = "<group>"; };
 		2FEA2BBF29BA068200DE8E54 /* MyPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageView.swift; sourceTree = "<group>"; };
+		2FEA2BCB29C43D9500DE8E54 /* EmailAuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailAuthView.swift; sourceTree = "<group>"; };
+		2FEA2BCE29C43F2400DE8E54 /* AuthCodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthCodeView.swift; sourceTree = "<group>"; };
+		2FEA2BD129C4424600DE8E54 /* OTPViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTPViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -196,6 +202,8 @@
 			isa = PBXGroup;
 			children = (
 				2FEA2B6229B73CC500DE8E54 /* ServiceAgreement */,
+				2FEA2BCA29C43D6D00DE8E54 /* EmailAuth */,
+				2FEA2BCD29C43F1200DE8E54 /* AuthCode */,
 				2FEA2BAA29B9EB9300DE8E54 /* UserInfo */,
 				2FEA2BAB29B9EBD300DE8E54 /* Welcome */,
 			);
@@ -321,6 +329,31 @@
 			path = Home;
 			sourceTree = "<group>";
 		};
+		2FEA2BCA29C43D6D00DE8E54 /* EmailAuth */ = {
+			isa = PBXGroup;
+			children = (
+				2FEA2BCB29C43D9500DE8E54 /* EmailAuthView.swift */,
+			);
+			path = EmailAuth;
+			sourceTree = "<group>";
+		};
+		2FEA2BCD29C43F1200DE8E54 /* AuthCode */ = {
+			isa = PBXGroup;
+			children = (
+				2FEA2BD029C4423500DE8E54 /* ViewModel */,
+				2FEA2BCE29C43F2400DE8E54 /* AuthCodeView.swift */,
+			);
+			path = AuthCode;
+			sourceTree = "<group>";
+		};
+		2FEA2BD029C4423500DE8E54 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				2FEA2BD129C4424600DE8E54 /* OTPViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -412,12 +445,15 @@
 				2FEA2BA529B892CB00DE8E54 /* TextFieldModifier.swift in Sources */,
 				2FEA2BBC29BA066D00DE8E54 /* AddView.swift in Sources */,
 				2FEA2BBE29BA067800DE8E54 /* CalculateView.swift in Sources */,
+				2FEA2BCF29C43F2400DE8E54 /* AuthCodeView.swift in Sources */,
 				2FEA2BA729B8969E00DE8E54 /* WelcomeView.swift in Sources */,
+				2FEA2BCC29C43D9500DE8E54 /* EmailAuthView.swift in Sources */,
 				2FD7F3C129B1E46900B99CAA /* Color.swift in Sources */,
 				2FEA2BC029BA068200DE8E54 /* MyPageView.swift in Sources */,
 				2FEA2BA929B8970A00DE8E54 /* NextButtonModifier.swift in Sources */,
 				2FD7F3C329B1E47200B99CAA /* Font.swift in Sources */,
 				2FD7F39C29B1E26D00B99CAA /* FloneyApp.swift in Sources */,
+				2FEA2BD229C4424600DE8E54 /* OTPViewModel.swift in Sources */,
 				2FD7F3B629B1E42400B99CAA /* Constant.swift in Sources */,
 				2FEA2BBA29BA066100DE8E54 /* AnalysisView.swift in Sources */,
 				2FD7F3C929B1E52C00B99CAA /* SplashScreenView.swift in Sources */,

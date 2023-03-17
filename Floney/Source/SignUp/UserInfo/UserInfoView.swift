@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct UserInfoView: View {
-    var pageCount = 2
-    var pageCountAll = 3
+    var pageCount = 4
+    var pageCountAll = 4
     @State var email = ""
     @State var password = ""
     @State var passwordCheck = ""

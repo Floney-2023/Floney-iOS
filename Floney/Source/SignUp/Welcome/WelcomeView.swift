@@ -8,18 +8,12 @@
 import SwiftUI
 
 struct WelcomeView: View {
-    var pageCount = 3
-    var pageCountAll = 3
     @State var nickname = "플로니"
     var body: some View {
         VStack(spacing: 30) {
             HStack {
                 VStack(alignment: .leading, spacing: 16) {
-                    Text("\(pageCount)")
-                        .foregroundColor(.greyScale2)
-                    + Text(" / \(pageCountAll)")
-                        .foregroundColor(.greyScale6)
-                    
+                
                     Text("환영합니다\n\(nickname)님!")
                         .font(.pretendardFont(.bold, size: 24))
                         .foregroundColor(.greyScale1)
@@ -29,6 +23,8 @@ struct WelcomeView: View {
                 }
                 Spacer()
             }
+            Spacer()
+            Image("icon_welcome")
             Spacer()
             
             NavigationLink(destination: WelcomeView()){
