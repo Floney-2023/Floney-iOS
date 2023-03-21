@@ -25,26 +25,27 @@ struct MyPageView: View {
                     }
                     
                     VStack(spacing:16) {
-                        HStack {
-                            Image("icon_profile")
-                                .padding(20)
-                            VStack(alignment: .leading, spacing:5){
-                                Text("\(nickname)")
-                                    .font(.pretendardFont(.bold, size: 14))
-                                    .foregroundColor(.greyScale2)
-                                
-                                Text("\(email)")
-                                    .font(.pretendardFont(.medium, size: 12))
-                                    .foregroundColor(.greyScale3)
-                                
-                                
+                        NavigationLink(destination: UserInformationView()) {
+                            HStack {
+                                Image("icon_profile")
+                                    .padding(20)
+                                VStack(alignment: .leading, spacing:5){
+                                    Text("\(nickname)")
+                                        .font(.pretendardFont(.bold, size: 14))
+                                        .foregroundColor(.greyScale2)
+                                    
+                                    Text("\(email)")
+                                        .font(.pretendardFont(.medium, size: 12))
+                                        .foregroundColor(.greyScale3)
+                                }
+                                Spacer()
+                                Image("forward_button")
+                                    .padding(20)
                             }
-                            Spacer()
-                            Image("forward_button")
-                                .padding(20)
+                            .background(Color.primary10)
+                            .cornerRadius(12)
                         }
-                        .background(Color.primary10)
-                        .cornerRadius(12)
+                        
                         
                         Button("구독 내역 보기") {
                         }

@@ -9,7 +9,6 @@ import Foundation
 import SwiftUI
 
 struct NextButtonModifier: ViewModifier {
-      
     func body(content: Content) -> some View {
         content
             .font(.pretendardFont(.bold, size: 14))

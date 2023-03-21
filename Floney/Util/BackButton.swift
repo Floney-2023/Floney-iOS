@@ -21,3 +21,18 @@ struct BackButton : View {
         }
     }
 }
+
+struct BackButtonBlack : View {
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    
+    var body: some View {
+        Button(action: {
+            self.presentationMode.wrappedValue.dismiss()
+        }) {
+            HStack {
+                Image("back_button_black") // set image here
+                    .aspectRatio(contentMode: .fit)
+            }
+        }
+    }
+}
