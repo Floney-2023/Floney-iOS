@@ -50,12 +50,14 @@ struct UserInformationView: View {
                     Spacer()
                     Image("forward_button")
                 }
-                HStack {
-                    Text("비밀번호 변경")
-                        .font(.pretendardFont(.medium, size: 14))
-                        .foregroundColor(.greyScale2)
-                    Spacer()
-                    Image("forward_button")
+                NavigationLink(destination: ChangePasswordView()){
+                    HStack {
+                        Text("비밀번호 변경")
+                            .font(.pretendardFont(.medium, size: 14))
+                            .foregroundColor(.greyScale2)
+                        Spacer()
+                        Image("forward_button")
+                    }
                 }
                 HStack {
                     Text("로그아웃")

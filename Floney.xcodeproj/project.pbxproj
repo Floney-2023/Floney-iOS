@@ -43,6 +43,7 @@
 		2FEA2BCF29C43F2400DE8E54 /* AuthCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEA2BCE29C43F2400DE8E54 /* AuthCodeView.swift */; };
 		2FEA2BD229C4424600DE8E54 /* OTPViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEA2BD129C4424600DE8E54 /* OTPViewModel.swift */; };
 		2FEA2BD529C9B70600DE8E54 /* UserInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEA2BD429C9B70600DE8E54 /* UserInformationView.swift */; };
+		2FEA2BD829CABB8D00DE8E54 /* ChangePasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEA2BD729CABB8D00DE8E54 /* ChangePasswordView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -84,6 +85,7 @@
 		2FEA2BCE29C43F2400DE8E54 /* AuthCodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthCodeView.swift; sourceTree = "<group>"; };
 		2FEA2BD129C4424600DE8E54 /* OTPViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTPViewModel.swift; sourceTree = "<group>"; };
 		2FEA2BD429C9B70600DE8E54 /* UserInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInformationView.swift; sourceTree = "<group>"; };
+		2FEA2BD729CABB8D00DE8E54 /* ChangePasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -360,9 +362,18 @@
 		2FEA2BD329C9B6E900DE8E54 /* UserInformation */ = {
 			isa = PBXGroup;
 			children = (
+				2FEA2BD629CABB6F00DE8E54 /* ChangePassword */,
 				2FEA2BD429C9B70600DE8E54 /* UserInformationView.swift */,
 			);
 			path = UserInformation;
+			sourceTree = "<group>";
+		};
+		2FEA2BD629CABB6F00DE8E54 /* ChangePassword */ = {
+			isa = PBXGroup;
+			children = (
+				2FEA2BD729CABB8D00DE8E54 /* ChangePasswordView.swift */,
+			);
+			path = ChangePassword;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -463,6 +474,7 @@
 				2FD7F3C129B1E46900B99CAA /* Color.swift in Sources */,
 				2FEA2BC029BA068200DE8E54 /* MyPageView.swift in Sources */,
 				2FEA2BA929B8970A00DE8E54 /* NextButtonModifier.swift in Sources */,
+				2FEA2BD829CABB8D00DE8E54 /* ChangePasswordView.swift in Sources */,
 				2FD7F3C329B1E47200B99CAA /* Font.swift in Sources */,
 				2FD7F39C29B1E26D00B99CAA /* FloneyApp.swift in Sources */,
 				2FEA2BD229C4424600DE8E54 /* OTPViewModel.swift in Sources */,
