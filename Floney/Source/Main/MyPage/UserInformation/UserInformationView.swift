@@ -43,12 +43,14 @@ struct UserInformationView: View {
             }
             
             VStack(spacing:30) {
-                HStack {
-                    Text("프로필 이미지 변경")
-                        .font(.pretendardFont(.medium, size: 14))
-                        .foregroundColor(.greyScale2)
-                    Spacer()
-                    Image("forward_button")
+                NavigationLink(destination: SetProfileImageView()){
+                    HStack {
+                        Text("프로필 이미지 변경")
+                            .font(.pretendardFont(.medium, size: 14))
+                            .foregroundColor(.greyScale2)
+                        Spacer()
+                        Image("forward_button")
+                    }
                 }
                 NavigationLink(destination: ChangePasswordView()){
                     HStack {
