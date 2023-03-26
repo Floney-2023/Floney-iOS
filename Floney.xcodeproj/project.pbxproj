@@ -45,6 +45,7 @@
 		2FEA2BD529C9B70600DE8E54 /* UserInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEA2BD429C9B70600DE8E54 /* UserInformationView.swift */; };
 		2FEA2BD829CABB8D00DE8E54 /* ChangePasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEA2BD729CABB8D00DE8E54 /* ChangePasswordView.swift */; };
 		2FEA2BDB29CD63B300DE8E54 /* SetProfileImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEA2BDA29CD63B300DE8E54 /* SetProfileImageView.swift */; };
+		2FEA2BDE29D0390300DE8E54 /* WithdrawalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEA2BDD29D0390300DE8E54 /* WithdrawalView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -88,6 +89,7 @@
 		2FEA2BD429C9B70600DE8E54 /* UserInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInformationView.swift; sourceTree = "<group>"; };
 		2FEA2BD729CABB8D00DE8E54 /* ChangePasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordView.swift; sourceTree = "<group>"; };
 		2FEA2BDA29CD63B300DE8E54 /* SetProfileImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetProfileImageView.swift; sourceTree = "<group>"; };
+		2FEA2BDD29D0390300DE8E54 /* WithdrawalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WithdrawalView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -364,6 +366,7 @@
 		2FEA2BD329C9B6E900DE8E54 /* UserInformation */ = {
 			isa = PBXGroup;
 			children = (
+				2FEA2BDC29D038E800DE8E54 /* Withdrawal */,
 				2FEA2BD929CD638D00DE8E54 /* SetProfileImage */,
 				2FEA2BD629CABB6F00DE8E54 /* ChangePassword */,
 				2FEA2BD429C9B70600DE8E54 /* UserInformationView.swift */,
@@ -385,6 +388,14 @@
 				2FEA2BDA29CD63B300DE8E54 /* SetProfileImageView.swift */,
 			);
 			path = SetProfileImage;
+			sourceTree = "<group>";
+		};
+		2FEA2BDC29D038E800DE8E54 /* Withdrawal */ = {
+			isa = PBXGroup;
+			children = (
+				2FEA2BDD29D0390300DE8E54 /* WithdrawalView.swift */,
+			);
+			path = Withdrawal;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -483,6 +494,7 @@
 				2FEA2BA729B8969E00DE8E54 /* WelcomeView.swift in Sources */,
 				2FEA2BCC29C43D9500DE8E54 /* EmailAuthView.swift in Sources */,
 				2FD7F3C129B1E46900B99CAA /* Color.swift in Sources */,
+				2FEA2BDE29D0390300DE8E54 /* WithdrawalView.swift in Sources */,
 				2FEA2BC029BA068200DE8E54 /* MyPageView.swift in Sources */,
 				2FEA2BDB29CD63B300DE8E54 /* SetProfileImageView.swift in Sources */,
 				2FEA2BA929B8970A00DE8E54 /* NextButtonModifier.swift in Sources */,

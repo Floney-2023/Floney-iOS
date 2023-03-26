@@ -69,7 +69,7 @@ struct UserInformationView: View {
                 }
             }
             
-            NavigationLink(destination: ServiceAgreementView()){
+            NavigationLink(destination: WithdrawalView()){
                 HStack {
                     VStack {
                         Text("회원탈퇴")
