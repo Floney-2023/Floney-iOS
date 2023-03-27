@@ -67,6 +67,7 @@ struct WithdrawalView: View {
                     
                 }
                 
+                
                 TextEditor(text: $content)
                     .font(.pretendardFont(.regular, size: 14))
                     .foregroundColor(.greyScale2)
