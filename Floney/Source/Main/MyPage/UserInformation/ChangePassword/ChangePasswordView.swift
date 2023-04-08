@@ -78,7 +78,7 @@ struct ChangePasswordView: View {
             NavigationLink(destination: WelcomeView()){
                 Text("확인")
                     .padding()
-                    .modifier(NextButtonModifier())
+                    .withNextButtonFormmating(.primary1)
             }
             
             Spacer()

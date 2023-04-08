@@ -36,7 +36,7 @@ struct FindPasswordView: View {
                     .modifier(TextFieldModifier())
                 Text("인증 메일 보내기")
                     .padding()
-                    .modifier(NextButtonModifier())
+                    .withNextButtonFormmating(.primary1)
             }
             Spacer()
         }

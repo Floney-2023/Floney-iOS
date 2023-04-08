@@ -27,10 +27,10 @@ struct WelcomeView: View {
             Image("icon_welcome")
             Spacer()
             
-            NavigationLink(destination: WelcomeView()){
+            NavigationLink(destination: SendAccountCodeView()){
                 Text("플로니 시작하기")
                     .padding()
-                    .modifier(NextButtonModifier())
+                    .withNextButtonFormmating(.primary1)
             }
         }
         .padding(EdgeInsets(top: 32, leading: 24, bottom: 0, trailing: 24))

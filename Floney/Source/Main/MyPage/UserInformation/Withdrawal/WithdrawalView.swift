@@ -94,7 +94,7 @@ struct WithdrawalView: View {
                 NavigationLink(destination: EmailAuthView()){
                     Text("탈퇴하기")
                         .padding()
-                        .modifier(NextButtonModifier())
+                        .withNextButtonFormmating(.primary1)
                 }
 
             }

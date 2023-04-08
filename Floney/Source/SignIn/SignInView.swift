@@ -45,7 +45,7 @@ struct SignInView: View {
                         
                         Text("로그인 하기")
                             .padding()
-                            .modifier(NextButtonModifier())
+                            .withNextButtonFormmating(.primary1)
                         
                         HStack(spacing:50) {
                             NavigationLink(destination: FindPasswordView()){

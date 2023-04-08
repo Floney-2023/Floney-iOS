@@ -84,7 +84,7 @@ struct ServiceAgreementView: View {
             NavigationLink(destination: EmailAuthView()){
                 Text("다음으로")
                     .padding()
-                    .modifier(NextButtonModifier())
+                    .withNextButtonFormmating(.primary1)
             }
             
             

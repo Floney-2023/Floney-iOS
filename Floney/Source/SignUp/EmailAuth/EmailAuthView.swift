@@ -50,7 +50,7 @@ struct EmailAuthView: View {
                 NavigationLink(destination: AuthCodeView()){
                     Text("메일 보내기")
                         .padding()
-                        .modifier(NextButtonModifier())
+                        .withNextButtonFormmating(.primary1)
                 }
             } else {
                 // Fallback on earlier versions

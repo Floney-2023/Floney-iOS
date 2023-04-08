@@ -9,12 +9,13 @@ import Foundation
 import SwiftUI
 
 struct NextButtonModifier: ViewModifier {
+    let backgroundColor : Color
     func body(content: Content) -> some View {
         content
             .font(.pretendardFont(.bold, size: 14))
             .foregroundColor(.white)
             .frame(maxWidth: .infinity)
-            .background(Color.primary1)
+            .background(backgroundColor)
             .cornerRadius(12)
     }
 }

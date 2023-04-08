@@ -124,7 +124,7 @@ struct UserInfoView: View {
                 NavigationLink(destination: WelcomeView()){
                     Text("다음으로")
                         .padding()
-                        .modifier(NextButtonModifier())
+                        .withNextButtonFormmating(.primary1)
                 }
             }
             .padding(EdgeInsets(top: 32, leading: 24, bottom: 0, trailing: 24))

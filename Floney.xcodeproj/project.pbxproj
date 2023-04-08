@@ -46,6 +46,8 @@
 		2FEA2BD829CABB8D00DE8E54 /* ChangePasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEA2BD729CABB8D00DE8E54 /* ChangePasswordView.swift */; };
 		2FEA2BDB29CD63B300DE8E54 /* SetProfileImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEA2BDA29CD63B300DE8E54 /* SetProfileImageView.swift */; };
 		2FEA2BDE29D0390300DE8E54 /* WithdrawalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEA2BDD29D0390300DE8E54 /* WithdrawalView.swift */; };
+		2FF25C8629E181C000737346 /* SendAccountCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FF25C8529E181C000737346 /* SendAccountCodeView.swift */; };
+		2FF25C8829E1858600737346 /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FF25C8729E1858600737346 /* View.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -90,6 +92,8 @@
 		2FEA2BD729CABB8D00DE8E54 /* ChangePasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordView.swift; sourceTree = "<group>"; };
 		2FEA2BDA29CD63B300DE8E54 /* SetProfileImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetProfileImageView.swift; sourceTree = "<group>"; };
 		2FEA2BDD29D0390300DE8E54 /* WithdrawalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WithdrawalView.swift; sourceTree = "<group>"; };
+		2FF25C8529E181C000737346 /* SendAccountCodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendAccountCodeView.swift; sourceTree = "<group>"; };
+		2FF25C8729E1858600737346 /* View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -169,6 +173,7 @@
 				2FD7F3C029B1E46900B99CAA /* Color.swift */,
 				2FD7F3C229B1E47200B99CAA /* Font.swift */,
 				2FD7F3C429B1E48B00B99CAA /* UIApplication.swift */,
+				2FF25C8729E1858600737346 /* View.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -214,6 +219,7 @@
 				2FEA2BCD29C43F1200DE8E54 /* AuthCode */,
 				2FEA2BAA29B9EB9300DE8E54 /* UserInfo */,
 				2FEA2BAB29B9EBD300DE8E54 /* Welcome */,
+				2FF25C8429E1812200737346 /* SendAccountCode */,
 			);
 			path = SignUp;
 			sourceTree = "<group>";
@@ -398,6 +404,14 @@
 			path = Withdrawal;
 			sourceTree = "<group>";
 		};
+		2FF25C8429E1812200737346 /* SendAccountCode */ = {
+			isa = PBXGroup;
+			children = (
+				2FF25C8529E181C000737346 /* SendAccountCodeView.swift */,
+			);
+			path = SendAccountCode;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -479,11 +493,13 @@
 			files = (
 				2FEA2BAE29B9EC1C00DE8E54 /* FindPasswordView.swift in Sources */,
 				2FD7F3C529B1E48B00B99CAA /* UIApplication.swift in Sources */,
+				2FF25C8829E1858600737346 /* View.swift in Sources */,
 				2FD7F3C729B1E50300B99CAA /* SignInView.swift in Sources */,
 				2FEA2BB029B9F4B200DE8E54 /* MainTabView.swift in Sources */,
 				2FD7F39E29B1E26D00B99CAA /* ContentView.swift in Sources */,
 				2FEA2BB729BA064B00DE8E54 /* HomeView.swift in Sources */,
 				2FEA2B6429B73CE700DE8E54 /* ServiceAgreementView.swift in Sources */,
+				2FF25C8629E181C000737346 /* SendAccountCodeView.swift in Sources */,
 				2FEA2BA029B8685E00DE8E54 /* BackButton.swift in Sources */,
 				2FEA2BA229B87A9200DE8E54 /* UserInfoView.swift in Sources */,
 				2FEA2BA529B892CB00DE8E54 /* TextFieldModifier.swift in Sources */,
