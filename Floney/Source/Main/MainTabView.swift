@@ -26,8 +26,6 @@ struct MainTabView: View {
                     Text("홈")
                 }.tag(0)
                 
-                
-                
                 AnalysisView().tabItem {
                     if selection == 1 {
                         Image("icon_leaderboard_on")
