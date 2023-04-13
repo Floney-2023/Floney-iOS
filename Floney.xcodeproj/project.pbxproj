@@ -48,6 +48,9 @@
 		2FEA2BDE29D0390300DE8E54 /* WithdrawalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEA2BDD29D0390300DE8E54 /* WithdrawalView.swift */; };
 		2FF25C8629E181C000737346 /* SendAccountCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FF25C8529E181C000737346 /* SendAccountCodeView.swift */; };
 		2FF25C8829E1858600737346 /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FF25C8729E1858600737346 /* View.swift */; };
+		2FF25C8F29E7EE9D00737346 /* BottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FF25C8E29E7EE9D00737346 /* BottomSheet.swift */; };
+		2FF25C9129E7EF0400737346 /* ButtonLarge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FF25C9029E7EF0400737346 /* ButtonLarge.swift */; };
+		2FF25C9429E7EF6500737346 /* RoundedCorners.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FF25C9329E7EF6500737346 /* RoundedCorners.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -94,6 +97,9 @@
 		2FEA2BDD29D0390300DE8E54 /* WithdrawalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WithdrawalView.swift; sourceTree = "<group>"; };
 		2FF25C8529E181C000737346 /* SendAccountCodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendAccountCodeView.swift; sourceTree = "<group>"; };
 		2FF25C8729E1858600737346 /* View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
+		2FF25C8E29E7EE9D00737346 /* BottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheet.swift; sourceTree = "<group>"; };
+		2FF25C9029E7EF0400737346 /* ButtonLarge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonLarge.swift; sourceTree = "<group>"; };
+		2FF25C9329E7EF6500737346 /* RoundedCorners.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedCorners.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -160,6 +166,9 @@
 		2FD7F3AA29B1E39400B99CAA /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				2FF25C9329E7EF6500737346 /* RoundedCorners.swift */,
+				2FF25C9029E7EF0400737346 /* ButtonLarge.swift */,
+				2FF25C8E29E7EE9D00737346 /* BottomSheet.swift */,
 				2FEA2B9F29B8685E00DE8E54 /* BackButton.swift */,
 				2FEA2BA329B892B000DE8E54 /* ViewModifier */,
 				2FD7F3AB29B1E39D00B99CAA /* Extension */,
@@ -510,11 +519,14 @@
 				2FEA2BA729B8969E00DE8E54 /* WelcomeView.swift in Sources */,
 				2FEA2BCC29C43D9500DE8E54 /* EmailAuthView.swift in Sources */,
 				2FD7F3C129B1E46900B99CAA /* Color.swift in Sources */,
+				2FF25C9129E7EF0400737346 /* ButtonLarge.swift in Sources */,
 				2FEA2BDE29D0390300DE8E54 /* WithdrawalView.swift in Sources */,
 				2FEA2BC029BA068200DE8E54 /* MyPageView.swift in Sources */,
+				2FF25C9429E7EF6500737346 /* RoundedCorners.swift in Sources */,
 				2FEA2BDB29CD63B300DE8E54 /* SetProfileImageView.swift in Sources */,
 				2FEA2BA929B8970A00DE8E54 /* NextButtonModifier.swift in Sources */,
 				2FEA2BD829CABB8D00DE8E54 /* ChangePasswordView.swift in Sources */,
+				2FF25C8F29E7EE9D00737346 /* BottomSheet.swift in Sources */,
 				2FD7F3C329B1E47200B99CAA /* Font.swift in Sources */,
 				2FD7F39C29B1E26D00B99CAA /* FloneyApp.swift in Sources */,
 				2FEA2BD229C4424600DE8E54 /* OTPViewModel.swift in Sources */,

@@ -10,8 +10,10 @@ import SwiftUI
 struct MyPageView: View {
     @State var nickname = "user"
     @State var email = "user@gmail.com"
+    @State var isShowingBottomSheet = false
     var body: some View {
-        NavigationView {
+      //  NavigationView {
+        ZStack {
             ScrollView {
                 VStack(spacing:32) {
                     HStack {
@@ -87,8 +89,12 @@ struct MyPageView: View {
                             .background(Color.greyScale12)
                             .cornerRadius(12)
                             
+                            
+                            // MARK: Bottom Sheet Toggle
                             Button(action: {
-                                print("Hello button tapped!")
+                                withAnimation{
+                                    isShowingBottomSheet.toggle()
+                                }
                             }) {
                                 Image("icon_plus")
                             }
@@ -147,10 +153,16 @@ struct MyPageView: View {
                     }
                 }
                 .padding(24)
+                
             }
+            // }
+            
+            // MARK: Bottom Sheet
+            BottomSheet(isShowing: $isShowingBottomSheet, content: BottomSheetType.accountBook.view())
         }
     }
 }
+
 
 struct MyPageView_Previews: PreviewProvider {
     static var previews: some View {

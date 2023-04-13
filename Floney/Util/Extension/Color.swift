@@ -71,4 +71,5 @@ extension Color {
     static let purple2 = Color(hex: "9B8BFF")
     static let purple3 = Color(hex: "D3CCFF")
 
+    static let white = Color(hex: "FFFFFF")
 }
