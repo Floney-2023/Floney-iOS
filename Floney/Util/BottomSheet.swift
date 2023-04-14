@@ -51,35 +51,43 @@ struct BottomSheet: View {
 struct AccountBookBottomSheet: View{
     
     let buttonHeight: CGFloat = 46
-    
+    @State var isLinktoCreateBook = false
+    @State var tag:Int? = nil
     var body: some View{
-        VStack(alignment: .leading, spacing: 20) {
-            HStack {
-                Text("가계부 추가")
-                    .foregroundColor(.greyScale1)
-                    .font(.pretendardFont(.bold,size: 18))
-                Spacer()
-            }
-            .padding(.top, 24)
- 
-            VStack(spacing : 18) {
-                ButtonLarge(label: "가계부 생성하기",textColor: .greyScale1, strokeColor: .primary2, action: {
-                  
-                })
-                .frame(height: buttonHeight)
+       
+            VStack(alignment: .leading, spacing: 20) {
                 
-                ButtonLarge(label: "코드 입력하기",textColor: .greyScale1, strokeColor: .greyScale9, action: {
-                 
-                })
-                .frame(height: buttonHeight)
+                HStack {
+                    Text("가계부 추가")
+                        .foregroundColor(.greyScale1)
+                        .font(.pretendardFont(.bold,size: 18))
+                    Spacer()
+                }
+                .padding(.top, 24)
                 
-                ButtonLarge(label: "추가하기", background: .primary1, textColor: .white,  strokeColor: .primary1, fontWeight: .bold, action: {
-                 
-                })
-                .frame(height: buttonHeight)
+                
+        
+                VStack(spacing : 18) {
+                    NavigationLink(destination: CreateBookView(), isActive: $isLinktoCreateBook) {
+                        ButtonLarge(label: "가계부 생성하기",textColor: .greyScale1, strokeColor: .primary2, action: {
+                            self.isLinktoCreateBook.toggle()
+                        })
+                        .frame(height: buttonHeight)
+                    }
+                    
+                    ButtonLarge(label: "코드 입력하기",textColor: .greyScale1, strokeColor: .greyScale9, action: {
+                        
+                    })
+                    .frame(height: buttonHeight)
+                    
+                    ButtonLarge(label: "추가하기", background: .primary1, textColor: .white,  strokeColor: .primary1, fontWeight: .bold, action: {
+                        
+                    })
+                    .frame(height: buttonHeight)
+                }
             }
-        }
-        .padding(.horizontal, 20)
+            .padding(.horizontal, 20)
+        
     }
 }
 
