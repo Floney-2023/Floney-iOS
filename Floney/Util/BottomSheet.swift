@@ -99,8 +99,6 @@ struct AccountBookBottomSheet: View{
 struct ShareBookBottomSheet: View{
     
     let buttonHeight: CGFloat = 46
-    @State var isLinktoCreateBook = false
-    @State var tag:Int? = nil
     var body: some View{
        
             VStack(alignment: .leading, spacing: 20) {
@@ -116,7 +114,7 @@ struct ShareBookBottomSheet: View{
                 VStack(spacing : 18) {
                     
                     ButtonLarge(label: "가계부 생성하기",textColor: .greyScale1, strokeColor: .primary2, action: {
-                        self.isLinktoCreateBook.toggle()
+
                     })
                     .frame(height: buttonHeight)
                     
