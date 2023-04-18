@@ -54,6 +54,13 @@
 		2FF25C9929E80D7E00737346 /* SetBookNameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FF25C9829E80D7E00737346 /* SetBookNameView.swift */; };
 		2FFA302429EE775B00412F83 /* SetBookProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFA302329EE775B00412F83 /* SetBookProfileView.swift */; };
 		2FFA302629EE81C000412F83 /* CreateBookView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFA302529EE81C000412F83 /* CreateBookView.swift */; };
+		2FFA302A29EEAE6700412F83 /* SignUpRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFA302929EEAE6700412F83 /* SignUpRequest.swift */; };
+		2FFA302C29EEAEB900412F83 /* SignUpResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFA302B29EEAEB900412F83 /* SignUpResponse.swift */; };
+		2FFA302E29EEAEE100412F83 /* SignUpDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFA302D29EEAEE100412F83 /* SignUpDataManager.swift */; };
+		2FFA303229EEAF6000412F83 /* SignInRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFA303129EEAF6000412F83 /* SignInRequest.swift */; };
+		2FFA303429EEAF6B00412F83 /* SignInResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFA303329EEAF6B00412F83 /* SignInResponse.swift */; };
+		2FFA303629EEB02800412F83 /* SignInDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFA303529EEB02800412F83 /* SignInDataManager.swift */; };
+		ED80267AB9E3B4258476CDC6 /* Pods_Floney.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FF682C42AEEFFE87847C8B3 /* Pods_Floney.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -104,8 +111,17 @@
 		2FF25C9029E7EF0400737346 /* ButtonLarge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonLarge.swift; sourceTree = "<group>"; };
 		2FF25C9329E7EF6500737346 /* RoundedCorners.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedCorners.swift; sourceTree = "<group>"; };
 		2FF25C9829E80D7E00737346 /* SetBookNameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetBookNameView.swift; sourceTree = "<group>"; };
+		2FF682C42AEEFFE87847C8B3 /* Pods_Floney.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Floney.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2FFA302329EE775B00412F83 /* SetBookProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetBookProfileView.swift; sourceTree = "<group>"; };
 		2FFA302529EE81C000412F83 /* CreateBookView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateBookView.swift; sourceTree = "<group>"; };
+		2FFA302929EEAE6700412F83 /* SignUpRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpRequest.swift; sourceTree = "<group>"; };
+		2FFA302B29EEAEB900412F83 /* SignUpResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpResponse.swift; sourceTree = "<group>"; };
+		2FFA302D29EEAEE100412F83 /* SignUpDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpDataManager.swift; sourceTree = "<group>"; };
+		2FFA303129EEAF6000412F83 /* SignInRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInRequest.swift; sourceTree = "<group>"; };
+		2FFA303329EEAF6B00412F83 /* SignInResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInResponse.swift; sourceTree = "<group>"; };
+		2FFA303529EEB02800412F83 /* SignInDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInDataManager.swift; sourceTree = "<group>"; };
+		67A9A49F4C8E4F3292D98C83 /* Pods-Floney.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Floney.release.xcconfig"; path = "Target Support Files/Pods-Floney/Pods-Floney.release.xcconfig"; sourceTree = "<group>"; };
+		890215AB09C6C1F4F677A9C7 /* Pods-Floney.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Floney.debug.xcconfig"; path = "Target Support Files/Pods-Floney/Pods-Floney.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,6 +129,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ED80267AB9E3B4258476CDC6 /* Pods_Floney.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -124,6 +141,8 @@
 			children = (
 				2FD7F39A29B1E26D00B99CAA /* Floney */,
 				2FD7F39929B1E26D00B99CAA /* Products */,
+				D7C10D9F09B4DF2DF487D2DF /* Pods */,
+				38979A95844287E695B1B7F9 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -220,6 +239,8 @@
 		2FD7F3AE29B1E3C900B99CAA /* SignIn */ = {
 			isa = PBXGroup;
 			children = (
+				2FFA303029EEAF4E00412F83 /* DataManager */,
+				2FFA302F29EEAF4700412F83 /* Entity */,
 				2FD7F3C629B1E50300B99CAA /* SignInView.swift */,
 				2FEA2BAC29B9EC0900DE8E54 /* FindPassword */,
 			);
@@ -229,6 +250,8 @@
 		2FD7F3AF29B1E3D600B99CAA /* SignUp */ = {
 			isa = PBXGroup;
 			children = (
+				2FFA302829EEAE3000412F83 /* Entity */,
+				2FFA302729EEAE2500412F83 /* DataManager */,
 				2FEA2B6229B73CC500DE8E54 /* ServiceAgreement */,
 				2FEA2BCA29C43D6D00DE8E54 /* EmailAuth */,
 				2FEA2BCD29C43F1200DE8E54 /* AuthCode */,
@@ -454,6 +477,57 @@
 			path = EnterBookCode;
 			sourceTree = "<group>";
 		};
+		2FFA302729EEAE2500412F83 /* DataManager */ = {
+			isa = PBXGroup;
+			children = (
+				2FFA302D29EEAEE100412F83 /* SignUpDataManager.swift */,
+			);
+			path = DataManager;
+			sourceTree = "<group>";
+		};
+		2FFA302829EEAE3000412F83 /* Entity */ = {
+			isa = PBXGroup;
+			children = (
+				2FFA302929EEAE6700412F83 /* SignUpRequest.swift */,
+				2FFA302B29EEAEB900412F83 /* SignUpResponse.swift */,
+			);
+			path = Entity;
+			sourceTree = "<group>";
+		};
+		2FFA302F29EEAF4700412F83 /* Entity */ = {
+			isa = PBXGroup;
+			children = (
+				2FFA303129EEAF6000412F83 /* SignInRequest.swift */,
+				2FFA303329EEAF6B00412F83 /* SignInResponse.swift */,
+			);
+			path = Entity;
+			sourceTree = "<group>";
+		};
+		2FFA303029EEAF4E00412F83 /* DataManager */ = {
+			isa = PBXGroup;
+			children = (
+				2FFA303529EEB02800412F83 /* SignInDataManager.swift */,
+			);
+			path = DataManager;
+			sourceTree = "<group>";
+		};
+		38979A95844287E695B1B7F9 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				2FF682C42AEEFFE87847C8B3 /* Pods_Floney.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		D7C10D9F09B4DF2DF487D2DF /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				890215AB09C6C1F4F677A9C7 /* Pods-Floney.debug.xcconfig */,
+				67A9A49F4C8E4F3292D98C83 /* Pods-Floney.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -461,9 +535,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2FD7F3A629B1E26E00B99CAA /* Build configuration list for PBXNativeTarget "Floney" */;
 			buildPhases = (
+				4DCCC81A2E30E5966599FF67 /* [CP] Check Pods Manifest.lock */,
 				2FD7F39429B1E26D00B99CAA /* Sources */,
 				2FD7F39529B1E26D00B99CAA /* Frameworks */,
 				2FD7F39629B1E26D00B99CAA /* Resources */,
+				85355A7A21250CFF6ADC7F93 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -528,6 +604,48 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		4DCCC81A2E30E5966599FF67 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Floney-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		85355A7A21250CFF6ADC7F93 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Floney/Pods-Floney-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Floney/Pods-Floney-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Floney/Pods-Floney-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		2FD7F39429B1E26D00B99CAA /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -539,6 +657,7 @@
 				2FD7F3C729B1E50300B99CAA /* SignInView.swift in Sources */,
 				2FEA2BB029B9F4B200DE8E54 /* MainTabView.swift in Sources */,
 				2FD7F39E29B1E26D00B99CAA /* ContentView.swift in Sources */,
+				2FFA302A29EEAE6700412F83 /* SignUpRequest.swift in Sources */,
 				2FEA2BB729BA064B00DE8E54 /* HomeView.swift in Sources */,
 				2FEA2B6429B73CE700DE8E54 /* ServiceAgreementView.swift in Sources */,
 				2FF25C8629E181C000737346 /* SendAccountCodeView.swift in Sources */,
@@ -548,12 +667,15 @@
 				2FEA2BBC29BA066D00DE8E54 /* AddView.swift in Sources */,
 				2FEA2BBE29BA067800DE8E54 /* CalculateView.swift in Sources */,
 				2FEA2BCF29C43F2400DE8E54 /* AuthCodeView.swift in Sources */,
+				2FFA302C29EEAEB900412F83 /* SignUpResponse.swift in Sources */,
+				2FFA303629EEB02800412F83 /* SignInDataManager.swift in Sources */,
 				2FEA2BD529C9B70600DE8E54 /* UserInformationView.swift in Sources */,
 				2FFA302429EE775B00412F83 /* SetBookProfileView.swift in Sources */,
 				2FFA302629EE81C000412F83 /* CreateBookView.swift in Sources */,
 				2FEA2BA729B8969E00DE8E54 /* WelcomeView.swift in Sources */,
 				2FF25C9929E80D7E00737346 /* SetBookNameView.swift in Sources */,
 				2FEA2BCC29C43D9500DE8E54 /* EmailAuthView.swift in Sources */,
+				2FFA303429EEAF6B00412F83 /* SignInResponse.swift in Sources */,
 				2FD7F3C129B1E46900B99CAA /* Color.swift in Sources */,
 				2FF25C9129E7EF0400737346 /* ButtonLarge.swift in Sources */,
 				2FEA2BDE29D0390300DE8E54 /* WithdrawalView.swift in Sources */,
@@ -562,8 +684,10 @@
 				2FEA2BDB29CD63B300DE8E54 /* SetProfileImageView.swift in Sources */,
 				2FEA2BA929B8970A00DE8E54 /* NextButtonModifier.swift in Sources */,
 				2FEA2BD829CABB8D00DE8E54 /* ChangePasswordView.swift in Sources */,
+				2FFA303229EEAF6000412F83 /* SignInRequest.swift in Sources */,
 				2FF25C8F29E7EE9D00737346 /* BottomSheet.swift in Sources */,
 				2FD7F3C329B1E47200B99CAA /* Font.swift in Sources */,
+				2FFA302E29EEAEE100412F83 /* SignUpDataManager.swift in Sources */,
 				2FD7F39C29B1E26D00B99CAA /* FloneyApp.swift in Sources */,
 				2FEA2BD229C4424600DE8E54 /* OTPViewModel.swift in Sources */,
 				2FD7F3B629B1E42400B99CAA /* Constant.swift in Sources */,
@@ -691,6 +815,7 @@
 		};
 		2FD7F3A729B1E26E00B99CAA /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 890215AB09C6C1F4F677A9C7 /* Pods-Floney.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -720,6 +845,7 @@
 		};
 		2FD7F3A829B1E26E00B99CAA /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 67A9A49F4C8E4F3292D98C83 /* Pods-Floney.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;

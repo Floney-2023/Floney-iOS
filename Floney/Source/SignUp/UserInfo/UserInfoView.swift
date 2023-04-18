@@ -14,6 +14,8 @@ struct UserInfoView: View {
     @State var password = ""
     @State var passwordCheck = ""
     @State var nickname = ""
+    var signUpDatamanager : SignUpDataManager = SignUpDataManager()
+    
     var body: some View {
         ZStack {
             VStack(spacing: 30) {
@@ -125,6 +127,10 @@ struct UserInfoView: View {
                     Text("다음으로")
                         .padding()
                         .withNextButtonFormmating(.primary1)
+                        .onTapGesture {
+                            let signUpRequest = SignUpRequest(email: email, password: password, nickname: nickname, profile_img: "")
+                            self.signUpDatamanager.postSignUp(signUpRequest)
+                        }
                 }
             }
             .padding(EdgeInsets(top: 32, leading: 24, bottom: 0, trailing: 24))

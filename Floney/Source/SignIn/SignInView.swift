@@ -11,6 +11,8 @@ import SwiftUI
 struct SignInView: View {
     @State var email = ""
     @State var password = ""
+    var signInDatamanager : SignInDataManager = SignInDataManager()
+
     var body: some View {
         NavigationView {
             ZStack {
@@ -46,7 +48,10 @@ struct SignInView: View {
                         Text("로그인 하기")
                             .padding()
                             .withNextButtonFormmating(.primary1)
-                        
+                            .onTapGesture {
+                                let signInRequest = SignInRequest(email: email, password: password)
+                                self.signInDatamanager.postSignIn(signInRequest)
+                            }
                         HStack(spacing:50) {
                             NavigationLink(destination: FindPasswordView()){
                                 VStack {
