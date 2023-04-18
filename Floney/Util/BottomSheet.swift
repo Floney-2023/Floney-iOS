@@ -10,12 +10,16 @@ import SwiftUI
 
 enum BottomSheetType: Int {
     case accountBook = 0
+    case shareBook = 1
     
     func view() -> AnyView {
         switch self {
         case .accountBook:
             return AnyView(AccountBookBottomSheet())
+        case .shareBook:
+            return AnyView(ShareBookBottomSheet())
         }
+        
     }
 }
 
@@ -68,7 +72,7 @@ struct AccountBookBottomSheet: View{
                 
         
                 VStack(spacing : 18) {
-                    NavigationLink(destination: CreateBookView(), isActive: $isLinktoCreateBook) {
+                    NavigationLink(destination: SetBookNameView(), isActive: $isLinktoCreateBook) {
                         ButtonLarge(label: "가계부 생성하기",textColor: .greyScale1, strokeColor: .primary2, action: {
                             self.isLinktoCreateBook.toggle()
                         })
@@ -91,3 +95,40 @@ struct AccountBookBottomSheet: View{
     }
 }
 
+
+struct ShareBookBottomSheet: View{
+    
+    let buttonHeight: CGFloat = 46
+    @State var isLinktoCreateBook = false
+    @State var tag:Int? = nil
+    var body: some View{
+       
+            VStack(alignment: .leading, spacing: 20) {
+                
+                HStack {
+                    Text("친구들을 초대해서\n함께 가계부를 적어보세요🍀")
+                        .foregroundColor(.greyScale1)
+                        .font(.pretendardFont(.bold,size: 18))
+                    Spacer()
+                }
+                .padding(.top, 24)
+                
+                VStack(spacing : 18) {
+                    
+                    ButtonLarge(label: "가계부 생성하기",textColor: .greyScale1, strokeColor: .primary2, action: {
+                        self.isLinktoCreateBook.toggle()
+                    })
+                    .frame(height: buttonHeight)
+                    
+                    
+                    ButtonLarge(label: "공유하기",textColor: .greyScale1, strokeColor: .greyScale9, action: {
+                        
+                    })
+                    .frame(height: buttonHeight)
+                    
+                }
+            }
+            .padding(.horizontal, 20)
+        
+    }
+}

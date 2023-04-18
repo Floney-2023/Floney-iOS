@@ -51,8 +51,9 @@
 		2FF25C8F29E7EE9D00737346 /* BottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FF25C8E29E7EE9D00737346 /* BottomSheet.swift */; };
 		2FF25C9129E7EF0400737346 /* ButtonLarge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FF25C9029E7EF0400737346 /* ButtonLarge.swift */; };
 		2FF25C9429E7EF6500737346 /* RoundedCorners.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FF25C9329E7EF6500737346 /* RoundedCorners.swift */; };
-		2FF25C9929E80D7E00737346 /* CreateBookView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FF25C9829E80D7E00737346 /* CreateBookView.swift */; };
+		2FF25C9929E80D7E00737346 /* SetBookNameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FF25C9829E80D7E00737346 /* SetBookNameView.swift */; };
 		2FFA302429EE775B00412F83 /* SetBookProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFA302329EE775B00412F83 /* SetBookProfileView.swift */; };
+		2FFA302629EE81C000412F83 /* CreateBookView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFA302529EE81C000412F83 /* CreateBookView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -102,8 +103,9 @@
 		2FF25C8E29E7EE9D00737346 /* BottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheet.swift; sourceTree = "<group>"; };
 		2FF25C9029E7EF0400737346 /* ButtonLarge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonLarge.swift; sourceTree = "<group>"; };
 		2FF25C9329E7EF6500737346 /* RoundedCorners.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedCorners.swift; sourceTree = "<group>"; };
-		2FF25C9829E80D7E00737346 /* CreateBookView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateBookView.swift; sourceTree = "<group>"; };
+		2FF25C9829E80D7E00737346 /* SetBookNameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetBookNameView.swift; sourceTree = "<group>"; };
 		2FFA302329EE775B00412F83 /* SetBookProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetBookProfileView.swift; sourceTree = "<group>"; };
+		2FFA302529EE81C000412F83 /* CreateBookView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateBookView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -438,8 +440,9 @@
 		2FF25C9629E80D3F00737346 /* CreateBook */ = {
 			isa = PBXGroup;
 			children = (
-				2FF25C9829E80D7E00737346 /* CreateBookView.swift */,
+				2FF25C9829E80D7E00737346 /* SetBookNameView.swift */,
 				2FFA302329EE775B00412F83 /* SetBookProfileView.swift */,
+				2FFA302529EE81C000412F83 /* CreateBookView.swift */,
 			);
 			path = CreateBook;
 			sourceTree = "<group>";
@@ -547,8 +550,9 @@
 				2FEA2BCF29C43F2400DE8E54 /* AuthCodeView.swift in Sources */,
 				2FEA2BD529C9B70600DE8E54 /* UserInformationView.swift in Sources */,
 				2FFA302429EE775B00412F83 /* SetBookProfileView.swift in Sources */,
+				2FFA302629EE81C000412F83 /* CreateBookView.swift in Sources */,
 				2FEA2BA729B8969E00DE8E54 /* WelcomeView.swift in Sources */,
-				2FF25C9929E80D7E00737346 /* CreateBookView.swift in Sources */,
+				2FF25C9929E80D7E00737346 /* SetBookNameView.swift in Sources */,
 				2FEA2BCC29C43D9500DE8E54 /* EmailAuthView.swift in Sources */,
 				2FD7F3C129B1E46900B99CAA /* Color.swift in Sources */,
 				2FF25C9129E7EF0400737346 /* ButtonLarge.swift in Sources */,

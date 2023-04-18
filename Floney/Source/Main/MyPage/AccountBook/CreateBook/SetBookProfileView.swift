@@ -39,7 +39,7 @@ struct SetBookProfileView: View {
             
             Spacer()
             
-            NavigationLink(destination: EmailAuthView()){
+            NavigationLink(destination: CreateBookView()){
                 Text("다음으로")
                     .padding()
                     .withNextButtonFormmating(.primary1)
