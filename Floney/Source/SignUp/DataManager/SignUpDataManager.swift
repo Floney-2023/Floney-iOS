@@ -7,7 +7,6 @@
 import Alamofire
 
 class SignUpDataManager: ObservableObject {
-    
     func postSignUp(_ parameters: SignUpRequest) {
         AF.request("\(Constant.BASE_URL)/users/signup", method: .post, parameters: parameters, encoder: JSONParameterEncoder(), headers: nil)
             .validate()

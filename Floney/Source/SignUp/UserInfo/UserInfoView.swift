@@ -128,6 +128,7 @@ struct UserInfoView: View {
                         .padding()
                         .withNextButtonFormmating(.primary1)
                         .onTapGesture {
+                            // combine으로 리팩토링 필요!!
                             let signUpRequest = SignUpRequest(email: email, password: password, nickname: nickname, profile_img: "")
                             self.signUpDatamanager.postSignUp(signUpRequest)
                         }

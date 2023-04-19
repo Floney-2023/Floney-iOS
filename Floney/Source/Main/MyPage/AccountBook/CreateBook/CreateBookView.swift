@@ -53,7 +53,7 @@ struct CreateBookView: View {
             }
             .padding(EdgeInsets(top: 32, leading: 24, bottom: 40, trailing: 24))
             .navigationBarBackButtonHidden(true)
-            .navigationBarItems(leading: BackButton())
+            //.navigationBarItems(leading: BackButton())
             
             // MARK: Bottom Sheet
             BottomSheet(isShowing: $isShowingBottomSheet, content: BottomSheetType.shareBook.view())
