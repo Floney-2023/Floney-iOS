@@ -111,15 +111,15 @@ struct ShareBookBottomSheet: View{
                 }
                 .padding(.top, 24)
                 
-                VStack(spacing : 18) {
+                VStack(spacing : 28) {
                     
-                    ButtonLarge(label: "가계부 생성하기",textColor: .greyScale1, strokeColor: .primary2, action: {
+                    ButtonLarge(label: "가계부 생성하기", background: .greyScale12, textColor: .greyScale2, strokeColor: .greyScale12, action: {
 
                     })
                     .frame(height: buttonHeight)
                     
                     
-                    ButtonLarge(label: "공유하기",textColor: .greyScale1, strokeColor: .greyScale9, action: {
+                    ButtonLarge(label: "공유하기",background: .primary1, textColor: .white, strokeColor: .primary1,  fontWeight: .bold, action: {
                         
                     })
                     .frame(height: buttonHeight)
