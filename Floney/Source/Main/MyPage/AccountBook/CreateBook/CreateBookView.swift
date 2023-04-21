@@ -48,6 +48,7 @@ struct CreateBookView: View {
                         .withNextButtonFormmating(.primary9)
                         .onTapGesture {
                             self.isShowingBottomSheet.toggle()
+                            
                         }
                 }
             }
