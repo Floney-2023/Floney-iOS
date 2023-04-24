@@ -43,9 +43,10 @@ struct SendAccountCodeView: View {
                         .modifier(NextButtonModifier(backgroundColor: .primary1))
                 }
                 NavigationLink(destination: WelcomeView()){
-                    Text("가계부 생성하기")
+                    Text("새 가계부 만들기")
                         .padding()
-                        .modifier(NextButtonModifier(backgroundColor: .greyScale2))
+                        .foregroundColor(.primary1)
+                        .modifier(NextButtonModifier(backgroundColor: .primary9))
                         
                 }
             }
