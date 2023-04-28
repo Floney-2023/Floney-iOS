@@ -19,7 +19,6 @@ enum BottomSheetType: Int {
         case .shareBook:
             return AnyView(ShareBookBottomSheet())
         }
-        
     }
 }
 
@@ -142,6 +141,5 @@ struct ShareBookBottomSheet: View{
                 }
             }
             .padding(.horizontal, 20)
-        
     }
 }
