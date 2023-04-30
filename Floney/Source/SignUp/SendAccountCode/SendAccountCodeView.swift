@@ -13,7 +13,6 @@ struct SendAccountCodeView: View {
         VStack(spacing: 30) {
             HStack {
                 VStack(alignment: .leading, spacing: 16) {
-                
                     Text("초대받은\n가계부가 있나요?")
                         .font(.pretendardFont(.bold, size: 24))
                         .foregroundColor(.greyScale1)
