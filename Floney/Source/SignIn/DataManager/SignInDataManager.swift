@@ -6,6 +6,7 @@
 //
 
 import Alamofire
+import Combine
 
 class SignInDataManager: ObservableObject {
     func postSignIn(_ parameters: SignInRequest) {
@@ -50,5 +51,35 @@ extension SignInDataManager {
     
     func failedToRequest(message: String) {
         //self.presentAlert(title: message)
+    }
+}
+
+
+protocol ServiceProtocol {
+    func fetchChats() -> AnyPublisher<DataResponse<SignInResponse, NetworkError>, Never>
+}
+
+
+class Service {
+    static let shared: ServiceProtocol = Service()
+    private init() { }
+}
+
+extension Service: ServiceProtocol {
+    func fetchChats() -> AnyPublisher<DataResponse<SignInResponse, NetworkError>, Never> {
+        let url = URL(string: "Your_URL")!
+        
+        return AF.request(url,
+                          method: .get)
+            .validate()
+            .publishDecodable(type: SignInResponse.self)
+            .map { response in
+                response.mapError { error in
+                    let backendError = response.data.flatMap { try? JSONDecoder().decode(BackendError.self, from: $0)}
+                    return NetworkError(initialError: error, backendError: backendError)
+                }
+            }
+            .receive(on: DispatchQueue.main)
+            .eraseToAnyPublisher()
     }
 }

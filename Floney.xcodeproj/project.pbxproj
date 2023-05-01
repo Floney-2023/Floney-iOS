@@ -60,6 +60,8 @@
 		2FFA303229EEAF6000412F83 /* SignInRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFA303129EEAF6000412F83 /* SignInRequest.swift */; };
 		2FFA303429EEAF6B00412F83 /* SignInResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFA303329EEAF6B00412F83 /* SignInResponse.swift */; };
 		2FFA303629EEB02800412F83 /* SignInDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFA303529EEB02800412F83 /* SignInDataManager.swift */; };
+		2FFDC36A2A00084600BE4C1B /* SignInViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFDC3692A00084600BE4C1B /* SignInViewModel.swift */; };
+		2FFDC36C2A00089F00BE4C1B /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFDC36B2A00089F00BE4C1B /* NetworkError.swift */; };
 		ED80267AB9E3B4258476CDC6 /* Pods_Floney.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FF682C42AEEFFE87847C8B3 /* Pods_Floney.framework */; };
 /* End PBXBuildFile section */
 
@@ -120,6 +122,8 @@
 		2FFA303129EEAF6000412F83 /* SignInRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInRequest.swift; sourceTree = "<group>"; };
 		2FFA303329EEAF6B00412F83 /* SignInResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInResponse.swift; sourceTree = "<group>"; };
 		2FFA303529EEB02800412F83 /* SignInDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInDataManager.swift; sourceTree = "<group>"; };
+		2FFDC3692A00084600BE4C1B /* SignInViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewModel.swift; sourceTree = "<group>"; };
+		2FFDC36B2A00089F00BE4C1B /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
 		67A9A49F4C8E4F3292D98C83 /* Pods-Floney.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Floney.release.xcconfig"; path = "Target Support Files/Pods-Floney/Pods-Floney.release.xcconfig"; sourceTree = "<group>"; };
 		890215AB09C6C1F4F677A9C7 /* Pods-Floney.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Floney.debug.xcconfig"; path = "Target Support Files/Pods-Floney/Pods-Floney.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -191,6 +195,7 @@
 		2FD7F3AA29B1E39400B99CAA /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				2FFDC36B2A00089F00BE4C1B /* NetworkError.swift */,
 				2FF25C9329E7EF6500737346 /* RoundedCorners.swift */,
 				2FF25C9029E7EF0400737346 /* ButtonLarge.swift */,
 				2FF25C8E29E7EE9D00737346 /* BottomSheet.swift */,
@@ -239,6 +244,7 @@
 		2FD7F3AE29B1E3C900B99CAA /* SignIn */ = {
 			isa = PBXGroup;
 			children = (
+				2FFDC3682A00083100BE4C1B /* ViewModel */,
 				2FFA303029EEAF4E00412F83 /* DataManager */,
 				2FFA302F29EEAF4700412F83 /* Entity */,
 				2FD7F3C629B1E50300B99CAA /* SignInView.swift */,
@@ -511,6 +517,14 @@
 			path = DataManager;
 			sourceTree = "<group>";
 		};
+		2FFDC3682A00083100BE4C1B /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				2FFDC3692A00084600BE4C1B /* SignInViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
 		38979A95844287E695B1B7F9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -660,6 +674,7 @@
 				2FFA302A29EEAE6700412F83 /* SignUpRequest.swift in Sources */,
 				2FEA2BB729BA064B00DE8E54 /* HomeView.swift in Sources */,
 				2FEA2B6429B73CE700DE8E54 /* ServiceAgreementView.swift in Sources */,
+				2FFDC36C2A00089F00BE4C1B /* NetworkError.swift in Sources */,
 				2FF25C8629E181C000737346 /* SendAccountCodeView.swift in Sources */,
 				2FEA2BA029B8685E00DE8E54 /* BackButton.swift in Sources */,
 				2FEA2BA229B87A9200DE8E54 /* UserInfoView.swift in Sources */,
@@ -686,6 +701,7 @@
 				2FEA2BD829CABB8D00DE8E54 /* ChangePasswordView.swift in Sources */,
 				2FFA303229EEAF6000412F83 /* SignInRequest.swift in Sources */,
 				2FF25C8F29E7EE9D00737346 /* BottomSheet.swift in Sources */,
+				2FFDC36A2A00084600BE4C1B /* SignInViewModel.swift in Sources */,
 				2FD7F3C329B1E47200B99CAA /* Font.swift in Sources */,
 				2FFA302E29EEAEE100412F83 /* SignUpDataManager.swift in Sources */,
 				2FD7F39C29B1E26D00B99CAA /* FloneyApp.swift in Sources */,
