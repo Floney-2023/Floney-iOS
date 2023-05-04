@@ -15,7 +15,6 @@ struct SignUpResponse: Decodable {
 }
 
 struct SignUpResult: Decodable {
-    var userIdx: Int
     var accessToken: String
     var refreshToken: String
 }

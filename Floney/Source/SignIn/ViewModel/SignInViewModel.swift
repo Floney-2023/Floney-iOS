@@ -9,31 +9,34 @@ import Foundation
 import Combine
 class SignInViewModel: ObservableObject {
     
-    @Published var chats =  [ChatModel]()
-    @Published var chatListLoadingError: String = ""
+    @Published var result : SignInResult = SignInResult(accessToken: "", refreshToken: "")
+    @Published var signInLoadingError: String = ""
     @Published var showAlert: Bool = false
+    @Published var email = ""
+    @Published var password = ""
 
     private var cancellableSet: Set<AnyCancellable> = []
-    var dataManager: ServiceProtocol
+    var dataManager: SignInProtocol
     
-    init( dataManager: ServiceProtocol = Service.shared) {
+    init( dataManager: SignInProtocol = SignIn.shared) {
         self.dataManager = dataManager
-        getChatList()
+        //postSignIn()
     }
     
-    func getChatList() {
-        dataManager.fetchChats()
+    func postSignIn() {
+        let request = SignInRequest(email: email, password: password)
+        dataManager.postSignIn(request)
             .sink { (dataResponse) in
                 if dataResponse.error != nil {
                     self.createAlert(with: dataResponse.error!)
                 } else {
-                    self.chats = dataResponse.value!.chats
+                    self.result = dataResponse.value!.result!
                 }
             }.store(in: &cancellableSet)
     }
     
     func createAlert( with error: NetworkError) {
-        chatListLoadingError = error.backendError == nil ? error.initialError.localizedDescription : error.backendError!.message
+        signInLoadingError = error.backendError == nil ? error.initialError.localizedDescription : error.backendError!.message
         self.showAlert = true
     }
 }

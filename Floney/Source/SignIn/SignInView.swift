@@ -11,8 +11,7 @@ import SwiftUI
 struct SignInView: View {
     @State var email = ""
     @State var password = ""
-    var signInDatamanager : SignInDataManager = SignInDataManager()
-
+    @StateObject var viewModel = SignInViewModel()
     var body: some View {
         NavigationView {
             ZStack {
@@ -21,7 +20,7 @@ struct SignInView: View {
                         .padding(EdgeInsets(top: 128, leading: 0, bottom: 0, trailing: 0))
                     
                     VStack(spacing: 20) {
-                        TextField("", text: $email)
+                        TextField("", text: $viewModel.email)
                             .padding()
                             .keyboardType(.emailAddress)
                             .overlay(
@@ -34,7 +33,7 @@ struct SignInView: View {
                             .modifier(TextFieldModifier())
                         
                         
-                        TextField("", text: $password)
+                        TextField("", text: $viewModel.password)
                             .padding()
                             .overlay(
                                 Text("비밀번호")
@@ -49,8 +48,8 @@ struct SignInView: View {
                             .padding()
                             .withNextButtonFormmating(.primary1)
                             .onTapGesture {
-                                let signInRequest = SignInRequest(email: email, password: password)
-                                self.signInDatamanager.postSignIn(signInRequest)
+                                //let signInRequest = SignInRequest(email: email, password: password)
+                                viewModel.postSignIn()
                             }
                         HStack(spacing:50) {
                             NavigationLink(destination: FindPasswordView()){

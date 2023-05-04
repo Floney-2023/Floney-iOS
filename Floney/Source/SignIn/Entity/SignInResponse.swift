@@ -13,7 +13,6 @@ struct SignInResponse: Decodable {
 }
 
 struct SignInResult: Decodable {
-    var userIdx: Int
     var accessToken: String
     var refreshToken: String
 }

@@ -8,6 +8,7 @@
 import Alamofire
 import Combine
 
+/*
 class SignInDataManager: ObservableObject {
     func postSignIn(_ parameters: SignInRequest) {
         AF.request("\(Constant.BASE_URL)/users/logIn", method: .post, parameters: parameters, encoder: JSONParameterEncoder(), headers: nil)
@@ -53,24 +54,25 @@ extension SignInDataManager {
         //self.presentAlert(title: message)
     }
 }
-
-
-protocol ServiceProtocol {
-    func fetchChats() -> AnyPublisher<DataResponse<SignInResponse, NetworkError>, Never>
+*/
+protocol SignInProtocol {
+    func postSignIn(_ parameters:SignInRequest) -> AnyPublisher<DataResponse<SignInResponse, NetworkError>, Never>
 }
 
 
-class Service {
-    static let shared: ServiceProtocol = Service()
+class SignIn {
+    static let shared: SignInProtocol = SignIn()
     private init() { }
 }
 
-extension Service: ServiceProtocol {
-    func fetchChats() -> AnyPublisher<DataResponse<SignInResponse, NetworkError>, Never> {
-        let url = URL(string: "Your_URL")!
-        
+extension SignIn: SignInProtocol {
+    func postSignIn(_ parameters:SignInRequest) -> AnyPublisher<DataResponse<SignInResponse, NetworkError>, Never> {
+      //  let url = URL(string: "Your_URL")!
+        let url = "\(Constant.BASE_URL)/login"
         return AF.request(url,
-                          method: .get)
+                          method: .post,
+                          parameters: parameters,
+                          encoder: JSONParameterEncoder())
             .validate()
             .publishDecodable(type: SignInResponse.self)
             .map { response in

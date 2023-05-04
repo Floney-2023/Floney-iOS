@@ -14,7 +14,7 @@ struct UserInfoView: View {
     @State var password = ""
     @State var passwordCheck = ""
     @State var nickname = ""
-    var signUpDatamanager : SignUpDataManager = SignUpDataManager()
+    @StateObject var viewModel = SignUpViewModel()
     
     var body: some View {
         ZStack {
@@ -41,7 +41,7 @@ struct UserInfoView: View {
                             Spacer()
                         }
                         
-                        TextField("", text: $email)
+                        TextField("", text: $viewModel.email)
                             .padding()
                             .keyboardType(.emailAddress)
                             .overlay(
@@ -109,7 +109,7 @@ struct UserInfoView: View {
                         Spacer()
                     }
                     
-                    TextField("", text: $nickname)
+                    TextField("", text: $viewModel.nickname)
                         .padding()
                         .keyboardType(.emailAddress)
                         .overlay(
@@ -129,8 +129,8 @@ struct UserInfoView: View {
                         .withNextButtonFormmating(.primary1)
                         .onTapGesture {
                             // combine으로 리팩토링 필요!!
-                            let signUpRequest = SignUpRequest(email: email, password: password, nickname: nickname, profile_img: "")
-                            self.signUpDatamanager.postSignUp(signUpRequest)
+                            //self.signUpDatamanager.postSignUp(signUpRequest)
+                            viewModel.postSignUp()
                         }
                 }
             }

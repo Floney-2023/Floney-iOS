@@ -5,7 +5,9 @@
 //  Created by 남경민 on 2023/04/18.
 //
 import Alamofire
+import Combine
 
+/*
 class SignUpDataManager: ObservableObject {
     func postSignUp(_ parameters: SignUpRequest) {
         AF.request("\(Constant.BASE_URL)/users/signup", method: .post, parameters: parameters, encoder: JSONParameterEncoder(), headers: nil)
@@ -54,5 +56,36 @@ extension SignUpDataManager {
     }
     func failedToRequest(message: String) {
         //self.presentAlert(title: message)
+    }
+}
+*/
+
+protocol SignUpProtocol {
+    func postSignUp(_ parameters:SignUpRequest) -> AnyPublisher<DataResponse<SignUpResponse, NetworkError>, Never>
+}
+
+
+class SignUp {
+    static let shared: SignUpProtocol = SignUp()
+    private init() { }
+}
+
+extension SignUp: SignUpProtocol {
+    func postSignUp(_ parameters:SignUpRequest) -> AnyPublisher<DataResponse<SignUpResponse, NetworkError>, Never> {
+        let url = "\(Constant.BASE_URL)/signup"
+        return AF.request(url,
+                          method: .post,
+                          parameters: parameters,
+                          encoder: JSONParameterEncoder())
+            .validate()
+            .publishDecodable(type: SignUpResponse.self)
+            .map { response in
+                response.mapError { error in
+                    let backendError = response.data.flatMap { try? JSONDecoder().decode(BackendError.self, from: $0)}
+                    return NetworkError(initialError: error, backendError: backendError)
+                }
+            }
+            .receive(on: DispatchQueue.main)
+            .eraseToAnyPublisher()
     }
 }
