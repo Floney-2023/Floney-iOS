@@ -28,7 +28,6 @@ struct AuthCodeView: View {
                         .font(.pretendardFont(.bold, size: 24))
                         .foregroundColor(.greyScale1)
                     
-                    
                     Text("이메일로 전송된 코드를\n하단에 입력해주세요.")
                         .font(.pretendardFont(.medium, size: 13))
                         .foregroundColor(.greyScale6)
@@ -41,6 +40,10 @@ struct AuthCodeView: View {
                 Text("다음으로")
                     .padding()
                     .withNextButtonFormmating(.primary1)
+                    .onTapGesture {
+                        // 유효성 검사
+                        // 시간 체크도 필요
+                    }
             }
         }
         .padding(EdgeInsets(top: 32, leading: 24, bottom: 0, trailing: 24))

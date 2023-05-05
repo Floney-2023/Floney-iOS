@@ -61,7 +61,7 @@ struct UserInfoView: View {
                             Spacer()
                         }
                         
-                        TextField("", text: $password)
+                        TextField("", text: $viewModel.password)
                             .padding()
                             .overlay(
                                 Text("비밀번호")
@@ -81,7 +81,7 @@ struct UserInfoView: View {
                             Spacer()
                         }
                         
-                        TextField("", text: $passwordCheck)
+                        TextField("", text: $viewModel.passwordCheck)
                             .padding()
                             .overlay(
                                 Text("비밀번호 확인")
@@ -128,9 +128,11 @@ struct UserInfoView: View {
                         .padding()
                         .withNextButtonFormmating(.primary1)
                         .onTapGesture {
-                            // combine으로 리팩토링 필요!!
-                            //self.signUpDatamanager.postSignUp(signUpRequest)
+                            // 모든 유효성 검사에서 통과할 때, post함.
                             viewModel.postSignUp()
+                            // 유효성 검사 필요함...
+                            // viewmodel에서 유효성 검사
+                            
                         }
                 }
             }

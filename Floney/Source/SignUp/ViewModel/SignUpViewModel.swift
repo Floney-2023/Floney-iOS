@@ -11,11 +11,12 @@ class SignUpViewModel: ObservableObject {
     @Published var result : SignUpResult = SignUpResult(accessToken: "", refreshToken: "")
     @Published var signUpLoadingError: String = ""
     @Published var showAlert: Bool = false
+    
     @Published var email = ""
     @Published var password = ""
+    @Published var passwordCheck = ""
     @Published var nickname = ""
     @Published var marketingAgree = 0
-
 
     private var cancellableSet: Set<AnyCancellable> = []
     var dataManager: SignUpProtocol
@@ -35,6 +36,12 @@ class SignUpViewModel: ObservableObject {
                     self.result = dataResponse.value!.result!
                 }
             }.store(in: &cancellableSet)
+    }
+    
+    func validatePassword() {
+        if (password != passwordCheck) {
+            
+        }
     }
     
     func createAlert( with error: NetworkError) {

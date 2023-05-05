@@ -6,10 +6,12 @@
 //
 
 struct SignInResponse: Decodable {
-    var isSuccess: Bool
-    var code: Int
-    var message: String
-    var result: SignInResult?
+    //var isSuccess: Bool
+    //var code: Int
+    //var message: String
+    //var result: SignInResult?
+    var accessToken: String
+    var refreshToken: String
 }
 
 struct SignInResult: Decodable {

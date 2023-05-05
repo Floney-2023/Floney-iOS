@@ -80,11 +80,14 @@ struct ServiceAgreementView: View {
             }
             
             Spacer()
-            
+
             NavigationLink(destination: EmailAuthView()){
                 Text("다음으로")
                     .padding()
                     .withNextButtonFormmating(.primary1)
+                    .onTapGesture {
+                        // 유효성 검사
+                    }
             }
             
             

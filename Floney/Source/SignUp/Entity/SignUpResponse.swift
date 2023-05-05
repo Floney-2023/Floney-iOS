@@ -8,10 +8,12 @@
 import Foundation
 
 struct SignUpResponse: Decodable {
-    var isSuccess: Bool
-    var code: Int
-    var message: String
-    var result: SignUpResult?
+    //var isSuccess: Bool
+    //var code: Int
+    //var message: String
+    //var result: SignUpResult?
+    var accessToken: String
+    var refreshToken: String
 }
 
 struct SignUpResult: Decodable {
