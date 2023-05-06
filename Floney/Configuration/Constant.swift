@@ -8,5 +8,5 @@
 import Foundation
 
 struct Constant {
-    static let BASE_URL = "https://prod.chaengni.shop"
+    static let BASE_URL = "http://ec2-15-164-220-164.ap-northeast-2.compute.amazonaws.com:8080"
 }

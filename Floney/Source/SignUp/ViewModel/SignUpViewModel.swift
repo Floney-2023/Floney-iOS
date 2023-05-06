@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 class SignUpViewModel: ObservableObject {
-    @Published var result : SignUpResult = SignUpResult(accessToken: "", refreshToken: "")
+    @Published var result : SignUpResponse = SignUpResponse(accessToken: "", refreshToken: "")
     @Published var signUpLoadingError: String = ""
     @Published var showAlert: Bool = false
     
@@ -33,7 +33,7 @@ class SignUpViewModel: ObservableObject {
                 if dataResponse.error != nil {
                     self.createAlert(with: dataResponse.error!)
                 } else {
-                    self.result = dataResponse.value!.result!
+                    self.result = dataResponse.value!
                 }
             }.store(in: &cancellableSet)
     }
