@@ -40,10 +40,7 @@ struct AuthCodeView: View {
                 Text("다음으로")
                     .padding()
                     .withNextButtonFormmating(.primary1)
-                    .onTapGesture {
-                        // 유효성 검사
-                        // 시간 체크도 필요
-                    }
+                    
             }
         }
         .padding(EdgeInsets(top: 32, leading: 24, bottom: 0, trailing: 24))

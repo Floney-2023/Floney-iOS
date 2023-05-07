@@ -127,6 +127,7 @@ struct UserInfoView: View {
                     Text("다음으로")
                         .padding()
                         .withNextButtonFormmating(.primary1)
+                    /*
                         .onTapGesture {
                             // 모든 유효성 검사에서 통과할 때, post함.
                             viewModel.postSignUp()
@@ -134,6 +135,7 @@ struct UserInfoView: View {
                             // viewmodel에서 유효성 검사
                             
                         }
+                     */
                 }
             }
             .padding(EdgeInsets(top: 32, leading: 24, bottom: 0, trailing: 24))

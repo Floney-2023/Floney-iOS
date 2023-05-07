@@ -32,8 +32,10 @@ class SignUpViewModel: ObservableObject {
             .sink { (dataResponse) in
                 if dataResponse.error != nil {
                     self.createAlert(with: dataResponse.error!)
+                    print(dataResponse.error)
                 } else {
                     self.result = dataResponse.value!
+                    print(self.result.accessToken)
                 }
             }.store(in: &cancellableSet)
     }

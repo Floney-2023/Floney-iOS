@@ -27,7 +27,7 @@ struct WelcomeView: View {
             Image("icon_welcome")
             Spacer()
             
-            NavigationLink(destination: SendAccountCodeView()){
+            NavigationLink(destination: SendBookCodeView()){
                 Text("플로니 시작하기")
                     .padding()
                     .withNextButtonFormmating(.primary1)

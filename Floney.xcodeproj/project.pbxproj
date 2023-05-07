@@ -9,6 +9,12 @@
 /* Begin PBXBuildFile section */
 		2F0D01182A03CEB600DAF21D /* SignUpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F0D01172A03CEB600DAF21D /* SignUpViewModel.swift */; };
 		2F1614552A07CFE20029E9A9 /* KeyChain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1614542A07CFE20029E9A9 /* KeyChain.swift */; };
+		2F1614572A07F2A60029E9A9 /* EnterBookCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1614562A07F2A60029E9A9 /* EnterBookCodeView.swift */; };
+		2F1614592A07F3880029E9A9 /* EnterBookView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1614582A07F3880029E9A9 /* EnterBookView.swift */; };
+		2F16145E2A07F4CA0029E9A9 /* BookCodeRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F16145D2A07F4CA0029E9A9 /* BookCodeRequest.swift */; };
+		2F1614602A07F4DC0029E9A9 /* BookCodeResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F16145F2A07F4DC0029E9A9 /* BookCodeResponse.swift */; };
+		2F1614622A07F5FE0029E9A9 /* SendBookCodeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1614612A07F5FE0029E9A9 /* SendBookCodeViewModel.swift */; };
+		2F1614642A07F6120029E9A9 /* SendBookCodeDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1614632A07F6120029E9A9 /* SendBookCodeDataManager.swift */; };
 		2FD7F39C29B1E26D00B99CAA /* FloneyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD7F39B29B1E26D00B99CAA /* FloneyApp.swift */; };
 		2FD7F39E29B1E26D00B99CAA /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD7F39D29B1E26D00B99CAA /* ContentView.swift */; };
 		2FD7F3A029B1E26E00B99CAA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2FD7F39F29B1E26E00B99CAA /* Assets.xcassets */; };
@@ -48,7 +54,7 @@
 		2FEA2BD829CABB8D00DE8E54 /* ChangePasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEA2BD729CABB8D00DE8E54 /* ChangePasswordView.swift */; };
 		2FEA2BDB29CD63B300DE8E54 /* SetProfileImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEA2BDA29CD63B300DE8E54 /* SetProfileImageView.swift */; };
 		2FEA2BDE29D0390300DE8E54 /* WithdrawalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEA2BDD29D0390300DE8E54 /* WithdrawalView.swift */; };
-		2FF25C8629E181C000737346 /* SendAccountCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FF25C8529E181C000737346 /* SendAccountCodeView.swift */; };
+		2FF25C8629E181C000737346 /* SendBookCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FF25C8529E181C000737346 /* SendBookCodeView.swift */; };
 		2FF25C8829E1858600737346 /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FF25C8729E1858600737346 /* View.swift */; };
 		2FF25C8F29E7EE9D00737346 /* BottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FF25C8E29E7EE9D00737346 /* BottomSheet.swift */; };
 		2FF25C9129E7EF0400737346 /* ButtonLarge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FF25C9029E7EF0400737346 /* ButtonLarge.swift */; };
@@ -70,6 +76,12 @@
 /* Begin PBXFileReference section */
 		2F0D01172A03CEB600DAF21D /* SignUpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewModel.swift; sourceTree = "<group>"; };
 		2F1614542A07CFE20029E9A9 /* KeyChain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyChain.swift; sourceTree = "<group>"; };
+		2F1614562A07F2A60029E9A9 /* EnterBookCodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterBookCodeView.swift; sourceTree = "<group>"; };
+		2F1614582A07F3880029E9A9 /* EnterBookView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterBookView.swift; sourceTree = "<group>"; };
+		2F16145D2A07F4CA0029E9A9 /* BookCodeRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookCodeRequest.swift; sourceTree = "<group>"; };
+		2F16145F2A07F4DC0029E9A9 /* BookCodeResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookCodeResponse.swift; sourceTree = "<group>"; };
+		2F1614612A07F5FE0029E9A9 /* SendBookCodeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendBookCodeViewModel.swift; sourceTree = "<group>"; };
+		2F1614632A07F6120029E9A9 /* SendBookCodeDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendBookCodeDataManager.swift; sourceTree = "<group>"; };
 		2FD7F39829B1E26D00B99CAA /* Floney.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Floney.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2FD7F39B29B1E26D00B99CAA /* FloneyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloneyApp.swift; sourceTree = "<group>"; };
 		2FD7F39D29B1E26D00B99CAA /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -111,7 +123,7 @@
 		2FEA2BD729CABB8D00DE8E54 /* ChangePasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordView.swift; sourceTree = "<group>"; };
 		2FEA2BDA29CD63B300DE8E54 /* SetProfileImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetProfileImageView.swift; sourceTree = "<group>"; };
 		2FEA2BDD29D0390300DE8E54 /* WithdrawalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WithdrawalView.swift; sourceTree = "<group>"; };
-		2FF25C8529E181C000737346 /* SendAccountCodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendAccountCodeView.swift; sourceTree = "<group>"; };
+		2FF25C8529E181C000737346 /* SendBookCodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendBookCodeView.swift; sourceTree = "<group>"; };
 		2FF25C8729E1858600737346 /* View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
 		2FF25C8E29E7EE9D00737346 /* BottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheet.swift; sourceTree = "<group>"; };
 		2FF25C9029E7EF0400737346 /* ButtonLarge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonLarge.swift; sourceTree = "<group>"; };
@@ -150,6 +162,31 @@
 				2F0D01172A03CEB600DAF21D /* SignUpViewModel.swift */,
 			);
 			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		2F16145A2A07F48C0029E9A9 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				2F1614612A07F5FE0029E9A9 /* SendBookCodeViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		2F16145B2A07F4930029E9A9 /* Entity */ = {
+			isa = PBXGroup;
+			children = (
+				2F16145D2A07F4CA0029E9A9 /* BookCodeRequest.swift */,
+				2F16145F2A07F4DC0029E9A9 /* BookCodeResponse.swift */,
+			);
+			path = Entity;
+			sourceTree = "<group>";
+		};
+		2F16145C2A07F49B0029E9A9 /* DataManager */ = {
+			isa = PBXGroup;
+			children = (
+				2F1614632A07F6120029E9A9 /* SendBookCodeDataManager.swift */,
+			);
+			path = DataManager;
 			sourceTree = "<group>";
 		};
 		2FD7F38F29B1E26D00B99CAA = {
@@ -277,7 +314,7 @@
 				2FEA2BCD29C43F1200DE8E54 /* AuthCode */,
 				2FEA2BAA29B9EB9300DE8E54 /* UserInfo */,
 				2FEA2BAB29B9EBD300DE8E54 /* Welcome */,
-				2FF25C8429E1812200737346 /* SendAccountCode */,
+				2FF25C8429E1812200737346 /* SendBookCode */,
 			);
 			path = SignUp;
 			sourceTree = "<group>";
@@ -463,12 +500,15 @@
 			path = Withdrawal;
 			sourceTree = "<group>";
 		};
-		2FF25C8429E1812200737346 /* SendAccountCode */ = {
+		2FF25C8429E1812200737346 /* SendBookCode */ = {
 			isa = PBXGroup;
 			children = (
-				2FF25C8529E181C000737346 /* SendAccountCodeView.swift */,
+				2FF25C8529E181C000737346 /* SendBookCodeView.swift */,
+				2F16145A2A07F48C0029E9A9 /* ViewModel */,
+				2F16145B2A07F4930029E9A9 /* Entity */,
+				2F16145C2A07F49B0029E9A9 /* DataManager */,
 			);
-			path = SendAccountCode;
+			path = SendBookCode;
 			sourceTree = "<group>";
 		};
 		2FF25C9529E80D1B00737346 /* AccountBook */ = {
@@ -493,6 +533,8 @@
 		2FF25C9729E80D4900737346 /* EnterBookCode */ = {
 			isa = PBXGroup;
 			children = (
+				2F1614562A07F2A60029E9A9 /* EnterBookCodeView.swift */,
+				2F1614582A07F3880029E9A9 /* EnterBookView.swift */,
 			);
 			path = EnterBookCode;
 			sourceTree = "<group>";
@@ -681,6 +723,7 @@
 			files = (
 				2FEA2BAE29B9EC1C00DE8E54 /* FindPasswordView.swift in Sources */,
 				2FD7F3C529B1E48B00B99CAA /* UIApplication.swift in Sources */,
+				2F1614592A07F3880029E9A9 /* EnterBookView.swift in Sources */,
 				2FF25C8829E1858600737346 /* View.swift in Sources */,
 				2FD7F3C729B1E50300B99CAA /* SignInView.swift in Sources */,
 				2FEA2BB029B9F4B200DE8E54 /* MainTabView.swift in Sources */,
@@ -689,14 +732,16 @@
 				2FEA2BB729BA064B00DE8E54 /* HomeView.swift in Sources */,
 				2FEA2B6429B73CE700DE8E54 /* ServiceAgreementView.swift in Sources */,
 				2FFDC36C2A00089F00BE4C1B /* NetworkError.swift in Sources */,
-				2FF25C8629E181C000737346 /* SendAccountCodeView.swift in Sources */,
+				2FF25C8629E181C000737346 /* SendBookCodeView.swift in Sources */,
 				2FEA2BA029B8685E00DE8E54 /* BackButton.swift in Sources */,
 				2FEA2BA229B87A9200DE8E54 /* UserInfoView.swift in Sources */,
 				2FEA2BA529B892CB00DE8E54 /* TextFieldModifier.swift in Sources */,
 				2FEA2BBC29BA066D00DE8E54 /* AddView.swift in Sources */,
 				2FEA2BBE29BA067800DE8E54 /* CalculateView.swift in Sources */,
 				2FEA2BCF29C43F2400DE8E54 /* AuthCodeView.swift in Sources */,
+				2F1614572A07F2A60029E9A9 /* EnterBookCodeView.swift in Sources */,
 				2FFA302C29EEAEB900412F83 /* SignUpResponse.swift in Sources */,
+				2F1614602A07F4DC0029E9A9 /* BookCodeResponse.swift in Sources */,
 				2FFA303629EEB02800412F83 /* SignInDataManager.swift in Sources */,
 				2FEA2BD529C9B70600DE8E54 /* UserInformationView.swift in Sources */,
 				2FFA302429EE775B00412F83 /* SetBookProfileView.swift in Sources */,
@@ -704,6 +749,7 @@
 				2F0D01182A03CEB600DAF21D /* SignUpViewModel.swift in Sources */,
 				2FEA2BA729B8969E00DE8E54 /* WelcomeView.swift in Sources */,
 				2FF25C9929E80D7E00737346 /* SetBookNameView.swift in Sources */,
+				2F16145E2A07F4CA0029E9A9 /* BookCodeRequest.swift in Sources */,
 				2FEA2BCC29C43D9500DE8E54 /* EmailAuthView.swift in Sources */,
 				2FFA303429EEAF6B00412F83 /* SignInResponse.swift in Sources */,
 				2FD7F3C129B1E46900B99CAA /* Color.swift in Sources */,
@@ -712,6 +758,7 @@
 				2FEA2BC029BA068200DE8E54 /* MyPageView.swift in Sources */,
 				2FF25C9429E7EF6500737346 /* RoundedCorners.swift in Sources */,
 				2FEA2BDB29CD63B300DE8E54 /* SetProfileImageView.swift in Sources */,
+				2F1614642A07F6120029E9A9 /* SendBookCodeDataManager.swift in Sources */,
 				2FEA2BA929B8970A00DE8E54 /* NextButtonModifier.swift in Sources */,
 				2FEA2BD829CABB8D00DE8E54 /* ChangePasswordView.swift in Sources */,
 				2FFA303229EEAF6000412F83 /* SignInRequest.swift in Sources */,
@@ -721,6 +768,7 @@
 				2FD7F3C329B1E47200B99CAA /* Font.swift in Sources */,
 				2FFA302E29EEAEE100412F83 /* SignUpDataManager.swift in Sources */,
 				2FD7F39C29B1E26D00B99CAA /* FloneyApp.swift in Sources */,
+				2F1614622A07F5FE0029E9A9 /* SendBookCodeViewModel.swift in Sources */,
 				2FEA2BD229C4424600DE8E54 /* OTPViewModel.swift in Sources */,
 				2FD7F3B629B1E42400B99CAA /* Constant.swift in Sources */,
 				2FEA2BBA29BA066100DE8E54 /* AnalysisView.swift in Sources */,

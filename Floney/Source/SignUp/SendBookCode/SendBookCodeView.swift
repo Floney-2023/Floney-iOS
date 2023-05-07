@@ -6,9 +6,9 @@
 //
 
 import SwiftUI
-struct SendAccountCodeView: View {
+struct SendBookCodeView: View {
     @State var accountCode = ""
-    
+    @StateObject var viewModel = BookCodeViewModel()
     var body: some View {
         VStack(spacing: 30) {
             HStack {
@@ -22,7 +22,7 @@ struct SendAccountCodeView: View {
                 }
                 Spacer()
             }
-            TextField("", text: $accountCode)
+            TextField("", text: $viewModel.code)
                 .padding()
                 .overlay(
                     Text("코드를 입력하세요.")
@@ -36,12 +36,15 @@ struct SendAccountCodeView: View {
             Spacer()
             
             VStack(spacing: 12) {
-                NavigationLink(destination: WelcomeView()){
+                //NavigationLink(destination: WelcomeView()){
                     Text("입력 완료하기")
                         .padding()
                         .modifier(NextButtonModifier(backgroundColor: .primary1))
-                }
-                NavigationLink(destination: WelcomeView()){
+                        .onTapGesture {
+                            viewModel.postBookCode()
+                        }
+                //}
+                NavigationLink(destination: SetBookNameView()){
                     Text("새 가계부 만들기")
                         .padding()
                         .foregroundColor(.primary1)
@@ -59,8 +62,8 @@ struct SendAccountCodeView: View {
     }
 }
 
-struct SendAccountCodeView_Previews: PreviewProvider {
+struct SendBookCodeView_Previews: PreviewProvider {
     static var previews: some View {
-        SendAccountCodeView()
+        SendBookCodeView()
     }
 }
