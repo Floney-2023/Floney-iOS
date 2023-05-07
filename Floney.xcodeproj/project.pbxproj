@@ -19,6 +19,7 @@
 		2F16146B2A0804B90029E9A9 /* CreateBookResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F16146A2A0804B90029E9A9 /* CreateBookResponse.swift */; };
 		2F16146D2A0804CA0029E9A9 /* CreateBookDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F16146C2A0804CA0029E9A9 /* CreateBookDataManager.swift */; };
 		2F1614702A0804E30029E9A9 /* CreateBookViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F16146F2A0804E30029E9A9 /* CreateBookViewModel.swift */; };
+		2F1614732A080C920029E9A9 /* ServiceAgreementViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1614722A080C920029E9A9 /* ServiceAgreementViewModel.swift */; };
 		2FD7F39C29B1E26D00B99CAA /* FloneyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD7F39B29B1E26D00B99CAA /* FloneyApp.swift */; };
 		2FD7F39E29B1E26D00B99CAA /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD7F39D29B1E26D00B99CAA /* ContentView.swift */; };
 		2FD7F3A029B1E26E00B99CAA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2FD7F39F29B1E26E00B99CAA /* Assets.xcassets */; };
@@ -90,6 +91,7 @@
 		2F16146A2A0804B90029E9A9 /* CreateBookResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateBookResponse.swift; sourceTree = "<group>"; };
 		2F16146C2A0804CA0029E9A9 /* CreateBookDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateBookDataManager.swift; sourceTree = "<group>"; };
 		2F16146F2A0804E30029E9A9 /* CreateBookViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateBookViewModel.swift; sourceTree = "<group>"; };
+		2F1614722A080C920029E9A9 /* ServiceAgreementViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceAgreementViewModel.swift; sourceTree = "<group>"; };
 		2FD7F39829B1E26D00B99CAA /* Floney.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Floney.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2FD7F39B29B1E26D00B99CAA /* FloneyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloneyApp.swift; sourceTree = "<group>"; };
 		2FD7F39D29B1E26D00B99CAA /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -218,6 +220,14 @@
 			isa = PBXGroup;
 			children = (
 				2F16146F2A0804E30029E9A9 /* CreateBookViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		2F1614712A080C790029E9A9 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				2F1614722A080C920029E9A9 /* ServiceAgreementViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -394,6 +404,7 @@
 			isa = PBXGroup;
 			children = (
 				2FEA2B6329B73CE700DE8E54 /* ServiceAgreementView.swift */,
+				2F1614712A080C790029E9A9 /* ViewModel */,
 			);
 			path = ServiceAgreement;
 			sourceTree = "<group>";
@@ -796,6 +807,7 @@
 				2FEA2BC029BA068200DE8E54 /* MyPageView.swift in Sources */,
 				2FF25C9429E7EF6500737346 /* RoundedCorners.swift in Sources */,
 				2FEA2BDB29CD63B300DE8E54 /* SetProfileImageView.swift in Sources */,
+				2F1614732A080C920029E9A9 /* ServiceAgreementViewModel.swift in Sources */,
 				2F1614642A07F6120029E9A9 /* SendBookCodeDataManager.swift in Sources */,
 				2FEA2BA929B8970A00DE8E54 /* NextButtonModifier.swift in Sources */,
 				2FEA2BD829CABB8D00DE8E54 /* ChangePasswordView.swift in Sources */,
