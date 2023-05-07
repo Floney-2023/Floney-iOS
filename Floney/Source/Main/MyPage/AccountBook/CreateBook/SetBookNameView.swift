@@ -10,7 +10,8 @@ import SwiftUI
 struct SetBookNameView: View {
     var pageCount = 1
     var pageCountAll = 3
-    @State var bookTitle = ""
+    //@State var bookTitle = ""
+    @StateObject var viewModel = CreateBookViewModel()
     var body: some View {
         VStack(spacing: 20) {
             HStack {
@@ -30,7 +31,7 @@ struct SetBookNameView: View {
                 Spacer()
             }
             VStack(spacing: 14) {
-                TextField("", text: $bookTitle)
+                TextField("", text: $viewModel.name)
                     .padding()
                     .keyboardType(.emailAddress)
                     .overlay(
@@ -38,7 +39,7 @@ struct SetBookNameView: View {
                             .padding()
                             .font(.pretendardFont(.regular, size: 14))
                             .foregroundColor(.greyScale6)
-                            .opacity(bookTitle.isEmpty ? 1 : 0), alignment: .leading
+                            .opacity(viewModel.name.isEmpty ? 1 : 0), alignment: .leading
                     )
                     .modifier(TextFieldModifier())
                 HStack {

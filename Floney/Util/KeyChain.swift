@@ -8,7 +8,7 @@
 import Foundation
 import SwiftKeychainWrapper
 
-class Common {
+class Keychain {
     enum KeychainKey: String {
            case authorization
        }

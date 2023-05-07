@@ -10,7 +10,8 @@ import SwiftUI
 struct SetBookProfileView: View {
     var pageCount = 2
     var pageCountAll = 3
-    @State var bookTitle = ""
+    //@State var bookTitle = ""
+    @StateObject var viewModel = CreateBookViewModel()
     var body: some View {
         VStack(spacing: 20) {
             HStack {
@@ -43,6 +44,9 @@ struct SetBookProfileView: View {
                 Text("다음으로")
                     .padding()
                     .withNextButtonFormmating(.primary1)
+                    .onTapGesture {
+                        viewModel.createBook()
+                    }
             }
         }
         .padding(EdgeInsets(top: 32, leading: 24, bottom: 0, trailing: 24))

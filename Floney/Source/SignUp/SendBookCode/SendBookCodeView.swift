@@ -29,21 +29,21 @@ struct SendBookCodeView: View {
                         .padding()
                         .font(.pretendardFont(.regular, size: 14))
                         .foregroundColor(.greyScale6)
-                        .opacity(accountCode.isEmpty ? 1 : 0), alignment: .leading
+                        .opacity(viewModel.code.isEmpty ? 1 : 0), alignment: .leading
                 )
                 .modifier(TextFieldModifier())
             
             Spacer()
             
             VStack(spacing: 12) {
-                //NavigationLink(destination: WelcomeView()){
+                NavigationLink(destination: EnterBookView()){
                     Text("입력 완료하기")
                         .padding()
                         .modifier(NextButtonModifier(backgroundColor: .primary1))
                         .onTapGesture {
                             viewModel.postBookCode()
                         }
-                //}
+                }
                 NavigationLink(destination: SetBookNameView()){
                     Text("새 가계부 만들기")
                         .padding()

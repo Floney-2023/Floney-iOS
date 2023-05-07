@@ -8,13 +8,17 @@
 
 /* Begin PBXBuildFile section */
 		2F0D01182A03CEB600DAF21D /* SignUpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F0D01172A03CEB600DAF21D /* SignUpViewModel.swift */; };
-		2F1614552A07CFE20029E9A9 /* KeyChain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1614542A07CFE20029E9A9 /* KeyChain.swift */; };
+		2F1614552A07CFE20029E9A9 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1614542A07CFE20029E9A9 /* Keychain.swift */; };
 		2F1614572A07F2A60029E9A9 /* EnterBookCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1614562A07F2A60029E9A9 /* EnterBookCodeView.swift */; };
 		2F1614592A07F3880029E9A9 /* EnterBookView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1614582A07F3880029E9A9 /* EnterBookView.swift */; };
 		2F16145E2A07F4CA0029E9A9 /* BookCodeRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F16145D2A07F4CA0029E9A9 /* BookCodeRequest.swift */; };
 		2F1614602A07F4DC0029E9A9 /* BookCodeResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F16145F2A07F4DC0029E9A9 /* BookCodeResponse.swift */; };
 		2F1614622A07F5FE0029E9A9 /* SendBookCodeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1614612A07F5FE0029E9A9 /* SendBookCodeViewModel.swift */; };
 		2F1614642A07F6120029E9A9 /* SendBookCodeDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1614632A07F6120029E9A9 /* SendBookCodeDataManager.swift */; };
+		2F1614692A0804A50029E9A9 /* CreateBookRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1614682A0804A50029E9A9 /* CreateBookRequest.swift */; };
+		2F16146B2A0804B90029E9A9 /* CreateBookResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F16146A2A0804B90029E9A9 /* CreateBookResponse.swift */; };
+		2F16146D2A0804CA0029E9A9 /* CreateBookDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F16146C2A0804CA0029E9A9 /* CreateBookDataManager.swift */; };
+		2F1614702A0804E30029E9A9 /* CreateBookViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F16146F2A0804E30029E9A9 /* CreateBookViewModel.swift */; };
 		2FD7F39C29B1E26D00B99CAA /* FloneyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD7F39B29B1E26D00B99CAA /* FloneyApp.swift */; };
 		2FD7F39E29B1E26D00B99CAA /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD7F39D29B1E26D00B99CAA /* ContentView.swift */; };
 		2FD7F3A029B1E26E00B99CAA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2FD7F39F29B1E26E00B99CAA /* Assets.xcassets */; };
@@ -75,13 +79,17 @@
 
 /* Begin PBXFileReference section */
 		2F0D01172A03CEB600DAF21D /* SignUpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewModel.swift; sourceTree = "<group>"; };
-		2F1614542A07CFE20029E9A9 /* KeyChain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyChain.swift; sourceTree = "<group>"; };
+		2F1614542A07CFE20029E9A9 /* Keychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
 		2F1614562A07F2A60029E9A9 /* EnterBookCodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterBookCodeView.swift; sourceTree = "<group>"; };
 		2F1614582A07F3880029E9A9 /* EnterBookView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterBookView.swift; sourceTree = "<group>"; };
 		2F16145D2A07F4CA0029E9A9 /* BookCodeRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookCodeRequest.swift; sourceTree = "<group>"; };
 		2F16145F2A07F4DC0029E9A9 /* BookCodeResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookCodeResponse.swift; sourceTree = "<group>"; };
 		2F1614612A07F5FE0029E9A9 /* SendBookCodeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendBookCodeViewModel.swift; sourceTree = "<group>"; };
 		2F1614632A07F6120029E9A9 /* SendBookCodeDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendBookCodeDataManager.swift; sourceTree = "<group>"; };
+		2F1614682A0804A50029E9A9 /* CreateBookRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateBookRequest.swift; sourceTree = "<group>"; };
+		2F16146A2A0804B90029E9A9 /* CreateBookResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateBookResponse.swift; sourceTree = "<group>"; };
+		2F16146C2A0804CA0029E9A9 /* CreateBookDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateBookDataManager.swift; sourceTree = "<group>"; };
+		2F16146F2A0804E30029E9A9 /* CreateBookViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateBookViewModel.swift; sourceTree = "<group>"; };
 		2FD7F39829B1E26D00B99CAA /* Floney.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Floney.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2FD7F39B29B1E26D00B99CAA /* FloneyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloneyApp.swift; sourceTree = "<group>"; };
 		2FD7F39D29B1E26D00B99CAA /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -189,6 +197,31 @@
 			path = DataManager;
 			sourceTree = "<group>";
 		};
+		2F1614652A0804790029E9A9 /* DataManager */ = {
+			isa = PBXGroup;
+			children = (
+				2F16146C2A0804CA0029E9A9 /* CreateBookDataManager.swift */,
+			);
+			path = DataManager;
+			sourceTree = "<group>";
+		};
+		2F1614662A0804850029E9A9 /* Entity */ = {
+			isa = PBXGroup;
+			children = (
+				2F1614682A0804A50029E9A9 /* CreateBookRequest.swift */,
+				2F16146A2A0804B90029E9A9 /* CreateBookResponse.swift */,
+			);
+			path = Entity;
+			sourceTree = "<group>";
+		};
+		2F1614672A0804920029E9A9 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				2F16146F2A0804E30029E9A9 /* CreateBookViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
 		2FD7F38F29B1E26D00B99CAA = {
 			isa = PBXGroup;
 			children = (
@@ -244,7 +277,7 @@
 		2FD7F3AA29B1E39400B99CAA /* Util */ = {
 			isa = PBXGroup;
 			children = (
-				2F1614542A07CFE20029E9A9 /* KeyChain.swift */,
+				2F1614542A07CFE20029E9A9 /* Keychain.swift */,
 				2FFDC36B2A00089F00BE4C1B /* NetworkError.swift */,
 				2FF25C9329E7EF6500737346 /* RoundedCorners.swift */,
 				2FF25C9029E7EF0400737346 /* ButtonLarge.swift */,
@@ -523,6 +556,9 @@
 		2FF25C9629E80D3F00737346 /* CreateBook */ = {
 			isa = PBXGroup;
 			children = (
+				2F1614672A0804920029E9A9 /* ViewModel */,
+				2F1614662A0804850029E9A9 /* Entity */,
+				2F1614652A0804790029E9A9 /* DataManager */,
 				2FF25C9829E80D7E00737346 /* SetBookNameView.swift */,
 				2FFA302329EE775B00412F83 /* SetBookProfileView.swift */,
 				2FFA302529EE81C000412F83 /* CreateBookView.swift */,
@@ -741,6 +777,8 @@
 				2FEA2BCF29C43F2400DE8E54 /* AuthCodeView.swift in Sources */,
 				2F1614572A07F2A60029E9A9 /* EnterBookCodeView.swift in Sources */,
 				2FFA302C29EEAEB900412F83 /* SignUpResponse.swift in Sources */,
+				2F1614692A0804A50029E9A9 /* CreateBookRequest.swift in Sources */,
+				2F16146B2A0804B90029E9A9 /* CreateBookResponse.swift in Sources */,
 				2F1614602A07F4DC0029E9A9 /* BookCodeResponse.swift in Sources */,
 				2FFA303629EEB02800412F83 /* SignInDataManager.swift in Sources */,
 				2FEA2BD529C9B70600DE8E54 /* UserInformationView.swift in Sources */,
@@ -763,7 +801,7 @@
 				2FEA2BD829CABB8D00DE8E54 /* ChangePasswordView.swift in Sources */,
 				2FFA303229EEAF6000412F83 /* SignInRequest.swift in Sources */,
 				2FF25C8F29E7EE9D00737346 /* BottomSheet.swift in Sources */,
-				2F1614552A07CFE20029E9A9 /* KeyChain.swift in Sources */,
+				2F1614552A07CFE20029E9A9 /* Keychain.swift in Sources */,
 				2FFDC36A2A00084600BE4C1B /* SignInViewModel.swift in Sources */,
 				2FD7F3C329B1E47200B99CAA /* Font.swift in Sources */,
 				2FFA302E29EEAEE100412F83 /* SignUpDataManager.swift in Sources */,
@@ -771,8 +809,10 @@
 				2F1614622A07F5FE0029E9A9 /* SendBookCodeViewModel.swift in Sources */,
 				2FEA2BD229C4424600DE8E54 /* OTPViewModel.swift in Sources */,
 				2FD7F3B629B1E42400B99CAA /* Constant.swift in Sources */,
+				2F16146D2A0804CA0029E9A9 /* CreateBookDataManager.swift in Sources */,
 				2FEA2BBA29BA066100DE8E54 /* AnalysisView.swift in Sources */,
 				2FD7F3C929B1E52C00B99CAA /* SplashScreenView.swift in Sources */,
+				2F1614702A0804E30029E9A9 /* CreateBookViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

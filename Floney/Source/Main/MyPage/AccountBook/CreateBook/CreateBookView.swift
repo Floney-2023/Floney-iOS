@@ -37,7 +37,7 @@ struct CreateBookView: View {
                 Spacer()
                 
                 VStack(spacing: 12) {
-                    NavigationLink(destination: CreateBookView()){
+                    NavigationLink(destination: MainTabView()){
                         Text("작성하러 가기")
                             .padding()
                             .withNextButtonFormmating(.primary1)
