@@ -28,7 +28,7 @@ struct SignInView: View {
                                     .padding()
                                     .font(.pretendardFont(.regular, size: 14))
                                     .foregroundColor(.greyScale7)
-                                    .opacity(email.isEmpty ? 1 : 0), alignment: .leading
+                                    .opacity(viewModel.email.isEmpty ? 1 : 0), alignment: .leading
                             )
                             .modifier(TextFieldModifier())
                         
@@ -40,7 +40,7 @@ struct SignInView: View {
                                     .padding()
                                     .font(.pretendardFont(.regular, size: 14))
                                     .foregroundColor(.greyScale7)
-                                    .opacity(password.isEmpty ? 1 : 0), alignment: .leading
+                                    .opacity(viewModel.password.isEmpty ? 1 : 0), alignment: .leading
                             )
                             .modifier(TextFieldModifier())
                         

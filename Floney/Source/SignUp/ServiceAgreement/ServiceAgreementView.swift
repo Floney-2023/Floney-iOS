@@ -74,9 +74,7 @@ struct ServiceAgreementView: View {
                     Spacer()
                     Image("forward_button")
                 }
-                
-                
-                
+
             }
             
             Spacer()
@@ -89,9 +87,6 @@ struct ServiceAgreementView: View {
                         // 유효성 검사
                     }
             }
-            
-            
-
         }
         .padding(EdgeInsets(top: 32, leading: 24, bottom: 0, trailing: 24))
         .navigationBarBackButtonHidden(true)

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		2F0D01182A03CEB600DAF21D /* SignUpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F0D01172A03CEB600DAF21D /* SignUpViewModel.swift */; };
+		2F1614552A07CFE20029E9A9 /* KeyChain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1614542A07CFE20029E9A9 /* KeyChain.swift */; };
 		2FD7F39C29B1E26D00B99CAA /* FloneyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD7F39B29B1E26D00B99CAA /* FloneyApp.swift */; };
 		2FD7F39E29B1E26D00B99CAA /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD7F39D29B1E26D00B99CAA /* ContentView.swift */; };
 		2FD7F3A029B1E26E00B99CAA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2FD7F39F29B1E26E00B99CAA /* Assets.xcassets */; };
@@ -68,6 +69,7 @@
 
 /* Begin PBXFileReference section */
 		2F0D01172A03CEB600DAF21D /* SignUpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewModel.swift; sourceTree = "<group>"; };
+		2F1614542A07CFE20029E9A9 /* KeyChain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyChain.swift; sourceTree = "<group>"; };
 		2FD7F39829B1E26D00B99CAA /* Floney.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Floney.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2FD7F39B29B1E26D00B99CAA /* FloneyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloneyApp.swift; sourceTree = "<group>"; };
 		2FD7F39D29B1E26D00B99CAA /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -205,6 +207,7 @@
 		2FD7F3AA29B1E39400B99CAA /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				2F1614542A07CFE20029E9A9 /* KeyChain.swift */,
 				2FFDC36B2A00089F00BE4C1B /* NetworkError.swift */,
 				2FF25C9329E7EF6500737346 /* RoundedCorners.swift */,
 				2FF25C9029E7EF0400737346 /* ButtonLarge.swift */,
@@ -713,6 +716,7 @@
 				2FEA2BD829CABB8D00DE8E54 /* ChangePasswordView.swift in Sources */,
 				2FFA303229EEAF6000412F83 /* SignInRequest.swift in Sources */,
 				2FF25C8F29E7EE9D00737346 /* BottomSheet.swift in Sources */,
+				2F1614552A07CFE20029E9A9 /* KeyChain.swift in Sources */,
 				2FFDC36A2A00084600BE4C1B /* SignInViewModel.swift in Sources */,
 				2FD7F3C329B1E47200B99CAA /* Font.swift in Sources */,
 				2FFA302E29EEAEE100412F83 /* SignUpDataManager.swift in Sources */,

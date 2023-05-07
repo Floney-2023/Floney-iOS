@@ -59,7 +59,6 @@ protocol SignInProtocol {
     func postSignIn(_ parameters:SignInRequest) -> AnyPublisher<DataResponse<SignInResponse, NetworkError>, Never>
 }
 
-
 class SignIn {
     static let shared: SignInProtocol = SignIn()
     private init() { }
@@ -68,7 +67,7 @@ class SignIn {
 extension SignIn: SignInProtocol {
     func postSignIn(_ parameters:SignInRequest) -> AnyPublisher<DataResponse<SignInResponse, NetworkError>, Never> {
       //  let url = URL(string: "Your_URL")!
-        let url = "\(Constant.BASE_URL)/login"
+        let url = "\(Constant.BASE_URL)/users/login"
         return AF.request(url,
                           method: .post,
                           parameters: parameters,

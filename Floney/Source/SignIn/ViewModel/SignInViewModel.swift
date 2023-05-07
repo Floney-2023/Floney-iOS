@@ -29,8 +29,12 @@ class SignInViewModel: ObservableObject {
             .sink { (dataResponse) in
                 if dataResponse.error != nil {
                     self.createAlert(with: dataResponse.error!)
+                    // 에러 처리
+                    print(dataResponse.error)
                 } else {
                     self.result = dataResponse.value!
+                    print("--성공--")
+                    print(self.result.accessToken)
                 }
             }.store(in: &cancellableSet)
     }
@@ -38,5 +42,6 @@ class SignInViewModel: ObservableObject {
     func createAlert( with error: NetworkError) {
         signInLoadingError = error.backendError == nil ? error.initialError.localizedDescription : error.backendError!.message
         self.showAlert = true
+        // 에러 처리
     }
 }

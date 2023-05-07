@@ -1,16 +1,20 @@
 PODS:
   - Alamofire (5.6.4)
+  - SwiftKeychainWrapper (4.0.1)
 
 DEPENDENCIES:
   - Alamofire
+  - SwiftKeychainWrapper
 
 SPEC REPOS:
   trunk:
     - Alamofire
+    - SwiftKeychainWrapper
 
 SPEC CHECKSUMS:
   Alamofire: 4e95d97098eacb88856099c4fc79b526a299e48c
+  SwiftKeychainWrapper: 807ba1d63c33a7d0613288512399cd1eda1e470c
 
-PODFILE CHECKSUM: 5fd1c2a46cf6c5fc3d695d26f3aadb28d5bc302a
+PODFILE CHECKSUM: 54a63a64d0805a16a8fbe715e2b7b3a06fc0aaed
 
 COCOAPODS: 1.11.3
