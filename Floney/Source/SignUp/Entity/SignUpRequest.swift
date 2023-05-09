@@ -12,3 +12,7 @@ struct SignUpRequest: Encodable {
     var nickname: String
     var marketingAgree : Int
 }
+
+struct AuthEmailRequest: Encodable {
+    var email: String
+}

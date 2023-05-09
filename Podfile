@@ -7,7 +7,9 @@ target 'Floney' do
 
   pod 'Alamofire'
   pod 'SwiftKeychainWrapper'
-
+  pod 'KakaoSDKCommon' # 공통 모듈
+  pod 'KakaoSDKAuth' # 카카오 로그인
+  pod 'KakaoSDKUser' # 사용자 정보
   # Pods for Floney
 
 end

@@ -20,3 +20,8 @@ struct SignUpResult: Decodable {
     var accessToken: String
     var refreshToken: String
 }
+/*
+struct AuthEmailResponse: Decodable {
+    var code : Int
+}
+*/

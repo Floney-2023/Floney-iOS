@@ -44,9 +44,11 @@ struct SetBookProfileView: View {
                 Text("다음으로")
                     .padding()
                     .withNextButtonFormmating(.primary1)
+                /*
                     .onTapGesture {
                         viewModel.createBook()
                     }
+                 */
             }
         }
         .padding(EdgeInsets(top: 32, leading: 24, bottom: 0, trailing: 24))

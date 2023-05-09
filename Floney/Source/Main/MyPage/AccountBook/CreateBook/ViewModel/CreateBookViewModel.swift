@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 class CreateBookViewModel: ObservableObject {
-    @Published var result : CreateBookResponse = CreateBookResponse(name: "", profileImg: "", seeProfile: -1, initialAsset: -1, bookKey: "", budget: -1, weekStartDay: "", carryOver: false, code: "")
+    @Published var result : CreateBookResponse = CreateBookResponse(bookKey: "", code: "")
     @Published var createBookLoadingError: String = ""
     @Published var showAlert: Bool = false
     
@@ -33,7 +33,7 @@ class CreateBookViewModel: ObservableObject {
                     print(dataResponse.error)
                 } else {
                     self.result = dataResponse.value!
-                    print(self.result.name)
+                    print(self.result.code)
                 }
             }.store(in: &cancellableSet)
     }

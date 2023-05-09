@@ -11,6 +11,7 @@ struct EmailAuthView: View {
     @State var email = ""
     var pageCount = 2
     var pageCountAll = 4
+    @StateObject var viewModel = SignUpViewModel()
     var body: some View {
         VStack(spacing: 32) {
             HStack {
@@ -33,7 +34,7 @@ struct EmailAuthView: View {
                 Spacer()
                 
             }
-            TextField("", text: $email)
+            TextField("", text: $viewModel.email)
                 .padding()
                 .keyboardType(.emailAddress)
                 .overlay(
@@ -41,7 +42,7 @@ struct EmailAuthView: View {
                         .padding()
                         .font(.pretendardFont(.regular, size: 14))
                         .foregroundColor(.greyScale6)
-                        .opacity(email.isEmpty ? 1 : 0), alignment: .leading
+                        .opacity(viewModel.email.isEmpty ? 1 : 0), alignment: .leading
                 )
                 .modifier(TextFieldModifier())
             Spacer()
@@ -51,6 +52,11 @@ struct EmailAuthView: View {
                     Text("메일 보내기")
                         .padding()
                         .withNextButtonFormmating(.primary1)
+                /*
+                        .onTapGesture {
+                            viewModel.authEmail()
+                        }
+                 */
                 }
             } else {
                 // Fallback on earlier versions

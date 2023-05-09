@@ -62,6 +62,7 @@ extension SignUpDataManager {
 
 protocol SignUpProtocol {
     func postSignUp(_ parameters:SignUpRequest) -> AnyPublisher<DataResponse<SignUpResponse, NetworkError>, Never>
+    func authEmail(_ parameters:AuthEmailRequest) -> AnyPublisher<Int, Error>
 }
 
 
@@ -72,7 +73,7 @@ class SignUp {
 
 extension SignUp: SignUpProtocol {
     func postSignUp(_ parameters:SignUpRequest) -> AnyPublisher<DataResponse<SignUpResponse, NetworkError>, Never> {
-        let url = "\(Constant.BASE_URL)/signup"
+        let url = "\(Constant.BASE_URL)/users/signup"
         return AF.request(url,
                           method: .post,
                           parameters: parameters,
@@ -88,4 +89,45 @@ extension SignUp: SignUpProtocol {
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
     }
+    
+    func authEmail(_ parameters:AuthEmailRequest) -> AnyPublisher<Int, Error> {
+        let url = "\(Constant.BASE_URL)/users/email?email=\(parameters.email)"
+        
+        
+        return Future<Int, Error> { promise in
+            AF.request(url,
+                       method: .get,
+                       parameters: nil,
+                       encoding : JSONEncoding.default)
+            .validate()
+            .responseJSON{ response in
+                switch response.result {
+                case .success(let value):
+                    if let intValue = value as? Int {
+                        //promise(.success(intValue))
+                        print(intValue)
+                    } else {
+                        //promise(.failure(NetworkError.invalidDataType))
+                        
+                    }
+                case .failure(let error):
+                    print((error))
+                }
+            }
+            
+        }
+        .receive(on: DispatchQueue.main)
+        .eraseToAnyPublisher()
+    }
+       
 }
+
+/*
+ .map { response in
+ response.mapError { error in
+ let backendError = response.data.flatMap { try? JSONDecoder().decode(BackendError.self, from: $0)}
+ return NetworkError(initialError: error, backendError: backendError)
+ }
+ }*/
+// .receive(on: DispatchQueue.main)
+//.eraseToAnyPublisher()

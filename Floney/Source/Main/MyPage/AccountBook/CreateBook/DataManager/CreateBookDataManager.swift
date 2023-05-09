@@ -22,7 +22,7 @@ class CreateBook {
 extension CreateBook: CreateBookProtocol {
     func createBook(_ parameters:CreateBookRequest) -> AnyPublisher<DataResponse<CreateBookResponse, NetworkError>, Never> {
         let url = "\(Constant.BASE_URL)/books"
-        let token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QGVtYWlsLmNvbSIsImlhdCI6MTY4MzQ3NDUwOSwiZXhwIjoxNjgzNDc2MzA5fQ.s5mERqChJ3XU9vS1I1tx_rFmrU1hg1-JRj5OKJsDOGc"
+        //let token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QGVtYWlsLmNvbSIsImlhdCI6MTY4MzQ3NDUwOSwiZXhwIjoxNjgzNDc2MzA5fQ.s5mERqChJ3XU9vS1I1tx_rFmrU1hg1-JRj5OKJsDOGc"
         //let token = Common.getKeychainValue(forKey: .authorization)
        /*
         guard let token = Common.getKeychainValue(forKey: .authorization) else {
@@ -30,11 +30,12 @@ extension CreateBook: CreateBookProtocol {
             return
         }
         */
+        let token = Keychain.getKeychainValue(forKey: .authorization)
         return AF.request(url,
                           method: .post,
                           parameters: parameters,
                           encoder: JSONParameterEncoder(),
-                          headers: ["Authorization":token])
+                          headers: ["Authorization":"Bearer \(token!)"])
             .validate()
             .publishDecodable(type: CreateBookResponse.self)
             .map { response in

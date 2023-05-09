@@ -17,6 +17,7 @@ class SignUpViewModel: ObservableObject {
     @Published var passwordCheck = ""
     @Published var nickname = ""
     @Published var marketingAgree = 0
+    @Published var isNext = false
 
     private var cancellableSet: Set<AnyCancellable> = []
     var dataManager: SignUpProtocol
@@ -35,14 +36,39 @@ class SignUpViewModel: ObservableObject {
                     print(dataResponse.error)
                 } else {
                     self.result = dataResponse.value!
+                    self.isNext = true
+                    let token = Keychain.setKeychain(self.result.accessToken, forKey: .authorization)
+                    //let token = Keychain.setKeychain(value: ,forKey: .authorization)
+                   
+                   
                     print(self.result.accessToken)
                 }
+                
             }.store(in: &cancellableSet)
+    }
+    func authEmail() {
+        let request = AuthEmailRequest(email: email)
+        dataManager.authEmail(request)
+        /*
+        dataManager.authEmail(request)
+            .sink { (dataResponse) in
+                if dataResponse.error != nil {
+                    self.createAlert(with: dataResponse.error!)
+                    print(dataResponse.error)
+                } else {
+                    //self.result = dataResponse.value!
+                    //self.isNext = true
+                    //let token = Keychain.setKeychain(self.result.accessToken, forKey: .authorization)
+                    //let token = Keychain.setKeychain(value: ,forKey: .authorization)
+                    print("성공")
+                }
+                
+            }.store(in: &cancellableSet)
+         */
     }
     
     func validatePassword() {
         if (password != passwordCheck) {
-            
         }
     }
     

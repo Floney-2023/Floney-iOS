@@ -49,7 +49,7 @@ struct UserInfoView: View {
                                     .padding()
                                     .font(.pretendardFont(.regular, size: 14))
                                     .foregroundColor(.greyScale6)
-                                    .opacity(email.isEmpty ? 1 : 0), alignment: .leading
+                                    .opacity(viewModel.email.isEmpty ? 1 : 0), alignment: .leading
                             )
                             .modifier(TextFieldModifier())
                     }
@@ -68,7 +68,7 @@ struct UserInfoView: View {
                                     .padding()
                                     .font(.pretendardFont(.regular, size: 14))
                                     .foregroundColor(.greyScale6)
-                                    .opacity(password.isEmpty ? 1 : 0), alignment: .leading
+                                    .opacity(viewModel.password.isEmpty ? 1 : 0), alignment: .leading
                             )
                             .modifier(TextFieldModifier())
                         
@@ -88,7 +88,7 @@ struct UserInfoView: View {
                                     .padding()
                                     .font(.pretendardFont(.regular, size: 14))
                                     .foregroundColor(.greyScale6)
-                                    .opacity(passwordCheck.isEmpty ? 1 : 0), alignment: .leading
+                                    .opacity(viewModel.passwordCheck.isEmpty ? 1 : 0), alignment: .leading
                             )
                             .modifier(TextFieldModifier())
                         
@@ -117,12 +117,12 @@ struct UserInfoView: View {
                                 .padding()
                                 .font(.pretendardFont(.regular, size: 14))
                                 .foregroundColor(.greyScale6)
-                                .opacity(nickname.isEmpty ? 1 : 0), alignment: .leading
+                                .opacity(viewModel.nickname.isEmpty ? 1 : 0), alignment: .leading
                         )
                         .modifier(TextFieldModifier())
                 }
                 Spacer()
-                
+            //isActive: $viewModel.isNext
                 NavigationLink(destination: WelcomeView()){
                     Text("다음으로")
                         .padding()
@@ -136,6 +136,7 @@ struct UserInfoView: View {
                             
                         }
                      */
+                     
                 }
             }
             .padding(EdgeInsets(top: 32, leading: 24, bottom: 0, trailing: 24))

@@ -20,6 +20,16 @@
 		2F16146D2A0804CA0029E9A9 /* CreateBookDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F16146C2A0804CA0029E9A9 /* CreateBookDataManager.swift */; };
 		2F1614702A0804E30029E9A9 /* CreateBookViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F16146F2A0804E30029E9A9 /* CreateBookViewModel.swift */; };
 		2F1614732A080C920029E9A9 /* ServiceAgreementViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1614722A080C920029E9A9 /* ServiceAgreementViewModel.swift */; };
+		2F1614762A0A32A20029E9A9 /* CalendarRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1614752A0A32A20029E9A9 /* CalendarRequest.swift */; };
+		2F1614782A0A32AF0029E9A9 /* CalendarResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1614772A0A32AF0029E9A9 /* CalendarResponse.swift */; };
+		2F16147C2A0A33A80029E9A9 /* CalendarDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F16147B2A0A33A80029E9A9 /* CalendarDataManager.swift */; };
+		2F16147E2A0A33B70029E9A9 /* CalendarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F16147D2A0A33B70029E9A9 /* CalendarViewModel.swift */; };
+		2F1614812A0A438A0029E9A9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1614802A0A438A0029E9A9 /* AppDelegate.swift */; };
+		2F1614832A0A45B80029E9A9 /* Secret.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1614822A0A45B80029E9A9 /* Secret.swift */; };
+		2F1614862A0A76A50029E9A9 /* MyPageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1614852A0A76A50029E9A9 /* MyPageViewModel.swift */; };
+		2F1614892A0A76E70029E9A9 /* MyPageRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1614882A0A76E70029E9A9 /* MyPageRequest.swift */; };
+		2F16148B2A0A76F20029E9A9 /* MyPageResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F16148A2A0A76F20029E9A9 /* MyPageResponse.swift */; };
+		2F16148E2A0A771E0029E9A9 /* MyPageDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F16148D2A0A771E0029E9A9 /* MyPageDataManager.swift */; };
 		2FD7F39C29B1E26D00B99CAA /* FloneyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD7F39B29B1E26D00B99CAA /* FloneyApp.swift */; };
 		2FD7F39E29B1E26D00B99CAA /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD7F39D29B1E26D00B99CAA /* ContentView.swift */; };
 		2FD7F3A029B1E26E00B99CAA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2FD7F39F29B1E26E00B99CAA /* Assets.xcassets */; };
@@ -92,6 +102,17 @@
 		2F16146C2A0804CA0029E9A9 /* CreateBookDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateBookDataManager.swift; sourceTree = "<group>"; };
 		2F16146F2A0804E30029E9A9 /* CreateBookViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateBookViewModel.swift; sourceTree = "<group>"; };
 		2F1614722A080C920029E9A9 /* ServiceAgreementViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceAgreementViewModel.swift; sourceTree = "<group>"; };
+		2F1614752A0A32A20029E9A9 /* CalendarRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarRequest.swift; sourceTree = "<group>"; };
+		2F1614772A0A32AF0029E9A9 /* CalendarResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarResponse.swift; sourceTree = "<group>"; };
+		2F16147B2A0A33A80029E9A9 /* CalendarDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarDataManager.swift; sourceTree = "<group>"; };
+		2F16147D2A0A33B70029E9A9 /* CalendarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewModel.swift; sourceTree = "<group>"; };
+		2F16147F2A0A3E510029E9A9 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
+		2F1614802A0A438A0029E9A9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		2F1614822A0A45B80029E9A9 /* Secret.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secret.swift; sourceTree = "<group>"; };
+		2F1614852A0A76A50029E9A9 /* MyPageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageViewModel.swift; sourceTree = "<group>"; };
+		2F1614882A0A76E70029E9A9 /* MyPageRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageRequest.swift; sourceTree = "<group>"; };
+		2F16148A2A0A76F20029E9A9 /* MyPageResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageResponse.swift; sourceTree = "<group>"; };
+		2F16148D2A0A771E0029E9A9 /* MyPageDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageDataManager.swift; sourceTree = "<group>"; };
 		2FD7F39829B1E26D00B99CAA /* Floney.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Floney.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2FD7F39B29B1E26D00B99CAA /* FloneyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloneyApp.swift; sourceTree = "<group>"; };
 		2FD7F39D29B1E26D00B99CAA /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -232,6 +253,56 @@
 			path = ViewModel;
 			sourceTree = "<group>";
 		};
+		2F1614742A0A32830029E9A9 /* Entity */ = {
+			isa = PBXGroup;
+			children = (
+				2F1614752A0A32A20029E9A9 /* CalendarRequest.swift */,
+				2F1614772A0A32AF0029E9A9 /* CalendarResponse.swift */,
+			);
+			path = Entity;
+			sourceTree = "<group>";
+		};
+		2F1614792A0A33800029E9A9 /* DataManager */ = {
+			isa = PBXGroup;
+			children = (
+				2F16147B2A0A33A80029E9A9 /* CalendarDataManager.swift */,
+			);
+			path = DataManager;
+			sourceTree = "<group>";
+		};
+		2F16147A2A0A33870029E9A9 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				2F16147D2A0A33B70029E9A9 /* CalendarViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		2F1614842A0A70790029E9A9 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				2F1614852A0A76A50029E9A9 /* MyPageViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		2F1614872A0A76D50029E9A9 /* Entity */ = {
+			isa = PBXGroup;
+			children = (
+				2F1614882A0A76E70029E9A9 /* MyPageRequest.swift */,
+				2F16148A2A0A76F20029E9A9 /* MyPageResponse.swift */,
+			);
+			path = Entity;
+			sourceTree = "<group>";
+		};
+		2F16148C2A0A77080029E9A9 /* DataManager */ = {
+			isa = PBXGroup;
+			children = (
+				2F16148D2A0A771E0029E9A9 /* MyPageDataManager.swift */,
+			);
+			path = DataManager;
+			sourceTree = "<group>";
+		};
 		2FD7F38F29B1E26D00B99CAA = {
 			isa = PBXGroup;
 			children = (
@@ -258,6 +329,7 @@
 				2FD7F3AA29B1E39400B99CAA /* Util */,
 				2FD7F3AC29B1E3B100B99CAA /* Source */,
 				2FD7F39B29B1E26D00B99CAA /* FloneyApp.swift */,
+				2F1614802A0A438A0029E9A9 /* AppDelegate.swift */,
 				2FD7F39D29B1E26D00B99CAA /* ContentView.swift */,
 				2FD7F39F29B1E26E00B99CAA /* Assets.xcassets */,
 				2FD7F3A129B1E26E00B99CAA /* Preview Content */,
@@ -396,6 +468,8 @@
 		2FD7F3B329B1E40400B99CAA /* Secret */ = {
 			isa = PBXGroup;
 			children = (
+				2F16147F2A0A3E510029E9A9 /* Config.xcconfig */,
+				2F1614822A0A45B80029E9A9 /* Secret.swift */,
 			);
 			path = Secret;
 			sourceTree = "<group>";
@@ -446,6 +520,9 @@
 			isa = PBXGroup;
 			children = (
 				2FEA2BBF29BA068200DE8E54 /* MyPageView.swift */,
+				2F16148C2A0A77080029E9A9 /* DataManager */,
+				2F1614872A0A76D50029E9A9 /* Entity */,
+				2F1614842A0A70790029E9A9 /* ViewModel */,
 				2FF25C9529E80D1B00737346 /* AccountBook */,
 				2FEA2BD329C9B6E900DE8E54 /* UserInformation */,
 			);
@@ -480,6 +557,9 @@
 			isa = PBXGroup;
 			children = (
 				2FEA2BB629BA064B00DE8E54 /* HomeView.swift */,
+				2F16147A2A0A33870029E9A9 /* ViewModel */,
+				2F1614742A0A32830029E9A9 /* Entity */,
+				2F1614792A0A33800029E9A9 /* DataManager */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -777,6 +857,7 @@
 				2FD7F39E29B1E26D00B99CAA /* ContentView.swift in Sources */,
 				2FFA302A29EEAE6700412F83 /* SignUpRequest.swift in Sources */,
 				2FEA2BB729BA064B00DE8E54 /* HomeView.swift in Sources */,
+				2F1614762A0A32A20029E9A9 /* CalendarRequest.swift in Sources */,
 				2FEA2B6429B73CE700DE8E54 /* ServiceAgreementView.swift in Sources */,
 				2FFDC36C2A00089F00BE4C1B /* NetworkError.swift in Sources */,
 				2FF25C8629E181C000737346 /* SendBookCodeView.swift in Sources */,
@@ -789,16 +870,20 @@
 				2F1614572A07F2A60029E9A9 /* EnterBookCodeView.swift in Sources */,
 				2FFA302C29EEAEB900412F83 /* SignUpResponse.swift in Sources */,
 				2F1614692A0804A50029E9A9 /* CreateBookRequest.swift in Sources */,
+				2F1614812A0A438A0029E9A9 /* AppDelegate.swift in Sources */,
 				2F16146B2A0804B90029E9A9 /* CreateBookResponse.swift in Sources */,
 				2F1614602A07F4DC0029E9A9 /* BookCodeResponse.swift in Sources */,
 				2FFA303629EEB02800412F83 /* SignInDataManager.swift in Sources */,
 				2FEA2BD529C9B70600DE8E54 /* UserInformationView.swift in Sources */,
 				2FFA302429EE775B00412F83 /* SetBookProfileView.swift in Sources */,
+				2F16147C2A0A33A80029E9A9 /* CalendarDataManager.swift in Sources */,
 				2FFA302629EE81C000412F83 /* CreateBookView.swift in Sources */,
 				2F0D01182A03CEB600DAF21D /* SignUpViewModel.swift in Sources */,
 				2FEA2BA729B8969E00DE8E54 /* WelcomeView.swift in Sources */,
 				2FF25C9929E80D7E00737346 /* SetBookNameView.swift in Sources */,
 				2F16145E2A07F4CA0029E9A9 /* BookCodeRequest.swift in Sources */,
+				2F16148E2A0A771E0029E9A9 /* MyPageDataManager.swift in Sources */,
+				2F16147E2A0A33B70029E9A9 /* CalendarViewModel.swift in Sources */,
 				2FEA2BCC29C43D9500DE8E54 /* EmailAuthView.swift in Sources */,
 				2FFA303429EEAF6B00412F83 /* SignInResponse.swift in Sources */,
 				2FD7F3C129B1E46900B99CAA /* Color.swift in Sources */,
@@ -807,12 +892,14 @@
 				2FEA2BC029BA068200DE8E54 /* MyPageView.swift in Sources */,
 				2FF25C9429E7EF6500737346 /* RoundedCorners.swift in Sources */,
 				2FEA2BDB29CD63B300DE8E54 /* SetProfileImageView.swift in Sources */,
+				2F1614832A0A45B80029E9A9 /* Secret.swift in Sources */,
 				2F1614732A080C920029E9A9 /* ServiceAgreementViewModel.swift in Sources */,
 				2F1614642A07F6120029E9A9 /* SendBookCodeDataManager.swift in Sources */,
 				2FEA2BA929B8970A00DE8E54 /* NextButtonModifier.swift in Sources */,
 				2FEA2BD829CABB8D00DE8E54 /* ChangePasswordView.swift in Sources */,
 				2FFA303229EEAF6000412F83 /* SignInRequest.swift in Sources */,
 				2FF25C8F29E7EE9D00737346 /* BottomSheet.swift in Sources */,
+				2F1614892A0A76E70029E9A9 /* MyPageRequest.swift in Sources */,
 				2F1614552A07CFE20029E9A9 /* Keychain.swift in Sources */,
 				2FFDC36A2A00084600BE4C1B /* SignInViewModel.swift in Sources */,
 				2FD7F3C329B1E47200B99CAA /* Font.swift in Sources */,
@@ -820,11 +907,14 @@
 				2FD7F39C29B1E26D00B99CAA /* FloneyApp.swift in Sources */,
 				2F1614622A07F5FE0029E9A9 /* SendBookCodeViewModel.swift in Sources */,
 				2FEA2BD229C4424600DE8E54 /* OTPViewModel.swift in Sources */,
+				2F1614782A0A32AF0029E9A9 /* CalendarResponse.swift in Sources */,
 				2FD7F3B629B1E42400B99CAA /* Constant.swift in Sources */,
 				2F16146D2A0804CA0029E9A9 /* CreateBookDataManager.swift in Sources */,
 				2FEA2BBA29BA066100DE8E54 /* AnalysisView.swift in Sources */,
 				2FD7F3C929B1E52C00B99CAA /* SplashScreenView.swift in Sources */,
+				2F16148B2A0A76F20029E9A9 /* MyPageResponse.swift in Sources */,
 				2F1614702A0804E30029E9A9 /* CreateBookViewModel.swift in Sources */,
+				2F1614862A0A76A50029E9A9 /* MyPageViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

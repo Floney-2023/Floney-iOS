@@ -11,6 +11,10 @@ struct MyPageView: View {
     @State var nickname = "user"
     @State var email = "user@gmail.com"
     @State var isShowingBottomSheet = false
+    @StateObject var viewModel = MyPageViewModel()
+    init() {
+        viewModel.getMyPage()
+    }
     var body: some View {
       //  NavigationView {
         ZStack {
@@ -32,11 +36,11 @@ struct MyPageView: View {
                                 Image("icon_profile")
                                     .padding(20)
                                 VStack(alignment: .leading, spacing:5){
-                                    Text("\(nickname)")
+                                    Text("\(viewModel.nickname)")
                                         .font(.pretendardFont(.bold, size: 14))
                                         .foregroundColor(.greyScale2)
                                     
-                                    Text("\(email)")
+                                    Text("\(viewModel.email)")
                                         .font(.pretendardFont(.medium, size: 12))
                                         .foregroundColor(.greyScale3)
                                 }
@@ -72,15 +76,13 @@ struct MyPageView: View {
                                 Image("icon_profile")
                                     .padding(20)
                                 VStack(alignment: .leading, spacing:5){
-                                    Text("\(nickname)")
+                                    Text("이름 그냥!!")
                                         .font(.pretendardFont(.bold, size: 14))
                                         .foregroundColor(.greyScale2)
                                     
-                                    Text("1명")
+                                    Text("5")
                                         .font(.pretendardFont(.medium, size: 12))
                                         .foregroundColor(.greyScale6)
-                                    
-                                    
                                 }
                                 Spacer()
                                 Image("icon_check_circle")
