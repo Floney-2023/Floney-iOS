@@ -8,8 +8,7 @@
 import Foundation
 import Combine
 class MyPageViewModel: ObservableObject {
-    @Published var result : MyPageResponse = MyPageResponse(nickname: "", email: "", subscribe: false
-    )
+    @Published var result : MyPageResponse = MyPageResponse(nickname: "", email: "", subscribe: false)
     @Published var myPageLoadingError: String = ""
     @Published var showAlert: Bool = false
     
@@ -25,6 +24,7 @@ class MyPageViewModel: ObservableObject {
     init( dataManager: MyPageProtocol = MyPage.shared) {
         self.dataManager = dataManager
         //postSignIn()
+        getMyPage()
     }
     
     func getMyPage() {

@@ -25,7 +25,7 @@ extension CalendarService: CalendarProtocol {
         
         // token을 keychain에 저장해야 함.
     
-        let token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QGVtYWlsLmNvbSIsImlhdCI6MTY4MzQ3NDUwOSwiZXhwIjoxNjgzNDc2MzA5fQ.s5mERqChJ3XU9vS1I1tx_rFmrU1hg1-JRj5OKJsDOGc"
+        let token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJLayIsImlhdCI6MTY4Mzk3NDczNiwiZXhwIjoxNjgzOTc4MzM2fQ.Edbqozc2kyaU5EVhXVM_8ZYMJ5UrbgX_e0TmfEDcm6c"
         return AF.request(url,
                           method: .get,
                           parameters: parameters,

@@ -10,7 +10,7 @@ import Foundation
 struct CalendarResponse: Decodable {
     var totalIncome: Int
     var totalOutcome: Int
-    var result: CalendarExpenses?
+    var result: [CalendarExpenses]?
 }
 
 struct CalendarExpenses: Decodable {

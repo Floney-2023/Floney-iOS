@@ -14,12 +14,19 @@ class CalendarViewModel: ObservableObject {
     @Published var showAlert: Bool = false
     @Published var bookKey = ""
     @Published var date = ""
+    
+    @Published var monthlyData: [CalendarExpenses] = []
+    @Published var selectedDate: CalendarExpenses?
+
+    var selectedYear: Int = Calendar.current.component(.year, from: Date())
+    var selectedMonth: Int = Calendar.current.component(.month, from: Date())
 
     private var cancellableSet: Set<AnyCancellable> = []
     var dataManager: CalendarProtocol
     
     init( dataManager: CalendarProtocol = CalendarService.shared) {
         self.dataManager = dataManager
+        getCalendar()
         //postSignIn()
     }
     
@@ -38,10 +45,34 @@ class CalendarViewModel: ObservableObject {
                 }
             }.store(in: &cancellableSet)
     }
+
+    func selectDate(_ date: CalendarExpenses) {
+        selectedDate = date
+    }
+
+    func nextMonth() {
+        selectedMonth += 1
+        if selectedMonth > 12 {
+            selectedMonth = 1
+            selectedYear += 1
+        }
+        getCalendar()
+    }
+
+    func previousMonth() {
+        selectedMonth -= 1
+        if selectedMonth < 1 {
+            selectedMonth = 12
+            selectedYear -= 1
+        }
+        getCalendar()
+    }
+
     
     func createAlert( with error: NetworkError) {
         calendarLoadingError = error.backendError == nil ? error.initialError.localizedDescription : error.backendError!.message
         self.showAlert = true
         // 에러 처리
     }
+    
 }

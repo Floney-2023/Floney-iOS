@@ -22,7 +22,7 @@ class MyPage {
 extension MyPage: MyPageProtocol {
     func getMyPage() -> AnyPublisher<DataResponse<MyPageResponse, NetworkError>, Never> {
         let url = "\(Constant.BASE_URL)/users/mypage"
-        let token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJLayIsImlhdCI6MTY4MzYzODI4OSwiZXhwIjoxNjgzNjQxODg5fQ.e-3pFz1KW01h7ooukGBJpHlQwccyOOX7g0H68sqhJzg"
+        let token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJLayIsImlhdCI6MTY4Mzk3NTg4NCwiZXhwIjoxNjgzOTc5NDg0fQ.JAq_EoZktUWlXZSEzunhaVYpvYs-emACFRV6ZyLRg_0"
         //let token = Common.getKeychainValue(forKey: .authorization)
        /*
         guard let token = Common.getKeychainValue(forKey: .authorization) else {
