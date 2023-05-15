@@ -8,5 +8,5 @@
 import Foundation
 
 struct Secret {
-    static let KAKAO_NATIVE_APP_KEY = "5f02db71e2b902a821ec6a5bd9de0582"
+    static let KAKAO_NATIVE_APP_KEY = "568bf0b356479da518498ee7ed8f9c5c"
 }

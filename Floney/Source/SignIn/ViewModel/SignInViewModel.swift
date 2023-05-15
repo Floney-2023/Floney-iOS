@@ -14,6 +14,8 @@ class SignInViewModel: ObservableObject {
     @Published var showAlert: Bool = false
     @Published var email = ""
     @Published var password = ""
+    
+    @Published var isNext = false
 
     private var cancellableSet: Set<AnyCancellable> = []
     var dataManager: SignInProtocol
@@ -33,6 +35,7 @@ class SignInViewModel: ObservableObject {
                     print(dataResponse.error)
                 } else {
                     self.result = dataResponse.value!
+                    self.isNext = true
                     print("--성공--")
                     print(self.result.accessToken)
                 }
