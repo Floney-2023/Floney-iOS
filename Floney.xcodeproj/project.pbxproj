@@ -32,6 +32,7 @@
 		2F16148E2A0A771E0029E9A9 /* MyPageDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F16148D2A0A771E0029E9A9 /* MyPageDataManager.swift */; };
 		2F1614922A0F971B0029E9A9 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1614912A0F971B0029E9A9 /* CalendarView.swift */; };
 		2F1614942A0FABBE0029E9A9 /* CustomAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1614932A0FABBE0029E9A9 /* CustomAlert.swift */; };
+		2F1614972A1370B90029E9A9 /* SignInWithAppleCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1614962A1370B90029E9A9 /* SignInWithAppleCoordinator.swift */; };
 		2FD7F39C29B1E26D00B99CAA /* FloneyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD7F39B29B1E26D00B99CAA /* FloneyApp.swift */; };
 		2FD7F39E29B1E26D00B99CAA /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD7F39D29B1E26D00B99CAA /* ContentView.swift */; };
 		2FD7F3A029B1E26E00B99CAA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2FD7F39F29B1E26E00B99CAA /* Assets.xcassets */; };
@@ -117,6 +118,8 @@
 		2F16148D2A0A771E0029E9A9 /* MyPageDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageDataManager.swift; sourceTree = "<group>"; };
 		2F1614912A0F971B0029E9A9 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
 		2F1614932A0FABBE0029E9A9 /* CustomAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAlert.swift; sourceTree = "<group>"; };
+		2F1614952A136FC60029E9A9 /* Floney.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Floney.entitlements; sourceTree = "<group>"; };
+		2F1614962A1370B90029E9A9 /* SignInWithAppleCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInWithAppleCoordinator.swift; sourceTree = "<group>"; };
 		2FD7F39829B1E26D00B99CAA /* Floney.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Floney.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2FD7F39B29B1E26D00B99CAA /* FloneyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloneyApp.swift; sourceTree = "<group>"; };
 		2FD7F39D29B1E26D00B99CAA /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -328,6 +331,7 @@
 		2FD7F39A29B1E26D00B99CAA /* Floney */ = {
 			isa = PBXGroup;
 			children = (
+				2F1614952A136FC60029E9A9 /* Floney.entitlements */,
 				2FD7F3CA29B1E5C500B99CAA /* Info.plist */,
 				2FD7F3A929B1E38900B99CAA /* Configuration */,
 				2FD7F3AA29B1E39400B99CAA /* Util */,
@@ -363,6 +367,7 @@
 		2FD7F3AA29B1E39400B99CAA /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				2F1614962A1370B90029E9A9 /* SignInWithAppleCoordinator.swift */,
 				2F1614932A0FABBE0029E9A9 /* CustomAlert.swift */,
 				2F1614542A07CFE20029E9A9 /* Keychain.swift */,
 				2FFDC36B2A00089F00BE4C1B /* NetworkError.swift */,
@@ -904,6 +909,7 @@
 				2F1614642A07F6120029E9A9 /* SendBookCodeDataManager.swift in Sources */,
 				2FEA2BA929B8970A00DE8E54 /* NextButtonModifier.swift in Sources */,
 				2FEA2BD829CABB8D00DE8E54 /* ChangePasswordView.swift in Sources */,
+				2F1614972A1370B90029E9A9 /* SignInWithAppleCoordinator.swift in Sources */,
 				2FFA303229EEAF6000412F83 /* SignInRequest.swift in Sources */,
 				2FF25C8F29E7EE9D00737346 /* BottomSheet.swift in Sources */,
 				2F1614892A0A76E70029E9A9 /* MyPageRequest.swift in Sources */,
@@ -1049,6 +1055,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Floney/Floney.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Floney/Preview Content\"";
@@ -1079,6 +1086,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Floney/Floney.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Floney/Preview Content\"";

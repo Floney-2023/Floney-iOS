@@ -9,6 +9,7 @@ import SwiftUI
 import KakaoSDKCommon
 import KakaoSDKAuth
 import KakaoSDKUser
+import AuthenticationServices
 
 struct SignInView: View {
     @State var email = ""
@@ -137,6 +138,13 @@ struct SignInView: View {
     }
 }
 
+struct SignInWithAppleView: UIViewRepresentable {
+    func makeUIView(context: Context) -> ASAuthorizationAppleIDButton {
+        return ASAuthorizationAppleIDButton(type: .signIn, style: .black)
+    }
+
+    func updateUIView(_ uiView: ASAuthorizationAppleIDButton, context: Context) {}
+}
 
 struct SignInView_Previews: PreviewProvider {
     static var previews: some View {

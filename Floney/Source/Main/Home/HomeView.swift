@@ -19,7 +19,7 @@ struct HomeView: View {
                         Spacer()
                         Image("icon_profile")
                     }
-                    CalendarView(month: month)
+                    CustomCalendarView(month: month)
                 }
                 .padding(20)
             }

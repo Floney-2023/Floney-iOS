@@ -7,6 +7,8 @@
 
 import Foundation
 import Combine
+import AuthenticationServices
+
 class SignInViewModel: ObservableObject {
     
     @Published var result : SignInResponse = SignInResponse(accessToken: "", refreshToken: "")
@@ -40,6 +42,16 @@ class SignInViewModel: ObservableObject {
                     print(self.result.accessToken)
                 }
             }.store(in: &cancellableSet)
+    }
+    
+    private func performAppleSignIn() {
+        let coordinator = SignInWithAppleCoordinator { userId in
+            print("Sign in successful, user id: \(userId)")
+        } onError: { error in
+            print("Sign in failed with error: \(error)")
+        }
+
+        coordinator.signIn()
     }
     
     func createAlert( with error: NetworkError) {
