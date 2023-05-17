@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct MyPageView: View {
-    @State var nickname = "user"
-    @State var email = "user@gmail.com"
+    @State var nickname = "플로니"
+    @State var email = "floney.dev@gmail.com"
     @State var isShowingBottomSheet = false
     @StateObject var viewModel = MyPageViewModel()
     
@@ -34,11 +34,11 @@ struct MyPageView: View {
                                 Image("icon_profile")
                                     .padding(20)
                                 VStack(alignment: .leading, spacing:5){
-                                    Text("\(viewModel.nickname)")
+                                    Text("\(nickname)")
                                         .font(.pretendardFont(.bold, size: 14))
                                         .foregroundColor(.greyScale2)
                                     
-                                    Text("\(viewModel.email)")
+                                    Text("\(email)")
                                         .font(.pretendardFont(.medium, size: 12))
                                         .foregroundColor(.greyScale3)
                                 }
@@ -74,11 +74,11 @@ struct MyPageView: View {
                                 Image("icon_profile")
                                     .padding(20)
                                 VStack(alignment: .leading, spacing:5){
-                                    Text("이름 그냥!!")
+                                    Text("플로니 가계부")
                                         .font(.pretendardFont(.bold, size: 14))
                                         .foregroundColor(.greyScale2)
                                     
-                                    Text("5")
+                                    Text("1명")
                                         .font(.pretendardFont(.medium, size: 12))
                                         .foregroundColor(.greyScale6)
                                 }

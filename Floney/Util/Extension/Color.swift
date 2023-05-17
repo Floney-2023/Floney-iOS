@@ -51,6 +51,7 @@ extension Color {
     static let background2 = Color(hex: "F6F6F6")
     static let background3 = Color(hex: "FAFAFA")
 
+    static let calendarRed = Color(hex: "F14F4F")
     static let red1 = Color(hex: "AD1F25")
     static let red2 = Color(hex: "E56E73")
     static let red3 = Color(hex: "EFA9AB")

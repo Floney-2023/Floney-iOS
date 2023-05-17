@@ -61,7 +61,7 @@ struct UserInfoView: View {
                             Spacer()
                         }
                         
-                        TextField("", text: $viewModel.password)
+                        SecureField("", text: $viewModel.password)
                             .padding()
                             .overlay(
                                 Text("비밀번호")
@@ -81,7 +81,7 @@ struct UserInfoView: View {
                             Spacer()
                         }
                         
-                        TextField("", text: $viewModel.passwordCheck)
+                        SecureField("", text: $viewModel.passwordCheck)
                             .padding()
                             .overlay(
                                 Text("비밀번호 확인")

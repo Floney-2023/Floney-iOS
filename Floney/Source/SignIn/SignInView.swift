@@ -35,7 +35,7 @@ struct SignInView: View {
                             .modifier(TextFieldModifier())
                         
                         
-                        TextField("", text: $viewModel.password)
+                        SecureField("", text: $viewModel.password)
                             .padding()
                             .overlay(
                                 Text("비밀번호")
