@@ -12,6 +12,7 @@ struct CreateBookView: View {
     var pageCountAll = 3
     @State var bookTitle = ""
     @State var isShowingBottomSheet = false
+
     var body: some View {
         ZStack {
             VStack(spacing: 32) {
@@ -37,7 +38,7 @@ struct CreateBookView: View {
                 Spacer()
                 
                 VStack(spacing: 12) {
-                    NavigationLink(destination: MyPageView()){
+                    NavigationLink(destination: MainTabView()){
                         Text("작성하러 가기")
                             .padding()
                             .withNextButtonFormmating(.primary1)
@@ -48,7 +49,6 @@ struct CreateBookView: View {
                         .withNextButtonFormmating(.primary9)
                         .onTapGesture {
                             self.isShowingBottomSheet.toggle()
-                            
                         }
                 }
             }

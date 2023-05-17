@@ -12,6 +12,7 @@ struct SetBookNameView: View {
     var pageCountAll = 3
     //@State var bookTitle = ""
     @StateObject var viewModel = CreateBookViewModel()
+    @State var name = ""
     var body: some View {
         VStack(spacing: 20) {
             HStack {
@@ -31,7 +32,7 @@ struct SetBookNameView: View {
                 Spacer()
             }
             VStack(spacing: 14) {
-                TextField("", text: $viewModel.name)
+                TextField("", text: $name)
                     .padding()
                     .keyboardType(.emailAddress)
                     .overlay(
@@ -39,7 +40,7 @@ struct SetBookNameView: View {
                             .padding()
                             .font(.pretendardFont(.regular, size: 14))
                             .foregroundColor(.greyScale6)
-                            .opacity(viewModel.name.isEmpty ? 1 : 0), alignment: .leading
+                            .opacity(name.isEmpty ? 1 : 0), alignment: .leading
                     )
                     .modifier(TextFieldModifier())
                 HStack {
@@ -53,7 +54,7 @@ struct SetBookNameView: View {
             
             Spacer()
             
-            NavigationLink(destination: SetBookProfileView()){
+            NavigationLink(destination: SetBookProfileView(name: name)){
                 Text("다음으로")
                     .padding()
                     .withNextButtonFormmating(.primary1)

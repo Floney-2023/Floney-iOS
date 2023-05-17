@@ -118,7 +118,7 @@ struct ShareBookBottomSheet: View{
                                 .foregroundColor(.greyScale8)
                             Spacer()
                         }
-                        ButtonLarge(label: "가계부 생성하기", background: .greyScale12, textColor: .greyScale2, strokeColor: .greyScale12, action: {
+                        ButtonLarge(label: (Keychain.getKeychainValue(forKey: .bookCode))!, background: .greyScale12, textColor: .greyScale2, strokeColor: .greyScale12, action: {
                             
                         })
                         .frame(height: buttonHeight)

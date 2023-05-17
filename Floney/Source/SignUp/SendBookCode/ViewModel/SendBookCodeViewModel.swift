@@ -13,7 +13,7 @@ class BookCodeViewModel: ObservableObject {
     @Published var showAlert: Bool = false
     
     @Published var code : String = ""
-    
+    @Published var isNext : Bool = false
     private var cancellableSet: Set<AnyCancellable> = []
     var dataManager: BookCodeProtocol
     
@@ -31,6 +31,7 @@ class BookCodeViewModel: ObservableObject {
                     print(dataResponse.error)
                 } else {
                     self.result = dataResponse.value!
+                    self.isNext = true
                     print(self.result.code)
                 }
             }.store(in: &cancellableSet)

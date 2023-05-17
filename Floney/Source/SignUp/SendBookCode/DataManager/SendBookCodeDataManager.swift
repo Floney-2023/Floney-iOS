@@ -24,7 +24,7 @@ extension BookCode: BookCodeProtocol {
         let code = parameters.code
         let url = "\(Constant.BASE_URL)/books/join?code=\(code)"
         //let token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QGVtYWlsLmNvbSIsImlhdCI6MTY4MzQ3NDUwOSwiZXhwIjoxNjgzNDc2MzA5fQ.s5mERqChJ3XU9vS1I1tx_rFmrU1hg1-JRj5OKJsDOGc"
-        let token = Keychain.getKeychainValue(forKey: .authorization)
+        let token = Keychain.getKeychainValue(forKey: .accessToken)
        /*
         guard let token = Common.getKeychainValue(forKey: .authorization) else {
             // 토큰 재발급 로직

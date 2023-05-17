@@ -10,6 +10,7 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>kakao${KAKAO_NATIVE_APP_KEY}</string>
+                <string>com.googleusercontent.apps.{GOOGLE_CLIENT_ID}</string>
 			</array>
 		</dict>
 	</array>

@@ -52,11 +52,11 @@ struct EmailAuthView: View {
                     Text("메일 보내기")
                         .padding()
                         .withNextButtonFormmating(.primary1)
-                /*
+                    /*
                         .onTapGesture {
                             viewModel.authEmail()
                         }
-                 */
+                     */
                 }
             } else {
                 // Fallback on earlier versions

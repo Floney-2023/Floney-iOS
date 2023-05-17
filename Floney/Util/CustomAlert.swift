@@ -84,30 +84,39 @@ enum ErrorMessage {
 
 struct CustomAlertView: View {
     var message: String
-    
     @Binding var isPresented: Bool
     
     var body: some View {
-        VStack {
-            HStack {
-                Button(action: {
-                    isPresented = false
-                }) {
-                    Image("icon_cancel_circle_white")
-                }
-                
-                Text(message)
-                    .foregroundColor(Color.white)
-                    .font(.pretendardFont(.medium,size: 14))
+        
+        if (isPresented) {
+            VStack{
                 Spacer()
-            }.padding(.leading)
-
+                VStack {
+                    
+                    HStack {
+                        Button(action: {
+                            isPresented = false
+                        }) {
+                            Image("icon_cancel_circle_white")
+                        }
+                        
+                        Text(message)
+                            .foregroundColor(Color.white)
+                            .font(.pretendardFont(.medium,size: 14))
+                        Spacer()
+                    }.padding(.leading)
+                    
+                }
+                .frame(width: 330, height: 46)
+                .background(Color.black.opacity(0.8))
+                .cornerRadius(10)
+                .shadow(radius: 10)
+                .animation(.easeInOut, value: isPresented)
+            }
+            .padding()
         }
-        .frame(width: 330, height: 46)
-        .background(Color.black.opacity(0.8))
-        .cornerRadius(10)
-        .shadow(radius: 10)
     }
+    
 }
 
 struct CustomAlertView_Previews: PreviewProvider {

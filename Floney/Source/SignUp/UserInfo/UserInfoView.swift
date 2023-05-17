@@ -123,11 +123,11 @@ struct UserInfoView: View {
                 }
                 Spacer()
             //isActive: $viewModel.isNext
-                NavigationLink(destination: WelcomeView()){
+                NavigationLink(destination: WelcomeView(), isActive: $viewModel.isNext){
                     Text("다음으로")
                         .padding()
                         .withNextButtonFormmating(.primary1)
-                    /*
+                    
                         .onTapGesture {
                             // 모든 유효성 검사에서 통과할 때, post함.
                             viewModel.postSignUp()
@@ -135,7 +135,7 @@ struct UserInfoView: View {
                             // viewmodel에서 유효성 검사
                             
                         }
-                     */
+                     
                      
                 }
             }

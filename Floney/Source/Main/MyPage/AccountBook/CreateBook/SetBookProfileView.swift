@@ -12,6 +12,8 @@ struct SetBookProfileView: View {
     var pageCountAll = 3
     //@State var bookTitle = ""
     @StateObject var viewModel = CreateBookViewModel()
+    @State var name = ""
+    @State var bookImg = ""
     var body: some View {
         VStack(spacing: 20) {
             HStack {
@@ -40,15 +42,16 @@ struct SetBookProfileView: View {
             
             Spacer()
             
-            NavigationLink(destination: CreateBookView()){
+            NavigationLink(destination: CreateBookView(), isActive: $viewModel.isNextToCreateBook){
                 Text("다음으로")
                     .padding()
                     .withNextButtonFormmating(.primary1)
-                /*
+                
                     .onTapGesture {
+                        viewModel.name = name
                         viewModel.createBook()
                     }
-                 */
+                 
             }
         }
         .padding(EdgeInsets(top: 32, leading: 24, bottom: 0, trailing: 24))

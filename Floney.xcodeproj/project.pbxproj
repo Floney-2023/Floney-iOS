@@ -8,6 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		2F0D01182A03CEB600DAF21D /* SignUpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F0D01172A03CEB600DAF21D /* SignUpViewModel.swift */; };
+		2F146A5B2A13A1260089AB3D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2F146A5A2A13A1260089AB3D /* GoogleService-Info.plist */; };
+		2F146A5E2A14B52D0089AB3D /* TokenReissueDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F146A5D2A14B52D0089AB3D /* TokenReissueDataManager.swift */; };
+		2F146A622A14B5AF0089AB3D /* TokenReissueRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F146A612A14B5AF0089AB3D /* TokenReissueRequest.swift */; };
+		2F146A642A14B5BD0089AB3D /* TokenReissueResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F146A632A14B5BD0089AB3D /* TokenReissueResponse.swift */; };
+		2F146A6A2A14B6980089AB3D /* TokenReissueViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F146A692A14B6980089AB3D /* TokenReissueViewModel.swift */; };
 		2F1614552A07CFE20029E9A9 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1614542A07CFE20029E9A9 /* Keychain.swift */; };
 		2F1614572A07F2A60029E9A9 /* EnterBookCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1614562A07F2A60029E9A9 /* EnterBookCodeView.swift */; };
 		2F1614592A07F3880029E9A9 /* EnterBookView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1614582A07F3880029E9A9 /* EnterBookView.swift */; };
@@ -88,11 +93,16 @@
 		2FFA303629EEB02800412F83 /* SignInDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFA303529EEB02800412F83 /* SignInDataManager.swift */; };
 		2FFDC36A2A00084600BE4C1B /* SignInViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFDC3692A00084600BE4C1B /* SignInViewModel.swift */; };
 		2FFDC36C2A00089F00BE4C1B /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFDC36B2A00089F00BE4C1B /* NetworkError.swift */; };
-		ED80267AB9E3B4258476CDC6 /* Pods_Floney.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FF682C42AEEFFE87847C8B3 /* Pods_Floney.framework */; };
+		3E803C4A08383EAF5C709410 /* libPods-Floney.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C5977FA1E14265D8E26FBC38 /* libPods-Floney.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		2F0D01172A03CEB600DAF21D /* SignUpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewModel.swift; sourceTree = "<group>"; };
+		2F146A5A2A13A1260089AB3D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		2F146A5D2A14B52D0089AB3D /* TokenReissueDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenReissueDataManager.swift; sourceTree = "<group>"; };
+		2F146A612A14B5AF0089AB3D /* TokenReissueRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenReissueRequest.swift; sourceTree = "<group>"; };
+		2F146A632A14B5BD0089AB3D /* TokenReissueResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenReissueResponse.swift; sourceTree = "<group>"; };
+		2F146A692A14B6980089AB3D /* TokenReissueViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenReissueViewModel.swift; sourceTree = "<group>"; };
 		2F1614542A07CFE20029E9A9 /* Keychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
 		2F1614562A07F2A60029E9A9 /* EnterBookCodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterBookCodeView.swift; sourceTree = "<group>"; };
 		2F1614582A07F3880029E9A9 /* EnterBookView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterBookView.swift; sourceTree = "<group>"; };
@@ -167,7 +177,6 @@
 		2FF25C9029E7EF0400737346 /* ButtonLarge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonLarge.swift; sourceTree = "<group>"; };
 		2FF25C9329E7EF6500737346 /* RoundedCorners.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedCorners.swift; sourceTree = "<group>"; };
 		2FF25C9829E80D7E00737346 /* SetBookNameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetBookNameView.swift; sourceTree = "<group>"; };
-		2FF682C42AEEFFE87847C8B3 /* Pods_Floney.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Floney.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2FFA302329EE775B00412F83 /* SetBookProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetBookProfileView.swift; sourceTree = "<group>"; };
 		2FFA302529EE81C000412F83 /* CreateBookView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateBookView.swift; sourceTree = "<group>"; };
 		2FFA302929EEAE6700412F83 /* SignUpRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpRequest.swift; sourceTree = "<group>"; };
@@ -180,6 +189,7 @@
 		2FFDC36B2A00089F00BE4C1B /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
 		67A9A49F4C8E4F3292D98C83 /* Pods-Floney.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Floney.release.xcconfig"; path = "Target Support Files/Pods-Floney/Pods-Floney.release.xcconfig"; sourceTree = "<group>"; };
 		890215AB09C6C1F4F677A9C7 /* Pods-Floney.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Floney.debug.xcconfig"; path = "Target Support Files/Pods-Floney/Pods-Floney.debug.xcconfig"; sourceTree = "<group>"; };
+		C5977FA1E14265D8E26FBC38 /* libPods-Floney.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Floney.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -187,7 +197,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ED80267AB9E3B4258476CDC6 /* Pods_Floney.framework in Frameworks */,
+				3E803C4A08383EAF5C709410 /* libPods-Floney.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -198,6 +208,41 @@
 			isa = PBXGroup;
 			children = (
 				2F0D01172A03CEB600DAF21D /* SignUpViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		2F146A5C2A14B03F0089AB3D /* TokenReissue */ = {
+			isa = PBXGroup;
+			children = (
+				2F146A682A14B6870089AB3D /* ViewModel */,
+				2F146A602A14B59F0089AB3D /* Entity */,
+				2F146A5F2A14B5920089AB3D /* DataManager */,
+			);
+			path = TokenReissue;
+			sourceTree = "<group>";
+		};
+		2F146A5F2A14B5920089AB3D /* DataManager */ = {
+			isa = PBXGroup;
+			children = (
+				2F146A5D2A14B52D0089AB3D /* TokenReissueDataManager.swift */,
+			);
+			path = DataManager;
+			sourceTree = "<group>";
+		};
+		2F146A602A14B59F0089AB3D /* Entity */ = {
+			isa = PBXGroup;
+			children = (
+				2F146A612A14B5AF0089AB3D /* TokenReissueRequest.swift */,
+				2F146A632A14B5BD0089AB3D /* TokenReissueResponse.swift */,
+			);
+			path = Entity;
+			sourceTree = "<group>";
+		};
+		2F146A682A14B6870089AB3D /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				2F146A692A14B6980089AB3D /* TokenReissueViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -331,6 +376,7 @@
 		2FD7F39A29B1E26D00B99CAA /* Floney */ = {
 			isa = PBXGroup;
 			children = (
+				2F146A5A2A13A1260089AB3D /* GoogleService-Info.plist */,
 				2F1614952A136FC60029E9A9 /* Floney.entitlements */,
 				2FD7F3CA29B1E5C500B99CAA /* Info.plist */,
 				2FD7F3A929B1E38900B99CAA /* Configuration */,
@@ -395,6 +441,7 @@
 		2FD7F3AC29B1E3B100B99CAA /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				2F146A5C2A14B03F0089AB3D /* TokenReissue */,
 				2FD7F3B029B1E3DD00B99CAA /* Splash */,
 				2FD7F3AF29B1E3D600B99CAA /* SignUp */,
 				2FD7F3AE29B1E3C900B99CAA /* SignIn */,
@@ -722,7 +769,7 @@
 		38979A95844287E695B1B7F9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				2FF682C42AEEFFE87847C8B3 /* Pods_Floney.framework */,
+				C5977FA1E14265D8E26FBC38 /* libPods-Floney.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -747,7 +794,7 @@
 				2FD7F39429B1E26D00B99CAA /* Sources */,
 				2FD7F39529B1E26D00B99CAA /* Frameworks */,
 				2FD7F39629B1E26D00B99CAA /* Resources */,
-				85355A7A21250CFF6ADC7F93 /* [CP] Embed Pods Frameworks */,
+				0016428AF120D69311939150 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -801,6 +848,7 @@
 				2FD7F3CC29B1EBFA00B99CAA /* Pretendard-Bold.otf in Resources */,
 				2FD7F3D029B1EC0400B99CAA /* Pretendard-Medium.otf in Resources */,
 				2FD7F3D129B1EC0700B99CAA /* Pretendard-Regular.otf in Resources */,
+				2F146A5B2A13A1260089AB3D /* GoogleService-Info.plist in Resources */,
 				2FD7F3CD29B1EBFD00B99CAA /* Pretendard-ExtraBold.otf in Resources */,
 				2FD7F3CF29B1EC0200B99CAA /* Pretendard-Light.otf in Resources */,
 				2FD7F3D229B1EC0900B99CAA /* Pretendard-SemiBold.otf in Resources */,
@@ -813,6 +861,23 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		0016428AF120D69311939150 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Floney/Pods-Floney-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Floney/Pods-Floney-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Floney/Pods-Floney-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		4DCCC81A2E30E5966599FF67 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -835,23 +900,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		85355A7A21250CFF6ADC7F93 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Floney/Pods-Floney-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Floney/Pods-Floney-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Floney/Pods-Floney-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -871,8 +919,10 @@
 				2FEA2BB729BA064B00DE8E54 /* HomeView.swift in Sources */,
 				2F1614762A0A32A20029E9A9 /* CalendarRequest.swift in Sources */,
 				2FEA2B6429B73CE700DE8E54 /* ServiceAgreementView.swift in Sources */,
+				2F146A642A14B5BD0089AB3D /* TokenReissueResponse.swift in Sources */,
 				2FFDC36C2A00089F00BE4C1B /* NetworkError.swift in Sources */,
 				2FF25C8629E181C000737346 /* SendBookCodeView.swift in Sources */,
+				2F146A6A2A14B6980089AB3D /* TokenReissueViewModel.swift in Sources */,
 				2FEA2BA029B8685E00DE8E54 /* BackButton.swift in Sources */,
 				2FEA2BA229B87A9200DE8E54 /* UserInfoView.swift in Sources */,
 				2FEA2BA529B892CB00DE8E54 /* TextFieldModifier.swift in Sources */,
@@ -889,6 +939,7 @@
 				2FEA2BD529C9B70600DE8E54 /* UserInformationView.swift in Sources */,
 				2FFA302429EE775B00412F83 /* SetBookProfileView.swift in Sources */,
 				2F16147C2A0A33A80029E9A9 /* CalendarDataManager.swift in Sources */,
+				2F146A622A14B5AF0089AB3D /* TokenReissueRequest.swift in Sources */,
 				2FFA302629EE81C000412F83 /* CreateBookView.swift in Sources */,
 				2F0D01182A03CEB600DAF21D /* SignUpViewModel.swift in Sources */,
 				2FEA2BA729B8969E00DE8E54 /* WelcomeView.swift in Sources */,
@@ -902,6 +953,7 @@
 				2FF25C9129E7EF0400737346 /* ButtonLarge.swift in Sources */,
 				2FEA2BDE29D0390300DE8E54 /* WithdrawalView.swift in Sources */,
 				2FEA2BC029BA068200DE8E54 /* MyPageView.swift in Sources */,
+				2F146A5E2A14B52D0089AB3D /* TokenReissueDataManager.swift in Sources */,
 				2FF25C9429E7EF6500737346 /* RoundedCorners.swift in Sources */,
 				2FEA2BDB29CD63B300DE8E54 /* SetProfileImageView.swift in Sources */,
 				2F1614832A0A45B80029E9A9 /* Secret.swift in Sources */,
@@ -974,7 +1026,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -1042,6 +1094,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";

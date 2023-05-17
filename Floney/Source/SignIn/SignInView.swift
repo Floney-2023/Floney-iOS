@@ -12,9 +12,8 @@ import KakaoSDKUser
 import AuthenticationServices
 
 struct SignInView: View {
-    @State var email = ""
-    @State var password = ""
     @StateObject var viewModel = SignInViewModel()
+
     var body: some View {
         NavigationView {
             ZStack {
@@ -46,7 +45,7 @@ struct SignInView: View {
                                     .opacity(viewModel.password.isEmpty ? 1 : 0), alignment: .leading
                             )
                             .modifier(TextFieldModifier())
-                        NavigationLink(destination: MainTabView(), isActive: $viewModel.isNext){
+                        //NavigationLink(destination: MainTabView(), isActive: $viewModel.isNext){
                             Text("로그인 하기")
                                 .padding()
                                 .withNextButtonFormmating(.primary1)
@@ -55,7 +54,7 @@ struct SignInView: View {
                                     //let signInRequest = SignInRequest(email: email, password: password)
                                     viewModel.postSignIn()
                                 }
-                        }
+                       // }
                         HStack(spacing:50) {
                             NavigationLink(destination: FindPasswordView()){
                                 VStack {
@@ -123,6 +122,7 @@ struct SignInView: View {
                     }
                     Spacer()
                 }
+                CustomAlertView(message: viewModel.errorMessage, isPresented: $viewModel.showAlert)
             }
             .onTapGesture {
                 // Hide the keyboard
@@ -133,6 +133,10 @@ struct SignInView: View {
                 DispatchQueue.main.async {
                     UIApplication.shared.windows.first?.rootViewController?.view.endEditing(false)
                 }
+                
+            }
+            .fullScreenCover(isPresented: $viewModel.isLoggedIn) {
+                        MainTabView()
             }
         }
     }

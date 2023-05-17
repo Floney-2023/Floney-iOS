@@ -14,7 +14,7 @@ class CreateBookViewModel: ObservableObject {
     
     @Published var name : String = ""
     @Published var profileImg : String = ""
-    
+    @Published var isNextToCreateBook : Bool = false
     
     private var cancellableSet: Set<AnyCancellable> = []
     var dataManager: CreateBookProtocol
@@ -33,9 +33,14 @@ class CreateBookViewModel: ObservableObject {
                     print(dataResponse.error)
                 } else {
                     self.result = dataResponse.value!
+                    self.isNextToCreateBook = true
                     print(self.result.code)
                 }
             }.store(in: &cancellableSet)
+    }
+    func setBookCode() {
+        Keychain.setKeychain(self.result.bookKey, forKey: .bookKey)
+        Keychain.setKeychain(self.result.code, forKey: .bookCode)
     }
     
     func createAlert( with error: NetworkError) {
