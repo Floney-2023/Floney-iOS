@@ -73,6 +73,7 @@ enum ErrorMessage {
             return "유효한 이메일을 입력해주세요"
         case .findPassword02:
             return "일치하는 회원이 없습니다."
+            
         }
         
         
