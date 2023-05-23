@@ -11,3 +11,8 @@ struct CalendarRequest: Encodable {
     var bookKey: String
     var date: String
 }
+
+struct DayLinesRequest: Encodable {
+    var bookKey : String
+    var date : String
+}

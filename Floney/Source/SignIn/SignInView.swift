@@ -13,6 +13,8 @@ import AuthenticationServices
 
 struct SignInView: View {
     @StateObject var viewModel = SignInViewModel()
+    @StateObject var kakaoviewModel = SignUpViewModel()
+
 
     var body: some View {
         NavigationView {
@@ -97,8 +99,40 @@ struct SignInView: View {
                                     if (UserApi.isKakaoTalkLoginAvailable()) {
                                         //카카오톡이 설치되어있다면 카카오톡을 통한 로그인 진행
                                         UserApi.shared.loginWithKakaoTalk {(oauthToken, error) in
-                                            print(oauthToken?.accessToken)
-                                            print(error)
+                                            if let error = error {
+                                                print(error)
+                                            }
+                                            if let oauthToken = oauthToken{
+                                                // 소셜 로그인(회원가입 API CALL)
+                                                print("성공")
+                                                
+                                                UserApi.shared.me() {(user, error) in
+                                                    if let error = error {
+                                                        print(error)
+                                                    }
+                                                    else {
+                                                        print("me() success.")
+                                                       
+                                                        let nickname = user?.kakaoAccount?.profile?.nickname
+                                                        let email = user?.kakaoAccount?.email
+
+                                                        print("nickname : \(nickname)")
+                                                        print("email : \(email)")
+                                                        print("oauthToken : \(oauthToken)")
+                                                        
+                                                        kakaoviewModel.email = email!
+                                                        kakaoviewModel.nickname = nickname!
+                                                        kakaoviewModel.password = "0000"
+                                                        kakaoviewModel.provider = "kakao"
+                                                        kakaoviewModel.postSignUp()
+                                                        let token = String(describing: oauthToken.accessToken)
+                                                        viewModel.kakaoSignIn(token: token)
+                                                        
+                                                       // "is_email_valid" = 1;
+                                                       // "is_email_verified" = 1;
+                                                    }
+                                                }
+                                            }
                                         }
                                     }else{
                                         //카카오톡이 설치되어있지 않다면 사파리를 통한 로그인 진행

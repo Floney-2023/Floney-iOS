@@ -48,6 +48,25 @@ class SignInViewModel: ObservableObject {
                 }
             }.store(in: &cancellableSet)
     }
+    func kakaoSignIn(token : String) {
+   
+        dataManager.kakaoSignIn(token)
+            .sink { (dataResponse) in
+                if dataResponse.error != nil {
+                    self.createAlert(with: dataResponse.error!)
+                    // 에러 처리
+                    print(dataResponse.error)
+                } else {
+                    self.result = dataResponse.value!
+                    self.isNext = true
+                    self.setToken()
+                    // 자동로그인을 한 경우는 isLoggedIn이 true이므로 email과 password를 다시 저장하지 않아도 괜찮다.
+                    if (self.isLoggedIn == false) {self.setEmailPassword()}
+                    print("--성공--")
+                    print(self.result.accessToken)
+                }
+            }.store(in: &cancellableSet)
+    }
     //MARK: 토큰 저장하기
     func setToken() {
         Keychain.setKeychain(self.result.accessToken, forKey: .accessToken)

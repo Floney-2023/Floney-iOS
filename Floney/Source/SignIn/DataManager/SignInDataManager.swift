@@ -57,6 +57,7 @@ extension SignInDataManager {
 */
 protocol SignInProtocol {
     func postSignIn(_ parameters:SignInRequest) -> AnyPublisher<DataResponse<SignInResponse, NetworkError>, Never>
+    func kakaoSignIn(_ token:String) -> AnyPublisher<DataResponse<SignInResponse, NetworkError>, Never>
 }
 
 class SignIn {
@@ -83,4 +84,23 @@ extension SignIn: SignInProtocol {
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
     }
+    func kakaoSignIn(_ token: String) -> AnyPublisher<DataResponse<SignInResponse, NetworkError>, Never> {
+      //  let url = URL(string: "Your_URL")!
+        let url = "\(Constant.BASE_URL)/users/login/kakao?token=\(token)"
+        return AF.request(url,
+                          method: .get,
+                          parameters: nil,
+                          encoding: JSONEncoding.default)
+            .validate()
+            .publishDecodable(type: SignInResponse.self)
+            .map { response in
+                response.mapError { error in
+                    let backendError = response.data.flatMap { try? JSONDecoder().decode(BackendError.self, from: $0)}
+                    return NetworkError(initialError: error, backendError: backendError)
+                }
+            }
+            .receive(on: DispatchQueue.main)
+            .eraseToAnyPublisher()
+    }
+
 }

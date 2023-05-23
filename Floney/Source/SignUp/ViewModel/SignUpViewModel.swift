@@ -19,6 +19,8 @@ class SignUpViewModel: ObservableObject {
     @Published var marketingAgree = 0
     @Published var isNextToAuthCode = false
     @Published var isNext = false
+    @Published var provider = ""
+
 
     private var cancellableSet: Set<AnyCancellable> = []
     var dataManager: SignUpProtocol
@@ -29,7 +31,7 @@ class SignUpViewModel: ObservableObject {
     }
     
     func postSignUp() {
-        let request = SignUpRequest(email: email, password: password, nickname: nickname, marketingAgree: marketingAgree)
+        let request = SignUpRequest(email: email, password: password, nickname: nickname, marketingAgree: marketingAgree, provider: provider)
         dataManager.postSignUp(request)
             .sink { (dataResponse) in
                 if dataResponse.error != nil {

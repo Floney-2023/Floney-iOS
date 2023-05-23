@@ -21,7 +21,7 @@ struct HomeView: View {
                     Image("icon_profile_book")
                 }
                 
-                CustomCalendarView(month: month)
+                CustomCalendarView(month: month, selectedDate: month)
                 
             }.padding(20)
             
@@ -74,10 +74,17 @@ struct CustomCalendarView: View {
     let daysOfTheWeek = ["일", "월", "화", "수", "목", "금", "토"]
     let calendar = Calendar.current
     
+    var dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MM.dd"
+        return formatter
+    }()
+    
     
     var body: some View {
         let year = String(describing: calendar.component(.year, from: month))
-        
+        let monthStr = String(describing: calendar.component(.month, from: month))
+       
         VStack(alignment: .center, spacing: 8) {
             // 날짜 헤더
             HStack {
@@ -87,7 +94,7 @@ struct CustomCalendarView: View {
                         self.isShowingMonthPicker.toggle()
                     }
                 }) {
-                    Text("\(year).\(calendar.component(.month, from: month))")
+                    Text(selectedView == 1 ? "\(year).\(monthStr)" : "\(selectedDate!, formatter: dateFormatter)")
                         .font(.pretendardFont(.semiBold, size: 20))
                         .foregroundColor(.greyScale1)
                     
@@ -134,9 +141,9 @@ struct CustomCalendarView: View {
                 
             }
             if selectedView == 1 {
-                MonthCalendar(month: $month, isShowingMonthPicker: $isShowingMonthPicker)
+                MonthCalendar(month: $month, isShowingMonthPicker: $isShowingMonthPicker, selectedDate: $selectedDate)
             } else if selectedView == 2 {
-                DateCalendar()
+                DayLinesView(date: $month)
             }
         }
         
@@ -247,6 +254,7 @@ struct MonthYearPicker: View {
             
         }
     }
+    
 }
 
 
@@ -272,7 +280,7 @@ struct MonthCalendar: View {
     @Binding var month: Date
  
     @Binding var isShowingMonthPicker : Bool
-    @State var selectedDate: Date?
+    @Binding var selectedDate: Date?
     @State private var pickerPosition = CGSize.zero
     
     let daysOfTheWeek = ["일", "월", "화", "수", "목", "금", "토"]
@@ -363,9 +371,11 @@ struct MonthCalendar: View {
     
     var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.dateStyle = .long
+        formatter.dateFormat = "MM.dd"
         return formatter
     }()
+    
+   
 }
 
 struct DateCalendar: View {
