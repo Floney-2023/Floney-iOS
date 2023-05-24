@@ -56,7 +56,7 @@ struct DayLinesDetailView : View {
         DayLinesResults(money: 10000, img: "", category: ["급여"], assetType: "INCOME", content: "알바")
     ]
     var body: some View {
-        VStack {
+        VStack(spacing:88) {
             HStack {
                 Text("내역")
                     .font(.pretendardFont(.bold, size: 16))
@@ -66,6 +66,7 @@ struct DayLinesDetailView : View {
                     .font(.pretendardFont(.semiBold, size: 12))
                     .foregroundColor(.primary2)
             }
+            /*
             List {
                 ForEach(dayLinesResponse, id: \.self) { day in
                     HStack {
@@ -77,10 +78,20 @@ struct DayLinesDetailView : View {
                     }
                 }
             }
+             */
+            VStack {
+                Image("no_line")
+                Text("내역이 없습니다.")
+                    .font(.pretendardFont(.medium, size: 12))
+                    .foregroundColor(.greyScale6)
+            }
+            Spacer()
         }
+        .frame(height: 366)
         .padding(20)
         .background(Color.white)
         .cornerRadius(12)
+        
     }
 }
 

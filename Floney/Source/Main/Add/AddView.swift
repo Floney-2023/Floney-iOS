@@ -39,7 +39,7 @@ struct AddView: View {
                         Text("지출")
                             .font(.pretendardFont(.semiBold, size: 11))
                     }
-                    //.frame(width: 54, height: 24)
+                    .frame(maxWidth: .infinity)
                     .padding(10)
                     .background(selectedView == 1 ? Color.white : Color.greyScale10)
                     .foregroundColor(selectedView == 1 ? Color.greyScale2 : Color.greyScale8)
@@ -51,6 +51,7 @@ struct AddView: View {
                         Text("수입")
                             .font(.pretendardFont(.semiBold, size: 11))
                     }
+                    .frame(maxWidth: .infinity)
                     //.frame(width: 54, height: 24)
                     .padding(10)
                     .background(selectedView == 2 ? Color.white : Color.greyScale10)
@@ -64,7 +65,9 @@ struct AddView: View {
                             .font(.pretendardFont(.semiBold, size: 11))
                     }
                     //.frame(width: 54, height: 24)
+                    .frame(maxWidth: .infinity)
                     .padding(10)
+                    
                     .background(selectedView == 3 ? Color.white : Color.greyScale10)
                     .foregroundColor(selectedView == 3 ? Color.greyScale2 : Color.greyScale8)
                     .cornerRadius(8)

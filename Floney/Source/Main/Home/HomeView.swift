@@ -288,7 +288,7 @@ struct MonthCalendar: View {
     
     var body: some View {
         ZStack {
-            VStack {
+            VStack(spacing: 20) {
                 // 날짜 가져오기
                 let dates = generateDates(for: month)
                 
@@ -348,8 +348,8 @@ struct MonthCalendar: View {
                 .cornerRadius(12)
                 
                 if let selectedDate = selectedDate {
-                    Text("Selected date: \(selectedDate, formatter: dateFormatter)")
-                        .padding(.top)
+                    //Text("Selected date: \(selectedDate, formatter: dateFormatter)")
+                       // .padding(.top)
                 }
                 TotalView()
                 
