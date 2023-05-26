@@ -11,7 +11,7 @@ struct HomeView: View {
     var body: some View {
         // ScrollView {
         ZStack {
-            Color.background2
+            Color.background3
                 .edgesIgnoringSafeArea(.all)
             VStack(spacing:37) {
                 HStack

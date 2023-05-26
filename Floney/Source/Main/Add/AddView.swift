@@ -11,6 +11,7 @@ struct AddView: View {
     @State var money : String = ""
     @State private var selectedView: Int = 1
 
+    @State var content = ""
     var body: some View {
         @State var moneyStr = String(describing: "\(money)")
         VStack {
@@ -109,9 +110,9 @@ struct AddView: View {
                             .font(.pretendardFont(.medium, size: 14))
                             .foregroundColor(.greyScale4)
                         Spacer()
-                        Text("점심")
+                        TextField("내용을 입력하세요", text: $content )
                             .font(.pretendardFont(.medium, size: 14))
-                            .foregroundColor(.greyScale2)
+                            .foregroundColor(.greyScale6)
                     }
                     HStack {
                         Text("예산에서 제외")
@@ -159,6 +160,7 @@ struct AddView: View {
             
             
         }
+        .onAppear(perform : UIApplication.shared.hideKeyboard)
     }
 }
 

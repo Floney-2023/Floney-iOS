@@ -158,6 +158,7 @@ struct SignInView: View {
                 }
                 CustomAlertView(message: viewModel.errorMessage, isPresented: $viewModel.showAlert)
             }
+            /*
             .onTapGesture {
                 // Hide the keyboard
                 UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
@@ -168,7 +169,8 @@ struct SignInView: View {
                     UIApplication.shared.windows.first?.rootViewController?.view.endEditing(false)
                 }
                 
-            }
+            }*/
+            .onAppear(perform : UIApplication.shared.hideKeyboard)
             .fullScreenCover(isPresented: $viewModel.isLoggedIn) {
                         MainTabView()
             }

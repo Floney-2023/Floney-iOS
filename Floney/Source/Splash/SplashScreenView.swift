@@ -12,7 +12,10 @@ struct SplashScreenView: View {
 
     var body: some View {
         if isActive {
+            
             SignInView()
+             
+            //AddView()
         } else {
             ZStack {
                 Image("splash_bg")

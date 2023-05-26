@@ -20,10 +20,11 @@ struct MyPageView: View {
                 VStack(spacing:32) {
                     HStack {
                         Text("마이페이지")
+                            .padding(.horizontal, 4)
                             .font(.pretendardFont(.bold, size: 22))
                             .foregroundColor(.greyScale1)
                         Spacer()
-                        Image("icon_notification")
+                        //Image("icon_notification")
                         Image("icon_settings")
                         
                     }
@@ -152,7 +153,7 @@ struct MyPageView: View {
                         }
                     }
                 }
-                .padding(24)
+                .padding(20)
                 
             }
             // }
