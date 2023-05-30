@@ -8,6 +8,7 @@ import SwiftUI
 
 struct HomeView: View {
     private let month = Date()
+    @State var isOnSettingBook = false
     var body: some View {
         // ScrollView {
         ZStack {
@@ -18,7 +19,12 @@ struct HomeView: View {
                 {
                     Image("logo_floney_home")
                     Spacer()
-                    Image("icon_profile_book")
+                    NavigationLink(destination: SettingBookView(isOnSettingBook: $isOnSettingBook),isActive: $isOnSettingBook){
+                        Image("icon_profile_book")
+                            .onTapGesture {
+                                self.isOnSettingBook = true
+                            }
+                    }
                 }
                 
                 CustomCalendarView(month: month, selectedDate: month)
