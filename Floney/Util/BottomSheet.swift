@@ -143,3 +143,45 @@ struct ShareBookBottomSheet: View{
             .padding(.horizontal, 20)
     }
 }
+
+
+struct SetBudgetBottomSheet: View{
+    
+    let buttonHeight: CGFloat = 46
+    var body: some View{
+       
+            VStack(spacing: 24) {
+                
+                HStack {
+                    Text("예산 설정")
+                        .foregroundColor(.greyScale1)
+                        .font(.pretendardFont(.bold,size: 18))
+                    Spacer()
+                }
+                .padding(.top, 24)
+                
+                VStack(spacing : 28) {
+                    ButtonLarge(label: "예산을 입력하세요", background: .greyScale12, textColor: .greyScale2, strokeColor: .greyScale12, action: {
+                            
+                        })
+                        .frame(height: buttonHeight)
+                    
+                    ButtonLarge(label: "저장하기",background: .primary1, textColor: .white, strokeColor: .primary1,  fontWeight: .bold, action: {
+                        
+                    })
+                    .frame(height: buttonHeight)
+                    
+                }
+                VStack {
+                    Text("초기화하기")
+                        .font(.pretendardFont(.regular, size: 12))
+                        .foregroundColor(.greyScale6)
+                    Divider()
+                        .frame(width: 70,height: 1.0)
+                        .padding(EdgeInsets(top: -10, leading: 0, bottom: 0, trailing: 0))
+                        .foregroundColor(.greyScale6)
+                }
+            }
+            .padding(.horizontal, 20)
+    }
+}

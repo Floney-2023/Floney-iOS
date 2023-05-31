@@ -86,7 +86,7 @@ extension SignIn: SignInProtocol {
     }
     func kakaoSignIn(_ token: String) -> AnyPublisher<DataResponse<SignInResponse, NetworkError>, Never> {
       //  let url = URL(string: "Your_URL")!
-        let url = "\(Constant.BASE_URL)/users/login/kakao?token=\(token)"
+        let url = "\(Constant.BASE_URL)/auth/kakao/login?token=\(token)"
         return AF.request(url,
                           method: .get,
                           parameters: nil,

@@ -21,7 +21,7 @@ struct ModifyingBookView: View {
                 HStack(spacing: 8) {
                     TextField("", text: $nickname)
                         .padding()
-                        .keyboardType(.emailAddress)
+                        //.keyboardType(.emailAddress)
                         .overlay(
                             Text("이름을 입력하세요.")
                                 .padding()

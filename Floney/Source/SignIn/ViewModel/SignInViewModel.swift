@@ -8,7 +8,10 @@
 import Foundation
 import Combine
 import AuthenticationServices
+import GoogleSignIn
+import FirebaseAuth
 
+@MainActor
 class SignInViewModel: ObservableObject {
     var tokenViewModel = TokenReissueViewModel()
     @Published var result : SignInResponse = SignInResponse(accessToken: "", refreshToken: "")
@@ -49,7 +52,6 @@ class SignInViewModel: ObservableObject {
             }.store(in: &cancellableSet)
     }
     func kakaoSignIn(token : String) {
-   
         dataManager.kakaoSignIn(token)
             .sink { (dataResponse) in
                 if dataResponse.error != nil {
@@ -67,6 +69,24 @@ class SignInViewModel: ObservableObject {
                 }
             }.store(in: &cancellableSet)
     }
+    func signInGoogle() async throws {
+        guard let topVC = Utilities.shared.topViewController() else {
+            throw URLError(.cannotFindHost)
+        }
+        
+        let gidSignInResult = try await GIDSignIn.sharedInstance.signIn(withPresenting: topVC)
+        
+        guard let idToken = gidSignInResult.user.idToken?.tokenString else {
+            throw URLError(.badServerResponse)
+        }
+        
+        let accessToken = gidSignInResult.user.accessToken.tokenString
+        
+        print("id token : \(idToken)")
+        print("access token : \(accessToken)")
+        //let credential = GoogleAuthProvider.credential(withIDToken: idToken, accessToken: accessToken)
+    }
+    
     //MARK: 토큰 저장하기
     func setToken() {
         Keychain.setKeychain(self.result.accessToken, forKey: .accessToken)

@@ -43,6 +43,7 @@
 		2FC3B1D52A25E30A00572804 /* SettingBookView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC3B1D42A25E30A00572804 /* SettingBookView.swift */; };
 		2FC3B1D72A25F95600572804 /* ModifyingBookView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC3B1D62A25F95600572804 /* ModifyingBookView.swift */; };
 		2FC3B1D92A25F9F200572804 /* SetBookProfileImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC3B1D82A25F9F200572804 /* SetBookProfileImageView.swift */; };
+		2FC3B1DB2A2733D200572804 /* GoogleSignIn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC3B1DA2A2733D200572804 /* GoogleSignIn.swift */; };
 		2FD7F39C29B1E26D00B99CAA /* FloneyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD7F39B29B1E26D00B99CAA /* FloneyApp.swift */; };
 		2FD7F39E29B1E26D00B99CAA /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD7F39D29B1E26D00B99CAA /* ContentView.swift */; };
 		2FD7F3A029B1E26E00B99CAA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2FD7F39F29B1E26E00B99CAA /* Assets.xcassets */; };
@@ -140,6 +141,7 @@
 		2FC3B1D42A25E30A00572804 /* SettingBookView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingBookView.swift; sourceTree = "<group>"; };
 		2FC3B1D62A25F95600572804 /* ModifyingBookView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifyingBookView.swift; sourceTree = "<group>"; };
 		2FC3B1D82A25F9F200572804 /* SetBookProfileImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetBookProfileImageView.swift; sourceTree = "<group>"; };
+		2FC3B1DA2A2733D200572804 /* GoogleSignIn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleSignIn.swift; sourceTree = "<group>"; };
 		2FD7F39829B1E26D00B99CAA /* Floney.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Floney.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2FD7F39B29B1E26D00B99CAA /* FloneyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloneyApp.swift; sourceTree = "<group>"; };
 		2FD7F39D29B1E26D00B99CAA /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -433,6 +435,7 @@
 		2FD7F3AA29B1E39400B99CAA /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				2FC3B1DA2A2733D200572804 /* GoogleSignIn.swift */,
 				2F1614962A1370B90029E9A9 /* SignInWithAppleCoordinator.swift */,
 				2F1614932A0FABBE0029E9A9 /* CustomAlert.swift */,
 				2F1614542A07CFE20029E9A9 /* Keychain.swift */,
@@ -980,6 +983,7 @@
 				2FEA2BDE29D0390300DE8E54 /* WithdrawalView.swift in Sources */,
 				2FEA2BC029BA068200DE8E54 /* MyPageView.swift in Sources */,
 				2F146A5E2A14B52D0089AB3D /* TokenReissueDataManager.swift in Sources */,
+				2FC3B1DB2A2733D200572804 /* GoogleSignIn.swift in Sources */,
 				2FF25C9429E7EF6500737346 /* RoundedCorners.swift in Sources */,
 				2FEA2BDB29CD63B300DE8E54 /* SetProfileImageView.swift in Sources */,
 				2F1614832A0A45B80029E9A9 /* Secret.swift in Sources */,

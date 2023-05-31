@@ -10,6 +10,7 @@ import KakaoSDKCommon
 import KakaoSDKAuth
 import KakaoSDKUser
 import AuthenticationServices
+import GoogleSignIn
 
 struct SignInView: View {
     @StateObject var viewModel = SignInViewModel()
@@ -124,8 +125,10 @@ struct SignInView: View {
                                                         kakaoviewModel.nickname = nickname!
                                                         kakaoviewModel.password = "0000"
                                                         kakaoviewModel.provider = "kakao"
-                                                        kakaoviewModel.postSignUp()
+                                                        
+                                                        
                                                         let token = String(describing: oauthToken.accessToken)
+                                                        //kakaoviewModel.kakaoSignUp(token)
                                                         viewModel.kakaoSignIn(token: token)
                                                         
                                                        // "is_email_valid" = 1;
@@ -151,6 +154,15 @@ struct SignInView: View {
                                         }
                                     })
                             Image("btn_google")
+                                .onTapGesture {
+                                    Task {
+                                        do {
+                                            try await viewModel.signInGoogle()
+                                        } catch {
+                                            print(error)
+                                        }
+                                    }
+                                }
                             Image("btn_apple")
                         }
                     }

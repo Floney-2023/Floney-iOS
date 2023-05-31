@@ -10,7 +10,7 @@ import SwiftUI
 struct SetBookProfileImageView: View {
     var body: some View {
         VStack(spacing:20) {
-            Image("btn_profile")
+            Image("btn_book_profile")
                 .overlay(
                     Image("btn_photo_camera")
                         .offset(x:45,y:45)

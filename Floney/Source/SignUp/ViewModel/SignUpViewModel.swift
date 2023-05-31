@@ -8,9 +8,12 @@
 import Foundation
 import Combine
 class SignUpViewModel: ObservableObject {
+    var tokenViewModel = TokenReissueViewModel()
+
     @Published var result : SignUpResponse = SignUpResponse(accessToken: "", refreshToken: "")
     @Published var signUpLoadingError: String = ""
     @Published var showAlert: Bool = false
+    @Published var errorMessage = ""
     
     @Published var email = ""
     @Published var password = ""
@@ -46,6 +49,25 @@ class SignUpViewModel: ObservableObject {
                     //let token = Keychain.setKeychain(value: ,forKey: .authorization)
                    
                    
+                    print(self.result.accessToken)
+                }
+                
+            }.store(in: &cancellableSet)
+    }
+    func kakaoSignUp(_ token: String) {
+        let request = SignUpRequest(email: email, password: password, nickname: nickname, marketingAgree: marketingAgree, provider: provider)
+        dataManager.kakaoSignUp(request, token)
+            .sink { (dataResponse) in
+                if dataResponse.error != nil {
+                    self.createAlert(with: dataResponse.error!)
+                    print(dataResponse.error)
+                } else {
+                    self.result = dataResponse.value!
+                    self.isNext = true
+                    self.setToken()
+                    self.setEmailPassword()
+                    //let token = Keychain.setKeychain(self.result.accessToken, forKey: .authorization)
+                    //let token = Keychain.setKeychain(value: ,forKey: .authorization)
                     print(self.result.accessToken)
                 }
                 
@@ -92,5 +114,22 @@ class SignUpViewModel: ObservableObject {
     func createAlert( with error: NetworkError) {
         signUpLoadingError = error.backendError == nil ? error.initialError.localizedDescription : error.backendError!.message
         self.showAlert = true
+        if let errorCode = error.backendError?.code {
+            switch errorCode {
+            case "U009" :
+                print("\(errorCode) : alert")
+                self.showAlert = true
+                self.errorMessage = ErrorMessage.login01.value
+                // 토큰 재발급
+            case "U006" :
+                tokenViewModel.tokenReissue()
+                // 아예 틀린 토큰이므로 재로그인해서 다시 발급받아야 함.
+            //case "U007" :
+                //self.postSignIn()
+            default:
+                break
+            }
+        }
+        
     }
 }

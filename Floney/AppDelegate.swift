@@ -23,7 +23,7 @@ class AppDelegate: NSObject, UIApplicationDelegate{
         // google 초기화
         GoogleSignIn.GIDSignIn.sharedInstance.restorePreviousSignIn { user, error in
             if error != nil || user == nil {
-                 
+               // GIDSignIn.sharedInstance.clientID = Secret.GOOGLE_CLIENT_ID
             } else {
                 
             }
