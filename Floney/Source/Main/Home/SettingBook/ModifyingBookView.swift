@@ -87,7 +87,7 @@ struct ModifyingBookView: View {
         .navigationBarItems(leading: BackButtonBlack())
         .toolbar {
             ToolbarItem(placement: .principal) {
-                Text("회원 정보")
+                Text("가계부 편집")
                     .font(.pretendardFont(.semiBold, size: 16))
                     .foregroundColor(.greyScale1)
             }

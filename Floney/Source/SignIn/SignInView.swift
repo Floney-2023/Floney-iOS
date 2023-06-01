@@ -15,8 +15,7 @@ import GoogleSignIn
 struct SignInView: View {
     @StateObject var viewModel = SignInViewModel()
     @StateObject var kakaoviewModel = SignUpViewModel()
-
-
+    
     var body: some View {
         NavigationView {
             ZStack {
@@ -49,15 +48,15 @@ struct SignInView: View {
                             )
                             .modifier(TextFieldModifier())
                         //NavigationLink(destination: MainTabView(), isActive: $viewModel.isNext){
-                            Text("로그인 하기")
-                                .padding()
-                                .withNextButtonFormmating(.primary1)
-                            
-                                .onTapGesture {
-                                    //let signInRequest = SignInRequest(email: email, password: password)
-                                    viewModel.postSignIn()
-                                }
-                       // }
+                        Text("로그인 하기")
+                            .padding()
+                            .withNextButtonFormmating(.primary1)
+                        
+                            .onTapGesture {
+                                //let signInRequest = SignInRequest(email: email, password: password)
+                                viewModel.postSignIn()
+                            }
+                        // }
                         HStack(spacing:50) {
                             NavigationLink(destination: FindPasswordView()){
                                 VStack {
@@ -113,26 +112,22 @@ struct SignInView: View {
                                                     }
                                                     else {
                                                         print("me() success.")
-                                                       
+                                                        
                                                         let nickname = user?.kakaoAccount?.profile?.nickname
                                                         let email = user?.kakaoAccount?.email
-
+                                                        
                                                         print("nickname : \(nickname)")
                                                         print("email : \(email)")
                                                         print("oauthToken : \(oauthToken)")
                                                         
-                                                        kakaoviewModel.email = email!
-                                                        kakaoviewModel.nickname = nickname!
-                                                        kakaoviewModel.password = "0000"
-                                                        kakaoviewModel.provider = "kakao"
-                                                        
+                                                        viewModel.signUpViewModel.email = email!
+                                                        viewModel.signUpViewModel.nickname = nickname!
+                                                        viewModel.signUpViewModel.provider = "kakao"
                                                         
                                                         let token = String(describing: oauthToken.accessToken)
-                                                        //kakaoviewModel.kakaoSignUp(token)
-                                                        viewModel.kakaoSignIn(token: token)
-                                                        
-                                                       // "is_email_valid" = 1;
-                                                       // "is_email_verified" = 1;
+                                                        viewModel.checkKakao(token: token)
+                                                        // "is_email_valid" = 1;
+                                                        // "is_email_verified" = 1;
                                                     }
                                                 }
                                             }
@@ -145,14 +140,14 @@ struct SignInView: View {
                                         }
                                     }
                                 }
-                                    //ios가 버전이 올라감에 따라 sceneDelegate를 더이상 사용하지 않게되었다
-                                    //그래서 로그인을 한후 리턴값을 인식을 하여야하는데 해당 코드를 적어주지않으면 리턴값을 인식되지않는다
-                                    //swiftUI로 바뀌면서 가장큰 차이점이다.
-                                    .onOpenURL(perform: { url in
-                                        if (AuthApi.isKakaoTalkLoginUrl(url)) {
-                                            _ = AuthController.handleOpenUrl(url: url)
-                                        }
-                                    })
+                            //ios가 버전이 올라감에 따라 sceneDelegate를 더이상 사용하지 않게되었다
+                            //그래서 로그인을 한후 리턴값을 인식을 하여야하는데 해당 코드를 적어주지않으면 리턴값을 인식되지않는다
+                            //swiftUI로 바뀌면서 가장큰 차이점이다.
+                                .onOpenURL(perform: { url in
+                                    if (AuthApi.isKakaoTalkLoginUrl(url)) {
+                                        _ = AuthController.handleOpenUrl(url: url)
+                                    }
+                                })
                             Image("btn_google")
                                 .onTapGesture {
                                     Task {
@@ -171,30 +166,31 @@ struct SignInView: View {
                 CustomAlertView(message: viewModel.errorMessage, isPresented: $viewModel.showAlert)
             }
             /*
-            .onTapGesture {
-                // Hide the keyboard
-                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-            }
-            .onAppear {
-                // Set the TextField as the first responder
-                DispatchQueue.main.async {
-                    UIApplication.shared.windows.first?.rootViewController?.view.endEditing(false)
-                }
-                
-            }*/
+             .onTapGesture {
+             // Hide the keyboard
+             UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+             }
+             .onAppear {
+             // Set the TextField as the first responder
+             DispatchQueue.main.async {
+             UIApplication.shared.windows.first?.rootViewController?.view.endEditing(false)
+             }
+             
+             }*/
             .onAppear(perform : UIApplication.shared.hideKeyboard)
             .fullScreenCover(isPresented: $viewModel.isLoggedIn) {
-                        MainTabView()
+                MainTabView()
             }
         }
     }
+    
 }
 
 struct SignInWithAppleView: UIViewRepresentable {
     func makeUIView(context: Context) -> ASAuthorizationAppleIDButton {
         return ASAuthorizationAppleIDButton(type: .signIn, style: .black)
     }
-
+    
     func updateUIView(_ uiView: ASAuthorizationAppleIDButton, context: Context) {}
 }
 

@@ -9,7 +9,6 @@ import Foundation
 import SwiftUI
 
 struct TextFieldModifier: ViewModifier {
-      
     func body(content: Content) -> some View {
         content
             .font(.pretendardFont(.regular, size: 14))

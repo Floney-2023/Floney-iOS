@@ -63,6 +63,7 @@ extension SignUpDataManager {
 protocol SignUpProtocol {
     func postSignUp(_ parameters:SignUpRequest) -> AnyPublisher<DataResponse<SignUpResponse, NetworkError>, Never>
     func kakaoSignUp(_ parameters:SignUpRequest, _ token: String) -> AnyPublisher<DataResponse<SignUpResponse, NetworkError>, Never>
+    func googleSignUp(_ parameters:SignUpRequest, _ token: String) -> AnyPublisher<DataResponse<SignUpResponse, NetworkError>, Never>
     func authEmail(_ parameters:AuthEmailRequest) -> AnyPublisher<Int, Error>
 }
 
@@ -107,8 +108,25 @@ extension SignUp: SignUpProtocol {
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
     }
-
     
+    func googleSignUp(_ parameters:SignUpRequest, _ token: String) -> AnyPublisher<DataResponse<SignUpResponse, NetworkError>, Never> {
+        let url = "\(Constant.BASE_URL)/auth/google/signup?token=\(token)"
+        return AF.request(url,
+                          method: .post,
+                          parameters: parameters,
+                          encoder: JSONParameterEncoder())
+            .validate()
+            .publishDecodable(type: SignUpResponse.self)
+            .map { response in
+                response.mapError { error in
+                    let backendError = response.data.flatMap { try? JSONDecoder().decode(BackendError.self, from: $0)}
+                    return NetworkError(initialError: error, backendError: backendError)
+                }
+            }
+            .receive(on: DispatchQueue.main)
+            .eraseToAnyPublisher()
+    }
+
     func authEmail(_ parameters:AuthEmailRequest) -> AnyPublisher<Int, Error> {
         let url = "\(Constant.BASE_URL)/users/email?email=\(parameters.email)"
         

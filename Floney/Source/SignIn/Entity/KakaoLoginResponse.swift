@@ -7,3 +7,6 @@
 
 import Foundation
 
+struct UserJoinedResponse: Decodable {
+    let joined: Bool
+}

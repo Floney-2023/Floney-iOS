@@ -24,6 +24,7 @@ class SignUpViewModel: ObservableObject {
     @Published var isNext = false
     @Published var provider = ""
 
+    @Published var isValid = false
 
     private var cancellableSet: Set<AnyCancellable> = []
     var dataManager: SignUpProtocol
@@ -57,6 +58,25 @@ class SignUpViewModel: ObservableObject {
     func kakaoSignUp(_ token: String) {
         let request = SignUpRequest(email: email, password: password, nickname: nickname, marketingAgree: marketingAgree, provider: provider)
         dataManager.kakaoSignUp(request, token)
+            .sink { (dataResponse) in
+                if dataResponse.error != nil {
+                    self.createAlert(with: dataResponse.error!)
+                    print(dataResponse.error)
+                } else {
+                    self.result = dataResponse.value!
+                    self.isNext = true
+                    self.setToken()
+                    self.setEmailPassword()
+                    //let token = Keychain.setKeychain(self.result.accessToken, forKey: .authorization)
+                    //let token = Keychain.setKeychain(value: ,forKey: .authorization)
+                    print(self.result.accessToken)
+                }
+                
+            }.store(in: &cancellableSet)
+    }
+    func googleSignUp(_ token: String) {
+        let request = SignUpRequest(email: email, password: password, nickname: nickname, marketingAgree: marketingAgree, provider: provider)
+        dataManager.googleSignUp(request, token)
             .sink { (dataResponse) in
                 if dataResponse.error != nil {
                     self.createAlert(with: dataResponse.error!)
