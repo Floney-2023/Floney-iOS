@@ -219,7 +219,6 @@ class SignInViewModel: ObservableObject {
         } onError: { error in
             print("Sign in failed with error: \(error)")
         }
-
         coordinator.signIn()
     }
     
