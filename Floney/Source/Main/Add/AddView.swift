@@ -24,13 +24,29 @@ struct AddView: View {
                         Spacer()
                     }
                     HStack {
-                        TextField("금액을 입력하세요", text: $money)
-                            .keyboardType(.decimalPad)
+                        TextField("", text: $money)
+                            .keyboardType(.numberPad)
                             .foregroundColor(.primary2)
-                            .font(.pretendardFont(.bold, size: 36))
-                        Text("원")
-                            .foregroundColor(.primary2)
-                            .font(.pretendardFont(.bold, size: 36))
+                            .font(.pretendardFont(.bold, size: 38))
+
+                            .overlay(
+                                Text("금액을 입력하세요.")
+                                    .font(.pretendardFont(.bold, size: 36))
+                                    .foregroundColor(.greyScale9)
+                                    .opacity(money.isEmpty ? 1 : 0)
+                                
+                                , alignment: .leading
+                            )
+                            .overlay(
+                                Text("\(money)원")
+                                    .font(.pretendardFont(.bold, size: 38))
+                                    .foregroundColor(.primary2)
+                                    .opacity(money.isEmpty ? 0 : 1)
+                                
+                                , alignment: .leading
+                            )
+                        
+                        
                     }
                 }
                 HStack {
