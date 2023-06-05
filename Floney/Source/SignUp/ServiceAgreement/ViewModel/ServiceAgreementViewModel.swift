@@ -8,7 +8,8 @@ import SwiftUI
 import Combine
 
 class ServiceAgreementViewModel: ObservableObject {
-    @StateObject var signupViewModel = SignUpViewModel()
+    var marketingAgree = 0
+    
     @Published var isTerm1Agreed: Bool = false {
         didSet {
             updateAllAgreed()
@@ -28,9 +29,9 @@ class ServiceAgreementViewModel: ObservableObject {
     @Published var isOptionalTermAgreed: Bool = false {
         didSet {
             if self.isOptionalTermAgreed {
-                signupViewModel.marketingAgree = 1
+                marketingAgree = 1
             } else {
-                signupViewModel.marketingAgree = 0
+                marketingAgree = 0
             }
         }
     }

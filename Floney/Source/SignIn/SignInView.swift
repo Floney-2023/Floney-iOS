@@ -71,8 +71,8 @@ struct SignInView: View {
                                         .foregroundColor(.greyScale6)
                                 }
                             }
-                            
-                            NavigationLink(destination: ServiceAgreementView()){
+                            //ServiceAgreementView()
+                            NavigationLink(destination: SetBookNameView()){
                                 VStack {
                                     Text("회원가입 하기")
                                         .font(.pretendardFont(.regular, size: 12))

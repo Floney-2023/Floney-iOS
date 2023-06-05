@@ -397,4 +397,129 @@ struct CarriedOverBottomSheet: View {
 }
 
 
+struct CategoryBottomSheet: View {
+    let buttonHeight: CGFloat = 38
+    @Binding var root : String
+    @Binding var categories : [String]
+    @Binding var isShowing: Bool
+    @Binding var isSelectedAssetTypeIndex : Int
+    @Binding var isSelectedAssetType : String
+    @Binding var isSelectedCategoryIndex : Int
+    @Binding var isSelectedCategory : String
+    var body: some View{
+        ZStack(alignment: .bottom) {
+            if (isShowing) {
+                //MARK: Background
+                Color.black
+                    .opacity(0.7)
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        isShowing.toggle()
+                    }
+                //MARK: content
+                VStack(spacing: 12) {
+                    HStack {
+                        Text(root == "자산" ? "자산" : "분류")
+                            .foregroundColor(.greyScale1)
+                            .font(.pretendardFont(.bold,size: 18))
+                        Spacer()
+                    }
+                    .padding(.top, 24)
+                    
+                    CategoryFlowLayout(root: $root,
+                                       categories: $categories,
+                                       isSelectedAssetTypeIndex: $isSelectedAssetTypeIndex,
+                                       isSelectedAssetType: $isSelectedAssetType,
+                                       isSelectedCategoryIndex: $isSelectedCategoryIndex,
+                                       isSelectedCategory: $isSelectedCategory,
+                                       isShowing: $isShowing)
+                    
+                    
+                }
+                .padding(.horizontal, 20)
+                .padding(.bottom, 44)
+                .padding(.top, 12)
+                .transition(.move(edge: .bottom))
+                .background(
+                    Color(.white)
+                )
+                .cornerRadius(12, corners: [.topLeft, .topRight])
+                .frame(height: UIScreen.main.bounds.height / 2) // Screen height is divided by 2
+                           
+            } // if
+        } //ZStack
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
+        .ignoresSafeArea()
+        .animation(.easeInOut, value: isShowing)
+    }
+}
+
+
+
+
+struct CategoryFlowLayout: View {
+    @Binding var root : String
+    @State private var totalWidth = CGFloat.zero
+    @Binding var categories: [String]
+    @Binding var isSelectedAssetTypeIndex : Int
+    @Binding var isSelectedAssetType : String
+    @Binding var isSelectedCategoryIndex : Int
+    @Binding var isSelectedCategory : String
+    @Binding var isShowing: Bool
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            GeometryReader { geometry in
+                self.generateContent(in: geometry)
+            }
+        }
+    }
+    private func generateContent(in g: GeometryProxy) -> some View {
+        var width = CGFloat.zero
+        var height = CGFloat.zero
+        let verticalSpacing: CGFloat = 12
+        
+        return ZStack(alignment: .topLeading) {
+            ForEach(self.categories.indices, id: \.self) { index in
+                CategoryButton(
+                    label: self.categories[index],
+                    isSelected: root == "자산" ? self.isSelectedAssetTypeIndex == index : self.isSelectedCategoryIndex == index,
+                    action: {
+                        if root == "자산" {
+                            self.isSelectedAssetTypeIndex = index
+                            isSelectedAssetType = categories[index]
+                        } else {
+                            self.isSelectedCategoryIndex = index
+                            isSelectedCategory = categories[index]
+                        }
+                        isShowing.toggle()
+                    }
+                )
+                .padding([.horizontal], 4)
+                .alignmentGuide(.leading, computeValue: { d in
+                    if (abs(width - d.width) > g.size.width)
+                    {
+                        width = 0
+                        height -= d.height + verticalSpacing
+                    }
+                    let result = width
+                    if index < self.categories.count - 1 {
+                        width -= d.width
+                    } else {
+                        width = 0
+                    }
+                    return result
+                })
+                .alignmentGuide(.top, computeValue: { _ in
+                    let result = height
+                    if width == 0 {
+                        //if the item is the last in the row
+                        height = 0
+                    }
+                    return result
+                })
+            }
+        }
+    }
+}
 
