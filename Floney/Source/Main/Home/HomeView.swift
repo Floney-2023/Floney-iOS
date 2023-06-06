@@ -27,6 +27,7 @@ struct HomeView: View {
                     }
                 }
                 
+                //MARK: 캘린더 뷰
                 CustomCalendarView(month: month, selectedDate: month)
                 
             }.padding(20)
@@ -263,7 +264,7 @@ struct MonthYearPicker: View {
     
 }
 
-
+//MARK: 달 선택
 struct MonthPicker: View {
     @Binding var month: Date
     
@@ -362,6 +363,13 @@ struct MonthCalendar: View {
             }
             
             if isShowingMonthPicker {
+                Color.black
+                    .opacity(0.7)
+                    .edgesIgnoringSafeArea(.all)
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        isShowingMonthPicker.toggle()
+                    }
                 MonthYearPicker(date: $month)
                     .background(Color.white)
                     .cornerRadius(10)

@@ -10,12 +10,12 @@ import SwiftUI
 struct DayLinesView: View {
     @Binding var date: Date
     var body: some View {
-        ScrollView {
             VStack {
                 DayTotalView()
                 DayLinesDetailView()
+                Spacer()
             }//.padding(20)
-        }.background(Color.clear)
+            .background(Color.clear)
     }
 }
 
@@ -66,24 +66,14 @@ struct DayLinesDetailView : View {
                     .font(.pretendardFont(.semiBold, size: 12))
                     .foregroundColor(.primary2)
             }
-            /*
-            List {
-                ForEach(dayLinesResponse, id: \.self) { day in
-                    HStack {
-                        Image("icon_profile")
-                        VStack {
-                            Text("\(day.content)")
-
-                        }
-                    }
-                }
-            }
-             */
+           
             VStack {
-                Image("no_line")
-                Text("내역이 없습니다.")
-                    .font(.pretendardFont(.medium, size: 12))
-                    .foregroundColor(.greyScale6)
+                ScrollView {
+                    Image("no_line")
+                    Text("내역이 없습니다.")
+                        .font(.pretendardFont(.medium, size: 12))
+                        .foregroundColor(.greyScale6)
+                }
             }
             Spacer()
         }
