@@ -8,7 +8,7 @@
 import SwiftUI
 import Combine
 struct AddView: View {
-    
+    @State var date : String = ""
     @State var money : String = ""
     @State private var selectedView: Int = 1
     @State var assetType = "자산을 선택하세요."
@@ -28,7 +28,7 @@ struct AddView: View {
     
     
     @State var categories: [String] = ["현금", "체크카드", "신용카드", "은행","추가", "추가추가","추가/추가"]
-    
+        
     var body: some View {
         @State var moneyStr = String(describing: "\(money)")
         ZStack {
@@ -129,7 +129,7 @@ struct AddView: View {
                                 .font(.pretendardFont(.medium, size: 14))
                                 .foregroundColor(.greyScale4)
                             Spacer()
-                            Text("2022.10.20")
+                            Text("\(date)")
                                 .font(.pretendardFont(.medium, size: 14))
                                 .foregroundColor(.greyScale2)
                         }
@@ -229,6 +229,7 @@ struct AddView: View {
                     .background(Color.primary1)
                 }
                 .frame(maxWidth: .infinity)
+                .ignoresSafeArea()
                 .frame(height: 66)
                 
                 

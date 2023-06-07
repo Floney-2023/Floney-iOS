@@ -523,3 +523,98 @@ struct CategoryFlowLayout: View {
     }
 }
 
+struct DayLinesBottomSheet: View {
+    let buttonHeight: CGFloat = 38
+    @StateObject var viewModel : CalendarViewModel
+    @Binding var isShowing: Bool
+    @Binding var isShowingAddView : Bool 
+    //@Binding var originalDateStr :String
+
+    var body: some View{
+        let year = String(describing: viewModel.selectedYear)
+        ZStack(alignment: .bottom) {
+            if (isShowing) {
+                //MARK: Background
+                Color.black
+                    .opacity(0.7)
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        isShowing.toggle()
+                    }
+                //MARK: content
+                
+                VStack() {
+                    HStack {
+                        VStack(alignment: .leading, spacing: 5) {
+                            Text("\(year)년")
+                                .font(.pretendardFont(.semiBold, size: 14))
+                                .foregroundColor(.greyScale6)
+                            Text("\(viewModel.selectedMonth)월 \(viewModel.selectedDay)일")
+                                .font(.pretendardFont(.semiBold, size: 16))
+                                .foregroundColor(.greyScale1)
+                            
+                        }
+                        Spacer()
+                        VStack {
+                           // Spacer()
+                            Text("내역 추가")
+                                .font(.pretendardFont(.semiBold, size: 12))
+                                .foregroundColor(.primary2)
+                                .onTapGesture {
+                                /*
+                                    originalDateStr = viewModel.selectedDateStr
+                                    let dateFormatter = DateFormatter()
+
+                                    // Set the input date format
+                                    dateFormatter.dateFormat = "yyyy-M-d"
+                                    guard let date = dateFormatter.date(from: originalDateStr) else {
+                                        fatalError("Incorrect date format")
+                                    }
+
+                                    // Set the output date format
+                                    dateFormatter.dateFormat = "yyyy.MM.dd"
+                                    let formattedDateStr = dateFormatter.string(from: date)
+                                    originalDateStr = formattedDateStr
+                                    print(formattedDateStr) // Prints "2020.03.03"*/
+                                    
+                                    isShowing.toggle()
+                                    self.isShowingAddView.toggle()
+                                }
+                            //Spacer()
+                        }
+                    }
+                    .padding(.top, 24)
+                    
+                    ScrollView {
+                        VStack {
+                          //  Spacer()
+                            Image("no_line")
+                            Text("내역이 없습니다.")
+                                .font(.pretendardFont(.medium, size: 12))
+                                .foregroundColor(.greyScale6)
+                          //  Spacer()
+                        }.frame(maxWidth: .infinity, maxHeight: .infinity)
+                            .frame(height: 200)
+                        //.background(Color.red)
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    
+                }
+                .padding(.horizontal, 20)
+                .padding(.bottom, 44)
+                .padding(.top, 0)
+                .transition(.move(edge: .bottom))
+                .background(
+                    Color(.white)
+                )
+                .cornerRadius(12, corners: [.topLeft, .topRight])
+                .frame(height: UIScreen.main.bounds.height / 2) // Screen height is divided by 2
+                           
+            } // if
+        } //ZStack
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
+        .ignoresSafeArea()
+        .animation(.easeInOut, value: isShowing)
+        
+    }
+}

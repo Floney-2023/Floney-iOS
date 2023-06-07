@@ -8,30 +8,44 @@
 import Foundation
 import Combine
 class CalendarViewModel: ObservableObject {
-    
     @Published var result : CalendarResponse = CalendarResponse(totalIncome: 0, totalOutcome: 0)
     @Published var calendarLoadingError: String = ""
     @Published var showAlert: Bool = false
     @Published var bookKey = ""
-    @Published var date = ""
+    @Published var requestDate: String = ""
     
-    @Published var monthlyData: [CalendarExpenses] = []
-    @Published var selectedDate: CalendarExpenses?
+    @Published var todayYear: Int = 0
+    @Published var todayMonth: Int = 0
+    @Published var todayDay: Int = 0
+    var totalToday = ""
 
-    var selectedYear: Int = Calendar.current.component(.year, from: Date())
-    var selectedMonth: Int = Calendar.current.component(.month, from: Date())
+    @Published var selectedDate: Date = Date()
+    @Published var selectedYear: Int = 0
+    @Published var selectedMonth: Int = 0
+    @Published var selectedDay: Int = 0
+    @Published var selectedYearMonth = ""
+    @Published var selectedDateStr = ""
+    
+    @Published var totalIncome: Int = 0
+    @Published var totalOutcome: Int = 0
+    
+    @Published var selectedView: Int = 1
+    @Published var daysOfTheWeek = ["일","월","화","수","목","금","토"]
+    
 
     private var cancellableSet: Set<AnyCancellable> = []
     var dataManager: CalendarProtocol
     
     init( dataManager: CalendarProtocol = CalendarService.shared) {
         self.dataManager = dataManager
-        getCalendar()
-        //postSignIn()
+       // getCalendar()
+        self.calcToday()
+        self.calcDate(Date())
     }
     
+    //MARK: server
     func getCalendar() {
-        let request = CalendarRequest(bookKey: bookKey, date: date)
+        let request = CalendarRequest(bookKey: bookKey, date: requestDate)
         dataManager.getCalendar(request)
             .sink { (dataResponse) in
                 if dataResponse.error != nil {
@@ -45,9 +59,48 @@ class CalendarViewModel: ObservableObject {
                 }
             }.store(in: &cancellableSet)
     }
-
-    func selectDate(_ date: CalendarExpenses) {
-        selectedDate = date
+    func calcToday() {
+        let today = Date()
+        todayYear = Calendar.current.component(.year, from: today)
+        todayMonth = Calendar.current.component(.month, from: today)
+        todayDay = Calendar.current.component(.day, from: today)
+        
+        totalToday = "\(todayYear)-\(todayMonth)-\(todayDay)"
+    }
+    
+    func calcDate(_ date: Date) {
+        selectedYear = Calendar.current.component(.year, from: date)
+        selectedMonth = Calendar.current.component(.month, from: date)
+        selectedDay = Calendar.current.component(.day, from: date)
+        
+        selectedDateStr = "\(selectedYear)-\(selectedMonth)-\(selectedDay)"
+        selectedYearMonth = "\(selectedYear).\(selectedMonth)"
+    }
+    
+    // MARK: 해당 달에 대한 date 반환
+    func generateDates(for date: Date, using calendar: Calendar = .current) -> [String] {
+        var dates: [String] = []
+        
+        let components = calendar.dateComponents([.year, .month], from: date)
+        var firstDayOfMonth = calendar.date(from: components)!
+        let year = calendar.component(.year, from: date)
+        let month = calendar.component(.month, from: date)
+        let firstDayOfWeek = calendar.component(.weekday, from: firstDayOfMonth)
+        
+        for _ in 0..<firstDayOfWeek-1 {
+            dates.append("0")
+        }
+        if let monthRange = calendar.range(of: .day, in: .month, for: date) {
+            for day in monthRange {
+               
+                let result = "\(year)-\(month)-\(day)"
+                
+                print(result)
+                dates.append(result)
+            }
+        }
+        print(dates)
+        return dates
     }
 
     func nextMonth() {
@@ -67,6 +120,12 @@ class CalendarViewModel: ObservableObject {
         }
         getCalendar()
     }
+    
+    var dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MM.dd"
+        return formatter
+    }()
 
     
     func createAlert( with error: NetworkError) {

@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ModifyingBookView: View {
     @State var nickname = ""
+    @State var toggleOnOff = false
     var body: some View {
         VStack(spacing:36) {
             VStack(spacing:12) {
@@ -52,15 +53,17 @@ struct ModifyingBookView: View {
                         Image("forward_button")
                     }
                 }
-                NavigationLink(destination: ChangePasswordView()){
-                    HStack {
-                        Text("내역 프로필 보기")
-                            .font(.pretendardFont(.medium, size: 14))
-                            .foregroundColor(.greyScale2)
-                        Spacer()
-                        Image("forward_button")
-                    }
+                
+                HStack {
+                    Text("내역 프로필 보기")
+                        .font(.pretendardFont(.medium, size: 14))
+                        .foregroundColor(.greyScale2)
+                    Spacer()
+                    Toggle(isOn: $toggleOnOff) {
+                        
+                    }.padding(.trailing, 6)
                 }
+                
                 
             }
             
