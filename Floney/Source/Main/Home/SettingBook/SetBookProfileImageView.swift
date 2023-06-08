@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct SetBookProfileImageView: View {
+    @State private var openPhoto = false
+    @State private var image = UIImage()
     var body: some View {
         VStack(spacing:20) {
             Image("btn_book_profile")
@@ -41,6 +43,9 @@ struct SetBookProfileImageView: View {
                     .font(.pretendardFont(.semiBold, size: 16))
                     .foregroundColor(.greyScale1)
             }
+        }
+        .sheet(isPresented: $openPhoto) {
+            ImagePicker(sourceType: .photoLibrary, selectedImage: self.$image)
         }
 
     }

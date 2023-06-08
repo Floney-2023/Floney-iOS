@@ -46,6 +46,7 @@
 		2FC3B1DB2A2733D200572804 /* GoogleSignIn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC3B1DA2A2733D200572804 /* GoogleSignIn.swift */; };
 		2FC3B1DD2A274FF200572804 /* TextFieldLarge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC3B1DC2A274FF200572804 /* TextFieldLarge.swift */; };
 		2FC3B1DF2A2DC80500572804 /* CategoryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC3B1DE2A2DC80500572804 /* CategoryButton.swift */; };
+		2FC3B1E22A321B1F00572804 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC3B1E12A321B1E00572804 /* ImagePicker.swift */; };
 		2FD7F39C29B1E26D00B99CAA /* FloneyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD7F39B29B1E26D00B99CAA /* FloneyApp.swift */; };
 		2FD7F39E29B1E26D00B99CAA /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD7F39D29B1E26D00B99CAA /* ContentView.swift */; };
 		2FD7F3A029B1E26E00B99CAA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2FD7F39F29B1E26E00B99CAA /* Assets.xcassets */; };
@@ -146,6 +147,7 @@
 		2FC3B1DA2A2733D200572804 /* GoogleSignIn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleSignIn.swift; sourceTree = "<group>"; };
 		2FC3B1DC2A274FF200572804 /* TextFieldLarge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldLarge.swift; sourceTree = "<group>"; };
 		2FC3B1DE2A2DC80500572804 /* CategoryButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryButton.swift; sourceTree = "<group>"; };
+		2FC3B1E12A321B1E00572804 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		2FD7F39829B1E26D00B99CAA /* Floney.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Floney.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2FD7F39B29B1E26D00B99CAA /* FloneyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloneyApp.swift; sourceTree = "<group>"; };
 		2FD7F39D29B1E26D00B99CAA /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -381,6 +383,14 @@
 			path = SettingBook;
 			sourceTree = "<group>";
 		};
+		2FC3B1E02A321AC400572804 /* Photo */ = {
+			isa = PBXGroup;
+			children = (
+				2FC3B1E12A321B1E00572804 /* ImagePicker.swift */,
+			);
+			path = Photo;
+			sourceTree = "<group>";
+		};
 		2FD7F38F29B1E26D00B99CAA = {
 			isa = PBXGroup;
 			children = (
@@ -470,6 +480,7 @@
 		2FD7F3AC29B1E3B100B99CAA /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				2FC3B1E02A321AC400572804 /* Photo */,
 				2F146A5C2A14B03F0089AB3D /* TokenReissue */,
 				2FD7F3B029B1E3DD00B99CAA /* Splash */,
 				2FD7F3AF29B1E3D600B99CAA /* SignUp */,
@@ -1010,6 +1021,7 @@
 				2FD7F3C329B1E47200B99CAA /* Font.swift in Sources */,
 				2FFA302E29EEAEE100412F83 /* SignUpDataManager.swift in Sources */,
 				2FD7F39C29B1E26D00B99CAA /* FloneyApp.swift in Sources */,
+				2FC3B1E22A321B1F00572804 /* ImagePicker.swift in Sources */,
 				2F1614622A07F5FE0029E9A9 /* SendBookCodeViewModel.swift in Sources */,
 				2FEA2BD229C4424600DE8E54 /* OTPViewModel.swift in Sources */,
 				2F1614782A0A32AF0029E9A9 /* CalendarResponse.swift in Sources */,
