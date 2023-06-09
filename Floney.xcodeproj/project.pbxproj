@@ -66,6 +66,7 @@
 		2FD7F3D129B1EC0700B99CAA /* Pretendard-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2FD7F3B929B1E44600B99CAA /* Pretendard-Regular.otf */; };
 		2FD7F3D229B1EC0900B99CAA /* Pretendard-SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2FD7F3BD29B1E44600B99CAA /* Pretendard-SemiBold.otf */; };
 		2FD7F3D329B1EC0C00B99CAA /* Pretendard-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2FD7F3BC29B1E44600B99CAA /* Pretendard-Thin.otf */; };
+		2FE23F5E2A336CF5009FA8CA /* PermissionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE23F5D2A336CF5009FA8CA /* PermissionManager.swift */; };
 		2FEA2B6429B73CE700DE8E54 /* ServiceAgreementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEA2B6329B73CE700DE8E54 /* ServiceAgreementView.swift */; };
 		2FEA2BA029B8685E00DE8E54 /* BackButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEA2B9F29B8685E00DE8E54 /* BackButton.swift */; };
 		2FEA2BA229B87A9200DE8E54 /* UserInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEA2BA129B87A9200DE8E54 /* UserInfoView.swift */; };
@@ -169,6 +170,7 @@
 		2FD7F3C629B1E50300B99CAA /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
 		2FD7F3C829B1E52C00B99CAA /* SplashScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreenView.swift; sourceTree = "<group>"; };
 		2FD7F3CA29B1E5C500B99CAA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		2FE23F5D2A336CF5009FA8CA /* PermissionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionManager.swift; sourceTree = "<group>"; };
 		2FEA2B6329B73CE700DE8E54 /* ServiceAgreementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceAgreementView.swift; sourceTree = "<group>"; };
 		2FEA2B9F29B8685E00DE8E54 /* BackButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackButton.swift; sourceTree = "<group>"; };
 		2FEA2BA129B87A9200DE8E54 /* UserInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoView.swift; sourceTree = "<group>"; };
@@ -462,6 +464,7 @@
 				2FEA2B9F29B8685E00DE8E54 /* BackButton.swift */,
 				2FEA2BA329B892B000DE8E54 /* ViewModifier */,
 				2FD7F3AB29B1E39D00B99CAA /* Extension */,
+				2FE23F5D2A336CF5009FA8CA /* PermissionManager.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -1024,6 +1027,7 @@
 				2FC3B1E22A321B1F00572804 /* ImagePicker.swift in Sources */,
 				2F1614622A07F5FE0029E9A9 /* SendBookCodeViewModel.swift in Sources */,
 				2FEA2BD229C4424600DE8E54 /* OTPViewModel.swift in Sources */,
+				2FE23F5E2A336CF5009FA8CA /* PermissionManager.swift in Sources */,
 				2F1614782A0A32AF0029E9A9 /* CalendarResponse.swift in Sources */,
 				2FD7F3B629B1E42400B99CAA /* Constant.swift in Sources */,
 				2F16146D2A0804CA0029E9A9 /* CreateBookDataManager.swift in Sources */,
@@ -1169,6 +1173,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Floney/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "floney가 사진 촬영을 통한 프로필 사진 등록을 위해 카메라 접근을 허용합니다.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "floney가 프로필 사진 등록을 위해 라이브러리에 접근하도록 허용합니다.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -1200,6 +1206,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Floney/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "floney가 사진 촬영을 통한 프로필 사진 등록을 위해 카메라 접근을 허용합니다.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "floney가 프로필 사진 등록을 위해 라이브러리에 접근하도록 허용합니다.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
