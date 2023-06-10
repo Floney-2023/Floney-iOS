@@ -10,7 +10,8 @@ import AVFoundation
 import Photos
 
 class PermissionManager : ObservableObject {
-    @Published var permissionGranted = false
+    @Published var cameraPermission = false
+    @Published var albumPermission = false
     
     /**
      * 카메라 권한을 요청합니다.
