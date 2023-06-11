@@ -379,8 +379,8 @@
 			isa = PBXGroup;
 			children = (
 				2FC3B1D42A25E30A00572804 /* SettingBookView.swift */,
-				2FC3B1D82A25F9F200572804 /* SetBookProfileImageView.swift */,
 				2FC3B1D62A25F95600572804 /* ModifyingBookView.swift */,
+				2FC3B1D82A25F9F200572804 /* SetBookProfileImageView.swift */,
 			);
 			path = SettingBook;
 			sourceTree = "<group>";
@@ -451,6 +451,7 @@
 		2FD7F3AA29B1E39400B99CAA /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				2FE23F5D2A336CF5009FA8CA /* PermissionManager.swift */,
 				2FC3B1DA2A2733D200572804 /* GoogleSignIn.swift */,
 				2F1614962A1370B90029E9A9 /* SignInWithAppleCoordinator.swift */,
 				2F1614932A0FABBE0029E9A9 /* CustomAlert.swift */,
@@ -464,7 +465,6 @@
 				2FEA2B9F29B8685E00DE8E54 /* BackButton.swift */,
 				2FEA2BA329B892B000DE8E54 /* ViewModifier */,
 				2FD7F3AB29B1E39D00B99CAA /* Extension */,
-				2FE23F5D2A336CF5009FA8CA /* PermissionManager.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
