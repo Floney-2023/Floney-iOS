@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct SetBookProfileImageView: View {
+    @StateObject var permissionManager = PermissionManager()
     @State private var openPhoto = false
     @State private var image = UIImage()
     
@@ -49,7 +50,8 @@ struct SetBookProfileImageView: View {
             ImagePicker(sourceType: .photoLibrary, selectedImage: self.$image)
         }
         .onAppear{
-            
+            permissionManager.requestCameraPermission()
+            permissionManager.requestAlbumPermission()
         }
 
     }
