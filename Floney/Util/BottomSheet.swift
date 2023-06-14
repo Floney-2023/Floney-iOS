@@ -10,14 +10,15 @@ import SwiftUI
 
 enum BottomSheetType: Int {
     case accountBook = 0
-    case shareBook = 1
+    //case shareBook = 1
     
     func view() -> AnyView {
         switch self {
         case .accountBook:
             return AnyView(AccountBookBottomSheet())
+            /*
         case .shareBook:
-            return AnyView(ShareBookBottomSheet())
+            return AnyView(ShareBookBottomSheet())*/
             
         }
     }
@@ -99,49 +100,83 @@ struct AccountBookBottomSheet: View{
 
 //MARK: 친구 초대하기 bottom sheet
 struct ShareBookBottomSheet: View{
+    var firebaseManager = FirebaseManager()
     let buttonHeight: CGFloat = 46
+    @Binding var isShowing : Bool
+    @Binding var bookCode : String
+    @Binding var onShareSheet : Bool
+    @Binding var shareUrl : URL?
     var body: some View{
-        
-        VStack(spacing: 24) {
-            HStack {
-                Text("친구들을 초대해서\n함께 가계부를 적어보세요🍀")
-                    .foregroundColor(.greyScale1)
-                    .font(.pretendardFont(.bold,size: 18))
-                Spacer()
-            }
-            .padding(.top, 24)
-            
-            VStack(spacing : 28) {
-                VStack(spacing:6) {
+        ZStack(alignment: .bottom) {
+            if (isShowing) {
+                Color.black
+                    .opacity(0.7)
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        isShowing.toggle()
+                    }
+                VStack(spacing: 24) {
                     HStack {
-                        Text("초대 코드")
-                            .font(.pretendardFont(.medium, size: 12))
-                            .foregroundColor(.greyScale8)
+                        Text("친구들을 초대해서\n함께 가계부를 적어보세요🍀")
+                            .foregroundColor(.greyScale1)
+                            .font(.pretendardFont(.bold,size: 18))
                         Spacer()
                     }
-                    ButtonLarge(label: "FLONEY", background: .greyScale12, textColor: .greyScale2, strokeColor: .greyScale12, action: {
+                    .padding(.top, 24)
+                    
+                    VStack(spacing : 28) {
+                        VStack(spacing:6) {
+                            HStack {
+                                Text("초대 코드")
+                                    .font(.pretendardFont(.medium, size: 12))
+                                    .foregroundColor(.greyScale8)
+                                Spacer()
+                            }
+                            ButtonLarge(label: "A9BC7ACE", background: .greyScale12, textColor: .greyScale2, strokeColor: .greyScale12, action: {
+                                
+                            })
+                            .frame(height: buttonHeight)
+                            
+                        }
+                        ButtonLarge(label: "공유하기",background: .primary1, textColor: .white, strokeColor: .primary1,  fontWeight: .bold, action: {
+                            //let url = firebaseManager.createDynamicLink(for: "A9BC7ACE")!
+                            print("공유하기")
+                            //shareUrl = url
+                            isShowing = false
+                            onShareSheet = true
+                            
+                        })
+                        .frame(height: buttonHeight)
+                        .onTapGesture {
+                            
+                        }
                         
-                    })
-                    .frame(height: buttonHeight)
-                    
+                    }
+                    VStack {
+                        Text("나중에 하기")
+                            .font(.pretendardFont(.regular, size: 12))
+                            .foregroundColor(.greyScale6)
+                        Divider()
+                            .frame(width: 70,height: 1.0)
+                            .padding(EdgeInsets(top: -10, leading: 0, bottom: 0, trailing: 0))
+                            .foregroundColor(.greyScale6)
+                    }
                 }
-                ButtonLarge(label: "공유하기",background: .primary1, textColor: .white, strokeColor: .primary1,  fontWeight: .bold, action: {
-                    
-                })
-                .frame(height: buttonHeight)
+                .padding(.horizontal, 20)
+                .padding(.bottom, 44)
+                .transition(.move(edge: .bottom))
+                .background(
+                    Color(.white)
+                )
+                .cornerRadius(12, corners: [.topLeft, .topRight])
+
                 
             }
-            VStack {
-                Text("나중에 하기")
-                    .font(.pretendardFont(.regular, size: 12))
-                    .foregroundColor(.greyScale6)
-                Divider()
-                    .frame(width: 70,height: 1.0)
-                    .padding(EdgeInsets(top: -10, leading: 0, bottom: 0, trailing: 0))
-                    .foregroundColor(.greyScale6)
-            }
         }
-        .padding(.horizontal, 20)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
+        .ignoresSafeArea()
+        .animation(.easeInOut, value: isShowing)
+        
     }
 }
 

@@ -10,21 +10,36 @@ import AVFoundation
 import Photos
 
 class PermissionManager : ObservableObject {
-    @Published var camerapermission = false
+    
+    @Published var cameraPermission = false
     @Published var albumPermission = false
     
     /**
      * 카메라 권한을 요청합니다.
      */
     func requestCameraPermission() {
-        AVCaptureDevice.requestAccess(for: .video, completionHandler: { (granted: Bool) in
-            if granted {
-                print("Camera: 권한 허용")
-            } else {
-                print("Camera: 권한 거부")
-            }
-        })
+        let status = AVCaptureDevice.authorizationStatus(for: .video)
+        
+        switch status {
+        case .authorized:
+            print("Camera: 권한 허용")
+        case .denied:
+            print("Camera: 권한 거부")
+        case .restricted,.notDetermined:
+            AVCaptureDevice.requestAccess(for: .video, completionHandler: { (granted: Bool) in
+                if granted {
+                    print("Camera: 권한 허용")
+                } else {
+                    print("Camera: 권한 거부")
+                }
+            })
+        default:
+            break
+        }
+         
     }
+    
+    
     /**
      * 앨범 권한을 요청합니다.
      */
@@ -43,17 +58,4 @@ class PermissionManager : ObservableObject {
             })
         }
 
-    /**
-     * 오디오 권한을  요청합니다.
-     */
-    func requestAudioPermission(){
-        AVCaptureDevice.requestAccess(for: .audio, completionHandler: { (granted: Bool) in
-            if granted {
-                print("Audio: 권한 허용")
-            } else {
-                print("Audio: 권한 거부")
-            }
-        })
-    }
-    
 }

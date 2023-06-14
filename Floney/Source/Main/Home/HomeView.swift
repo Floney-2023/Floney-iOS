@@ -7,7 +7,6 @@
 import SwiftUI
 
 struct HomeView: View {
-
     @StateObject var viewModel = CalendarViewModel()
     @State var isOnSettingBook = false
     @State var isShowingMonthPicker = false

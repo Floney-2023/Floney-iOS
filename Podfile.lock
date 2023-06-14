@@ -239,6 +239,8 @@ PODS:
     - GoogleUtilities/Environment (~> 6.7)
     - GoogleUtilities/Logger (~> 6.7)
     - nanopb (~> 1.30906.0)
+  - FirebaseDynamicLinks (4.3.1):
+    - FirebaseCore (~> 6.10)
   - FirebaseFirestore (1.19.0):
     - abseil/algorithm (= 0.20200225.0)
     - abseil/base (= 0.20200225.0)
@@ -329,6 +331,7 @@ DEPENDENCIES:
   - Alamofire
   - BoringSSL-GRPC
   - FirebaseAuth
+  - FirebaseDynamicLinks
   - FirebaseFirestore
   - FirebaseStorage
   - FirebaseStorageSwift
@@ -348,6 +351,7 @@ SPEC REPOS:
     - FirebaseAuth
     - FirebaseCore
     - FirebaseCoreDiagnostics
+    - FirebaseDynamicLinks
     - FirebaseFirestore
     - FirebaseStorage
     - FirebaseStorageSwift
@@ -374,6 +378,7 @@ SPEC CHECKSUMS:
   FirebaseAuth: c92d49ada7948d1a23466e3db17bc4c2039dddc3
   FirebaseCore: d3a978a3cfa3240bf7e4ba7d137fdf5b22b628ec
   FirebaseCoreDiagnostics: 770ac5958e1372ce67959ae4b4f31d8e127c3ac1
+  FirebaseDynamicLinks: 6eac37d86910382eafb6315d952cc44c9e176094
   FirebaseFirestore: 9b2f1b9b9a6f2f0b6fb7484b9e32ab7e39243554
   FirebaseStorage: 15e0f15ef3c7fec3d1899d68623e47d4447066b4
   FirebaseStorageSwift: c7aee26b04ce4cfc16120f091313caa1ad5be723
@@ -392,6 +397,6 @@ SPEC CHECKSUMS:
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
   SwiftKeychainWrapper: 807ba1d63c33a7d0613288512399cd1eda1e470c
 
-PODFILE CHECKSUM: 714ac3c1cb5f2e9449f81754b3890626cb6e53d3
+PODFILE CHECKSUM: fe5f2fae1d7915ff68d0868586e9f501977119d1
 
 COCOAPODS: 1.11.3

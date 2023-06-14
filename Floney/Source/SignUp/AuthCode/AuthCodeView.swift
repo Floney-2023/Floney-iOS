@@ -9,6 +9,9 @@ import SwiftUI
 
 @available(iOS 15.0, *)
 struct AuthCodeView: View {
+    @State private var remainingTime: Int = 5 * 60 // 초 단위로 5분
+    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+       
     @StateObject var otpModel : OTPViewModel = .init()
     // MARK: TextField Focus State
     @FocusState var activeField : OTPField?
@@ -16,7 +19,8 @@ struct AuthCodeView: View {
     var pageCount = 3
     var pageCountAll = 4
     var body: some View {
-        VStack(spacing: 32) {
+        VStack(spacing: 24) {
+            
             HStack {
                 VStack(alignment: .leading, spacing: 16) {
                     Text("\(pageCount)")
@@ -33,8 +37,35 @@ struct AuthCodeView: View {
                         .foregroundColor(.greyScale6)
                 }
                 Spacer()
-            }
+            }.padding(.bottom, 40)
+            
             OTPField()
+            
+            Text("\(remainingTime / 60):\(remainingTime % 60)")
+                .padding(6)
+                .font(.pretendardFont(.medium,size:20))
+                .foregroundColor(.primary2)
+                .background(Color.primary10)
+                .cornerRadius(8)
+                .onReceive(timer) { _ in
+                    if self.remainingTime > 0 {
+                        self.remainingTime -= 1
+                    }
+                }.padding(.bottom, 24)
+            HStack {
+                VStack(alignment: .leading, spacing:5) {
+                    Text("-유효 시간이 지났을 경우 인증 메일을 다시 보내주세요.")
+                        .font(.pretendardFont(.regular,size: 12))
+                        .foregroundColor(.greyScale6)
+                    Text("-하루동안 5번까지 새로운 인증 코드를 받을 수 있습니다.")
+                        .font(.pretendardFont(.regular,size: 12))
+                        .foregroundColor(.greyScale6)
+                    Text("-5번 연속 코드 입력에 실패했다면 24시간 이후 시도해주세요.")
+                        .font(.pretendardFont(.regular,size: 12))
+                        .foregroundColor(.greyScale6)
+                }
+                Spacer()
+            }
             Spacer()
             NavigationLink(destination: UserInfoView()){
                 Text("다음으로")

@@ -11,6 +11,7 @@ import KakaoSDKCommon
 import KakaoSDKAuth
 import FirebaseCore
 import GoogleSignIn
+import FirebaseDynamicLinks
 
 class AppDelegate: NSObject, UIApplicationDelegate{
     
@@ -32,7 +33,10 @@ class AppDelegate: NSObject, UIApplicationDelegate{
     }
     
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
-        
+        // dynamic link
+        if handleFirebaseLink(app: app, open: url, options: options) {
+            return true
+        }
         // kakao
         if (AuthApi.isKakaoTalkLoginUrl(url)) {
             return AuthController.handleOpenUrl(url: url, options: options)
@@ -44,6 +48,26 @@ class AppDelegate: NSObject, UIApplicationDelegate{
         }
         
         return false
+    }
+    
+    func handleFirebaseLink(app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any]) -> Bool {
+        if let dynamicLink = DynamicLinks.dynamicLinks().dynamicLink(fromCustomSchemeURL: url) {
+            // 동적 링크로부터 데이터를 가져옵니다
+            handleIncomingDynamicLink(dynamicLink)
+            return true
+        }
+        return false
+    }
+    // 동적 링크를 처리하는 함수
+    func handleIncomingDynamicLink(_ dynamicLink: DynamicLink) {
+        guard let url = dynamicLink.url else {
+            print("No incoming link")
+            return
+        }
+        let components = URLComponents(url: url, resolvingAgainstBaseURL: false)
+        // bookCode 값을 가져오고 싶다면 URL에서 bookCode를 찾습니다
+        let bookCode = components?.queryItems?.first(where: { $0.name == "bookCode" })?.value
+        print("Book code is: \(bookCode ?? "No code")")
     }
     
 }

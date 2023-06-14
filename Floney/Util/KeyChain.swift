@@ -16,6 +16,9 @@ class Keychain {
         case password
         case bookKey
         case bookCode
+        case encryptionKey
+        case bookProfileImage
+        case userProfileImage
     }
     
     /**
@@ -41,6 +44,12 @@ class Keychain {
         return KeychainWrapper.standard.string(forKey: keychainKey.rawValue)
     }
     
+    static func setDataTypeKey(_ value: Data, forKey keychainKey: KeychainKey) {
+        KeychainWrapper.standard.set(value, forKey: keychainKey.rawValue)
+    }
+    static func getDataTypeKey(forKey keychainKey: KeychainKey) -> Data? {
+        return KeychainWrapper.standard.data(forKey: keychainKey.rawValue)
+    }
     /**
      # removeKeychain
      - parameters:

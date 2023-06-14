@@ -18,10 +18,14 @@ struct SettingBookView: View {
     @State var budget = ""
     @State var initialAsset = ""
     @State var onOff = false
+    @State var onShareSheet = false
+    @State var bookCode = "A9BC7ACE"
+    @State private var shareUrl: URL? = nil
+    
     var body: some View {
         ZStack {
-        ScrollView {
-         
+            ScrollView {
+                
                 VStack(spacing:32) {
                     VStack(spacing:24) {
                         //MARK: Head
@@ -251,18 +255,27 @@ struct SettingBookView: View {
                 .padding(EdgeInsets(top: 30, leading: 20, bottom: 0, trailing: 20))
                 .navigationBarBackButtonHidden(true)
                 .navigationBarItems(leading: BackButton(), trailing: Image("icon_notification"))
+            }.sheet(isPresented: $onShareSheet) {
+                ActivityView(activityItems: [shareUrl ?? ""])
             }
+            
             SetBudgetBottomSheet(isShowing: $isShowingSetBudget, budget: $budget)
             
             SetInitialAssetBottomSheet(isShowing: $isShowingSetInitialAsset, initialAsset: $initialAsset)
             
             CarriedOverBottomSheet(isShowing: $isShowingCarriedOver, onOff: $onOff)
             
-            BottomSheet(isShowing: $isShowingShareBook, content: BottomSheetType.shareBook.view())
+            ShareBookBottomSheet(isShowing: $isShowingShareBook, bookCode: $bookCode, onShareSheet: $onShareSheet, shareUrl: $shareUrl)
+                
+            //BottomSheet(isShowing: $isShowingShareBook, content: BottomSheetType.shareBook.view())
         }
         
+        
     }
+    
+    
 }
+
 
 struct SettingBookView_Previews: PreviewProvider {
     static var previews: some View {

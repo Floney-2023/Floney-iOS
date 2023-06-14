@@ -57,7 +57,7 @@ struct CreateBookView: View {
             //.navigationBarItems(leading: BackButton())
             
             // MARK: Bottom Sheet
-            BottomSheet(isShowing: $isShowingBottomSheet, content: BottomSheetType.shareBook.view())
+           // BottomSheet(isShowing: $isShowingBottomSheet, content: BottomSheetType.shareBook.view())
         }     
     }
 }

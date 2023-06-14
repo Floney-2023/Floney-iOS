@@ -14,10 +14,10 @@ struct SplashScreenView: View {
         if isActive {
             
             //
-            SignInView()
+            //SignInView()
              
             //AddView()
-            //MainTabView()
+            MainTabView()
         } else {
             ZStack {
                 Image("splash_bg")

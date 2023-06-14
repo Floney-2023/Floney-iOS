@@ -22,7 +22,8 @@ target 'Floney' do
   pod 'FirebaseFirestore'
   pod 'FirebaseStorage'
   pod 'FirebaseStorageSwift'
-  # Pods for Floney
+  pod 'FirebaseDynamicLinks'
+# Pods for Floney
   pod 'GoogleSignIn'
   pod 'BoringSSL-GRPC', :modular_headers => false
   pod 'gRPC-Core', :modular_headers => false
