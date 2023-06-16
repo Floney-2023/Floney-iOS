@@ -8,7 +8,7 @@ import SwiftUI
 import Combine
 
 class ServiceAgreementViewModel: ObservableObject {
-    var marketingAgree = 0
+    //var marketingAgree = 0
     
     @Published var isTerm1Agreed: Bool = false {
         didSet {
@@ -25,7 +25,7 @@ class ServiceAgreementViewModel: ObservableObject {
             updateAllAgreed()
         }
     }
-    
+    /*
     @Published var isOptionalTermAgreed: Bool = false {
         didSet {
             if self.isOptionalTermAgreed {
@@ -34,7 +34,7 @@ class ServiceAgreementViewModel: ObservableObject {
                 marketingAgree = 0
             }
         }
-    }
+    }*/
     
     @Published var isAllAgreed: Bool = false {
         didSet {
@@ -42,13 +42,13 @@ class ServiceAgreementViewModel: ObservableObject {
                 isTerm1Agreed = true
                 isTerm2Agreed = true
                 isTerm3Agreed = true
-                isOptionalTermAgreed = true
+                //isOptionalTermAgreed = true
             }
         }
     }
 
     private func updateAllAgreed() {
         isAllAgreed = isTerm1Agreed && isTerm2Agreed
-                    && isTerm3Agreed && isOptionalTermAgreed
+                    && isTerm3Agreed
     }
 }

@@ -58,7 +58,7 @@ struct ServiceAgreementView: View {
                 ServiceAgreementButton(isAgreed: $viewModel.isTerm2Agreed, title: "만 14세 이상 확인 (필수)")
 
                 ServiceAgreementButton(isAgreed: $viewModel.isTerm3Agreed, title: "개인정보 수집 및 이용 동의 (필수)")
-                ServiceAgreementButton(isAgreed: $viewModel.isOptionalTermAgreed, title: "마케팅 정보 수신 동의 (선택)")
+                //ServiceAgreementButton(isAgreed: $viewModel.isOptionalTermAgreed, title: "마케팅 정보 수신 동의 (선택)")
 /*
                 HStack(spacing: 14) {
                     Image(viewModel.isTerm2Agreed ? "check_primary" : "checkbox_grey")

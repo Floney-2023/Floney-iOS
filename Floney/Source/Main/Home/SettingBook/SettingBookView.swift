@@ -234,22 +234,23 @@ struct SettingBookView: View {
                     .onTapGesture {
                         self.isShowingShareBook.toggle()
                     }
-                    NavigationLink(destination: FindPasswordView()){
-                        HStack {
-                            VStack {
-                                Text("가계부 나가기")
-                                    .font(.pretendardFont(.regular, size: 12))
-                                    .foregroundColor(.greyScale6)
-                                
-                                
-                                Divider()
-                                    .padding(EdgeInsets(top: -10, leading: 0, bottom: 0, trailing: 0))
-                                    .frame(width: 70,height: 1.0)
-                                    .foregroundColor(.greyScale6)
-                            }
-                            Spacer()
+                    
+                    //MARK: 가계부 나가기
+                    HStack {
+                        VStack {
+                            Text("가계부 나가기")
+                                .font(.pretendardFont(.regular, size: 12))
+                                .foregroundColor(.greyScale6)
+                            
+                            
+                            Divider()
+                                .padding(EdgeInsets(top: -10, leading: 0, bottom: 0, trailing: 0))
+                                .frame(width: 70,height: 1.0)
+                                .foregroundColor(.greyScale6)
                         }
+                        Spacer()
                     }
+                    
                     Spacer()
                 }
                 .padding(EdgeInsets(top: 30, leading: 20, bottom: 0, trailing: 20))
