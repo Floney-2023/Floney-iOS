@@ -12,7 +12,6 @@ struct MyPageView: View {
     @State var email = "floney.dev@gmail.com"
     @State var isShowingBottomSheet = false
     @StateObject var viewModel = MyPageViewModel()
-    
     var body: some View {
       //  NavigationView {
         ZStack {
