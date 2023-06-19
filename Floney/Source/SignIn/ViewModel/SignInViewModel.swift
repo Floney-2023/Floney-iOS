@@ -122,6 +122,7 @@ class SignInViewModel: ObservableObject {
                     if (self.isLoggedIn == false) {self.setEmailPassword()}
                     print("--성공--")
                     print(self.result.accessToken)
+                    
                 }
             }.store(in: &cancellableSet)
     }
@@ -136,12 +137,14 @@ class SignInViewModel: ObservableObject {
                 } else {
                     self.result = dataResponse.value!
                     self.isNext = true
+                    print("--성공--")
+                    print("로그인 성공 후 : \n\(self.result.accessToken)")
+                    print("set token 호출 전")
                     self.setToken()
+                    print("set token 호출 후")
                     // 자동로그인을 한 경우는 isLoggedIn이 true이므로 email과 password를 다시 저장하지 않아도 괜찮다.
                     if (self.isLoggedIn == false) {self.setEmailPassword()}
-                    print("--성공--")
-                    print(self.result.accessToken)
-                }
+                                    }
             }.store(in: &cancellableSet)
     }
     //MARK: Connect with google
@@ -189,7 +192,8 @@ class SignInViewModel: ObservableObject {
     func setToken() {
         Keychain.setKeychain(self.result.accessToken, forKey: .accessToken)
         Keychain.setKeychain(self.result.refreshToken, forKey: .refreshToken)
-        
+        print("in Set Token에서 view model 내부에 저장된 토큰 : \n\(self.result.accessToken)")
+        print("in Set Token에서 key chain에 저장된 토큰 : \n\(Keychain.getKeychainValue(forKey: .accessToken))")
     }
     
     //MARK: 자동로그인을 위한 email, password 저장하기, 사용자가 이메일과 비밀번호 입력한 경우이다.

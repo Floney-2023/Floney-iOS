@@ -37,6 +37,7 @@ class MyPageViewModel: ObservableObject {
                 } else {
                     self.result = dataResponse.value!
                     print(self.result.myBooks)
+                    print(self.result)
                     self.nickname = self.result.nickname
                     self.email = self.result.email
                     self.myBooks = self.result.myBooks!

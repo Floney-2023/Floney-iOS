@@ -22,7 +22,10 @@ class MyPage {
 extension MyPage: MyPageProtocol {
     func getMyPage() -> AnyPublisher<DataResponse<MyPageResponse, NetworkError>, Never> {
         let url = "\(Constant.BASE_URL)/users/mypage"
-        let token = Keychain.getKeychainValue(forKey: .accessToken)
+        //let token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJydWRhbHN3aGRrMTJAbmF2ZXIuY29tIiwiaWF0IjoxNjg3MDY2MTU1LCJleHAiOjE2ODcwNjk3NTV9.-CCO-ChO7Olw3z3hu9dcbjxq4IbfGWQupVdI0FEYdTk"
+        
+        let token = Keychain.getKeychainValue(forKey: .accessToken)!
+        print("My Page : \n\(token)")
        /*
         guard let token = Keychain.getKeychainValue(forKey: .accessToken) else {
             // 토큰 재발급 로직
