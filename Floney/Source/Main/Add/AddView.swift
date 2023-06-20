@@ -9,7 +9,7 @@ import SwiftUI
 import Combine
 struct AddView: View {
     @StateObject var viewModel = AddViewModel()
-    @State var date : String = ""
+    @State var date : String = "2023-06-20"
     @State var money : String = ""
     @State private var selectedView: Int = 1
     @State var assetType = "자산을 선택하세요."
@@ -57,7 +57,7 @@ struct AddView: View {
                                 , alignment: .leading
                             )
                             .overlay(
-                                Text("\(money)원")
+                                Text("\(moneyStr)원")
                                     .font(.pretendardFont(.bold, size: 38))
                                     .foregroundColor(.primary2)
                                     .opacity(money.isEmpty ? 0 : 1)
@@ -67,9 +67,9 @@ struct AddView: View {
                             .onReceive(Just(money)) { value in
                                 let digits = value.filter { "0"..."9" ~= $0 }
                                 if let intValue = Int(digits), intValue <= 100_000_000_000 {
-                                    money = formatNumber(intValue)
+                                    moneyStr = formatNumber(intValue)
                                 } else {
-                                    money = String(digits.dropLast())
+                                    moneyStr = String(digits.dropLast())
                                 }
                             }
                         
@@ -225,6 +225,25 @@ struct AddView: View {
                     .background(Color.greyScale2)
                     Button {
                         //
+                        
+                        viewModel.money = money
+                        viewModel.lineDate = date
+                        viewModel.flow = toggleType
+                        viewModel.asset = assetType
+                        viewModel.line = category
+                        viewModel.description = content
+                        viewModel.except = toggleOnOff
+                        
+                        print(viewModel.money)
+                        print(viewModel.lineDate)
+                        print(viewModel.flow)
+                        print(viewModel.asset)
+                        print(viewModel.line)
+                        print(viewModel.description)
+                        print(viewModel.except)
+                        
+                        viewModel.postLines()
+                        
                     } label: {
                         Text("저장하기")
                             .font(.pretendardFont(.bold, size:14))

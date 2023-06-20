@@ -15,6 +15,7 @@ class CalendarViewModel: ObservableObject {
     @Published var bookKey = ""
     @Published var requestDate: String = ""
     
+    
     //MARK: Today
     @Published var todayYear: Int = 0
     @Published var todayMonth: Int = 0
@@ -35,6 +36,14 @@ class CalendarViewModel: ObservableObject {
     @Published var selectedView: Int = 1
     @Published var daysOfTheWeek = ["일","월","화","수","목","금","토"]
     
+    //MARK: Day Lines
+    @Published var dayLinesDate: String = ""
+    @Published var dayLinesResult : DayLinesResponse = DayLinesResponse(dayLinesResponse: [], totalExpense: [], seeProfileImg: true)
+    @Published var dayLinesTotalIncome : Int = 0
+    @Published var dayLinesTotalOutcome : Int = 0
+    //@Published var dayLinesTotalExpenses : [DayTotalExpenses?] = []
+    @Published var dayLines : [DayLinesResults?] = []
+    @Published var seeProfileImg : Bool = true
 
     private var cancellableSet: Set<AnyCancellable> = []
     var dataManager: CalendarProtocol
@@ -67,6 +76,34 @@ class CalendarViewModel: ObservableObject {
                 }
             }.store(in: &cancellableSet)
     }
+    func getDayLines() {
+        bookKey = "2FE56430"
+        let request = DayLinesRequest(bookKey: bookKey, date: dayLinesDate)
+        dataManager.getDayLines(request)
+            .sink { (dataResponse) in
+                if dataResponse.error != nil {
+                    self.createAlert(with: dataResponse.error!)
+                    print(dataResponse.error)
+                } else {
+                    self.dayLinesResult = dataResponse.value!
+                    print("--성공--")
+                    
+                    print(self.dayLinesResult)
+                    
+                    for asset in self.dayLinesResult.totalExpense {
+                        if asset?.assetType == "INCOME" {
+                            self.dayLinesTotalIncome += asset!.money
+                        } else if asset?.assetType == "OUTCOME" {
+                            self.dayLinesTotalOutcome += asset!.money
+                        }
+                    }
+                    self.dayLines = self.dayLinesResult.dayLinesResponse
+                    self.seeProfileImg = self.dayLinesResult.seeProfileImg
+                    
+                }
+            }.store(in: &cancellableSet)
+    }
+
     func calcToday() {
         let today = Date()
         todayYear = Calendar.current.component(.year, from: today)

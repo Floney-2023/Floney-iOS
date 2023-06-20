@@ -9,24 +9,40 @@ import SwiftUI
 
 struct DayLinesView: View {
     @Binding var date: Date
+    @ObservedObject var viewModel : CalendarViewModel
     var body: some View {
             VStack {
-                DayTotalView()
-                DayLinesDetailView()
+                DayTotalView(viewModel: viewModel)
+                DayLinesDetailView(viewModel: viewModel)
                 Spacer()
             }//.padding(20)
             .background(Color.clear)
+            .onAppear{
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "yyyy-MM-dd"
+
+                let dateString = dateFormatter.string(from: date)
+
+                print(dateString)
+                viewModel.dayLinesDate = dateString
+                print("date : \(dateString)")
+                viewModel.getDayLines()
+            }
     }
 }
 
 struct DayTotalView : View {
+    @ObservedObject var viewModel : CalendarViewModel
+    @State var totalIncome = 0
+    @State var totalOutcome = 0
     var body: some View {
         HStack() {
             VStack(alignment: .leading, spacing: 8) {
                 Text("수입")
                     .font(.pretendardFont(.medium, size: 12))
                     .foregroundColor(.greyScale12)
-                Text("99999999원")
+                
+                Text("\(viewModel.dayLinesTotalIncome)")
                     .font(.pretendardFont(.semiBold, size: 18))
                     .foregroundColor(.white)
             }
@@ -35,7 +51,7 @@ struct DayTotalView : View {
                 Text("지출")
                     .font(.pretendardFont(.medium, size: 12))
                     .foregroundColor(.greyScale12)
-                Text("99999999원")
+                Text("\(viewModel.dayLinesTotalOutcome)")
                     .font(.pretendardFont(.semiBold, size: 18))
                     .foregroundColor(.white)
             }
@@ -47,14 +63,7 @@ struct DayTotalView : View {
     }
 }
 struct DayLinesDetailView : View {
-    var dayLine = DayLinesViewModel()
-    let dayLinesResponse =
-    [
-        DayLinesResults(money: 10000, img: "", category: ["식비"], assetType: "OUTCOME", content: "점심"),
-        DayLinesResults(money: 10000, img: "", category: ["식비"], assetType: "OUTCOME", content: "저녁"),
-        DayLinesResults(money: 10000, img: "", category: ["급여"], assetType: "INCOME", content: "급여"),
-        DayLinesResults(money: 10000, img: "", category: ["급여"], assetType: "INCOME", content: "알바")
-    ]
+    @ObservedObject var viewModel : CalendarViewModel
     var body: some View {
         VStack(spacing:88) {
             HStack {
@@ -66,13 +75,35 @@ struct DayLinesDetailView : View {
                     .font(.pretendardFont(.semiBold, size: 12))
                     .foregroundColor(.primary2)
             }
-           
             VStack {
                 ScrollView {
-                    Image("no_line")
-                    Text("내역이 없습니다.")
-                        .font(.pretendardFont(.medium, size: 12))
-                        .foregroundColor(.greyScale6)
+                    if viewModel.dayLines.count == 0 {
+                        Image("no_line")
+                        Text("내역이 없습니다.")
+                            .font(.pretendardFont(.medium, size: 12))
+                            .foregroundColor(.greyScale6)
+                    } else {
+                        ForEach(viewModel.dayLines, id: \.self) { line in
+                            HStack {
+                                Image("icon_profile")
+                                VStack {
+                                    Text("\(line!.content)")
+                                    HStack {
+                                        ForEach(line!.category, id: \.self) { category in
+                                            Text("\(category)")
+                                        }
+                                    }
+                                }
+                                Spacer()
+                                if line!.assetType == "INCOME" {
+                                    Text("+\(line!.money)")
+                                } else if line!.assetType == "OUTCOME" {
+                                    Text("-\(line!.money)")
+
+                                }
+                            }
+                        }
+                    }
                 }
             }
             Spacer()
@@ -87,6 +118,6 @@ struct DayLinesDetailView : View {
 
 struct DateCalendarView_Previews: PreviewProvider {
     static var previews: some View {
-        DayLinesView(date : .constant(Date()))
+        DayLinesView(date : .constant(Date()), viewModel: CalendarViewModel())
     }
 }

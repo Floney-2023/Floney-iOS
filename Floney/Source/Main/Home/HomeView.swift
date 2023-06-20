@@ -156,7 +156,7 @@ struct CustomCalendarView: View {
             if viewModel.selectedView == 1 {
                 MonthCalendar(viewModel: viewModel, isShowingMonthPicker: $isShowingMonthPicker, isShowingBottomSheet: $isShowingBottomSheet)
             } else if viewModel.selectedView == 2 {
-                DayLinesView(date: $viewModel.selectedDate)
+                DayLinesView(date: $viewModel.selectedDate, viewModel: viewModel)
             }
         }
         
