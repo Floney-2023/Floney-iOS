@@ -126,7 +126,7 @@ class CalendarViewModel: ObservableObject {
             requestDate = "\(selectedYear)-\(selectedMonth)-01"
         }
         print("requestDate : \(requestDate)")
-        getCalendar()
+        //getCalendar()
     }
     
     // MARK: 해당 달에 대한 date 반환

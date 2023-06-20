@@ -346,6 +346,9 @@ struct MonthCalendar: View {
                 .frame(maxHeight : .infinity)
                 .background(Color.white)
                 .cornerRadius(12)
+                .onAppear{
+                    viewModel.getCalendar()
+                }
                
                 TotalView(viewModel: viewModel)
 
