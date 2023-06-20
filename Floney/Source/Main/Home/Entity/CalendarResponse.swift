@@ -11,10 +11,10 @@ import Foundation
 struct CalendarResponse: Decodable {
     var totalIncome: Int
     var totalOutcome: Int
-    var result: [CalendarExpenses]?
+    var expenses: [CalendarExpenses]
 }
 
-struct CalendarExpenses: Decodable {
+struct CalendarExpenses: Decodable, Hashable {
     var date: String
     var money: Int
     var assetType: String
@@ -22,7 +22,6 @@ struct CalendarExpenses: Decodable {
 
 //MARK: 일별내역 조회 결과
 struct DayLinesResponse: Decodable{
-    
     var dayLinesResponse : [DayLinesResults]
     var totalExpense : [DayTotalExpenses]
 }

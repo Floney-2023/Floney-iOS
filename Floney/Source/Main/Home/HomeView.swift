@@ -65,8 +65,7 @@ struct HomeView: View {
 }
 //MARK: 총지출/총수입
 struct TotalView: View {
-    @StateObject var viewModel : CalendarViewModel
-    
+    @ObservedObject var viewModel : CalendarViewModel
     var body: some View {
         HStack(spacing:23){
             VStack(alignment: .leading,spacing: 8){
@@ -101,7 +100,7 @@ struct TotalView: View {
 
 //MARK: 캘린더 메인
 struct CustomCalendarView: View {
-    @StateObject var viewModel : CalendarViewModel
+    @ObservedObject var viewModel : CalendarViewModel
     @Binding var isShowingMonthPicker : Bool
     @Binding var isShowingBottomSheet : Bool
   
@@ -165,7 +164,7 @@ struct CustomCalendarView: View {
 }
 //MARK: 달 선택
 struct MonthYearPicker: View {
-    @StateObject var viewModel : CalendarViewModel
+    @ObservedObject var viewModel : CalendarViewModel
     @Binding var date: Date
     
     var body: some View {
@@ -232,28 +231,9 @@ struct MonthYearPicker: View {
     
 }
 
-/*
-//MARK: 달 선택
-struct MonthPicker: View {
-    @Binding var month: Date
-    
-    var body: some View {
-        let dateClosedRange: ClosedRange<Date> = {
-            let calendar = Calendar.current
-            let startComponents = DateComponents(year: 1900, month: 1, day: 1)
-            let endComponents = DateComponents(year: 2100, month: 12, day: 31)
-            return calendar.date(from:startComponents)!...calendar.date(from:endComponents)!
-        }()
-        
-        return DatePicker("", selection: $month, in: dateClosedRange, displayedComponents: .date)
-            .datePickerStyle(WheelDatePickerStyle())
-            .labelsHidden()
-            .frame(maxWidth: 400)
-    }
-}*/
-
+//MARK: main 1
 struct MonthCalendar: View {
-    @StateObject var viewModel : CalendarViewModel
+    @ObservedObject var viewModel : CalendarViewModel
     @Binding var isShowingMonthPicker : Bool
     @Binding var isShowingBottomSheet : Bool
     
@@ -288,10 +268,9 @@ struct MonthCalendar: View {
                                     let components = date.split(separator: "-")
                                     
                                     VStack {
-                                        //\(calendar.component(.day, from: date))
                                         if let dayComponent = components.last {
                                             let day = String(dayComponent)
-                                           // print(day) // prints "05"
+                                           
                                             if day == "0" {
                                                 Text("")
                                                     .padding()
@@ -321,16 +300,28 @@ struct MonthCalendar: View {
                                                         isShowingBottomSheet.toggle()
                                                     }
                                                 VStack {
-                                                    Text("-30,000")
-                                                        .font(Font.pretendardFont(.medium, size:9))
-                                                        .foregroundColor(.calendarRed)
-                                                    Text("+30,000")
-                                                        .font(Font.pretendardFont(.medium, size:9))
-                                                        .foregroundColor(.blue1)
+                                                    ForEach(viewModel.expenses, id: \.self) { (expense: CalendarExpenses) in
+                                                        let extractedDay = viewModel.extractDay(from: expense.date)
+                                                        let assetType = expense.assetType
+                                                        let money = expense.money
+                                                        
+                                                        if extractedDay == day && assetType == "OUTCOME" && money > 0 {
+                                                            Text("-\(money)")
+                                                                .font(Font.pretendardFont(.medium, size:9))
+                                                                .foregroundColor(.calendarRed)
+                                                        }
+                                                        
+                                                        if extractedDay == day && assetType == "INCOME" && money > 0 {
+                                                            Text("+\(money)")
+                                                                .font(Font.pretendardFont(.medium, size:9))
+                                                                .foregroundColor(.blue1)
+                                                        }
+                                                    }
                                                 }
                                                 
                                                 
                                             }
+                                            
                                         }
                                         
                                         

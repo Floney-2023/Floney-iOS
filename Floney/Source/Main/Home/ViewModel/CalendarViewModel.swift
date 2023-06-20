@@ -8,17 +8,20 @@
 import Foundation
 import Combine
 class CalendarViewModel: ObservableObject {
-    @Published var result : CalendarResponse = CalendarResponse(totalIncome: 0, totalOutcome: 0)
+    @Published var result : CalendarResponse = CalendarResponse(totalIncome: 0, totalOutcome: 0, expenses: [])
+    @Published var expenses : [CalendarExpenses] = []
     @Published var calendarLoadingError: String = ""
     @Published var showAlert: Bool = false
     @Published var bookKey = ""
     @Published var requestDate: String = ""
     
+    //MARK: Today
     @Published var todayYear: Int = 0
     @Published var todayMonth: Int = 0
     @Published var todayDay: Int = 0
     var totalToday = ""
 
+    //MARK: Selected Date
     @Published var selectedDate: Date = Date()
     @Published var selectedYear: Int = 0
     @Published var selectedMonth: Int = 0
@@ -45,6 +48,7 @@ class CalendarViewModel: ObservableObject {
     
     //MARK: server
     func getCalendar() {
+        bookKey = "2FE56430"
         let request = CalendarRequest(bookKey: bookKey, date: requestDate)
         dataManager.getCalendar(request)
             .sink { (dataResponse) in
@@ -55,7 +59,11 @@ class CalendarViewModel: ObservableObject {
                 } else {
                     self.result = dataResponse.value!
                     print("--성공--")
+                    print(self.result)
                     print(self.result.totalIncome)
+                    self.totalIncome = self.result.totalIncome
+                    self.totalOutcome = self.result.totalOutcome
+                    self.expenses = self.result.expenses
                 }
             }.store(in: &cancellableSet)
     }
@@ -75,6 +83,13 @@ class CalendarViewModel: ObservableObject {
         
         selectedDateStr = "\(selectedYear)-\(selectedMonth)-\(selectedDay)"
         selectedYearMonth = "\(selectedYear).\(selectedMonth)"
+        if (selectedMonth < 10) {
+            requestDate = "\(selectedYear)-0\(selectedMonth)-01"
+        } else {
+            requestDate = "\(selectedYear)-\(selectedMonth)-01"
+        }
+        print("requestDate : \(requestDate)")
+        getCalendar()
     }
     
     // MARK: 해당 달에 대한 date 반환
@@ -102,6 +117,12 @@ class CalendarViewModel: ObservableObject {
         print(dates)
         return dates
     }
+    func extractDay(from dateString: String) -> String {
+        let components = dateString.split(separator: "-")
+        let dayComponent = components.last
+        return String(describing: dayComponent!)
+    }
+
 
     func nextMonth() {
         selectedMonth += 1

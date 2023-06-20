@@ -70,6 +70,10 @@
 		2FE23F602A39AADA009FA8CA /* CryptManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE23F5F2A39AADA009FA8CA /* CryptManager.swift */; };
 		2FE23F622A39B981009FA8CA /* FirebaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE23F612A39B981009FA8CA /* FirebaseManager.swift */; };
 		2FE23F642A39DAF6009FA8CA /* ShareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE23F632A39DAF6009FA8CA /* ShareView.swift */; };
+		2FE23F692A417372009FA8CA /* CategoryRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE23F682A417372009FA8CA /* CategoryRequest.swift */; };
+		2FE23F6B2A417380009FA8CA /* CategoryResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE23F6A2A417380009FA8CA /* CategoryResponse.swift */; };
+		2FE23F6D2A4173D7009FA8CA /* AddDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE23F6C2A4173D7009FA8CA /* AddDataManager.swift */; };
+		2FE23F6F2A4173E4009FA8CA /* AddViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE23F6E2A4173E4009FA8CA /* AddViewModel.swift */; };
 		2FEA2B6429B73CE700DE8E54 /* ServiceAgreementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEA2B6329B73CE700DE8E54 /* ServiceAgreementView.swift */; };
 		2FEA2BA029B8685E00DE8E54 /* BackButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEA2B9F29B8685E00DE8E54 /* BackButton.swift */; };
 		2FEA2BA229B87A9200DE8E54 /* UserInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEA2BA129B87A9200DE8E54 /* UserInfoView.swift */; };
@@ -177,6 +181,10 @@
 		2FE23F5F2A39AADA009FA8CA /* CryptManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptManager.swift; sourceTree = "<group>"; };
 		2FE23F612A39B981009FA8CA /* FirebaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseManager.swift; sourceTree = "<group>"; };
 		2FE23F632A39DAF6009FA8CA /* ShareView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareView.swift; sourceTree = "<group>"; };
+		2FE23F682A417372009FA8CA /* CategoryRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryRequest.swift; sourceTree = "<group>"; };
+		2FE23F6A2A417380009FA8CA /* CategoryResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryResponse.swift; sourceTree = "<group>"; };
+		2FE23F6C2A4173D7009FA8CA /* AddDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddDataManager.swift; sourceTree = "<group>"; };
+		2FE23F6E2A4173E4009FA8CA /* AddViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddViewModel.swift; sourceTree = "<group>"; };
 		2FEA2B6329B73CE700DE8E54 /* ServiceAgreementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceAgreementView.swift; sourceTree = "<group>"; };
 		2FEA2B9F29B8685E00DE8E54 /* BackButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackButton.swift; sourceTree = "<group>"; };
 		2FEA2BA129B87A9200DE8E54 /* UserInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoView.swift; sourceTree = "<group>"; };
@@ -583,6 +591,31 @@
 			path = Secret;
 			sourceTree = "<group>";
 		};
+		2FE23F652A4172EA009FA8CA /* DataManager */ = {
+			isa = PBXGroup;
+			children = (
+				2FE23F6C2A4173D7009FA8CA /* AddDataManager.swift */,
+			);
+			path = DataManager;
+			sourceTree = "<group>";
+		};
+		2FE23F662A4172F2009FA8CA /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				2FE23F6E2A4173E4009FA8CA /* AddViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		2FE23F672A4172FB009FA8CA /* Entity */ = {
+			isa = PBXGroup;
+			children = (
+				2FE23F682A417372009FA8CA /* CategoryRequest.swift */,
+				2FE23F6A2A417380009FA8CA /* CategoryResponse.swift */,
+			);
+			path = Entity;
+			sourceTree = "<group>";
+		};
 		2FEA2B6229B73CC500DE8E54 /* ServiceAgreement */ = {
 			isa = PBXGroup;
 			children = (
@@ -650,6 +683,9 @@
 			isa = PBXGroup;
 			children = (
 				2FEA2BBB29BA066D00DE8E54 /* AddView.swift */,
+				2FE23F672A4172FB009FA8CA /* Entity */,
+				2FE23F662A4172F2009FA8CA /* ViewModel */,
+				2FE23F652A4172EA009FA8CA /* DataManager */,
 			);
 			path = Add;
 			sourceTree = "<group>";
@@ -971,15 +1007,18 @@
 				2FEA2BB029B9F4B200DE8E54 /* MainTabView.swift in Sources */,
 				2FD7F39E29B1E26D00B99CAA /* ContentView.swift in Sources */,
 				2FFA302A29EEAE6700412F83 /* SignUpRequest.swift in Sources */,
+				2FE23F6F2A4173E4009FA8CA /* AddViewModel.swift in Sources */,
 				2FEA2BB729BA064B00DE8E54 /* HomeView.swift in Sources */,
 				2FC3B1D22A1CD2E200572804 /* KakaoLoginResponse.swift in Sources */,
 				2F1614762A0A32A20029E9A9 /* CalendarRequest.swift in Sources */,
 				2FEA2B6429B73CE700DE8E54 /* ServiceAgreementView.swift in Sources */,
+				2FE23F6D2A4173D7009FA8CA /* AddDataManager.swift in Sources */,
 				2F146A642A14B5BD0089AB3D /* TokenReissueResponse.swift in Sources */,
 				2FFDC36C2A00089F00BE4C1B /* NetworkError.swift in Sources */,
 				2FF25C8629E181C000737346 /* SendBookCodeView.swift in Sources */,
 				2F146A6A2A14B6980089AB3D /* TokenReissueViewModel.swift in Sources */,
 				2FEA2BA029B8685E00DE8E54 /* BackButton.swift in Sources */,
+				2FE23F6B2A417380009FA8CA /* CategoryResponse.swift in Sources */,
 				2FC3B1D72A25F95600572804 /* ModifyingBookView.swift in Sources */,
 				2FC3B1D02A1CD26A00572804 /* KakaoLoginRequest.swift in Sources */,
 				2FEA2BA229B87A9200DE8E54 /* UserInfoView.swift in Sources */,
@@ -1025,6 +1064,7 @@
 				2FEA2BA929B8970A00DE8E54 /* NextButtonModifier.swift in Sources */,
 				2FEA2BD829CABB8D00DE8E54 /* ChangePasswordView.swift in Sources */,
 				2F1614972A1370B90029E9A9 /* SignInWithAppleCoordinator.swift in Sources */,
+				2FE23F692A417372009FA8CA /* CategoryRequest.swift in Sources */,
 				2FFA303229EEAF6000412F83 /* SignInRequest.swift in Sources */,
 				2FF25C8F29E7EE9D00737346 /* BottomSheet.swift in Sources */,
 				2F1614892A0A76E70029E9A9 /* MyPageRequest.swift in Sources */,

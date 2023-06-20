@@ -1,29 +1,31 @@
 //
-//  CalendarDataManager.swift
+//  AddDataManager.swift
 //  Floney
 //
-//  Created by 남경민 on 2023/05/09.
+//  Created by 남경민 on 2023/06/20.
 //
 
 import Alamofire
 import Combine
 
-protocol CalendarProtocol {
-    func getCalendar(_ parameters:CalendarRequest) -> AnyPublisher<DataResponse<CalendarResponse, NetworkError>, Never>
+protocol AddProtocol {
+    func getCategory(_ parameters:CategoryRequest) -> AnyPublisher<DataResponse<[CategoryResponse], NetworkError>, Never>
 }
 
-class CalendarService {
-    static let shared: CalendarProtocol = CalendarService()
+class AddService {
+    static let shared: AddProtocol = AddService()
     private init() { }
 }
 
-extension CalendarService: CalendarProtocol {
-    func getCalendar(_ parameters:CalendarRequest) -> AnyPublisher<DataResponse<CalendarResponse, NetworkError>, Never> {
+extension AddService: AddProtocol {
+    func getCategory(_ parameters:CategoryRequest) -> AnyPublisher<DataResponse<[CategoryResponse], NetworkError>, Never> {
       //  let url = URL(string: "Your_URL")!
         let bookKey = parameters.bookKey
-        let date = parameters.date
-        let url = "\(Constant.BASE_URL)/books/month?bookKey=\(bookKey)&date=\(date)"
-        
+        let root = parameters.root
+        let urlString = "\(Constant.BASE_URL)/books/categories?bookKey=\(bookKey)&root=\(root)"
+        print("\(urlString)")
+        let encodedString = urlString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+        let url = URL(string: encodedString!)!
         let token = Keychain.getKeychainValue(forKey: .accessToken)!
         return AF.request(url,
                           method: .get,
@@ -31,7 +33,7 @@ extension CalendarService: CalendarProtocol {
                           encoding: JSONEncoding.default,
                           headers: ["Authorization":"Bearer \(token)"])
             .validate()
-            .publishDecodable(type: CalendarResponse.self)
+            .publishDecodable(type: [CategoryResponse].self)
             .map { response in
                 response.mapError { error in
                     let backendError = response.data.flatMap { try? JSONDecoder().decode(BackendError.self, from: $0)}

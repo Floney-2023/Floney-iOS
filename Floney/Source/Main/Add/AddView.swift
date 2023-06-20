@@ -8,6 +8,7 @@
 import SwiftUI
 import Combine
 struct AddView: View {
+    @StateObject var viewModel = AddViewModel()
     @State var date : String = ""
     @State var money : String = ""
     @State private var selectedView: Int = 1
@@ -21,7 +22,7 @@ struct AddView: View {
     @State var isSelectedAssetTypeIndex = 0
     @State var isSelectedCategoryIndex = 0
     @State var root = ""
-    @State var toggleType = ""
+    @State var toggleType = "지출"
     
     @State var selectedAssetType = ""
     @State var selectedCategory = ""
@@ -145,6 +146,10 @@ struct AddView: View {
                         }
                         .onTapGesture {
                             self.root = "자산"
+                            viewModel.root = self.root
+                            viewModel.getCategory()
+                            //self.categories = viewModel.categories
+                            print("\(self.categories)")
                             self.isShowingBottomSheet.toggle()
                         }
                         HStack {
@@ -152,12 +157,16 @@ struct AddView: View {
                                 .font(.pretendardFont(.medium, size: 14))
                                 .foregroundColor(.greyScale4)
                             Spacer()
+                            
                             Text("\(category)")
                                 .font(.pretendardFont(.medium, size: 14))
                                 .foregroundColor(.greyScale6)
                         }
                         .onTapGesture {
                             self.root = self.toggleType
+                            viewModel.root = self.root
+                            viewModel.getCategory()
+                            
                             self.isShowingBottomSheet.toggle()
                         }
                         HStack {
@@ -236,7 +245,7 @@ struct AddView: View {
             } // VStack
             .onAppear(perform : UIApplication.shared.hideKeyboard)
             
-            CategoryBottomSheet(root: $root, categories: $categories, isShowing: $isShowingBottomSheet, isSelectedAssetTypeIndex: $isSelectedAssetTypeIndex, isSelectedAssetType: $assetType, isSelectedCategoryIndex: $isSelectedCategoryIndex, isSelectedCategory: $category)
+            CategoryBottomSheet(root: $root, categories: $viewModel.categories, isShowing: $isShowingBottomSheet, isSelectedAssetTypeIndex: $isSelectedAssetTypeIndex, isSelectedAssetType: $assetType, isSelectedCategoryIndex: $isSelectedCategoryIndex, isSelectedCategory: $category)
         } // ZStack
     }
     func formatNumber(_ n: Int) -> String {
