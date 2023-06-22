@@ -88,18 +88,27 @@ struct DayLinesDetailView : View {
                                 Image("icon_profile")
                                 VStack {
                                     Text("\(line!.content)")
+                                        .font(.pretendardFont(.semiBold, size: 14))
+                                        .foregroundColor(.greyScale2)
                                     HStack {
                                         ForEach(line!.category, id: \.self) { category in
                                             Text("\(category)")
+                                                .font(.pretendardFont(.medium, size: 12))
+                                                .foregroundColor(.greyScale6)
                                         }
+                                        
                                     }
                                 }
                                 Spacer()
                                 if line!.assetType == "INCOME" {
                                     Text("+\(line!.money)")
+                                        .font(.pretendardFont(.semiBold, size: 16))
+                                        .foregroundColor(.greyScale2)
                                 } else if line!.assetType == "OUTCOME" {
                                     Text("-\(line!.money)")
-
+                                        .font(.pretendardFont(.semiBold, size: 16))
+                                        .foregroundColor(.greyScale2)
+                                    
                                 }
                             }
                         }

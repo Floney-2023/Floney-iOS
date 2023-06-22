@@ -622,19 +622,54 @@ struct DayLinesBottomSheet: View {
                     
                     ScrollView {
                         VStack {
-                          //  Spacer()
-                            Image("no_line")
-                            Text("내역이 없습니다.")
-                                .font(.pretendardFont(.medium, size: 12))
-                                .foregroundColor(.greyScale6)
-                          //  Spacer()
-                        }.frame(maxWidth: .infinity, maxHeight: .infinity)
-                            .frame(height: 200)
+                            if viewModel.dayLines.count == 0 {
+                                Image("no_line")
+                                Text("내역이 없습니다.")
+                                    .font(.pretendardFont(.medium, size: 12))
+                                    .foregroundColor(.greyScale6)
+                            } else {
+                                ForEach(viewModel.dayLines, id: \.self) { line in
+                                    HStack {
+                                        Image("icon_profile")
+                                        VStack {
+                                            Text("\(line!.content)")
+                                                .font(.pretendardFont(.semiBold, size: 14))
+                                                .foregroundColor(.greyScale2)
+                                            HStack {
+                                                ForEach(line!.category, id: \.self) { category in
+                                                    Text("\(category)")
+                                                        .font(.pretendardFont(.medium, size: 12))
+                                                        .foregroundColor(.greyScale6)
+                                                }
+                                                
+                                            }
+                                        }
+                                        Spacer()
+                                        if line!.assetType == "INCOME" {
+                                            Text("+\(line!.money)")
+                                                .font(.pretendardFont(.semiBold, size: 16))
+                                                .foregroundColor(.greyScale2)
+                                        } else if line!.assetType == "OUTCOME" {
+                                            Text("-\(line!.money)")
+                                                .font(.pretendardFont(.semiBold, size: 16))
+                                                .foregroundColor(.greyScale2)
+                                            
+                                        }
+                                    }
+                                }
+                            }
+                            
+                            
+                            
+                            
+                        } // VStack
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .frame(height: 200)
                         //.background(Color.red)
-                    }
+                    } //ScrollView
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     
-                }
+                } // VStack
                 .padding(.horizontal, 20)
                 .padding(.bottom, 44)
                 .padding(.top, 0)
