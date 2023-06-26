@@ -21,20 +21,22 @@ class TokenReissueViewModel: ObservableObject {
     }
     
     func tokenReissue() {
-        let accessToken = Keychain.getKeychainValue(forKey: .accessToken)
-        let refreshToken = Keychain.getKeychainValue(forKey: .refreshToken)
-        let request = TokenReissueRequest(accessToken: accessToken!, refreshToken: refreshToken!)
-        dataManager.tokenReissue(request)
-            .sink { (dataResponse) in
-                if dataResponse.error != nil {
-                    self.createAlert(with: dataResponse.error!)
-                    print(dataResponse.error)
-                } else {
-                    self.result = dataResponse.value!
-                    self.setToken()
-                }
-                
-            }.store(in: &cancellableSet)
+        if let accessToken = Keychain.getKeychainValue(forKey: .accessToken) ,let refreshToken = Keychain.getKeychainValue(forKey: .refreshToken) {
+            print("token reissue----------------")
+            let request = TokenReissueRequest(accessToken: accessToken, refreshToken: refreshToken)
+            dataManager.tokenReissue(request)
+                .sink { (dataResponse) in
+                    if dataResponse.error != nil {
+                        self.createAlert(with: dataResponse.error!)
+                        print(dataResponse.error)
+                    } else {
+                        self.result = dataResponse.value!
+                        print("reissue token : \(self.result)")
+                        self.setToken()
+                    }
+                    
+                }.store(in: &cancellableSet)
+        }
     }
     //MARK: 토큰 저장하기
     func setToken() {

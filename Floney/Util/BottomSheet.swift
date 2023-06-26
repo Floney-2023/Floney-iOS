@@ -17,8 +17,8 @@ enum BottomSheetType: Int {
         case .accountBook:
             return AnyView(AccountBookBottomSheet())
             /*
-        case .shareBook:
-            return AnyView(ShareBookBottomSheet())*/
+             case .shareBook:
+             return AnyView(ShareBookBottomSheet())*/
             
         }
     }
@@ -169,7 +169,7 @@ struct ShareBookBottomSheet: View{
                     Color(.white)
                 )
                 .cornerRadius(12, corners: [.topLeft, .topRight])
-
+                
                 
             }
         }
@@ -480,7 +480,7 @@ struct CategoryBottomSheet: View {
                 )
                 .cornerRadius(12, corners: [.topLeft, .topRight])
                 .frame(height: UIScreen.main.bounds.height / 2) // Screen height is divided by 2
-                           
+                
             } // if
         } //ZStack
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
@@ -562,9 +562,9 @@ struct DayLinesBottomSheet: View {
     let buttonHeight: CGFloat = 38
     @StateObject var viewModel : CalendarViewModel
     @Binding var isShowing: Bool
-    @Binding var isShowingAddView : Bool 
+    @Binding var isShowingAddView : Bool
     //@Binding var originalDateStr :String
-
+    
     var body: some View{
         let year = String(describing: viewModel.selectedYear)
         ZStack(alignment: .bottom) {
@@ -591,27 +591,11 @@ struct DayLinesBottomSheet: View {
                         }
                         Spacer()
                         VStack {
-                           // Spacer()
+                            // Spacer()
                             Text("내역 추가")
                                 .font(.pretendardFont(.semiBold, size: 12))
                                 .foregroundColor(.primary2)
                                 .onTapGesture {
-                                /*
-                                    originalDateStr = viewModel.selectedDateStr
-                                    let dateFormatter = DateFormatter()
-
-                                    // Set the input date format
-                                    dateFormatter.dateFormat = "yyyy-M-d"
-                                    guard let date = dateFormatter.date(from: originalDateStr) else {
-                                        fatalError("Incorrect date format")
-                                    }
-
-                                    // Set the output date format
-                                    dateFormatter.dateFormat = "yyyy.MM.dd"
-                                    let formattedDateStr = dateFormatter.string(from: date)
-                                    originalDateStr = formattedDateStr
-                                    print(formattedDateStr) // Prints "2020.03.03"*/
-                                    
                                     isShowing.toggle()
                                     self.isShowingAddView.toggle()
                                 }
@@ -631,17 +615,21 @@ struct DayLinesBottomSheet: View {
                                 ForEach(viewModel.dayLines, id: \.self) { line in
                                     HStack {
                                         Image("icon_profile")
-                                        VStack {
+                                        VStack(alignment: .leading, spacing: 3) {
                                             Text("\(line!.content)")
                                                 .font(.pretendardFont(.semiBold, size: 14))
                                                 .foregroundColor(.greyScale2)
                                             HStack {
-                                                ForEach(line!.category, id: \.self) { category in
-                                                    Text("\(category)")
+                                                ForEach(line!.category.indices, id: \.self) { index in
+                                                    Text("\(line!.category[index])")
                                                         .font(.pretendardFont(.medium, size: 12))
                                                         .foregroundColor(.greyScale6)
+                                                    if index != line!.category.count - 1 {
+                                                        Text(" ‧ ")
+                                                            .font(.pretendardFont(.medium, size: 12))
+                                                            .foregroundColor(.greyScale6)
+                                                    }
                                                 }
-                                                
                                             }
                                         }
                                         Spacer()
@@ -666,6 +654,10 @@ struct DayLinesBottomSheet: View {
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                         .frame(height: 200)
                         //.background(Color.red)
+                        .onAppear {
+                            viewModel.dayLinesDate = viewModel.selectedDateStr
+                            viewModel.getDayLines()
+                        }
                     } //ScrollView
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     
@@ -679,7 +671,7 @@ struct DayLinesBottomSheet: View {
                 )
                 .cornerRadius(12, corners: [.topLeft, .topRight])
                 .frame(height: UIScreen.main.bounds.height / 2) // Screen height is divided by 2
-                           
+                
             } // if
         } //ZStack
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct DayLinesView: View {
-    @Binding var date: Date
+    @Binding var date: String
     @ObservedObject var viewModel : CalendarViewModel
     var body: some View {
             VStack {
@@ -18,14 +18,7 @@ struct DayLinesView: View {
             }//.padding(20)
             .background(Color.clear)
             .onAppear{
-                let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "yyyy-MM-dd"
-
-                let dateString = dateFormatter.string(from: date)
-
-                print(dateString)
-                viewModel.dayLinesDate = dateString
-                print("date : \(dateString)")
+                print("date : \(date)")
                 viewModel.getDayLines()
             }
     }
@@ -86,19 +79,22 @@ struct DayLinesDetailView : View {
                         ForEach(viewModel.dayLines, id: \.self) { line in
                             HStack {
                                 Image("icon_profile")
-                                VStack {
-                                    Text("\(line!.content)")
-                                        .font(.pretendardFont(.semiBold, size: 14))
-                                        .foregroundColor(.greyScale2)
-                                    HStack {
-                                        ForEach(line!.category, id: \.self) { category in
-                                            Text("\(category)")
-                                                .font(.pretendardFont(.medium, size: 12))
-                                                .foregroundColor(.greyScale6)
-                                        }
+                             
+                                VStack(alignment: .leading, spacing: 3) {
                                         
+                                        Text("\(line!.content)")
+                                            .font(.pretendardFont(.semiBold, size: 14))
+                                            .foregroundColor(.greyScale2)
+                                        HStack {
+                                            ForEach(line!.category, id: \.self) { category in
+                                                Text("\(category)‧")
+                                                    .font(.pretendardFont(.medium, size: 12))
+                                                    .foregroundColor(.greyScale6)
+                                            }
+                                            
+                                        }
                                     }
-                                }
+                                    
                                 Spacer()
                                 if line!.assetType == "INCOME" {
                                     Text("+\(line!.money)")
@@ -127,6 +123,6 @@ struct DayLinesDetailView : View {
 
 struct DateCalendarView_Previews: PreviewProvider {
     static var previews: some View {
-        DayLinesView(date : .constant(Date()), viewModel: CalendarViewModel())
+        DayLinesView(date : .constant("2023-06-20"), viewModel: CalendarViewModel())
     }
 }

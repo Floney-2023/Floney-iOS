@@ -7,18 +7,20 @@
 import SwiftUI
 
 struct HomeView: View {
+    
     @StateObject var viewModel = CalendarViewModel()
     @State var isOnSettingBook = false
     @State var isShowingMonthPicker = false
     @State var isShowingBottomSheet = false
     @State var isShowingAddView = false
-    @State var selectedDate = ""
+    
     var body: some View {
         // ScrollView {
         ZStack {
             Color.background3
                 .edgesIgnoringSafeArea(.all)
             VStack(spacing:37) {
+                //MARK: 로고, 프로필 이미지
                 HStack
                 {
                     Image("logo_floney_home")
@@ -31,12 +33,12 @@ struct HomeView: View {
                     }
                 }
                 
-                //MARK: 캘린더 뷰
+                //MARK: 캘린더 뷰 - viewModel로 상태 추적
                 CustomCalendarView(viewModel: viewModel, isShowingMonthPicker: $isShowingMonthPicker, isShowingBottomSheet: $isShowingBottomSheet)
                 
             }.padding(20)
                 
-            
+            // MARK: Month Year Picker
             if isShowingMonthPicker {
                 Color.black
                     .opacity(0.2)
@@ -56,9 +58,7 @@ struct HomeView: View {
             if isShowingBottomSheet {
                 DayLinesBottomSheet(viewModel: viewModel, isShowing: $isShowingBottomSheet, isShowingAddView: $isShowingAddView)
             }
-            
-            
-        }.fullScreenCover(isPresented: $isShowingAddView){
+        }.fullScreenCover(isPresented: $isShowingAddView) {
             AddView.init(date:viewModel.selectedDateStr)
         }
     }
@@ -66,12 +66,15 @@ struct HomeView: View {
 //MARK: 총지출/총수입
 struct TotalView: View {
     @ObservedObject var viewModel : CalendarViewModel
+    
     var body: some View {
         HStack(spacing:23){
-            VStack(alignment: .leading,spacing: 8){
+            
+            VStack(alignment: .leading, spacing: 8){
                 Text("총지출")
                     .font(.pretendardFont(.medium, size: 12))
                     .foregroundColor(.white)
+                
                 Text("\(viewModel.totalOutcome)")
                     .font(.pretendardFont(.semiBold, size: 16))
                     .foregroundColor(.white)
@@ -108,12 +111,15 @@ struct CustomCalendarView: View {
     
     var body: some View {
         VStack(alignment: .center, spacing: 8) {
-            // 날짜 헤더
+            // MARK: 날짜 헤더
             HStack {
                 Image("leftSide")
+                
                 Button(action: {
                     withAnimation {
-                        self.isShowingMonthPicker.toggle()
+                        if viewModel.selectedView == 1 {
+                            self.isShowingMonthPicker.toggle() // MARK: 연도, 월 변경 toggle
+                        }
                     }
                 }) {
                     Text(viewModel.selectedView == 1 ? "\(viewModel.selectedYearMonth)" : "\(viewModel.selectedMonth).\(viewModel.selectedDay)")
@@ -138,6 +144,7 @@ struct CustomCalendarView: View {
                     
                     Button(action: {
                         viewModel.selectedView = 2
+                        viewModel.dayLinesDate = viewModel.selectedDateStr
                     }) {
                         Text("일별")
                             .font(.pretendardFont(.semiBold, size: 11))
@@ -156,7 +163,7 @@ struct CustomCalendarView: View {
             if viewModel.selectedView == 1 {
                 MonthCalendar(viewModel: viewModel, isShowingMonthPicker: $isShowingMonthPicker, isShowingBottomSheet: $isShowingBottomSheet)
             } else if viewModel.selectedView == 2 {
-                DayLinesView(date: $viewModel.selectedDate, viewModel: viewModel)
+                DayLinesView(date: $viewModel.dayLinesDate, viewModel: viewModel)
             }
         }
         
@@ -165,7 +172,7 @@ struct CustomCalendarView: View {
 //MARK: 달 선택
 struct MonthYearPicker: View {
     @ObservedObject var viewModel : CalendarViewModel
-    @Binding var date: Date
+    @Binding var date: Date // 바뀐 날짜 업데이트
     
     var body: some View {
         let year = Calendar.current.component(.year, from: date)
@@ -241,7 +248,7 @@ struct MonthCalendar: View {
     
     var body: some View {
             VStack(spacing: 20) {
-                // 날짜 가져오기
+                // MARK: 날짜 가져오기
                 let dates = viewModel.generateDates(for: viewModel.selectedDate)
                 let firstDayOfMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: viewModel.selectedDate))!
                 let firstWeekday = calendar.component(.weekday, from: firstDayOfMonth)
@@ -269,52 +276,49 @@ struct MonthCalendar: View {
                                     
                                     VStack {
                                         if let dayComponent = components.last {
-                                            let day = String(dayComponent)
-                                           
+                                            let day = String(dayComponent) // 01, 02, ..., 31
                                             if day == "0" {
                                                 Text("")
                                                     .padding()
                                                     .font(.pretendardFont(.regular, size: 12))
                                                     .frame(maxWidth: .infinity)
-                                                //.padding(15)
                                                     .background(isSelected ? .primary1 : (date == viewModel.totalToday ? Color.primary1 : Color.clear))
                                                     .foregroundColor(isSelected ? .white : .greyScale2)
-                                                //.cornerRadius(20)
                                                     .clipShape(Circle())
-                                                    .onTapGesture {
-                                                        viewModel.selectedDateStr = date
-                                                    }
                                             } else {
-                                                Text("\(day)")
+                                                Text("\(Int(day)!)") // 1,2,...,31
                                                     .padding(7)
                                                     .font(.pretendardFont(.regular, size: 12))
                                                     .frame(maxWidth: .infinity)
-                                               
                                                     .background(isSelected ? .primary1 : (date == viewModel.totalToday ? Color.primary1 : Color.clear))
                                                     .foregroundColor(isSelected ? .white : (date == viewModel.totalToday ? .white : .greyScale2))
-                                             
                                                     .clipShape(Circle())
-                                                    .onTapGesture {
-                                                        viewModel.selectedDateStr = date
+                                                    .onTapGesture { // 해당 날짜 터치할 경우
+                                                        viewModel.selectedDateStr = date // 0000-00-00
                                                         viewModel.selectedDay = Int(dayComponent)!
+                                                        viewModel.selectedDate = Calendar.current.date(from: DateComponents(year: viewModel.selectedYear, month: viewModel.selectedMonth , day: Int(dayComponent)))!
+
+                                                        print("selected :\(viewModel.selectedDay)")
                                                         isShowingBottomSheet.toggle()
                                                     }
                                                 VStack {
                                                     ForEach(viewModel.expenses, id: \.self) { (expense: CalendarExpenses) in
-                                                        let extractedDay = viewModel.extractDay(from: expense.date)
-                                                        let assetType = expense.assetType
-                                                        let money = expense.money
-                                                        
-                                                        if extractedDay == day && assetType == "OUTCOME" && money > 0 {
-                                                            Text("-\(money)")
-                                                                .font(Font.pretendardFont(.medium, size:9))
-                                                                .foregroundColor(.calendarRed)
-                                                        }
-                                                        
-                                                        if extractedDay == day && assetType == "INCOME" && money > 0 {
-                                                            Text("+\(money)")
-                                                                .font(Font.pretendardFont(.medium, size:9))
-                                                                .foregroundColor(.blue1)
+                                                        if viewModel.extractYearMonth(from: viewModel.selectedDateStr) {
+                                                            let extractedDay = viewModel.extractDay(from: expense.date)
+                                                            let assetType = expense.assetType
+                                                            let money = expense.money
+                                                            
+                                                            if extractedDay == day && assetType == "OUTCOME" && money > 0 {
+                                                                Text("-\(money)")
+                                                                    .font(Font.pretendardFont(.medium, size:9))
+                                                                    .foregroundColor(.calendarRed)
+                                                            }
+                                                            
+                                                            if extractedDay == day && assetType == "INCOME" && money > 0 {
+                                                                Text("+\(money)")
+                                                                    .font(Font.pretendardFont(.medium, size:9))
+                                                                    .foregroundColor(.blue1)
+                                                            }
                                                         }
                                                     }
                                                 }
@@ -330,8 +334,6 @@ struct MonthCalendar: View {
                                     
                                     
                                 } else {
-                                    //Spacer()
-                                        //.frame(maxWidth: .infinity)
                                     Text("")
                                         .padding()
                                         .font(.pretendardFont(.regular, size: 12))
@@ -346,10 +348,18 @@ struct MonthCalendar: View {
                 .frame(maxHeight : .infinity)
                 .background(Color.white)
                 .cornerRadius(12)
-                .onAppear{
+                .onAppear {
                     viewModel.getCalendar()
                 }
-               
+                .onAppear {
+                    viewModel.getCalendar()
+                }
+                .onChange(of: viewModel.selectedYear) { newValue in
+                    viewModel.getCalendar()
+                }
+                .onChange(of: viewModel.selectedMonth) { newValue in
+                    viewModel.getCalendar()
+                }
                 TotalView(viewModel: viewModel)
 
             }

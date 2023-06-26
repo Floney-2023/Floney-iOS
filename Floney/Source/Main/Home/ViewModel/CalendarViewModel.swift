@@ -8,14 +8,15 @@
 import Foundation
 import Combine
 class CalendarViewModel: ObservableObject {
+    var tokenViewModel = TokenReissueViewModel()
+    
     @Published var result : CalendarResponse = CalendarResponse(totalIncome: 0, totalOutcome: 0, expenses: [])
     @Published var expenses : [CalendarExpenses] = []
     @Published var calendarLoadingError: String = ""
     @Published var showAlert: Bool = false
     @Published var bookKey = ""
-    @Published var requestDate: String = ""
-    
-    
+    @Published var requestDate: String = ""  // 0000-00-01
+        
     //MARK: Today
     @Published var todayYear: Int = 0
     @Published var todayMonth: Int = 0
@@ -23,12 +24,14 @@ class CalendarViewModel: ObservableObject {
     var totalToday = ""
 
     //MARK: Selected Date
-    @Published var selectedDate: Date = Date()
-    @Published var selectedYear: Int = 0
-    @Published var selectedMonth: Int = 0
-    @Published var selectedDay: Int = 0
-    @Published var selectedYearMonth = ""
-    @Published var selectedDateStr = ""
+    // 연,월을 바꿀 경우에는 해당 연도 해당 달의 1일로 selected 변화
+    // 아래 모든 데이터는 같은 날짜를 가리켜야 함 
+    @Published var selectedDate: Date = Date() // Date type
+    @Published var selectedYear: Int = 0 // year
+    @Published var selectedMonth: Int = 0 // month
+    @Published var selectedDay: Int = 0 // day
+    @Published var selectedYearMonth = "" // year.month
+    @Published var selectedDateStr = "" // String type 0000-00-00
     
     @Published var totalIncome: Int = 0
     @Published var totalOutcome: Int = 0
@@ -41,7 +44,6 @@ class CalendarViewModel: ObservableObject {
     @Published var dayLinesResult : DayLinesResponse = DayLinesResponse(dayLinesResponse: [], totalExpense: [], seeProfileImg: true)
     @Published var dayLinesTotalIncome : Int = 0
     @Published var dayLinesTotalOutcome : Int = 0
-    //@Published var dayLinesTotalExpenses : [DayTotalExpenses?] = []
     @Published var dayLines : [DayLinesResults?] = []
     @Published var seeProfileImg : Bool = true
 
@@ -50,7 +52,6 @@ class CalendarViewModel: ObservableObject {
     
     init( dataManager: CalendarProtocol = CalendarService.shared) {
         self.dataManager = dataManager
-       // getCalendar()
         self.calcToday()
         self.calcDate(Date())
     }
@@ -70,9 +71,10 @@ class CalendarViewModel: ObservableObject {
                     print("--성공--")
                     print(self.result)
                     print(self.result.totalIncome)
+                    self.expenses = self.result.expenses
                     self.totalIncome = self.result.totalIncome
                     self.totalOutcome = self.result.totalOutcome
-                    self.expenses = self.result.expenses
+                    
                 }
             }.store(in: &cancellableSet)
     }
@@ -92,9 +94,9 @@ class CalendarViewModel: ObservableObject {
                     
                     for asset in self.dayLinesResult.totalExpense {
                         if asset?.assetType == "INCOME" {
-                            self.dayLinesTotalIncome += asset!.money
+                            self.dayLinesTotalIncome = asset!.money
                         } else if asset?.assetType == "OUTCOME" {
-                            self.dayLinesTotalOutcome += asset!.money
+                            self.dayLinesTotalOutcome = asset!.money
                         }
                     }
                     self.dayLines = self.dayLinesResult.dayLinesResponse
@@ -104,6 +106,7 @@ class CalendarViewModel: ObservableObject {
             }.store(in: &cancellableSet)
     }
 
+    // MARK: 오늘 날짜 계산
     func calcToday() {
         let today = Date()
         todayYear = Calendar.current.component(.year, from: today)
@@ -113,20 +116,31 @@ class CalendarViewModel: ObservableObject {
         totalToday = "\(todayYear)-\(todayMonth)-\(todayDay)"
     }
     
+    // MARK: 선택된 날짜
     func calcDate(_ date: Date) {
         selectedYear = Calendar.current.component(.year, from: date)
         selectedMonth = Calendar.current.component(.month, from: date)
         selectedDay = Calendar.current.component(.day, from: date)
         
-        selectedDateStr = "\(selectedYear)-\(selectedMonth)-\(selectedDay)"
-        selectedYearMonth = "\(selectedYear).\(selectedMonth)"
         if (selectedMonth < 10) {
             requestDate = "\(selectedYear)-0\(selectedMonth)-01"
+            selectedYearMonth = "\(selectedYear).0\(selectedMonth)"
+            if ( selectedDay < 10) {
+                selectedDateStr = "\(selectedYear)-0\(selectedMonth)-0\(selectedDay)"
+            } else {
+                selectedDateStr = "\(selectedYear)-0\(selectedMonth)-\(selectedDay)"
+            }
         } else {
             requestDate = "\(selectedYear)-\(selectedMonth)-01"
+            selectedYearMonth = "\(selectedYear).\(selectedMonth)"
+            if ( selectedDay < 10) {
+                selectedDateStr = "\(selectedYear)-\(selectedMonth)-0\(selectedDay)"
+            } else {
+                selectedDateStr = "\(selectedYear)-\(selectedMonth)-\(selectedDay)"
+            }
         }
+        print("selectedDate : \(selectedDateStr)")
         print("requestDate : \(requestDate)")
-        //getCalendar()
     }
     
     // MARK: 해당 달에 대한 date 반환
@@ -145,7 +159,22 @@ class CalendarViewModel: ObservableObject {
         if let monthRange = calendar.range(of: .day, in: .month, for: date) {
             for day in monthRange {
                
-                let result = "\(year)-\(month)-\(day)"
+                var result = "\(year)-\(month)-\(day)"
+                
+                if (selectedMonth < 10) {
+                    if ( day < 10) {
+                        result = "\(year)-0\(month)-0\(day)"
+                    } else {
+                        result = "\(year)-0\(month)-\(day)"
+                    }
+                    
+                } else {
+                    if ( day < 10) {
+                        result = "\(year)-\(month)-0\(day)"
+                    } else {
+                        result = "\(year)-\(month)-\(day)"
+                    }
+                }
                 
                 print(result)
                 dates.append(result)
@@ -154,10 +183,25 @@ class CalendarViewModel: ObservableObject {
         print(dates)
         return dates
     }
+    // MARK: 데이 추출
     func extractDay(from dateString: String) -> String {
         let components = dateString.split(separator: "-")
         let dayComponent = components.last
         return String(describing: dayComponent!)
+    }
+    //MARK: 연, 월 추출 후 검사 
+    func extractYearMonth(from dateString: String) -> Bool {
+        var result = false
+        let components = dateString.split(separator: "-")
+   
+        if let year = Int(components[0]), let month = Int(components[1]) {
+            if year == selectedYear && month == selectedMonth {
+                result = true
+            } else {
+                result = false
+            }
+        }
+        return result
     }
 
 
@@ -185,11 +229,27 @@ class CalendarViewModel: ObservableObject {
         return formatter
     }()
 
-    
     func createAlert( with error: NetworkError) {
         calendarLoadingError = error.backendError == nil ? error.initialError.localizedDescription : error.backendError!.message
         self.showAlert = true
-        // 에러 처리
+        
+        if let errorCode = error.backendError?.code {
+            switch errorCode {
+                //case "U009" :
+                //print("\(errorCode) : alert")
+                //self.showAlert = true
+                //self.errorMessage = ErrorMessage.login01.value
+                // 토큰 재발급
+            case "U006" :
+                tokenViewModel.tokenReissue()
+                // 아예 틀린 토큰이므로 재로그인해서 다시 발급받아야 함.
+                //case "U007" :
+                // self.postSignIn()
+            default:
+                break
+            }
+            // 에러 처리
+        }
     }
     
 }

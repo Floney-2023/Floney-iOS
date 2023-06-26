@@ -34,6 +34,8 @@ class SignInViewModel: ObservableObject {
     init( dataManager: SignInProtocol = SignIn.shared) {
         self.dataManager = dataManager
         //postSignIn()
+        print(Keychain.getKeychainValue(forKey: .accessToken))
+        print(Keychain.getKeychainValue(forKey: .refreshToken))
     }
     
     func postSignIn() {
