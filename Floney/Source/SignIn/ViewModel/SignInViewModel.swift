@@ -24,9 +24,10 @@ class SignInViewModel: ObservableObject {
     @Published var password = ""
     
     @Published var isNext = false
-    var isLoggedIn = false
     @Published var hasJoined: Bool = false
     @Published var token = ""
+    
+    @Published var isUserLoggedIn = false
 
     private var cancellableSet: Set<AnyCancellable> = []
     var dataManager: SignInProtocol
@@ -51,7 +52,7 @@ class SignInViewModel: ObservableObject {
                     self.isNext = true
                     self.setToken()
                     // 자동로그인을 한 경우는 isLoggedIn이 true이므로 email과 password를 다시 저장하지 않아도 괜찮다.
-                    if (self.isLoggedIn == false) {self.setEmailPassword()}
+                    if (self.isUserLoggedIn == false) {self.setEmailPassword()}
                     print("--성공--")
                     print(self.result.accessToken)
                 }
@@ -121,7 +122,7 @@ class SignInViewModel: ObservableObject {
                     self.isNext = true
                     self.setToken()
                     // 자동로그인을 한 경우는 isLoggedIn이 true이므로 email과 password를 다시 저장하지 않아도 괜찮다.
-                    if (self.isLoggedIn == false) {self.setEmailPassword()}
+                    if (self.isUserLoggedIn == false) {self.setEmailPassword()}
                     print("--성공--")
                     print(self.result.accessToken)
                     
@@ -145,7 +146,7 @@ class SignInViewModel: ObservableObject {
                     self.setToken()
                     print("set token 호출 후")
                     // 자동로그인을 한 경우는 isLoggedIn이 true이므로 email과 password를 다시 저장하지 않아도 괜찮다.
-                    if (self.isLoggedIn == false) {self.setEmailPassword()}
+                    if (self.isUserLoggedIn == false) {self.setEmailPassword()}
                                     }
             }.store(in: &cancellableSet)
     }
@@ -202,17 +203,17 @@ class SignInViewModel: ObservableObject {
     func setEmailPassword() {
         Keychain.setKeychain(email, forKey: .email)
         Keychain.setKeychain(password, forKey: .password)
-        self.isLoggedIn = true
+        self.isUserLoggedIn = true
     }
     
     //MARK: 자동로그인, 사용자가 입력하지 않아도 이미 저장되어 있는 이메일과 비밀번호를 불러와서 로그인을 진행한다.
     func autoLogin() -> Bool {
         guard let email = Keychain.getKeychainValue(forKey: .email),
                 let password = Keychain.getKeychainValue(forKey: .password) else {
-            self.isLoggedIn = false
+            self.isUserLoggedIn = false
             return false
         }
-        self.isLoggedIn = true
+        self.isUserLoggedIn = true
         self.email = email
         self.password = password
         postSignIn()

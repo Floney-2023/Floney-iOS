@@ -9,18 +9,19 @@ import SwiftUI
 
 struct SplashScreenView: View {
     @State private var isActive = false
+    @EnvironmentObject var viewModel: SignInViewModel
 
     var body: some View {
         if isActive {
             
-            //
-            SignInView()
-             
-            //AddView()
-            //MainTabView()
+            if viewModel.autoLogin(), viewModel.isUserLoggedIn {
+                MainTabView()
+            } else {
+                SignInView() 
+            }
         } else {
-            ZStack {
-                Image("splash_bg")
+                ZStack {
+                    Image("splash_bg")
                     .resizable(capInsets: EdgeInsets(top: 0.0, leading: 0.0, bottom: 0.0, trailing: 0.0))
                     .ignoresSafeArea()
                 Image("splash_logo")

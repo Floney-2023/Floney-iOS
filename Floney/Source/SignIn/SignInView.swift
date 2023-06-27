@@ -13,7 +13,7 @@ import AuthenticationServices
 import GoogleSignIn
 
 struct SignInView: View {
-    @StateObject var viewModel = SignInViewModel()
+    @EnvironmentObject var viewModel : SignInViewModel
     @StateObject var kakaoviewModel = SignUpViewModel()
     
     var body: some View {
@@ -178,9 +178,10 @@ struct SignInView: View {
              
              }*/
             .onAppear(perform : UIApplication.shared.hideKeyboard)
-            .fullScreenCover(isPresented: $viewModel.isLoggedIn) {
+            /*
+            .fullScreenCover(isPresented: $viewModel.isUserLoggedIn) {
                 MainTabView()
-            }
+            }*/
         }
     }
     
