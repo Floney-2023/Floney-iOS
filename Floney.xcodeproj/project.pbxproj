@@ -38,6 +38,7 @@
 		2F1614922A0F971B0029E9A9 /* DayLinesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1614912A0F971B0029E9A9 /* DayLinesView.swift */; };
 		2F1614942A0FABBE0029E9A9 /* CustomAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1614932A0FABBE0029E9A9 /* CustomAlert.swift */; };
 		2F1614972A1370B90029E9A9 /* SignInWithAppleCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1614962A1370B90029E9A9 /* SignInWithAppleCoordinator.swift */; };
+		2F28C2D12A4C228600894F67 /* AuthenticationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F28C2D02A4C228600894F67 /* AuthenticationService.swift */; };
 		2FC3B1D02A1CD26A00572804 /* KakaoLoginRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC3B1CF2A1CD26A00572804 /* KakaoLoginRequest.swift */; };
 		2FC3B1D22A1CD2E200572804 /* KakaoLoginResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC3B1D12A1CD2E200572804 /* KakaoLoginResponse.swift */; };
 		2FC3B1D52A25E30A00572804 /* SettingBookView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC3B1D42A25E30A00572804 /* SettingBookView.swift */; };
@@ -149,6 +150,7 @@
 		2F1614932A0FABBE0029E9A9 /* CustomAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAlert.swift; sourceTree = "<group>"; };
 		2F1614952A136FC60029E9A9 /* Floney.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Floney.entitlements; sourceTree = "<group>"; };
 		2F1614962A1370B90029E9A9 /* SignInWithAppleCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInWithAppleCoordinator.swift; sourceTree = "<group>"; };
+		2F28C2D02A4C228600894F67 /* AuthenticationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationService.swift; sourceTree = "<group>"; };
 		2FC3B1CF2A1CD26A00572804 /* KakaoLoginRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoLoginRequest.swift; sourceTree = "<group>"; };
 		2FC3B1D12A1CD2E200572804 /* KakaoLoginResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoLoginResponse.swift; sourceTree = "<group>"; };
 		2FC3B1D42A25E30A00572804 /* SettingBookView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingBookView.swift; sourceTree = "<group>"; };
@@ -469,6 +471,7 @@
 		2FD7F3AA29B1E39400B99CAA /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				2F28C2D02A4C228600894F67 /* AuthenticationService.swift */,
 				2FE23F632A39DAF6009FA8CA /* ShareView.swift */,
 				2FE23F612A39B981009FA8CA /* FirebaseManager.swift */,
 				2FE23F5F2A39AADA009FA8CA /* CryptManager.swift */,
@@ -1061,6 +1064,7 @@
 				2FEA2BDE29D0390300DE8E54 /* WithdrawalView.swift in Sources */,
 				2FEA2BC029BA068200DE8E54 /* MyPageView.swift in Sources */,
 				2F146A5E2A14B52D0089AB3D /* TokenReissueDataManager.swift in Sources */,
+				2F28C2D12A4C228600894F67 /* AuthenticationService.swift in Sources */,
 				2FC3B1DB2A2733D200572804 /* GoogleSignIn.swift in Sources */,
 				2FF25C9429E7EF6500737346 /* RoundedCorners.swift in Sources */,
 				2FEA2BDB29CD63B300DE8E54 /* SetProfileImageView.swift in Sources */,

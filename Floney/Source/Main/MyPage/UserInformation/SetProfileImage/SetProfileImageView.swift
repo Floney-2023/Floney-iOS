@@ -8,20 +8,57 @@
 import SwiftUI
 
 struct SetProfileImageView: View {
+    @StateObject var permissionManager = PermissionManager()
+    @StateObject var mypageViewModel = MyPageViewModel()
+    var firebaseManager = FirebaseManager()
+    var encryptionManager = CryptManager()
+    // 프로필 이미지
+    @State var bookProfileImage: Image = Image("btn_profile")
+    // 이미지선택창 선택 여부
+    @State private var presentsImagePicker = false
+    // 카메라 선택 여부
+    @State private var onCamera = false
+    // 사진 앨범 선택 여부
+    @State private var onPhotoLibrary = false
+    // 프로필 이미지 변화 확정 여부
+    @State private var profileChanged = false
+    @State private var selectedUIImage: UIImage? = nil
+
     var body: some View {
         VStack(spacing:20) {
-            Image("btn_profile")
-                .overlay(
-                    Image("btn_photo_camera")
-                        .offset(x:45,y:45)
-                )
-            Text("기본 프로필로 변경")
-                .font(.pretendardFont(.regular, size: 12))
-                .foregroundColor(.greyScale6)
-            Spacer()
-            
+            bookProfileImage
+                 .resizable()
+                 .aspectRatio(contentMode: .fill)
+                 .clipShape(Circle()) // 프로필 이미지를 원형으로 자르기
+                 .frame(width: 124, height: 124)
+                 .overlay(
+                     Image("btn_photo_camera")
+                         .offset(x:45,y:45)
+                 )
+                 .onTapGesture {
+                     presentsImagePicker = true
+                 }
+             Text("기본 프로필로 변경")
+                 .font(.pretendardFont(.regular, size: 12))
+                 .foregroundColor(.greyScale6)
+                 .onTapGesture {
+                     bookProfileImage = Image("btn_profile")
+                 }
+             Spacer()
+             
             Button("변경하기") {
-                
+                if let image = selectedUIImage {
+                    print("selected:\(image)")
+                    firebaseManager.uploadImageToFirebase(image: image) { encryptedURL in
+                        DispatchQueue.main.async {
+                            if let url = encryptedURL {
+                                self.mypageViewModel.encryptedImageUrl = url
+                                mypageViewModel.changeProfile()
+                                print("in image view: \(url)")
+                            }
+                        }
+                    }
+                }
             }
             .padding(20)
             .font(.pretendardFont(.bold, size: 14))
@@ -42,6 +79,51 @@ struct SetProfileImageView: View {
                     .foregroundColor(.greyScale1)
             }
         }
+        .onAppear{
+         permissionManager.requestCameraPermission()
+         permissionManager.requestAlbumPermission()
+         }
+        // 카메라 선택
+        .sheet(isPresented: $onCamera) {
+            CameraView(image: $selectedUIImage) { selectedImage in
+                if let selectedImage = selectedImage {
+                    self.selectedUIImage = selectedImage
+                    self.bookProfileImage = Image(uiImage: selectedImage)
+                }
+                self.onCamera = false
+            }
+        }
+        // 사진 앨범 선택
+        .sheet(isPresented: $onPhotoLibrary) {
+            PhotoPicker(image: $selectedUIImage) { selectedImage in
+                if let selectedImage = selectedImage {
+                    self.selectedUIImage = selectedImage
+                    self.bookProfileImage = Image(uiImage: selectedImage)
+                }
+                self.onPhotoLibrary = false
+            }
+        }
+        .actionSheet(isPresented: $presentsImagePicker) {
+            ActionSheet(
+                title: Text("이미지 선택하기"),
+                message: nil,
+                buttons: [
+                    .default(
+                        Text("카메라"),
+                        action: { onCamera = true }
+                    ),
+                    .default(
+                        Text("사진 앨범"),
+                        action: { onPhotoLibrary = true }
+                    ),
+                    .cancel(
+                        Text("돌아가기")
+                    )
+                ]
+            )
+        }
+        
+
     }
 }
 

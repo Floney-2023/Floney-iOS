@@ -10,7 +10,6 @@ import AVFoundation
 import Photos
 
 class PermissionManager : ObservableObject {
-    
     @Published var cameraPermission = false
     @Published var albumPermission = false
     

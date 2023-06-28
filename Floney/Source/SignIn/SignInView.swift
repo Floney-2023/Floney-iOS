@@ -13,7 +13,7 @@ import AuthenticationServices
 import GoogleSignIn
 
 struct SignInView: View {
-    @EnvironmentObject var viewModel : SignInViewModel
+    @StateObject var viewModel = SignInViewModel()
     @StateObject var kakaoviewModel = SignUpViewModel()
     
     var body: some View {

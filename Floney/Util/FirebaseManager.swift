@@ -12,7 +12,8 @@ import FirebaseDynamicLinks
 class FirebaseManager {
     var encryptionManager = CryptManager()
     // completion: @escaping (URL?) -> Void)
-    func uploadImageToFirebase(image: UIImage) {
+   
+    func uploadImageToFirebase(image: UIImage, completion: @escaping (String?) -> Void) {
         // 이 부분에서 Firebase Storage에 이미지를 업로드하는 코드를 작성하고,
         // 이미지의 URL을 completion handler를 통해 반환합니다.
         let timestamp = Date().timeIntervalSince1970
@@ -46,12 +47,16 @@ class FirebaseManager {
                                 let encryptedURL = self.encryptionManager.encrypt(url.absoluteString, using: key)
                                 print("completed : \(encryptedURL)")
                                 let decryptedURL = self.encryptionManager.decrypt(encryptedURL!, using: key)
+                                completion(encryptedURL)
+                            } else {
+                                completion(nil)
                             }
                         }
                     }
                 }
             }
         }
+    
     }
     
     func createDynamicLink(for bookCode: String) -> URL? {

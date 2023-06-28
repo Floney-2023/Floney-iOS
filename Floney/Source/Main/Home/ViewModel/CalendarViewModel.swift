@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+
 class CalendarViewModel: ObservableObject {
     var tokenViewModel = TokenReissueViewModel()
     
@@ -239,12 +240,12 @@ class CalendarViewModel: ObservableObject {
                 //print("\(errorCode) : alert")
                 //self.showAlert = true
                 //self.errorMessage = ErrorMessage.login01.value
-                // 토큰 재발급
+            // 토큰 재발급
             case "U006" :
                 tokenViewModel.tokenReissue()
-                // 아예 틀린 토큰이므로 재로그인해서 다시 발급받아야 함.
+            // 아예 틀린 토큰이므로 재로그인해서 다시 발급받아야 함.
             case "U007" :
-                // self.postSignIn()
+                AuthenticationService.shared.logoutDueToTokenExpiration()
             default:
                 break
             }

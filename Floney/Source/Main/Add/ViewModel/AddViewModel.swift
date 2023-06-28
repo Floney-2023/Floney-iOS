@@ -8,6 +8,7 @@
 import Foundation
 import Combine
 class AddViewModel: ObservableObject {
+    var tokenViewModel = TokenReissueViewModel()
     @Published var categoryResult : [CategoryResponse] = []
     @Published var categories : [String] = []
     @Published var addLoadingError: String = ""
@@ -86,5 +87,23 @@ class AddViewModel: ObservableObject {
         addLoadingError = error.backendError == nil ? error.initialError.localizedDescription : error.backendError!.message
         self.showAlert = true
         // 에러 처리
+        
+        if let errorCode = error.backendError?.code {
+            switch errorCode {
+                //case "U009" :
+                //print("\(errorCode) : alert")
+                //self.showAlert = true
+                //self.errorMessage = ErrorMessage.login01.value
+                // 토큰 재발급
+            case "U006" :
+                tokenViewModel.tokenReissue()
+                // 아예 틀린 토큰이므로 재로그인해서 다시 발급받아야 함.
+            case "U007" :
+                AuthenticationService.shared.logoutDueToTokenExpiration()
+            default:
+                break
+            }
+            // 에러 처리
+        }
     }
 }

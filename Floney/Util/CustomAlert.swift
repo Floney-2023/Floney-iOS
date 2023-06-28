@@ -113,6 +113,11 @@ struct CustomAlertView: View {
                 .cornerRadius(10)
                 .shadow(radius: 10)
                 .animation(.easeInOut, value: isPresented)
+                .onAppear {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                        isPresented = false
+                    }
+                }
             }
             .padding()
         }

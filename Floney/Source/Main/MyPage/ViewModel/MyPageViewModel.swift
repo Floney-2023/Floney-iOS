@@ -15,8 +15,7 @@ class MyPageViewModel: ObservableObject {
     @Published var nickname : String = ""
     @Published var email : String = ""
     @Published var myBooks : [MyBookResult] = []
-    //@Published var email : String = ""
-    
+    @Published var encryptedImageUrl : String = ""
     
     private var cancellableSet: Set<AnyCancellable> = []
     var dataManager: MyPageProtocol
@@ -43,8 +42,23 @@ class MyPageViewModel: ObservableObject {
                     self.myBooks = self.result.myBooks!
                 }
             }.store(in: &cancellableSet)
+        
     }
     
+    func changeProfile() {
+        dataManager.changeProfile(img: encryptedImageUrl)
+            .sink { completion in
+                switch completion {
+                case .finished:
+                    print("Profile successfully changed.")
+                case .failure(let error):
+                    print("Error changing profile: \(error)")
+                }
+            } receiveValue: { data in
+                // TODO: Handle the received data if necessary.
+            }
+            .store(in: &cancellableSet)
+    }
     func createAlert( with error: NetworkError) {
         myPageLoadingError = error.backendError == nil ? error.initialError.localizedDescription : error.backendError!.message
         self.showAlert = true

@@ -15,7 +15,6 @@ import FirebaseAuth
 class SignInViewModel: ObservableObject {
     var tokenViewModel = TokenReissueViewModel()
     @Published var signUpViewModel = SignUpViewModel()
-    
     @Published var result : SignInResponse = SignInResponse(accessToken: "", refreshToken: "")
     @Published var signInLoadingError: String = ""
     @Published var errorMessage = ""
@@ -27,8 +26,6 @@ class SignInViewModel: ObservableObject {
     @Published var hasJoined: Bool = false
     @Published var token = ""
     
-    @Published var isUserLoggedIn = false
-
     private var cancellableSet: Set<AnyCancellable> = []
     var dataManager: SignInProtocol
     
@@ -52,7 +49,7 @@ class SignInViewModel: ObservableObject {
                     self.isNext = true
                     self.setToken()
                     // 자동로그인을 한 경우는 isLoggedIn이 true이므로 email과 password를 다시 저장하지 않아도 괜찮다.
-                    if (self.isUserLoggedIn == false) {self.setEmailPassword()}
+                    if (AuthenticationService.shared.isUserLoggedIn == false) {self.setEmailPassword()}
                     print("--성공--")
                     print(self.result.accessToken)
                 }
@@ -122,7 +119,7 @@ class SignInViewModel: ObservableObject {
                     self.isNext = true
                     self.setToken()
                     // 자동로그인을 한 경우는 isLoggedIn이 true이므로 email과 password를 다시 저장하지 않아도 괜찮다.
-                    if (self.isUserLoggedIn == false) {self.setEmailPassword()}
+                    if (AuthenticationService.shared.isUserLoggedIn == false) {self.setEmailPassword()}
                     print("--성공--")
                     print(self.result.accessToken)
                     
@@ -146,7 +143,7 @@ class SignInViewModel: ObservableObject {
                     self.setToken()
                     print("set token 호출 후")
                     // 자동로그인을 한 경우는 isLoggedIn이 true이므로 email과 password를 다시 저장하지 않아도 괜찮다.
-                    if (self.isUserLoggedIn == false) {self.setEmailPassword()}
+                    if (AuthenticationService.shared.isUserLoggedIn == false) {self.setEmailPassword()}
                                     }
             }.store(in: &cancellableSet)
     }
@@ -203,20 +200,21 @@ class SignInViewModel: ObservableObject {
     func setEmailPassword() {
         Keychain.setKeychain(email, forKey: .email)
         Keychain.setKeychain(password, forKey: .password)
-        self.isUserLoggedIn = true
+        AuthenticationService.shared.logIn()
+        
     }
     
     //MARK: 자동로그인, 사용자가 입력하지 않아도 이미 저장되어 있는 이메일과 비밀번호를 불러와서 로그인을 진행한다.
     func autoLogin() -> Bool {
         guard let email = Keychain.getKeychainValue(forKey: .email),
                 let password = Keychain.getKeychainValue(forKey: .password) else {
-            self.isUserLoggedIn = false
+            AuthenticationService.shared.logoutDueToTokenExpiration()
             return false
         }
-        self.isUserLoggedIn = true
         self.email = email
         self.password = password
         postSignIn()
+        AuthenticationService.shared.logIn()
         return true
     }
     
@@ -231,18 +229,22 @@ class SignInViewModel: ObservableObject {
     
     func createAlert( with error: NetworkError) {
         signInLoadingError = error.backendError == nil ? error.initialError.localizedDescription : error.backendError!.message
-                if let errorCode = error.backendError?.code {
+        if let errorCode = error.backendError?.code {
             switch errorCode {
             case "U009" :
                 print("\(errorCode) : alert")
                 self.showAlert = true
                 self.errorMessage = ErrorMessage.login01.value
-            // 토큰 재발급
+            case "U008" :
+                print("\(errorCode) : alert")
+                self.showAlert = true
+                self.errorMessage = ErrorMessage.login01.value
+                // 토큰 재발급
             case "U006" :
                 tokenViewModel.tokenReissue()
-            // 아예 틀린 토큰이므로 재로그인해서 다시 발급받아야 함.
+                // 아예 틀린 토큰이므로 재로그인해서 다시 발급받아야 함.
             case "U007" :
-                self.postSignIn()
+                AuthenticationService.shared.logoutDueToTokenExpiration()
             default:
                 break
             }

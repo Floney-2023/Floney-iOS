@@ -8,6 +8,8 @@
 import SwiftUI
 import Combine
 struct AddView: View {
+    @Binding var isPresented: Bool
+    
     @StateObject var viewModel = AddViewModel()
     @State var date : String = "2023-06-20"
     @State var money : String = ""
@@ -34,6 +36,15 @@ struct AddView: View {
         @State var moneyStr = String(describing: "\(money)")
         ZStack {
             VStack {
+                HStack {
+                    Image("icon_close")
+                        .onTapGesture {
+                            self.isPresented.toggle()
+                        }
+                    Spacer()
+                }
+                .padding(20)
+
                 VStack(spacing: 32){
                     //MARK: 금액
                     VStack {
@@ -276,6 +287,6 @@ struct AddView: View {
 
 struct AddView_Previews: PreviewProvider {
     static var previews: some View {
-        AddView()
+        AddView(isPresented: .constant(true))
     }
 }

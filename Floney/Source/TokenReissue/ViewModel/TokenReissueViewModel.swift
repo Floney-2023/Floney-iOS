@@ -47,5 +47,20 @@ class TokenReissueViewModel: ObservableObject {
     func createAlert( with error: NetworkError) {
         tokenReissueLoadingError = error.backendError == nil ? error.initialError.localizedDescription : error.backendError!.message
         self.showAlert = true
+        
+        if let errorCode = error.backendError?.code {
+            switch errorCode {
+                
+                // 토큰 재발급
+            case "U006" :
+                AuthenticationService.shared.logoutDueToTokenExpiration()
+            // 아예 틀린 토큰이므로 재로그인해서 다시 발급받아야 함.
+            case "U007" :
+                AuthenticationService.shared.logoutDueToTokenExpiration()
+            default:
+                break
+            }
+        }
+
     }
 }

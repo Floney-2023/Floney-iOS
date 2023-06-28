@@ -49,7 +49,15 @@ struct SetBookProfileImageView: View {
             
             Button("변경하기") {
                 if let image = selectedUIImage {
-                    firebaseManager.uploadImageToFirebase(image: image)
+                    firebaseManager.uploadImageToFirebase(image: image) { encryptedURL in
+                        DispatchQueue.main.async {
+                            if let url = encryptedURL {
+                                //self.mypageViewModel.encryptedImageUrl = url
+                                //mypageViewModel.changeProfile()
+                                print("in image view: \(url)")
+                            }
+                        }
+                    }
                 }
             }
             .padding(20)

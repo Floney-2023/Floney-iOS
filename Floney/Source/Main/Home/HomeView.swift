@@ -32,12 +32,14 @@ struct HomeView: View {
                             }
                     }
                 }
-                
-                //MARK: 캘린더 뷰 - viewModel로 상태 추적
-                CustomCalendarView(viewModel: viewModel, isShowingMonthPicker: $isShowingMonthPicker, isShowingBottomSheet: $isShowingBottomSheet)
+                ScrollView
+                {
+                    // MARK: 캘린더 뷰 - viewModel로 상태 추적
+                    CustomCalendarView(viewModel: viewModel, isShowingMonthPicker: $isShowingMonthPicker, isShowingBottomSheet: $isShowingBottomSheet)
+                }
                 
             }.padding(20)
-                
+            
             // MARK: Month Year Picker
             if isShowingMonthPicker {
                 Color.black
@@ -59,7 +61,7 @@ struct HomeView: View {
                 DayLinesBottomSheet(viewModel: viewModel, isShowing: $isShowingBottomSheet, isShowingAddView: $isShowingAddView)
             }
         }.fullScreenCover(isPresented: $isShowingAddView) {
-            AddView.init(date:viewModel.selectedDateStr)
+            AddView.init(isPresented: $isShowingAddView, date:viewModel.selectedDateStr)
         }
     }
 }
