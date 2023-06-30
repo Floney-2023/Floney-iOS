@@ -19,3 +19,15 @@ struct BookProfileRequest : Encodable {
     var bookKey : String
 }
 
+struct SeeProfileRequest : Encodable {
+    var bookKey : String
+    var seeProfileStatus : Bool
+}
+struct SetBudgetRequest : Encodable {
+    var bookKey : String
+    var budget : Float
+}
+struct SetAssetRequest : Encodable {
+    var bookKey : String
+    var asset : Float
+}

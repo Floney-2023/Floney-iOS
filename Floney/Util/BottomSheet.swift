@@ -185,7 +185,8 @@ struct SetBudgetBottomSheet: View {
     let buttonHeight: CGFloat = 46
     @State var label = "예산을 입력하세요."
     @Binding var isShowing: Bool
-    @Binding var budget : String
+    @ObservedObject var viewModel : SettingBookViewModel
+    @State var budget : String = ""
     var body: some View{
         ZStack(alignment: .bottom) {
             if (isShowing) {
@@ -216,7 +217,15 @@ struct SetBudgetBottomSheet: View {
                             .frame(height: buttonHeight)
                         
                         ButtonLarge(label: "저장하기",background: .primary1, textColor: .white, strokeColor: .primary1,  fontWeight: .bold, action: {
-                            
+                            if let floatValue = Float(budget) {
+                                // 변환 성공
+                                print(floatValue) // 출력: 3200.4
+                                viewModel.budget = floatValue
+                                viewModel.setBudget()
+                            } else {
+                                // 변환 실패
+                                print("변환 실패")
+                            }
                         })
                         .frame(height: buttonHeight)
                         
@@ -229,6 +238,11 @@ struct SetBudgetBottomSheet: View {
                             .frame(width: 70,height: 1.0)
                             .padding(EdgeInsets(top: -10, leading: 0, bottom: 0, trailing: 0))
                             .foregroundColor(.greyScale6)
+                    }
+                    .onTapGesture {
+                        print(viewModel.budget) // 출력: 3200.4
+                        viewModel.budget = 0
+                        viewModel.setBudget()
                     }
                 }
                 .padding(.horizontal, 20)
@@ -252,7 +266,8 @@ struct SetInitialAssetBottomSheet: View {
     let buttonHeight: CGFloat = 46
     @State var label = "초기 자산을 입력하세요."
     @Binding var isShowing: Bool
-    @Binding var initialAsset : String
+    @ObservedObject var viewModel : SettingBookViewModel
+    @State var initialAsset : String = ""
     var body: some View{
         ZStack(alignment: .bottom) {
             if (isShowing) {
@@ -285,7 +300,15 @@ struct SetInitialAssetBottomSheet: View {
                             .frame(height: buttonHeight)
                         
                         ButtonLarge(label: "저장하기",background: .primary1, textColor: .white, strokeColor: .primary1,  fontWeight: .bold, action: {
-                            
+                            if let floatValue = Float(initialAsset) {
+                                // 변환 성공
+                                print(floatValue) // 출력: 3200.4
+                                viewModel.asset = floatValue
+                                viewModel.setAsset()
+                            } else {
+                                // 변환 실패
+                                print("변환 실패")
+                            }
                         })
                         .frame(height: buttonHeight)
                         
@@ -298,6 +321,11 @@ struct SetInitialAssetBottomSheet: View {
                             .frame(width: 70,height: 1.0)
                             .padding(EdgeInsets(top: -10, leading: 0, bottom: 0, trailing: 0))
                             .foregroundColor(.greyScale6)
+                    }
+                    .onTapGesture {
+                        print(viewModel.asset) // 출력: 3200.4
+                        viewModel.asset = 0
+                        viewModel.setAsset()
                     }
                 }
                 .padding(.horizontal, 20)

@@ -10,7 +10,7 @@ import SwiftUI
 struct ModifyingBookView: View {
     @State var viewModel = SettingBookViewModel()
     //@State var nickname = ""
-    @State var toggleOnOff = false
+    @State var toggleOnOff = true
     var body: some View {
         VStack(spacing:36) {
             VStack(spacing:12) {
@@ -60,11 +60,16 @@ struct ModifyingBookView: View {
                         .font(.pretendardFont(.medium, size: 14))
                         .foregroundColor(.greyScale2)
                     Spacer()
-                    Toggle(isOn: $toggleOnOff) {
+                    Toggle(isOn: $viewModel.profileStatus) {
                         
                     }.padding(.trailing, 6)
+                        
                 }
                 
+                .onReceive(viewModel.$profileStatus) { profileStatus in
+                    print("see profile status : \(viewModel.profileStatus)")
+                        viewModel.changeProfileStatus()
+                }
                 
             }
             
@@ -96,6 +101,7 @@ struct ModifyingBookView: View {
                     .foregroundColor(.greyScale1)
             }
         }
+        
     }
 }
 

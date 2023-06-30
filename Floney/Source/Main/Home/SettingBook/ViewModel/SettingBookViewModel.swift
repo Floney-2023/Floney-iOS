@@ -24,6 +24,10 @@ class SettingBookViewModel : ObservableObject {
     
     @Published var changedName = ""
     @Published var encryptedImageUrl : String = ""
+    @Published var profileStatus = true
+    
+    @Published var budget : Float = 0
+    @Published var asset : Float = 0
     
     private var cancellableSet: Set<AnyCancellable> = []
     var dataManager: SettingBookProtocol
@@ -76,6 +80,54 @@ class SettingBookViewModel : ObservableObject {
         bookKey = "2FE56430"
         let request = BookNameRequest(name: changedName, bookKey: bookKey)
         dataManager.changeNickname(parameters: request)
+            .sink { completion in
+                switch completion {
+                case .finished:
+                    print("Profile successfully changed.")
+                case .failure(let error):
+                    print("Error changing nickname: \(error)")
+                }
+            } receiveValue: { data in
+                // TODO: Handle the received data if necessary.
+            }
+            .store(in: &cancellableSet)
+    }
+    func changeProfileStatus() {
+        bookKey = "2FE56430"
+        let request = SeeProfileRequest(bookKey: bookKey, seeProfileStatus: profileStatus)
+        dataManager.changeProfileStatus(parameters: request)
+            .sink { completion in
+                switch completion {
+                case .finished:
+                    print("Profile successfully changed.")
+                case .failure(let error):
+                    print("Error changing nickname: \(error)")
+                }
+            } receiveValue: { data in
+                // TODO: Handle the received data if necessary.
+            }
+            .store(in: &cancellableSet)
+    }
+    func setBudget() {
+        bookKey = "2FE56430"
+        let request = SetBudgetRequest(bookKey: bookKey, budget: budget)
+        dataManager.setBudget(parameters: request)
+            .sink { completion in
+                switch completion {
+                case .finished:
+                    print("Profile successfully changed.")
+                case .failure(let error):
+                    print("Error changing nickname: \(error)")
+                }
+            } receiveValue: { data in
+                // TODO: Handle the received data if necessary.
+            }
+            .store(in: &cancellableSet)
+    }
+    func setAsset() {
+        bookKey = "2FE56430"
+        let request = SetAssetRequest(bookKey: bookKey, asset: asset)
+        dataManager.setAsset(parameters: request)
             .sink { completion in
                 switch completion {
                 case .finished:

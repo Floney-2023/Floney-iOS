@@ -221,9 +221,9 @@ struct SettingBookView: View {
                 ActivityView(activityItems: [shareUrl ?? ""])
             }
             
-            SetBudgetBottomSheet(isShowing: $isShowingSetBudget, budget: $budget)
+            SetBudgetBottomSheet(isShowing: $isShowingSetBudget, viewModel: viewModel)
             
-            SetInitialAssetBottomSheet(isShowing: $isShowingSetInitialAsset, initialAsset: $initialAsset)
+            SetInitialAssetBottomSheet(isShowing: $isShowingSetInitialAsset, viewModel: viewModel)
             
             CarriedOverBottomSheet(isShowing: $isShowingCarriedOver, onOff: $onOff)
             
