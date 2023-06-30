@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct ModifyingBookView: View {
-    @State var nickname = ""
+    @State var viewModel = SettingBookViewModel()
+    //@State var nickname = ""
     @State var toggleOnOff = false
     var body: some View {
         VStack(spacing:36) {
@@ -20,7 +21,7 @@ struct ModifyingBookView: View {
                     Spacer()
                 }
                 HStack(spacing: 8) {
-                    TextField("", text: $nickname)
+                    TextField("", text: $viewModel.changedName)
                         .padding()
                         //.keyboardType(.emailAddress)
                         .overlay(
@@ -28,11 +29,11 @@ struct ModifyingBookView: View {
                                 .padding()
                                 .font(.pretendardFont(.regular, size: 14))
                                 .foregroundColor(.greyScale7)
-                                .opacity(nickname.isEmpty ? 1 : 0), alignment: .leading
+                                .opacity(viewModel.changedName.isEmpty ? 1 : 0), alignment: .leading
                         )
                         .modifier(TextFieldModifier())
                     Button("변경하기"){
-                        
+                        viewModel.changeNickname()
                     }
                     .padding()
                     .font(.pretendardFont(.bold, size: 14))

@@ -39,6 +39,10 @@
 		2F1614942A0FABBE0029E9A9 /* CustomAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1614932A0FABBE0029E9A9 /* CustomAlert.swift */; };
 		2F1614972A1370B90029E9A9 /* SignInWithAppleCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1614962A1370B90029E9A9 /* SignInWithAppleCoordinator.swift */; };
 		2F28C2D12A4C228600894F67 /* AuthenticationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F28C2D02A4C228600894F67 /* AuthenticationService.swift */; };
+		2F28C2D62A4ED60E00894F67 /* SettingBookDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F28C2D52A4ED60E00894F67 /* SettingBookDataManager.swift */; };
+		2F28C2D82A4ED61B00894F67 /* SettingBookViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F28C2D72A4ED61B00894F67 /* SettingBookViewModel.swift */; };
+		2F28C2DA2A4ED63900894F67 /* SettingBookRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F28C2D92A4ED63900894F67 /* SettingBookRequest.swift */; };
+		2F28C2DC2A4ED64500894F67 /* SettingBookResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F28C2DB2A4ED64500894F67 /* SettingBookResponse.swift */; };
 		2FC3B1D02A1CD26A00572804 /* KakaoLoginRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC3B1CF2A1CD26A00572804 /* KakaoLoginRequest.swift */; };
 		2FC3B1D22A1CD2E200572804 /* KakaoLoginResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC3B1D12A1CD2E200572804 /* KakaoLoginResponse.swift */; };
 		2FC3B1D52A25E30A00572804 /* SettingBookView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC3B1D42A25E30A00572804 /* SettingBookView.swift */; };
@@ -151,6 +155,10 @@
 		2F1614952A136FC60029E9A9 /* Floney.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Floney.entitlements; sourceTree = "<group>"; };
 		2F1614962A1370B90029E9A9 /* SignInWithAppleCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInWithAppleCoordinator.swift; sourceTree = "<group>"; };
 		2F28C2D02A4C228600894F67 /* AuthenticationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationService.swift; sourceTree = "<group>"; };
+		2F28C2D52A4ED60E00894F67 /* SettingBookDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingBookDataManager.swift; sourceTree = "<group>"; };
+		2F28C2D72A4ED61B00894F67 /* SettingBookViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingBookViewModel.swift; sourceTree = "<group>"; };
+		2F28C2D92A4ED63900894F67 /* SettingBookRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingBookRequest.swift; sourceTree = "<group>"; };
+		2F28C2DB2A4ED64500894F67 /* SettingBookResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingBookResponse.swift; sourceTree = "<group>"; };
 		2FC3B1CF2A1CD26A00572804 /* KakaoLoginRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoLoginRequest.swift; sourceTree = "<group>"; };
 		2FC3B1D12A1CD2E200572804 /* KakaoLoginResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoLoginResponse.swift; sourceTree = "<group>"; };
 		2FC3B1D42A25E30A00572804 /* SettingBookView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingBookView.swift; sourceTree = "<group>"; };
@@ -395,9 +403,37 @@
 			path = DataManager;
 			sourceTree = "<group>";
 		};
+		2F28C2D22A4ECCEB00894F67 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				2F28C2D72A4ED61B00894F67 /* SettingBookViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		2F28C2D32A4ECCF800894F67 /* DataManager */ = {
+			isa = PBXGroup;
+			children = (
+				2F28C2D52A4ED60E00894F67 /* SettingBookDataManager.swift */,
+			);
+			path = DataManager;
+			sourceTree = "<group>";
+		};
+		2F28C2D42A4ECCFF00894F67 /* Entity */ = {
+			isa = PBXGroup;
+			children = (
+				2F28C2D92A4ED63900894F67 /* SettingBookRequest.swift */,
+				2F28C2DB2A4ED64500894F67 /* SettingBookResponse.swift */,
+			);
+			path = Entity;
+			sourceTree = "<group>";
+		};
 		2FC3B1D32A25E2D600572804 /* SettingBook */ = {
 			isa = PBXGroup;
 			children = (
+				2F28C2D42A4ECCFF00894F67 /* Entity */,
+				2F28C2D32A4ECCF800894F67 /* DataManager */,
+				2F28C2D22A4ECCEB00894F67 /* ViewModel */,
 				2FC3B1D42A25E30A00572804 /* SettingBookView.swift */,
 				2FC3B1D62A25F95600572804 /* ModifyingBookView.swift */,
 				2FC3B1D82A25F9F200572804 /* SetBookProfileImageView.swift */,
@@ -1017,6 +1053,7 @@
 				2FD7F39E29B1E26D00B99CAA /* ContentView.swift in Sources */,
 				2FFA302A29EEAE6700412F83 /* SignUpRequest.swift in Sources */,
 				2FE23F6F2A4173E4009FA8CA /* AddViewModel.swift in Sources */,
+				2F28C2D82A4ED61B00894F67 /* SettingBookViewModel.swift in Sources */,
 				2FEA2BB729BA064B00DE8E54 /* HomeView.swift in Sources */,
 				2FC3B1D22A1CD2E200572804 /* KakaoLoginResponse.swift in Sources */,
 				2F1614762A0A32A20029E9A9 /* CalendarRequest.swift in Sources */,
@@ -1028,6 +1065,7 @@
 				2FF25C8629E181C000737346 /* SendBookCodeView.swift in Sources */,
 				2F146A6A2A14B6980089AB3D /* TokenReissueViewModel.swift in Sources */,
 				2FEA2BA029B8685E00DE8E54 /* BackButton.swift in Sources */,
+				2F28C2D62A4ED60E00894F67 /* SettingBookDataManager.swift in Sources */,
 				2FE23F6B2A417380009FA8CA /* CategoryResponse.swift in Sources */,
 				2FC3B1D72A25F95600572804 /* ModifyingBookView.swift in Sources */,
 				2FC3B1D02A1CD26A00572804 /* KakaoLoginRequest.swift in Sources */,
@@ -1043,6 +1081,7 @@
 				2F1614812A0A438A0029E9A9 /* AppDelegate.swift in Sources */,
 				2F16146B2A0804B90029E9A9 /* CreateBookResponse.swift in Sources */,
 				2F1614602A07F4DC0029E9A9 /* BookCodeResponse.swift in Sources */,
+				2F28C2DC2A4ED64500894F67 /* SettingBookResponse.swift in Sources */,
 				2FC3B1DD2A274FF200572804 /* TextFieldLarge.swift in Sources */,
 				2FFA303629EEB02800412F83 /* SignInDataManager.swift in Sources */,
 				2FEA2BD529C9B70600DE8E54 /* UserInformationView.swift in Sources */,
@@ -1092,6 +1131,7 @@
 				2F1614622A07F5FE0029E9A9 /* SendBookCodeViewModel.swift in Sources */,
 				2FEA2BD229C4424600DE8E54 /* OTPViewModel.swift in Sources */,
 				2FE23F5E2A336CF5009FA8CA /* PermissionManager.swift in Sources */,
+				2F28C2DA2A4ED63900894F67 /* SettingBookRequest.swift in Sources */,
 				2F1614782A0A32AF0029E9A9 /* CalendarResponse.swift in Sources */,
 				2FD7F3B629B1E42400B99CAA /* Constant.swift in Sources */,
 				2F16146D2A0804CA0029E9A9 /* CreateBookDataManager.swift in Sources */,

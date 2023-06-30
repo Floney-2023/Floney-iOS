@@ -1,40 +1,40 @@
 //
-//  MyPageDataManager.swift
+//  SettingBookDataManager.swift
 //  Floney
 //
-//  Created by 남경민 on 2023/05/09.
+//  Created by 남경민 on 2023/06/30.
 //
 
 import Foundation
-import Combine
-import Alamofire
 
-protocol MyPageProtocol {
-    func getMyPage() -> AnyPublisher<DataResponse<MyPageResponse, NetworkError>, Never>
-    func changeProfile(img: String) -> AnyPublisher<Void, NetworkError>
-    func changeNickname(nickname: String) -> AnyPublisher<Void, NetworkError>
+import Alamofire
+import Combine
+
+protocol SettingBookProtocol {
+    func getBookInfo(_ parameters:BookInfoRequest) -> AnyPublisher<DataResponse<BookInfoResponse, NetworkError>, Never>
+    func changeProfile(parameters: BookProfileRequest) -> AnyPublisher<Void, NetworkError>
+    func changeNickname(parameters: BookNameRequest) -> AnyPublisher<Void, NetworkError>
 }
 
-
-class MyPage {
-    static let shared: MyPageProtocol = MyPage()
+class SettingBookService {
+    static let shared: SettingBookProtocol = SettingBookService()
     private init() { }
 }
 
-extension MyPage: MyPageProtocol {
-    func getMyPage() -> AnyPublisher<DataResponse<MyPageResponse, NetworkError>, Never> {
-        let url = "\(Constant.BASE_URL)/users/mypage"
-        
+extension SettingBookService: SettingBookProtocol {
+    func getBookInfo(_ parameters:BookInfoRequest) -> AnyPublisher<DataResponse<BookInfoResponse, NetworkError>, Never> {
+    
+        let bookKey = parameters.bookKey
+        let url = "\(Constant.BASE_URL)/books/info?bookKey=\(bookKey)"
+        print(url)
         let token = Keychain.getKeychainValue(forKey: .accessToken)!
-        print("My Page : \n\(token)")
-        
         return AF.request(url,
                           method: .get,
                           parameters: nil,
-                          encoding: JSONEncoding.default,
+                          encoding : JSONEncoding.default,
                           headers: ["Authorization":"Bearer \(token)"])
         .validate()
-        .publishDecodable(type: MyPageResponse.self)
+        .publishDecodable(type: BookInfoResponse.self)
         .map { response in
             response.mapError { error in
                 let backendError = response.data.flatMap { try? JSONDecoder().decode(BackendError.self, from: $0)}
@@ -44,17 +44,16 @@ extension MyPage: MyPageProtocol {
         .receive(on: DispatchQueue.main)
         .eraseToAnyPublisher()
     }
-    
-    func changeProfile(img: String) -> AnyPublisher<Void, NetworkError> {
-        let url = "\(Constant.BASE_URL)/users/profileimg/update?profileImg=\(img)"
+    func changeProfile(parameters: BookProfileRequest) -> AnyPublisher<Void, NetworkError> {
+        let url = "\(Constant.BASE_URL)/books/info/bookImg"
         
         let token = Keychain.getKeychainValue(forKey: .accessToken)!
-        print("My Page : \n\(token)")
+        print("change profile : \n\(token)")
         
         return AF.request(url,
-                          method: .get,
-                          parameters: nil,
-                          encoding: JSONEncoding.default,
+                          method: .post,
+                          parameters: parameters,
+                          encoder: JSONParameterEncoder(),
                           headers: ["Authorization":"Bearer \(token)"])
         .validate()
         .publishData()
@@ -84,19 +83,18 @@ extension MyPage: MyPageProtocol {
         }
         .eraseToAnyPublisher()
     }
-
-    func changeNickname(nickname: String) -> AnyPublisher<Void, NetworkError> {
-        let urlString = "\(Constant.BASE_URL)/users/nickname/update?nickname=\(nickname)"
-        print("\(urlString)")
-        let encodedString = urlString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
-        let url = URL(string: encodedString!)!
+    
+    
+    func changeNickname(parameters: BookNameRequest) -> AnyPublisher<Void, NetworkError> {
+        let url = "\(Constant.BASE_URL)/books/name"
+       
         let token = Keychain.getKeychainValue(forKey: .accessToken)!
         print("change nickname : \n\(token)")
         
         return AF.request(url,
-                          method: .get,
-                          parameters: nil,
-                          encoding: JSONEncoding.default,
+                          method: .post,
+                          parameters: parameters,
+                          encoder: JSONParameterEncoder(),
                           headers: ["Authorization":"Bearer \(token)"])
         .validate()
         .publishData()
@@ -128,3 +126,4 @@ extension MyPage: MyPageProtocol {
         
     }
 }
+

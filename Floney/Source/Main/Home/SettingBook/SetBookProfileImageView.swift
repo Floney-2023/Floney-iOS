@@ -10,6 +10,7 @@ import CryptoKit
 import FirebaseStorage
 
 struct SetBookProfileImageView: View {
+    @StateObject var viewModel = SettingBookViewModel()
     @StateObject var permissionManager = PermissionManager()
     var firebaseManager = FirebaseManager()
     var encryptionManager = CryptManager()
@@ -52,8 +53,8 @@ struct SetBookProfileImageView: View {
                     firebaseManager.uploadImageToFirebase(image: image) { encryptedURL in
                         DispatchQueue.main.async {
                             if let url = encryptedURL {
-                                //self.mypageViewModel.encryptedImageUrl = url
-                                //mypageViewModel.changeProfile()
+                                viewModel.encryptedImageUrl = url
+                                viewModel.changeProfile()
                                 print("in image view: \(url)")
                             }
                         }

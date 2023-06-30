@@ -9,6 +9,8 @@ import SwiftUI
 
 struct SettingBookView: View {
     @Binding var isOnSettingBook : Bool
+    @StateObject var viewModel = SettingBookViewModel()
+    
     @State var nickname = "team"
     @State var date = "2023.05.01 개설"
     @State var isShowingSetBudget = false
@@ -25,7 +27,6 @@ struct SettingBookView: View {
     var body: some View {
         ZStack {
             ScrollView {
-                
                 VStack(spacing:32) {
                     VStack(spacing:24) {
                         //MARK: Head
@@ -43,11 +44,11 @@ struct SettingBookView: View {
                                 Image("icon_profile_book")
                                 
                                 VStack(alignment: .leading, spacing:8){
-                                    Text("\(nickname)")
+                                    Text("\(viewModel.bookName)")
                                         .font(.pretendardFont(.bold, size: 14))
                                         .foregroundColor(.greyScale2)
                                     
-                                    Text("\(date)")
+                                    Text("\(viewModel.startDay)")
                                         .font(.pretendardFont(.medium, size: 12))
                                         .foregroundColor(.greyScale3)
                                 }
@@ -70,68 +71,25 @@ struct SettingBookView: View {
                             Spacer()
                         }
                         VStack(spacing:32) {
-                            
-                            HStack(spacing:16) {
-                                Image("icon_profile")
-                                
-                                VStack(alignment: .leading, spacing:8){
-                                    Text("고등어")
-                                        .font(.pretendardFont(.bold, size: 14))
-                                        .foregroundColor(.greyScale2)
+                            ForEach(viewModel.bookUsers, id: \.self) { user in
+                                HStack(spacing:16) {
+                                    Image("icon_profile")
                                     
-                                    Text("방장")
-                                        .font(.pretendardFont(.medium, size: 12))
-                                        .foregroundColor(.greyScale6)
+                                    VStack(alignment: .leading, spacing:8){
+                                        Text("\(user.name)")
+                                            .font(.pretendardFont(.bold, size: 14))
+                                            .foregroundColor(.greyScale2)
+                                        
+                                        Text("\(user.role)")
+                                            .font(.pretendardFont(.medium, size: 12))
+                                            .foregroundColor(.greyScale6)
+                                    }
+                                    Spacer()
                                 }
-                                Spacer()
+
                             }
-                            
-                            HStack(spacing:16) {
-                                Image("icon_profile")
-                                
-                                VStack(alignment: .leading, spacing:8){
-                                    Text("고등어")
-                                        .font(.pretendardFont(.bold, size: 14))
-                                        .foregroundColor(.greyScale2)
-                                    
-                                    Text("팀원")
-                                        .font(.pretendardFont(.medium, size: 12))
-                                        .foregroundColor(.greyScale6)
-                                }
-                                Spacer()
-                            }
-                            
-                            HStack(spacing:16) {
-                                Image("icon_profile")
-                                
-                                VStack(alignment: .leading, spacing:8){
-                                    Text("고등어")
-                                        .font(.pretendardFont(.bold, size: 14))
-                                        .foregroundColor(.greyScale2)
-                                    
-                                    Text("팀원")
-                                        .font(.pretendardFont(.medium, size: 12))
-                                        .foregroundColor(.greyScale6)
-                                }
-                                Spacer()
-                            }
-                            
-                            HStack(spacing:16) {
-                                Image("icon_profile")
-                                
-                                VStack(alignment: .leading, spacing:8){
-                                    Text("고등어")
-                                        .font(.pretendardFont(.bold, size: 14))
-                                        .foregroundColor(.greyScale2)
-                                    
-                                    Text("팀원")
-                                        .font(.pretendardFont(.medium, size: 12))
-                                        .foregroundColor(.greyScale6)
-                                }
-                                Spacer()
-                            }
-                            
-                            
+
+    
                         }
                         .padding(20)
                         .background(Color.greyScale12)
@@ -256,6 +214,9 @@ struct SettingBookView: View {
                 .padding(EdgeInsets(top: 30, leading: 20, bottom: 0, trailing: 20))
                 .navigationBarBackButtonHidden(true)
                 .navigationBarItems(leading: BackButton(), trailing: Image("icon_notification"))
+                .onAppear{
+                    viewModel.getBookInfo()
+                }
             }.sheet(isPresented: $onShareSheet) {
                 ActivityView(activityItems: [shareUrl ?? ""])
             }

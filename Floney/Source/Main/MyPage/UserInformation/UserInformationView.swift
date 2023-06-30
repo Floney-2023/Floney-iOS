@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct UserInformationView: View {
-    @State var nickname = ""
+    @StateObject var viewModel = MyPageViewModel()
     var body: some View {
         VStack(spacing:36) {
             VStack(spacing:12) {
@@ -19,7 +19,7 @@ struct UserInformationView: View {
                     Spacer()
                 }
                 HStack(spacing: 8) {
-                    TextField("", text: $nickname)
+                    TextField("", text: $viewModel.changedNickname)
                         .padding()
                         .keyboardType(.emailAddress)
                         .overlay(
@@ -27,11 +27,11 @@ struct UserInformationView: View {
                                 .padding()
                                 .font(.pretendardFont(.regular, size: 14))
                                 .foregroundColor(.greyScale7)
-                                .opacity(nickname.isEmpty ? 1 : 0), alignment: .leading
+                                .opacity(viewModel.changedNickname.isEmpty ? 1 : 0), alignment: .leading
                         )
                         .modifier(TextFieldModifier())
                     Button("변경하기"){
-                        
+                        viewModel.changeNickname()
                     }
                     .padding()
                     .font(.pretendardFont(.bold, size: 14))

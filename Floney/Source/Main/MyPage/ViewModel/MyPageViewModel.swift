@@ -17,6 +17,8 @@ class MyPageViewModel: ObservableObject {
     @Published var myBooks : [MyBookResult] = []
     @Published var encryptedImageUrl : String = ""
     
+    @Published var changedNickname = ""
+    
     private var cancellableSet: Set<AnyCancellable> = []
     var dataManager: MyPageProtocol
     
@@ -59,6 +61,21 @@ class MyPageViewModel: ObservableObject {
             }
             .store(in: &cancellableSet)
     }
+    func changeNickname() {
+        dataManager.changeNickname(nickname: changedNickname)
+            .sink { completion in
+                switch completion {
+                case .finished:
+                    print("Profile successfully changed.")
+                case .failure(let error):
+                    print("Error changing nickname: \(error)")
+                }
+            } receiveValue: { data in
+                // TODO: Handle the received data if necessary.
+            }
+            .store(in: &cancellableSet)
+    }
+    
     func createAlert( with error: NetworkError) {
         myPageLoadingError = error.backendError == nil ? error.initialError.localizedDescription : error.backendError!.message
         self.showAlert = true
