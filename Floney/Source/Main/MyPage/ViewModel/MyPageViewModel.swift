@@ -75,6 +75,21 @@ class MyPageViewModel: ObservableObject {
             }
             .store(in: &cancellableSet)
     }
+    func logout() {
+        dataManager.logout()
+            .sink { completion in
+                switch completion {
+                case .finished:
+                    print("logout success.")
+                    AuthenticationService.shared.logoutDueToTokenExpiration()
+                case .failure(let error):
+                    print("Error changing nickname: \(error)")
+                }
+            } receiveValue: { data in
+                // TODO: Handle the received data if necessary.
+            }
+            .store(in: &cancellableSet)
+    }
     
     func createAlert( with error: NetworkError) {
         myPageLoadingError = error.backendError == nil ? error.initialError.localizedDescription : error.backendError!.message

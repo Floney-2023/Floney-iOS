@@ -49,7 +49,12 @@ class SignInViewModel: ObservableObject {
                     self.isNext = true
                     self.setToken()
                     // 자동로그인을 한 경우는 isLoggedIn이 true이므로 email과 password를 다시 저장하지 않아도 괜찮다.
-                    if (AuthenticationService.shared.isUserLoggedIn == false) {self.setEmailPassword()}
+                    
+                    if (AuthenticationService.shared.isUserLoggedIn == false){
+                        self.setEmailPassword()
+                        AuthenticationService.shared.logIn()
+                    }
+                    
                     print("--성공--")
                     print(self.result.accessToken)
                 }
@@ -214,7 +219,7 @@ class SignInViewModel: ObservableObject {
         self.email = email
         self.password = password
         postSignIn()
-        AuthenticationService.shared.logIn()
+        
         return true
     }
     

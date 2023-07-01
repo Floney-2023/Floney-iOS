@@ -13,6 +13,7 @@ protocol MyPageProtocol {
     func getMyPage() -> AnyPublisher<DataResponse<MyPageResponse, NetworkError>, Never>
     func changeProfile(img: String) -> AnyPublisher<Void, NetworkError>
     func changeNickname(nickname: String) -> AnyPublisher<Void, NetworkError>
+    func logout() -> AnyPublisher<Void, NetworkError>
 }
 
 
@@ -127,4 +128,45 @@ extension MyPage: MyPageProtocol {
         .eraseToAnyPublisher()
         
     }
+    func logout() -> AnyPublisher<Void, NetworkError> {
+
+        let token = Keychain.getKeychainValue(forKey: .accessToken)!
+        let url = "\(Constant.BASE_URL)/users/logout?accessToken=\(token)"
+        print("change nickname : \n\(token)")
+        
+        return AF.request(url,
+                          method: .get,
+                          parameters: nil,
+                          encoding: JSONEncoding.default
+                          )
+        .validate()
+        .publishData()
+        .tryMap { result in
+            // Check the status code
+            if let statusCode = result.response?.statusCode {
+                print("Status Code: \(statusCode)")
+                if statusCode == 200 {
+                    return // Success, return
+                } else {
+                    // Handle error based on status code
+                    let backendError = result.data.flatMap { try? JSONDecoder().decode(BackendError.self, from: $0)}
+
+                    
+                    if let backendError = backendError {
+                        throw NetworkError(initialError: result.error!, backendError: backendError)
+                    } else {
+                        throw NetworkError(initialError: result.error!, backendError: nil)
+                    }
+                }
+            } else {
+                throw NetworkError(initialError: result.error!, backendError: nil)
+            }
+        }
+        .mapError { error in
+            return error as! NetworkError
+        }
+        .eraseToAnyPublisher()
+        
+    }
+
 }

@@ -9,6 +9,9 @@ import SwiftUI
 
 struct UserInformationView: View {
     @StateObject var viewModel = MyPageViewModel()
+    @State var showingLogoutAlert = false
+    @State var title = "로그아웃"
+    @State var message = "로그아웃 하시겠습니끼?"
     var body: some View {
         VStack(spacing:36) {
             VStack(spacing:12) {
@@ -65,8 +68,12 @@ struct UserInformationView: View {
                     Text("로그아웃")
                         .font(.pretendardFont(.medium, size: 14))
                         .foregroundColor(.greyScale2)
+                        .onTapGesture {
+                            self.showingLogoutAlert = true
+                        }
                     Spacer()
                 }
+                
             }
             
             NavigationLink(destination: WithdrawalView()){
@@ -97,8 +104,69 @@ struct UserInformationView: View {
                     .foregroundColor(.greyScale1)
             }
         }
+        .overlay(
+            ZStack {
+                if showingLogoutAlert {
+                    AlertView(isPresented: $showingLogoutAlert, title: $title, message: $message, onOKAction: {viewModel.logout()})
+                }
+            }
+        )
+
     }
 }
+struct AlertView: View {
+    @Binding var isPresented: Bool
+    @Binding var title : String
+    @Binding var message : String
+    var onOKAction: () -> Void
+    //var onCancelAction: () -> Void
+    
+    var body: some View {
+        GeometryReader { geometry in
+            VStack(spacing: 13) {
+                VStack {
+                    Text("\(title)")
+                        .font(.pretendardFont(.semiBold, size: 20))
+                    
+                    
+                    Text("\(message)")
+                        .font(.pretendardFont(.regular, size: 20))
+                        .multilineTextAlignment(.center)
+                }.padding(.vertical, 20)
+                Divider()
+                
+                HStack(alignment: .center) {
+                    Button("OK") {
+                        isPresented = false
+                        onOKAction()
+                    }
+                    .frame(width: geometry.size.width * 0.35)
+                    .font(.pretendardFont(.semiBold, size: 20))
+                    .foregroundColor(.blue1)
+                 
+                    Divider()
+                    Button("Cancel") {
+                        isPresented = false
+                    }
+                    .frame(width: geometry.size.width * 0.35)
+                    .font(.pretendardFont(.semiBold, size: 20))
+                    .foregroundColor(.calendarRed)
+                }.frame(height: 40)
+          
+            }
+            .frame(width: geometry.size.width * 0.8, height: 170)
+            .background(Color.greyScale11)
+            .cornerRadius(16)
+            .shadow(radius: 10)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Color.black.opacity(0.5))
+            .edgesIgnoringSafeArea(.all)
+            .transition(.opacity)
+        }
+
+    }
+}
+
 
 struct UserInformationView_Previews: PreviewProvider {
     static var previews: some View {
