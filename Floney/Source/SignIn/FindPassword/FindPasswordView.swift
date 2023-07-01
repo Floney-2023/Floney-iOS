@@ -9,6 +9,7 @@ import SwiftUI
 
 struct FindPasswordView: View {
     @State var email = ""
+    @StateObject var viewModel = SignInViewModel()
     var body: some View {
         VStack(spacing: 32) {
             HStack {
@@ -37,6 +38,9 @@ struct FindPasswordView: View {
                 Text("인증 메일 보내기")
                     .padding()
                     .withNextButtonFormmating(.primary1)
+                    .onTapGesture {
+                        viewModel.findPassword(email: email)
+                    }
             }
             Spacer()
         }

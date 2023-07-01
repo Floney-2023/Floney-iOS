@@ -62,6 +62,8 @@ protocol SignInProtocol {
 
     func checkKakao(_ token:String) -> AnyPublisher<Bool, Error>
     func checkgoogle(_ token:String) -> AnyPublisher<Bool, Error>
+    
+    func findPassword(email: String) -> AnyPublisher<Void, NetworkError>
 }
 
 class SignIn {
@@ -187,4 +189,45 @@ extension SignIn: SignInProtocol {
         .receive(on: DispatchQueue.main)
         .eraseToAnyPublisher()
     }
+    
+    func findPassword(email: String) -> AnyPublisher<Void, NetworkError> {
+        let url = "\(Constant.BASE_URL)/users/password/find?email=\(email)"
+       
+        let token = Keychain.getKeychainValue(forKey: .accessToken)!
+        
+        return AF.request(url,
+                          method: .get,
+                          parameters: nil,
+                          encoding: JSONEncoding.default)
+                          //headers: ["Authorization":"Bearer \(token)"]
+        .validate()
+        .publishData()
+        .tryMap { result in
+            // Check the status code
+            if let statusCode = result.response?.statusCode {
+                print("Status Code: \(statusCode)")
+                if statusCode == 200 {
+                    return // Success, return
+                } else {
+                    // Handle error based on status code
+                    let backendError = result.data.flatMap { try? JSONDecoder().decode(BackendError.self, from: $0)}
+
+                    
+                    if let backendError = backendError {
+                        throw NetworkError(initialError: result.error!, backendError: backendError)
+                    } else {
+                        throw NetworkError(initialError: result.error!, backendError: nil)
+                    }
+                }
+            } else {
+                throw NetworkError(initialError: result.error!, backendError: nil)
+            }
+        }
+        .mapError { error in
+            return error as! NetworkError
+        }
+        .eraseToAnyPublisher()
+        
+    }
+
 }

@@ -226,6 +226,20 @@ class SignInViewModel: ObservableObject {
         }
         coordinator.signIn()
     }
+    func findPassword(email: String) {
+        dataManager.findPassword(email: email)
+            .sink { completion in
+                switch completion {
+                case .finished:
+                    print("Profile successfully changed.")
+                case .failure(let error):
+                    print("Error finding password: \(error)")
+                }
+            } receiveValue: { data in
+                // TODO: Handle the received data if necessary.
+            }
+            .store(in: &cancellableSet)
+    }
     
     func createAlert( with error: NetworkError) {
         signInLoadingError = error.backendError == nil ? error.initialError.localizedDescription : error.backendError!.message
