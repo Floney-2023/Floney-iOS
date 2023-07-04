@@ -76,6 +76,7 @@ extension SignIn: SignInProtocol {
     func postSignIn(_ parameters:SignInRequest) -> AnyPublisher<DataResponse<SignInResponse, NetworkError>, Never> {
         //  let url = URL(string: "Your_URL")!
         let url = "\(Constant.BASE_URL)/users/login"
+        print(parameters)
         return AF.request(url,
                           method: .post,
                           parameters: parameters,
@@ -122,7 +123,7 @@ extension SignIn: SignInProtocol {
         .eraseToAnyPublisher()
         
     }
-    
+    //MARK: 
     func checkgoogle(_ token: String) -> AnyPublisher<Bool, Error> {
         let url = "\(Constant.BASE_URL)/auth/google/check?token=\(token)"
         
@@ -151,7 +152,7 @@ extension SignIn: SignInProtocol {
         .mapError { $0 as? NetworkError ?? NetworkError(initialError: AFError.explicitlyCancelled, backendError: nil) }
         .eraseToAnyPublisher()
     }
-    
+    //MARK: 카카오 간편 로그인
     func kakaoSignIn(_ token: String) -> AnyPublisher<DataResponse<SignInResponse, NetworkError>, Never> {
         //  let url = URL(string: "Your_URL")!
         let url = "\(Constant.BASE_URL)/auth/kakao/login?token=\(token)"
@@ -170,7 +171,7 @@ extension SignIn: SignInProtocol {
         .receive(on: DispatchQueue.main)
         .eraseToAnyPublisher()
     }
-    
+    //MARK: 구글 간편 로그인
     func googleSignIn(_ token: String) -> AnyPublisher<DataResponse<SignInResponse, NetworkError>, Never> {
         //  let url = URL(string: "Your_URL")!
         let url = "\(Constant.BASE_URL)/auth/google/login?token=\(token)"
@@ -189,7 +190,7 @@ extension SignIn: SignInProtocol {
         .receive(on: DispatchQueue.main)
         .eraseToAnyPublisher()
     }
-    
+    //MARK: 비밀번호 찾기
     func findPassword(email: String) -> AnyPublisher<Void, NetworkError> {
         let url = "\(Constant.BASE_URL)/users/password/find?email=\(email)"
        
@@ -209,10 +210,9 @@ extension SignIn: SignInProtocol {
                 if statusCode == 200 {
                     return // Success, return
                 } else {
+                    
                     // Handle error based on status code
                     let backendError = result.data.flatMap { try? JSONDecoder().decode(BackendError.self, from: $0)}
-
-                    
                     if let backendError = backendError {
                         throw NetworkError(initialError: result.error!, backendError: backendError)
                     } else {

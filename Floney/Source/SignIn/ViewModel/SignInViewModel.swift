@@ -25,6 +25,9 @@ class SignInViewModel: ObservableObject {
     @Published var isNext = false
     @Published var hasJoined: Bool = false
     @Published var token = ""
+    @Published var isShowingBottomSheet = false
+    @Published var isShowingLogin = false
+    @Published var isLoading = false
     
     private var cancellableSet: Set<AnyCancellable> = []
     var dataManager: SignInProtocol
@@ -237,7 +240,11 @@ class SignInViewModel: ObservableObject {
                 switch completion {
                 case .finished:
                     print("Profile successfully changed.")
+                    self.isLoading = false
+                    self.isShowingBottomSheet = true
+                    
                 case .failure(let error):
+                    self.isLoading = false
                     print("Error finding password: \(error)")
                 }
             } receiveValue: { data in

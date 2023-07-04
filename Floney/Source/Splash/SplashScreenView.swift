@@ -14,6 +14,8 @@ struct SplashScreenView: View {
     
     var body: some View {
         if isActive {
+            SignInView()
+            /*
             Group {
                 if AuthenticationService.shared.isUserLoggedIn {
                     MainTabView()
@@ -28,7 +30,7 @@ struct SplashScreenView: View {
             }
             .onAppear {
                 signInViewModel.autoLogin()
-            }
+            }*/
         } else {
             ZStack {
                 Image("splash_bg")

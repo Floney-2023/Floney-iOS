@@ -708,3 +708,65 @@ struct DayLinesBottomSheet: View {
         
     }
 }
+
+//MARK: 친구 초대하기 bottom sheet
+struct PasswordBottomSheet: View{
+    let buttonHeight: CGFloat = 46
+    @Binding var isShowing : Bool
+    @Binding var isShowingLogin : Bool
+    var body: some View{
+        ZStack(alignment: .bottom) {
+            if (isShowing) {
+                Color.black
+                    .opacity(0.7)
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        isShowing.toggle()
+                    }
+                VStack(spacing: 24) {
+                    HStack {
+                        Text("임시 비밀번호가\n발송되었습니다.")
+                            .foregroundColor(.greyScale1)
+                            .font(.pretendardFont(.bold,size: 18))
+                        Spacer()
+                    }
+                    .padding(.top, 24)
+                    
+                    VStack(spacing : 28) {
+                            HStack {
+                                Text("임시 비밀번호로 로그인 후\n새로운 비밀번호로 변경해 주세요.")
+                                    .font(.pretendardFont(.medium, size: 13))
+                                    .foregroundColor(.greyScale6)
+                                Spacer()
+                            }
+                        ButtonLarge(label: "다시 로그인하기",background: .primary1, textColor: .white, strokeColor: .primary1,  fontWeight: .bold, action: {
+                            //let url = firebaseManager.createDynamicLink(for: "A9BC7ACE")!
+                            print("다시 로그인 하기")
+                            //shareUrl = url
+                            isShowing = false
+                            isShowingLogin = true
+                        })
+                        .frame(height: buttonHeight)
+                        
+                        
+                    }
+                   
+                }
+                .padding(.horizontal, 20)
+                .padding(.bottom, 44)
+                .transition(.move(edge: .bottom))
+                .background(
+                    Color(.white)
+                )
+                .cornerRadius(12, corners: [.topLeft, .topRight])
+                
+                
+            }
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
+        .ignoresSafeArea()
+        .animation(.easeInOut, value: isShowing)
+        
+    }
+}
+
