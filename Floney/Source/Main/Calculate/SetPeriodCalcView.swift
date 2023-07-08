@@ -11,12 +11,17 @@ struct SetPeriodCalcView: View {
     @Binding var isShowingCalc : Bool
     @Binding var isShowingPeriod : Bool
     @State var isShowingContent = false
+    @State var isShowingCalendar = false
+    @StateObject var viewModel = CalculateViewModel()
+   
+    @State var text = "기간을 설정해주세요."
+    
     var pageCount = 2
     var pageCountAll = 4
     var nickname = "user1"
     
     var body: some View {
-    
+        ZStack{
             VStack {
                 HStack {
                     Spacer()
@@ -47,7 +52,18 @@ struct SetPeriodCalcView: View {
                         }
                         Spacer()
                     }
-                    
+                    HStack(spacing: 12) {
+                        Image("icon_calendar")
+                        Text("\(text)")
+                            .font(.pretendardFont(.medium, size: 14))
+                            .foregroundColor(.greyScale7)
+                        Spacer()
+                    }.padding(20)
+                        .background(Color.greyScale12)
+                        .cornerRadius(8)
+                        .onTapGesture {
+                            self.isShowingCalendar = true
+                        }
                     
                     Spacer()
                 }
@@ -79,8 +95,10 @@ struct SetPeriodCalcView: View {
             .fullScreenCover(isPresented: $isShowingContent)  {
                 SetContentCalcView(isShowingCalc: $isShowingCalc, isShowingPeriod: $isShowingPeriod, isShowingContent: $isShowingContent)
             }
-        
-
+            if isShowingCalendar {
+                CalendarBottomSheet(isShowing: $isShowingCalendar, viewModel: viewModel)
+            }
+        }
     }
 }
 

@@ -709,7 +709,7 @@ struct DayLinesBottomSheet: View {
     }
 }
 
-//MARK: 친구 초대하기 bottom sheet
+//MARK: 임시 비밀번호 완료 bottom sheet
 struct PasswordBottomSheet: View{
     let buttonHeight: CGFloat = 46
     @Binding var isShowing : Bool
@@ -770,3 +770,140 @@ struct PasswordBottomSheet: View{
     }
 }
 
+//MARK: 캘린더 bottom sheet
+struct CalendarBottomSheet: View{
+    let buttonHeight: CGFloat = 46
+    @Binding var isShowing : Bool
+    @ObservedObject var viewModel : CalculateViewModel
+    
+    @State private var selectedDate: Date?
+    var body: some View{
+        ZStack(alignment: .bottom) {
+            if (isShowing) {
+                Color.black
+                    .opacity(0.7)
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        isShowing.toggle()
+                    }
+                VStack(spacing: 24) {
+                    ScrollView(showsIndicators: false) {
+                        LazyVStack(spacing: 10) {
+                            ForEach((0..<3).reversed(), id: \.self) { index in
+                                let monthOffset = -index
+                                let startDate = Calendar.current.date(byAdding: .month, value: monthOffset, to: Date())!
+                                let endDate = Calendar.current.date(byAdding: .month, value: monthOffset + 1, to: Date())!
+                                
+                                MonthView(startDate: startDate, endDate: endDate, viewModel: viewModel)
+                            }
+                        }
+   
+                    }
+                    HStack {
+                        Spacer()
+                        Button {
+                            isShowing = false
+                        } label: {
+                            Text("선택")
+                                .padding()
+                                .font(.pretendardFont(.bold, size: 14))
+                                .foregroundColor(.white)
+                                .frame(maxWidth: .infinity)
+                                .frame(width: UIScreen.main.bounds.width * 1/2)
+                                .background(Color.primary1)
+                                .cornerRadius(10)
+                        }
+                    }
+
+                }
+                .padding(.horizontal, 24)
+                .padding(.bottom, 44)
+                .frame(height: UIScreen.main.bounds.height * 3/4)
+                .transition(.move(edge: .bottom))
+                .background(
+                    Color(.white)
+                )
+                .cornerRadius(12, corners: [.topLeft, .topRight])
+                
+                
+            }
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
+        .ignoresSafeArea()
+        .animation(.easeInOut, value: isShowing)
+
+    }
+    
+   
+}
+
+struct MonthView: View {
+    let startDate: Date
+    let endDate: Date
+    @ObservedObject var viewModel: CalculateViewModel
+    var body: some View {
+        VStack {
+            HStack {
+                Text("\(formattedMonth(startDate: startDate))")
+                    .font(.pretendardFont(.semiBold, size: 22))
+                    .foregroundColor(.greyScale2)
+                    .padding(.top, 10)
+                Spacer()
+            }
+            //MARK: 요일
+            HStack {
+                ForEach(viewModel.daysOfTheWeek, id: \.self) { day in
+                    Text(day)
+                        .frame(maxWidth: .infinity)
+                        .font(.pretendardFont(.regular, size: 14))
+                        .foregroundColor(.greyScale6)
+                }
+            }.padding(.top, 10)
+
+            
+            LazyVGrid(columns: Array(repeating: GridItem(), count: 7), spacing: 10) {
+                ForEach(daysInMonth(startDate: startDate, endDate: endDate), id: \.self) { day in
+                    Text("\(day)")
+                        .font(.pretendardFont(.regular, size: 14))
+                        .foregroundColor(.greyScale2)
+                }
+            }
+            .padding(.bottom, 10)
+        }.frame(maxWidth: .infinity)
+    }
+    
+    func formattedMonth(startDate: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy.MM"
+        return formatter.string(from: startDate)
+    }
+    
+    func daysInMonth(startDate: Date, endDate: Date) -> [Int] {
+        let calendar = Calendar.current
+        let startComponents = calendar.dateComponents([.year, .month], from: startDate)
+        let endComponents = calendar.dateComponents([.year, .month], from: endDate)
+        
+        guard let startMonth = calendar.date(from: startComponents),
+              let endMonth = calendar.date(from: endComponents) else {
+            return []
+        }
+        
+        let range = calendar.range(of: .day, in: .month, for: startMonth)!
+        let days = range.compactMap { day -> Int? in
+            let dateComponents = DateComponents(year: calendar.component(.year, from: startMonth),
+                                                month: calendar.component(.month, from: startMonth),
+                                                day: day)
+            let date = calendar.date(from: dateComponents)
+            
+            return (date?.isWithinRange(startDate: startDate, endDate: endDate))! ? day : nil
+        }
+        
+        return days
+    }
+}
+
+extension Date {
+    func isWithinRange(startDate: Date, endDate: Date) -> Bool {
+        return (self >= startDate) && (self <= endDate)
+    }
+}

@@ -56,7 +56,7 @@ struct CompleteCalcView: View {
                     .font(.pretendardFont(.bold, size: 14))
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
-                    .frame(width: UIScreen.main.bounds.width * 2/3)
+                    
                     .background(Color.primary1)
             }
             
@@ -68,6 +68,6 @@ struct CompleteCalcView: View {
 
 struct CompleteCalcView_Previews: PreviewProvider {
     static var previews: some View {
-        CompleteCalcView(isShowingCalc: .constant(true)
+        CompleteCalcView(isShowingCalc: .constant(true))
     }
 }
