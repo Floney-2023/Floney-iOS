@@ -51,6 +51,13 @@
 		2FB3DA6C2A5C25FD00E1486D /* CalculateDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB3DA6B2A5C25FD00E1486D /* CalculateDataManager.swift */; };
 		2FB3DA6E2A5C264800E1486D /* SettlementRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB3DA6D2A5C264800E1486D /* SettlementRequest.swift */; };
 		2FB3DA702A5C265700E1486D /* SettlementResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB3DA6F2A5C265700E1486D /* SettlementResponse.swift */; };
+		2FB3DA722A5C867200E1486D /* ExpenseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB3DA712A5C867200E1486D /* ExpenseView.swift */; };
+		2FB3DA742A5C86B800E1486D /* IncomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB3DA732A5C86B800E1486D /* IncomeView.swift */; };
+		2FB3DA762A5C86D800E1486D /* BudgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB3DA752A5C86D800E1486D /* BudgetView.swift */; };
+		2FB3DA782A5C86E800E1486D /* AssetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB3DA772A5C86E800E1486D /* AssetView.swift */; };
+		2FB3DA7B2A5C8F8D00E1486D /* AnalysisResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB3DA7A2A5C8F8D00E1486D /* AnalysisResponse.swift */; };
+		2FB3DA7E2A5C92F700E1486D /* AnalysisViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB3DA7D2A5C92F700E1486D /* AnalysisViewModel.swift */; };
+		2FB3DA812A5C934300E1486D /* AnalysisDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB3DA802A5C934300E1486D /* AnalysisDataManager.swift */; };
 		2FC3B1D02A1CD26A00572804 /* KakaoLoginRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC3B1CF2A1CD26A00572804 /* KakaoLoginRequest.swift */; };
 		2FC3B1D22A1CD2E200572804 /* KakaoLoginResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC3B1D12A1CD2E200572804 /* KakaoLoginResponse.swift */; };
 		2FC3B1D52A25E30A00572804 /* SettingBookView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC3B1D42A25E30A00572804 /* SettingBookView.swift */; };
@@ -175,6 +182,13 @@
 		2FB3DA6B2A5C25FD00E1486D /* CalculateDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculateDataManager.swift; sourceTree = "<group>"; };
 		2FB3DA6D2A5C264800E1486D /* SettlementRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettlementRequest.swift; sourceTree = "<group>"; };
 		2FB3DA6F2A5C265700E1486D /* SettlementResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettlementResponse.swift; sourceTree = "<group>"; };
+		2FB3DA712A5C867200E1486D /* ExpenseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseView.swift; sourceTree = "<group>"; };
+		2FB3DA732A5C86B800E1486D /* IncomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomeView.swift; sourceTree = "<group>"; };
+		2FB3DA752A5C86D800E1486D /* BudgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetView.swift; sourceTree = "<group>"; };
+		2FB3DA772A5C86E800E1486D /* AssetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetView.swift; sourceTree = "<group>"; };
+		2FB3DA7A2A5C8F8D00E1486D /* AnalysisResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalysisResponse.swift; sourceTree = "<group>"; };
+		2FB3DA7D2A5C92F700E1486D /* AnalysisViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalysisViewModel.swift; sourceTree = "<group>"; };
+		2FB3DA802A5C934300E1486D /* AnalysisDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalysisDataManager.swift; sourceTree = "<group>"; };
 		2FC3B1CF2A1CD26A00572804 /* KakaoLoginRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoLoginRequest.swift; sourceTree = "<group>"; };
 		2FC3B1D12A1CD2E200572804 /* KakaoLoginResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoLoginResponse.swift; sourceTree = "<group>"; };
 		2FC3B1D42A25E30A00572804 /* SettingBookView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingBookView.swift; sourceTree = "<group>"; };
@@ -467,6 +481,30 @@
 				2FB3DA6F2A5C265700E1486D /* SettlementResponse.swift */,
 			);
 			path = Entity;
+			sourceTree = "<group>";
+		};
+		2FB3DA792A5C8F7700E1486D /* Entity */ = {
+			isa = PBXGroup;
+			children = (
+				2FB3DA7A2A5C8F8D00E1486D /* AnalysisResponse.swift */,
+			);
+			path = Entity;
+			sourceTree = "<group>";
+		};
+		2FB3DA7C2A5C92E300E1486D /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				2FB3DA7D2A5C92F700E1486D /* AnalysisViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		2FB3DA7F2A5C933300E1486D /* DataManager */ = {
+			isa = PBXGroup;
+			children = (
+				2FB3DA802A5C934300E1486D /* AnalysisDataManager.swift */,
+			);
+			path = DataManager;
 			sourceTree = "<group>";
 		};
 		2FC3B1D32A25E2D600572804 /* SettingBook */ = {
@@ -786,7 +824,14 @@
 		2FEA2BB429BA061D00DE8E54 /* Analysis */ = {
 			isa = PBXGroup;
 			children = (
+				2FB3DA7F2A5C933300E1486D /* DataManager */,
+				2FB3DA7C2A5C92E300E1486D /* ViewModel */,
+				2FB3DA792A5C8F7700E1486D /* Entity */,
 				2FEA2BB929BA066100DE8E54 /* AnalysisView.swift */,
+				2FB3DA712A5C867200E1486D /* ExpenseView.swift */,
+				2FB3DA732A5C86B800E1486D /* IncomeView.swift */,
+				2FB3DA752A5C86D800E1486D /* BudgetView.swift */,
+				2FB3DA772A5C86E800E1486D /* AssetView.swift */,
 			);
 			path = Analysis;
 			sourceTree = "<group>";
@@ -1103,6 +1148,7 @@
 				2FFA302A29EEAE6700412F83 /* SignUpRequest.swift in Sources */,
 				2FE23F6F2A4173E4009FA8CA /* AddViewModel.swift in Sources */,
 				2F28C2D82A4ED61B00894F67 /* SettingBookViewModel.swift in Sources */,
+				2FB3DA722A5C867200E1486D /* ExpenseView.swift in Sources */,
 				2FEA2BB729BA064B00DE8E54 /* HomeView.swift in Sources */,
 				2FC3B1D22A1CD2E200572804 /* KakaoLoginResponse.swift in Sources */,
 				2F1614762A0A32A20029E9A9 /* CalendarRequest.swift in Sources */,
@@ -1119,6 +1165,8 @@
 				2FC3B1D72A25F95600572804 /* ModifyingBookView.swift in Sources */,
 				2FC3B1D02A1CD26A00572804 /* KakaoLoginRequest.swift in Sources */,
 				2FEA2BA229B87A9200DE8E54 /* UserInfoView.swift in Sources */,
+				2FB3DA7B2A5C8F8D00E1486D /* AnalysisResponse.swift in Sources */,
+				2FB3DA782A5C86E800E1486D /* AssetView.swift in Sources */,
 				2FEA2BA529B892CB00DE8E54 /* TextFieldModifier.swift in Sources */,
 				2FEA2BBC29BA066D00DE8E54 /* AddView.swift in Sources */,
 				2FEA2BBE29BA067800DE8E54 /* CalculateView.swift in Sources */,
@@ -1127,6 +1175,7 @@
 				2FFA302C29EEAEB900412F83 /* SignUpResponse.swift in Sources */,
 				2F1614692A0804A50029E9A9 /* CreateBookRequest.swift in Sources */,
 				2FE23F602A39AADA009FA8CA /* CryptManager.swift in Sources */,
+				2FB3DA742A5C86B800E1486D /* IncomeView.swift in Sources */,
 				2F1614812A0A438A0029E9A9 /* AppDelegate.swift in Sources */,
 				2F16146B2A0804B90029E9A9 /* CreateBookResponse.swift in Sources */,
 				2F1614602A07F4DC0029E9A9 /* BookCodeResponse.swift in Sources */,
@@ -1145,6 +1194,7 @@
 				2FF25C9929E80D7E00737346 /* SetBookNameView.swift in Sources */,
 				2F16145E2A07F4CA0029E9A9 /* BookCodeRequest.swift in Sources */,
 				2F16148E2A0A771E0029E9A9 /* MyPageDataManager.swift in Sources */,
+				2FB3DA812A5C934300E1486D /* AnalysisDataManager.swift in Sources */,
 				2F16147E2A0A33B70029E9A9 /* CalendarViewModel.swift in Sources */,
 				2FEA2BCC29C43D9500DE8E54 /* EmailAuthView.swift in Sources */,
 				2FC3B1DF2A2DC80500572804 /* CategoryButton.swift in Sources */,
@@ -1167,6 +1217,7 @@
 				2F1614972A1370B90029E9A9 /* SignInWithAppleCoordinator.swift in Sources */,
 				2FE23F692A417372009FA8CA /* CategoryRequest.swift in Sources */,
 				2FFA303229EEAF6000412F83 /* SignInRequest.swift in Sources */,
+				2FB3DA762A5C86D800E1486D /* BudgetView.swift in Sources */,
 				2FF25C8F29E7EE9D00737346 /* BottomSheet.swift in Sources */,
 				2FB3DA702A5C265700E1486D /* SettlementResponse.swift in Sources */,
 				2F1614892A0A76E70029E9A9 /* MyPageRequest.swift in Sources */,
@@ -1184,6 +1235,7 @@
 				2F28C2E22A556BC100894F67 /* SetContentCalcView.swift in Sources */,
 				2FEA2BD229C4424600DE8E54 /* OTPViewModel.swift in Sources */,
 				2FE23F5E2A336CF5009FA8CA /* PermissionManager.swift in Sources */,
+				2FB3DA7E2A5C92F700E1486D /* AnalysisViewModel.swift in Sources */,
 				2F28C2DA2A4ED63900894F67 /* SettingBookRequest.swift in Sources */,
 				2F1614782A0A32AF0029E9A9 /* CalendarResponse.swift in Sources */,
 				2FD7F3B629B1E42400B99CAA /* Constant.swift in Sources */,

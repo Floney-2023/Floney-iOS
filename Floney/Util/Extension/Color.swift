@@ -63,6 +63,14 @@ extension Color {
     static let blue1 = Color(hex: "114EEE")
     static let blue2 = Color(hex: "4373F1")
     static let blue3 = Color(hex: "A0B8F8")
+    static let blue4 = Color(hex: "99C4FF")
+    static let blue5 = Color(hex: "CCE1FF")
+    
+    static let orange1 = Color(hex: "CE4A00")
+    static let orange2 = Color(hex: "FF5C00")
+    static let orange3 = Color(hex: "FF965B")
+    static let orange4 = Color(hex: "FFBE99")
+    static let orange5 = Color(hex: "FFDECC")
     
     static let indigo1 = Color(hex: "35347F")
     static let indigo2 = Color(hex: "4A48B0")

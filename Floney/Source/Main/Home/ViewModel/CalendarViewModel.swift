@@ -55,6 +55,7 @@ class CalendarViewModel: ObservableObject {
         self.dataManager = dataManager
         self.calcToday()
         self.calcDate(Date())
+        Keychain.setKeychain("eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJydWRhbHN3aGRrMTJAbmF2ZXIuY29tIiwiaWF0IjoxNjg5MDE5MzExLCJleHAiOjE2ODkwMjI5MTF9.rxAQM2ewEPfF6h_jdaZyDC2iu2r2mRd9tR7bRi8kfzuLENXYDElWZznds36D1w0G", forKey: .accessToken)
     }
     
     //MARK: server
