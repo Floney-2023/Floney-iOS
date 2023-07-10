@@ -12,7 +12,7 @@ struct SetPeriodCalcView: View {
     @Binding var isShowingPeriod : Bool
     @State var isShowingContent = false
     @State var isShowingCalendar = false
-    @StateObject var viewModel = CalculateViewModel()
+    @ObservedObject var viewModel : CalculateViewModel
    
     @State var text = "기간을 설정해주세요."
     
@@ -93,7 +93,7 @@ struct SetPeriodCalcView: View {
                 
             }
             .fullScreenCover(isPresented: $isShowingContent)  {
-                SetContentCalcView(isShowingCalc: $isShowingCalc, isShowingPeriod: $isShowingPeriod, isShowingContent: $isShowingContent)
+                SetContentCalcView(isShowingCalc: $isShowingCalc, isShowingPeriod: $isShowingPeriod, isShowingContent: $isShowingContent, viewModel: viewModel)
             }
             if isShowingCalendar {
                 CalendarBottomSheet(isShowing: $isShowingCalendar, viewModel: viewModel)
@@ -104,6 +104,6 @@ struct SetPeriodCalcView: View {
 
 struct SetPeriodCalcView_Previews: PreviewProvider {
     static var previews: some View {
-        SetPeriodCalcView(isShowingCalc: .constant(true), isShowingPeriod: .constant(true))
+        SetPeriodCalcView(isShowingCalc: .constant(true), isShowingPeriod: .constant(true), viewModel: CalculateViewModel())
     }
 }

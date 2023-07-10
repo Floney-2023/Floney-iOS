@@ -12,6 +12,13 @@ struct SetContentCalcView: View {
     @Binding var isShowingPeriod : Bool
     @Binding var isShowingContent : Bool
     @State var isShowingComplete = false
+    
+    @ObservedObject var viewModel : CalculateViewModel
+    
+    @State var list : [SettlementResponse] = [
+    SettlementResponse(money: 6000, category: ["체크카드","카페/간식"], assetType: "OUTCOME", content: "Cake", img: nil),
+    SettlementResponse(money: 4500, category: ["체크카드","카페/간식"], assetType: "OUTCOME", content: "커피", img: nil)
+    ]
     var pageCount = 3
     var pageCountAll = 4
     
@@ -44,7 +51,28 @@ struct SetContentCalcView: View {
                             .font(.pretendardFont(.bold, size: 22))
                             .foregroundColor(.greyScale1)
                     }
+                    
+                    
                     Spacer()
+                }
+                VStack {
+                    ForEach(list, id: \.self) { item in
+                        HStack {
+                            Image("icon_check_circle_disabled")
+                            VStack(alignment: .leading) {
+                                Text("\(item.content)")
+                                    .font(.pretendardFont(.medium, size: 14))
+                                    .foregroundColor(.greyScale2)
+                                Text("\(item.category[0]) ‧ \(item.category[1])")
+                                    .font(.pretendardFont(.medium, size: 12))
+                                    .foregroundColor(.greyScale6)
+                            }
+                            Spacer()
+                            Text("\(item.money)원")
+                                .font(.pretendardFont(.medium, size: 14))
+                                .foregroundColor(.greyScale2)
+                        }
+                    }
                 }
                 
                 
@@ -75,6 +103,12 @@ struct SetContentCalcView: View {
             }
             
         }
+        .onAppear{
+            //viewModel.userList = ["rudalswhdk12@naver.com"]
+            //viewModel.startDateStr = "2023-06-01"
+            //viewModel.endDateStr = "2023-07-08"
+            //viewModel.getSettlements()
+        }
         .fullScreenCover(isPresented: $isShowingComplete) {
             CompleteCalcView(isShowingCalc: $isShowingCalc)
         }
@@ -85,6 +119,6 @@ struct SetContentCalcView: View {
 
 struct SetContentCalcView_Previews: PreviewProvider {
     static var previews: some View {
-        SetContentCalcView(isShowingCalc: .constant(true), isShowingPeriod: .constant(true), isShowingContent: .constant(true))
+        SetContentCalcView(isShowingCalc: .constant(true), isShowingPeriod: .constant(true), isShowingContent: .constant(true), viewModel: CalculateViewModel())
     }
 }

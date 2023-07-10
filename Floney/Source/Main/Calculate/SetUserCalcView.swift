@@ -10,6 +10,7 @@ import SwiftUI
 struct SetUserCalcView: View {
     @Binding var isShowingCalc : Bool
     @State var isShowingPeriod = false
+    @StateObject var viewModel = CalculateViewModel()
     var pageCount = 1
     var pageCountAll = 4
     var nickname = "user1"
@@ -96,7 +97,7 @@ struct SetUserCalcView: View {
                         }
             }
             .fullScreenCover(isPresented: $isShowingPeriod)  {
-                SetPeriodCalcView(isShowingCalc: $isShowingCalc, isShowingPeriod: $isShowingPeriod)
+                SetPeriodCalcView(isShowingCalc: $isShowingCalc, isShowingPeriod: $isShowingPeriod, viewModel: viewModel)
                     
             }
     

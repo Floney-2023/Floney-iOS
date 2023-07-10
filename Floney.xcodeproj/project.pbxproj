@@ -48,6 +48,9 @@
 		2F28C2E22A556BC100894F67 /* SetContentCalcView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F28C2E12A556BC100894F67 /* SetContentCalcView.swift */; };
 		2F28C2E42A55723900894F67 /* CompleteCalcView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F28C2E32A55723900894F67 /* CompleteCalcView.swift */; };
 		2F28C2E72A55814200894F67 /* CalculateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F28C2E62A55814200894F67 /* CalculateViewModel.swift */; };
+		2FB3DA6C2A5C25FD00E1486D /* CalculateDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB3DA6B2A5C25FD00E1486D /* CalculateDataManager.swift */; };
+		2FB3DA6E2A5C264800E1486D /* SettlementRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB3DA6D2A5C264800E1486D /* SettlementRequest.swift */; };
+		2FB3DA702A5C265700E1486D /* SettlementResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB3DA6F2A5C265700E1486D /* SettlementResponse.swift */; };
 		2FC3B1D02A1CD26A00572804 /* KakaoLoginRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC3B1CF2A1CD26A00572804 /* KakaoLoginRequest.swift */; };
 		2FC3B1D22A1CD2E200572804 /* KakaoLoginResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC3B1D12A1CD2E200572804 /* KakaoLoginResponse.swift */; };
 		2FC3B1D52A25E30A00572804 /* SettingBookView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC3B1D42A25E30A00572804 /* SettingBookView.swift */; };
@@ -169,6 +172,9 @@
 		2F28C2E12A556BC100894F67 /* SetContentCalcView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetContentCalcView.swift; sourceTree = "<group>"; };
 		2F28C2E32A55723900894F67 /* CompleteCalcView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompleteCalcView.swift; sourceTree = "<group>"; };
 		2F28C2E62A55814200894F67 /* CalculateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculateViewModel.swift; sourceTree = "<group>"; };
+		2FB3DA6B2A5C25FD00E1486D /* CalculateDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculateDataManager.swift; sourceTree = "<group>"; };
+		2FB3DA6D2A5C264800E1486D /* SettlementRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettlementRequest.swift; sourceTree = "<group>"; };
+		2FB3DA6F2A5C265700E1486D /* SettlementResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettlementResponse.swift; sourceTree = "<group>"; };
 		2FC3B1CF2A1CD26A00572804 /* KakaoLoginRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoLoginRequest.swift; sourceTree = "<group>"; };
 		2FC3B1D12A1CD2E200572804 /* KakaoLoginResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoLoginResponse.swift; sourceTree = "<group>"; };
 		2FC3B1D42A25E30A00572804 /* SettingBookView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingBookView.swift; sourceTree = "<group>"; };
@@ -444,6 +450,23 @@
 				2F28C2E62A55814200894F67 /* CalculateViewModel.swift */,
 			);
 			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		2FB3DA692A5C25E300E1486D /* DataManager */ = {
+			isa = PBXGroup;
+			children = (
+				2FB3DA6B2A5C25FD00E1486D /* CalculateDataManager.swift */,
+			);
+			path = DataManager;
+			sourceTree = "<group>";
+		};
+		2FB3DA6A2A5C25EC00E1486D /* Entity */ = {
+			isa = PBXGroup;
+			children = (
+				2FB3DA6D2A5C264800E1486D /* SettlementRequest.swift */,
+				2FB3DA6F2A5C265700E1486D /* SettlementResponse.swift */,
+			);
+			path = Entity;
 			sourceTree = "<group>";
 		};
 		2FC3B1D32A25E2D600572804 /* SettingBook */ = {
@@ -737,6 +760,8 @@
 		2FEA2BB229BA060500DE8E54 /* Calculate */ = {
 			isa = PBXGroup;
 			children = (
+				2FB3DA6A2A5C25EC00E1486D /* Entity */,
+				2FB3DA692A5C25E300E1486D /* DataManager */,
 				2F28C2E52A55812700894F67 /* ViewModel */,
 				2FEA2BBD29BA067800DE8E54 /* CalculateView.swift */,
 				2F28C2DD2A55605B00894F67 /* SetUserCalcView.swift */,
@@ -1143,6 +1168,7 @@
 				2FE23F692A417372009FA8CA /* CategoryRequest.swift in Sources */,
 				2FFA303229EEAF6000412F83 /* SignInRequest.swift in Sources */,
 				2FF25C8F29E7EE9D00737346 /* BottomSheet.swift in Sources */,
+				2FB3DA702A5C265700E1486D /* SettlementResponse.swift in Sources */,
 				2F1614892A0A76E70029E9A9 /* MyPageRequest.swift in Sources */,
 				2FE23F622A39B981009FA8CA /* FirebaseManager.swift in Sources */,
 				2F1614552A07CFE20029E9A9 /* Keychain.swift in Sources */,
@@ -1162,9 +1188,11 @@
 				2F1614782A0A32AF0029E9A9 /* CalendarResponse.swift in Sources */,
 				2FD7F3B629B1E42400B99CAA /* Constant.swift in Sources */,
 				2F16146D2A0804CA0029E9A9 /* CreateBookDataManager.swift in Sources */,
+				2FB3DA6C2A5C25FD00E1486D /* CalculateDataManager.swift in Sources */,
 				2FEA2BBA29BA066100DE8E54 /* AnalysisView.swift in Sources */,
 				2FD7F3C929B1E52C00B99CAA /* SplashScreenView.swift in Sources */,
 				2F28C2E02A55689000894F67 /* SetPeriodCalcView.swift in Sources */,
+				2FB3DA6E2A5C264800E1486D /* SettlementRequest.swift in Sources */,
 				2F16148B2A0A76F20029E9A9 /* MyPageResponse.swift in Sources */,
 				2F1614702A0804E30029E9A9 /* CreateBookViewModel.swift in Sources */,
 				2FC3B1D92A25F9F200572804 /* SetBookProfileImageView.swift in Sources */,
