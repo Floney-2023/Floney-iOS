@@ -68,7 +68,7 @@ struct SetContentCalcView: View {
                                     .foregroundColor(.greyScale6)
                             }
                             Spacer()
-                            Text("\(item.money)원")
+                            Text("\(Int(item.money))원")
                                 .font(.pretendardFont(.medium, size: 14))
                                 .foregroundColor(.greyScale2)
                         }
