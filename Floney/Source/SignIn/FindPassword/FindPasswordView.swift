@@ -56,14 +56,10 @@ struct FindPasswordView: View {
                 // Hide the keyboard
                 UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
             }
-            .onAppear {
-                // Set the TextField as the first responder
-                DispatchQueue.main.async {
-                    UIApplication.shared.windows.first?.rootViewController?.view.endEditing(false)
-                }
-            }
+            .onAppear(perform : UIApplication.shared.hideKeyboard)
             // 내용을 불투명한 배경으로 가리는 로딩 화면
             if viewModel.isLoading {
+                /*
                 Color.black.opacity(0.4)
                     .ignoresSafeArea()
                     .overlay(
@@ -71,6 +67,8 @@ struct FindPasswordView: View {
                             .progressViewStyle(CircularProgressViewStyle(tint: .white))
                             .scaleEffect(1.5)
                     )
+                 */
+                LoadingView()
             }
             
             PasswordBottomSheet(isShowing: $viewModel.isShowingBottomSheet, isShowingLogin: $viewModel.isShowingLogin)

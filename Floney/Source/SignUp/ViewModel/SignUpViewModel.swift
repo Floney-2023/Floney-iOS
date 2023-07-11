@@ -35,7 +35,7 @@ class SignUpViewModel: ObservableObject {
     }
     
     func postSignUp() {
-        let request = SignUpRequest(email: email, password: password, nickname: nickname, marketingAgree: marketingAgree, provider: provider)
+        let request = SignUpRequest(email: email, password: password, nickname: nickname)
         dataManager.postSignUp(request)
             .sink { (dataResponse) in
                 if dataResponse.error != nil {
@@ -56,7 +56,7 @@ class SignUpViewModel: ObservableObject {
             }.store(in: &cancellableSet)
     }
     func kakaoSignUp(_ token: String) {
-        let request = SignUpRequest(email: email, password: password, nickname: nickname, marketingAgree: marketingAgree, provider: provider)
+        let request = SignUpRequest(email: email, password: password, nickname: nickname)
         dataManager.kakaoSignUp(request, token)
             .sink { (dataResponse) in
                 if dataResponse.error != nil {
@@ -75,7 +75,7 @@ class SignUpViewModel: ObservableObject {
             }.store(in: &cancellableSet)
     }
     func googleSignUp(_ token: String) {
-        let request = SignUpRequest(email: email, password: password, nickname: nickname, marketingAgree: marketingAgree, provider: provider)
+        let request = SignUpRequest(email: email, password: password, nickname: nickname)
         dataManager.googleSignUp(request, token)
             .sink { (dataResponse) in
                 if dataResponse.error != nil {

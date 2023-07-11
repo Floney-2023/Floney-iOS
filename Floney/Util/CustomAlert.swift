@@ -108,18 +108,19 @@ struct CustomAlertView: View {
                     }.padding(.leading)
                     
                 }
-                .frame(width: 330, height: 46)
+                .frame(width: 360, height: 46)
                 .background(Color.black.opacity(0.8))
                 .cornerRadius(10)
                 .shadow(radius: 10)
                 .animation(.easeInOut, value: isPresented)
+                .transition(.move(edge: .bottom))
                 .onAppear {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                         isPresented = false
                     }
                 }
             }
-            .padding()
+            
         }
     }
     

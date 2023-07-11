@@ -8,47 +8,48 @@ import SwiftUI
 import Combine
 
 class ServiceAgreementViewModel: ObservableObject {
-    //var marketingAgree = 0
-    
+    @Published var showAlert: Bool = false
     @Published var isTerm1Agreed: Bool = false {
-        didSet {
-            updateAllAgreed()
-        }
-    }
-    @Published var isTerm2Agreed: Bool = false {
-        didSet {
-            updateAllAgreed()
-        }
-    }
-    @Published var isTerm3Agreed: Bool = false {
-        didSet {
-            updateAllAgreed()
-        }
-    }
-    /*
-    @Published var isOptionalTermAgreed: Bool = false {
-        didSet {
-            if self.isOptionalTermAgreed {
-                marketingAgree = 1
-            } else {
-                marketingAgree = 0
+        willSet {
+            if newValue != isTerm1Agreed {
+                DispatchQueue.main.async {
+                    self.isAllAgreed = self.isTerm1Agreed && self.isTerm2Agreed && self.isTerm3Agreed
+                }
             }
         }
-    }*/
+    }
     
-    @Published var isAllAgreed: Bool = false {
-        didSet {
-            if isAllAgreed {
-                isTerm1Agreed = true
-                isTerm2Agreed = true
-                isTerm3Agreed = true
-                //isOptionalTermAgreed = true
+    @Published var isTerm2Agreed: Bool = false {
+        willSet {
+            if newValue != isTerm2Agreed {
+                DispatchQueue.main.async {
+                    self.isAllAgreed = self.isTerm1Agreed && self.isTerm2Agreed && self.isTerm3Agreed
+                }
+            }
+        }
+    }
+    
+    @Published var isTerm3Agreed: Bool = false {
+        willSet {
+            if newValue != isTerm3Agreed {
+                DispatchQueue.main.async {
+                    self.isAllAgreed = self.isTerm1Agreed && self.isTerm2Agreed && self.isTerm3Agreed
+                }
             }
         }
     }
 
-    private func updateAllAgreed() {
-        isAllAgreed = isTerm1Agreed && isTerm2Agreed
-                    && isTerm3Agreed
+    @Published var isAllAgreed: Bool = false {
+        willSet {
+            if newValue == false && newValue != isAllAgreed {
+                isTerm1Agreed = newValue
+                isTerm2Agreed = newValue
+                isTerm3Agreed = newValue
+            } else if newValue == true {
+                isTerm1Agreed = newValue
+                isTerm2Agreed = newValue
+                isTerm3Agreed = newValue
+            }
+        }
     }
 }

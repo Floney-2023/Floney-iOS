@@ -60,6 +60,7 @@
 		2FB3DA812A5C934300E1486D /* AnalysisDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB3DA802A5C934300E1486D /* AnalysisDataManager.swift */; };
 		2FB3DA832A5D722E00E1486D /* CategoryManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB3DA822A5D722E00E1486D /* CategoryManagementView.swift */; };
 		2FB3DA852A5D7AFC00E1486D /* AddCategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB3DA842A5D7AFC00E1486D /* AddCategoryView.swift */; };
+		2FB3DA872A5DB59E00E1486D /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB3DA862A5DB59E00E1486D /* LoadingView.swift */; };
 		2FC3B1D02A1CD26A00572804 /* KakaoLoginRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC3B1CF2A1CD26A00572804 /* KakaoLoginRequest.swift */; };
 		2FC3B1D22A1CD2E200572804 /* KakaoLoginResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC3B1D12A1CD2E200572804 /* KakaoLoginResponse.swift */; };
 		2FC3B1D52A25E30A00572804 /* SettingBookView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC3B1D42A25E30A00572804 /* SettingBookView.swift */; };
@@ -193,6 +194,7 @@
 		2FB3DA802A5C934300E1486D /* AnalysisDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalysisDataManager.swift; sourceTree = "<group>"; };
 		2FB3DA822A5D722E00E1486D /* CategoryManagementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryManagementView.swift; sourceTree = "<group>"; };
 		2FB3DA842A5D7AFC00E1486D /* AddCategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCategoryView.swift; sourceTree = "<group>"; };
+		2FB3DA862A5DB59E00E1486D /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		2FC3B1CF2A1CD26A00572804 /* KakaoLoginRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoLoginRequest.swift; sourceTree = "<group>"; };
 		2FC3B1D12A1CD2E200572804 /* KakaoLoginResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoLoginResponse.swift; sourceTree = "<group>"; };
 		2FC3B1D42A25E30A00572804 /* SettingBookView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingBookView.swift; sourceTree = "<group>"; };
@@ -592,6 +594,7 @@
 		2FD7F3AA29B1E39400B99CAA /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				2FB3DA862A5DB59E00E1486D /* LoadingView.swift */,
 				2F28C2D02A4C228600894F67 /* AuthenticationService.swift */,
 				2FE23F632A39DAF6009FA8CA /* ShareView.swift */,
 				2FE23F612A39B981009FA8CA /* FirebaseManager.swift */,
@@ -1167,6 +1170,7 @@
 				2FF25C8629E181C000737346 /* SendBookCodeView.swift in Sources */,
 				2F146A6A2A14B6980089AB3D /* TokenReissueViewModel.swift in Sources */,
 				2FEA2BA029B8685E00DE8E54 /* BackButton.swift in Sources */,
+				2FB3DA872A5DB59E00E1486D /* LoadingView.swift in Sources */,
 				2F28C2D62A4ED60E00894F67 /* SettingBookDataManager.swift in Sources */,
 				2FE23F6B2A417380009FA8CA /* CategoryResponse.swift in Sources */,
 				2FC3B1D72A25F95600572804 /* ModifyingBookView.swift in Sources */,

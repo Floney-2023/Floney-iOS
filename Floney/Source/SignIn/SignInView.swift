@@ -72,7 +72,7 @@ struct SignInView: View {
                                 }
                             }
                             //ServiceAgreementView()
-                            NavigationLink(destination: SetBookNameView()){
+                            NavigationLink(destination: ServiceAgreementView()){
                                 VStack {
                                     Text("회원가입 하기")
                                         .font(.pretendardFont(.regular, size: 12))
@@ -165,18 +165,6 @@ struct SignInView: View {
                 }
                 CustomAlertView(message: viewModel.errorMessage, isPresented: $viewModel.showAlert)
             }
-            /*
-             .onTapGesture {
-             // Hide the keyboard
-             UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-             }
-             .onAppear {
-             // Set the TextField as the first responder
-             DispatchQueue.main.async {
-             UIApplication.shared.windows.first?.rootViewController?.view.endEditing(false)
-             }
-             
-             }*/
             .onAppear(perform : UIApplication.shared.hideKeyboard)
             /*
             .fullScreenCover(isPresented: $viewModel.isUserLoggedIn) {
