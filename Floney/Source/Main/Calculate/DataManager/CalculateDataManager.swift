@@ -21,7 +21,7 @@ class CalculateService {
 extension CalculateService: CalculateProtocol {
     func getSettlements(_ parameters:SettlementRequest) -> AnyPublisher<DataResponse<[SettlementResponse], NetworkError>, Never> {
         
-        let url = "\(Constant.BASE_URL)/books/settlements"
+        let url = "\(Constant.BASE_URL)/books/outcomes"
         let token = Keychain.getKeychainValue(forKey: .accessToken)!
         
         return AF.request(url,

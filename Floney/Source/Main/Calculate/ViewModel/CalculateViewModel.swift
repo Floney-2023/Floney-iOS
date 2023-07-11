@@ -32,7 +32,7 @@ class CalculateViewModel : ObservableObject {
     }
     //MARK: server
     func getSettlements() {
-        let request = SettlementRequest(usersEmails: userList, startDate: startDateStr, endDate: endDateStr)
+        let request = SettlementRequest(usersEmails: userList, dates: SettlementDate(startDate: startDateStr, endDate: endDateStr))
         dataManager.getSettlements(request)
             .sink { (dataResponse) in
                 if dataResponse.error != nil {

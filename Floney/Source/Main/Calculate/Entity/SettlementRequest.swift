@@ -9,6 +9,9 @@ import Foundation
 
 struct SettlementRequest : Encodable {
     var usersEmails : [String]
+    var dates : SettlementDate
+}
+struct SettlementDate : Encodable {
     var startDate : String
     var endDate : String
 }
