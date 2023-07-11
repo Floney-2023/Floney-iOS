@@ -12,3 +12,8 @@ struct ExpenseResponse: Decodable, Hashable {
     var percentage : Int
     var money : Float
 }
+
+struct AssetData : Decodable, Hashable{
+    let month: String
+    let amount: Double
+}

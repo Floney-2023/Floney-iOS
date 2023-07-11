@@ -28,7 +28,7 @@ struct IncomeView: View {
                             .foregroundColor(.greyScale6)
                     }
                     Spacer()
-                    Image("expense")
+                    Image("income")
                 }
             }
             
