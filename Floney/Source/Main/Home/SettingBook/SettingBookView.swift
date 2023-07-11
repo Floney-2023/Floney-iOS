@@ -166,6 +166,14 @@ struct SettingBookView: View {
                         
                     }
                     HStack {
+                        Text("분류항목 관리")
+                            .font(.pretendardFont(.bold,size: 16))
+                            .foregroundColor(.greyScale1)
+                        Spacer()
+                        Image("forward_button")
+                        
+                    }
+                    HStack {
                         Text("화폐 설정")
                             .font(.pretendardFont(.bold,size: 16))
                             .foregroundColor(.greyScale1)

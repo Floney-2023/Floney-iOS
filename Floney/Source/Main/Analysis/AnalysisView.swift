@@ -51,32 +51,32 @@ struct AnalysisView: View {
                 .pickerStyle(SegmentedPickerStyle())
                 .padding()*/
                 HStack(spacing: 0) {
-                            ForEach(options.indices, id:\.self) { index in
-                                ZStack {
-                                    Rectangle()
-                                        .fill(Color.greyScale12)
-                                    Rectangle()
-                                        .fill(Color.white)
-                                        .cornerRadius(6)
-                                        .padding(4)
-                                        .opacity(selectedOptions == index ? 1 : 0.01)
-                                        .onTapGesture {
-                                                withAnimation(.interactiveSpring()) {
-                                                    selectedOptions = index
-                                                }
-                                            }
+                    ForEach(options.indices, id:\.self) { index in
+                        ZStack {
+                            Rectangle()
+                                .fill(Color.greyScale12)
+                            Rectangle()
+                                .fill(Color.white)
+                                .cornerRadius(6)
+                                .padding(4)
+                                .opacity(selectedOptions == index ? 1 : 0.01)
+                                .onTapGesture {
+                                    withAnimation(.interactiveSpring()) {
+                                        selectedOptions = index
+                                    }
                                 }
-                                .overlay(
-                                    Text(options[index])
-                                        .font(.pretendardFont(.semiBold, size: 14))
-                                        .foregroundColor(selectedOptions == index ? .greyScale2: .greyScale8)
-                                )
-                            }
                         }
-                        .frame(height: 38)
-                        .cornerRadius(8)
-                        .padding(.horizontal, 16)
-                                
+                        .overlay(
+                            Text(options[index])
+                                .font(.pretendardFont(.semiBold, size: 14))
+                                .foregroundColor(selectedOptions == index ? .greyScale2: .greyScale8)
+                        )
+                    }
+                }
+                .frame(height: 38)
+                .cornerRadius(8)
+                .padding(.horizontal, 16)
+                
                 switch selectedOptions {
                 case 0:
                     ExpenseView(viewModel: viewModel)

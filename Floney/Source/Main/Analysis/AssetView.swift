@@ -17,52 +17,53 @@ struct AssetView: View {
             AssetData(month: "이번달", amount: 4800)
         ]
     var body: some View {
-        VStack(spacing: 42) {
-            VStack(alignment:.leading, spacing: 0){
-                Text("나의 자산이")
-                    .font(.pretendardFont(.bold,size: 22))
-                    .foregroundColor(.greyScale1)
-                HStack{
-                    VStack(alignment:.leading, spacing: 10) {
-                        Text("지난달보다 증가했어요")
-                            .font(.pretendardFont(.bold,size: 22))
-                            .foregroundColor(.greyScale1)
-                        Text("지난달 대비 100,000원\n증가했어요")
-                            .font(.pretendardFont(.medium,size: 13))
-                            .foregroundColor(.greyScale6)
-                    }
-                    Spacer()
-                    Image("asset")
-                }
-            }
-                .padding(.horizontal, 24)
-            
-            HStack(alignment: .bottom, spacing: 40) {
-                ForEach(assetData.indices) { index in
-                    VStack {
+        ScrollView(showsIndicators: false){
+            VStack(spacing: 42) {
+                VStack(alignment:.leading, spacing: 0){
+                    Text("나의 자산이")
+                        .font(.pretendardFont(.bold,size: 22))
+                        .foregroundColor(.greyScale1)
+                    HStack{
+                        VStack(alignment:.leading, spacing: 10) {
+                            Text("지난달보다 증가했어요")
+                                .font(.pretendardFont(.bold,size: 22))
+                                .foregroundColor(.greyScale1)
+                            Text("지난달 대비 100,000원\n증가했어요")
+                                .font(.pretendardFont(.medium,size: 13))
+                                .foregroundColor(.greyScale6)
+                        }
                         Spacer()
-                        Rectangle()
-                            .fill(index == self.assetData.count - 1 ? Color.primary1 : Color.greyScale10)
-                            .frame(width: 20, height: CGFloat(self.assetData[index].amount) / 1000.0)
-                        Text("\(self.assetData[index].month)")
-                            .font(.pretendardFont(.medium, size: 12))
-                            .foregroundColor(.greyScale6)
+                        Image("asset")
                     }
                 }
-            }.frame(height: 200)
-               
-            VStack(alignment: .leading, spacing: 42) {
-                HStack {
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text("현재자산")
-                            .font(.pretendardFont(.medium, size: 14))
-                            .foregroundColor(.greyScale6)
-                        Text("1,100,000원")
-                            .font(.pretendardFont(.bold, size: 20))
-                            .foregroundColor(.greyScale2)
+                .padding(.horizontal, 24)
+                
+                HStack(alignment: .bottom, spacing: 40) {
+                    ForEach(assetData.indices) { index in
+                        VStack {
+                            Spacer()
+                            Rectangle()
+                                .fill(index == self.assetData.count - 1 ? Color.primary1 : Color.greyScale10)
+                                .frame(width: 20, height: CGFloat(self.assetData[index].amount) / 1000.0)
+                            Text("\(self.assetData[index].month)")
+                                .font(.pretendardFont(.medium, size: 12))
+                                .foregroundColor(.greyScale6)
+                        }
                     }
-                    Spacer()
-                }
+                }.frame(height: 200)
+                
+                VStack(alignment: .leading, spacing: 42) {
+                    HStack {
+                        VStack(alignment: .leading, spacing: 12) {
+                            Text("현재자산")
+                                .font(.pretendardFont(.medium, size: 14))
+                                .foregroundColor(.greyScale6)
+                            Text("1,100,000원")
+                                .font(.pretendardFont(.bold, size: 20))
+                                .foregroundColor(.greyScale2)
+                        }
+                        Spacer()
+                    }
                     VStack(alignment: .leading, spacing: 12) {
                         Text("초기자산")
                             .font(.pretendardFont(.medium, size: 14))
@@ -71,16 +72,16 @@ struct AssetView: View {
                             .font(.pretendardFont(.bold, size: 20))
                             .foregroundColor(.greyScale2)
                     }
-                  
+                    
+                    
+                    
+                }
+                .padding(.horizontal, 24)
                 
                 
+                Spacer()
             }
-            .padding(.horizontal, 24)
-            
-            
-            Spacer()
         }
-       
         
     }
 }
