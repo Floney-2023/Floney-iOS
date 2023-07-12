@@ -16,6 +16,7 @@ struct BudgetView: View {
                 Text("현재 예산의")
                     .font(.pretendardFont(.bold,size: 22))
                     .foregroundColor(.greyScale1)
+                    .padding(.bottom,10)
                 HStack{
                     VStack(alignment:.leading, spacing: 10) {
                         Text("60%를 사용했어요")

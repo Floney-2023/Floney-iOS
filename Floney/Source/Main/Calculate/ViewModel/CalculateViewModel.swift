@@ -7,6 +7,13 @@
 
 import Foundation
 import Combine
+
+struct YearMonthDuration {
+  let year: Int
+  let month: Int
+}
+
+
 class CalculateViewModel : ObservableObject {
     var tokenViewModel = TokenReissueViewModel()
     @Published var addLoadingError: String = ""
@@ -14,15 +21,22 @@ class CalculateViewModel : ObservableObject {
     
     @Published var userList : [String] = []
     
-    @Published var startDate : Date = Date()
-    @Published var endDate : Date = Date()
+    @Published var startDate : Date? = Date()
+    @Published var endDate : Date? = Date()
     @Published var startDateStr : String = ""
     @Published var endDateStr : String = ""
     @Published var daysOfTheWeek = ["일","월","화","수","목","금","토"]
     
-    
     @Published var lines : [SettlementResponse] = []
+    @Published var selectedDates: [Date] = []
     
+    @Published var selectedDate: Date = Date()
+    
+    @Published var yearMonth = YearMonthDuration(year: Date().year, month: Date().month) {
+        didSet {
+            selectedDate = Date.from(year: yearMonth.year, month: yearMonth.month)
+        }
+    }
     private var cancellableSet: Set<AnyCancellable> = []
     var dataManager: CalculateProtocol
     

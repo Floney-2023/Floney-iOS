@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+
+
 struct SetPeriodCalcView: View {
     @Binding var isShowingCalc : Bool
     @Binding var isShowingPeriod : Bool

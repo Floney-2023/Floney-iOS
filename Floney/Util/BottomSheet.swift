@@ -7,6 +7,7 @@
 
 
 import SwiftUI
+//import UIKit
 
 enum BottomSheetType: Int {
     case accountBook = 0
@@ -771,13 +772,14 @@ struct PasswordBottomSheet: View{
 }
 
 //MARK: 캘린더 bottom sheet
-struct CalendarBottomSheet: View{
+struct CalendarBottomSheet: View {
     let buttonHeight: CGFloat = 46
     @Binding var isShowing : Bool
     @ObservedObject var viewModel : CalculateViewModel
+    @State var pickerPresented = false
     
-    @State private var selectedDate: Date?
-    var body: some View{
+    
+    var body: some View {
         ZStack(alignment: .bottom) {
             if (isShowing) {
                 Color.black
@@ -786,124 +788,434 @@ struct CalendarBottomSheet: View{
                     .onTapGesture {
                         isShowing.toggle()
                     }
-                VStack(spacing: 24) {
-                    ScrollView(showsIndicators: false) {
-                        LazyVStack(spacing: 10) {
-                            ForEach((0..<3).reversed(), id: \.self) { index in
-                                let monthOffset = -index
-                                let startDate = Calendar.current.date(byAdding: .month, value: monthOffset, to: Date())!
-                                let endDate = Calendar.current.date(byAdding: .month, value: monthOffset + 1, to: Date())!
-                                
-                                MonthView(startDate: startDate, endDate: endDate, viewModel: viewModel)
-                            }
-                        }
-   
-                    }
-                    HStack {
-                        Spacer()
-                        Button {
-                            isShowing = false
-                        } label: {
-                            Text("선택")
-                                .padding()
-                                .font(.pretendardFont(.bold, size: 14))
-                                .foregroundColor(.white)
-                                .frame(maxWidth: .infinity)
-                                .frame(width: UIScreen.main.bounds.width * 1/2)
-                                .background(Color.primary1)
-                                .cornerRadius(10)
-                        }
-                    }
-
-                }
-                .padding(.horizontal, 24)
-                .padding(.bottom, 44)
-                .frame(height: UIScreen.main.bounds.height * 3/4)
-                .transition(.move(edge: .bottom))
-                .background(
-                    Color(.white)
-                )
-                .cornerRadius(12, corners: [.topLeft, .topRight])
-                
-                
+                MonthView(viewModel: viewModel,selectedDate: $viewModel.selectedDate, yearMonth: $viewModel.yearMonth, pickerPresented: $pickerPresented)
+                    
             }
-        }
+            
+        } //
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
         .ignoresSafeArea()
         .animation(.easeInOut, value: isShowing)
-
+        
+        PickerBottomSheet(isShowing: $pickerPresented, yearMonth: $viewModel.yearMonth)
     }
-    
-   
+
+
 }
 
 struct MonthView: View {
-    let startDate: Date
-    let endDate: Date
-    @ObservedObject var viewModel: CalculateViewModel
+    @ObservedObject var viewModel : CalculateViewModel
+    @Binding var selectedDate: Date
+    @Binding var yearMonth : YearMonthDuration
+    @Binding var pickerPresented : Bool
+    
+    let columns: [GridItem] = Array(repeating: .init(.flexible()), count: 7)
+    @State var daysList = [[Date]]()
     var body: some View {
-        VStack {
-            HStack {
-                Text("\(formattedMonth(startDate: startDate))")
-                    .font(.pretendardFont(.semiBold, size: 22))
-                    .foregroundColor(.greyScale2)
-                    .padding(.top, 10)
+            VStack {
+                HStack {
+                    
+                    Image("icon_left")
+                        .onTapGesture {
+                            // 한달 전으로 이동
+                            self.selectedDate = Calendar.current.date(byAdding: .month, value: -1, to: self.selectedDate) ?? self.selectedDate                    }
+                    
+                    Spacer()
+                    
+                    
+                    Button(action: {
+                        // 피커 뷰 표시
+                        self.pickerPresented = true
+                    }) {
+                        
+                        Text("\(yearAndMonthFormatter.string(from: selectedDate))")
+                            .font(.pretendardFont(.semiBold, size: 22))
+                            .foregroundColor(.greyScale2)
+                    }
+                    
+                    Spacer()
+                    
+                    Image("icon_right")
+                        .onTapGesture {
+                            // 한달 후로 이동
+                            self.selectedDate = Calendar.current.date(byAdding: .month, value: 1, to: self.selectedDate) ?? self.selectedDate
+                        }
+                    
+                }
+                
+                //MARK: 요일
+                HStack {
+                    ForEach(viewModel.daysOfTheWeek, id: \.self) { day in
+                        Text(day)
+                            .frame(maxWidth: .infinity)
+                            .font(.pretendardFont(.regular, size: 14))
+                            .foregroundColor(.greyScale6)
+                    }
+                }.padding(.top, 20)
+            /*
+                let dates = daysInMonth()
+                let numberOfRows = dates.count / 7 + (dates.count % 7 == 0 ? 0 : 1)
+                ForEach(0..<numberOfRows, id: \.self) { rowIndex in
+                    HStack {
+                        ForEach(0..<7, id: \.self) { columnIndex in
+                            if rowIndex * 7 + columnIndex < dates.count {
+                                let date = dates[rowIndex * 7 + columnIndex]
+                                
+                                        DayCell(date: date, selectedDates: $viewModel.selectedDates)
+                                            .onTapGesture {
+                                                handleDateTap(date)
+                                            }
+                                    
+                            }
+                            
+                        }
+                    }
+                }*/
+
+                /*
+                LazyVGrid(columns: columns) {
+                    ForEach(daysInMonth(), id: \.self) { date in
+                        DayCell(date: date, selectedDates: $viewModel.selectedDates)
+                            .onTapGesture {
+                                handleDateTap(date)
+                            }
+                    }
+                }*/
+                Group {
+                    ForEach(daysList.indices, id: \.self) { i in
+                        Week(days: $daysList[i], selectedDates: $viewModel.selectedDates)
+                    }
+                }
+                
+                
                 Spacer()
             }
-            //MARK: 요일
-            HStack {
-                ForEach(viewModel.daysOfTheWeek, id: \.self) { day in
-                    Text(day)
-                        .frame(maxWidth: .infinity)
-                        .font(.pretendardFont(.regular, size: 14))
-                        .foregroundColor(.greyScale6)
-                }
-            }.padding(.top, 10)
-
-            
-            LazyVGrid(columns: Array(repeating: GridItem(), count: 7), spacing: 10) {
-                ForEach(daysInMonth(startDate: startDate, endDate: endDate), id: \.self) { day in
-                    Text("\(day)")
-                        .font(.pretendardFont(.regular, size: 14))
-                        .foregroundColor(.greyScale2)
+            .frame(height: 490)
+            .frame(maxWidth: .infinity)
+            .padding(.horizontal, 20)
+            .padding(.bottom, 44)
+            .padding(.top, 24)
+            .transition(.move(edge: .bottom))
+            .background(
+                Color(.white)
+            )
+            .cornerRadius(12, corners: [.topLeft, .topRight])
+        
+            .onChange(of: selectedDate, perform: { newValue in
+                daysList = extractDate()
+                print("on change 해당 달 : \(daysList)")
+                print("on change SelectedDates : \(viewModel.selectedDates)")
+            })
+            .onAppear {
+                daysList = extractDate()
+                print("on Appear 해당 달 : \(daysList)")
+                print("on Appear SelectedDates : \(viewModel.selectedDates)")
+            }
+                        
+    }
+    
+    private var yearAndMonthFormatter: DateFormatter {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "YYYY.MM"
+        return formatter
+    }
+    
+    // Helper functions to calculate the number of days in the month and get a specific date
+    func numberOfDaysInMonth() -> Int {
+        let range = Calendar.current.range(of: .day, in: .month, for: selectedDate)!
+        return range.count
+    }
+    
+    func daysInMonth() -> [Date] {
+        var dates = [Date]()
+        
+        let calendar = Calendar.current
+        var components = calendar.dateComponents([.year, .month], from: selectedDate)
+        components.day = 1
+        
+        let firstDayOfMonth = calendar.date(from: components)!
+        let firstWeekday = calendar.component(.weekday, from: firstDayOfMonth)
+        let offsetDays = (firstWeekday - calendar.firstWeekday + 7) % 7
+        
+        if let startDay = calendar.date(byAdding: .day, value: -offsetDays, to: firstDayOfMonth),
+           let rangeOfMonth = calendar.range(of: .day, in: .month, for: firstDayOfMonth) {
+            for i in 0..<(rangeOfMonth.count + offsetDays) {
+                if let date = calendar.date(byAdding: .day, value: i, to: startDay) {
+                    dates.append(date)
                 }
             }
-            .padding(.bottom, 10)
-        }.frame(maxWidth: .infinity)
-    }
-    
-    func formattedMonth(startDate: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy.MM"
-        return formatter.string(from: startDate)
-    }
-    
-    func daysInMonth(startDate: Date, endDate: Date) -> [Int] {
-        let calendar = Calendar.current
-        let startComponents = calendar.dateComponents([.year, .month], from: startDate)
-        let endComponents = calendar.dateComponents([.year, .month], from: endDate)
-        
-        guard let startMonth = calendar.date(from: startComponents),
-              let endMonth = calendar.date(from: endComponents) else {
-            return []
         }
         
-        let range = calendar.range(of: .day, in: .month, for: startMonth)!
-        let days = range.compactMap { day -> Int? in
-            let dateComponents = DateComponents(year: calendar.component(.year, from: startMonth),
-                                                month: calendar.component(.month, from: startMonth),
-                                                day: day)
-            let date = calendar.date(from: dateComponents)
+        while dates.count % 7 != 0 {
+            if let date = calendar.date(byAdding: .day, value: 1, to: dates.last!) {
+                dates.append(date)
+            }
+        }
+        
+        return dates
+    }
+    // 이차원 배열 달력
+    func extractDate() -> [[Date]] {
+        var days = daysInMonth()
+        //달력과 같은 배치의 이차원 배열로 변환하여 리턴
+        var result = [[Date]]()
+        days.forEach {
+            if result.isEmpty || result.last?.count == 7 {
+                result.append([$0])
+            } else {
+                result[result.count - 1].append($0)
+            }
+        }
+        
+        return result
+    }
+    func handleDateTap(_ date: Date) {
+        if viewModel.selectedDates.count == 2 {
+            viewModel.selectedDates = [date]
+        } else {
+            viewModel.selectedDates.append(date)
+        }
+        viewModel.selectedDates.sort()
+    }
+
+}
+/*
+struct DayCell: View {
+    let date: Date
+    @Binding var selectedDates: [Date]
+
+    var body: some View {
+        Text("\(date.day)")
+            .padding()
+            .background(isSelected() ? Color.green : Color.clear)
+    }
+
+    func isSelected() -> Bool {
+        if selectedDates.count == 2 {
+            return date >= selectedDates[0] && date <= selectedDates[1]
+        } else {
+            return selectedDates.contains(date)
+        }
+    }
+    
+}*/
+/*
+struct DayCell: View {
+    let date: Date
+    @Binding var selectedDates: [Date]
+
+    var body: some View {
+        Text("\(date.day)")
+            .padding()
+            .background(dateInsideColor(for: date))
+            .clipShape(getShape())
+            .foregroundColor(dateTextColor(for: date))
+    }
+
+    func isSelected() -> Bool {
+        if selectedDates.count == 2 {
+            return date >= selectedDates[0] && date <= selectedDates[1]
+        } else {
+            return selectedDates.contains(date)
+        }
+    }
+
+    func getShape() -> some Shape {
+            if selectedDates.isEmpty {
+                return AnyShape(Circle())
+            }
             
-            return (date?.isWithinRange(startDate: startDate, endDate: endDate))! ? day : nil
+            let firstDate = selectedDates.first!
+            let lastDate = selectedDates.last!
+            
+            if date == firstDate || date == lastDate {
+                return AnyShape(Circle())
+            } else {
+                return AnyShape(Rectangle())
+            }
+        }
+
+        func dateInsideColor(for date: Date) -> Color {
+            if selectedDates.isEmpty {
+                return .clear
+            }
+
+            let firstDate = selectedDates.first!
+            let lastDate = selectedDates.last!
+
+            if date >= firstDate && date <= lastDate {
+                return .green
+            } else {
+                return .clear
+            }
+        }
+
+        func dateTextColor(for date: Date) -> Color {
+            if selectedDates.isEmpty {
+                return .black
+            }
+
+            let firstDate = selectedDates.first!
+            let lastDate = selectedDates.last!
+
+            if date >= firstDate && date <= lastDate {
+                return .white
+            } else {
+                return .black
+            }
+        }
+}*/
+//SelectedDateRangeView(selectedDates: $selectedDates, date: date)
+/*
+struct DayCell: View {
+    let date: Date
+    @Binding var selectedDates: [Date]
+
+    var body: some View {
+        ZStack {
+            
+            Text("\(date.day)")
+                .padding()
+                .background(isSelected(date) ? Color.green : Color.clear)
+                .clipShape(Circle())
+                .foregroundColor(isSelected(date) ? .white : .black)
+        }
+    }
+
+    private func isSelected(_ date: Date) -> Bool {
+        guard let firstDate = selectedDates.first, let lastDate = selectedDates.last else {
+            return false
+        }
+
+        return date == firstDate || date == lastDate
+    }
+}*/
+struct Week: View {
+    @Binding var days : [Date]
+    @Binding var selectedDates : [Date]
+    let colWidth = UIScreen.main.bounds.width / 7
+
+    var body: some View {
+        ZStack {
+            
+            if selectedDates.count == 2 {
+                VStack(spacing: 0) {
+                    //Spacer()
+                    
+                    //ForEach(scheduleList.indices, id: \.self) { i in
+                    HStack(spacing: 0) {
+                        if let weekFirst = self.days.first, let weekLast = self.days.last {
+                            if ( weekFirst <= selectedDates.first! && selectedDates.first! <= weekLast ) {
+                                Spacer()
+                                    .frame(width: colWidth * CGFloat(((selectedDates.first?.day)! - self.days[0].day)), height: 20)
+                            }
+                        } //if
+                        Text("")
+                            .padding(.vertical, 2)
+                            .frame(maxWidth: .infinity)
+                            .background(Color.yellow2)
+                        
+                        if let weekFirst = self.days.first, let weekLast = self.days.last {
+                            if ( weekFirst <= selectedDates.last! && selectedDates.last! <= weekLast ) {
+                                Spacer()
+                                    .frame(width: colWidth * CGFloat((self.days[self.days.count - 1].day - selectedDates.last!.day)), height: 20)
+                            }
+                        } //if
+                    } //HStack
+                    .padding(.bottom, 5)
+                    //ForEach
+                } //VStack
+            } //if
+             
+
+            HStack(spacing: 0) {
+                ForEach(days.indices, id: \.self) { i in
+                    CardView(value: days[i])
+                        .onTapGesture {
+                            handleDateTap(days[i])
+                            print("tap")
+                            print("\(selectedDates)")
+                        }
+                }
+            }
         }
         
-        return days
+    } //body
+    
+    /**
+     각각의 날짜에 대한 달력 칸 뷰
+     */
+
+    func CardView(value: Date) -> some View {
+        VStack(spacing: 0) {
+                if value.day > 0 {
+                    Text("\(value.day)")
+                        .font(.pretendardFont(.regular,size: 14))
+                        .foregroundColor(.greyScale2)
+                }
+        }
+        .frame(width: UIScreen.main.bounds.width / 7)
+        .frame(height: 40)
+        //.contentShape(Rectangle())
+        //.background(Rectangle().stroke())
+    }
+    
+    func handleDateTap(_ date: Date) {
+        if selectedDates.count == 2 {
+            selectedDates = [date]
+        } else {
+            selectedDates.append(date)
+        }
+        selectedDates.sort()
     }
 }
 
-extension Date {
-    func isWithinRange(startDate: Date, endDate: Date) -> Bool {
-        return (self >= startDate) && (self <= endDate)
+
+
+//MARK: 피커 bottom sheet
+struct PickerBottomSheet: View {
+    @Binding var isShowing : Bool
+    @Binding var yearMonth : YearMonthDuration
+    let years = Array(2000...2099)
+    let months = Array(1...12)
+
+    var body: some View {
+        ZStack(alignment: .bottom) {
+            if (isShowing) {
+                Color.black
+                    .opacity(0.7)
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        isShowing.toggle()
+                    }
+                    
+                VStack {
+                    HStack {
+                        Spacer()
+                        Button("완료") {
+                            isShowing = false
+                        }
+                        .font(.pretendardFont(.semiBold, size: 16))
+                        .foregroundColor(.greyScale2)
+                        .padding()
+                    }
+                    YearMonthPicker(selection: $yearMonth, years: years, months: months)
+                }
+                .frame(alignment: .bottom)
+                .frame(maxWidth: .infinity)
+                .frame(height: UIScreen.main.bounds.height / 3)
+                .background(Color.greyScale12)
+                .transition(.move(edge: .bottom))
+                .cornerRadius(12, corners: [.allCorners])
+            }
+            
+        }
+        
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
+        .ignoresSafeArea()
+        .animation(.easeInOut, value: isShowing)
     }
+
+
 }
+

@@ -61,7 +61,6 @@
 		2FB3DA832A5D722E00E1486D /* CategoryManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB3DA822A5D722E00E1486D /* CategoryManagementView.swift */; };
 		2FB3DA852A5D7AFC00E1486D /* AddCategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB3DA842A5D7AFC00E1486D /* AddCategoryView.swift */; };
 		2FB3DA872A5DB59E00E1486D /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB3DA862A5DB59E00E1486D /* LoadingView.swift */; };
-		2FB3DA892A5E851D00E1486D /* LoadingMotionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB3DA882A5E851D00E1486D /* LoadingMotionView.swift */; };
 		2FC3B1D02A1CD26A00572804 /* KakaoLoginRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC3B1CF2A1CD26A00572804 /* KakaoLoginRequest.swift */; };
 		2FC3B1D22A1CD2E200572804 /* KakaoLoginResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC3B1D12A1CD2E200572804 /* KakaoLoginResponse.swift */; };
 		2FC3B1D52A25E30A00572804 /* SettingBookView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC3B1D42A25E30A00572804 /* SettingBookView.swift */; };
@@ -126,6 +125,8 @@
 		2FF25C9129E7EF0400737346 /* ButtonLarge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FF25C9029E7EF0400737346 /* ButtonLarge.swift */; };
 		2FF25C9429E7EF6500737346 /* RoundedCorners.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FF25C9329E7EF6500737346 /* RoundedCorners.swift */; };
 		2FF25C9929E80D7E00737346 /* SetBookNameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FF25C9829E80D7E00737346 /* SetBookNameView.swift */; };
+		2FF7247E2A5F0EC4008B9333 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FF7247D2A5F0EC3008B9333 /* Date.swift */; };
+		2FF724802A5F1D1E008B9333 /* YearMonthPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FF7247F2A5F1D1E008B9333 /* YearMonthPicker.swift */; };
 		2FFA302429EE775B00412F83 /* SetBookProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFA302329EE775B00412F83 /* SetBookProfileView.swift */; };
 		2FFA302629EE81C000412F83 /* CreateBookView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFA302529EE81C000412F83 /* CreateBookView.swift */; };
 		2FFA302A29EEAE6700412F83 /* SignUpRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFA302929EEAE6700412F83 /* SignUpRequest.swift */; };
@@ -196,7 +197,6 @@
 		2FB3DA822A5D722E00E1486D /* CategoryManagementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryManagementView.swift; sourceTree = "<group>"; };
 		2FB3DA842A5D7AFC00E1486D /* AddCategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCategoryView.swift; sourceTree = "<group>"; };
 		2FB3DA862A5DB59E00E1486D /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
-		2FB3DA882A5E851D00E1486D /* LoadingMotionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingMotionView.swift; sourceTree = "<group>"; };
 		2FC3B1CF2A1CD26A00572804 /* KakaoLoginRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoLoginRequest.swift; sourceTree = "<group>"; };
 		2FC3B1D12A1CD2E200572804 /* KakaoLoginResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoLoginResponse.swift; sourceTree = "<group>"; };
 		2FC3B1D42A25E30A00572804 /* SettingBookView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingBookView.swift; sourceTree = "<group>"; };
@@ -263,6 +263,8 @@
 		2FF25C9029E7EF0400737346 /* ButtonLarge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonLarge.swift; sourceTree = "<group>"; };
 		2FF25C9329E7EF6500737346 /* RoundedCorners.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedCorners.swift; sourceTree = "<group>"; };
 		2FF25C9829E80D7E00737346 /* SetBookNameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetBookNameView.swift; sourceTree = "<group>"; };
+		2FF7247D2A5F0EC3008B9333 /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
+		2FF7247F2A5F1D1E008B9333 /* YearMonthPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YearMonthPicker.swift; sourceTree = "<group>"; };
 		2FFA302329EE775B00412F83 /* SetBookProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetBookProfileView.swift; sourceTree = "<group>"; };
 		2FFA302529EE81C000412F83 /* CreateBookView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateBookView.swift; sourceTree = "<group>"; };
 		2FFA302929EEAE6700412F83 /* SignUpRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpRequest.swift; sourceTree = "<group>"; };
@@ -596,7 +598,7 @@
 		2FD7F3AA29B1E39400B99CAA /* Util */ = {
 			isa = PBXGroup;
 			children = (
-				2FB3DA882A5E851D00E1486D /* LoadingMotionView.swift */,
+				2FF7247F2A5F1D1E008B9333 /* YearMonthPicker.swift */,
 				2FB3DA862A5DB59E00E1486D /* LoadingView.swift */,
 				2F28C2D02A4C228600894F67 /* AuthenticationService.swift */,
 				2FE23F632A39DAF6009FA8CA /* ShareView.swift */,
@@ -627,6 +629,7 @@
 				2FD7F3C229B1E47200B99CAA /* Font.swift */,
 				2FD7F3C429B1E48B00B99CAA /* UIApplication.swift */,
 				2FF25C8729E1858600737346 /* View.swift */,
+				2FF7247D2A5F0EC3008B9333 /* Date.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -1208,7 +1211,6 @@
 				2FEA2BA729B8969E00DE8E54 /* WelcomeView.swift in Sources */,
 				2FF25C9929E80D7E00737346 /* SetBookNameView.swift in Sources */,
 				2F16145E2A07F4CA0029E9A9 /* BookCodeRequest.swift in Sources */,
-				2FB3DA892A5E851D00E1486D /* LoadingMotionView.swift in Sources */,
 				2F16148E2A0A771E0029E9A9 /* MyPageDataManager.swift in Sources */,
 				2FB3DA812A5C934300E1486D /* AnalysisDataManager.swift in Sources */,
 				2F16147E2A0A33B70029E9A9 /* CalendarViewModel.swift in Sources */,
@@ -1234,6 +1236,7 @@
 				2FE23F692A417372009FA8CA /* CategoryRequest.swift in Sources */,
 				2FFA303229EEAF6000412F83 /* SignInRequest.swift in Sources */,
 				2FB3DA762A5C86D800E1486D /* BudgetView.swift in Sources */,
+				2FF724802A5F1D1E008B9333 /* YearMonthPicker.swift in Sources */,
 				2FF25C8F29E7EE9D00737346 /* BottomSheet.swift in Sources */,
 				2FB3DA702A5C265700E1486D /* SettlementResponse.swift in Sources */,
 				2F1614892A0A76E70029E9A9 /* MyPageRequest.swift in Sources */,
@@ -1259,6 +1262,7 @@
 				2FB3DA6C2A5C25FD00E1486D /* CalculateDataManager.swift in Sources */,
 				2FEA2BBA29BA066100DE8E54 /* AnalysisView.swift in Sources */,
 				2FD7F3C929B1E52C00B99CAA /* SplashScreenView.swift in Sources */,
+				2FF7247E2A5F0EC4008B9333 /* Date.swift in Sources */,
 				2F28C2E02A55689000894F67 /* SetPeriodCalcView.swift in Sources */,
 				2FB3DA6E2A5C264800E1486D /* SettlementRequest.swift in Sources */,
 				2F16148B2A0A76F20029E9A9 /* MyPageResponse.swift in Sources */,
