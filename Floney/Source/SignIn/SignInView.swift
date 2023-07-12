@@ -122,7 +122,7 @@ struct SignInView: View {
                                                         
                                                         viewModel.signUpViewModel.email = email!
                                                         viewModel.signUpViewModel.nickname = nickname!
-                                                        viewModel.signUpViewModel.provider = "kakao"
+                                                        //viewModel.signUpViewModel.provider = "kakao"
                                                         
                                                         let token = String(describing: oauthToken.accessToken)
                                                         viewModel.checkKakao(token: token)

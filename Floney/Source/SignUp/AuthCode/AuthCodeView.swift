@@ -13,6 +13,7 @@ struct AuthCodeView: View {
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
        
     @StateObject var otpModel : OTPViewModel = .init()
+    @ObservedObject var viewModel : SignUpViewModel
     // MARK: TextField Focus State
     @FocusState var activeField : OTPField?
     @State var email = ""
@@ -67,7 +68,7 @@ struct AuthCodeView: View {
                 Spacer()
             }
             Spacer()
-            NavigationLink(destination: UserInfoView()){
+            NavigationLink(destination: UserInfoView(viewModel: viewModel)){
                 Text("다음으로")
                     .padding()
                     .withNextButtonFormmating(.primary1)
@@ -111,8 +112,10 @@ struct AuthCodeView: View {
     func OTPField()->some View {
         HStack(spacing:14) {
             ForEach(0..<6, id: \.self){ index in
-                VStack(spacing:8) {
+                VStack(spacing:16) {
                     TextField("", text: $otpModel.otpFields[index])
+                        .font(.pretendardFont(.semiBold, size: 28))
+                        .foregroundColor(.greyScale2)
                         .keyboardType(.numberPad)
                         .textContentType(.oneTimeCode)
                         .multilineTextAlignment(.center)
@@ -120,9 +123,9 @@ struct AuthCodeView: View {
                     
                     Rectangle()
                         .fill(activeField == activeStateForIndex(index: index) ? Color.primary3 : Color.greyScale9)
-                        .frame(height: 4)
+                        .frame(height: 2)
                 }
-                .frame(width: 40)
+                .frame(width: 34)
             }
             
         }
@@ -144,7 +147,7 @@ struct AuthCodeView: View {
 struct AuthCodeView_Previews: PreviewProvider {
     static var previews: some View {
         if #available(iOS 15.0, *) {
-            AuthCodeView()
+            AuthCodeView(viewModel: SignUpViewModel())
         } else {
             // Fallback on earlier versions
         }

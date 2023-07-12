@@ -11,26 +11,17 @@ struct SplashScreenView: View {
     @State private var isActive = false
     @StateObject var signInViewModel = SignInViewModel()
     //@EnvironmentObject var viewModel: SignInViewModel
-    
+    @EnvironmentObject var userSession: AuthenticationService
     var body: some View {
         if isActive {
-            SignInView()
-            /*
+            //SignInView()
             Group {
-                if AuthenticationService.shared.isUserLoggedIn {
+                if userSession.isUserLoggedIn {
                     MainTabView()
                 } else {
                     SignInView()
                 }
             }
-            .onReceive(AuthenticationService.shared.$isUserLoggedIn) { loggedIn in
-                if !loggedIn {
-                    // 필요한 경우 로그아웃 시 추가 처리 수행
-                }
-            }
-            .onAppear {
-                signInViewModel.autoLogin()
-            }*/
         } else {
             ZStack {
                 Image("splash_bg")

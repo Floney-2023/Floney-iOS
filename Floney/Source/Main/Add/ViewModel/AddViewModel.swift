@@ -36,7 +36,7 @@ class AddViewModel: ObservableObject {
     
     //MARK: server
     func getCategory() {
-        bookKey = "2FE56430"
+        bookKey = "1B4C5911"
         let request = CategoryRequest(bookKey: bookKey, root: root)
         dataManager.getCategory(request)
             .sink { (dataResponse) in
@@ -61,8 +61,8 @@ class AddViewModel: ObservableObject {
             }.store(in: &cancellableSet)
     }
     func postLines() {
-        bookKey = "2FE56430"
-        nickname = "너구리"
+        bookKey = "1B4C5911"
+        nickname = "도토리"
         let moneyInt = Int(money)
         print(moneyInt)
         let request = LinesRequest(bookKey: bookKey, money: moneyInt!, lineDate: lineDate, flow: flow, asset: asset, line: line, description: description, except: except, nickname: nickname)

@@ -19,12 +19,12 @@ class SignUpViewModel: ObservableObject {
     @Published var password = ""
     @Published var passwordCheck = ""
     @Published var nickname = ""
-    @Published var marketingAgree = 0
+    //@Published var marketingAgree = 0
     @Published var isNextToAuthCode = false
     @Published var isNext = false
-    @Published var provider = ""
+    //@Published var provider = ""
 
-    @Published var isValid = false
+    //@Published var isValid = false
 
     private var cancellableSet: Set<AnyCancellable> = []
     var dataManager: SignUpProtocol
@@ -129,6 +129,26 @@ class SignUpViewModel: ObservableObject {
     func validatePassword() {
         if (password != passwordCheck) {
         }
+    }
+    
+    func checkEmail() {
+            if email.isEmpty {
+                errorMessage = ErrorMessage.signup02.value
+                showAlert = true
+                isNextToAuthCode = false
+            } else if !isValidEmail(email) {
+                errorMessage = ErrorMessage.signup03.value
+                showAlert = true
+                isNextToAuthCode = false
+            } else {
+                isNextToAuthCode = true
+            }
+        }
+    //MARK: 이메일 정규식 체크
+    func isValidEmail(_ email: String) -> Bool {
+        let emailFormat = "[A-Z0-9a-z._%+-]+@[A-Z0-9a-z.-]+\\.[A-Za-z]{2,}"
+        let emailPredicate = NSPredicate(format:"SELF MATCHES %@", emailFormat)
+        return emailPredicate.evaluate(with: email)
     }
     
     func createAlert( with error: NetworkError) {

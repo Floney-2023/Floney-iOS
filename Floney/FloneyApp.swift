@@ -11,10 +11,11 @@ import SwiftUI
 @main
 struct FloneyApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+    //@StateObject var userSession = AuthenticationService()
     
     var body: some Scene {
         WindowGroup {
-            SplashScreenView()
+            SplashScreenView().environmentObject(AuthenticationService.shared)
         }
     }
 }

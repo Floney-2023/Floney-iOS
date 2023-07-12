@@ -38,7 +38,7 @@ class SettingBookViewModel : ObservableObject {
     }
     //MARK: server
     func getBookInfo() {
-        bookKey = "2FE56430"
+        bookKey = "1B4C5911"
         let request = BookInfoRequest(bookKey: bookKey)
         dataManager.getBookInfo(request)
             .sink { (dataResponse) in
@@ -59,7 +59,7 @@ class SettingBookViewModel : ObservableObject {
             }.store(in: &cancellableSet)
     }
     func changeProfile() {
-        bookKey = "2FE56430"
+        bookKey = "1B4C5911"
         let request = BookProfileRequest(newUrl: encryptedImageUrl, bookKey: bookKey)
         print("book profile parameter : \(request)")
         dataManager.changeProfile(parameters: request)
@@ -77,7 +77,7 @@ class SettingBookViewModel : ObservableObject {
     }
 
     func changeNickname() {
-        bookKey = "2FE56430"
+        bookKey = "1B4C5911"
         let request = BookNameRequest(name: changedName, bookKey: bookKey)
         dataManager.changeNickname(parameters: request)
             .sink { completion in
@@ -93,7 +93,7 @@ class SettingBookViewModel : ObservableObject {
             .store(in: &cancellableSet)
     }
     func changeProfileStatus() {
-        bookKey = "2FE56430"
+        bookKey = "1B4C5911"
         let request = SeeProfileRequest(bookKey: bookKey, seeProfileStatus: profileStatus)
         dataManager.changeProfileStatus(parameters: request)
             .sink { completion in
@@ -109,7 +109,7 @@ class SettingBookViewModel : ObservableObject {
             .store(in: &cancellableSet)
     }
     func setBudget() {
-        bookKey = "2FE56430"
+        bookKey = "1B4C5911"
         let request = SetBudgetRequest(bookKey: bookKey, budget: budget)
         dataManager.setBudget(parameters: request)
             .sink { completion in
@@ -125,7 +125,7 @@ class SettingBookViewModel : ObservableObject {
             .store(in: &cancellableSet)
     }
     func setAsset() {
-        bookKey = "2FE56430"
+        bookKey = "1B4C5911"
         let request = SetAssetRequest(bookKey: bookKey, asset: asset)
         dataManager.setAsset(parameters: request)
             .sink { completion in

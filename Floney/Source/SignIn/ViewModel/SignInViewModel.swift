@@ -59,7 +59,8 @@ class SignInViewModel: ObservableObject {
                     }
                     
                     print("--성공--")
-                    print(self.result.accessToken)
+                    //print(self.result.accessToken)
+                    print(self.result)
                 }
             }.store(in: &cancellableSet)
     }
@@ -180,7 +181,7 @@ class SignInViewModel: ObservableObject {
         self.token = idToken
         signUpViewModel.email = email!
         signUpViewModel.nickname = nickname!
-        signUpViewModel.provider = "google"
+        //signUpViewModel.provider = "google"
         
         print("id token : \(idToken)")
         print("access token : \(accessToken)")

@@ -39,7 +39,7 @@ struct ExpenseView: View {
                         .frame(width: ((UIScreen.main.bounds.width - 40)*CGFloat(percentage[i]) / 100), height: 20)
                 }
             }
-            .frame(width: .infinity, height: 20)
+            .frame(height: 20) // 만약 infinity로 설정 했을 때 : Invalid frame dimension (negative or non-finite).
             .cornerRadius(6)
             .padding(.vertical, 20)
             

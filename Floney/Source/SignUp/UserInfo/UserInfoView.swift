@@ -14,7 +14,7 @@ struct UserInfoView: View {
     @State var password = ""
     @State var passwordCheck = ""
     @State var nickname = ""
-    @StateObject var viewModel = SignUpViewModel()
+    @ObservedObject var viewModel : SignUpViewModel
     
     var body: some View {
         ZStack {
@@ -40,7 +40,7 @@ struct UserInfoView: View {
                                 .foregroundColor(.greyScale6)
                             Spacer()
                         }
-                        
+                        /*
                         TextField("", text: $viewModel.email)
                             .padding()
                             .keyboardType(.emailAddress)
@@ -52,6 +52,20 @@ struct UserInfoView: View {
                                     .opacity(viewModel.email.isEmpty ? 1 : 0), alignment: .leading
                             )
                             .modifier(TextFieldModifier())
+                         */
+                        Text("\(viewModel.email)")
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding()
+                            .font(.pretendardFont(.regular, size: 14))
+                            .foregroundColor(.greyScale2)
+                            .background(Color.greyScale12)
+                            .cornerRadius(12)
+                        //.border(Color.greyScale10)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .stroke(Color.greyScale10, lineWidth: 1) // Set the border
+                            )
+                        
                     }
                     VStack(spacing: 14) {
                         HStack {
@@ -159,6 +173,6 @@ struct UserInfoView: View {
 
 struct UserInfoView_Previews: PreviewProvider {
     static var previews: some View {
-        UserInfoView()
+        UserInfoView(viewModel: SignUpViewModel())
     }
 }

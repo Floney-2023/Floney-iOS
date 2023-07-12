@@ -27,6 +27,7 @@ extension CalendarService: CalendarProtocol {
         let url = "\(Constant.BASE_URL)/books/month?bookKey=\(bookKey)&date=\(date)"
         
         let token = Keychain.getKeychainValue(forKey: .accessToken)!
+        print("calendar data manager Token : \(token)")
         return AF.request(url,
                           method: .get,
                           parameters: nil,
