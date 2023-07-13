@@ -12,6 +12,8 @@ struct AddCategoryView: View {
     @State var selectedIndex = 0
     let root = ["자산", "지출","수입","이체"]
     @State var text = ""
+    
+    @StateObject var viewModel = AddViewModel()
     var body: some View {
         VStack {
             VStack {
@@ -93,7 +95,7 @@ struct AddCategoryView: View {
                             .foregroundColor(.greyScale2)
                         Spacer()
                     }
-                    TextField("", text: $text)
+                    TextField("", text: $viewModel.newCategoryName)
                         .padding()
                         .overlay(
                             Text("이름을 입력하세요.")
@@ -115,7 +117,11 @@ struct AddCategoryView: View {
             }.padding(.horizontal, 20)
                 .padding(.top, 18)
             Button {
-                isShowingAdd = true
+                viewModel.root = self.root[selectedIndex]
+                viewModel.postCategory()
+                isShowingAdd = false
+                
+                
             } label: {
                 Text("완료하기")
                     .font(.pretendardFont(.bold, size: 14))

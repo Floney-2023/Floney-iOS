@@ -470,6 +470,7 @@ struct CategoryBottomSheet: View {
     @Binding var isSelectedAssetType : String
     @Binding var isSelectedCategoryIndex : Int
     @Binding var isSelectedCategory : String
+    @Binding var isShowingEditCategory : Bool
     var body: some View{
         ZStack(alignment: .bottom) {
             if (isShowing) {
@@ -487,6 +488,17 @@ struct CategoryBottomSheet: View {
                             .foregroundColor(.greyScale1)
                             .font(.pretendardFont(.bold,size: 18))
                         Spacer()
+                        
+                        Button  {
+                                print("category 편집 토글")
+                                isShowingEditCategory = true
+                        } label: {
+                            Text("편집")
+                                .foregroundColor(.greyScale4)
+                                .font(.pretendardFont(.regular,size: 14))
+                                
+                        }
+
                     }
                     .padding(.top, 24)
                     
@@ -510,7 +522,10 @@ struct CategoryBottomSheet: View {
                 .cornerRadius(12, corners: [.topLeft, .topRight])
                 .frame(height: UIScreen.main.bounds.height / 2) // Screen height is divided by 2
                 
+                
             } // if
+            
+            
         } //ZStack
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
         .ignoresSafeArea()

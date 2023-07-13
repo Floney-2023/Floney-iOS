@@ -9,13 +9,12 @@ import Foundation
 import Combine
 class AddViewModel: ObservableObject {
     var tokenViewModel = TokenReissueViewModel()
-    @Published var categoryResult : [CategoryResponse] = []
-    @Published var categories : [String] = []
+    
     @Published var addLoadingError: String = ""
     @Published var showAlert: Bool = false
     
     @Published var bookKey = ""
-    @Published var root = ""
+    
     
     //MARK: line
     @Published var lineResult : LinesResponse = LinesResponse(money: 0, flow: "", asset: "", line: "", description: "", except: false, nickname: "")
@@ -27,6 +26,14 @@ class AddViewModel: ObservableObject {
     @Published var description = ""
     @Published var except = false
     @Published var nickname = ""
+    
+    //MARK: category
+    @Published var categoryResult : [CategoryResponse] = []
+    @Published var categories : [String] = []
+    @Published var root = ""
+    @Published var newCategoryName = ""
+    
+    
     private var cancellableSet: Set<AnyCancellable> = []
     var dataManager: AddProtocol
     
@@ -36,7 +43,7 @@ class AddViewModel: ObservableObject {
     
     //MARK: server
     func getCategory() {
-        bookKey = "1B4C5911"
+        bookKey = "5EDA7A3D"
         let request = CategoryRequest(bookKey: bookKey, root: root)
         dataManager.getCategory(request)
             .sink { (dataResponse) in
@@ -61,7 +68,7 @@ class AddViewModel: ObservableObject {
             }.store(in: &cancellableSet)
     }
     func postLines() {
-        bookKey = "1B4C5911"
+        bookKey = "5EDA7A3D"
         nickname = "도토리"
         let moneyInt = Int(money)
         print(moneyInt)
@@ -76,6 +83,23 @@ class AddViewModel: ObservableObject {
                     self.lineResult = dataResponse.value!
                     print("--성공--")
                     print(self.lineResult)
+                   
+                }
+            }.store(in: &cancellableSet)
+    }
+    func postCategory() {
+        bookKey = "5EDA7A3D"
+
+        let request = AddCategoryRequest(bookKey: bookKey, parent: root, name: newCategoryName)
+        dataManager.postCategory(request)
+            .sink { (dataResponse) in
+                if dataResponse.error != nil {
+                    self.createAlert(with: dataResponse.error!)
+                    // 에러 처리
+                    print(dataResponse.error)
+                } else {
+                    print("--카테고리 추가 성공--")
+                    print(dataResponse.value)
                    
                 }
             }.store(in: &cancellableSet)

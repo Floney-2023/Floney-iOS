@@ -31,6 +31,7 @@ struct AddView: View {
     
     
     @State var categories: [String] = ["현금", "체크카드", "신용카드", "은행","추가", "추가추가","추가/추가"]
+    @State var isShowingEditCategory = false
         
     var body: some View {
         @State var moneyStr = String(describing: "\(money)")
@@ -274,8 +275,17 @@ struct AddView: View {
                 
             } // VStack
             .onAppear(perform : UIApplication.shared.hideKeyboard)
+            .fullScreenCover(isPresented: $isShowingEditCategory){
+     
+                    CategoryManagementView(isShowingEditCategory: $isShowingEditCategory)
+                
+            }
             
-            CategoryBottomSheet(root: $root, categories: $viewModel.categories, isShowing: $isShowingBottomSheet, isSelectedAssetTypeIndex: $isSelectedAssetTypeIndex, isSelectedAssetType: $assetType, isSelectedCategoryIndex: $isSelectedCategoryIndex, isSelectedCategory: $category)
+            CategoryBottomSheet(root: $root, categories: $viewModel.categories, isShowing: $isShowingBottomSheet, isSelectedAssetTypeIndex: $isSelectedAssetTypeIndex, isSelectedAssetType: $assetType, isSelectedCategoryIndex: $isSelectedCategoryIndex, isSelectedCategory: $category, isShowingEditCategory: $isShowingEditCategory)
+            
+            
+            
+            
         } // ZStack
     }
     func formatNumber(_ n: Int) -> String {

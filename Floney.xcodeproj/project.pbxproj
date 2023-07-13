@@ -526,8 +526,6 @@
 				2FC3B1D42A25E30A00572804 /* SettingBookView.swift */,
 				2FC3B1D62A25F95600572804 /* ModifyingBookView.swift */,
 				2FC3B1D82A25F9F200572804 /* SetBookProfileImageView.swift */,
-				2FB3DA822A5D722E00E1486D /* CategoryManagementView.swift */,
-				2FB3DA842A5D7AFC00E1486D /* AddCategoryView.swift */,
 			);
 			path = SettingBook;
 			sourceTree = "<group>";
@@ -829,6 +827,8 @@
 			isa = PBXGroup;
 			children = (
 				2FEA2BBB29BA066D00DE8E54 /* AddView.swift */,
+				2FB3DA822A5D722E00E1486D /* CategoryManagementView.swift */,
+				2FB3DA842A5D7AFC00E1486D /* AddCategoryView.swift */,
 				2FE23F672A4172FB009FA8CA /* Entity */,
 				2FE23F662A4172F2009FA8CA /* ViewModel */,
 				2FE23F652A4172EA009FA8CA /* DataManager */,
