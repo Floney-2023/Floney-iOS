@@ -33,6 +33,7 @@ struct SetPeriodCalcView: View {
                             self.isShowingCalc = false
                         }
                 }
+                
                 VStack(spacing: 32) {
                     HStack {
                         VStack(alignment: .leading, spacing: 5) {

@@ -788,7 +788,8 @@ struct CalendarBottomSheet: View {
                     .onTapGesture {
                         isShowing.toggle()
                     }
-                MonthView(viewModel: viewModel,selectedDate: $viewModel.selectedDate, yearMonth: $viewModel.yearMonth, pickerPresented: $pickerPresented)
+
+                MonthView(viewModel: viewModel, pickerPresented: $pickerPresented)
                     
             }
             
@@ -805,20 +806,20 @@ struct CalendarBottomSheet: View {
 
 struct MonthView: View {
     @ObservedObject var viewModel : CalculateViewModel
-    @Binding var selectedDate: Date
-    @Binding var yearMonth : YearMonthDuration
     @Binding var pickerPresented : Bool
     
     let columns: [GridItem] = Array(repeating: .init(.flexible()), count: 7)
-    @State var daysList = [[Date]]()
+    
+    
     var body: some View {
+        @State var daysList = extractDate()
             VStack {
                 HStack {
                     
                     Image("icon_left")
                         .onTapGesture {
                             // 한달 전으로 이동
-                            self.selectedDate = Calendar.current.date(byAdding: .month, value: -1, to: self.selectedDate) ?? self.selectedDate                    }
+                            viewModel.selectedDate = Calendar.current.date(byAdding: .month, value: -1, to: viewModel.selectedDate) ?? viewModel.selectedDate                    }
                     
                     Spacer()
                     
@@ -828,7 +829,7 @@ struct MonthView: View {
                         self.pickerPresented = true
                     }) {
                         
-                        Text("\(yearAndMonthFormatter.string(from: selectedDate))")
+                        Text("\(yearAndMonthFormatter.string(from:viewModel.selectedDate))")
                             .font(.pretendardFont(.semiBold, size: 22))
                             .foregroundColor(.greyScale2)
                     }
@@ -838,7 +839,7 @@ struct MonthView: View {
                     Image("icon_right")
                         .onTapGesture {
                             // 한달 후로 이동
-                            self.selectedDate = Calendar.current.date(byAdding: .month, value: 1, to: self.selectedDate) ?? self.selectedDate
+                            viewModel.selectedDate = Calendar.current.date(byAdding: .month, value: 1, to: viewModel.selectedDate) ?? viewModel.selectedDate
                         }
                     
                 }
@@ -852,36 +853,12 @@ struct MonthView: View {
                             .foregroundColor(.greyScale6)
                     }
                 }.padding(.top, 20)
-            /*
-                let dates = daysInMonth()
-                let numberOfRows = dates.count / 7 + (dates.count % 7 == 0 ? 0 : 1)
-                ForEach(0..<numberOfRows, id: \.self) { rowIndex in
-                    HStack {
-                        ForEach(0..<7, id: \.self) { columnIndex in
-                            if rowIndex * 7 + columnIndex < dates.count {
-                                let date = dates[rowIndex * 7 + columnIndex]
-                                
-                                        DayCell(date: date, selectedDates: $viewModel.selectedDates)
-                                            .onTapGesture {
-                                                handleDateTap(date)
-                                            }
-                                    
-                            }
-                            
-                        }
-                    }
-                }*/
+                    .padding(.bottom, 15)
+            
 
-                /*
-                LazyVGrid(columns: columns) {
-                    ForEach(daysInMonth(), id: \.self) { date in
-                        DayCell(date: date, selectedDates: $viewModel.selectedDates)
-                            .onTapGesture {
-                                handleDateTap(date)
-                            }
-                    }
-                }*/
+               
                 Group {
+                    
                     ForEach(daysList.indices, id: \.self) { i in
                         Week(days: $daysList[i], selectedDates: $viewModel.selectedDates)
                     }
@@ -889,6 +866,15 @@ struct MonthView: View {
                 
                 
                 Spacer()
+                
+                Button {
+                    //
+                } label: {
+                    Text("선택")
+                        .padding()
+                        .withNextButtonFormmating(.primary1)
+                }
+
             }
             .frame(height: 490)
             .frame(maxWidth: .infinity)
@@ -900,18 +886,7 @@ struct MonthView: View {
                 Color(.white)
             )
             .cornerRadius(12, corners: [.topLeft, .topRight])
-        
-            .onChange(of: selectedDate, perform: { newValue in
-                daysList = extractDate()
-                print("on change 해당 달 : \(daysList)")
-                print("on change SelectedDates : \(viewModel.selectedDates)")
-            })
-            .onAppear {
-                daysList = extractDate()
-                print("on Appear 해당 달 : \(daysList)")
-                print("on Appear SelectedDates : \(viewModel.selectedDates)")
-            }
-                        
+                
     }
     
     private var yearAndMonthFormatter: DateFormatter {
@@ -922,7 +897,7 @@ struct MonthView: View {
     
     // Helper functions to calculate the number of days in the month and get a specific date
     func numberOfDaysInMonth() -> Int {
-        let range = Calendar.current.range(of: .day, in: .month, for: selectedDate)!
+        let range = Calendar.current.range(of: .day, in: .month, for: viewModel.selectedDate)!
         return range.count
     }
     
@@ -930,7 +905,7 @@ struct MonthView: View {
         var dates = [Date]()
         
         let calendar = Calendar.current
-        var components = calendar.dateComponents([.year, .month], from: selectedDate)
+        var components = calendar.dateComponents([.year, .month], from: viewModel.selectedDate)
         components.day = 1
         
         let firstDayOfMonth = calendar.date(from: components)!
@@ -969,163 +944,70 @@ struct MonthView: View {
         
         return result
     }
-    func handleDateTap(_ date: Date) {
-        if viewModel.selectedDates.count == 2 {
-            viewModel.selectedDates = [date]
-        } else {
-            viewModel.selectedDates.append(date)
-        }
-        viewModel.selectedDates.sort()
-    }
-
-}
-/*
-struct DayCell: View {
-    let date: Date
-    @Binding var selectedDates: [Date]
-
-    var body: some View {
-        Text("\(date.day)")
-            .padding()
-            .background(isSelected() ? Color.green : Color.clear)
-    }
-
-    func isSelected() -> Bool {
-        if selectedDates.count == 2 {
-            return date >= selectedDates[0] && date <= selectedDates[1]
-        } else {
-            return selectedDates.contains(date)
-        }
-    }
     
-}*/
-/*
-struct DayCell: View {
-    let date: Date
-    @Binding var selectedDates: [Date]
+}
 
-    var body: some View {
-        Text("\(date.day)")
-            .padding()
-            .background(dateInsideColor(for: date))
-            .clipShape(getShape())
-            .foregroundColor(dateTextColor(for: date))
-    }
 
-    func isSelected() -> Bool {
-        if selectedDates.count == 2 {
-            return date >= selectedDates[0] && date <= selectedDates[1]
-        } else {
-            return selectedDates.contains(date)
-        }
-    }
-
-    func getShape() -> some Shape {
-            if selectedDates.isEmpty {
-                return AnyShape(Circle())
-            }
-            
-            let firstDate = selectedDates.first!
-            let lastDate = selectedDates.last!
-            
-            if date == firstDate || date == lastDate {
-                return AnyShape(Circle())
-            } else {
-                return AnyShape(Rectangle())
-            }
-        }
-
-        func dateInsideColor(for date: Date) -> Color {
-            if selectedDates.isEmpty {
-                return .clear
-            }
-
-            let firstDate = selectedDates.first!
-            let lastDate = selectedDates.last!
-
-            if date >= firstDate && date <= lastDate {
-                return .green
-            } else {
-                return .clear
-            }
-        }
-
-        func dateTextColor(for date: Date) -> Color {
-            if selectedDates.isEmpty {
-                return .black
-            }
-
-            let firstDate = selectedDates.first!
-            let lastDate = selectedDates.last!
-
-            if date >= firstDate && date <= lastDate {
-                return .white
-            } else {
-                return .black
-            }
-        }
-}*/
-//SelectedDateRangeView(selectedDates: $selectedDates, date: date)
-/*
-struct DayCell: View {
-    let date: Date
-    @Binding var selectedDates: [Date]
-
-    var body: some View {
-        ZStack {
-            
-            Text("\(date.day)")
-                .padding()
-                .background(isSelected(date) ? Color.green : Color.clear)
-                .clipShape(Circle())
-                .foregroundColor(isSelected(date) ? .white : .black)
-        }
-    }
-
-    private func isSelected(_ date: Date) -> Bool {
-        guard let firstDate = selectedDates.first, let lastDate = selectedDates.last else {
-            return false
-        }
-
-        return date == firstDate || date == lastDate
-    }
-}*/
 struct Week: View {
     @Binding var days : [Date]
     @Binding var selectedDates : [Date]
+    
     let colWidth = UIScreen.main.bounds.width / 7
 
     var body: some View {
+        @State var checkPeriod = validPeriod()
+        let weekFirst = days.first!
+        let weekLast = days.last!
+        let lastDayOfWeekFirst = getLastDayOfMonth(date: weekFirst)
+        
         ZStack {
-            
+   
             if selectedDates.count == 2 {
-                VStack(spacing: 0) {
-                    //Spacer()
-                    
-                    //ForEach(scheduleList.indices, id: \.self) { i in
-                    HStack(spacing: 0) {
-                        if let weekFirst = self.days.first, let weekLast = self.days.last {
-                            if ( weekFirst <= selectedDates.first! && selectedDates.first! <= weekLast ) {
-                                Spacer()
-                                    .frame(width: colWidth * CGFloat(((selectedDates.first?.day)! - self.days[0].day)), height: 20)
-                            }
-                        } //if
-                        Text("")
-                            .padding(.vertical, 2)
-                            .frame(maxWidth: .infinity)
-                            .background(Color.yellow2)
+                    if checkPeriod {
+                    VStack(spacing: 0) {
                         
-                        if let weekFirst = self.days.first, let weekLast = self.days.last {
-                            if ( weekFirst <= selectedDates.last! && selectedDates.last! <= weekLast ) {
+                        HStack(spacing: 0) {
+                            let firstStartDay = weekFirst.day
+                            let firstEndDay = (weekFirst.month == selectedDates.first!.month) ? selectedDates.first!.day : (lastDayOfWeekFirst + selectedDates.first!.day)
+                            
+                            let firstSpacerWidth = colWidth * CGFloat(firstEndDay - firstStartDay)
+                            
+                            if (weekFirst <= selectedDates.first! && selectedDates.first! <= weekLast ) {
                                 Spacer()
-                                    .frame(width: colWidth * CGFloat((self.days[self.days.count - 1].day - selectedDates.last!.day)), height: 20)
+                                    .frame(width: firstSpacerWidth, height: 20)
                             }
-                        } //if
-                    } //HStack
-                    .padding(.bottom, 5)
-                    //ForEach
-                } //VStack
-            } //if
+                            
+
+                            Text("")
+                                .font(.pretendardFont(.regular, size: 14))
+                                .foregroundColor(.greyScale2)
+                                .padding(.vertical, 2)
+                                .frame(maxWidth: .infinity)
+                                .frame(height: 32)
+                                .background(Color.greyScale12)
+
+                            
+                            let lastDayOfSelectedDates = getLastDayOfMonth(date: selectedDates.last!)
+                            let lastStartDay = selectedDates.last!.day
+                            let lastEndDay = (weekLast.month == selectedDates.last!.month) ? weekLast.day : (lastDayOfSelectedDates + weekLast.day)
+
+                                let lastSpacerWidth = colWidth * CGFloat(lastEndDay - lastStartDay)
+                                if (weekFirst <= selectedDates.last! && selectedDates.last! <= weekLast ) {
+                                    Spacer()
+                                        .frame(width: lastSpacerWidth, height: 20)
+                                }
+                            
+                        }
+
+                        
+                        //ForEach
+                    } //VStack
+                    .onAppear {
+                        print("in week view days : \(days)")
+                    }
+                } //if
+            }
+                
              
 
             HStack(spacing: 0) {
@@ -1150,16 +1032,25 @@ struct Week: View {
         VStack(spacing: 0) {
                 if value.day > 0 {
                     Text("\(value.day)")
+                        .padding()
                         .font(.pretendardFont(.regular,size: 14))
-                        .foregroundColor(.greyScale2)
+                        .foregroundColor(selectedDates.contains(value) ? .white : .greyScale2)
+                        .background(selectedDates.contains(value) ? Color.primary5 : Color.clear)
+                        .clipShape(Circle())
                 }
         }
-        .frame(width: UIScreen.main.bounds.width / 7)
+        .frame(width: (UIScreen.main.bounds.width - 48) / 7)
         .frame(height: 40)
         //.contentShape(Rectangle())
         //.background(Rectangle().stroke())
     }
-    
+    func getLastDayOfMonth(date: Date) -> Int {
+        let calendar = Calendar.current
+        if let interval = calendar.range(of: .day, in: .month, for: date) {
+            return interval.count
+        }
+        return 0
+    }
     func handleDateTap(_ date: Date) {
         if selectedDates.count == 2 {
             selectedDates = [date]
@@ -1168,6 +1059,20 @@ struct Week: View {
         }
         selectedDates.sort()
     }
+    
+    func validPeriod() -> Bool {
+        for day in days {
+            if let firstDate = selectedDates.first,
+               let lastDate = selectedDates.last {
+                if ((day >= firstDate && day <= lastDate) || (day >= firstDate && day <= lastDate)){
+                    return true
+                }
+            }
+        }
+        return false
+    }
+
+ 
 }
 
 
