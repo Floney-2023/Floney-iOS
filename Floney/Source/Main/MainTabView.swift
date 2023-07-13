@@ -23,7 +23,9 @@ struct MainTabView: View {
         VStack {
             ZStack {
                 Spacer().fullScreenCover(isPresented: $showingAddView) {
-                    AddView(isPresented: $showingAddView, date: currentDate)
+                    NavigationView {
+                        AddView(isPresented: $showingAddView, date: currentDate)
+                    }
                 }
                 switch selection {
                 case 0:

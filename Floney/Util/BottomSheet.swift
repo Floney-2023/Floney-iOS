@@ -490,8 +490,11 @@ struct CategoryBottomSheet: View {
                         Spacer()
                         
                         Button  {
+                    
                                 print("category 편집 토글")
                                 isShowingEditCategory = true
+                            
+                                
                         } label: {
                             Text("편집")
                                 .foregroundColor(.greyScale4)

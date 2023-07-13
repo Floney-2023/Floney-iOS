@@ -275,15 +275,12 @@ struct AddView: View {
                 
             } // VStack
             .onAppear(perform : UIApplication.shared.hideKeyboard)
-            .fullScreenCover(isPresented: $isShowingEditCategory){
-     
-                    CategoryManagementView(isShowingEditCategory: $isShowingEditCategory)
-                
-            }
-            
+
             CategoryBottomSheet(root: $root, categories: $viewModel.categories, isShowing: $isShowingBottomSheet, isSelectedAssetTypeIndex: $isSelectedAssetTypeIndex, isSelectedAssetType: $assetType, isSelectedCategoryIndex: $isSelectedCategoryIndex, isSelectedCategory: $category, isShowingEditCategory: $isShowingEditCategory)
             
-            
+            NavigationLink(destination: CategoryManagementView(isShowingEditCategory: $isShowingEditCategory), isActive: $isShowingEditCategory) {
+                EmptyView()
+            }
             
             
         } // ZStack

@@ -126,6 +126,7 @@ struct CategoryManagementView: View {
                 viewModel.root = options[newValue]
                 viewModel.getCategory()
             }
+            .navigationBarBackButtonHidden(true)
         }
     }
 }
