@@ -219,6 +219,9 @@ PODS:
   - AppAuth/Core (1.6.2)
   - AppAuth/ExternalUserAgent (1.6.2):
     - AppAuth/Core
+  - AppsFlyerFramework (6.12.0):
+    - AppsFlyerFramework/Main (= 6.12.0)
+  - AppsFlyerFramework/Main (6.12.0)
   - BoringSSL-GRPC (0.0.7):
     - BoringSSL-GRPC/Implementation (= 0.0.7)
     - BoringSSL-GRPC/Interface (= 0.0.7)
@@ -329,6 +332,7 @@ PODS:
 
 DEPENDENCIES:
   - Alamofire
+  - AppsFlyerFramework
   - BoringSSL-GRPC
   - FirebaseAuth
   - FirebaseDynamicLinks
@@ -347,6 +351,7 @@ SPEC REPOS:
     - abseil
     - Alamofire
     - AppAuth
+    - AppsFlyerFramework
     - BoringSSL-GRPC
     - FirebaseAuth
     - FirebaseCore
@@ -374,6 +379,7 @@ SPEC CHECKSUMS:
   abseil: 6c8eb7892aefa08d929b39f9bb108e5367e3228f
   Alamofire: 0123a34370cb170936ae79a8df46cc62b2edeb88
   AppAuth: 3bb1d1cd9340bd09f5ed189fb00b1cc28e1e8570
+  AppsFlyerFramework: 38431c0dd52c05f4bdbe34934ef004d586063b30
   BoringSSL-GRPC: 8edf627ee524575e2f8d19d56f068b448eea3879
   FirebaseAuth: c92d49ada7948d1a23466e3db17bc4c2039dddc3
   FirebaseCore: d3a978a3cfa3240bf7e4ba7d137fdf5b22b628ec
@@ -397,6 +403,6 @@ SPEC CHECKSUMS:
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
   SwiftKeychainWrapper: 807ba1d63c33a7d0613288512399cd1eda1e470c
 
-PODFILE CHECKSUM: fe5f2fae1d7915ff68d0868586e9f501977119d1
+PODFILE CHECKSUM: d0aaa786fc3b16de0d2fac2fd8b94e40e4cf5911
 
 COCOAPODS: 1.11.3

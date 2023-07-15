@@ -15,7 +15,7 @@ struct MyPageView: View {
     var body: some View {
       //  NavigationView {
         ZStack {
-            ScrollView {
+            ScrollView(showsIndicators: false) {
                 VStack(spacing:32) {
                     HStack {
                         Text("마이페이지")
@@ -34,11 +34,11 @@ struct MyPageView: View {
                                 Image("icon_profile")
                                     .padding(20)
                                 VStack(alignment: .leading, spacing:5){
-                                    Text("\(nickname)")
+                                    Text("\(viewModel.nickname)")
                                         .font(.pretendardFont(.bold, size: 14))
                                         .foregroundColor(.greyScale2)
                                     
-                                    Text("\(email)")
+                                    Text("\(viewModel.email)")
                                         .font(.pretendardFont(.medium, size: 12))
                                         .foregroundColor(.greyScale3)
                                 }
@@ -70,24 +70,26 @@ struct MyPageView: View {
                         }
                         
                         VStack(spacing:16) {
-                            HStack {
-                                Image("icon_profile")
-                                    .padding(20)
-                                VStack(alignment: .leading, spacing:5){
-                                    Text("플로니 가계부")
-                                        .font(.pretendardFont(.bold, size: 14))
-                                        .foregroundColor(.greyScale2)
-                                    
-                                    Text("1명")
-                                        .font(.pretendardFont(.medium, size: 12))
-                                        .foregroundColor(.greyScale6)
+                            ForEach(viewModel.myBooks, id:\.self) { book in
+                                HStack {
+                                    Image("icon_profile")
+                                        .padding(20)
+                                    VStack(alignment: .leading, spacing:5){
+                                        Text("\(book.name)")
+                                            .font(.pretendardFont(.bold, size: 14))
+                                            .foregroundColor(.greyScale2)
+                                        
+                                        Text("\(book.memberCount)명")
+                                            .font(.pretendardFont(.medium, size: 12))
+                                            .foregroundColor(.greyScale6)
+                                    }
+                                    Spacer()
+                                    Image("icon_check_circle")
+                                        .padding(20)
                                 }
-                                Spacer()
-                                Image("icon_check_circle")
-                                    .padding(20)
+                                .background(Color.greyScale12)
+                                .cornerRadius(12)
                             }
-                            .background(Color.greyScale12)
-                            .cornerRadius(12)
                             
                             
                             // MARK: Bottom Sheet Toggle
@@ -153,6 +155,9 @@ struct MyPageView: View {
                     }
                 }
                 .padding(20)
+                .onAppear{
+                    viewModel.getMyPage()
+                }
                 
             }
             // }

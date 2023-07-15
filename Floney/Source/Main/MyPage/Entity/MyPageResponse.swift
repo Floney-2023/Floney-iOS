@@ -13,7 +13,7 @@ struct MyPageResponse: Decodable {
     var lastAdTime : String? // null 일 수 있음
     var myBooks : [MyBookResult]?
 }
-struct MyBookResult : Decodable {
+struct MyBookResult : Decodable, Hashable {
     var bookImg : String?
     var bookKey : String
     var name : String

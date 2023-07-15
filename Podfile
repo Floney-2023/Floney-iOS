@@ -2,9 +2,11 @@
 # platform :ios, '10.0'
 
 target 'Floney' do
+  # Pods for Floney  
   # Comment the next line if you don't want to use dynamic frameworks
   #use_frameworks!
   use_modular_headers!
+ 
   pod 'Alamofire'
   pod 'SwiftKeychainWrapper'
   pod 'KakaoSDKCommon' # 공통 모듈
@@ -23,8 +25,10 @@ target 'Floney' do
   pod 'FirebaseStorage'
   pod 'FirebaseStorageSwift'
   pod 'FirebaseDynamicLinks'
-# Pods for Floney
+
   pod 'GoogleSignIn'
   pod 'BoringSSL-GRPC', :modular_headers => false
   pod 'gRPC-Core', :modular_headers => false
+
+  pod 'AppsFlyerFramework'
 end

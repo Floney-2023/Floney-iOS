@@ -83,8 +83,9 @@ struct DayLinesDetailView : View {
                     } else {
                         ForEach(viewModel.dayLines, id: \.self) { line in
                             HStack {
-                                Image("icon_profile")
-                             
+                                if viewModel.seeProfileImg {
+                                    Image("icon_profile")
+                                }
                                 VStack(alignment: .leading, spacing: 3) {
                                         
                                         Text("\(line!.content)")
