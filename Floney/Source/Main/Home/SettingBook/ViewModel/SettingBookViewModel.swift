@@ -16,11 +16,12 @@ class SettingBookViewModel : ObservableObject {
     
     @Published var bookKey = ""
     
-    @Published var result : BookInfoResponse = BookInfoResponse(bookImg: "", bookName: "", startDay: "", ourBookUsers: [])
+    @Published var result : BookInfoResponse = BookInfoResponse(bookImg: nil, bookName: "", startDay: "", seeProfileStatus: true, carryOver: true, ourBookUsers: [])
     @Published var bookUsers : [BookUsers] = []
     @Published var bookImg : String?
     @Published var bookName = ""
     @Published var startDay = ""
+    @Published var carryOver = true
     
     @Published var changedName = ""
     @Published var encryptedImageUrl : String = ""
@@ -55,6 +56,8 @@ class SettingBookViewModel : ObservableObject {
                     
                     self.bookName = self.result.bookName
                     self.startDay = self.result.startDay
+                    self.carryOver = self.result.carryOver
+                    self.profileStatus = self.result.seeProfileStatus
                 }
             }.store(in: &cancellableSet)
     }

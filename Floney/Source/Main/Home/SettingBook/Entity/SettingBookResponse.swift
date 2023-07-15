@@ -11,6 +11,8 @@ struct BookInfoResponse: Decodable {
     var bookImg : String?
     var bookName : String
     var startDay : String
+    var seeProfileStatus : Bool
+    var carryOver : Bool
     var ourBookUsers : [BookUsers]
 }
 struct BookUsers: Decodable, Hashable {

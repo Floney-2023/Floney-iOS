@@ -10,7 +10,7 @@ import CryptoKit
 import FirebaseStorage
 
 struct SetBookProfileImageView: View {
-    @StateObject var viewModel = SettingBookViewModel()
+    @ObservedObject var viewModel : SettingBookViewModel
     @StateObject var permissionManager = PermissionManager()
     var firebaseManager = FirebaseManager()
     var encryptionManager = CryptManager()
@@ -131,6 +131,6 @@ struct SetBookProfileImageView: View {
 
 struct SetBookProfileImageView_Previews: PreviewProvider {
     static var previews: some View {
-        SetBookProfileImageView()
+        SetBookProfileImageView(viewModel: SettingBookViewModel())
     }
 }
