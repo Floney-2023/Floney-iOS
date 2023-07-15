@@ -610,7 +610,6 @@ struct DayLinesBottomSheet: View {
     @StateObject var viewModel : CalendarViewModel
     @Binding var isShowing: Bool
     @Binding var isShowingAddView : Bool
-    //@Binding var originalDateStr :String
     
     var body: some View{
         let year = String(describing: viewModel.selectedYear)
@@ -693,10 +692,7 @@ struct DayLinesBottomSheet: View {
                                     }
                                 }
                             }
-                            
-                            
-                            
-                            
+  
                         } // VStack
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                         .frame(height: 200)

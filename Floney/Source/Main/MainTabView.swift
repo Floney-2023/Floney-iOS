@@ -10,7 +10,7 @@ import SwiftUI
 struct MainTabView: View {
     @State var selection = 0
     @State var showingAddView = false
-    @State var currentDate = ""
+
     let icons = ["icon_home_off", "icon_leaderboard_off", "icon_add_circle", "icon_calculate_off", "icon_person_off"]
     let selectedIcons = ["icon_home_on", "icon_leaderboard_on", "", "icon_calculate_on", "icon_person_on"]
     let labels = ["홈", "분석", "", "정산", "마이"]
@@ -18,8 +18,14 @@ struct MainTabView: View {
         //UITabBar.appearance().backgroundColor = UIColor.white
         
     }
+    private var dateFormatter: DateFormatter {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "YYYY-MM-dd"
+        return formatter
+    }
     
     var body: some View {
+        @State var currentDate = dateFormatter.string(from: Date())
         VStack {
             ZStack {
                 Spacer().fullScreenCover(isPresented: $showingAddView) {

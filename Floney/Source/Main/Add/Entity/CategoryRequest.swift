@@ -17,3 +17,8 @@ struct AddCategoryRequest: Encodable {
     var parent : String
     var name : String
 }
+
+struct DeleteCategoryRequest : Encodable {
+    var bookKey : String
+    var name : String
+}

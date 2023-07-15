@@ -39,7 +39,6 @@ struct IncomeView: View {
                         .frame(width: ((UIScreen.main.bounds.width - 40)*CGFloat(percentage[i]) / 100), height: 20)
                 }
             }
-            .frame(width: .infinity, height: 20)
             .cornerRadius(6)
             .padding(.vertical, 20)
             

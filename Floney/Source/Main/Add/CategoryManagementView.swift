@@ -11,8 +11,10 @@ struct CategoryManagementView: View {
     var options = ["자산", "지출", "수입", "이체"]
     @State private var selectedOptions = 0
     @State var list = ["현금", "체크카드", "신용카드", "은행"]
+    @State var state = [true, true, true, false]
     @State var isShowingAdd = false
     @Binding var isShowingEditCategory : Bool
+    @State var editState = false
     @StateObject var viewModel = AddViewModel()
     var body: some View {
         ZStack {
@@ -24,10 +26,29 @@ struct CategoryManagementView: View {
                                 isShowingEditCategory = false
                             }
                         Spacer()
-                        Image("icon_edit")
+                        if editState {
+                            Button {
+                                self.editState = false
+                            } label: {
+                                Text("완료")
+                                    .font(.pretendardFont(.regular,size: 14))
+                                    .foregroundColor(.greyScale2)
+                            }
+
+                        } else {
+                            Image("icon_edit")
+                                .onTapGesture {
+                                    self.editState = true
+                                }
+                        }
+                        
                         
                     }
+                    .frame(height: 24)
+                    .padding(.top, 0)
                     .padding(.bottom, 52)
+                    .padding(.horizontal, 24)
+                    
                     VStack(alignment:.leading, spacing: 0){
                         HStack{
                             VStack(alignment:.leading, spacing: 10) {
@@ -43,6 +64,9 @@ struct CategoryManagementView: View {
                             
                         }
                     }
+                    
+                    .padding(.horizontal, 24)
+                    
                     HStack(spacing: 0) {
                         ForEach(options.indices, id:\.self) { index in
                             ZStack {
@@ -68,10 +92,13 @@ struct CategoryManagementView: View {
                             )
                         }
                     }
+                    
                     .frame(maxWidth: .infinity)
                     .frame(height: 38)
                     .cornerRadius(8)
-                    .padding(.horizontal, 16)
+                    .padding(.horizontal,20)
+                    
+                    //.padding(.horizontal, 16)
                     /*
                      switch selectedOptions {
                      case 0:
@@ -88,10 +115,40 @@ struct CategoryManagementView: View {
                      */
                     ScrollView(showsIndicators: false) {
                         VStack(alignment: .leading) {
-                            ForEach(viewModel.categories, id: \.self) { data in
+                            ForEach(viewModel.categories.indices, id: \.self) { i in
                                 VStack(alignment: .leading) {
                                     Spacer()
-                                    Text("\(data)")
+                                    HStack(spacing:0) {
+                                        
+                                        if editState {
+                                            if !state[i] {
+                                                Image("icon_delete")
+                                                    .onTapGesture {
+                                                        viewModel.deleteCategoryName = viewModel.categories[i]
+                                                        viewModel.deleteCategory()
+                                                    }
+                                            }
+                                            
+                                        }
+                                        Text("\(list[i])")
+                                            .padding(.leading,12)
+                                            .font(.pretendardFont(.medium, size: 14))
+                                            .foregroundColor(.greyScale2)
+                                    }
+                                    Spacer()
+                                    Divider()
+                                        .foregroundColor(.greyScale11)
+                                }.frame(height: 58)
+                                
+                            }
+                            
+                        }.padding(.horizontal,22)
+                        /*
+                        VStack(alignment: .leading) {
+                            ForEach(viewModel.categories.indices, id: \.self) { i in
+                                VStack(alignment: .leading) {
+                                    Spacer()
+                                    Text("\(viewModel.categories[i])")
                                         .font(.pretendardFont(.medium, size: 14))
                                         .foregroundColor(.greyScale2)
                                     Spacer()
@@ -100,11 +157,11 @@ struct CategoryManagementView: View {
                                 }.frame(height: 58)
                                 
                             }
-                        }
+                        }*/
                     }
                     
                 }
-                .padding(.horizontal, 24)
+               // .padding(.horizontal, 24)
                 Button {
                     isShowingAdd = true
                 } label: {

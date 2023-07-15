@@ -17,6 +17,7 @@ class CalendarViewModel: ObservableObject {
     @Published var showAlert: Bool = false
     @Published var bookKey = ""
     @Published var requestDate: String = ""  // 0000-00-01
+    @Published var options = ["캘린더", "일별"]
         
     //MARK: Today
     @Published var todayYear: Int = 0
@@ -37,7 +38,7 @@ class CalendarViewModel: ObservableObject {
     @Published var totalIncome: Int = 0
     @Published var totalOutcome: Int = 0
     
-    @Published var selectedView: Int = 1
+    @Published var selectedView: Int = 0
     @Published var daysOfTheWeek = ["일","월","화","수","목","금","토"]
     
     //MARK: Day Lines

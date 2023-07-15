@@ -9,11 +9,12 @@ import SwiftUI
 
 struct DayLinesView: View {
     @Binding var date: String
+    @Binding var isShowingAddView : Bool
     @ObservedObject var viewModel : CalendarViewModel
     var body: some View {
             VStack {
                 DayTotalView(viewModel: viewModel)
-                DayLinesDetailView(viewModel: viewModel)
+                DayLinesDetailView(viewModel: viewModel, isShowingAddView: $isShowingAddView)
                 Spacer()
             }//.padding(20)
             .background(Color.clear)
@@ -57,6 +58,7 @@ struct DayTotalView : View {
 }
 struct DayLinesDetailView : View {
     @ObservedObject var viewModel : CalendarViewModel
+    @Binding var isShowingAddView : Bool
     var body: some View {
         VStack(spacing:88) {
             HStack {
@@ -67,6 +69,9 @@ struct DayLinesDetailView : View {
                 Text("내역 추가")
                     .font(.pretendardFont(.semiBold, size: 12))
                     .foregroundColor(.primary2)
+                    .onTapGesture {
+                        isShowingAddView = true
+                    }
             }
             VStack {
                 ScrollView {
@@ -123,6 +128,6 @@ struct DayLinesDetailView : View {
 
 struct DateCalendarView_Previews: PreviewProvider {
     static var previews: some View {
-        DayLinesView(date : .constant("2023-06-20"), viewModel: CalendarViewModel())
+        DayLinesView(date : .constant("2023-06-20"), isShowingAddView: .constant(false), viewModel: CalendarViewModel())
     }
 }

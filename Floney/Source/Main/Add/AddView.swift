@@ -32,6 +32,9 @@ struct AddView: View {
     
     @State var categories: [String] = ["현금", "체크카드", "신용카드", "은행","추가", "추가추가","추가/추가"]
     @State var isShowingEditCategory = false
+    
+    @State var options = ["지출", "수입", "이체"]
+    @State var selectedOptions = 0
         
     var body: some View {
         @State var moneyStr = String(describing: "\(money)")
@@ -88,51 +91,34 @@ struct AddView: View {
                     } // 금액 VStack
                     
                     //MARK: 지출/수입/이체 선택 토글 버튼
-                    HStack {
-                        Button(action: {
-                            toggleType = "지출"
-                            selectedView = 1
-                        }) {
-                            Text("지출")
-                                .font(.pretendardFont(.semiBold, size: 11))
+                    HStack(spacing: 0) {
+                        ForEach(options.indices, id:\.self) { index in
+                            ZStack {
+                                Rectangle()
+                                    .fill(Color.greyScale10)
+                                
+                                Rectangle()
+                                    .fill(Color.white)
+                                    .cornerRadius(8)
+                                    .padding(4)
+                                    .opacity(selectedOptions == index ? 1 : 0.01)
+                                    .onTapGesture {
+                                        withAnimation(.interactiveSpring()) {
+                                            selectedOptions = index
+                                            toggleType = options[selectedOptions]
+                                        }
+                                    }
+                            }
+                            .overlay(
+                                Text(options[index])
+                                
+                                    .font(.pretendardFont(.semiBold, size: 11))
+                                    .foregroundColor(selectedOptions == index ? .greyScale2: .greyScale8)
+                            )
                         }
-                        .frame(maxWidth: .infinity)
-                        .padding(10)
-                        .background(selectedView == 1 ? Color.white : Color.greyScale10)
-                        .foregroundColor(selectedView == 1 ? Color.greyScale2 : Color.greyScale8)
-                        .cornerRadius(8)
-                        
-                        Button(action: {
-                            toggleType = "수입"
-                            selectedView = 2
-                        }) {
-                            Text("수입")
-                                .font(.pretendardFont(.semiBold, size: 11))
-                        }
-                        .frame(maxWidth: .infinity)
-                        //.frame(width: 54, height: 24)
-                        .padding(10)
-                        .background(selectedView == 2 ? Color.white : Color.greyScale10)
-                        .foregroundColor(selectedView == 2 ? Color.greyScale2 : Color.greyScale8)
-                        .cornerRadius(8)
-                        
-                        Button(action: {
-                            toggleType = "이체"
-                            selectedView = 3
-                        }) {
-                            Text("이체")
-                                .font(.pretendardFont(.semiBold, size: 11))
-                        }
-                        //.frame(width: 54, height: 24)
-                        .frame(maxWidth: .infinity)
-                        .padding(10)
-                        
-                        .background(selectedView == 3 ? Color.white : Color.greyScale10)
-                        .foregroundColor(selectedView == 3 ? Color.greyScale2 : Color.greyScale8)
-                        .cornerRadius(8)
                     }
                     .frame(maxWidth: .infinity)
-                    .background(Color.greyScale10)
+                    .frame(height: 38)
                     .cornerRadius(10)
                     
                     //MARK: 날짜/자산/분류/내용/제외여부

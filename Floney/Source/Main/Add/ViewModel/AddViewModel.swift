@@ -30,8 +30,10 @@ class AddViewModel: ObservableObject {
     //MARK: category
     @Published var categoryResult : [CategoryResponse] = []
     @Published var categories : [String] = []
+    @Published var categoryStates : [Bool] = []
     @Published var root = ""
     @Published var newCategoryName = ""
+    @Published var deleteCategoryName = ""
     
     
     private var cancellableSet: Set<AnyCancellable> = []
@@ -59,6 +61,7 @@ class AddViewModel: ObservableObject {
                         self.categories = []
                         for i in self.categoryResult {
                             self.categories.append(i.name)
+                            self.categoryStates.append(i.default)
                             print(i.name)
                         }
                         print(self.categories)
@@ -104,9 +107,25 @@ class AddViewModel: ObservableObject {
                 }
             }.store(in: &cancellableSet)
     }
+    
+    func deleteCategory() {
+        bookKey = "5EDA7A3D"
+        let request = DeleteCategoryRequest(bookKey: bookKey, name: deleteCategoryName)
+        dataManager.deleteCategory(parameters: request)
+            .sink { completion in
+                switch completion {
+                case .finished:
+                    print(" successfully category delete.")
+                case .failure(let error):
+                    print("Error deleting category: \(error)")
+                }
+            } receiveValue: { data in
+                // TODO: Handle the received data if necessary.
+            }
+            .store(in: &cancellableSet)
+    }
 
-    
-    
+
     func createAlert( with error: NetworkError) {
         addLoadingError = error.backendError == nil ? error.initialError.localizedDescription : error.backendError!.message
         self.showAlert = true

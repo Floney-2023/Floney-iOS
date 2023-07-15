@@ -7,7 +7,6 @@
 import SwiftUI
 
 struct HomeView: View {
-    
     @StateObject var viewModel = CalendarViewModel()
     @State var isOnSettingBook = false
     @State var isShowingMonthPicker = false
@@ -32,10 +31,10 @@ struct HomeView: View {
                             }
                     }
                 }
-                ScrollView
+                ScrollView(showsIndicators: false)
                 {
                     // MARK: 캘린더 뷰 - viewModel로 상태 추적
-                    CustomCalendarView(viewModel: viewModel, isShowingMonthPicker: $isShowingMonthPicker, isShowingBottomSheet: $isShowingBottomSheet)
+                    CustomCalendarView(viewModel: viewModel, isShowingMonthPicker: $isShowingMonthPicker, isShowingBottomSheet: $isShowingBottomSheet,isShowingAddView: $isShowingAddView)
                 }
                 
             }.padding(20)
@@ -60,8 +59,11 @@ struct HomeView: View {
             if isShowingBottomSheet {
                 DayLinesBottomSheet(viewModel: viewModel, isShowing: $isShowingBottomSheet, isShowingAddView: $isShowingAddView)
             }
+            
         }.fullScreenCover(isPresented: $isShowingAddView) {
-            AddView.init(isPresented: $isShowingAddView, date:viewModel.selectedDateStr)
+            NavigationView {
+                AddView.init(isPresented: $isShowingAddView, date:viewModel.selectedDateStr)
+            }
         }
     }
 }
@@ -108,6 +110,7 @@ struct CustomCalendarView: View {
     @ObservedObject var viewModel : CalendarViewModel
     @Binding var isShowingMonthPicker : Bool
     @Binding var isShowingBottomSheet : Bool
+    @Binding var isShowingAddView : Bool
   
     let calendar = Calendar.current
     
@@ -119,53 +122,52 @@ struct CustomCalendarView: View {
                 
                 Button(action: {
                     withAnimation {
-                        if viewModel.selectedView == 1 {
+                        if viewModel.selectedView == 0 {
                             self.isShowingMonthPicker.toggle() // MARK: 연도, 월 변경 toggle
                         }
                     }
                 }) {
-                    Text(viewModel.selectedView == 1 ? "\(viewModel.selectedYearMonth)" : "\(viewModel.selectedMonth).\(viewModel.selectedDay)")
+                    Text(viewModel.selectedView == 0 ? "\(viewModel.selectedYearMonth)" : "\(viewModel.selectedMonth).\(viewModel.selectedDay)")
                         .font(.pretendardFont(.semiBold, size: 20))
                         .foregroundColor(.greyScale1)
                 }
                 
                 Image("rightSide")
                 Spacer()
-                HStack {
-                    Button(action: {
-                        viewModel.selectedView = 1
-                    }) {
-                        Text("캘린더")
-                            .font(.pretendardFont(.semiBold, size: 11))
+                HStack(spacing: 0) {
+                    ForEach(viewModel.options.indices, id:\.self) { index in
+                        ZStack {
+                            Rectangle()
+                                .fill(Color.greyScale10)
+                            
+                            Rectangle()
+                                .fill(Color.white)
+                                .cornerRadius(5)
+                                .padding(4)
+                                .opacity(viewModel.selectedView == index ? 1 : 0.01)
+                                .onTapGesture {
+                                    withAnimation(.interactiveSpring()) {
+                                        viewModel.selectedView = index
+                                    }
+                                }
+                        }
+                        .overlay(
+                            Text(viewModel.options[index])
+                                .font(.pretendardFont(.semiBold, size: 11))
+                                .foregroundColor(viewModel.selectedView == index ? .greyScale2: .greyScale8)
+                        )
                     }
-                    //.frame(width: 54, height: 24)
-                    .padding(10)
-                    .background(viewModel.selectedView == 1 ? Color.white : Color.greyScale10)
-                    .foregroundColor(viewModel.selectedView == 1 ? Color.greyScale2 : Color.greyScale8)
-                    .cornerRadius(5)
-                    
-                    Button(action: {
-                        viewModel.selectedView = 2
-                        viewModel.dayLinesDate = viewModel.selectedDateStr
-                    }) {
-                        Text("일별")
-                            .font(.pretendardFont(.semiBold, size: 11))
-                    }
-                    //.frame(width: 54, height: 24)
-                    .padding(10)
-                    .background(viewModel.selectedView == 2 ? Color.white : Color.greyScale10)
-                    .foregroundColor(viewModel.selectedView == 2 ? Color.greyScale2 : Color.greyScale8)
-                    .cornerRadius(5)
                 }
-                .background(Color.greyScale10)
-                .frame(width: 116, height: 32)
-                .cornerRadius(8)
                 
+                .frame(width: 113)
+                .frame(height: 38)
+                .cornerRadius(8)
+                                
             }
-            if viewModel.selectedView == 1 {
+            if viewModel.selectedView == 0 {
                 MonthCalendar(viewModel: viewModel, isShowingMonthPicker: $isShowingMonthPicker, isShowingBottomSheet: $isShowingBottomSheet)
-            } else if viewModel.selectedView == 2 {
-                DayLinesView(date: $viewModel.dayLinesDate, viewModel: viewModel)
+            } else if viewModel.selectedView == 1 {
+                DayLinesView(date: $viewModel.dayLinesDate, isShowingAddView: $isShowingAddView, viewModel: viewModel)
             }
         }
         

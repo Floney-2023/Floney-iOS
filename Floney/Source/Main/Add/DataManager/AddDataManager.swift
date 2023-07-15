@@ -12,6 +12,7 @@ protocol AddProtocol {
     func getCategory(_ parameters:CategoryRequest) -> AnyPublisher<DataResponse<[CategoryResponse], NetworkError>, Never>
     func postLines(_ parameters:LinesRequest) -> AnyPublisher<DataResponse<LinesResponse, NetworkError>, Never>
     func postCategory(_ parameters:AddCategoryRequest) -> AnyPublisher<DataResponse<CategoryResponse, NetworkError>, Never>
+    func deleteCategory(parameters: DeleteCategoryRequest) -> AnyPublisher<Void, NetworkError>
 }
 
 class AddService {
@@ -85,4 +86,44 @@ extension AddService: AddProtocol {
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
     }
+    func deleteCategory(parameters: DeleteCategoryRequest) -> AnyPublisher<Void, NetworkError> {
+        let url = "\(Constant.BASE_URL)/books/categories"
+       
+        let token = Keychain.getKeychainValue(forKey: .accessToken)!
+        
+        return AF.request(url,
+                          method: .delete,
+                          parameters: parameters,
+                          encoder: JSONParameterEncoder(),
+                          headers: ["Authorization":"Bearer \(token)"])
+        .validate()
+        .publishData()
+        .tryMap { result in
+            // Check the status code
+            if let statusCode = result.response?.statusCode {
+                print("Status Code: \(statusCode)")
+                if statusCode == 200 {
+                    return // Success, return
+                } else {
+                    // Handle error based on status code
+                    let backendError = result.data.flatMap { try? JSONDecoder().decode(BackendError.self, from: $0)}
+
+                    
+                    if let backendError = backendError {
+                        throw NetworkError(initialError: result.error!, backendError: backendError)
+                    } else {
+                        throw NetworkError(initialError: result.error!, backendError: nil)
+                    }
+                }
+            } else {
+                throw NetworkError(initialError: result.error!, backendError: nil)
+            }
+        }
+        .mapError { error in
+            return error as! NetworkError
+        }
+        .eraseToAnyPublisher()
+        
+    }
+
 }
