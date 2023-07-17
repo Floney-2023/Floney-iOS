@@ -39,7 +39,7 @@ class SettingBookViewModel : ObservableObject {
     }
     //MARK: server
     func getBookInfo() {
-        bookKey = "5EDA7A3D"
+        bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
         let request = BookInfoRequest(bookKey: bookKey)
         dataManager.getBookInfo(request)
             .sink { (dataResponse) in
@@ -62,7 +62,7 @@ class SettingBookViewModel : ObservableObject {
             }.store(in: &cancellableSet)
     }
     func changeProfile() {
-        bookKey = "5EDA7A3D"
+        bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
         let request = BookProfileRequest(newUrl: encryptedImageUrl, bookKey: bookKey)
         print("book profile parameter : \(request)")
         dataManager.changeProfile(parameters: request)
@@ -80,13 +80,13 @@ class SettingBookViewModel : ObservableObject {
     }
 
     func changeNickname() {
-        bookKey = "5EDA7A3D"
+        bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
         let request = BookNameRequest(name: changedName, bookKey: bookKey)
         dataManager.changeNickname(parameters: request)
             .sink { completion in
                 switch completion {
                 case .finished:
-                    print("Profile successfully changed.")
+                    print("Changing nickname successfully changed.")
                 case .failure(let error):
                     print("Error changing nickname: \(error)")
                 }
@@ -96,13 +96,13 @@ class SettingBookViewModel : ObservableObject {
             .store(in: &cancellableSet)
     }
     func changeProfileStatus() {
-        bookKey = "5EDA7A3D"
+        bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
         let request = SeeProfileRequest(bookKey: bookKey, seeProfileStatus: profileStatus)
         dataManager.changeProfileStatus(parameters: request)
             .sink { completion in
                 switch completion {
                 case .finished:
-                    print("Profile successfully changed.")
+                    print("Changing Profile Status successfully changed.")
                 case .failure(let error):
                     print("Error changing nickname: \(error)")
                 }
@@ -112,13 +112,13 @@ class SettingBookViewModel : ObservableObject {
             .store(in: &cancellableSet)
     }
     func setBudget() {
-        bookKey = "5EDA7A3D"
+        bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
         let request = SetBudgetRequest(bookKey: bookKey, budget: budget)
         dataManager.setBudget(parameters: request)
             .sink { completion in
                 switch completion {
                 case .finished:
-                    print("Profile successfully changed.")
+                    print("Setting Budget successfully changed.")
                 case .failure(let error):
                     print("Error changing nickname: \(error)")
                 }
@@ -128,13 +128,13 @@ class SettingBookViewModel : ObservableObject {
             .store(in: &cancellableSet)
     }
     func setAsset() {
-        bookKey = "5EDA7A3D"
+        bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
         let request = SetAssetRequest(bookKey: bookKey, asset: asset)
         dataManager.setAsset(parameters: request)
             .sink { completion in
                 switch completion {
                 case .finished:
-                    print("Profile successfully changed.")
+                    print("Setting Asset successfully changed.")
                 case .failure(let error):
                     print("Error changing nickname: \(error)")
                 }

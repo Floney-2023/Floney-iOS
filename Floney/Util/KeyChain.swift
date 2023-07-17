@@ -19,6 +19,8 @@ class Keychain {
         case encryptionKey
         case bookProfileImage
         case userProfileImage
+        case userNickname
+        case bookName
     }
     
     /**

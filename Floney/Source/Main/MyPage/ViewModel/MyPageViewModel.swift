@@ -67,6 +67,7 @@ class MyPageViewModel: ObservableObject {
                 switch completion {
                 case .finished:
                     print("Profile successfully changed.")
+                    Keychain.setKeychain(self.changedNickname, forKey: .userNickname)
                 case .failure(let error):
                     print("Error changing nickname: \(error)")
                 }

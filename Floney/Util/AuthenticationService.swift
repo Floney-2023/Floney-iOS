@@ -13,9 +13,13 @@ class AuthenticationService: ObservableObject {
     
     @Published var isUserLoggedIn: Bool = false
     @Published var tokenExpired: Bool = false
+    @Published var bookStatus: Bool = false
+    @Published var bookExistenceViewModel = BookExistenceViewModel()
 
     init() {
-        isUserLoggedIn = UserDefaults.standard.bool(forKey: "isLoggedIn")
+        //isUserLoggedIn = UserDefaults.standard.bool(forKey: "isLoggedIn")
+        bookExistenceViewModel.getBookExistence()
+        //Keychain.setKeychain("C9C30C52", forKey: .bookKey)
     }
     func logoutDueToTokenExpiration() {
         // 로그아웃 처리
@@ -26,5 +30,9 @@ class AuthenticationService: ObservableObject {
         // 로그인 처리
         self.isUserLoggedIn = true
         UserDefaults.standard.set(true, forKey: "isLoggedIn")
+    }
+    func bookExist() {
+        bookExistenceViewModel.getBookExistence()
+        bookStatus = bookExistenceViewModel.bookExistence
     }
 }

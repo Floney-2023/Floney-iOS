@@ -46,13 +46,9 @@ class SignUpViewModel: ObservableObject {
                     self.isNext = true
                     self.setToken()
                     self.setEmailPassword()
-                    //let token = Keychain.setKeychain(self.result.accessToken, forKey: .authorization)
-                    //let token = Keychain.setKeychain(value: ,forKey: .authorization)
-                   
-                   
+
                     print(self.result.accessToken)
                 }
-                
             }.store(in: &cancellableSet)
     }
     func kakaoSignUp(_ token: String) {
@@ -103,6 +99,7 @@ class SignUpViewModel: ObservableObject {
     func setEmailPassword() {
         Keychain.setKeychain(email, forKey: .email)
         Keychain.setKeychain(password, forKey: .password)
+        Keychain.setKeychain(nickname, forKey: .userNickname)
     }
     /*
     func authEmail() {

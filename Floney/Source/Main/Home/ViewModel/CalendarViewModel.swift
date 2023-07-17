@@ -56,12 +56,11 @@ class CalendarViewModel: ObservableObject {
         self.dataManager = dataManager
         self.calcToday()
         self.calcDate(Date())
-        Keychain.setKeychain("eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJydWRhbHN3aGRrMTJAbmF2ZXIuY29tIiwiaWF0IjoxNjg5MDE5MzExLCJleHAiOjE2ODkwMjI5MTF9.rxAQM2ewEPfF6h_jdaZyDC2iu2r2mRd9tR7bRi8kfzuLENXYDElWZznds36D1w0G", forKey: .accessToken)
     }
     
     //MARK: server
     func getCalendar() {
-        bookKey = "5EDA7A3D"
+        bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
         let request = CalendarRequest(bookKey: bookKey, date: requestDate)
         dataManager.getCalendar(request)
             .sink { (dataResponse) in
@@ -82,7 +81,7 @@ class CalendarViewModel: ObservableObject {
             }.store(in: &cancellableSet)
     }
     func getDayLines() {
-        bookKey = "5EDA7A3D"
+        bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
         let request = DayLinesRequest(bookKey: bookKey, date: dayLinesDate)
         dataManager.getDayLines(request)
             .sink { (dataResponse) in

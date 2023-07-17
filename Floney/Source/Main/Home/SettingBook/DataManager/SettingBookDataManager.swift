@@ -132,7 +132,7 @@ extension SettingBookService: SettingBookProtocol {
         let url = "\(Constant.BASE_URL)/books/info/seeProfile"
        
         let token = Keychain.getKeychainValue(forKey: .accessToken)!
-        print("change nickname : \n\(token)")
+        //print("change nickname : \n\(token)")
         
         return AF.request(url,
                           method: .post,

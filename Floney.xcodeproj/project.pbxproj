@@ -127,6 +127,9 @@
 		2FF25C9929E80D7E00737346 /* SetBookNameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FF25C9829E80D7E00737346 /* SetBookNameView.swift */; };
 		2FF7247E2A5F0EC4008B9333 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FF7247D2A5F0EC3008B9333 /* Date.swift */; };
 		2FF724802A5F1D1E008B9333 /* YearMonthPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FF7247F2A5F1D1E008B9333 /* YearMonthPicker.swift */; };
+		2FF724882A654AC7008B9333 /* BookExistenceResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FF724872A654AC7008B9333 /* BookExistenceResponse.swift */; };
+		2FF7248A2A654AD8008B9333 /* BookExistenceDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FF724892A654AD8008B9333 /* BookExistenceDataManager.swift */; };
+		2FF7248C2A654AE6008B9333 /* BookExistenceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FF7248B2A654AE6008B9333 /* BookExistenceViewModel.swift */; };
 		2FFA302429EE775B00412F83 /* SetBookProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFA302329EE775B00412F83 /* SetBookProfileView.swift */; };
 		2FFA302629EE81C000412F83 /* CreateBookView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFA302529EE81C000412F83 /* CreateBookView.swift */; };
 		2FFA302A29EEAE6700412F83 /* SignUpRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFA302929EEAE6700412F83 /* SignUpRequest.swift */; };
@@ -265,6 +268,9 @@
 		2FF25C9829E80D7E00737346 /* SetBookNameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetBookNameView.swift; sourceTree = "<group>"; };
 		2FF7247D2A5F0EC3008B9333 /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		2FF7247F2A5F1D1E008B9333 /* YearMonthPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YearMonthPicker.swift; sourceTree = "<group>"; };
+		2FF724872A654AC7008B9333 /* BookExistenceResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookExistenceResponse.swift; sourceTree = "<group>"; };
+		2FF724892A654AD8008B9333 /* BookExistenceDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookExistenceDataManager.swift; sourceTree = "<group>"; };
+		2FF7248B2A654AE6008B9333 /* BookExistenceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookExistenceViewModel.swift; sourceTree = "<group>"; };
 		2FFA302329EE775B00412F83 /* SetBookProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetBookProfileView.swift; sourceTree = "<group>"; };
 		2FFA302529EE81C000412F83 /* CreateBookView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateBookView.swift; sourceTree = "<group>"; };
 		2FFA302929EEAE6700412F83 /* SignUpRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpRequest.swift; sourceTree = "<group>"; };
@@ -635,6 +641,7 @@
 		2FD7F3AC29B1E3B100B99CAA /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				2FF724832A654A7A008B9333 /* BookExistence */,
 				2FC3B1E02A321AC400572804 /* Photo */,
 				2F146A5C2A14B03F0089AB3D /* TokenReissue */,
 				2FD7F3B029B1E3DD00B99CAA /* Splash */,
@@ -966,6 +973,40 @@
 			path = EnterBookCode;
 			sourceTree = "<group>";
 		};
+		2FF724832A654A7A008B9333 /* BookExistence */ = {
+			isa = PBXGroup;
+			children = (
+				2FF724862A654A9B008B9333 /* ViewModel */,
+				2FF724852A654A97008B9333 /* Entity */,
+				2FF724842A654A8D008B9333 /* DataManager */,
+			);
+			path = BookExistence;
+			sourceTree = "<group>";
+		};
+		2FF724842A654A8D008B9333 /* DataManager */ = {
+			isa = PBXGroup;
+			children = (
+				2FF724892A654AD8008B9333 /* BookExistenceDataManager.swift */,
+			);
+			path = DataManager;
+			sourceTree = "<group>";
+		};
+		2FF724852A654A97008B9333 /* Entity */ = {
+			isa = PBXGroup;
+			children = (
+				2FF724872A654AC7008B9333 /* BookExistenceResponse.swift */,
+			);
+			path = Entity;
+			sourceTree = "<group>";
+		};
+		2FF724862A654A9B008B9333 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				2FF7248B2A654AE6008B9333 /* BookExistenceViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
 		2FFA302729EEAE2500412F83 /* DataManager */ = {
 			isa = PBXGroup;
 			children = (
@@ -1217,6 +1258,7 @@
 				2FEA2BCC29C43D9500DE8E54 /* EmailAuthView.swift in Sources */,
 				2FC3B1DF2A2DC80500572804 /* CategoryButton.swift in Sources */,
 				2FFA303429EEAF6B00412F83 /* SignInResponse.swift in Sources */,
+				2FF7248A2A654AD8008B9333 /* BookExistenceDataManager.swift in Sources */,
 				2FD7F3C129B1E46900B99CAA /* Color.swift in Sources */,
 				2FF25C9129E7EF0400737346 /* ButtonLarge.swift in Sources */,
 				2FEA2BDE29D0390300DE8E54 /* WithdrawalView.swift in Sources */,
@@ -1238,8 +1280,10 @@
 				2FB3DA762A5C86D800E1486D /* BudgetView.swift in Sources */,
 				2FF724802A5F1D1E008B9333 /* YearMonthPicker.swift in Sources */,
 				2FF25C8F29E7EE9D00737346 /* BottomSheet.swift in Sources */,
+				2FF724882A654AC7008B9333 /* BookExistenceResponse.swift in Sources */,
 				2FB3DA702A5C265700E1486D /* SettlementResponse.swift in Sources */,
 				2F1614892A0A76E70029E9A9 /* MyPageRequest.swift in Sources */,
+				2FF7248C2A654AE6008B9333 /* BookExistenceViewModel.swift in Sources */,
 				2FE23F622A39B981009FA8CA /* FirebaseManager.swift in Sources */,
 				2F1614552A07CFE20029E9A9 /* Keychain.swift in Sources */,
 				2FFDC36A2A00084600BE4C1B /* SignInViewModel.swift in Sources */,

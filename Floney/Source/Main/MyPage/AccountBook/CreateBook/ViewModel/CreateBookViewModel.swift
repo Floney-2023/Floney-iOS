@@ -34,6 +34,8 @@ class CreateBookViewModel: ObservableObject {
                 } else {
                     self.result = dataResponse.value!
                     self.isNextToCreateBook = true
+                    print(self.result) // bookkey & code
+                    // bookKey는 request할 때 사용, code는 초대할 때 사용
                     print(self.result.code)
                 }
             }.store(in: &cancellableSet)

@@ -65,7 +65,6 @@ struct ModifyingBookView: View {
                     }.padding(.trailing, 6)
                         
                 }
-                
                 .onReceive(viewModel.$profileStatus) { profileStatus in
                     print("see profile status : \(viewModel.profileStatus)")
                         viewModel.changeProfileStatus()

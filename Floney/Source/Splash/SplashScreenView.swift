@@ -17,7 +17,12 @@ struct SplashScreenView: View {
             //SignInView()
             Group {
                 if userSession.isUserLoggedIn {
-                    MainTabView()
+                   // if userSession.bookStatus {
+                        MainTabView()
+                        /*
+                    } else {
+                        SendBookCodeView()
+                    }*/
                 } else {
                     SignInView()
                 }
@@ -34,8 +39,9 @@ struct SplashScreenView: View {
                     withAnimation {
                         self.isActive = true
                     }
-                    
+                   
                 }
+                
             }
         }
     }

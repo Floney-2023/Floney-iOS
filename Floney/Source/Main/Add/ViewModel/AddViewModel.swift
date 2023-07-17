@@ -45,7 +45,7 @@ class AddViewModel: ObservableObject {
     
     //MARK: server
     func getCategory() {
-        bookKey = "5EDA7A3D"
+        bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
         let request = CategoryRequest(bookKey: bookKey, root: root)
         dataManager.getCategory(request)
             .sink { (dataResponse) in
@@ -61,7 +61,7 @@ class AddViewModel: ObservableObject {
                         self.categories = []
                         for i in self.categoryResult {
                             self.categories.append(i.name)
-                            self.categoryStates.append(i.default)
+                            //self.categoryStates.append(i.default)
                             print(i.name)
                         }
                         print(self.categories)
@@ -71,8 +71,8 @@ class AddViewModel: ObservableObject {
             }.store(in: &cancellableSet)
     }
     func postLines() {
-        bookKey = "5EDA7A3D"
-        nickname = "도토리"
+        bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
+        nickname = Keychain.getKeychainValue(forKey: .userNickname)!
         let moneyInt = Int(money)
         print(moneyInt)
         let request = LinesRequest(bookKey: bookKey, money: moneyInt!, lineDate: lineDate, flow: flow, asset: asset, line: line, description: description, except: except, nickname: nickname)
@@ -91,7 +91,7 @@ class AddViewModel: ObservableObject {
             }.store(in: &cancellableSet)
     }
     func postCategory() {
-        bookKey = "5EDA7A3D"
+        bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
 
         let request = AddCategoryRequest(bookKey: bookKey, parent: root, name: newCategoryName)
         dataManager.postCategory(request)
@@ -109,7 +109,7 @@ class AddViewModel: ObservableObject {
     }
     
     func deleteCategory() {
-        bookKey = "5EDA7A3D"
+        bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
         let request = DeleteCategoryRequest(bookKey: bookKey, name: deleteCategoryName)
         dataManager.deleteCategory(parameters: request)
             .sink { completion in

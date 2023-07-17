@@ -14,6 +14,7 @@ import FirebaseAuth
 @MainActor
 class SignInViewModel: ObservableObject {
     var tokenViewModel = TokenReissueViewModel()
+   
     @Published var signUpViewModel = SignUpViewModel()
     @Published var result : SignInResponse = SignInResponse(accessToken: "", refreshToken: "")
     @Published var signInLoadingError: String = ""
@@ -51,7 +52,6 @@ class SignInViewModel: ObservableObject {
                     self.result = dataResponse.value!
                     self.isNext = true
                     self.setToken()
-                    // 자동로그인을 한 경우는 isLoggedIn이 true이므로 email과 password를 다시 저장하지 않아도 괜찮다.
                     
                     if (AuthenticationService.shared.isUserLoggedIn == false){
                         self.setEmailPassword()
@@ -59,8 +59,8 @@ class SignInViewModel: ObservableObject {
                     }
                     
                     print("--성공--")
-                    //print(self.result.accessToken)
                     print(self.result)
+                    AuthenticationService.shared.bookExist()
                 }
             }.store(in: &cancellableSet)
     }
