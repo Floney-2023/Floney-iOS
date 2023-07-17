@@ -29,3 +29,12 @@ struct AddSettlementResponseDetails : Decodable, Hashable {
     var money : Float
     var userNickname : String
 }
+
+struct SettlementListResponse : Decodable, Hashable {
+    var id : Int
+    var userCount : Int
+    var startDate : String
+    var endDate : String
+    var totalOutcome : Float
+    var outcome : Float
+}

@@ -39,11 +39,16 @@ class CalculateViewModel : ObservableObject {
         }
     }
     
+    //MARK: 정산 요청 완료
     @Published var settlementResult : AddSettlementResponse = AddSettlementResponse(id: 0, userCount: 0, startDate: "", endDate: "", totalOutcome: 0, outcome: 0, details: [])
     @Published var userCount = 0
     @Published var totalOutcome : Float = 0
     @Published var outcomePerUser : Float = 0
     @Published var details : [AddSettlementResponseDetails] = []
+    
+    //MARK: 정산 내역 리스트
+    @Published var settlementList : [SettlementListResponse] = []
+    
     private var cancellableSet: Set<AnyCancellable> = []
     var dataManager: CalculateProtocol
     
@@ -100,6 +105,24 @@ class CalculateViewModel : ObservableObject {
                 }
             }.store(in: &cancellableSet)
     }
+    func getSettlementList() {
+        dataManager.getSettlementList()
+            .sink { (dataResponse) in
+                if dataResponse.error != nil {
+                    self.createAlert(with: dataResponse.error!)
+                    // 에러 처리
+                    print(dataResponse.error)
+                    self.showLoadingView = false
+                } else {
+                    print("--정산 내역 요청 성공--")
+                    self.showLoadingView = false
+                    self.settlementList = dataResponse.value!
+                    print(self.settlementList)
+  
+                }
+            }.store(in: &cancellableSet)
+    }
+
     
     func daysInMonth() -> [Date] {
         var dates = [Date]()

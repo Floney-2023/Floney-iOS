@@ -10,6 +10,7 @@ import SwiftUI
 struct CalculateView: View {
     var date = 11
     @State var isShowingCalc = false
+    @State var isShowingSettlement = false
     @Binding var showingTabbar : Bool
     
     var body: some View {
@@ -58,11 +59,14 @@ struct CalculateView: View {
                         .foregroundColor(.greyScale6)
                 }
                 .onTapGesture {
-                    
+                    self.isShowingSettlement = true
                 }
                 Spacer()
                 
                 NavigationLink(destination : CalculateMainView(isShowingTabbar: $showingTabbar, isShowingCalc: $isShowingCalc), isActive: $isShowingCalc){
+                    EmptyView()
+                }
+                NavigationLink(destination : SettlementListView(isShowing: $isShowingSettlement, showingTabbar: $showingTabbar), isActive: $isShowingSettlement){
                     EmptyView()
                 }
             }.padding(.top, 26)
