@@ -120,19 +120,21 @@ struct SettingBookView: View {
                         .onTapGesture {
                             self.isShowingCarriedOver.toggle()
                         }
-                        NavigationLink(destination: FindPasswordView()){
-                            HStack {
-                                VStack {
-                                    Text("가계부 초기화")
-                                        .font(.pretendardFont(.regular, size: 12))
-                                        .foregroundColor(.greyScale6)
-                                    
-                                    Divider()
-                                        .padding(EdgeInsets(top: -10, leading: 0, bottom: 0, trailing: 0))
-                                        .frame(width: 70,height: 1.0)
-                                        .foregroundColor(.greyScale6)
+                        if viewModel.role == "방장" {
+                            NavigationLink(destination: FindPasswordView()){
+                                HStack {
+                                    VStack {
+                                        Text("가계부 초기화")
+                                            .font(.pretendardFont(.regular, size: 12))
+                                            .foregroundColor(.greyScale6)
+                                        
+                                        Divider()
+                                            .padding(EdgeInsets(top: -10, leading: 0, bottom: 0, trailing: 0))
+                                            .frame(width: 70,height: 1.0)
+                                            .foregroundColor(.greyScale6)
+                                    }
+                                    Spacer()
                                 }
-                                Spacer()
                             }
                         }
                     }
@@ -173,13 +175,15 @@ struct SettingBookView: View {
                         Image("forward_button")
                         
                     }
-                    HStack {
-                        Text("화폐 설정")
-                            .font(.pretendardFont(.bold,size: 16))
-                            .foregroundColor(.greyScale1)
-                        Spacer()
-                        Image("forward_button")
-                        
+                    if viewModel.role == "방장" {
+                        HStack {
+                            Text("화폐 설정")
+                                .font(.pretendardFont(.bold,size: 16))
+                                .foregroundColor(.greyScale1)
+                            Spacer()
+                            Image("forward_button")
+                            
+                        }
                     }
                     
                     HStack {
@@ -224,6 +228,7 @@ struct SettingBookView: View {
                 .navigationBarItems(leading: BackButton(), trailing: Image("icon_notification"))
                 .onAppear{
                     viewModel.getBookInfo()
+                 
                 }
             }.sheet(isPresented: $onShareSheet) {
                 ActivityView(activityItems: [shareUrl ?? ""])

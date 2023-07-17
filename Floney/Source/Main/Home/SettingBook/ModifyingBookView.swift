@@ -71,20 +71,21 @@ struct ModifyingBookView: View {
                 }
                 
             }
-            
-            NavigationLink(destination: WithdrawalView()){
-                HStack {
-                    VStack {
-                        Text("가계부 삭제")
-                            .font(.pretendardFont(.regular, size: 12))
-                            .foregroundColor(.greyScale6)
-                        Divider()
-                            .padding(EdgeInsets(top: -10, leading: 0, bottom: 0, trailing: 0))
-                            .frame(width: 50,height: 1.0)
-                            .foregroundColor(.greyScale6)
-                        
+            if viewModel.role == "방장" {
+                NavigationLink(destination: WithdrawalView()){
+                    HStack {
+                        VStack {
+                            Text("가계부 삭제")
+                                .font(.pretendardFont(.regular, size: 12))
+                                .foregroundColor(.greyScale6)
+                            Divider()
+                                .padding(EdgeInsets(top: -10, leading: 0, bottom: 0, trailing: 0))
+                                .frame(width: 50,height: 1.0)
+                                .foregroundColor(.greyScale6)
+                            
+                        }
+                        Spacer()
                     }
-                    Spacer()
                 }
             }
             Spacer()

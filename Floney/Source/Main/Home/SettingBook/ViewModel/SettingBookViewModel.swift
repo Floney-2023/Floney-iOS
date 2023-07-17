@@ -30,15 +30,17 @@ class SettingBookViewModel : ObservableObject {
     @Published var budget : Float = 0
     @Published var asset : Float = 0
     
+    @Published var role = "방장"
+    
     private var cancellableSet: Set<AnyCancellable> = []
     var dataManager: SettingBookProtocol
     
     init( dataManager: SettingBookProtocol = SettingBookService.shared) {
         self.dataManager = dataManager
-       
     }
     //MARK: server
     func getBookInfo() {
+        //bookKey = "C9C30C52"
         bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
         let request = BookInfoRequest(bookKey: bookKey)
         dataManager.getBookInfo(request)
@@ -51,6 +53,7 @@ class SettingBookViewModel : ObservableObject {
                     self.result = dataResponse.value!
                     print("--성공--")
                     print(self.result)
+                    
                     self.bookUsers = self.result.ourBookUsers
                     self.bookImg = self.result.bookImg
                     
@@ -58,6 +61,7 @@ class SettingBookViewModel : ObservableObject {
                     self.startDay = self.result.startDay
                     self.carryOver = self.result.carryOver
                     self.profileStatus = self.result.seeProfileStatus
+                    self.hostFilter()
                 }
             }.store(in: &cancellableSet)
     }
@@ -142,6 +146,23 @@ class SettingBookViewModel : ObservableObject {
                 // TODO: Handle the received data if necessary.
             }
             .store(in: &cancellableSet)
+    }
+    
+    //MARK: 방장 필터
+    func hostFilter() {
+        // role이 "방장"이고, me가 true인 요소를 필터링합니다.
+        print("가계부 멤버 : \(bookUsers)")
+        let filteredUsers = bookUsers.filter { user in
+            user.role == "방장" && user.me == true
+        }
+        if let host = filteredUsers.first {
+            print("방장이며, me가 true인 사용자: \(host)")
+            role = "방장"
+        } else {
+            // 조건에 해당하는 사용자가 없을 경우 처리할 작업을 수행합니다.
+            print("해당 조건을 만족하는 사용자가 없습니다.")
+            role = "팀원"
+        }
     }
     
     func createAlert( with error: NetworkError) {
