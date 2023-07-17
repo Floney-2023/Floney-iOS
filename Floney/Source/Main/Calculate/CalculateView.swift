@@ -10,6 +10,8 @@ import SwiftUI
 struct CalculateView: View {
     var date = 11
     @State var isShowingCalc = false
+    @Binding var showingTabbar : Bool
+    
     var body: some View {
             VStack {
                 HStack {
@@ -60,18 +62,18 @@ struct CalculateView: View {
                 }
                 Spacer()
                 
-                
+                NavigationLink(destination : CalculateMainView(isShowingTabbar: $showingTabbar, isShowingCalc: $isShowingCalc), isActive: $isShowingCalc){
+                    EmptyView()
+                }
             }.padding(.top, 26)
             
-            .fullScreenCover(isPresented: $isShowingCalc) {
-                    SetUserCalcView(isShowingCalc: $isShowingCalc)
-            }
+            
         
     }
 }
 
 struct CalculateView_Previews: PreviewProvider {
     static var previews: some View {
-        CalculateView()
+        CalculateView(showingTabbar: .constant(true))
     }
 }

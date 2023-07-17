@@ -59,15 +59,7 @@ struct FindPasswordView: View {
             .onAppear(perform : UIApplication.shared.hideKeyboard)
             // 내용을 불투명한 배경으로 가리는 로딩 화면
             if viewModel.isLoading {
-                /*
-                Color.black.opacity(0.4)
-                    .ignoresSafeArea()
-                    .overlay(
-                        ProgressView()
-                            .progressViewStyle(CircularProgressViewStyle(tint: .white))
-                            .scaleEffect(1.5)
-                    )
-                 */
+                
                 LoadingView()
             }
             

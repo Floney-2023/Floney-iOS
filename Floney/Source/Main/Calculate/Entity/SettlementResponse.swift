@@ -14,3 +14,18 @@ struct SettlementResponse : Decodable, Hashable {
     var content : String
     var img : String?
 }
+
+struct AddSettlementResponse : Decodable, Hashable {
+    var id : Int
+    var userCount : Int
+    var startDate : String
+    var endDate : String
+    var totalOutcome : Float
+    var outcome : Float
+    var details : [AddSettlementResponseDetails]
+
+}
+struct AddSettlementResponseDetails : Decodable, Hashable {
+    var money : Float
+    var userNickname : String
+}

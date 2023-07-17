@@ -14,13 +14,12 @@ enum ButtonOptions: String, CaseIterable {
 }
 
 struct AnalysisView: View {
+    @Binding var showingTabbar : Bool
     var options = ["지출", "수입", "예산", "자산"]
     @State private var selectedOptions = 0
     @State private var selectedOption = ButtonOptions.optionOne
     @StateObject var viewModel = AnalysisViewModel()
-    init(){
-            
-        }
+    
     var body: some View {
         ZStack{
             VStack(spacing:24){
@@ -39,17 +38,7 @@ struct AnalysisView: View {
                 }
                 .padding(.horizontal, 20)
                 .padding(.bottom, 8)
-                /*
-                Picker("Options", selection: $selectedOption) {
-                    ForEach(ButtonOptions.allCases, id: \.self) { option in
-                        Text(option.rawValue).tag(option)
-                            .font(.pretendardFont(.semiBold, size: 14))
-                            .foregroundColor(.greyScale2)
-                    }
-                }
-               
-                .pickerStyle(SegmentedPickerStyle())
-                .padding()*/
+                
                 HStack(spacing: 0) {
                     ForEach(options.indices, id:\.self) { index in
                         ZStack {
@@ -103,6 +92,6 @@ struct AnalysisView: View {
 
 struct AnalysisView_Previews: PreviewProvider {
     static var previews: some View {
-        AnalysisView()
+        AnalysisView(showingTabbar: .constant(true))
     }
 }

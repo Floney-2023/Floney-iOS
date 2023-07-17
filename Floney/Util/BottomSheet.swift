@@ -803,7 +803,7 @@ struct CalendarBottomSheet: View {
                         isShowing.toggle()
                     }
 
-                MonthView(viewModel: viewModel, pickerPresented: $pickerPresented)
+                MonthView(viewModel: viewModel, isShowing: $isShowing, pickerPresented: $pickerPresented)
                     
             }
             
@@ -820,13 +820,13 @@ struct CalendarBottomSheet: View {
 
 struct MonthView: View {
     @ObservedObject var viewModel : CalculateViewModel
+    @Binding var isShowing : Bool
     @Binding var pickerPresented : Bool
     
     let columns: [GridItem] = Array(repeating: .init(.flexible()), count: 7)
     
     
     var body: some View {
-        @State var daysList = extractDate()
             VStack {
                 HStack {
                     
@@ -872,9 +872,8 @@ struct MonthView: View {
 
                
                 Group {
-                    
-                    ForEach(daysList.indices, id: \.self) { i in
-                        Week(days: $daysList[i], selectedDates: $viewModel.selectedDates)
+                    ForEach(viewModel.daysList.indices, id: \.self) { i in
+                        Week(viewModel: viewModel, days: $viewModel.daysList[i], selectedDates: $viewModel.selectedDates)
                     }
                 }
                 
@@ -882,7 +881,13 @@ struct MonthView: View {
                 Spacer()
                 
                 Button {
-                    //
+                    if let startDate = viewModel.selectedDates.first, let endDate = viewModel.selectedDates.last {
+                        viewModel.startDateStr = dateFormatter.string(from: startDate)
+                        viewModel.endDateStr = dateFormatter.string(from: endDate)
+                        print("시작 날짜 \(viewModel.startDateStr)")
+                        print("끝나는 날짜 \(viewModel.endDateStr)")
+                    }
+                    isShowing = false
                 } label: {
                     Text("선택")
                         .padding()
@@ -902,6 +907,11 @@ struct MonthView: View {
             .cornerRadius(12, corners: [.topLeft, .topRight])
                 
     }
+    private var dateFormatter : DateFormatter {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "YYYY-MM-dd"
+        return formatter
+    }
     
     private var yearAndMonthFormatter: DateFormatter {
         let formatter = DateFormatter()
@@ -914,55 +924,12 @@ struct MonthView: View {
         let range = Calendar.current.range(of: .day, in: .month, for: viewModel.selectedDate)!
         return range.count
     }
-    
-    func daysInMonth() -> [Date] {
-        var dates = [Date]()
-        
-        let calendar = Calendar.current
-        var components = calendar.dateComponents([.year, .month], from: viewModel.selectedDate)
-        components.day = 1
-        
-        let firstDayOfMonth = calendar.date(from: components)!
-        let firstWeekday = calendar.component(.weekday, from: firstDayOfMonth)
-        let offsetDays = (firstWeekday - calendar.firstWeekday + 7) % 7
-        
-        if let startDay = calendar.date(byAdding: .day, value: -offsetDays, to: firstDayOfMonth),
-           let rangeOfMonth = calendar.range(of: .day, in: .month, for: firstDayOfMonth) {
-            for i in 0..<(rangeOfMonth.count + offsetDays) {
-                if let date = calendar.date(byAdding: .day, value: i, to: startDay) {
-                    dates.append(date)
-                }
-            }
-        }
-        
-        while dates.count % 7 != 0 {
-            if let date = calendar.date(byAdding: .day, value: 1, to: dates.last!) {
-                dates.append(date)
-            }
-        }
-        
-        return dates
-    }
-    // 이차원 배열 달력
-    func extractDate() -> [[Date]] {
-        var days = daysInMonth()
-        //달력과 같은 배치의 이차원 배열로 변환하여 리턴
-        var result = [[Date]]()
-        days.forEach {
-            if result.isEmpty || result.last?.count == 7 {
-                result.append([$0])
-            } else {
-                result[result.count - 1].append($0)
-            }
-        }
-        
-        return result
-    }
-    
+
 }
 
 
 struct Week: View {
+    @ObservedObject var viewModel : CalculateViewModel
     @Binding var days : [Date]
     @Binding var selectedDates : [Date]
     
@@ -1048,7 +1015,7 @@ struct Week: View {
                     Text("\(value.day)")
                         .padding()
                         .font(.pretendardFont(.regular,size: 14))
-                        .foregroundColor(selectedDates.contains(value) ? .white : .greyScale2)
+                        .foregroundColor(selectedDates.contains(value) ? .white : viewModel.selectedDate.year == value.year ? .greyScale2 : .greyScale7)
                         .background(selectedDates.contains(value) ? Color.primary5 : Color.clear)
                         .clipShape(Circle())
                 }

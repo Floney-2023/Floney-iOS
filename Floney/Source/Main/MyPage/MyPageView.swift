@@ -8,10 +8,12 @@
 import SwiftUI
 
 struct MyPageView: View {
-    @State var nickname = "플로니"
-    @State var email = "floney.dev@gmail.com"
+    @Binding var showingTabbar : Bool
+    //@State var nickname = "플로니"
+    //@State var email = "floney.dev@gmail.com"
     @State var isShowingBottomSheet = false
     @StateObject var viewModel = MyPageViewModel()
+    
     var body: some View {
       //  NavigationView {
         ZStack {
@@ -171,6 +173,6 @@ struct MyPageView: View {
 
 struct MyPageView_Previews: PreviewProvider {
     static var previews: some View {
-        MyPageView()
+        MyPageView(showingTabbar: .constant(true))
     }
 }

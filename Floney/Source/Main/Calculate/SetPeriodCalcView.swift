@@ -10,15 +10,16 @@ import SwiftUI
 
 
 struct SetPeriodCalcView: View {
+    @Binding var isShowingTabbar : Bool
     @Binding var isShowingCalc : Bool
-    @Binding var isShowingPeriod : Bool
-    @State var isShowingContent = false
+    //@Binding var isShowingPeriod : Bool
+    //@State var isShowingContent = false
     @State var isShowingCalendar = false
     @ObservedObject var viewModel : CalculateViewModel
    
     @State var text = "기간을 설정해주세요."
     
-    var pageCount = 2
+    @Binding var pageCount : Int
     var pageCountAll = 4
     var nickname = "user1"
     
@@ -30,6 +31,7 @@ struct SetPeriodCalcView: View {
                     Image("icon_close")
                         .padding(.trailing, 24)
                         .onTapGesture {
+                            self.isShowingTabbar = true
                             self.isShowingCalc = false
                         }
                 }
@@ -80,7 +82,8 @@ struct SetPeriodCalcView: View {
                         .frame(maxWidth: .infinity)
                         .background(Color.greyScale2)
                         .onTapGesture {
-                            self.isShowingPeriod = false
+                            //self.isShowingPeriod = false
+                            pageCount = 1
                         }
                     Text("다음으로")
                         .padding()
@@ -90,14 +93,14 @@ struct SetPeriodCalcView: View {
                         .frame(width: UIScreen.main.bounds.width * 2/3)
                         .background(Color.primary1)
                         .onTapGesture {
-                            self.isShowingContent = true
+                            //self.isShowingContent = true
+                            pageCount = 3
+                            viewModel.getSettlements()
                         }
                 }
                 
             }
-            .fullScreenCover(isPresented: $isShowingContent)  {
-                SetContentCalcView(isShowingCalc: $isShowingCalc, isShowingPeriod: $isShowingPeriod, isShowingContent: $isShowingContent, viewModel: viewModel)
-            }
+          
             if isShowingCalendar {
                 CalendarBottomSheet(isShowing: $isShowingCalendar, viewModel: viewModel)
             }
@@ -107,6 +110,6 @@ struct SetPeriodCalcView: View {
 
 struct SetPeriodCalcView_Previews: PreviewProvider {
     static var previews: some View {
-        SetPeriodCalcView(isShowingCalc: .constant(true), isShowingPeriod: .constant(true), viewModel: CalculateViewModel())
+        SetPeriodCalcView(isShowingTabbar: .constant(false), isShowingCalc: .constant(true), viewModel: CalculateViewModel(), pageCount: .constant(2))
     }
 }

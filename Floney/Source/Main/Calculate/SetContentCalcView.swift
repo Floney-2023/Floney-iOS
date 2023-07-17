@@ -8,10 +8,11 @@
 import SwiftUI
 
 struct SetContentCalcView: View {
+    @Binding var isShowingTabbar : Bool
     @Binding var isShowingCalc : Bool
-    @Binding var isShowingPeriod : Bool
-    @Binding var isShowingContent : Bool
-    @State var isShowingComplete = false
+   // @Binding var isShowingPeriod : Bool
+    //@Binding var isShowingContent : Bool
+    //@State var isShowingComplete = false
     
     @ObservedObject var viewModel : CalculateViewModel
     
@@ -19,7 +20,7 @@ struct SetContentCalcView: View {
     SettlementResponse(money: 6000, category: ["체크카드","카페/간식"], assetType: "OUTCOME", content: "Cake", img: nil),
     SettlementResponse(money: 4500, category: ["체크카드","카페/간식"], assetType: "OUTCOME", content: "커피", img: nil)
     ]
-    var pageCount = 3
+    @Binding var pageCount : Int
     var pageCountAll = 4
     
     var body: some View {
@@ -30,6 +31,7 @@ struct SetContentCalcView: View {
                     Image("icon_close")
                         .padding(.trailing, 24)
                         .onTapGesture {
+                            self.isShowingTabbar = true
                             self.isShowingCalc = false
                         }
                 }
@@ -63,7 +65,7 @@ struct SetContentCalcView: View {
                             .foregroundColor(.greyScale8)
                     }
                     VStack {
-                        ForEach(list, id: \.self) { item in
+                        ForEach(viewModel.lines, id: \.self) { item in
                             HStack {
                                 Image("icon_check_circle_disabled")
                                     .padding(.bottom, 15)
@@ -108,7 +110,8 @@ struct SetContentCalcView: View {
                         .frame(maxWidth: .infinity)
                         .background(Color.greyScale2)
                         .onTapGesture {
-                            self.isShowingContent = false
+                            //self.isShowingContent = false
+                            pageCount = 2
                         }
                     Text("정산하기")
                         .padding()
@@ -118,22 +121,16 @@ struct SetContentCalcView: View {
                         .frame(width: UIScreen.main.bounds.width * 2/3)
                         .background(Color.primary1)
                         .onTapGesture {
-                            self.isShowingComplete = true
+                            viewModel.postSettlements()
+                            pageCount = 4 
                         }
                 }
                 
             }
             .onAppear{
-                //viewModel.userList = ["rudalswhdk12@naver.com"]
-                //viewModel.startDateStr = "2023-06-01"
-                //viewModel.endDateStr = "2023-07-08"
-                //viewModel.getSettlements()
+                
             }
-            .fullScreenCover(isPresented: $isShowingComplete) {
-                CompleteCalcView(isShowingCalc: $isShowingCalc)
-            }
-            
-            //LoadingMotionView()
+  
         }
 
     }
@@ -142,6 +139,6 @@ struct SetContentCalcView: View {
 
 struct SetContentCalcView_Previews: PreviewProvider {
     static var previews: some View {
-        SetContentCalcView(isShowingCalc: .constant(true), isShowingPeriod: .constant(true), isShowingContent: .constant(true), viewModel: CalculateViewModel())
+        SetContentCalcView(isShowingTabbar: .constant(false), isShowingCalc: .constant(true),viewModel: CalculateViewModel(), pageCount: .constant(3))
     }
 }

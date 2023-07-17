@@ -8,11 +8,12 @@
 import SwiftUI
 
 struct CompleteCalcView: View {
+    @Binding var isShowingTabbar : Bool
     @Binding var isShowingCalc : Bool
     @State var totalMoney = 200000
-    var pageCount = 4
+    @Binding var pageCount : Int
     var pageCountAll = 4
-    
+    @ObservedObject var viewModel : CalculateViewModel
     var body: some View {
         VStack {
             HStack {
@@ -20,6 +21,7 @@ struct CompleteCalcView: View {
                 Image("icon_close")
                     .padding(.trailing, 24)
                     .onTapGesture {
+                        self.isShowingTabbar = true
                         self.isShowingCalc = false
                     }
             }
@@ -55,7 +57,7 @@ struct CompleteCalcView: View {
                         .font(.pretendardFont(.medium, size: 16))
                         .foregroundColor(.greyScale2)
                     Spacer()
-                    Text("\(totalMoney)원")
+                    Text("\(viewModel.totalOutcome)원")
                         .font(.pretendardFont(.bold, size: 16))
                         .foregroundColor(.greyScale2)
                 }
@@ -70,24 +72,18 @@ struct CompleteCalcView: View {
                 }
                 .frame(height: 1)
                 VStack(spacing: 20) {
-                    HStack {
-                        Text("user1")
-                            .font(.pretendardFont(.medium, size: 14))
-                            .foregroundColor(.greyScale6)
-                        Spacer()
-                        Text("80,000원")
-                            .font(.pretendardFont(.bold, size: 14))
-                            .foregroundColor(.greyScale2)
+                    ForEach(viewModel.details, id:\.self){ detail in
+                        HStack {
+                            Text("\(detail.userNickname)")
+                                .font(.pretendardFont(.medium, size: 14))
+                                .foregroundColor(.greyScale6)
+                            Spacer()
+                            Text("\(detail.money + viewModel.outcomePerUser)")
+                                .font(.pretendardFont(.bold, size: 14))
+                                .foregroundColor(.greyScale2)
+                        }
                     }
-                    HStack {
-                        Text("user2")
-                            .font(.pretendardFont(.medium, size: 14))
-                            .foregroundColor(.greyScale6)
-                        Spacer()
-                        Text("120,000원")
-                            .font(.pretendardFont(.bold, size: 14))
-                            .foregroundColor(.greyScale2)
-                    }
+                    
                 }
                 GeometryReader { geometry in
                     Path { path in
@@ -107,40 +103,36 @@ struct CompleteCalcView: View {
                     Text("1인")
                         .font(.pretendardFont(.semiBold, size: 10))
                         .foregroundColor(.greyScale6)
-                    Text("\(totalMoney)원")
+                    Text("\(viewModel.outcomePerUser)원")
                         .font(.pretendardFont(.bold, size: 16))
                         .foregroundColor(.primary2)
                 }
-                HStack{
-                    Image("icon_profile")
-                    VStack(alignment:.leading) {
-                        Text("user1")
-                            .font(.pretendardFont(.medium, size: 12))
-                            .foregroundColor(.greyScale2)
-                        Text("20,000원")
-                            .font(.pretendardFont(.bold, size: 16))
-                            .foregroundColor(.greyScale2)
-                        +
-                        Text(" 을 보내야해요.")
-                            .font(.pretendardFont(.regular, size: 16))
-                            .foregroundColor(.greyScale2)
+                
+                ForEach(viewModel.details, id: \.self) { detail in
+                    HStack{
+                        Image("icon_profile")
+                        VStack(alignment:.leading) {
+                            Text("\(detail.userNickname)")
+                                .font(.pretendardFont(.medium, size: 12))
+                                .foregroundColor(.greyScale2)
+                            if detail.money != 0 {
+                                Text("\(abs(detail.money))")
+                                    .font(.pretendardFont(.bold, size: 16))
+                                    .foregroundColor(.greyScale2)
+                                +
+                                Text(detail.money > 0 ? " 을 받아야해요." : " 을 보내야해요")
+                                    .font(.pretendardFont(.regular, size: 16))
+                                    .foregroundColor(.greyScale2)
+                            } else {
+                                Text("정산할 금액이 없어요.")
+                                    .font(.pretendardFont(.regular, size: 16))
+                                    .foregroundColor(.greyScale2)
+                            }
+                        }
                     }
                 }
-                HStack{
-                    Image("icon_profile")
-                    VStack(alignment:.leading) {
-                        Text("user2")
-                            .font(.pretendardFont(.medium, size: 12))
-                            .foregroundColor(.greyScale2)
-                        Text("20,000원")
-                            .font(.pretendardFont(.bold, size: 16))
-                            .foregroundColor(.greyScale2)
-                        +
-                        Text(" 을 받아야해요.")
-                            .font(.pretendardFont(.regular, size: 16))
-                            .foregroundColor(.greyScale2)
-                    }
-                }
+                
+                
                   
                        
              Spacer()
@@ -165,6 +157,6 @@ struct CompleteCalcView: View {
 
 struct CompleteCalcView_Previews: PreviewProvider {
     static var previews: some View {
-        CompleteCalcView(isShowingCalc: .constant(true))
+        CompleteCalcView(isShowingTabbar: .constant(false), isShowingCalc: .constant(true), pageCount: .constant(4), viewModel: CalculateViewModel())
     }
 }

@@ -7,11 +7,14 @@
 
 import SwiftUI
 
+
+
 struct SetUserCalcView: View {
+    @Binding var isShowingTabbar : Bool
     @Binding var isShowingCalc : Bool
-    @State var isShowingPeriod = false
-    @StateObject var viewModel = CalculateViewModel()
-    var pageCount = 1
+    //@State var isShowingPeriod = false
+    @ObservedObject var viewModel : CalculateViewModel
+    @Binding var pageCount : Int
     var pageCountAll = 4
     var nickname = "user1"
     
@@ -22,6 +25,7 @@ struct SetUserCalcView: View {
                     Image("icon_close")
                         .padding(.trailing, 24)
                         .onTapGesture {
+                            self.isShowingTabbar = true
                             self.isShowingCalc = false
                         }
                 }
@@ -93,12 +97,12 @@ struct SetUserCalcView: View {
                         .frame(maxWidth: .infinity)
                         .background(Color.primary1)
                         .onTapGesture {
-                            self.isShowingPeriod = true
+                            pageCount = 2
+                            
                         }
             }
-            .fullScreenCover(isPresented: $isShowingPeriod)  {
-                SetPeriodCalcView(isShowingCalc: $isShowingCalc, isShowingPeriod: $isShowingPeriod, viewModel: viewModel)
-                    
+            .onAppear{
+                isShowingTabbar = false
             }
     
     }
@@ -106,6 +110,6 @@ struct SetUserCalcView: View {
 
 struct SetUserCalcView_Previews: PreviewProvider {
     static var previews: some View {
-        SetUserCalcView(isShowingCalc: .constant(true))
+        SetUserCalcView(isShowingTabbar: .constant(true), isShowingCalc: .constant(false), viewModel: CalculateViewModel(), pageCount: .constant(1))
     }
 }

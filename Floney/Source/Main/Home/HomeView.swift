@@ -8,6 +8,7 @@ import SwiftUI
 
 struct HomeView: View {
     @StateObject var viewModel = CalendarViewModel()
+    @Binding var showingTabbar : Bool
     @State var isOnSettingBook = false
     @State var isShowingMonthPicker = false
     @State var isShowingBottomSheet = false
@@ -375,6 +376,6 @@ struct MonthCalendar: View {
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeView()
+        HomeView(showingTabbar: .constant(true))
     }
 }
