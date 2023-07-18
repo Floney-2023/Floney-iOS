@@ -19,25 +19,39 @@ class CalculateViewModel : ObservableObject {
     @Published var showAlert: Bool = false
     @Published var showLoadingView = false
     
+    //MARK: 유저 조회
+    @Published var bookUsers : [BookUsersResponse] = []
     @Published var userList : [String] = []
     
+    //MARK: 날짜 선택
     @Published var startDate : Date? = Date()
     @Published var endDate : Date? = Date()
     @Published var startDateStr : String = ""
     @Published var endDateStr : String = ""
+    @Published var selectedDates: [Date] = []
+    @Published var selectedDatesStr = ""
+    
     @Published var daysOfTheWeek = ["일","월","화","수","목","금","토"]
     
-    @Published var lines : [SettlementResponse] = []
-    @Published var selectedDates: [Date] = []
-    
-    @Published var selectedDate: Date = Date()
+    // 메인으로 선택된 날짜 -> 이 날짜에 의해 좌우됨.
+    @Published var selectedDate: Date = Date() {
+        didSet {
+            extractDate()
+        }
+    }
+    // 2차원 배열 달력
     @Published var daysList : [[Date]] = [[]]
     
+    // 피커 뷰에서 선택된 연도, 월
     @Published var yearMonth = YearMonthDuration(year: Date().year, month: Date().month) {
         didSet {
             selectedDate = Date.from(year: yearMonth.year, month: yearMonth.month)
+            print("in Year Month 프로퍼티 selectedDate: \(selectedDate)")
         }
     }
+    
+    //MARK: 정산 지출 내역
+    @Published var lines : [SettlementResponse] = []
     
     //MARK: 정산 요청 완료
     @Published var settlementResult : AddSettlementResponse = AddSettlementResponse(id: 0, userCount: 0, startDate: "", endDate: "", totalOutcome: 0, outcome: 0, details: [])
@@ -47,7 +61,7 @@ class CalculateViewModel : ObservableObject {
     @Published var details : [AddSettlementResponseDetails] = []
     @Published var id = 0
     
-    //MARK: 정산 내역 리스트
+    //MARK: 정산 내역 조회 리스트
     @Published var settlementList : [SettlementListResponse] = []
     
     private var cancellableSet: Set<AnyCancellable> = []
@@ -56,11 +70,7 @@ class CalculateViewModel : ObservableObject {
     
     init( dataManager: CalculateProtocol = CalculateService.shared) {
         self.dataManager = dataManager
-        $selectedDate
-            .sink { [weak self] date in
-                self?.extractDate()
-            }
-            .store(in: &cancellableSet)
+        extractDate()
     }
     //MARK: server
     func getSettlements() {
@@ -146,9 +156,24 @@ class CalculateViewModel : ObservableObject {
                 }
             }.store(in: &cancellableSet)
     }
+    func getBookUsers() {
+        dataManager.getBookUsers()
+            .sink { (dataResponse) in
+                if dataResponse.error != nil {
+                    self.createAlert(with: dataResponse.error!)
+                    // 에러 처리
+                    print(dataResponse.error)
+                    
+                } else {
+                    print("--유저 리스트 요청 성공--")
+                    self.bookUsers = dataResponse.value!
+                    print(self.bookUsers)
 
+                }
+            }.store(in: &cancellableSet)
+    }
 
-    
+    // 1주일씩 계산
     func daysInMonth() -> [Date] {
         var dates = [Date]()
         
@@ -165,6 +190,7 @@ class CalculateViewModel : ObservableObject {
             for i in 0..<(rangeOfMonth.count + offsetDays) {
                 if let date = calendar.date(byAdding: .day, value: i, to: startDay) {
                     dates.append(date)
+                    print(date)
                 }
             }
         }
@@ -172,6 +198,7 @@ class CalculateViewModel : ObservableObject {
         while dates.count % 7 != 0 {
             if let date = calendar.date(byAdding: .day, value: 1, to: dates.last!) {
                 dates.append(date)
+                print(date)
             }
         }
         
@@ -188,8 +215,31 @@ class CalculateViewModel : ObservableObject {
             } else {
                 result[result.count - 1].append($0)
             }
+            
         }
         self.daysList = result
+        print(daysList)
+    }
+    
+    func extractSelectedDatesStr() {
+        if selectedDates.count == 2 {
+            if let date1 = selectedDates.first, let date2 = selectedDates.last {
+                if date1.year == date2.year {
+                    // 연도가 같을 경우
+                    let dateFormatter = DateFormatter()
+                    dateFormatter.dateFormat = "MM-dd"
+                    let formattedDate = dateFormatter.string(from: date2)
+                    print("연도가 같음 뒤 날짜: \(formattedDate)")
+                    selectedDatesStr = "\(startDateStr) - \(formattedDate)"
+                    print("\(selectedDatesStr)")
+                } else {
+                    // 연도가 다를 경우
+                    print("연도가 다름")
+                    selectedDatesStr = "\(startDateStr) - \(endDateStr)"
+                    print("\(selectedDatesStr)")
+                }
+            }
+        }
     }
     func createAlert( with error: NetworkError) {
         addLoadingError = error.backendError == nil ? error.initialError.localizedDescription : error.backendError!.message

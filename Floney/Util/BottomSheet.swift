@@ -792,7 +792,6 @@ struct CalendarBottomSheet: View {
     @ObservedObject var viewModel : CalculateViewModel
     @State var pickerPresented = false
     
-    
     var body: some View {
         ZStack(alignment: .bottom) {
             if (isShowing) {
@@ -812,7 +811,7 @@ struct CalendarBottomSheet: View {
         .ignoresSafeArea()
         .animation(.easeInOut, value: isShowing)
         
-        PickerBottomSheet(isShowing: $pickerPresented, yearMonth: $viewModel.yearMonth)
+        PickerBottomSheet(isShowing: $pickerPresented, yearMonth: $viewModel.yearMonth, viewModel: viewModel)
     }
 
 
@@ -822,27 +821,36 @@ struct MonthView: View {
     @ObservedObject var viewModel : CalculateViewModel
     @Binding var isShowing : Bool
     @Binding var pickerPresented : Bool
+
+    private var dateFormatter : DateFormatter {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "YYYY-MM-dd"
+        return formatter
+    }
     
-    let columns: [GridItem] = Array(repeating: .init(.flexible()), count: 7)
-    
-    
+    private var yearAndMonthFormatter: DateFormatter {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "YYYY.MM"
+        return formatter
+    }
+
     var body: some View {
+        @State var weeks = viewModel.daysList
             VStack {
                 HStack {
-                    
                     Image("icon_left")
                         .onTapGesture {
                             // 한달 전으로 이동
-                            viewModel.selectedDate = Calendar.current.date(byAdding: .month, value: -1, to: viewModel.selectedDate) ?? viewModel.selectedDate                    }
+                            viewModel.selectedDate = Calendar.current.date(byAdding: .month, value: -1, to: viewModel.selectedDate) ?? viewModel.selectedDate
+                        }
                     
                     Spacer()
-                    
                     
                     Button(action: {
                         // 피커 뷰 표시
                         self.pickerPresented = true
-                    }) {
                         
+                    }) {
                         Text("\(yearAndMonthFormatter.string(from:viewModel.selectedDate))")
                             .font(.pretendardFont(.semiBold, size: 22))
                             .foregroundColor(.greyScale2)
@@ -855,7 +863,6 @@ struct MonthView: View {
                             // 한달 후로 이동
                             viewModel.selectedDate = Calendar.current.date(byAdding: .month, value: 1, to: viewModel.selectedDate) ?? viewModel.selectedDate
                         }
-                    
                 }
                 
                 //MARK: 요일
@@ -866,24 +873,21 @@ struct MonthView: View {
                             .font(.pretendardFont(.regular, size: 14))
                             .foregroundColor(.greyScale6)
                     }
-                }.padding(.top, 20)
-                    .padding(.bottom, 15)
-            
-
-               
-                Group {
-                    ForEach(viewModel.daysList.indices, id: \.self) { i in
-                        Week(viewModel: viewModel, days: $viewModel.daysList[i], selectedDates: $viewModel.selectedDates)
-                    }
                 }
-                
-                
+                .padding(.top, 20)
+                .padding(.bottom, 15)
+
+                //MARK: 날짜
+                ForEach(weeks.indices, id: \.self) { i in
+                    Week(viewModel: viewModel, days: $weeks[i], selectedDates: $viewModel.selectedDates)
+                }
                 Spacer()
-                
+                //MARK: 선택하기 버튼
                 Button {
                     if let startDate = viewModel.selectedDates.first, let endDate = viewModel.selectedDates.last {
                         viewModel.startDateStr = dateFormatter.string(from: startDate)
                         viewModel.endDateStr = dateFormatter.string(from: endDate)
+                        viewModel.extractSelectedDatesStr()
                         print("시작 날짜 \(viewModel.startDateStr)")
                         print("끝나는 날짜 \(viewModel.endDateStr)")
                     }
@@ -893,7 +897,6 @@ struct MonthView: View {
                         .padding()
                         .withNextButtonFormmating(.primary1)
                 }
-
             }
             .frame(height: 490)
             .frame(maxWidth: .infinity)
@@ -905,29 +908,14 @@ struct MonthView: View {
                 Color(.white)
             )
             .cornerRadius(12, corners: [.topLeft, .topRight])
-                
+            .onChange(of: viewModel.daysList) { newValue in
+                weeks = newValue
+            }
     }
-    private var dateFormatter : DateFormatter {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "YYYY-MM-dd"
-        return formatter
-    }
-    
-    private var yearAndMonthFormatter: DateFormatter {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "YYYY.MM"
-        return formatter
-    }
-    
-    // Helper functions to calculate the number of days in the month and get a specific date
-    func numberOfDaysInMonth() -> Int {
-        let range = Calendar.current.range(of: .day, in: .month, for: viewModel.selectedDate)!
-        return range.count
-    }
-
+   
 }
 
-
+//MARK: 일주일씩 그리기
 struct Week: View {
     @ObservedObject var viewModel : CalculateViewModel
     @Binding var days : [Date]
@@ -942,7 +930,6 @@ struct Week: View {
         let lastDayOfWeekFirst = getLastDayOfMonth(date: weekFirst)
         
         ZStack {
-   
             if selectedDates.count == 2 {
                     if checkPeriod {
                     VStack(spacing: 0) {
@@ -977,10 +964,7 @@ struct Week: View {
                                     Spacer()
                                         .frame(width: lastSpacerWidth, height: 20)
                                 }
-                            
                         }
-
-                        
                         //ForEach
                     } //VStack
                     .onAppear {
@@ -988,27 +972,37 @@ struct Week: View {
                     }
                 } //if
             }
-                
-             
-
+ 
             HStack(spacing: 0) {
-                ForEach(days.indices, id: \.self) { i in
-                    CardView(value: days[i])
-                        .onTapGesture {
-                            handleDateTap(days[i])
-                            print("tap")
-                            print("\(selectedDates)")
-                        }
+                ForEach(days, id: \.self) { value in
+                    //CardView(value: days[i])
+                    VStack(spacing: 0) {
+                            if value.day > 0 {
+                                Text("\(value.day)")
+                                    .padding()
+                                    .font(.pretendardFont(.regular,size: 14))
+                                    .foregroundColor(selectedDates.contains(value) ? .white : viewModel.selectedDate.year == value.year ? .greyScale2 : .greyScale7)
+                                    .background(selectedDates.contains(value) ? Color.primary5 : Color.clear)
+                                    .clipShape(Circle())
+                                
+                            }
+                    }
+                    .frame(width: (UIScreen.main.bounds.width - 48) / 7)
+                    .frame(height: 40)
+                    .onTapGesture {
+                        handleDateTap(value)
+                        print("tap")
+                        print("\(selectedDates)")
+                    }
+                    
                 }
             }
-        }
+        } //ZStack
         
     } //body
     
-    /**
-     각각의 날짜에 대한 달력 칸 뷰
-     */
-
+    /*
+    //MARK: 각각의 날짜에 대한 달력 칸 뷰
     func CardView(value: Date) -> some View {
         VStack(spacing: 0) {
                 if value.day > 0 {
@@ -1022,9 +1016,9 @@ struct Week: View {
         }
         .frame(width: (UIScreen.main.bounds.width - 48) / 7)
         .frame(height: 40)
-        //.contentShape(Rectangle())
-        //.background(Rectangle().stroke())
-    }
+        
+    }*/
+    
     func getLastDayOfMonth(date: Date) -> Int {
         let calendar = Calendar.current
         if let interval = calendar.range(of: .day, in: .month, for: date) {
@@ -1052,8 +1046,6 @@ struct Week: View {
         }
         return false
     }
-
- 
 }
 
 
@@ -1062,6 +1054,7 @@ struct Week: View {
 struct PickerBottomSheet: View {
     @Binding var isShowing : Bool
     @Binding var yearMonth : YearMonthDuration
+    @ObservedObject var viewModel : CalculateViewModel
     let years = Array(2000...2099)
     let months = Array(1...12)
 
@@ -1086,6 +1079,7 @@ struct PickerBottomSheet: View {
                         .padding()
                     }
                     YearMonthPicker(selection: $yearMonth, years: years, months: months)
+                    // yearMonth가 바뀔 때마다 selectedDate가 바뀜
                 }
                 .frame(alignment: .bottom)
                 .frame(maxWidth: .infinity)

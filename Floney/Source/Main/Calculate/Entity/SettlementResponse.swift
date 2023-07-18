@@ -38,3 +38,12 @@ struct SettlementListResponse : Decodable, Hashable {
     var totalOutcome : Float
     var outcome : Float
 }
+
+struct BookUsersResponse : Decodable, Hashable {
+    var nickname : String
+    var email : String
+    var subscribe : Bool
+    var lastAdTime : String
+    var provider : String
+    var status : String
+}

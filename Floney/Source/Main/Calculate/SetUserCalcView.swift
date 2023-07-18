@@ -51,40 +51,27 @@ struct SetUserCalcView: View {
                         Spacer()
                     }
                     VStack(spacing: 10) {
-                        
-                        HStack(spacing: 15) {
-                            Image("icon_profile")
-                                .padding(.vertical,20)
-                                .padding(.leading, 20)
+                        ForEach(viewModel.bookUsers, id: \.self){ user in
                             
-                            Text("\(nickname)")
-                                .font(.pretendardFont(.semiBold, size: 14))
-                                .foregroundColor(.greyScale2)
+                            HStack(spacing: 15) {
+                                Image("icon_profile")
+                                    .padding(.vertical,20)
+                                    .padding(.leading, 20)
+                                
+                                Text("\(user.nickname)")
+                                    .font(.pretendardFont(.semiBold, size: 14))
+                                    .foregroundColor(.greyScale2)
+                                
+                                Spacer()
+                                Image("icon_check_circle")
+                                    .padding(20)
+                            }
+                            .background(Color.primary10)
+                            .cornerRadius(12)
                             
-                            Spacer()
-                            Image("icon_check_circle")
-                                .padding(20)
                         }
-                        .background(Color.primary10)
-                        .cornerRadius(12)
-                        
-                        HStack(spacing: 15) {
-                            Image("icon_profile")
-                                .padding(.vertical,20)
-                                .padding(.leading, 20)
-                            
-                            Text("\(nickname)")
-                                .font(.pretendardFont(.semiBold, size: 14))
-                                .foregroundColor(.greyScale2)
-                            
-                            Spacer()
-                            Image("icon_check_circle_disabled")
-                                .padding(20)
-                        }
-                        .background(Color.greyScale12)
-                        .cornerRadius(12)
                     }
-                    
+
                     Spacer()
                 }
                 .padding(EdgeInsets(top: 32, leading: 24, bottom: 0, trailing: 24))
@@ -102,6 +89,7 @@ struct SetUserCalcView: View {
                         }
             }
             .onAppear{
+                viewModel.getBookUsers()
                 isShowingTabbar = false
             }
     
