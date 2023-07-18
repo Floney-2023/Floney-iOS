@@ -121,14 +121,13 @@ struct CategoryManagementView: View {
                                     HStack(spacing:0) {
                                         
                                         if editState {
-                                            if !state[i] {
+                                            if !(viewModel.categoryStates[i]) {
                                                 Image("icon_delete")
                                                     .onTapGesture {
                                                         viewModel.deleteCategoryName = viewModel.categories[i]
                                                         viewModel.deleteCategory()
                                                     }
                                             }
-                                            
                                         }
                                         Text("\(viewModel.categories[i])")
                                             .padding(.leading,12)
@@ -143,21 +142,7 @@ struct CategoryManagementView: View {
                             }
                             
                         }.padding(.horizontal,22)
-                        /*
-                        VStack(alignment: .leading) {
-                            ForEach(viewModel.categories.indices, id: \.self) { i in
-                                VStack(alignment: .leading) {
-                                    Spacer()
-                                    Text("\(viewModel.categories[i])")
-                                        .font(.pretendardFont(.medium, size: 14))
-                                        .foregroundColor(.greyScale2)
-                                    Spacer()
-                                    Divider()
-                                        .foregroundColor(.greyScale11)
-                                }.frame(height: 58)
-                                
-                            }
-                        }*/
+                       
                     }
                     
                 }

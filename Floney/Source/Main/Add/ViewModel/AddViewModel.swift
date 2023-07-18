@@ -59,12 +59,14 @@ class AddViewModel: ObservableObject {
                     print(self.categoryResult)
                     DispatchQueue.main.async {
                         self.categories = []
+                        self.categoryStates = []
                         for i in self.categoryResult {
                             self.categories.append(i.name)
-                            //self.categoryStates.append(i.default)
+                            self.categoryStates.append(i.default)
                             print(i.name)
                         }
                         print(self.categories)
+                        print(self.categoryStates)
                     }
                     
                 }
@@ -110,12 +112,13 @@ class AddViewModel: ObservableObject {
     
     func deleteCategory() {
         bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
-        let request = DeleteCategoryRequest(bookKey: bookKey, name: deleteCategoryName)
+        let request = DeleteCategoryRequest(bookKey: bookKey, root: root, name: deleteCategoryName)
         dataManager.deleteCategory(parameters: request)
             .sink { completion in
                 switch completion {
                 case .finished:
                     print(" successfully category delete.")
+                    self.getCategory()
                 case .failure(let error):
                     print("Error deleting category: \(error)")
                 }

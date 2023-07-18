@@ -8,6 +8,7 @@
 import Foundation
 
 struct SettlementRequest : Encodable {
+    var bookKey : String
     var usersEmails : [String]
     var dates : SettlementDate
     

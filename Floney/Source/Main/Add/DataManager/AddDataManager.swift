@@ -11,7 +11,7 @@ import Combine
 protocol AddProtocol {
     func getCategory(_ parameters:CategoryRequest) -> AnyPublisher<DataResponse<[CategoryResponse], NetworkError>, Never>
     func postLines(_ parameters:LinesRequest) -> AnyPublisher<DataResponse<LinesResponse, NetworkError>, Never>
-    func postCategory(_ parameters:AddCategoryRequest) -> AnyPublisher<DataResponse<CategoryResponse, NetworkError>, Never>
+    func postCategory(_ parameters:AddCategoryRequest) -> AnyPublisher<DataResponse<AddCategoryResponse, NetworkError>, Never>
     func deleteCategory(parameters: DeleteCategoryRequest) -> AnyPublisher<Void, NetworkError>
 }
 
@@ -66,7 +66,7 @@ extension AddService: AddProtocol {
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
     }
-    func postCategory(_ parameters:AddCategoryRequest) -> AnyPublisher<DataResponse<CategoryResponse, NetworkError>, Never> {
+    func postCategory(_ parameters:AddCategoryRequest) -> AnyPublisher<DataResponse<AddCategoryResponse, NetworkError>, Never> {
         let url = "\(Constant.BASE_URL)/books/categories"
         print("\(url)")
         let token = Keychain.getKeychainValue(forKey: .accessToken)!
@@ -76,7 +76,7 @@ extension AddService: AddProtocol {
                           encoder: JSONParameterEncoder(),
                           headers: ["Authorization":"Bearer \(token)"])
             .validate()
-            .publishDecodable(type: CategoryResponse.self)
+            .publishDecodable(type: AddCategoryResponse.self)
             .map { response in
                 response.mapError { error in
                     let backendError = response.data.flatMap { try? JSONDecoder().decode(BackendError.self, from: $0)}

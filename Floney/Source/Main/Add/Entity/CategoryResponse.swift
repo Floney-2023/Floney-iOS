@@ -9,5 +9,9 @@ import Foundation
 
 struct CategoryResponse : Decodable {
     var name : String
-    //var `default` : Bool
+    var `default` : Bool
+}
+
+struct AddCategoryResponse : Decodable {
+    var name : String
 }

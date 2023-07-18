@@ -34,22 +34,12 @@ extension CalculateService: CalculateProtocol {
         let url = "\(Constant.BASE_URL)/books/outcomes"
         let token = Keychain.getKeychainValue(forKey: .accessToken)!
         print(url)
-        print(parameters)
-        let parameters: Parameters = [
-            "usersEmails": parameters.usersEmails,
-            "dates": [
-                "startDate": parameters.dates.startDate,
-                "endDate": parameters.dates.endDate
-            ]
-        ]
-        print("파라미터 \(parameters)")
-        var request = URLRequest(url: try! url.asURL())
-        request.headers = ["Authorization":"Bearer \(token)"]
-        request.httpMethod = "GET"
-        request.httpBody = try! JSONSerialization.data(withJSONObject: parameters)
-        request.addValue("application/json", forHTTPHeaderField: "Accept")
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        return AF.request(request)
+        
+        return  AF.request(url,
+                           method: .post,
+                           parameters: parameters,
+                           encoder: JSONParameterEncoder(),
+                           headers: ["Authorization":"Bearer \(token)"])
             .validate()
             .publishDecodable(type: [SettlementResponse].self)
             .map { response in

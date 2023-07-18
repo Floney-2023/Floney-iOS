@@ -65,7 +65,8 @@ class CalculateViewModel : ObservableObject {
     //MARK: server
     func getSettlements() {
         userList = ["rudalswhdk12@naver.com","rudalswhdk12@gmail.com"]
-        let request = SettlementRequest(usersEmails: userList, dates: SettlementDate(startDate: startDateStr, endDate: endDateStr))
+        let bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
+        let request = SettlementRequest(bookKey: bookKey, usersEmails: userList, dates: SettlementDate(startDate: startDateStr, endDate: endDateStr))
         
         dataManager.getSettlements(request)
             .sink { (dataResponse) in
@@ -78,6 +79,7 @@ class CalculateViewModel : ObservableObject {
                     print("--성공--")
                     print(self.lines) 
                 }
+                
             }.store(in: &cancellableSet)
     }
     func postSettlements() {
@@ -101,8 +103,7 @@ class CalculateViewModel : ObservableObject {
                     self.totalOutcome = self.settlementResult.totalOutcome
                     self.outcomePerUser = self.settlementResult.outcome
                     self.details = self.settlementResult.details
-                    
-                    
+
                 }
             }.store(in: &cancellableSet)
     }
