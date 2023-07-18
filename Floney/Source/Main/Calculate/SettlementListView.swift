@@ -38,7 +38,7 @@ struct SettlementListView: View {
                 .frame(maxHeight: .infinity)
             } else {*/
                 ScrollView(showsIndicators: false) {
-                    ForEach(0..<1, id:\.self) { list in
+                    ForEach(viewModel.settlementList, id:\.self) { list in
                         VStack(spacing: 12) {
                             VStack(spacing:22) {
                                 HStack {
@@ -46,7 +46,7 @@ struct SettlementListView: View {
                                         .font(.pretendardFont(.medium,size: 13))
                                         .foregroundColor(.greyScale6)
                                     Spacer()
-                                    Text("2022.10.10 - 10.25")
+                                    Text("\(list.startDate) - \(list.endDate)")
                                         .font(.pretendardFont(.medium,size: 13))
                                         .foregroundColor(.greyScale2)
                                     
@@ -56,7 +56,7 @@ struct SettlementListView: View {
                                         .font(.pretendardFont(.medium,size: 13))
                                         .foregroundColor(.greyScale6)
                                     Spacer()
-                                    Text("300,000원")
+                                    Text("\(list.totalOutcome)")
                                         .font(.pretendardFont(.medium,size: 13))
                                         .foregroundColor(.greyScale2)
                                     
@@ -66,7 +66,7 @@ struct SettlementListView: View {
                                         .font(.pretendardFont(.medium,size: 13))
                                         .foregroundColor(.greyScale6)
                                     Spacer()
-                                    Text("2명")
+                                    Text("\(list.userCount)명")
                                         .font(.pretendardFont(.medium,size: 13))
                                         .foregroundColor(.greyScale2)
                                     
@@ -83,7 +83,7 @@ struct SettlementListView: View {
                                 Text("1인")
                                     .font(.pretendardFont(.semiBold, size: 10))
                                     .foregroundColor(.greyScale6)
-                                Text("150,000원")
+                                Text("\(list.outcome)원")
                                     .font(.pretendardFont(.bold, size: 16))
                                     .foregroundColor(.primary2)
                                 Image("forward_button")
@@ -94,7 +94,9 @@ struct SettlementListView: View {
                             .background(Color.primary10)
                             .cornerRadius(12)
                         }.onTapGesture {
+                            viewModel.id = list.id
                             showingDetail = true
+                            
                         }
                     }
                 }
@@ -104,11 +106,13 @@ struct SettlementListView: View {
         .padding(.horizontal, 20)
         .onAppear{
             showingTabbar = false
-            //viewModel.getSettlementList()
+            viewModel.getSettlementList()
         }
         .navigationBarBackButtonHidden()
         
-       // NavigationLink(destina)
+        NavigationLink(destination: SettlementDetailView(isShowingTabbar: $showingTabbar, showingDetail: $showingDetail, viewModel: viewModel), isActive: $showingDetail) {
+            EmptyView()
+        }
     }
 }
 

@@ -130,7 +130,7 @@ struct CategoryManagementView: View {
                                             }
                                             
                                         }
-                                        Text("\(list[i])")
+                                        Text("\(viewModel.categories[i])")
                                             .padding(.leading,12)
                                             .font(.pretendardFont(.medium, size: 14))
                                             .foregroundColor(.greyScale2)
@@ -176,7 +176,7 @@ struct CategoryManagementView: View {
                 AddCategoryView(isShowingAdd: $isShowingAdd)
             }
             .onAppear{
-                viewModel.root = "지출"
+                viewModel.root = "자산"
                 viewModel.getCategory()
             }
             .onChange(of: selectedOptions) { newValue in

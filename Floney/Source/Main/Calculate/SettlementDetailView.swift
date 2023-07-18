@@ -9,22 +9,27 @@ import SwiftUI
 
 struct SettlementDetailView: View {
     @Binding var isShowingTabbar : Bool
+    @Binding var showingDetail : Bool
     @ObservedObject var viewModel : CalculateViewModel
     var body: some View {
         VStack {
+            /*
             HStack {
                 Image("back_button")
-                
+                    .onTapGesture {
+                        print("back button tapped")
+                        self.showingDetail = false
+                    }
                 Spacer()
                 
             }
             .padding(.vertical, 22)
-            .padding(.leading, 20)
-            
+            .padding(.leading, 20)*/
+
             VStack(alignment: .leading,spacing: 32) {
                 HStack {
                     VStack(alignment: .leading, spacing: 12) {
-                        Text("2022.10.10 - 10.25")
+                        Text("\(viewModel.startDateStr) - \(viewModel.endDateStr)")
                             .foregroundColor(.greyScale7)
                             .font(.pretendardFont(.medium, size: 14))
 
@@ -99,9 +104,9 @@ struct SettlementDetailView: View {
                     .background(Color.background2)
                     
                     ForEach(viewModel.details, id: \.self) { detail in
-                        HStack{
+                        HStack(spacing: 11){
                             Image("icon_profile")
-                            VStack(alignment:.leading) {
+                            VStack(alignment:.leading, spacing: 8) {
                                 Text("\(detail.userNickname)")
                                     .font(.pretendardFont(.medium, size: 12))
                                     .foregroundColor(.greyScale2)
@@ -120,6 +125,7 @@ struct SettlementDetailView: View {
                                 }
                             }
                         }
+                        .padding(.leading, 24)
                     }
        
              Spacer()
@@ -137,12 +143,16 @@ struct SettlementDetailView: View {
             }
             
         }.navigationBarBackButtonHidden()
+        .navigationBarItems(leading: BackButton())
+            .onAppear{
+                viewModel.getSettlementDetail()
+            }
 
     }
 }
 
 struct SettlementDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        SettlementDetailView(isShowingTabbar: .constant(false), viewModel: CalculateViewModel())
+        SettlementDetailView(isShowingTabbar: .constant(false), showingDetail: .constant(true), viewModel: CalculateViewModel())
     }
 }

@@ -45,6 +45,7 @@ class CalculateViewModel : ObservableObject {
     @Published var totalOutcome : Float = 0
     @Published var outcomePerUser : Float = 0
     @Published var details : [AddSettlementResponseDetails] = []
+    @Published var id = 0
     
     //MARK: 정산 내역 리스트
     @Published var settlementList : [SettlementListResponse] = []
@@ -80,7 +81,7 @@ class CalculateViewModel : ObservableObject {
             }.store(in: &cancellableSet)
     }
     func postSettlements() {
-        userList = ["rudalswhdk12@naver.com","rudalswhdk12@gmail.com"]
+        userList = ["rudalswhdk12@gmail.com"]
         let bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
         let request = AddSettlementRequest(bookKey: bookKey, userEmails: userList, startDate: startDateStr, endDate: endDateStr, outcomes: [OutComes(outcome: 300000, userEmail: "rudalswhdk12@gmail.com")])
         
@@ -122,6 +123,29 @@ class CalculateViewModel : ObservableObject {
                 }
             }.store(in: &cancellableSet)
     }
+    func getSettlementDetail() {
+        dataManager.getSettlementDetail(id: self.id)
+            .sink { (dataResponse) in
+                if dataResponse.error != nil {
+                    self.createAlert(with: dataResponse.error!)
+                    // 에러 처리
+                    print(dataResponse.error)
+                    self.showLoadingView = false
+                } else {
+                    print("--정산 내역 디테일 요청 성공--")
+                    self.showLoadingView = false
+                    self.settlementResult = dataResponse.value!
+                    self.startDateStr = self.settlementResult.startDate
+                    self.endDateStr = self.settlementResult.endDate
+                    
+                    self.userCount = self.settlementResult.userCount
+                    self.totalOutcome = self.settlementResult.totalOutcome
+                    self.outcomePerUser = self.settlementResult.outcome
+                    self.details = self.settlementResult.details
+                }
+            }.store(in: &cancellableSet)
+    }
+
 
     
     func daysInMonth() -> [Date] {
