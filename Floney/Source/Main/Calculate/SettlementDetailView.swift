@@ -46,7 +46,7 @@ struct SettlementDetailView: View {
                         .font(.pretendardFont(.medium, size: 16))
                         .foregroundColor(.greyScale2)
                     Spacer()
-                    Text("\(viewModel.totalOutcome)원")
+                    Text("\(Int(viewModel.totalOutcome))원")
                         .font(.pretendardFont(.bold, size: 16))
                         .foregroundColor(.greyScale2)
                 }.padding(.horizontal, 28)
@@ -68,7 +68,7 @@ struct SettlementDetailView: View {
                                 .font(.pretendardFont(.medium, size: 14))
                                 .foregroundColor(.greyScale6)
                             Spacer()
-                            Text("\(detail.money + viewModel.outcomePerUser)")
+                            Text("\(Int((detail.money + viewModel.outcomePerUser)))원")
                                 .font(.pretendardFont(.medium, size: 14))
                                 .foregroundColor(.greyScale2)
                         }
@@ -92,7 +92,7 @@ struct SettlementDetailView: View {
                     Text("1인")
                         .font(.pretendardFont(.semiBold, size: 10))
                         .foregroundColor(.greyScale6)
-                    Text("\(viewModel.outcomePerUser)원")
+                    Text("\(Int(viewModel.outcomePerUser))원")
                         .font(.pretendardFont(.bold, size: 16))
                         .foregroundColor(.primary2)
                 }
@@ -111,11 +111,11 @@ struct SettlementDetailView: View {
                                     .font(.pretendardFont(.medium, size: 12))
                                     .foregroundColor(.greyScale2)
                                 if detail.money != 0 {
-                                    Text("\(abs(detail.money))")
+                                    Text("\(Int(abs(detail.money)))")
                                         .font(.pretendardFont(.bold, size: 16))
                                         .foregroundColor(.greyScale2)
                                     +
-                                    Text(detail.money > 0 ? " 을 받아야해요." : " 을 보내야해요")
+                                    Text(detail.money > 0 ? "원 을 받아야해요." : "원 을 보내야해요")
                                         .font(.pretendardFont(.regular, size: 16))
                                         .foregroundColor(.greyScale2)
                                 } else {

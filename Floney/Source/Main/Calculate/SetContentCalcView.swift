@@ -65,23 +65,29 @@ struct SetContentCalcView: View {
                             .foregroundColor(.greyScale8)
                     }
                     VStack {
-                        ForEach(viewModel.lines, id: \.self) { item in
+                        ForEach(viewModel.lines.indices, id: \.self) { index in
                             HStack {
-                                Image("icon_check_circle_disabled")
-                                    .padding(.bottom, 15)
+                                if viewModel.lines[index].isSelected! {
+                                    Image("icon_check_circle_activated")
+                                        .padding(.bottom, 15)
+                                }
+                                else {
+                                    Image("icon_check_circle_disabled")
+                                        .padding(.bottom, 15)
+                                }
                                 VStack {
                                     
                                     HStack {
                                         VStack(alignment: .leading) {
-                                            Text("\(item.content)")
+                                            Text("\(viewModel.lines[index].content)")
                                                 .font(.pretendardFont(.medium, size: 14))
                                                 .foregroundColor(.greyScale2)
-                                            Text("\(item.category[0]) ‧ \(item.category[1])")
+                                            Text("\(viewModel.lines[index].category[0]) ‧ \(viewModel.lines[index].category[1])")
                                                 .font(.pretendardFont(.medium, size: 12))
                                                 .foregroundColor(.greyScale6)
                                         }
                                         Spacer()
-                                        Text("\(Int(item.money))원")
+                                        Text("\(Int(viewModel.lines[index].money))원")
                                             .font(.pretendardFont(.medium, size: 14))
                                             .foregroundColor(.greyScale2)
                                     }.padding(.bottom, 8)
@@ -90,10 +96,9 @@ struct SetContentCalcView: View {
                                     
                                 }
                             }.frame(height: 55)
-                            
-                            
-                            
-                            
+                                .onTapGesture {
+                                    viewModel.lines[index].isSelected?.toggle()
+                                }
                         }
                     }
                     

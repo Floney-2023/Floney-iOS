@@ -38,8 +38,7 @@ struct SetUserCalcView: View {
                             + Text(" / \(pageCountAll)")
                                 .foregroundColor(.greyScale6)
                                 .font(.pretendardFont(.medium, size: 12))
-                            
-                            
+ 
                             Text("정산에 참여할 멤버를")
                                 .font(.pretendardFont(.bold, size: 22))
                                 .foregroundColor(.greyScale1)
@@ -50,9 +49,9 @@ struct SetUserCalcView: View {
                         }
                         Spacer()
                     }
+                    /*
                     VStack(spacing: 10) {
                         ForEach(viewModel.bookUsers, id: \.self){ user in
-                            
                             HStack(spacing: 15) {
                                 Image("user_profile_32")
                                     .clipShape(Circle())
@@ -65,12 +64,53 @@ struct SetUserCalcView: View {
                                     .foregroundColor(.greyScale2)
                                 
                                 Spacer()
-                                Image("icon_check_circle")
-                                    .padding(20)
+                                if let isSelected = user.isSelected {
+                                    if isSelected {
+                                        Image("icon_check_circle")
+                                            .padding(20)
+                                    } else {
+                                        Image("icon_check_circle_disabled")
+                                            .padding(20)
+                                    }
+                                }
                             }
                             .background(Color.primary10)
                             .cornerRadius(12)
+                            .onTapGesture {
+                                user.isSelected.toggle()
+                            }
                             
+                        }
+                    }*/
+                    VStack(spacing: 10) {
+                        ForEach(viewModel.bookUsers.indices, id: \.self) { index in
+                            HStack(spacing: 15) {
+                                Image("user_profile_32")
+                                    .clipShape(Circle())
+                                    .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
+                                    .padding(.vertical,20)
+                                    .padding(.leading, 20)
+                                
+                                Text("\(viewModel.bookUsers[index].nickname)")
+                                    .font(.pretendardFont(.semiBold, size: 14))
+                                    .foregroundColor(.greyScale2)
+                                
+                                Spacer()
+                                if let isSelected = viewModel.bookUsers[index].isSelected {
+                                    if isSelected {
+                                        Image("icon_check_circle_activated")
+                                            .padding(20)
+                                    } else {
+                                        Image("icon_check_circle_disabled")
+                                            .padding(20)
+                                    }
+                                }
+                            }
+                            .background(Color.primary10)
+                            .cornerRadius(12)
+                            .onTapGesture {
+                                viewModel.bookUsers[index].isSelected?.toggle()
+                            }
                         }
                     }
 

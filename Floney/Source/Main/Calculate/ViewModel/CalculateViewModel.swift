@@ -87,7 +87,12 @@ class CalculateViewModel : ObservableObject {
                 } else {
                     self.lines = dataResponse.value!
                     print("--성공--")
-                    print(self.lines) 
+                    print(self.lines)
+                    self.lines = self.lines.map { item in
+                        var item = item
+                        item.isSelected = false
+                        return item
+                    }
                 }
                 
             }.store(in: &cancellableSet)
@@ -95,7 +100,7 @@ class CalculateViewModel : ObservableObject {
     func postSettlements() {
         userList = ["rudalswhdk12@gmail.com"]
         let bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
-        let request = AddSettlementRequest(bookKey: bookKey, userEmails: userList, startDate: startDateStr, endDate: endDateStr, outcomes: [OutComes(outcome: 300000, userEmail: "rudalswhdk12@gmail.com")])
+        let request = AddSettlementRequest(bookKey: bookKey, userEmails: userList, startDate: startDateStr, endDate: endDateStr, outcomes: [OutComes(outcome: 30000, userEmail: "rudalswhdk12@naver.com")])
         
         dataManager.postSettlements(request)
             .sink { (dataResponse) in
@@ -168,7 +173,11 @@ class CalculateViewModel : ObservableObject {
                     print("--유저 리스트 요청 성공--")
                     self.bookUsers = dataResponse.value!
                     print(self.bookUsers)
-
+                    self.bookUsers = self.bookUsers.map { item in
+                        var item = item
+                        item.isSelected = false
+                        return item
+                    }
                 }
             }.store(in: &cancellableSet)
     }

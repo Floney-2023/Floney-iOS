@@ -16,6 +16,9 @@ struct CategoryManagementView: View {
     @Binding var isShowingEditCategory : Bool
     @State var editState = false
     @StateObject var viewModel = AddViewModel()
+    @State var deleteAlert = false
+    @State var title = "분류항목 삭제"
+    @State var message = "삭제하시겠습니까?"
     var body: some View {
         ZStack {
             VStack {
@@ -55,7 +58,7 @@ struct CategoryManagementView: View {
                                 Text("분류 항목 관리")
                                     .font(.pretendardFont(.bold,size: 24))
                                     .foregroundColor(.greyScale1)
-                                Text("저번 달 대비 1,000,000원을\n더 사용했어요")
+                                Text("가계부를 적을 때 선택하는 항목들을\n추가, 삭제 할 수 있어요")
                                     .font(.pretendardFont(.medium,size: 13))
                                     .foregroundColor(.greyScale6)
                             }
@@ -125,7 +128,7 @@ struct CategoryManagementView: View {
                                                 Image("icon_delete")
                                                     .onTapGesture {
                                                         viewModel.deleteCategoryName = viewModel.categories[i]
-                                                        viewModel.deleteCategory()
+                                                        self.deleteAlert = true
                                                     }
                                             }
                                         }
@@ -169,6 +172,15 @@ struct CategoryManagementView: View {
                 viewModel.getCategory()
             }
             .navigationBarBackButtonHidden(true)
+            .overlay(
+                ZStack {
+                    if deleteAlert {
+                        AlertView(isPresented: $deleteAlert, title: $title, message: $message, onOKAction: {
+                            viewModel.deleteCategory()
+                        })
+                    }
+                }
+            )
         }
     }
 }

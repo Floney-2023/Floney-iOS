@@ -983,7 +983,7 @@ struct Week: View {
                                 Text("\(value.day)")
                                     .padding()
                                     .font(.pretendardFont(.regular,size: 14))
-                                    .foregroundColor(selectedDates.contains(value) ? .white : viewModel.selectedDate.year == value.year ? .greyScale2 : .greyScale7)
+                                    .foregroundColor(selectedDates.contains(value) ? .white : viewModel.selectedDate.month == value.month ? .greyScale2 : .greyScale7)
                                     .background(selectedDates.contains(value) ? Color.primary5 : Color.clear)
                                     .clipShape(Circle())
                                 

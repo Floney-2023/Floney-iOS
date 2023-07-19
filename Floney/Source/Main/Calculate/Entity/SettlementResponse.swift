@@ -13,6 +13,7 @@ struct SettlementResponse : Decodable, Hashable {
     var assetType : String
     var content : String
     var img : String?
+    var isSelected : Bool?
 }
 
 struct AddSettlementResponse : Decodable, Hashable {
@@ -46,4 +47,5 @@ struct BookUsersResponse : Decodable, Hashable {
     var lastAdTime : String
     var provider : String
     var status : String
+    var isSelected : Bool?
 }

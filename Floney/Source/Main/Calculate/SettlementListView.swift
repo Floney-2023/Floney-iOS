@@ -56,7 +56,7 @@ struct SettlementListView: View {
                                         .font(.pretendardFont(.medium,size: 13))
                                         .foregroundColor(.greyScale6)
                                     Spacer()
-                                    Text("\(list.totalOutcome)")
+                                    Text("\(Int(list.totalOutcome))원")
                                         .font(.pretendardFont(.medium,size: 13))
                                         .foregroundColor(.greyScale2)
                                     
@@ -83,7 +83,7 @@ struct SettlementListView: View {
                                 Text("1인")
                                     .font(.pretendardFont(.semiBold, size: 10))
                                     .foregroundColor(.greyScale6)
-                                Text("\(list.outcome)원")
+                                Text("\(Int(list.outcome))원")
                                     .font(.pretendardFont(.bold, size: 16))
                                     .foregroundColor(.primary2)
                                 Image("forward_button")

@@ -208,21 +208,22 @@ struct SettingBookView: View {
                     .onTapGesture {
                         self.isShowingShareBook.toggle()
                     }
-                    
-                    //MARK: 가계부 나가기
-                    HStack {
-                        VStack {
-                            Text("가계부 나가기")
-                                .font(.pretendardFont(.regular, size: 12))
-                                .foregroundColor(.greyScale6)
-                            
-                            
-                            Divider()
-                                .padding(EdgeInsets(top: -10, leading: 0, bottom: 0, trailing: 0))
-                                .frame(width: 70,height: 1.0)
-                                .foregroundColor(.greyScale6)
+                    if viewModel.role == "팀원" {
+                        //MARK: 가계부 나가기
+                        HStack {
+                            VStack {
+                                Text("가계부 나가기")
+                                    .font(.pretendardFont(.regular, size: 12))
+                                    .foregroundColor(.greyScale6)
+                                
+                                
+                                Divider()
+                                    .padding(EdgeInsets(top: -10, leading: 0, bottom: 0, trailing: 0))
+                                    .frame(width: 70,height: 1.0)
+                                    .foregroundColor(.greyScale6)
+                            }
+                            Spacer()
                         }
-                        Spacer()
                     }
                     
                     Spacer()

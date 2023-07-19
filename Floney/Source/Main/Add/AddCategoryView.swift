@@ -102,7 +102,7 @@ struct AddCategoryView: View {
                                 .padding()
                                 .font(.pretendardFont(.regular, size: 14))
                                 .foregroundColor(.greyScale7)
-                                .opacity(text.isEmpty ? 1 : 0), alignment: .leading
+                                .opacity(viewModel.newCategoryName.isEmpty ? 1 : 0), alignment: .leading
                         )
                         .modifier(TextFieldModifier())
                     HStack {
