@@ -41,7 +41,9 @@ struct SettingBookView: View {
                         //MARK: 가계부 정보
                         NavigationLink(destination: ModifyingBookView(viewModel: viewModel)) {
                             HStack(spacing:16) {
-                                Image("icon_profile_book")
+                                Image("book_profile_36")
+                                    .clipShape(Circle())
+                                        .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
                                 
                                 VStack(alignment: .leading, spacing:8){
                                     Text("\(viewModel.bookName)")
@@ -73,7 +75,9 @@ struct SettingBookView: View {
                         VStack(spacing:32) {
                             ForEach(viewModel.bookUsers, id: \.self) { user in
                                 HStack(spacing:16) {
-                                    Image("icon_profile")
+                                    Image("user_profile_32")
+                                        .clipShape(Circle())
+                                            .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
                                     
                                     VStack(alignment: .leading, spacing:8){
                                         Text("\(user.name)")

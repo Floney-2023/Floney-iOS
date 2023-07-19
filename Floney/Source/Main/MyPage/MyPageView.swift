@@ -33,7 +33,9 @@ struct MyPageView: View {
                     VStack(spacing:16) {
                         NavigationLink(destination: UserInformationView()) {
                             HStack {
-                                Image("icon_profile")
+                                Image("user_profile_36")
+                                    .clipShape(Circle())
+                                        .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
                                     .padding(20)
                                 VStack(alignment: .leading, spacing:5){
                                     Text("\(viewModel.nickname)")
@@ -74,7 +76,9 @@ struct MyPageView: View {
                         VStack(spacing:16) {
                             ForEach(viewModel.myBooks, id:\.self) { book in
                                 HStack {
-                                    Image("icon_profile")
+                                    Image("book_profile_36")
+                                        .clipShape(Circle())
+                                        .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
                                         .padding(20)
                                     VStack(alignment: .leading, spacing:5){
                                         Text("\(book.name)")

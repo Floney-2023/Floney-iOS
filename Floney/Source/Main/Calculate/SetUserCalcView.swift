@@ -54,7 +54,9 @@ struct SetUserCalcView: View {
                         ForEach(viewModel.bookUsers, id: \.self){ user in
                             
                             HStack(spacing: 15) {
-                                Image("icon_profile")
+                                Image("user_profile_32")
+                                    .clipShape(Circle())
+                                        .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
                                     .padding(.vertical,20)
                                     .padding(.leading, 20)
                                 

@@ -660,7 +660,9 @@ struct DayLinesBottomSheet: View {
                             } else {
                                 ForEach(viewModel.dayLines, id: \.self) { line in
                                     HStack {
-                                        Image("icon_profile")
+                                        Image("user_profile_32")
+                                            .clipShape(Circle())
+                                                .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
                                         VStack(alignment: .leading, spacing: 3) {
                                             Text("\(line!.content)")
                                                 .font(.pretendardFont(.semiBold, size: 14))

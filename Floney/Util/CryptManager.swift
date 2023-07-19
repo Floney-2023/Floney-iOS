@@ -7,15 +7,30 @@
 
 import Foundation
 import CryptoKit
+import Combine
 
-class CryptManager {
+class CryptManager : ObservableObject {
+    @Published var key : SymmetricKey?
+    
+    init(key: SymmetricKey? = nil) {
+        self.key = key
+        guard let keyData = Keychain.getDataTypeKey(forKey: .encryptionKey) else {
+            self.setEncryptionKey()
+            self.key = self.keyDataToSymmetricKey()
+            print("encryption key : \(self.key)")
+            return
+        }
+        self.key = keyDataToSymmetricKey()
+        print("encryption key : \(self.key)")
+    }
+    //MARK: key string
     func setEncryptionKey() {
         // 암호화할 때 사용할 키, 이 키를 이용해서 url을 암호화하고 복호화함.
         let keyData = Data((0..<32).map { _ in return UInt8.random(in: 0...255) })
         Keychain.setDataTypeKey(keyData, forKey: .encryptionKey)
         print(keyData.base64EncodedString())
     }
-    
+    //MARK: key string 을 symmetricKey로 변환
     func keyDataToSymmetricKey() -> SymmetricKey? {
         var key : SymmetricKey?
         if let keyData = Keychain.getDataTypeKey(forKey: .encryptionKey) {

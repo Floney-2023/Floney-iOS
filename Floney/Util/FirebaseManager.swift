@@ -40,10 +40,8 @@ class FirebaseManager {
                             print("Download URL: \(url)")
                             // 키 존재
                             print("original url : \(url.absoluteString)")
-                            if Keychain.getDataTypeKey(forKey: .encryptionKey) == nil {
-                                self.encryptionManager.setEncryptionKey()
-                            }
-                            if let key = self.encryptionManager.keyDataToSymmetricKey() {// 키 변환
+                            
+                            if let key = self.encryptionManager.key {// 키
                                 let encryptedURL = self.encryptionManager.encrypt(url.absoluteString, using: key)
                                 print("completed : \(encryptedURL)")
                                 let decryptedURL = self.encryptionManager.decrypt(encryptedURL!, using: key)
@@ -59,40 +57,4 @@ class FirebaseManager {
     
     }
     
-    func createDynamicLink(for bookCode: String) -> URL? {
-        // URL에 bookCode 쿼리 파라미터를 추가합니다.
-        var finalUrl = URL(string: "")
-        let link = URL(string: "https://floney.page.link?bookCode=\(bookCode)")!
-        let dynamicLinksDomainURIPrefix = "https://floney.page.link" // Firebase 콘솔에서 제공되는 값으로 변경하세요
-
-        let linkBuilder = DynamicLinkComponents(link: link, domainURIPrefix: dynamicLinksDomainURIPrefix)
-
-        linkBuilder?.iOSParameters = DynamicLinkIOSParameters(bundleID: "com.KyoungminNam.Floney") // 앱의 번들 ID로 변경하세요
-        //linkBuilder?.androidParameters = DynamicLinkAndroidParameters(packageName: "com.yourapp.android") // 안드로이드 앱의 패키지 이름으로 변경하세요
-        linkBuilder!.socialMetaTagParameters = DynamicLinkSocialMetaTagParameters()
-        linkBuilder!.socialMetaTagParameters?.title = "플로니 Floney"
-        linkBuilder!.socialMetaTagParameters?.imageURL = URL(string: "")
-
-
-        // 이 URL을 공유합니다
-        let longLink = linkBuilder?.url
-        print("The long URL is: \(longLink)")
-
-        // 짧은 URL을 만들어서 공유하는 것이 좋습니다
-        linkBuilder?.shorten { (shortURL, warnings, error) in
-            if let error = error {
-                print("Error: \(error)")
-            }
-            if let warnings = warnings {
-                for warning in warnings {
-                    print("Warning: \(warning)")
-                }
-            }
-            if let shortURL = shortURL {
-                print("The short URL is: \(shortURL)")
-                finalUrl = shortURL
-            }
-        }
-        return finalUrl
-    }
 }

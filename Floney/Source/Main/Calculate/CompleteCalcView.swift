@@ -110,7 +110,9 @@ struct CompleteCalcView: View {
                 
                 ForEach(viewModel.details, id: \.self) { detail in
                     HStack{
-                        Image("icon_profile")
+                        Image("user_profile_32")
+                            .clipShape(Circle())
+                                .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
                         VStack(alignment:.leading) {
                             Text("\(detail.userNickname)")
                                 .font(.pretendardFont(.medium, size: 12))

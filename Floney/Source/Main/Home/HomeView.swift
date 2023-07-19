@@ -8,6 +8,8 @@ import SwiftUI
 
 struct HomeView: View {
     @StateObject var viewModel = CalendarViewModel()
+    var encryptionManager = CryptManager()
+    var profileManager = ProfileManager.shared
     @Binding var showingTabbar : Bool
     @State var isOnSettingBook = false
     @State var isShowingMonthPicker = false
@@ -26,10 +28,27 @@ struct HomeView: View {
                     Image("logo_floney_home")
                     Spacer()
                     NavigationLink(destination: SettingBookView(isOnSettingBook: $isOnSettingBook),isActive: $isOnSettingBook){
-                        Image("icon_profile_book")
-                            .onTapGesture {
+                        Image("book_profile_34")
+                            .clipShape(Circle())
+                                .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
+                                .onTapGesture{
                                 self.isOnSettingBook = true
                             }
+                        /*
+                        switch profileManager.getBookProfileImageState() {
+                        case .default :
+                            Image("book_profile_34")
+                                .onTapGesture {
+                                    self.isOnSettingBook = true
+                                }
+                        case .custom :
+                            let url = encryptionManager.decrypt(Keychain.getKeychainValue(forKey: .bookProfileImage)!, using: encryptionManager.key!)
+                            /*
+                            AsyncImage(url: URL(string: url!))
+                                .onTapGesture {
+                                    self.isOnSettingBook = true
+                                }*/
+                        }*/
                     }
                 }
                 ScrollView(showsIndicators: false)

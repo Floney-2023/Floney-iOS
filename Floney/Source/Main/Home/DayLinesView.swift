@@ -84,7 +84,9 @@ struct DayLinesDetailView : View {
                         ForEach(viewModel.dayLines, id: \.self) { line in
                             HStack {
                                 if viewModel.seeProfileImg {
-                                    Image("icon_profile")
+                                    Image("user_profile_32")
+                                        .clipShape(Circle())
+                                            .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
                                 }
                                 VStack(alignment: .leading, spacing: 3) {
                                         
