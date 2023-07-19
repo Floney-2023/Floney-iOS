@@ -133,6 +133,7 @@
 		2FF7248E2A65844E008B9333 /* CalculateMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FF7248D2A65844E008B9333 /* CalculateMainView.swift */; };
 		2FF724902A65D84E008B9333 /* SettlementListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FF7248F2A65D84E008B9333 /* SettlementListView.swift */; };
 		2FF724922A65E1E6008B9333 /* SettlementDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FF724912A65E1E6008B9333 /* SettlementDetailView.swift */; };
+		2FF724942A67D6D7008B9333 /* ProfileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FF724932A67D6D7008B9333 /* ProfileManager.swift */; };
 		2FFA302429EE775B00412F83 /* SetBookProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFA302329EE775B00412F83 /* SetBookProfileView.swift */; };
 		2FFA302629EE81C000412F83 /* CreateBookView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFA302529EE81C000412F83 /* CreateBookView.swift */; };
 		2FFA302A29EEAE6700412F83 /* SignUpRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFA302929EEAE6700412F83 /* SignUpRequest.swift */; };
@@ -277,6 +278,7 @@
 		2FF7248D2A65844E008B9333 /* CalculateMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculateMainView.swift; sourceTree = "<group>"; };
 		2FF7248F2A65D84E008B9333 /* SettlementListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettlementListView.swift; sourceTree = "<group>"; };
 		2FF724912A65E1E6008B9333 /* SettlementDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettlementDetailView.swift; sourceTree = "<group>"; };
+		2FF724932A67D6D7008B9333 /* ProfileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileManager.swift; sourceTree = "<group>"; };
 		2FFA302329EE775B00412F83 /* SetBookProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetBookProfileView.swift; sourceTree = "<group>"; };
 		2FFA302529EE81C000412F83 /* CreateBookView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateBookView.swift; sourceTree = "<group>"; };
 		2FFA302929EEAE6700412F83 /* SignUpRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpRequest.swift; sourceTree = "<group>"; };
@@ -608,6 +610,7 @@
 		2FD7F3AA29B1E39400B99CAA /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				2FF724932A67D6D7008B9333 /* ProfileManager.swift */,
 				2FF7247F2A5F1D1E008B9333 /* YearMonthPicker.swift */,
 				2FB3DA862A5DB59E00E1486D /* LoadingView.swift */,
 				2F28C2D02A4C228600894F67 /* AuthenticationService.swift */,
@@ -1302,6 +1305,7 @@
 				2FD7F3C329B1E47200B99CAA /* Font.swift in Sources */,
 				2FFA302E29EEAEE100412F83 /* SignUpDataManager.swift in Sources */,
 				2FE23F642A39DAF6009FA8CA /* ShareView.swift in Sources */,
+				2FF724942A67D6D7008B9333 /* ProfileManager.swift in Sources */,
 				2FE23F732A4187DA009FA8CA /* LinesResponse.swift in Sources */,
 				2FD7F39C29B1E26D00B99CAA /* FloneyApp.swift in Sources */,
 				2FC3B1E22A321B1F00572804 /* ImagePicker.swift in Sources */,

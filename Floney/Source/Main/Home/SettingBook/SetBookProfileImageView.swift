@@ -15,7 +15,7 @@ struct SetBookProfileImageView: View {
     var firebaseManager = FirebaseManager()
     var encryptionManager = CryptManager()
     // 프로필 이미지
-    @State var bookProfileImage: Image = Image("btn_book_profile")
+    @State var bookProfileImage: Image = Image("book_profile_124")
     // 이미지선택창 선택 여부
     @State private var presentsImagePicker = false
     // 카메라 선택 여부
@@ -44,7 +44,7 @@ struct SetBookProfileImageView: View {
                 .font(.pretendardFont(.regular, size: 12))
                 .foregroundColor(.greyScale6)
                 .onTapGesture {
-                    bookProfileImage = Image("btn_book_profile")
+                    bookProfileImage = Image("book_profile_124")
                 }
             Spacer()
             

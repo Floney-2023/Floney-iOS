@@ -101,6 +101,9 @@ class SignUpViewModel: ObservableObject {
         Keychain.setKeychain(password, forKey: .password)
         Keychain.setKeychain(nickname, forKey: .userNickname)
     }
+    func setProfileState() {
+        Keychain.setKeychain(<#T##value: String##String#>, forKey: <#T##Keychain.KeychainKey#>)
+    }
     /*
     func authEmail() {
         let request = AuthEmailRequest(email: email)

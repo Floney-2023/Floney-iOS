@@ -227,15 +227,18 @@ class CalculateViewModel : ObservableObject {
                 if date1.year == date2.year {
                     // 연도가 같을 경우
                     let dateFormatter = DateFormatter()
-                    dateFormatter.dateFormat = "MM-dd"
+                    dateFormatter.dateFormat = "MM.dd"
                     let formattedDate = dateFormatter.string(from: date2)
                     print("연도가 같음 뒤 날짜: \(formattedDate)")
-                    selectedDatesStr = "\(startDateStr) - \(formattedDate)"
+                    let newStartDate = startDateStr.replacingOccurrences(of: "-", with: ".")
+                    selectedDatesStr = "\(newStartDate) - \(formattedDate)"
                     print("\(selectedDatesStr)")
                 } else {
                     // 연도가 다를 경우
                     print("연도가 다름")
-                    selectedDatesStr = "\(startDateStr) - \(endDateStr)"
+                    let newStartDate = startDateStr.replacingOccurrences(of: "-", with: ".")
+                    let newEndDate = endDateStr.replacingOccurrences(of: "-", with: ".")
+                    selectedDatesStr = "\(newStartDate) - \(newEndDate)"
                     print("\(selectedDatesStr)")
                 }
             }

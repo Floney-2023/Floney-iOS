@@ -21,6 +21,8 @@ class Keychain {
         case userProfileImage
         case userNickname
         case bookName
+        case userProfileState
+        case bookProfileState
     }
     
     /**
