@@ -15,7 +15,7 @@ struct BookNameRequest : Encodable {
     var bookKey : String
 }
 struct BookProfileRequest : Encodable {
-    var newUrl : String
+    var newUrl : String?
     var bookKey : String
 }
 

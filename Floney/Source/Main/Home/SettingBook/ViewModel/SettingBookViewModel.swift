@@ -7,8 +7,10 @@
 
 import Foundation
 import Combine
+import SwiftUI
 
 class SettingBookViewModel : ObservableObject {
+    var cryprionManager = CryptManager()
     @Published var tokenViewModel = TokenReissueViewModel()
     
     @Published var bookInfoLoadingError: String = ""
@@ -32,6 +34,9 @@ class SettingBookViewModel : ObservableObject {
     
     @Published var role = "방장"
     
+    @Published var previewImage: UIImage?
+
+    
     private var cancellableSet: Set<AnyCancellable> = []
     var dataManager: SettingBookProtocol
     
@@ -40,7 +45,6 @@ class SettingBookViewModel : ObservableObject {
     }
     //MARK: server
     func getBookInfo() {
-        //bookKey = "C9C30C52"
         bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
         let request = BookInfoRequest(bookKey: bookKey)
         dataManager.getBookInfo(request)
@@ -62,12 +66,43 @@ class SettingBookViewModel : ObservableObject {
                     self.carryOver = self.result.carryOver
                     self.profileStatus = self.result.seeProfileStatus
                     self.hostFilter()
+                    
+                    if let url = self.bookImg {
+                        let decryptedUrl = self.cryprionManager.decrypt(url, using: self.cryprionManager.key!)
+                        self.loadImageFromURL(decryptedUrl!)
+                    } else {
+                        let image = UIImage(named: "book_profile_124")
+                        self.previewImage = image
+                    }
                 }
             }.store(in: &cancellableSet)
     }
-    func changeProfile() {
+    func loadImageFromURL(_ urlString: String) {
+        guard let url = URL(string: urlString) else {
+            print("Invalid URL.")
+            return
+        }
+        
+        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+            if let data = data, let image = UIImage(data: data) {
+                DispatchQueue.main.async {
+                    self.previewImage = image
+                }
+            } else {
+                print("Failed to load image: \(error?.localizedDescription ?? "Unknown error")")
+            }
+        }
+        task.resume()
+    }
+    func changeProfile(inputStatus: String) {
         bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
-        let request = BookProfileRequest(newUrl: encryptedImageUrl, bookKey: bookKey)
+        var request : BookProfileRequest
+        if inputStatus == "default" {
+            request = BookProfileRequest(newUrl: nil, bookKey: bookKey)
+        } else {
+            request = BookProfileRequest(newUrl: encryptedImageUrl, bookKey: bookKey)
+        }
+        
         print("book profile parameter : \(request)")
         dataManager.changeProfile(parameters: request)
             .sink { completion in
@@ -108,7 +143,7 @@ class SettingBookViewModel : ObservableObject {
                 case .finished:
                     print("Changing Profile Status successfully changed.")
                 case .failure(let error):
-                    print("Error changing nickname: \(error)")
+                    print("Error changing profile status: \(error)")
                 }
             } receiveValue: { data in
                 // TODO: Handle the received data if necessary.
@@ -171,11 +206,7 @@ class SettingBookViewModel : ObservableObject {
         
         if let errorCode = error.backendError?.code {
             switch errorCode {
-                //case "U009" :
-                //print("\(errorCode) : alert")
-                //self.showAlert = true
-                //self.errorMessage = ErrorMessage.login01.value
-            // 토큰 재발급
+                // 토큰 재발급
             case "U006" :
                 tokenViewModel.tokenReissue()
             // 아예 틀린 토큰이므로 재로그인해서 다시 발급받아야 함.

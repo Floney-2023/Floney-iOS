@@ -10,6 +10,8 @@ import SwiftUI
 struct SettingBookView: View {
     @Binding var isOnSettingBook : Bool
     @StateObject var viewModel = SettingBookViewModel()
+    var encryptionManager = CryptManager()
+    var profileManager = ProfileManager.shared
     
     @State var nickname = "team"
     @State var date = "2023.05.01 개설"
@@ -41,10 +43,23 @@ struct SettingBookView: View {
                         //MARK: 가계부 정보
                         NavigationLink(destination: ModifyingBookView(viewModel: viewModel)) {
                             HStack(spacing:16) {
+                                /*
                                 Image("book_profile_36")
                                     .clipShape(Circle())
+                                        .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))*/
+                                if let bookUrl = viewModel.bookImg {
+                                    let url = encryptionManager.decrypt(bookUrl, using: encryptionManager.key!)
+                                    URLImage(url: URL(string: url!)!)
+                                        .aspectRatio(contentMode: .fill)
+                                        .clipShape(Circle())
+                                        .frame(width: 36, height: 36)
                                         .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
-                                
+                                } else {
+                                    Image("book_profile_36")
+                                        .clipShape(Circle())
+                                        .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
+
+                                }
                                 VStack(alignment: .leading, spacing:8){
                                     Text("\(viewModel.bookName)")
                                         .font(.pretendardFont(.bold, size: 14))
@@ -75,10 +90,19 @@ struct SettingBookView: View {
                         VStack(spacing:32) {
                             ForEach(viewModel.bookUsers, id: \.self) { user in
                                 HStack(spacing:16) {
-                                    Image("user_profile_32")
-                                        .clipShape(Circle())
+                                    if let userUrl = user.profileImg {
+                                        let url = encryptionManager.decrypt(userUrl, using: encryptionManager.key!)
+                                        
+                                        URLImage(url: URL(string: url!)!)
+                                            .aspectRatio(contentMode: .fill)
+                                            .clipShape(Circle())
+                                            .frame(width: 32, height: 32)
                                             .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
-                                    
+                                    } else {
+                                        Image("user_profile_32")
+                                            .clipShape(Circle())
+                                                .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
+                                    }
                                     VStack(alignment: .leading, spacing:8){
                                         Text("\(user.name)")
                                             .font(.pretendardFont(.bold, size: 14))

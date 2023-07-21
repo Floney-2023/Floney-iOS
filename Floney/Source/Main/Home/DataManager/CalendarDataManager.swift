@@ -11,6 +11,7 @@ import Combine
 protocol CalendarProtocol {
     func getCalendar(_ parameters:CalendarRequest) -> AnyPublisher<DataResponse<CalendarResponse, NetworkError>, Never>
     func getDayLines(_ parameters:DayLinesRequest) -> AnyPublisher<DataResponse<DayLinesResponse, NetworkError>, Never>
+    func getBookInfo(_ parameters:BookInfoRequest) -> AnyPublisher<DataResponse<BookInfoResponse, NetworkError>, Never>
 
 }
 
@@ -66,5 +67,27 @@ extension CalendarService: CalendarProtocol {
             }
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
+    }
+    func getBookInfo(_ parameters:BookInfoRequest) -> AnyPublisher<DataResponse<BookInfoResponse, NetworkError>, Never> {
+    
+        let bookKey = parameters.bookKey
+        let url = "\(Constant.BASE_URL)/books/info?bookKey=\(bookKey)"
+        print(url)
+        let token = Keychain.getKeychainValue(forKey: .accessToken)!
+        return AF.request(url,
+                          method: .get,
+                          parameters: nil,
+                          encoding : JSONEncoding.default,
+                          headers: ["Authorization":"Bearer \(token)"])
+        .validate()
+        .publishDecodable(type: BookInfoResponse.self)
+        .map { response in
+            response.mapError { error in
+                let backendError = response.data.flatMap { try? JSONDecoder().decode(BackendError.self, from: $0)}
+                return NetworkError(initialError: error, backendError: backendError)
+            }
+        }
+        .receive(on: DispatchQueue.main)
+        .eraseToAnyPublisher()
     }
 }

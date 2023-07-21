@@ -15,7 +15,7 @@ struct SetBookProfileImageView: View {
     var firebaseManager = FirebaseManager()
     var encryptionManager = CryptManager()
     // 프로필 이미지
-    @State var bookProfileImage: Image = Image("book_profile_124")
+    
     // 이미지선택창 선택 여부
     @State private var presentsImagePicker = false
     // 카메라 선택 여부
@@ -28,23 +28,39 @@ struct SetBookProfileImageView: View {
     
     var body: some View {
         VStack(spacing:20) {
-           bookProfileImage
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .clipShape(Circle()) // 프로필 이미지를 원형으로 자르기
-                .frame(width: 124, height: 124)
-                .overlay(
-                    Image("btn_photo_camera")
-                        .offset(x:45,y:45)
-                )
-                .onTapGesture {
-                    presentsImagePicker = true
-                }
+            if let preview = viewModel.previewImage {
+                Image(uiImage: preview)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .clipShape(Circle()) // 프로필 이미지를 원형으로 자르기
+                    .frame(width: 124, height: 124)
+                    .overlay(
+                        Image("btn_photo_camera")
+                            .offset(x:45,y:45)
+                    )
+                    .onTapGesture {
+                        presentsImagePicker = true
+                    }
+            } else {
+                Image("book_profile_124")
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .clipShape(Circle()) // 프로필 이미지를 원형으로 자르기
+                    .frame(width: 124, height: 124)
+                    .overlay(
+                        Image("btn_photo_camera")
+                            .offset(x:45,y:45)
+                    )
+                    .onTapGesture {
+                        presentsImagePicker = true
+                    }
+            }
             Text("기본 프로필로 변경")
                 .font(.pretendardFont(.regular, size: 12))
                 .foregroundColor(.greyScale6)
                 .onTapGesture {
-                    bookProfileImage = Image("book_profile_124")
+                    //bookProfileImage = Image("book_profile_124")
+                    viewModel.previewImage = UIImage(named: "book_profile_124")
                 }
             Spacer()
             
@@ -54,11 +70,17 @@ struct SetBookProfileImageView: View {
                         DispatchQueue.main.async {
                             if let url = encryptedURL {
                                 viewModel.encryptedImageUrl = url
-                                viewModel.changeProfile()
+                                viewModel.changeProfile(inputStatus: "custom")
+                                viewModel.previewImage = selectedUIImage
+                                ProfileManager.shared.setBookImageStateToCustom(url: url)
                                 print("in image view: \(url)")
                             }
                         }
                     }
+                } else {
+                    viewModel.encryptedImageUrl = ""
+                    viewModel.changeProfile(inputStatus: "default")
+                    ProfileManager.shared.setBookImageStateToDefault()
                 }
             }
             .padding(20)
@@ -89,7 +111,8 @@ struct SetBookProfileImageView: View {
             CameraView(image: $selectedUIImage) { selectedImage in
                 if let selectedImage = selectedImage {
                     self.selectedUIImage = selectedImage
-                    self.bookProfileImage = Image(uiImage: selectedImage)
+                    //self.bookProfileImage = Image(uiImage: selectedImage)
+                    viewModel.previewImage = selectedImage
                 }
                 self.onCamera = false
             }
@@ -99,7 +122,8 @@ struct SetBookProfileImageView: View {
             PhotoPicker(image: $selectedUIImage) { selectedImage in
                 if let selectedImage = selectedImage {
                     self.selectedUIImage = selectedImage
-                    self.bookProfileImage = Image(uiImage: selectedImage)
+                    //self.bookProfileImage = Image(uiImage: selectedImage)
+                    viewModel.previewImage = selectedImage
                 }
                 self.onPhotoLibrary = false
             }

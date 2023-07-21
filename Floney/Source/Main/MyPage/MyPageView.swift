@@ -9,6 +9,8 @@ import SwiftUI
 
 struct MyPageView: View {
     @Binding var showingTabbar : Bool
+    var encryptionManager = CryptManager()
+    var profileManager = ProfileManager.shared
     //@State var nickname = "플로니"
     //@State var email = "floney.dev@gmail.com"
     @State var isShowingBottomSheet = false
@@ -31,8 +33,9 @@ struct MyPageView: View {
                     }
                     
                     VStack(spacing:16) {
-                        NavigationLink(destination: UserInformationView()) {
+                        NavigationLink(destination: UserInformationView(viewModel: viewModel)) {
                             HStack {
+                                
                                 Image("user_profile_36")
                                     .clipShape(Circle())
                                         .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
@@ -76,10 +79,28 @@ struct MyPageView: View {
                         VStack(spacing:16) {
                             ForEach(viewModel.myBooks, id:\.self) { book in
                                 HStack {
+                                    /*
                                     Image("book_profile_36")
                                         .clipShape(Circle())
                                         .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
-                                        .padding(20)
+                                        .padding(20)*/
+                                    
+                                    if let bookUrl = book.bookImg {
+                                        let url = encryptionManager.decrypt(bookUrl, using: encryptionManager.key!)
+                                        URLImage(url: URL(string: url!)!)
+                                            .aspectRatio(contentMode: .fill)
+                                            .clipShape(Circle())
+                                            .frame(width: 36, height: 36)
+                                            .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
+                                            .padding(20)
+                                    } else {
+                                        Image("book_profile_36")
+                                            .clipShape(Circle())
+                                            .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
+                                            .padding(20)
+                                    }
+
+                                    
                                     VStack(alignment: .leading, spacing:5){
                                         Text("\(book.name)")
                                             .font(.pretendardFont(.bold, size: 14))

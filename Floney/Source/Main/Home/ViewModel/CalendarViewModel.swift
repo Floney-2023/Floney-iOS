@@ -48,6 +48,10 @@ class CalendarViewModel: ObservableObject {
     @Published var dayLinesTotalOutcome : Int = 0
     @Published var dayLines : [DayLinesResults?] = []
     @Published var seeProfileImg : Bool = true
+    
+    //MARK: book profile image
+    @Published var bookInfoResult = BookInfoResponse(bookImg: "",bookName: "", startDay: "", seeProfileStatus: true, carryOver: true, ourBookUsers: [])
+    @Published var bookProfileImage : String?
 
     private var cancellableSet: Set<AnyCancellable> = []
     var dataManager: CalendarProtocol
@@ -56,6 +60,7 @@ class CalendarViewModel: ObservableObject {
         self.dataManager = dataManager
         self.calcToday()
         self.calcDate(Date())
+        
     }
     
     //MARK: server
@@ -103,6 +108,25 @@ class CalendarViewModel: ObservableObject {
                     }
                     self.dayLines = self.dayLinesResult.dayLinesResponse
                     self.seeProfileImg = self.dayLinesResult.seeProfileImg
+                    
+                }
+            }.store(in: &cancellableSet)
+    }
+    //MARK: server
+    func getBookInfo() {
+        bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
+        let request = BookInfoRequest(bookKey: bookKey)
+        dataManager.getBookInfo(request)
+            .sink { (dataResponse) in
+                if dataResponse.error != nil {
+                    self.createAlert(with: dataResponse.error!)
+                    // 에러 처리
+                    print(dataResponse.error)
+                } else {
+                    self.bookInfoResult = dataResponse.value!
+                    print("--성공--")
+                    print(self.bookInfoResult)
+                    self.bookProfileImage = self.bookInfoResult.bookImg
                     
                 }
             }.store(in: &cancellableSet)

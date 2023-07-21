@@ -11,6 +11,8 @@ struct DayLinesView: View {
     @Binding var date: String
     @Binding var isShowingAddView : Bool
     @ObservedObject var viewModel : CalendarViewModel
+    
+
     var body: some View {
             VStack {
                 DayTotalView(viewModel: viewModel)
@@ -29,6 +31,7 @@ struct DayTotalView : View {
     @ObservedObject var viewModel : CalendarViewModel
     @State var totalIncome = 0
     @State var totalOutcome = 0
+   
     var body: some View {
         HStack() {
             VStack(alignment: .leading, spacing: 8) {
@@ -59,6 +62,7 @@ struct DayTotalView : View {
 struct DayLinesDetailView : View {
     @ObservedObject var viewModel : CalendarViewModel
     @Binding var isShowingAddView : Bool
+    var encryptionManager = CryptManager()
     var body: some View {
         VStack(spacing:88) {
             HStack {
@@ -84,9 +88,19 @@ struct DayLinesDetailView : View {
                         ForEach(viewModel.dayLines, id: \.self) { line in
                             HStack {
                                 if viewModel.seeProfileImg {
-                                    Image("user_profile_32")
-                                        .clipShape(Circle())
+                                    if let userUrl = line?.img {
+                                        let url = encryptionManager.decrypt(userUrl, using: encryptionManager.key!)
+                                        URLImage(url: URL(string: url!)!)
+                                            .aspectRatio(contentMode: .fill)
+                                            .clipShape(Circle())
+                                            .frame(width: 32, height: 32)
                                             .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
+                                            
+                                    } else {
+                                        Image("user_profile_32")
+                                            .clipShape(Circle())
+                                                .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
+                                    }
                                 }
                                 VStack(alignment: .leading, spacing: 3) {
                                         

@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import SwiftUI
 class MyPageViewModel: ObservableObject {
     @Published var result : MyPageResponse = MyPageResponse(nickname: "", email: "", subscribe: false)
     @Published var myPageLoadingError: String = ""
@@ -18,6 +19,8 @@ class MyPageViewModel: ObservableObject {
     @Published var encryptedImageUrl : String = ""
     
     @Published var changedNickname = ""
+    
+    @Published var userPreviewImage : UIImage?
     
     private var cancellableSet: Set<AnyCancellable> = []
     var dataManager: MyPageProtocol
@@ -42,13 +45,20 @@ class MyPageViewModel: ObservableObject {
                     self.nickname = self.result.nickname
                     self.email = self.result.email
                     self.myBooks = self.result.myBooks!
+                    self.userPreviewImage = UIImage(named: "user_profile_124")
                 }
             }.store(in: &cancellableSet)
         
     }
     
-    func changeProfile() {
-        dataManager.changeProfile(img: encryptedImageUrl)
+    func changeProfile(imageStatus: String) {
+        var requestImage : String?
+        if imageStatus == "default" {
+            requestImage = nil
+        } else {
+            requestImage = self.encryptedImageUrl
+        }
+        dataManager.changeProfile(img: requestImage)
             .sink { completion in
                 switch completion {
                 case .finished:

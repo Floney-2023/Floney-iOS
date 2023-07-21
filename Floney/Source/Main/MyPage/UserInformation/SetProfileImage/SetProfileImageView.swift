@@ -9,11 +9,11 @@ import SwiftUI
 
 struct SetProfileImageView: View {
     @StateObject var permissionManager = PermissionManager()
-    @StateObject var mypageViewModel = MyPageViewModel()
+    @ObservedObject var viewModel : MyPageViewModel
     var firebaseManager = FirebaseManager()
     var encryptionManager = CryptManager()
     // 프로필 이미지
-    @State var bookProfileImage: Image = Image("btn_profile")
+    @State var userProfileImage: Image = Image("user_profile_124")
     // 이미지선택창 선택 여부
     @State private var presentsImagePicker = false
     // 카메라 선택 여부
@@ -26,23 +26,39 @@ struct SetProfileImageView: View {
 
     var body: some View {
         VStack(spacing:20) {
-            bookProfileImage
-                 .resizable()
-                 .aspectRatio(contentMode: .fill)
-                 .clipShape(Circle()) // 프로필 이미지를 원형으로 자르기
-                 .frame(width: 124, height: 124)
-                 .overlay(
-                     Image("btn_photo_camera")
-                         .offset(x:45,y:45)
-                 )
-                 .onTapGesture {
-                     presentsImagePicker = true
-                 }
+            if let preview = viewModel.userPreviewImage {
+                Image(uiImage: preview)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .clipShape(Circle()) // 프로필 이미지를 원형으로 자르기
+                    .frame(width: 124, height: 124)
+                    .overlay(
+                        Image("btn_photo_camera")
+                            .offset(x:45,y:45)
+                    )
+                    .onTapGesture {
+                        presentsImagePicker = true
+                    }
+            } else {
+                Image("user_profile_124")
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .clipShape(Circle()) // 프로필 이미지를 원형으로 자르기
+                    .frame(width: 124, height: 124)
+                    .overlay(
+                        Image("btn_photo_camera")
+                            .offset(x:45,y:45)
+                    )
+                    .onTapGesture {
+                        presentsImagePicker = true
+                    }
+            }
+
              Text("기본 프로필로 변경")
                  .font(.pretendardFont(.regular, size: 12))
                  .foregroundColor(.greyScale6)
                  .onTapGesture {
-                     bookProfileImage = Image("btn_profile")
+                     viewModel.userPreviewImage = UIImage(named: "user_profile_124")
                  }
              Spacer()
              
@@ -52,12 +68,16 @@ struct SetProfileImageView: View {
                     firebaseManager.uploadImageToFirebase(image: image) { encryptedURL in
                         DispatchQueue.main.async {
                             if let url = encryptedURL {
-                                self.mypageViewModel.encryptedImageUrl = url
-                                mypageViewModel.changeProfile()
+                                self.viewModel.encryptedImageUrl = url
+                                viewModel.userPreviewImage = selectedUIImage
+                                viewModel.changeProfile(imageStatus: "custom")
                                 print("in image view: \(url)")
                             }
                         }
                     }
+                } else {
+                    viewModel.userPreviewImage = UIImage(named: "user_profile_124")
+                    viewModel.changeProfile(imageStatus: "default")
                 }
             }
             .padding(20)
@@ -88,7 +108,8 @@ struct SetProfileImageView: View {
             CameraView(image: $selectedUIImage) { selectedImage in
                 if let selectedImage = selectedImage {
                     self.selectedUIImage = selectedImage
-                    self.bookProfileImage = Image(uiImage: selectedImage)
+                    //self.bookProfileImage = Image(uiImage: selectedImage)
+                    viewModel.userPreviewImage = selectedImage
                 }
                 self.onCamera = false
             }
@@ -98,7 +119,8 @@ struct SetProfileImageView: View {
             PhotoPicker(image: $selectedUIImage) { selectedImage in
                 if let selectedImage = selectedImage {
                     self.selectedUIImage = selectedImage
-                    self.bookProfileImage = Image(uiImage: selectedImage)
+                    //self.bookProfileImage = Image(uiImage: selectedImage)
+                    viewModel.userPreviewImage = selectedImage
                 }
                 self.onPhotoLibrary = false
             }
@@ -129,6 +151,6 @@ struct SetProfileImageView: View {
 
 struct SetProfileImageView_Previews: PreviewProvider {
     static var previews: some View {
-        SetProfileImageView()
+        SetProfileImageView(viewModel: MyPageViewModel())
     }
 }

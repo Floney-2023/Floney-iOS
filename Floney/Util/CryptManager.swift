@@ -50,9 +50,25 @@ class CryptManager : ObservableObject {
 
     // 복호화 함수
     func decrypt(_ string: String, using key: SymmetricKey) -> String? {
-        guard let data = Data(base64Encoded: string) else { return nil }
-        guard let sealedBox = try? AES.GCM.SealedBox(combined: data) else { return nil }
-        guard let originalData = try? AES.GCM.open(sealedBox, using: key) else { return nil }
+        print("암호화한 url : \(string)")
+        let str = "cNXxE80PtpfFRuaok6yXJOUCcjTAIHZJSmZGZUnQeNCKZN94eefN7ELxcfNgsnFR/VuvSArKgi0SXhgulPMFa1ZZlyuFh99W2kah97c0VpAlAeRUrrWq06ZmJtO7mosf B9nlagtcZ0QK6e3OsxCC7wCDM27VZj1RN0V7GQzErYW65tvtm/x7M2hoXsQ6PyaoGSaKMQLotECGS2cAThKaZr/1/C/LcuY4AULtGkWwNO7t/8zw=="
+        guard let data = Data(base64Encoded: str) else {
+            print("암호화한 url, 데이터로 인코딩 실패")
+            return nil
+            
+        }
+        guard let sealedBox = try? AES.GCM.SealedBox(combined: data) else {
+            
+            print("암호화한 data, sealedBox로 로딩 실패")
+            return nil
+            
+        }
+        guard let originalData = try? AES.GCM.open(sealedBox, using: key) else {
+            print("암호화한 sealedbox, original data로 로딩 실패")
+            return nil
+            
+        }
+        print("오리지널 데이터 : ")
         print(String(data: originalData, encoding: .utf8))
         return String(data: originalData, encoding: .utf8)
     }

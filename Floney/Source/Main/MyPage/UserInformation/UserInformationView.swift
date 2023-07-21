@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct UserInformationView: View {
-    @StateObject var viewModel = MyPageViewModel()
+    @ObservedObject var viewModel : MyPageViewModel
     @State var showingLogoutAlert = false
     @State var title = "로그아웃"
     @State var message = "로그아웃 하시겠습니끼?"
@@ -46,7 +46,7 @@ struct UserInformationView: View {
             }
             
             VStack(spacing:30) {
-                NavigationLink(destination: SetProfileImageView()){
+                NavigationLink(destination: SetProfileImageView(viewModel: viewModel)){
                     HStack {
                         Text("프로필 이미지 변경")
                             .font(.pretendardFont(.medium, size: 14))
@@ -170,6 +170,6 @@ struct AlertView: View {
 
 struct UserInformationView_Previews: PreviewProvider {
     static var previews: some View {
-        UserInformationView()
+        UserInformationView(viewModel: MyPageViewModel())
     }
 }

@@ -25,9 +25,6 @@ class ProfileManager: ObservableObject {
     static let shared = ProfileManager()  // Singleton instance
     @Published var userImageState: UserProfileImageState = .default
     @Published var bookImageState: BookProfileImageState = .default
-    init() {
-        
-    }
     
     func getUserProfileImageState() -> UserProfileImageState {
         guard let imageState = Keychain.getKeychainValue(forKey: .userProfileState) else {
@@ -40,6 +37,7 @@ class ProfileManager: ObservableObject {
         }
         return userImageState
     }
+    
     func getBookProfileImageState() -> BookProfileImageState {
         guard let imageState = Keychain.getKeychainValue(forKey: .bookProfileState) else {
             bookImageState = .default
@@ -58,11 +56,18 @@ class ProfileManager: ObservableObject {
         Keychain.setKeychain(url, forKey: .userProfileImage)
 
     }
+
+    func setBookImageStateToDefault() {
+        bookImageState = .default
+        Keychain.setKeychain(bookImageState.rawValue, forKey: .bookProfileState)
+    }
+    
     func setBookImageStateToCustom(url: String) {
         bookImageState = .custom
         Keychain.setKeychain(bookImageState.rawValue, forKey: .bookProfileState)
         Keychain.setKeychain(url, forKey: .bookProfileImage)
     }
+    
     func setRandomProfileImage() {
         // 여기에서 랜덤 이미지를 선택하고 imageState를 업데이트합니다.
         let randomNumber = Int.random(in: 1...6)

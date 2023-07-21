@@ -610,6 +610,7 @@ struct DayLinesBottomSheet: View {
     @StateObject var viewModel : CalendarViewModel
     @Binding var isShowing: Bool
     @Binding var isShowingAddView : Bool
+    var encryptionManager = CryptManager()
     
     var body: some View{
         let year = String(describing: viewModel.selectedYear)
@@ -660,9 +661,21 @@ struct DayLinesBottomSheet: View {
                             } else {
                                 ForEach(viewModel.dayLines, id: \.self) { line in
                                     HStack {
-                                        Image("user_profile_32")
-                                            .clipShape(Circle())
-                                                .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
+                                        if viewModel.seeProfileImg {
+                                            if let userUrl = line?.img {
+                                                let url = encryptionManager.decrypt(userUrl, using: encryptionManager.key!)
+                                                URLImage(url: URL(string: url!)!)
+                                                    .aspectRatio(contentMode: .fill)
+                                                    .clipShape(Circle())
+                                                    .frame(width: 32, height: 32)
+                                                    .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
+                                                    
+                                            } else {
+                                                Image("user_profile_32")
+                                                    .clipShape(Circle())
+                                                        .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
+                                            }
+                                        }
                                         VStack(alignment: .leading, spacing: 3) {
                                             Text("\(line!.content)")
                                                 .font(.pretendardFont(.semiBold, size: 14))

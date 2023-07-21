@@ -28,27 +28,24 @@ struct HomeView: View {
                     Image("logo_floney_home")
                     Spacer()
                     NavigationLink(destination: SettingBookView(isOnSettingBook: $isOnSettingBook),isActive: $isOnSettingBook){
-                        Image("book_profile_34")
-                            .clipShape(Circle())
+                        if let bookUrl = viewModel.bookProfileImage {
+                            let url = encryptionManager.decrypt(bookUrl, using: encryptionManager.key!)
+                            URLImage(url: URL(string: url!)!)
+                                .aspectRatio(contentMode: .fill)
+                                .clipShape(Circle())
+                                .frame(width: 34, height: 34)
                                 .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
-                                .onTapGesture{
-                                self.isOnSettingBook = true
-                            }
-                        /*
-                        switch profileManager.getBookProfileImageState() {
-                        case .default :
-                            Image("book_profile_34")
                                 .onTapGesture {
                                     self.isOnSettingBook = true
                                 }
-                        case .custom :
-                            let url = encryptionManager.decrypt(Keychain.getKeychainValue(forKey: .bookProfileImage)!, using: encryptionManager.key!)
-                            /*
-                            AsyncImage(url: URL(string: url!))
+                        } else {
+                            Image("book_profile_34")
+                                .clipShape(Circle())
+                                .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
                                 .onTapGesture {
                                     self.isOnSettingBook = true
-                                }*/
-                        }*/
+                                }
+                        }
                     }
                 }
                 ScrollView(showsIndicators: false)
@@ -374,9 +371,7 @@ struct MonthCalendar: View {
                 .cornerRadius(12)
                 .onAppear {
                     viewModel.getCalendar()
-                }
-                .onAppear {
-                    viewModel.getCalendar()
+                    viewModel.getBookInfo()
                 }
                 .onChange(of: viewModel.selectedYear) { newValue in
                     viewModel.getCalendar()

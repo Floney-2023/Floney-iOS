@@ -134,6 +134,7 @@
 		2FF724902A65D84E008B9333 /* SettlementListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FF7248F2A65D84E008B9333 /* SettlementListView.swift */; };
 		2FF724922A65E1E6008B9333 /* SettlementDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FF724912A65E1E6008B9333 /* SettlementDetailView.swift */; };
 		2FF724942A67D6D7008B9333 /* ProfileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FF724932A67D6D7008B9333 /* ProfileManager.swift */; };
+		2FF724962A6A9123008B9333 /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FF724952A6A9123008B9333 /* ImageLoader.swift */; };
 		2FFA302429EE775B00412F83 /* SetBookProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFA302329EE775B00412F83 /* SetBookProfileView.swift */; };
 		2FFA302629EE81C000412F83 /* CreateBookView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFA302529EE81C000412F83 /* CreateBookView.swift */; };
 		2FFA302A29EEAE6700412F83 /* SignUpRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFA302929EEAE6700412F83 /* SignUpRequest.swift */; };
@@ -279,6 +280,7 @@
 		2FF7248F2A65D84E008B9333 /* SettlementListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettlementListView.swift; sourceTree = "<group>"; };
 		2FF724912A65E1E6008B9333 /* SettlementDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettlementDetailView.swift; sourceTree = "<group>"; };
 		2FF724932A67D6D7008B9333 /* ProfileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileManager.swift; sourceTree = "<group>"; };
+		2FF724952A6A9123008B9333 /* ImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
 		2FFA302329EE775B00412F83 /* SetBookProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetBookProfileView.swift; sourceTree = "<group>"; };
 		2FFA302529EE81C000412F83 /* CreateBookView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateBookView.swift; sourceTree = "<group>"; };
 		2FFA302929EEAE6700412F83 /* SignUpRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpRequest.swift; sourceTree = "<group>"; };
@@ -610,6 +612,7 @@
 		2FD7F3AA29B1E39400B99CAA /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				2FF724952A6A9123008B9333 /* ImageLoader.swift */,
 				2FF724932A67D6D7008B9333 /* ProfileManager.swift */,
 				2FF7247F2A5F1D1E008B9333 /* YearMonthPicker.swift */,
 				2FB3DA862A5DB59E00E1486D /* LoadingView.swift */,
@@ -1218,6 +1221,7 @@
 				2F28C2D82A4ED61B00894F67 /* SettingBookViewModel.swift in Sources */,
 				2FB3DA722A5C867200E1486D /* ExpenseView.swift in Sources */,
 				2FB3DA852A5D7AFC00E1486D /* AddCategoryView.swift in Sources */,
+				2FF724962A6A9123008B9333 /* ImageLoader.swift in Sources */,
 				2FEA2BB729BA064B00DE8E54 /* HomeView.swift in Sources */,
 				2FC3B1D22A1CD2E200572804 /* KakaoLoginResponse.swift in Sources */,
 				2F1614762A0A32A20029E9A9 /* CalendarRequest.swift in Sources */,
