@@ -57,6 +57,7 @@ class MyPageViewModel: ObservableObject {
             requestImage = nil
         } else {
             requestImage = self.encryptedImageUrl
+            print("My Page ViewModel Change User Image \(self.encryptedImageUrl)")
         }
         dataManager.changeProfile(img: requestImage)
             .sink { completion in

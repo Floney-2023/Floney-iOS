@@ -91,6 +91,7 @@ struct SetUserCalcView: View {
                                     .padding(.vertical,20)
                                     .padding(.leading, 20)
                                 
+                                
                                 Text("\(viewModel.bookUsers[index].nickname)")
                                     .font(.pretendardFont(.semiBold, size: 14))
                                     .foregroundColor(.greyScale2)

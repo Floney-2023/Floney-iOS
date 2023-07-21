@@ -47,21 +47,22 @@ extension MyPage: MyPageProtocol {
     }
     
     func changeProfile(img: String?) -> AnyPublisher<Void, NetworkError> {
-        var url = ""
-        if let imageUrl = img {
-            url = "\(Constant.BASE_URL)/users/profileimg/update?profileImg=\(imageUrl)"
-        } else {
-            url = "\(Constant.BASE_URL)/users/profileimg/update?profileImg="
+        var url = "\(Constant.BASE_URL)/users/profileimg/update"
+        
+        print("My Page DataManager Change User Image \(url)")
+        
+        var parameters = [String: String]()
+        if let img = img {
+            parameters["profileImg"] = img
         }
-        
-        
+        print("parameters : \(parameters)")
         let token = Keychain.getKeychainValue(forKey: .accessToken)!
-        print("My Page : \n\(token)")
+        //print("My Page : \n\(token)")
         
         return AF.request(url,
                           method: .get,
-                          parameters: nil,
-                          encoding: JSONEncoding.default,
+                          parameters: parameters,
+                          encoding: CustomURLEncoding(),
                           headers: ["Authorization":"Bearer \(token)"])
         .validate()
         .publishData()
@@ -175,4 +176,28 @@ extension MyPage: MyPageProtocol {
         
     }
 
+}
+struct CustomURLEncoding: ParameterEncoding {
+    func encode(_ urlRequest: URLRequestConvertible, with parameters: Parameters?) throws -> URLRequest {
+        var request = try urlRequest.asURLRequest()
+        
+        if let parameters = parameters {
+            let urlString = request.url?.absoluteString.appending("?" + parameters.stringFromHttpParameters())
+            request.url = URL(string: urlString!)
+        }
+        
+        return request
+    }
+}
+
+extension Dictionary {
+    func stringFromHttpParameters() -> String {
+        let parameterArray = self.map { key, value -> String in
+            let percentEscapedKey = (key as! String).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+            let percentEscapedValue = (value as! String).addingPercentEncoding(withAllowedCharacters: CharacterSet(charactersIn: "+").inverted)!
+            return "\(percentEscapedKey)=\(percentEscapedValue)"
+        }
+        
+        return parameterArray.joined(separator: "&")
+    }
 }
