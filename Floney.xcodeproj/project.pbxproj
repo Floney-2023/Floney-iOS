@@ -135,6 +135,7 @@
 		2FF724922A65E1E6008B9333 /* SettlementDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FF724912A65E1E6008B9333 /* SettlementDetailView.swift */; };
 		2FF724942A67D6D7008B9333 /* ProfileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FF724932A67D6D7008B9333 /* ProfileManager.swift */; };
 		2FF724962A6A9123008B9333 /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FF724952A6A9123008B9333 /* ImageLoader.swift */; };
+		2FF724992A6D5164008B9333 /* NotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FF724982A6D5164008B9333 /* NotificationView.swift */; };
 		2FFA302429EE775B00412F83 /* SetBookProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFA302329EE775B00412F83 /* SetBookProfileView.swift */; };
 		2FFA302629EE81C000412F83 /* CreateBookView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFA302529EE81C000412F83 /* CreateBookView.swift */; };
 		2FFA302A29EEAE6700412F83 /* SignUpRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFA302929EEAE6700412F83 /* SignUpRequest.swift */; };
@@ -281,6 +282,7 @@
 		2FF724912A65E1E6008B9333 /* SettlementDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettlementDetailView.swift; sourceTree = "<group>"; };
 		2FF724932A67D6D7008B9333 /* ProfileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileManager.swift; sourceTree = "<group>"; };
 		2FF724952A6A9123008B9333 /* ImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
+		2FF724982A6D5164008B9333 /* NotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationView.swift; sourceTree = "<group>"; };
 		2FFA302329EE775B00412F83 /* SetBookProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetBookProfileView.swift; sourceTree = "<group>"; };
 		2FFA302529EE81C000412F83 /* CreateBookView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateBookView.swift; sourceTree = "<group>"; };
 		2FFA302929EEAE6700412F83 /* SignUpRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpRequest.swift; sourceTree = "<group>"; };
@@ -818,6 +820,7 @@
 			isa = PBXGroup;
 			children = (
 				2FEA2BBF29BA068200DE8E54 /* MyPageView.swift */,
+				2FF724972A6D5145008B9333 /* Notification */,
 				2F16148C2A0A77080029E9A9 /* DataManager */,
 				2F1614872A0A76D50029E9A9 /* Entity */,
 				2F1614842A0A70790029E9A9 /* ViewModel */,
@@ -1020,6 +1023,14 @@
 				2FF7248B2A654AE6008B9333 /* BookExistenceViewModel.swift */,
 			);
 			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		2FF724972A6D5145008B9333 /* Notification */ = {
+			isa = PBXGroup;
+			children = (
+				2FF724982A6D5164008B9333 /* NotificationView.swift */,
+			);
+			path = Notification;
 			sourceTree = "<group>";
 		};
 		2FFA302729EEAE2500412F83 /* DataManager */ = {
@@ -1265,6 +1276,7 @@
 				2F146A622A14B5AF0089AB3D /* TokenReissueRequest.swift in Sources */,
 				2FFA302629EE81C000412F83 /* CreateBookView.swift in Sources */,
 				2F0D01182A03CEB600DAF21D /* SignUpViewModel.swift in Sources */,
+				2FF724992A6D5164008B9333 /* NotificationView.swift in Sources */,
 				2FEA2BA729B8969E00DE8E54 /* WelcomeView.swift in Sources */,
 				2FF25C9929E80D7E00737346 /* SetBookNameView.swift in Sources */,
 				2F16145E2A07F4CA0029E9A9 /* BookCodeRequest.swift in Sources */,

@@ -254,7 +254,7 @@ struct SettingBookView: View {
                 }
                 .padding(EdgeInsets(top: 30, leading: 20, bottom: 0, trailing: 20))
                 .navigationBarBackButtonHidden(true)
-                .navigationBarItems(leading: BackButton(), trailing: Image("icon_notification"))
+                .navigationBarItems(leading: BackButton())
                 .onAppear{
                     viewModel.getBookInfo()
                  

@@ -15,11 +15,12 @@ struct MyPageView: View {
     //@State var email = "floney.dev@gmail.com"
     @State var isShowingBottomSheet = false
     @StateObject var viewModel = MyPageViewModel()
+    @State var isShowingNotiView = false
     
     var body: some View {
       //  NavigationView {
         ZStack {
-            ScrollView(showsIndicators: false) {
+            
                 VStack(spacing:32) {
                     HStack {
                         Text("마이페이지")
@@ -27,10 +28,16 @@ struct MyPageView: View {
                             .font(.pretendardFont(.bold, size: 22))
                             .foregroundColor(.greyScale1)
                         Spacer()
-                        //Image("icon_notification")
+                        NavigationLink(destination: NotificationView(showingTabbar: $showingTabbar), isActive: $isShowingNotiView) {
+                            Image("icon_notification")
+                                .onTapGesture {
+                                    isShowingNotiView = true
+                                }
+                        }
                         Image("icon_settings")
                         
                     }
+                    ScrollView(showsIndicators: false) {
                     
                     VStack(spacing:16) {
                         NavigationLink(destination: UserInformationView(viewModel: viewModel)) {
@@ -137,7 +144,7 @@ struct MyPageView: View {
                     }
                     VStack(spacing:30) {
                         HStack {
-                            Text("서비스")
+                            Text("고객지원")
                                 .font(.pretendardFont(.bold, size: 16))
                                 .foregroundColor(.greyScale1)
                             Spacer()
@@ -158,6 +165,20 @@ struct MyPageView: View {
                         }
                         HStack {
                             Text("리뷰 작성하기")
+                                .font(.pretendardFont(.medium, size: 14))
+                                .foregroundColor(.greyScale2)
+                            Spacer()
+                            Image("forward_button")
+                        }
+                        HStack {
+                            Text("개인정보 처리방침")
+                                .font(.pretendardFont(.medium, size: 14))
+                                .foregroundColor(.greyScale2)
+                            Spacer()
+                            Image("forward_button")
+                        }
+                        HStack {
+                            Text("이용 약관")
                                 .font(.pretendardFont(.medium, size: 14))
                                 .foregroundColor(.greyScale2)
                             Spacer()
@@ -184,6 +205,7 @@ struct MyPageView: View {
                 .padding(20)
                 .onAppear{
                     viewModel.getMyPage()
+                    showingTabbar = true
                 }
                 
             }
