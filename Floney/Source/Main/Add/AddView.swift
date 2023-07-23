@@ -13,6 +13,7 @@ struct AddView: View {
     @StateObject var viewModel = AddViewModel()
     @State var date : String = "2023-06-20"
     @State var money : String = ""
+    @State var moneyMaxLength = 11
     @State private var selectedView: Int = 1
     @State var assetType = "자산을 선택하세요."
     @State var category = "분류를 선택하세요."
@@ -29,7 +30,6 @@ struct AddView: View {
     @State var selectedAssetType = ""
     @State var selectedCategory = ""
     
-    
     @State var categories: [String] = ["현금", "체크카드", "신용카드", "은행","추가", "추가추가","추가/추가"]
     @State var isShowingEditCategory = false
     
@@ -37,7 +37,7 @@ struct AddView: View {
     @State var selectedOptions = 0
         
     var body: some View {
-        @State var moneyStr = String(describing: "\(money)")
+        var moneyStr : String = String(describing: money)
         ZStack {
             VStack {
                 HStack {
@@ -59,10 +59,14 @@ struct AddView: View {
                             Spacer()
                         }
                         TextField("", text: $money)
-                            .keyboardType(.numberPad)
+                            .keyboardType(.decimalPad)
                             .foregroundColor(.primary2)
                             .font(.pretendardFont(.bold, size: 38))
-                        
+                            .onChange(of: money) { newValue in
+                                if newValue.count > moneyMaxLength {
+                                    money = String(newValue.prefix(moneyMaxLength))
+                                }
+                            }
                             .overlay(
                                 Text("금액을 입력하세요.")
                                     .font(.pretendardFont(.bold, size: 36))
@@ -71,23 +75,24 @@ struct AddView: View {
                                 
                                 , alignment: .leading
                             )
+                        
                             .overlay(
-                                Text("\(moneyStr)원")
-                                    .font(.pretendardFont(.bold, size: 38))
-                                    .foregroundColor(.primary2)
-                                    .opacity(money.isEmpty ? 0 : 1)
+                                Text("\(money)원")
+                                        .font(.pretendardFont(.bold, size: 38))
+                                        .foregroundColor(.primary2)
+                                        .opacity(money.isEmpty ? 0 : 1)
+                                    , alignment: .leading
                                 
-                                , alignment: .leading
                             )
                             .onReceive(Just(money)) { value in
                                 let digits = value.filter { "0"..."9" ~= $0 }
                                 if let intValue = Int(digits), intValue <= 100_000_000_000 {
-                                    moneyStr = formatNumber(intValue)
+                                    money = formatNumber(intValue)
                                 } else {
-                                    moneyStr = String(digits.dropLast())
+                                    money = String(digits.dropLast())
                                 }
                             }
-                        
+                                                    
                     } // 금액 VStack
                     
                     //MARK: 지출/수입/이체 선택 토글 버튼

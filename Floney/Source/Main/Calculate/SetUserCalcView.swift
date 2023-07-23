@@ -49,39 +49,7 @@ struct SetUserCalcView: View {
                         }
                         Spacer()
                     }
-                    /*
-                    VStack(spacing: 10) {
-                        ForEach(viewModel.bookUsers, id: \.self){ user in
-                            HStack(spacing: 15) {
-                                Image("user_profile_32")
-                                    .clipShape(Circle())
-                                        .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
-                                    .padding(.vertical,20)
-                                    .padding(.leading, 20)
-                                
-                                Text("\(user.nickname)")
-                                    .font(.pretendardFont(.semiBold, size: 14))
-                                    .foregroundColor(.greyScale2)
-                                
-                                Spacer()
-                                if let isSelected = user.isSelected {
-                                    if isSelected {
-                                        Image("icon_check_circle")
-                                            .padding(20)
-                                    } else {
-                                        Image("icon_check_circle_disabled")
-                                            .padding(20)
-                                    }
-                                }
-                            }
-                            .background(Color.primary10)
-                            .cornerRadius(12)
-                            .onTapGesture {
-                                user.isSelected.toggle()
-                            }
-                            
-                        }
-                    }*/
+                    
                     VStack(spacing: 10) {
                         ForEach(viewModel.bookUsers.indices, id: \.self) { index in
                             HStack(spacing: 15) {

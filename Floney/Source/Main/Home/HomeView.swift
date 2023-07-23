@@ -90,7 +90,6 @@ struct TotalView: View {
     
     var body: some View {
         HStack(spacing:23){
-            
             VStack(alignment: .leading, spacing: 8){
                 Text("총지출")
                     .font(.pretendardFont(.medium, size: 12))
@@ -151,6 +150,7 @@ struct CustomCalendarView: View {
                 
                 Image("rightSide")
                 Spacer()
+                //MARK: 캘린더, 일별 toggle
                 HStack(spacing: 0) {
                     ForEach(viewModel.options.indices, id:\.self) { index in
                         ZStack {
@@ -331,19 +331,28 @@ struct MonthCalendar: View {
                                                             
                                                             if extractedDay == day && assetType == "OUTCOME" && money > 0 {
                                                                 Text("-\(money)")
-                                                                    .font(Font.pretendardFont(.medium, size:9))
+                                                                    .font(money < 1000000 ? Font.pretendardFont(.medium, size:9) : Font.pretendardFont(.medium, size:8))
                                                                     .foregroundColor(.calendarRed)
+                                                            }
+                                                            if extractedDay == day && assetType == "OUTCOME" && money == 0 {
+                                                                Text("")
+                                                                    .font(Font.pretendardFont(.medium, size:9))
                                                             }
                                                             
                                                             if extractedDay == day && assetType == "INCOME" && money > 0 {
                                                                 Text("+\(money)")
-                                                                    .font(Font.pretendardFont(.medium, size:9))
+                                                                    .font(money < 1000000 ? Font.pretendardFont(.medium, size:9) : Font.pretendardFont(.medium, size:8))
                                                                     .foregroundColor(.blue1)
+                                                            }
+                                                            if extractedDay == day && assetType == "INCOME" && money == 0 {
+                                                                Text("")
+                                                                    .font(Font.pretendardFont(.medium, size:9))
+                                                                    
                                                             }
                                                         }
                                                     }
                                                 }
-                                                
+                                                Spacer()
                                                 
                                             }
                                             
@@ -351,7 +360,9 @@ struct MonthCalendar: View {
                                         
                                         
                                     }
-                                    .frame(height: 70)
+                                    //.frame(height: 60)
+                                    .frame(maxHeight: .infinity)
+                                    .background(Color.yellow2)
                                     
                                     
                                 } else {
@@ -362,7 +373,9 @@ struct MonthCalendar: View {
                                 }
                                 
                             }
+                            
                         }
+                        .frame(maxHeight: .infinity)
                     }
                     Spacer()
                 }
@@ -382,7 +395,7 @@ struct MonthCalendar: View {
                 TotalView(viewModel: viewModel)
 
             }
-            
+            .frame(maxHeight : .infinity)
         
     }
     

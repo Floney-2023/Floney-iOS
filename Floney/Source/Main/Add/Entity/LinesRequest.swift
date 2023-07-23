@@ -8,7 +8,7 @@
 import Foundation
 struct LinesRequest : Encodable {
     var bookKey: String
-    var money: Int
+    var money: Float
     var lineDate: String
     var flow: String
     var asset: String

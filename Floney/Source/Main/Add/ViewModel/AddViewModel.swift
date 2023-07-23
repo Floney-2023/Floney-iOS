@@ -75,7 +75,7 @@ class AddViewModel: ObservableObject {
     func postLines() {
         bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
         nickname = Keychain.getKeychainValue(forKey: .userNickname)!
-        let moneyInt = Int(money)
+        let moneyInt = Float(money)
         print(moneyInt)
         let request = LinesRequest(bookKey: bookKey, money: moneyInt!, lineDate: lineDate, flow: flow, asset: asset, line: line, description: description, except: except, nickname: nickname)
         dataManager.postLines(request)
