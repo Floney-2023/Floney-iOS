@@ -35,6 +35,7 @@ class SettingBookViewModel : ObservableObject {
     @Published var role = "방장"
     
     @Published var previewImage: UIImage?
+    @Published var userImages : [String]?
 
     
     private var cancellableSet: Set<AnyCancellable> = []
@@ -66,6 +67,8 @@ class SettingBookViewModel : ObservableObject {
                     self.carryOver = self.result.carryOver
                     self.profileStatus = self.result.seeProfileStatus
                     self.hostFilter()
+                    
+                    self.userImages = self.bookUsers.compactMap { $0.profileImg }
                     
                     if let url = self.bookImg {
                         let decryptedUrl = self.cryprionManager.decrypt(url, using: self.cryprionManager.key!)

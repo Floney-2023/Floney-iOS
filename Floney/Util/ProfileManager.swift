@@ -6,15 +6,16 @@
 //
 
 import Foundation
+import SwiftUI
 
 enum UserProfileImageState : String {
     case `default` = "default"
+    case random0 = "random0"
     case random1 = "random1"
     case random2 = "random2"
     case random3 = "random3"
     case random4 = "random4"
     case random5 = "random5"
-    case random6 = "random6"
     case custom = "custom"
 }
 enum BookProfileImageState : String {
@@ -24,21 +25,30 @@ enum BookProfileImageState : String {
 class ProfileManager: ObservableObject {
     static let shared = ProfileManager()  // Singleton instance
     @Published var userImageState: UserProfileImageState = .default
+    //@Published var userPreviewImageCustom : UIImage?
+    @Published var userPreviewImage124 : UIImage?
+    @Published var userPreviewImage36 : UIImage?
+    @Published var userPreviewImage32 : UIImage?
+    @Published var userImageUrl : String = ""
     @Published var bookImageState: BookProfileImageState = .default
+    @Published var bookImageUrl : String = ""
+    @Published var bookPreviewImage : UIImage?
     
     func getUserProfileImageState() -> UserProfileImageState {
+        /*
         guard let imageState = Keychain.getKeychainValue(forKey: .userProfileState) else {
             userImageState = .default
-            Keychain.setKeychain(userImageState.rawValue, forKey: .userProfileState)
+            //Keychain.setKeychain(userImageState.rawValue, forKey: .userProfileState)
             return userImageState
         }
         if let userState = UserProfileImageState(rawValue: imageState) {
             userImageState = userState
-        }
+        }*/
         return userImageState
     }
     
     func getBookProfileImageState() -> BookProfileImageState {
+        /*
         guard let imageState = Keychain.getKeychainValue(forKey: .bookProfileState) else {
             bookImageState = .default
             Keychain.setKeychain(bookImageState.rawValue, forKey: .bookProfileState)
@@ -46,51 +56,114 @@ class ProfileManager: ObservableObject {
         }
         if let bookState = BookProfileImageState(rawValue: imageState) {
             bookImageState = bookState
-        }
+        }*/
         return bookImageState
     }
 
-    func setUserImageStateToCustom(url: String) {
+    func setUserImageStateToCustom(urlString: String) {
         userImageState = .custom
-        Keychain.setKeychain(userImageState.rawValue, forKey: .userProfileState)
-        Keychain.setKeychain(url, forKey: .userProfileImage)
+        //Keychain.setKeychain(userImageState.rawValue, forKey: .userProfileState)
+        //Keychain.setKeychain(url, forKey: .userProfileImage)
+        userImageUrl = urlString
+        guard let url = URL(string: urlString) else {
+            print("Invalid URL.")
+            return
+        }
+        
+        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+            if let data = data, let image = UIImage(data: data) {
+                DispatchQueue.main.async {
+                    self.userPreviewImage124 = image
+                    self.userPreviewImage36 = image
+                    self.userPreviewImage32 = image
+                }
+            } else {
+                print("Failed to load image: \(error?.localizedDescription ?? "Unknown error")")
+            }
+        }
+        task.resume()
 
+    }
+    func setUserImageStateToDefault() {
+        userImageState = .default
+        //Keychain.setKeychain(userImageState.rawValue, forKey: .userProfileState)
+        self.userPreviewImage124 = UIImage(named: "user_profile_124")
+        self.userPreviewImage36 = UIImage(named: "user_profile_36")
+        self.userPreviewImage32 = UIImage(named: "user_profile_32")
     }
 
     func setBookImageStateToDefault() {
         bookImageState = .default
-        Keychain.setKeychain(bookImageState.rawValue, forKey: .bookProfileState)
+        //Keychain.setKeychain(bookImageState.rawValue, forKey: .bookProfileState)
+        
     }
     
-    func setBookImageStateToCustom(url: String) {
+    func setBookImageStateToCustom(urlString: String) {
         bookImageState = .custom
-        Keychain.setKeychain(bookImageState.rawValue, forKey: .bookProfileState)
-        Keychain.setKeychain(url, forKey: .bookProfileImage)
-    }
-    
-    func setRandomProfileImage() {
-        // 여기에서 랜덤 이미지를 선택하고 imageState를 업데이트합니다.
-        let randomNumber = Int.random(in: 1...6)
-        switch randomNumber {
-        case 1:
-            userImageState = .random1
-        case 2:
-            userImageState = .random2
-        case 3:
-            userImageState = .random3
-        case 4:
-            userImageState = .random4
-        case 5:
-            userImageState = .random5
-        case 6:
-            userImageState = .random6
-        default:
-            userImageState = .random1
+        //Keychain.setKeychain(bookImageState.rawValue, forKey: .bookProfileState)
+        //Keychain.setKeychain(url, forKey: .bookProfileImage)
+        bookImageUrl = urlString
+        guard let url = URL(string: urlString) else {
+            print("Invalid URL.")
+            return
         }
-        Keychain.setKeychain(userImageState.rawValue, forKey: .userProfileState)
+        
+        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+            if let data = data, let image = UIImage(data: data) {
+                DispatchQueue.main.async {
+                    self.bookPreviewImage = image
+                }
+            } else {
+                print("Failed to load image: \(error?.localizedDescription ?? "Unknown error")")
+            }
+        }
+        task.resume()
     }
     
-    private func saveUserImageURLToKeychain(_ imageUrl: String) {
-        // 이미지 URL을 키체인에 저장하는 로직
+    func setRandomProfileImage(randomNumStr : String) {
+        switch randomNumStr {
+        case "random0" :
+            userImageState = .random0
+            self.userPreviewImage124 = UIImage(named: "img_user_random_profile_01_124")
+            self.userPreviewImage36 = UIImage(named: "img_user_random_profile_01_36")
+            self.userPreviewImage32 = UIImage(named: "img_user_random_profile_01_32")
+        case "random1" :
+            userImageState = .random1
+            self.userPreviewImage124 = UIImage(named: "img_user_random_profile_02_124")
+            self.userPreviewImage36 = UIImage(named: "img_user_random_profile_02_36")
+            self.userPreviewImage32 = UIImage(named: "img_user_random_profile_02_32")
+
+        case "random2":
+            userImageState = .random2
+            self.userPreviewImage124 = UIImage(named: "img_user_random_profile_03_124")
+            self.userPreviewImage36 = UIImage(named: "img_user_random_profile_03_36")
+            self.userPreviewImage32 = UIImage(named: "img_user_random_profile_03_32")
+
+        case "random3":
+            userImageState = .random3
+            self.userPreviewImage124 = UIImage(named: "img_user_random_profile_04_124")
+            self.userPreviewImage36 = UIImage(named: "img_user_random_profile_04_36")
+            self.userPreviewImage32 = UIImage(named: "img_user_random_profile_04_32")
+
+        case "random4":
+            userImageState = .random4
+            self.userPreviewImage124 = UIImage(named: "img_user_random_profile_05_124")
+            self.userPreviewImage36 = UIImage(named: "img_user_random_profile_05_36")
+            self.userPreviewImage32 = UIImage(named: "img_user_random_profile_05_32")
+
+        case "random5":
+            userImageState = .random5
+            self.userPreviewImage124 = UIImage(named: "img_user_random_profile_06_124")
+            self.userPreviewImage36 = UIImage(named: "img_user_random_profile_06_36")
+            self.userPreviewImage32 = UIImage(named: "img_user_random_profile_06_32")
+
+        default:
+            userImageState = .random0
+            self.userPreviewImage124 = UIImage(named: "img_user_random_profile_01_124")
+            self.userPreviewImage36 = UIImage(named: "img_user_random_profile_01_36")
+            self.userPreviewImage32 = UIImage(named: "img_user_random_profile_01_32")
+
+        }
     }
+    
 }

@@ -52,12 +52,11 @@ class CryptManager : ObservableObject {
     func decrypt(_ string: String, using key: SymmetricKey) -> String? {
         print("암호화한 url : \(string)")
         guard let data = Data(base64Encoded: string) else {
+            print(string)
             print("암호화한 url, 데이터로 인코딩 실패")
             return nil
-            
         }
         guard let sealedBox = try? AES.GCM.SealedBox(combined: data) else {
-            
             print("암호화한 data, sealedBox로 로딩 실패")
             return nil
             

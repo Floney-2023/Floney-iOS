@@ -8,12 +8,11 @@
 import SwiftUI
 
 struct SetProfileImageView: View {
+    @StateObject var viewModel = MyPageViewModel()
     @StateObject var permissionManager = PermissionManager()
-    @ObservedObject var viewModel : MyPageViewModel
     var firebaseManager = FirebaseManager()
     var encryptionManager = CryptManager()
-    // 프로필 이미지
-    @State var userProfileImage: Image = Image("user_profile_124")
+   
     // 이미지선택창 선택 여부
     @State private var presentsImagePicker = false
     // 카메라 선택 여부
@@ -26,7 +25,7 @@ struct SetProfileImageView: View {
 
     var body: some View {
         VStack(spacing:20) {
-            if let preview = viewModel.userPreviewImage {
+            if let preview = viewModel.userPreviewImage124 {
                 Image(uiImage: preview)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
@@ -53,12 +52,12 @@ struct SetProfileImageView: View {
                         presentsImagePicker = true
                     }
             }
-
              Text("기본 프로필로 변경")
                  .font(.pretendardFont(.regular, size: 12))
                  .foregroundColor(.greyScale6)
                  .onTapGesture {
-                     viewModel.userPreviewImage = UIImage(named: "user_profile_124")
+                     viewModel.randomNumStr = nil
+                     viewModel.userPreviewImage124 = UIImage(named: "user_profile_124")
                  }
              Spacer()
              
@@ -68,16 +67,18 @@ struct SetProfileImageView: View {
                     firebaseManager.uploadImageToFirebase(image: image) { encryptedURL in
                         DispatchQueue.main.async {
                             if let url = encryptedURL {
-                                self.viewModel.encryptedImageUrl = url
-                                viewModel.userPreviewImage = selectedUIImage
-                                viewModel.changeProfile(imageStatus: "custom")
+                                self.viewModel.encryptedImageUrl = url // 암호화된 url
+                                viewModel.changeProfile(imageStatus: "custom") // 서버에 전송
                                 print("in image view: \(url)")
                             }
                         }
                     }
                 } else {
-                    viewModel.userPreviewImage = UIImage(named: "user_profile_124")
-                    viewModel.changeProfile(imageStatus: "default")
+                    if let randomNum = viewModel.randomNumStr {
+                        viewModel.changeProfile(imageStatus: "random") // 서버에 전송
+                    } else {
+                        viewModel.changeProfile(imageStatus: "default") // 서버에 전송
+                    }
                 }
             }
             .padding(20)
@@ -86,8 +87,6 @@ struct SetProfileImageView: View {
             .frame(maxWidth: .infinity)
             .background(Color.greyScale2)
             .cornerRadius(12)
-            
- 
         }
         .padding(EdgeInsets(top: 68, leading: 20, bottom: 0, trailing: 20))
         .navigationBarBackButtonHidden(true)
@@ -100,16 +99,17 @@ struct SetProfileImageView: View {
             }
         }
         .onAppear{
-         permissionManager.requestCameraPermission()
-         permissionManager.requestAlbumPermission()
+            permissionManager.requestCameraPermission()
+            permissionManager.requestAlbumPermission()
+            viewModel.loadUserPreviewImage()
          }
         // 카메라 선택
         .sheet(isPresented: $onCamera) {
             CameraView(image: $selectedUIImage) { selectedImage in
                 if let selectedImage = selectedImage {
                     self.selectedUIImage = selectedImage
-                    //self.bookProfileImage = Image(uiImage: selectedImage)
-                    viewModel.userPreviewImage = selectedImage
+                    viewModel.userPreviewImage124 = selectedImage
+                    viewModel.randomNumStr = nil
                 }
                 self.onCamera = false
             }
@@ -119,8 +119,8 @@ struct SetProfileImageView: View {
             PhotoPicker(image: $selectedUIImage) { selectedImage in
                 if let selectedImage = selectedImage {
                     self.selectedUIImage = selectedImage
-                    //self.bookProfileImage = Image(uiImage: selectedImage)
-                    viewModel.userPreviewImage = selectedImage
+                    viewModel.userPreviewImage124 = selectedImage
+                    viewModel.randomNumStr = nil
                 }
                 self.onPhotoLibrary = false
             }
@@ -131,15 +131,21 @@ struct SetProfileImageView: View {
                 message: nil,
                 buttons: [
                     .default(
-                        Text("카메라"),
+                        Text("사진 촬영하기"),
                         action: { onCamera = true }
                     ),
                     .default(
-                        Text("사진 앨범"),
+                        Text("앨범에서 사진 선택"),
                         action: { onPhotoLibrary = true }
                     ),
+                    .default(
+                        Text("랜덤 이미지"),
+                        action: {
+                            viewModel.setRandomProfileImage()
+                        }
+                    ),
                     .cancel(
-                        Text("돌아가기")
+                        Text("취소")
                     )
                 ]
             )
@@ -151,6 +157,6 @@ struct SetProfileImageView: View {
 
 struct SetProfileImageView_Previews: PreviewProvider {
     static var previews: some View {
-        SetProfileImageView(viewModel: MyPageViewModel())
+        SetProfileImageView()
     }
 }

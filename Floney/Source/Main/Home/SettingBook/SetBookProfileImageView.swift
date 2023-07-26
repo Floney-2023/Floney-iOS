@@ -14,7 +14,7 @@ struct SetBookProfileImageView: View {
     @StateObject var permissionManager = PermissionManager()
     var firebaseManager = FirebaseManager()
     var encryptionManager = CryptManager()
-    // 프로필 이미지
+
     
     // 이미지선택창 선택 여부
     @State private var presentsImagePicker = false
@@ -72,7 +72,7 @@ struct SetBookProfileImageView: View {
                                 viewModel.encryptedImageUrl = url
                                 viewModel.changeProfile(inputStatus: "custom")
                                 viewModel.previewImage = selectedUIImage
-                                ProfileManager.shared.setBookImageStateToCustom(url: url)
+                                //ProfileManager.shared.setBookImageStateToCustom(url: url)
                                 print("in image view: \(url)")
                             }
                         }

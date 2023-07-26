@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct UserInformationView: View {
-    @ObservedObject var viewModel : MyPageViewModel
+    @StateObject var viewModel = MyPageViewModel()
     @State var showingLogoutAlert = false
     @State var title = "로그아웃"
     @State var message = "로그아웃 하시겠습니끼?"
@@ -46,7 +46,7 @@ struct UserInformationView: View {
             }
             
             VStack(spacing:30) {
-                NavigationLink(destination: SetProfileImageView(viewModel: viewModel)){
+                NavigationLink(destination: SetProfileImageView()){
                     HStack {
                         Text("프로필 이미지 변경")
                             .font(.pretendardFont(.medium, size: 14))
@@ -54,6 +54,7 @@ struct UserInformationView: View {
                         Spacer()
                         Image("forward_button")
                     }
+                    
                 }
                 NavigationLink(destination: ChangePasswordView()){
                     HStack {
@@ -170,6 +171,6 @@ struct AlertView: View {
 
 struct UserInformationView_Previews: PreviewProvider {
     static var previews: some View {
-        UserInformationView(viewModel: MyPageViewModel())
+        UserInformationView()
     }
 }

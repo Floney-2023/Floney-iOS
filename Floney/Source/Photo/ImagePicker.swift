@@ -39,6 +39,7 @@ struct PhotoPicker: UIViewControllerRepresentable {
         
         func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
             if let itemProvider = results.first?.itemProvider, itemProvider.canLoadObject(ofClass: UIImage.self) {
+                
                 itemProvider.loadObject(ofClass: UIImage.self) { [weak self] image, error in
                     DispatchQueue.main.async {
                         if let image = image as? UIImage {
@@ -84,7 +85,6 @@ struct CameraView: UIViewControllerRepresentable {
                 parent.image = image
                 parent.onCapture(image)
             }
-            
             parent.presentationMode.wrappedValue.dismiss()
         }
 

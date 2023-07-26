@@ -11,7 +11,7 @@ import Alamofire
 
 protocol MyPageProtocol {
     func getMyPage() -> AnyPublisher<DataResponse<MyPageResponse, NetworkError>, Never>
-    func changeProfile(img: String?) -> AnyPublisher<Void, NetworkError>
+    func changeProfile(img: String) -> AnyPublisher<Void, NetworkError>
     func changeNickname(nickname: String) -> AnyPublisher<Void, NetworkError>
     func logout() -> AnyPublisher<Void, NetworkError>
 }
@@ -46,15 +46,15 @@ extension MyPage: MyPageProtocol {
         .eraseToAnyPublisher()
     }
     
-    func changeProfile(img: String?) -> AnyPublisher<Void, NetworkError> {
+    func changeProfile(img: String) -> AnyPublisher<Void, NetworkError> {
         var url = "\(Constant.BASE_URL)/users/profileimg/update"
-        
+
         print("My Page DataManager Change User Image \(url)")
         
         var parameters = [String: String]()
-        if let img = img {
-            parameters["profileImg"] = img
-        }
+      
+        parameters["profileImg"] = img
+        
         print("parameters : \(parameters)")
         let token = Keychain.getKeychainValue(forKey: .accessToken)!
         //print("My Page : \n\(token)")

@@ -16,8 +16,7 @@ struct MainTabView: View {
     let selectedIcons = ["icon_home_on", "icon_leaderboard_on", "", "icon_calculate_on", "icon_person_on"]
     let labels = ["홈", "분석", "", "정산", "마이"]
     init() {
-        //UITabBar.appearance().backgroundColor = UIColor.white
-        
+
     }
     private var dateFormatter: DateFormatter {
         let formatter = DateFormatter()
@@ -58,6 +57,7 @@ struct MainTabView: View {
                 }
             }
             Spacer()
+            //MARK: Tab Bar
             if showingTabbar {
                 Divider()
                 HStack {
@@ -97,19 +97,6 @@ struct MainTabView: View {
     }
 }
  
-    /*
-extension UITabBarController {
-    override open func viewDidLoad() {
-        let standardAppearance = UITabBarAppearance()
-        
-        standardAppearance.stackedItemPositioning = .centered
-        standardAppearance.stackedItemSpacing = 44
-        standardAppearance.stackedItemWidth = 60
-        
-      
-        tabBar.standardAppearance = standardAppearance
-    }
-}*/
 
 struct MainTabView_Previews: PreviewProvider {
     static var previews: some View {

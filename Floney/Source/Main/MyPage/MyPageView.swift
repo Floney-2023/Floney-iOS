@@ -11,57 +11,51 @@ struct MyPageView: View {
     @Binding var showingTabbar : Bool
     var encryptionManager = CryptManager()
     var profileManager = ProfileManager.shared
-    //@State var nickname = "플로니"
-    //@State var email = "floney.dev@gmail.com"
+    
     @State var isShowingBottomSheet = false
     @StateObject var viewModel = MyPageViewModel()
     @State var isShowingNotiView = false
     
     var body: some View {
-      //  NavigationView {
         ZStack {
-            
-                VStack(spacing:32) {
-                    HStack {
-                        Text("마이페이지")
-                            .padding(.horizontal, 4)
-                            .font(.pretendardFont(.bold, size: 22))
-                            .foregroundColor(.greyScale1)
-                            
-                        Spacer()
-                        NavigationLink(destination: NotificationView(showingTabbar: $showingTabbar), isActive: $isShowingNotiView) {
-                            Image("icon_notification")
-                                .onTapGesture {
-                                    isShowingNotiView = true
-                                }
-                        }
-                        Image("icon_settings")
-                        
-                    }.padding(.horizontal, 20)
-                    ScrollView(showsIndicators: false) {
+            VStack(spacing:26) {
+                HStack {
+                    Text("마이페이지")
+                        .padding(.horizontal, 4)
+                        .font(.pretendardFont(.bold, size: 22))
+                        .foregroundColor(.greyScale1)
                     
+                    Spacer()
+                    NavigationLink(destination: NotificationView(showingTabbar: $showingTabbar), isActive: $isShowingNotiView) {
+                        Image("icon_notification")
+                            .onTapGesture {
+                                isShowingNotiView = true
+                            }
+                    }
+                    Image("icon_settings")
+                    
+                }.padding(.horizontal, 20)
+                
+                ScrollView(showsIndicators: false) {
                     VStack(spacing:16) {
-                        NavigationLink(destination: UserInformationView(viewModel: viewModel)) {
+                        NavigationLink(destination: UserInformationView()) {
                             HStack {
-                                Image("user_profile_36")
-                                    .clipShape(Circle())
-                                    .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
-                                    .padding(20)
-
-                                /*
-                                if viewModel.userImg == "user_default" {
-                                    Image("user_profile_36")
+                                if let preview = viewModel.userPreviewImage36 {
+                                    Image(uiImage: preview)
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fill)
                                         .clipShape(Circle())
+                                        .frame(width: 36, height: 36)
                                         .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
                                         .padding(20)
                                 } else {
-                                    let url = encryptionManager.decrypt(viewModel.userImg, using: encryptionManager.key!)
-                                    URLImage(url: URL(string: url!)!)
-                                        .aspectRatio(contentMode: .fill)
+                                    ProgressView()
                                         .clipShape(Circle())
-                                        .frame(width: 34, height: 34)
+                                        .frame(width: 36, height: 36)
                                         .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
-                                }*/
+                                        .padding(20)
+                                }
+                                
                                 VStack(alignment: .leading, spacing:5){
                                     Text("\(viewModel.nickname)")
                                         .font(.pretendardFont(.bold, size: 14))
@@ -101,11 +95,6 @@ struct MyPageView: View {
                         VStack(spacing:16) {
                             ForEach(viewModel.myBooks, id:\.self) { book in
                                 HStack {
-                                    /*
-                                    Image("book_profile_36")
-                                        .clipShape(Circle())
-                                        .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
-                                        .padding(20)*/
                                     
                                     if let bookUrl = book.bookImg {
                                         let url = encryptionManager.decrypt(bookUrl, using: encryptionManager.key!)
@@ -121,7 +110,7 @@ struct MyPageView: View {
                                             .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
                                             .padding(20)
                                     }
-
+                                    
                                     
                                     VStack(alignment: .leading, spacing:5){
                                         Text("\(book.name)")
@@ -217,15 +206,15 @@ struct MyPageView: View {
                         }
                     }
                 }
-                .padding(20)
-                .onAppear{
-                    viewModel.getMyPage()
-                    showingTabbar = true
-                }
+                .padding(.horizontal,20)
+                
                 
             }
-            // }
-            
+            .padding(.top, 26)
+            .onAppear{
+                viewModel.getMyPage()
+                showingTabbar = true
+            }
             // MARK: Bottom Sheet
             BottomSheet(isShowing: $isShowingBottomSheet, content: BottomSheetType.accountBook.view())
         }

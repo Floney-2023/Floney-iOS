@@ -88,26 +88,37 @@ struct SettingBookView: View {
                             Spacer()
                         }
                         VStack(spacing:32) {
-                            ForEach(viewModel.bookUsers, id: \.self) { user in
+                            ForEach(viewModel.bookUsers.indices, id: \.self) { index in
                                 HStack(spacing:16) {
-                                    if let userUrl = user.profileImg {
-                                        let url = encryptionManager.decrypt(userUrl, using: encryptionManager.key!)
-                                        URLImage(url: URL(string: url!)!)
-                                            .aspectRatio(contentMode: .fill)
-                                            .clipShape(Circle())
-                                            .frame(width: 32, height: 32)
-                                            .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
+                                    if let userImg = viewModel.userImages {
+                                        if userImg[index] == "user_default" {
+                                            Image("user_profile_32")
+                                                .clipShape(Circle())
+                                                .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
+                                                
+                                        } else {
+                                            let url = encryptionManager.decrypt(userImg[index], using: encryptionManager.key!)
+                                            URLImage(url: URL(string: url!)!)
+                                                .aspectRatio(contentMode: .fill)
+                                                .clipShape(Circle())
+                                                .frame(width: 34, height: 34)
+                                                .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
+                                               
+                                        }
                                     } else {
                                         Image("user_profile_32")
                                             .clipShape(Circle())
-                                                .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
+                                            .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
+                                            
                                     }
+
+                        
                                     VStack(alignment: .leading, spacing:8){
-                                        Text("\(user.name)")
+                                        Text("\(viewModel.bookUsers[index].name)")
                                             .font(.pretendardFont(.bold, size: 14))
                                             .foregroundColor(.greyScale2)
                                         
-                                        Text("\(user.role)")
+                                        Text("\(viewModel.bookUsers[index].role)")
                                             .font(.pretendardFont(.medium, size: 12))
                                             .foregroundColor(.greyScale6)
                                     }
