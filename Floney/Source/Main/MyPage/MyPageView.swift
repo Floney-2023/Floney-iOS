@@ -27,6 +27,7 @@ struct MyPageView: View {
                             .padding(.horizontal, 4)
                             .font(.pretendardFont(.bold, size: 22))
                             .foregroundColor(.greyScale1)
+                            
                         Spacer()
                         NavigationLink(destination: NotificationView(showingTabbar: $showingTabbar), isActive: $isShowingNotiView) {
                             Image("icon_notification")
@@ -36,17 +37,31 @@ struct MyPageView: View {
                         }
                         Image("icon_settings")
                         
-                    }
+                    }.padding(.horizontal, 20)
                     ScrollView(showsIndicators: false) {
                     
                     VStack(spacing:16) {
                         NavigationLink(destination: UserInformationView(viewModel: viewModel)) {
                             HStack {
-                                
                                 Image("user_profile_36")
                                     .clipShape(Circle())
-                                        .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
+                                    .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
                                     .padding(20)
+
+                                /*
+                                if viewModel.userImg == "user_default" {
+                                    Image("user_profile_36")
+                                        .clipShape(Circle())
+                                        .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
+                                        .padding(20)
+                                } else {
+                                    let url = encryptionManager.decrypt(viewModel.userImg, using: encryptionManager.key!)
+                                    URLImage(url: URL(string: url!)!)
+                                        .aspectRatio(contentMode: .fill)
+                                        .clipShape(Circle())
+                                        .frame(width: 34, height: 34)
+                                        .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
+                                }*/
                                 VStack(alignment: .leading, spacing:5){
                                     Text("\(viewModel.nickname)")
                                         .font(.pretendardFont(.bold, size: 14))

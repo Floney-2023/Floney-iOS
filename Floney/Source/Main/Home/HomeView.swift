@@ -362,7 +362,7 @@ struct MonthCalendar: View {
                                     }
                                     //.frame(height: 60)
                                     .frame(maxHeight: .infinity)
-                                    .background(Color.yellow2)
+                                    //.background(Color.yellow2)
                                     
                                     
                                 } else {

@@ -9,10 +9,13 @@ import Foundation
 struct MyPageResponse: Decodable {
     var nickname : String
     var email : String
+    var profileImg : String
+    var provider : String
     var subscribe : Bool
     var lastAdTime : String? // null 일 수 있음
     var myBooks : [MyBookResult]?
 }
+
 struct MyBookResult : Decodable, Hashable {
     var bookImg : String?
     var bookKey : String

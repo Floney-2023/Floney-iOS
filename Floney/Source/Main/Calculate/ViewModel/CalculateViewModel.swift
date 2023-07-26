@@ -52,6 +52,7 @@ class CalculateViewModel : ObservableObject {
     
     //MARK: 정산 지출 내역
     @Published var lines : [SettlementResponse] = []
+    @Published var outcomeRequest : [OutComes] = []
     
     //MARK: 정산 요청 완료
     @Published var settlementResult : AddSettlementResponse = AddSettlementResponse(id: 0, userCount: 0, startDate: "", endDate: "", totalOutcome: 0, outcome: 0, details: [])
@@ -98,9 +99,8 @@ class CalculateViewModel : ObservableObject {
             }.store(in: &cancellableSet)
     }
     func postSettlements() {
-        userList = ["rudalswhdk12@gmail.com"]
         let bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
-        let request = AddSettlementRequest(bookKey: bookKey, userEmails: userList, startDate: startDateStr, endDate: endDateStr, outcomes: [OutComes(outcome: 30000, userEmail: "rudalswhdk12@naver.com")])
+        let request = AddSettlementRequest(bookKey: bookKey, userEmails: userList, startDate: startDateStr, endDate: endDateStr, outcomes: outcomeRequest)
         
         dataManager.postSettlements(request)
             .sink { (dataResponse) in
@@ -122,6 +122,7 @@ class CalculateViewModel : ObservableObject {
                 }
             }.store(in: &cancellableSet)
     }
+    
     func getSettlementList() {
         dataManager.getSettlementList()
             .sink { (dataResponse) in
@@ -181,7 +182,30 @@ class CalculateViewModel : ObservableObject {
                 }
             }.store(in: &cancellableSet)
     }
-
+    func checkUser() {
+        // 체크 상태에 따라 배열에 추가/제거
+        for user in bookUsers {
+            if let selected = user.isSelected {
+                if selected {
+                    userList.append(user.email)
+                }
+            }
+        }
+        print(userList)
+    }
+    
+    func CheckOutcome() {
+        for line in lines {
+            if let selected = line.isSelected {
+                if selected {
+                    let outcome = line.money
+                    let email = line.userEmail
+                    outcomeRequest.append(OutComes(outcome: outcome, userEmail: email))
+                }
+            }
+        }
+        print(outcomeRequest)
+    }
     // 1주일씩 계산
     func daysInMonth() -> [Date] {
         var dates = [Date]()

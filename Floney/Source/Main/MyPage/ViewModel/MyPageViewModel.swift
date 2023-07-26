@@ -9,17 +9,17 @@ import Foundation
 import Combine
 import SwiftUI
 class MyPageViewModel: ObservableObject {
-    @Published var result : MyPageResponse = MyPageResponse(nickname: "", email: "", subscribe: false)
+    @Published var result : MyPageResponse = MyPageResponse(nickname: "", email: "", profileImg: "", provider: "", subscribe: false, lastAdTime: nil, myBooks: [])
     @Published var myPageLoadingError: String = ""
     @Published var showAlert: Bool = false
     
     @Published var nickname : String = ""
     @Published var email : String = ""
+    @Published var userImg : String = ""
     @Published var myBooks : [MyBookResult] = []
     @Published var encryptedImageUrl : String = ""
     
     @Published var changedNickname = ""
-    
     @Published var userPreviewImage : UIImage?
     
     private var cancellableSet: Set<AnyCancellable> = []
@@ -45,12 +45,12 @@ class MyPageViewModel: ObservableObject {
                     self.nickname = self.result.nickname
                     self.email = self.result.email
                     self.myBooks = self.result.myBooks!
+                    self.userImg = self.result.profileImg
                     self.userPreviewImage = UIImage(named: "user_profile_124")
+                
                 }
             }.store(in: &cancellableSet)
-        
     }
-    
     func changeProfile(imageStatus: String) {
         var requestImage : String?
         if imageStatus == "default" {
@@ -102,7 +102,6 @@ class MyPageViewModel: ObservableObject {
             }
             .store(in: &cancellableSet)
     }
-    
     func createAlert( with error: NetworkError) {
         myPageLoadingError = error.backendError == nil ? error.initialError.localizedDescription : error.backendError!.message
         self.showAlert = true

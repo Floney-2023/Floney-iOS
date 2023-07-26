@@ -9,14 +9,27 @@ import SwiftUI
 
 struct AssetView: View {
     var assetData: [AssetData] = [
-            AssetData(month: "6", amount: 5000),
-            AssetData(month: "7", amount: 4000),
-            AssetData(month: "8", amount: 6000),
-            AssetData(month: "9", amount: 3000),
-            AssetData(month: "10", amount: 6500),
-            AssetData(month: "이번달", amount: 4800)
-        ]
+        
+        AssetData(month: "6", amount: 500000.0),
+        AssetData(month: "7", amount: 4000.0),
+        AssetData(month: "8", amount: 6000.0),
+        AssetData(month: "9", amount: 3000.0),
+        AssetData(month: "10", amount: 6500.0),
+        AssetData(month: "이번달", amount: 4800000.0)
+        
+    ]
+    var standardizedData : [AssetData]?
+    var normalizedData : [AssetData]?
+   
+    
+    
     var body: some View {
+        // Log Transform the asset data
+        let logTransformedData = assetData.map { AssetData(month: $0.month, amount: log($0.amount)) }
+        // Get the min and max of the log transformed data
+        let minLogAmount = logTransformedData.map { $0.amount }.min() ?? 0
+        let maxLogAmount = logTransformedData.map { $0.amount }.max() ?? 1
+       
         ScrollView(showsIndicators: false){
             VStack(spacing: 42) {
                 VStack(alignment:.leading, spacing: 0){
@@ -37,17 +50,30 @@ struct AssetView: View {
                     }
                 }
                 .padding(.horizontal, 24)
-                
+                /*
                 HStack(alignment: .bottom, spacing: 40) {
                     ForEach(assetData.indices) { index in
                         VStack {
                             Spacer()
                             Rectangle()
                                 .fill(index == self.assetData.count - 1 ? Color.primary1 : Color.greyScale10)
-                                .frame(width: 20, height: CGFloat(self.assetData[index].amount) / 1000.0)
+                                .frame(width: 20, height: CGFloat(self.assetData[index].amount) / 200.0)
                             Text("\(self.assetData[index].month)")
                                 .font(.pretendardFont(.medium, size: 12))
                                 .foregroundColor(.greyScale6)
+                        }
+                    }
+                    
+                }.frame(height: 200)*/
+                HStack(alignment: .bottom, spacing: 40) {
+                    ForEach(logTransformedData.indices) { index in
+                        VStack {
+                            Spacer()
+                            Rectangle()
+                                .fill(index == self.assetData.count - 1 ? Color.primary1 : Color.greyScale10)
+                                .frame(width: 20, height: CGFloat(((logTransformedData[index].amount - 0) / (log(9999999999) - 0) * 200.0)) + 4)
+                            Text("\(self.assetData[index].month)")
+                                .font(.system(size: 12))
                         }
                     }
                 }.frame(height: 200)
@@ -64,6 +90,7 @@ struct AssetView: View {
                         }
                         Spacer()
                     }
+                    
                     VStack(alignment: .leading, spacing: 12) {
                         Text("초기자산")
                             .font(.pretendardFont(.medium, size: 14))
@@ -72,10 +99,8 @@ struct AssetView: View {
                             .font(.pretendardFont(.bold, size: 20))
                             .foregroundColor(.greyScale2)
                     }
-                    
-                    
-                    
                 }
+                
                 .padding(.horizontal, 24)
                 
                 

@@ -15,11 +15,11 @@ struct SetContentCalcView: View {
     //@State var isShowingComplete = false
     
     @ObservedObject var viewModel : CalculateViewModel
-    
+    /*
     @State var list : [SettlementResponse] = [
     SettlementResponse(money: 6000, category: ["체크카드","카페/간식"], assetType: "OUTCOME", content: "Cake", img: nil),
     SettlementResponse(money: 4500, category: ["체크카드","카페/간식"], assetType: "OUTCOME", content: "커피", img: nil)
-    ]
+    ]*/
     @Binding var pageCount : Int
     var pageCountAll = 4
     
@@ -126,6 +126,7 @@ struct SetContentCalcView: View {
                         .frame(width: UIScreen.main.bounds.width * 2/3)
                         .background(Color.primary1)
                         .onTapGesture {
+                            viewModel.CheckOutcome()
                             viewModel.postSettlements()
                             pageCount = 4 
                         }

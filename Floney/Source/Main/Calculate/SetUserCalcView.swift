@@ -96,7 +96,7 @@ struct SetUserCalcView: View {
                         .background(Color.primary1)
                         .onTapGesture {
                             pageCount = 2
-                            
+                            viewModel.checkUser()
                         }
             }
             .onAppear{

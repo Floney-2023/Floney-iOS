@@ -12,6 +12,7 @@ struct SettlementResponse : Decodable, Hashable {
     var category : [String]
     var assetType : String
     var content : String
+    var userEmail : String
     var img : String?
     var isSelected : Bool?
 }
@@ -24,8 +25,8 @@ struct AddSettlementResponse : Decodable, Hashable {
     var totalOutcome : Float
     var outcome : Float
     var details : [AddSettlementResponseDetails]
-
 }
+
 struct AddSettlementResponseDetails : Decodable, Hashable {
     var money : Float
     var userNickname : String

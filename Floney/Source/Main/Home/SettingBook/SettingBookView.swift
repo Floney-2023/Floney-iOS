@@ -92,7 +92,6 @@ struct SettingBookView: View {
                                 HStack(spacing:16) {
                                     if let userUrl = user.profileImg {
                                         let url = encryptionManager.decrypt(userUrl, using: encryptionManager.key!)
-                                        
                                         URLImage(url: URL(string: url!)!)
                                             .aspectRatio(contentMode: .fill)
                                             .clipShape(Circle())
@@ -114,10 +113,7 @@ struct SettingBookView: View {
                                     }
                                     Spacer()
                                 }
-
                             }
-
-    
                         }
                         .padding(20)
                         .background(Color.greyScale12)
@@ -138,12 +134,21 @@ struct SettingBookView: View {
                                 .font(.pretendardFont(.regular, size: 14))
                                 .foregroundColor(.greyScale2)
                             Spacer()
-                            Text("이월 없음")
-                                .padding(6)
-                                .font(.pretendardFont(.medium, size: 10))
-                                .foregroundColor(.greyScale2)
-                                .background(Color.background2)
-                                .cornerRadius(8)
+                            if viewModel.carryOver {
+                                Text("이월 있음")
+                                    .padding(6)
+                                    .font(.pretendardFont(.medium, size: 10))
+                                    .foregroundColor(.primary2)
+                                    .background(Color.primary10)
+                                    .cornerRadius(8)
+                            } else {
+                                Text("이월 없음")
+                                    .padding(6)
+                                    .font(.pretendardFont(.medium, size: 10))
+                                    .foregroundColor(.greyScale2)
+                                    .background(Color.background2)
+                                    .cornerRadius(8)
+                            }
                         }
                         .onTapGesture {
                             self.isShowingCarriedOver.toggle()
@@ -267,7 +272,7 @@ struct SettingBookView: View {
             
             SetInitialAssetBottomSheet(isShowing: $isShowingSetInitialAsset, viewModel: viewModel)
             
-            CarriedOverBottomSheet(isShowing: $isShowingCarriedOver, onOff: $onOff)
+            CarriedOverBottomSheet(isShowing: $isShowingCarriedOver, onOff: $viewModel.carryOver)
             
             ShareBookBottomSheet(isShowing: $isShowingShareBook, bookCode: $bookCode, onShareSheet: $onShareSheet, shareUrl: $shareUrl)
                 
