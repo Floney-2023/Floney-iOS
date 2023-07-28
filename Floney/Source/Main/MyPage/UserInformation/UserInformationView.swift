@@ -115,58 +115,6 @@ struct UserInformationView: View {
 
     }
 }
-struct AlertView: View {
-    @Binding var isPresented: Bool
-    @Binding var title : String
-    @Binding var message : String
-    var onOKAction: () -> Void
-    //var onCancelAction: () -> Void
-    
-    var body: some View {
-        GeometryReader { geometry in
-            VStack(spacing: 13) {
-                VStack {
-                    Text("\(title)")
-                        .font(.pretendardFont(.semiBold, size: 20))
-                    
-                    
-                    Text("\(message)")
-                        .font(.pretendardFont(.regular, size: 20))
-                        .multilineTextAlignment(.center)
-                }.padding(.vertical, 20)
-                Divider()
-                
-                HStack(alignment: .center) {
-                    Button("OK") {
-                        isPresented = false
-                        onOKAction()
-                    }
-                    .frame(width: geometry.size.width * 0.35)
-                    .font(.pretendardFont(.semiBold, size: 20))
-                    .foregroundColor(.blue1)
-                 
-                    Divider()
-                    Button("Cancel") {
-                        isPresented = false
-                    }
-                    .frame(width: geometry.size.width * 0.35)
-                    .font(.pretendardFont(.semiBold, size: 20))
-                    .foregroundColor(.calendarRed)
-                }.frame(height: 40)
-          
-            }
-            .frame(width: geometry.size.width * 0.8, height: 170)
-            .background(Color.greyScale11)
-            .cornerRadius(16)
-            .shadow(radius: 10)
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Color.black.opacity(0.5))
-            .edgesIgnoringSafeArea(.all)
-            .transition(.opacity)
-        }
-
-    }
-}
 
 
 struct UserInformationView_Previews: PreviewProvider {

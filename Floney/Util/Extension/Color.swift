@@ -80,5 +80,8 @@ extension Color {
     static let purple2 = Color(hex: "9B8BFF")
     static let purple3 = Color(hex: "D3CCFF")
 
-    //static let white = Color(hex: "FFFFFF")
+    static let alertGrey1 = Color(hex: "F2F2F2")
+    static let alertGrey2 = Color(hex: "3C3C43")
+    static let alertBlue = Color(hex: "007AFF")
+
 }
