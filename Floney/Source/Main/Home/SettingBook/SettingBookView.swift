@@ -26,6 +26,13 @@ struct SettingBookView: View {
     @State var bookCode = "A9BC7ACE"
     @State private var shareUrl: URL? = nil
     
+    @State var resetAlert = false
+    @State var resetTitle = "가계부 초기화"
+    @State var resetMessage = "가계부 내역 초기화 시 모든 내역이 삭제됩니다. 초기화 하시겠습니까?"
+    @State var exitAlert = false
+    @State var exitTitle = "가계부 나가기"
+    @State var exitMessage = "가계부를 나갈 시 모든 내역이 삭제됩니다. 삭제하시겠습니까?"
+    
     var body: some View {
         ZStack {
             ScrollView {
@@ -165,20 +172,22 @@ struct SettingBookView: View {
                             self.isShowingCarriedOver.toggle()
                         }
                         if viewModel.role == "방장" {
-                            NavigationLink(destination: FindPasswordView()){
-                                HStack {
-                                    VStack {
-                                        Text("가계부 초기화")
-                                            .font(.pretendardFont(.regular, size: 12))
-                                            .foregroundColor(.greyScale6)
-                                        
-                                        Divider()
-                                            .padding(EdgeInsets(top: -10, leading: 0, bottom: 0, trailing: 0))
-                                            .frame(width: 70,height: 1.0)
-                                            .foregroundColor(.greyScale6)
-                                    }
-                                    Spacer()
+                            
+                            HStack {
+                                VStack {
+                                    Text("가계부 초기화")
+                                        .font(.pretendardFont(.regular, size: 12))
+                                        .foregroundColor(.greyScale6)
+                                    
+                                    Divider()
+                                        .padding(EdgeInsets(top: -10, leading: 0, bottom: 0, trailing: 0))
+                                        .frame(width: 70,height: 1.0)
+                                        .foregroundColor(.greyScale6)
                                 }
+                                Spacer()
+                            }
+                            .onTapGesture {
+                                self.resetAlert = true
                             }
                         }
                     }
@@ -264,6 +273,9 @@ struct SettingBookView: View {
                             }
                             Spacer()
                         }
+                        .onTapGesture {
+                            self.exitAlert = true
+                        }
                     }
                     
                     Spacer()
@@ -275,6 +287,24 @@ struct SettingBookView: View {
                     viewModel.getBookInfo()
                  
                 }
+                .overlay(
+                    ZStack {
+                        if resetAlert {
+                            AlertView(isPresented: $resetAlert, title: $resetTitle, message: $resetMessage, onOKAction: {
+                                
+                            })
+                        }
+                    }
+                )
+                .overlay(
+                    ZStack {
+                        if exitAlert {
+                            AlertView(isPresented: $exitAlert, title: $exitTitle, message: $exitMessage, onOKAction: {
+                                
+                            })
+                        }
+                    }
+                )
             }.sheet(isPresented: $onShareSheet) {
                 ActivityView(activityItems: [shareUrl ?? ""])
             }

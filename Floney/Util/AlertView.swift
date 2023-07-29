@@ -29,6 +29,7 @@ struct AlertView: View {
                 }.padding(.vertical, 20)
                 
                 Divider()
+                    .foregroundColor(.alertGrey2)
                 
                 HStack(alignment: .center) {
                     Button("네") {
@@ -40,6 +41,7 @@ struct AlertView: View {
                     .foregroundColor(okColor)
                  
                     Divider()
+                        .foregroundColor(.alertGrey2)
                     Button("아니요") {
                         isPresented = false
                     }
