@@ -103,7 +103,15 @@ struct SettingBookView: View {
                                                 .clipShape(Circle())
                                                 .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
                                                 
-                                        } else {
+                                        } else if userImg[index].hasPrefix("random"){
+                                            let components = userImg[index].components(separatedBy: CharacterSet.decimalDigits.inverted)
+                                            let random = components.first!  // "random"
+                                            let number = components.last!   // "5"
+                                            Image("img_user_random_profile_0\(number)_32")
+                                                .clipShape(Circle())
+                                                .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
+                                        }
+                                        else {
                                             let url = encryptionManager.decrypt(userImg[index], using: encryptionManager.key!)
                                             URLImage(url: URL(string: url!)!)
                                                 .aspectRatio(contentMode: .fill)

@@ -140,25 +140,25 @@ class MyPageViewModel: ObservableObject {
         let randomNumber = Int.random(in: 0...5)
         switch randomNumber {
         case 0:
-            userPreviewImage124 = UIImage(named: "img_user_random_profile_01_124")
+            userPreviewImage124 = UIImage(named: "img_user_random_profile_00_124")
             randomNumStr = "random0"
         case 1:
-            userPreviewImage124 = UIImage(named: "img_user_random_profile_02_124")
+            userPreviewImage124 = UIImage(named: "img_user_random_profile_01_124")
             randomNumStr = "random1"
         case 2:
-            userPreviewImage124 = UIImage(named: "img_user_random_profile_03_124")
+            userPreviewImage124 = UIImage(named: "img_user_random_profile_02_124")
             randomNumStr = "random2"
         case 3:
-            userPreviewImage124 = UIImage(named: "img_user_random_profile_04_124")
+            userPreviewImage124 = UIImage(named: "img_user_random_profile_03_124")
             randomNumStr = "random3"
         case 4:
-            userPreviewImage124 = UIImage(named: "img_user_random_profile_05_124")
+            userPreviewImage124 = UIImage(named: "img_user_random_profile_04_124")
             randomNumStr = "random4"
         case 5:
-            userPreviewImage124 = UIImage(named: "img_user_random_profile_06_124")
+            userPreviewImage124 = UIImage(named: "img_user_random_profile_05_124")
             randomNumStr = "random5"
         default:
-            userPreviewImage124 = UIImage(named: "img_user_random_profile_01_124")
+            userPreviewImage124 = UIImage(named: "img_user_random_profile_00_124")
             randomNumStr = "random0"
         }
     }

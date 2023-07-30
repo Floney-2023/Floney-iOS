@@ -35,35 +35,15 @@ class ProfileManager: ObservableObject {
     @Published var bookPreviewImage : UIImage?
     
     func getUserProfileImageState() -> UserProfileImageState {
-        /*
-        guard let imageState = Keychain.getKeychainValue(forKey: .userProfileState) else {
-            userImageState = .default
-            //Keychain.setKeychain(userImageState.rawValue, forKey: .userProfileState)
-            return userImageState
-        }
-        if let userState = UserProfileImageState(rawValue: imageState) {
-            userImageState = userState
-        }*/
         return userImageState
     }
     
     func getBookProfileImageState() -> BookProfileImageState {
-        /*
-        guard let imageState = Keychain.getKeychainValue(forKey: .bookProfileState) else {
-            bookImageState = .default
-            Keychain.setKeychain(bookImageState.rawValue, forKey: .bookProfileState)
-            return bookImageState
-        }
-        if let bookState = BookProfileImageState(rawValue: imageState) {
-            bookImageState = bookState
-        }*/
         return bookImageState
     }
 
     func setUserImageStateToCustom(urlString: String) {
         userImageState = .custom
-        //Keychain.setKeychain(userImageState.rawValue, forKey: .userProfileState)
-        //Keychain.setKeychain(url, forKey: .userProfileImage)
         userImageUrl = urlString
         guard let url = URL(string: urlString) else {
             print("Invalid URL.")
@@ -86,7 +66,7 @@ class ProfileManager: ObservableObject {
     }
     func setUserImageStateToDefault() {
         userImageState = .default
-        //Keychain.setKeychain(userImageState.rawValue, forKey: .userProfileState)
+  
         self.userPreviewImage124 = UIImage(named: "user_profile_124")
         self.userPreviewImage36 = UIImage(named: "user_profile_36")
         self.userPreviewImage32 = UIImage(named: "user_profile_32")
@@ -94,14 +74,10 @@ class ProfileManager: ObservableObject {
 
     func setBookImageStateToDefault() {
         bookImageState = .default
-        //Keychain.setKeychain(bookImageState.rawValue, forKey: .bookProfileState)
-        
     }
     
     func setBookImageStateToCustom(urlString: String) {
         bookImageState = .custom
-        //Keychain.setKeychain(bookImageState.rawValue, forKey: .bookProfileState)
-        //Keychain.setKeychain(url, forKey: .bookProfileImage)
         bookImageUrl = urlString
         guard let url = URL(string: urlString) else {
             print("Invalid URL.")
@@ -124,44 +100,44 @@ class ProfileManager: ObservableObject {
         switch randomNumStr {
         case "random0" :
             userImageState = .random0
+            self.userPreviewImage124 = UIImage(named: "img_user_random_profile_00_124")
+            self.userPreviewImage36 = UIImage(named: "img_user_random_profile_00_36")
+            self.userPreviewImage32 = UIImage(named: "img_user_random_profile_00_32")
+        case "random1" :
+            userImageState = .random1
             self.userPreviewImage124 = UIImage(named: "img_user_random_profile_01_124")
             self.userPreviewImage36 = UIImage(named: "img_user_random_profile_01_36")
             self.userPreviewImage32 = UIImage(named: "img_user_random_profile_01_32")
-        case "random1" :
-            userImageState = .random1
+
+        case "random2":
+            userImageState = .random2
             self.userPreviewImage124 = UIImage(named: "img_user_random_profile_02_124")
             self.userPreviewImage36 = UIImage(named: "img_user_random_profile_02_36")
             self.userPreviewImage32 = UIImage(named: "img_user_random_profile_02_32")
 
-        case "random2":
-            userImageState = .random2
+        case "random3":
+            userImageState = .random3
             self.userPreviewImage124 = UIImage(named: "img_user_random_profile_03_124")
             self.userPreviewImage36 = UIImage(named: "img_user_random_profile_03_36")
             self.userPreviewImage32 = UIImage(named: "img_user_random_profile_03_32")
 
-        case "random3":
-            userImageState = .random3
+        case "random4":
+            userImageState = .random4
             self.userPreviewImage124 = UIImage(named: "img_user_random_profile_04_124")
             self.userPreviewImage36 = UIImage(named: "img_user_random_profile_04_36")
             self.userPreviewImage32 = UIImage(named: "img_user_random_profile_04_32")
 
-        case "random4":
-            userImageState = .random4
+        case "random5":
+            userImageState = .random5
             self.userPreviewImage124 = UIImage(named: "img_user_random_profile_05_124")
             self.userPreviewImage36 = UIImage(named: "img_user_random_profile_05_36")
             self.userPreviewImage32 = UIImage(named: "img_user_random_profile_05_32")
 
-        case "random5":
-            userImageState = .random5
-            self.userPreviewImage124 = UIImage(named: "img_user_random_profile_06_124")
-            self.userPreviewImage36 = UIImage(named: "img_user_random_profile_06_36")
-            self.userPreviewImage32 = UIImage(named: "img_user_random_profile_06_32")
-
         default:
             userImageState = .random0
-            self.userPreviewImage124 = UIImage(named: "img_user_random_profile_01_124")
-            self.userPreviewImage36 = UIImage(named: "img_user_random_profile_01_36")
-            self.userPreviewImage32 = UIImage(named: "img_user_random_profile_01_32")
+            self.userPreviewImage124 = UIImage(named: "img_user_random_profile_00_124")
+            self.userPreviewImage36 = UIImage(named: "img_user_random_profile_00_36")
+            self.userPreviewImage32 = UIImage(named: "img_user_random_profile_00_32")
 
         }
     }

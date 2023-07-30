@@ -85,30 +85,52 @@ struct DayLinesDetailView : View {
                             .font(.pretendardFont(.medium, size: 12))
                             .foregroundColor(.greyScale6)
                     } else {
-                        ForEach(viewModel.dayLines, id: \.self) { line in
+                        ForEach(viewModel.dayLines.indices, id: \.self) { index in
                             HStack {
                                 if viewModel.seeProfileImg {
-                                    if let userUrl = line?.img {
-                                        let url = encryptionManager.decrypt(userUrl, using: encryptionManager.key!)
-                                        URLImage(url: URL(string: url!)!)
-                                            .aspectRatio(contentMode: .fill)
-                                            .clipShape(Circle())
-                                            .frame(width: 32, height: 32)
-                                            .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
-                                            
+                                    if let userImg = viewModel.userImages {
+                                        if let img = userImg[index] {
+                                            if img == "user_default" {
+                                                Image("user_profile_32")
+                                                    .clipShape(Circle())
+                                                    .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
+                                                
+                                            } else if img.hasPrefix("random"){
+                                                let components = img.components(separatedBy: CharacterSet.decimalDigits.inverted)
+                                                let random = components.first!  // "random"
+                                                let number = components.last!   // "5"
+                                                Image("img_user_random_profile_0\(number)_32")
+                                                    .clipShape(Circle())
+                                                    .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
+                                            }
+                                            else  {
+                                                let url = encryptionManager.decrypt(img, using: encryptionManager.key!)
+                                                URLImage(url: URL(string: url!)!)
+                                                    .aspectRatio(contentMode: .fill)
+                                                    .clipShape(Circle())
+                                                    .frame(width: 34, height: 34)
+                                                    .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
+                                                
+                                            }
+                                        } else { //null
+                                            Image("book_profile_32")
+                                                .clipShape(Circle())
+                                                .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
+                                        }
                                     } else {
                                         Image("user_profile_32")
                                             .clipShape(Circle())
-                                                .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
+                                            .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
+                                            
                                     }
                                 }
-                                VStack(alignment: .leading, spacing: 3) {
-                                        
-                                        Text("\(line!.content)")
+                                if let line = viewModel.dayLines[index] {
+                                    VStack(alignment: .leading, spacing: 3) {
+                                        Text("\(line.content)")
                                             .font(.pretendardFont(.semiBold, size: 14))
                                             .foregroundColor(.greyScale2)
                                         HStack {
-                                            ForEach(line!.category, id: \.self) { category in
+                                            ForEach(line.category, id: \.self) { category in
                                                 Text("\(category)‧")
                                                     .font(.pretendardFont(.medium, size: 12))
                                                     .foregroundColor(.greyScale6)
@@ -117,21 +139,22 @@ struct DayLinesDetailView : View {
                                         }
                                     }
                                     
-                                Spacer()
-                                if line!.assetType == "INCOME" {
-                                    Text("+\(line!.money)")
-                                        .font(.pretendardFont(.semiBold, size: 16))
-                                        .foregroundColor(.greyScale2)
-                                } else if line!.assetType == "OUTCOME" {
-                                    Text("-\(line!.money)")
-                                        .font(.pretendardFont(.semiBold, size: 16))
-                                        .foregroundColor(.greyScale2)
-                                    
+                                    Spacer()
+                                    if line.assetType == "INCOME" {
+                                        Text("+\(line.money)")
+                                            .font(.pretendardFont(.semiBold, size: 16))
+                                            .foregroundColor(.greyScale2)
+                                    } else if line.assetType == "OUTCOME" {
+                                        Text("-\(line.money)")
+                                            .font(.pretendardFont(.semiBold, size: 16))
+                                            .foregroundColor(.greyScale2)
+                                        
+                                    }
                                 }
                             }
-                        }
-                    }
-                }
+                        } //ForEach
+                    } // else
+                } //ScrollView
             }
             Spacer()
         }

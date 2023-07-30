@@ -48,6 +48,7 @@ class CalendarViewModel: ObservableObject {
     @Published var dayLinesTotalOutcome : Int = 0
     @Published var dayLines : [DayLinesResults?] = []
     @Published var seeProfileImg : Bool = true
+    @Published var userImages : [String?]?
     
     //MARK: book profile image
     @Published var bookInfoResult = BookInfoResponse(bookImg: "",bookName: "", startDay: "", seeProfileStatus: true, carryOver: true, ourBookUsers: [])
@@ -108,6 +109,8 @@ class CalendarViewModel: ObservableObject {
                     }
                     self.dayLines = self.dayLinesResult.dayLinesResponse
                     self.seeProfileImg = self.dayLinesResult.seeProfileImg
+                    self.userImages = self.dayLines.compactMap { $0?.img }
+                    
                     
                 }
             }.store(in: &cancellableSet)
