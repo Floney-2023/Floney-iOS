@@ -37,6 +37,7 @@ class SettingBookViewModel : ObservableObject {
     @Published var previewImage: UIImage?
     @Published var userImages : [String]?
 
+    @Published var bookCode : String = ""
     
     private var cancellableSet: Set<AnyCancellable> = []
     var dataManager: SettingBookProtocol
@@ -185,6 +186,23 @@ class SettingBookViewModel : ObservableObject {
             }
             .store(in: &cancellableSet)
     }
+    func getShareCode() {
+        bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
+        let request = BookInfoRequest(bookKey: bookKey)
+        dataManager.getShareCode(request)
+            .sink { (dataResponse) in
+                if dataResponse.error != nil {
+                    self.createAlert(with: dataResponse.error!)
+                    // 에러 처리
+                    print(dataResponse.error)
+                } else {
+                    self.bookCode = (dataResponse.value!.code)
+                    print("--성공--")
+                    print(self.bookCode) 
+                }
+            }.store(in: &cancellableSet)
+    }
+
     
     //MARK: 방장 필터
     func hostFilter() {

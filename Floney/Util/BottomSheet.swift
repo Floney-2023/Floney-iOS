@@ -103,6 +103,7 @@ struct AccountBookBottomSheet: View{
 struct ShareBookBottomSheet: View{
     var firebaseManager = FirebaseManager()
     let buttonHeight: CGFloat = 46
+    @ObservedObject var viewModel : SettingBookViewModel
     @Binding var isShowing : Bool
     @Binding var bookCode : String
     @Binding var onShareSheet : Bool
@@ -133,7 +134,7 @@ struct ShareBookBottomSheet: View{
                                     .foregroundColor(.greyScale8)
                                 Spacer()
                             }
-                            ButtonLarge(label: "A9BC7ACE", background: .greyScale12, textColor: .greyScale2, strokeColor: .greyScale12, action: {
+                            ButtonLarge(label: viewModel.bookCode, background: .greyScale12, textColor: .greyScale2, strokeColor: .greyScale12, action: {
                                 
                             })
                             .frame(height: buttonHeight)
@@ -170,7 +171,9 @@ struct ShareBookBottomSheet: View{
                     Color(.white)
                 )
                 .cornerRadius(12, corners: [.topLeft, .topRight])
-                
+                .onAppear {
+                    viewModel.getShareCode()
+                }
                 
             }
         }

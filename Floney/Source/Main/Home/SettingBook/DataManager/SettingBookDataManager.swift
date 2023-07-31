@@ -17,6 +17,7 @@ protocol SettingBookProtocol {
     func changeProfileStatus(parameters: SeeProfileRequest) -> AnyPublisher<Void, NetworkError>
     func setBudget(parameters: SetBudgetRequest) -> AnyPublisher<Void, NetworkError>
     func setAsset(parameters: SetAssetRequest) -> AnyPublisher<Void, NetworkError>
+    func getShareCode(_ parameters:BookInfoRequest) -> AnyPublisher<DataResponse<ShareCodeResponse, NetworkError>, Never>
 }
 
 class SettingBookService {
@@ -25,6 +26,28 @@ class SettingBookService {
 }
 
 extension SettingBookService: SettingBookProtocol {
+    
+    func getShareCode(_ parameters: BookInfoRequest) -> AnyPublisher<DataResponse<ShareCodeResponse, NetworkError>, Never> {
+        let bookKey = parameters.bookKey
+        let url = "\(Constant.BASE_URL)/books/code?bookKey=\(bookKey)"
+        let token = Keychain.getKeychainValue(forKey: .accessToken)!
+        return AF.request(url,
+                          method: .get,
+                          parameters: nil,
+                          encoding : JSONEncoding.default,
+                          headers: ["Authorization":"Bearer \(token)"])
+        .validate()
+        .publishDecodable(type: ShareCodeResponse.self)
+        .map { response in
+            response.mapError { error in
+                let backendError = response.data.flatMap { try? JSONDecoder().decode(BackendError.self, from: $0)}
+                return NetworkError(initialError: error, backendError: backendError)
+            }
+        }
+        .receive(on: DispatchQueue.main)
+        .eraseToAnyPublisher()
+    }
+    
     func getBookInfo(_ parameters:BookInfoRequest) -> AnyPublisher<DataResponse<BookInfoResponse, NetworkError>, Never> {
     
         let bookKey = parameters.bookKey

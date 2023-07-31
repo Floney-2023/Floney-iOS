@@ -21,3 +21,7 @@ struct BookUsers: Decodable, Hashable {
     var role : String
     var me : Bool
 }
+
+struct ShareCodeResponse: Decodable {
+    var code : String
+}

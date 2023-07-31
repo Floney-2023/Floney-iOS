@@ -323,7 +323,7 @@ struct SettingBookView: View {
             
             CarriedOverBottomSheet(isShowing: $isShowingCarriedOver, onOff: $viewModel.carryOver)
             
-            ShareBookBottomSheet(isShowing: $isShowingShareBook, bookCode: $bookCode, onShareSheet: $onShareSheet, shareUrl: $shareUrl)
+            ShareBookBottomSheet(viewModel: viewModel, isShowing: $isShowingShareBook, bookCode: $bookCode, onShareSheet: $onShareSheet, shareUrl: $shareUrl)
                 
             //BottomSheet(isShowing: $isShowingShareBook, content: BottomSheetType.shareBook.view())
         }
