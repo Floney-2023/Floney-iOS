@@ -83,5 +83,6 @@ extension Color {
     static let alertGrey1 = Color(hex: "F2F2F2")
     static let alertGrey2 = Color(hex: "3C3C43")
     static let alertBlue = Color(hex: "007AFF")
+    static let alertRed = Color(hex: "FF3B30")
 
 }

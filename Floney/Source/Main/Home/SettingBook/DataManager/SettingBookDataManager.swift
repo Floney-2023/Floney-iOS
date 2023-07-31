@@ -18,6 +18,7 @@ protocol SettingBookProtocol {
     func setBudget(parameters: SetBudgetRequest) -> AnyPublisher<Void, NetworkError>
     func setAsset(parameters: SetAssetRequest) -> AnyPublisher<Void, NetworkError>
     func getShareCode(_ parameters:BookInfoRequest) -> AnyPublisher<DataResponse<ShareCodeResponse, NetworkError>, Never>
+    func exitBook(parameters: BookInfoRequest) -> AnyPublisher<Void, NetworkError>
 }
 
 class SettingBookService {
@@ -26,6 +27,45 @@ class SettingBookService {
 }
 
 extension SettingBookService: SettingBookProtocol {
+    func exitBook(parameters: BookInfoRequest) -> AnyPublisher<Void, NetworkError> {
+        let url = "\(Constant.BASE_URL)/books/users/out"
+        let token = Keychain.getKeychainValue(forKey: .accessToken)!
+        print("exit book : \n\(token)")
+        
+        return AF.request(url,
+                          method: .post,
+                          parameters: parameters,
+                          encoder: JSONParameterEncoder(),
+                          headers: ["Authorization":"Bearer \(token)"])
+        .validate()
+        .publishData()
+        .tryMap { result in
+            // Check the status code
+            if let statusCode = result.response?.statusCode {
+                print("Status Code: \(statusCode)")
+                if statusCode == 200 {
+                    return // Success, return
+                } else {
+                    // Handle error based on status code
+                    let backendError = result.data.flatMap { try? JSONDecoder().decode(BackendError.self, from: $0)}
+
+                    
+                    if let backendError = backendError {
+                        throw NetworkError(initialError: result.error!, backendError: backendError)
+                    } else {
+                        throw NetworkError(initialError: result.error!, backendError: nil)
+                    }
+                }
+            } else {
+                throw NetworkError(initialError: result.error!, backendError: nil)
+            }
+        }
+        .mapError { error in
+            return error as! NetworkError
+        }
+        .eraseToAnyPublisher()
+    }
+    
     
     func getShareCode(_ parameters: BookInfoRequest) -> AnyPublisher<DataResponse<ShareCodeResponse, NetworkError>, Never> {
         let bookKey = parameters.bookKey

@@ -295,27 +295,29 @@ struct SettingBookView: View {
                     viewModel.getBookInfo()
                  
                 }
-                .overlay(
-                    ZStack {
-                        if resetAlert {
-                            AlertView(isPresented: $resetAlert, title: $resetTitle, message: $resetMessage, onOKAction: {
-                                
-                            })
-                        }
-                    }
-                )
-                .overlay(
-                    ZStack {
-                        if exitAlert {
-                            AlertView(isPresented: $exitAlert, title: $exitTitle, message: $exitMessage, onOKAction: {
-                                
-                            })
-                        }
-                    }
-                )
+                
+                
             }.sheet(isPresented: $onShareSheet) {
                 ActivityView(activityItems: [shareUrl ?? ""])
             }
+            .overlay(
+                ZStack {
+                    if exitAlert {
+                        AlertView(isPresented: $exitAlert, title: $exitTitle, message: $exitMessage, okColor: .alertRed, onOKAction: {
+                            viewModel.exitBook()
+                        })
+                    }
+                }
+            )
+            .overlay(
+                ZStack {
+                    if resetAlert {
+                        AlertView(isPresented: $resetAlert,title: $resetTitle, message: $resetMessage, okColor: .alertRed, onOKAction: {
+                            
+                        })
+                    }
+                }
+            )
             
             SetBudgetBottomSheet(isShowing: $isShowingSetBudget, viewModel: viewModel)
             
