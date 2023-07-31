@@ -128,9 +128,11 @@ struct AddCategoryView: View {
                     .foregroundColor(.white)
                     .padding()
             }.frame(maxWidth: .infinity)
+                .frame(height:66)
                 .background(Color.greyScale2)
 
         }
+        .edgesIgnoringSafeArea(.bottom)
     }
 }
 

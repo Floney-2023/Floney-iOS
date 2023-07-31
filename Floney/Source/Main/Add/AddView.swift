@@ -48,7 +48,6 @@ struct AddView: View {
                     Spacer()
                 }
                 .padding(.leading,20)
-                .padding(.top, 64)
 
                 VStack(spacing: 32){
                     //MARK: 금액
@@ -268,7 +267,7 @@ struct AddView: View {
                 
                 
             } // VStack
-            .ignoresSafeArea()
+            .edgesIgnoringSafeArea(.bottom)
             .onAppear(perform : UIApplication.shared.hideKeyboard)
 
             CategoryBottomSheet(root: $root, categories: $viewModel.categories, isShowing: $isShowingBottomSheet, isSelectedAssetTypeIndex: $isSelectedAssetTypeIndex, isSelectedAssetType: $assetType, isSelectedCategoryIndex: $isSelectedCategoryIndex, isSelectedCategory: $category, isShowingEditCategory: $isShowingEditCategory)

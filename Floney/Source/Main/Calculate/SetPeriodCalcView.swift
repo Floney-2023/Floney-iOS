@@ -87,6 +87,7 @@ struct SetPeriodCalcView: View {
                         .font(.pretendardFont(.bold, size: 14))
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
+                        .frame(maxHeight: .infinity)
                         .background(Color.greyScale2)
                         .onTapGesture {
                             //self.isShowingPeriod = false
@@ -98,6 +99,7 @@ struct SetPeriodCalcView: View {
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
                         .frame(width: UIScreen.main.bounds.width * 2/3)
+                        .frame(maxHeight: .infinity)
                         .background(Color.primary1)
                         .onTapGesture {
                             //self.isShowingContent = true
@@ -105,8 +107,10 @@ struct SetPeriodCalcView: View {
                             viewModel.getSettlements()
                         }
                 }
+                .frame(height: 66)
                 
             }
+            .edgesIgnoringSafeArea(.bottom)
           
             if isShowingCalendar {
                 CalendarBottomSheet(isShowing: $isShowingCalendar, viewModel: viewModel)

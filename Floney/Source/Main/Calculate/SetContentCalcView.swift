@@ -113,6 +113,7 @@ struct SetContentCalcView: View {
                         .font(.pretendardFont(.bold, size: 14))
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
+                        .frame(maxHeight: .infinity)
                         .background(Color.greyScale2)
                         .onTapGesture {
                             //self.isShowingContent = false
@@ -123,6 +124,7 @@ struct SetContentCalcView: View {
                         .font(.pretendardFont(.bold, size: 14))
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
+                        .frame(maxHeight: .infinity)
                         .frame(width: UIScreen.main.bounds.width * 2/3)
                         .background(Color.primary1)
                         .onTapGesture {
@@ -131,8 +133,10 @@ struct SetContentCalcView: View {
                             pageCount = 4 
                         }
                 }
+                .frame(height:66)
                 
             }
+            .edgesIgnoringSafeArea(.bottom)
             .onAppear{
                 
             }

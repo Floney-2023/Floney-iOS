@@ -147,11 +147,11 @@ struct CompleteCalcView: View {
                     .font(.pretendardFont(.bold, size: 14))
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
-                    
+                    .frame(maxHeight: .infinity)
                     .background(Color.primary1)
-            }
+            }.frame(height: 66)
             
-        }
+        }.edgesIgnoringSafeArea(.bottom)
 
     }
 

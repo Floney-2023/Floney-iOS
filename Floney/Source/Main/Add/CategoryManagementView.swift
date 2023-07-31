@@ -157,12 +157,15 @@ struct CategoryManagementView: View {
                         .font(.pretendardFont(.bold, size: 14))
                         .foregroundColor(.white)
                         .padding()
+                    
                 }.frame(maxWidth: .infinity)
+                    .frame(height:66)
                     .background(Color.primary1)
             }
             .fullScreenCover(isPresented: $isShowingAdd) {
                 AddCategoryView(isShowingAdd: $isShowingAdd)
             }
+            .edgesIgnoringSafeArea(.bottom)
             .onAppear{
                 viewModel.root = "자산"
                 viewModel.getCategory()

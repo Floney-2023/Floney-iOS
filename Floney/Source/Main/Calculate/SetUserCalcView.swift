@@ -87,20 +87,24 @@ struct SetUserCalcView: View {
                 }
                 .padding(EdgeInsets(top: 32, leading: 24, bottom: 0, trailing: 24))
                 
-               
-                    Text("다음으로")
-                        .padding()
-                        .font(.pretendardFont(.bold, size: 14))
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                        .background(Color.primary1)
-                        .onTapGesture {
-                            pageCount = 2
-                            viewModel.checkUser()
-                        }
+                
+                Text("다음으로")
+                    .padding()
+                    .font(.pretendardFont(.bold, size: 14))
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 66)
+                    .background(Color.primary1)
+                    .onTapGesture {
+                        pageCount = 2
+                        //viewModel.checkUser()
+                    }
+                    //.frame(maxHeight: .infinity)
+                    
             }
+            .edgesIgnoringSafeArea(.bottom)
             .onAppear{
-                viewModel.getBookUsers()
+                //viewModel.getBookUsers()
                 isShowingTabbar = false
             }
     
