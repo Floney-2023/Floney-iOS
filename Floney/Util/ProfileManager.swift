@@ -29,10 +29,16 @@ class ProfileManager: ObservableObject {
     @Published var userPreviewImage124 : UIImage?
     @Published var userPreviewImage36 : UIImage?
     @Published var userPreviewImage32 : UIImage?
+    @Published var bookPreviewImage124 : UIImage?
+    @Published var bookPreviewImage110 : UIImage?
+    @Published var bookPreviewImage36 : UIImage?
+    @Published var bookPreviewImage34 : UIImage?
+    //@Published var bookPreviewImage32 : UIImage?
+
     @Published var userImageUrl : String = ""
     @Published var bookImageState: BookProfileImageState = .default
     @Published var bookImageUrl : String = ""
-    @Published var bookPreviewImage : UIImage?
+    //@Published var bookPreviewImage : UIImage?
     
     func getUserProfileImageState() -> UserProfileImageState {
         return userImageState
@@ -74,6 +80,12 @@ class ProfileManager: ObservableObject {
 
     func setBookImageStateToDefault() {
         bookImageState = .default
+        
+        self.bookPreviewImage124 = UIImage(named: "book_profile_124")
+        self.bookPreviewImage110 = UIImage(named: "book_profile_110")
+        self.bookPreviewImage36 = UIImage(named: "book_profile_36")
+        self.bookPreviewImage34 = UIImage(named: "book_profile_34")
+       // self.bookPreviewImage32 = UIImage(named: "book_profile_32")
     }
     
     func setBookImageStateToCustom(urlString: String) {
@@ -87,7 +99,11 @@ class ProfileManager: ObservableObject {
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
             if let data = data, let image = UIImage(data: data) {
                 DispatchQueue.main.async {
-                    self.bookPreviewImage = image
+                    self.bookPreviewImage124 = image
+                    self.bookPreviewImage110 = image
+                    self.bookPreviewImage36 = image
+                    self.bookPreviewImage34 = image
+                    //self.bookPreviewImage32 = image
                 }
             } else {
                 print("Failed to load image: \(error?.localizedDescription ?? "Unknown error")")

@@ -48,7 +48,7 @@ struct SettingBookView: View {
                         }
                         
                         //MARK: 가계부 정보
-                        NavigationLink(destination: ModifyingBookView(viewModel: viewModel)) {
+                        NavigationLink(destination: ModifyingBookView()) {
                             HStack(spacing:16) {
                                 /*
                                 Image("book_profile_36")

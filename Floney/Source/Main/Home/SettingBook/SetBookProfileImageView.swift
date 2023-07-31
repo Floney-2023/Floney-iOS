@@ -10,12 +10,10 @@ import CryptoKit
 import FirebaseStorage
 
 struct SetBookProfileImageView: View {
-    @ObservedObject var viewModel : SettingBookViewModel
+    @StateObject var viewModel = SettingBookViewModel()
     @StateObject var permissionManager = PermissionManager()
     var firebaseManager = FirebaseManager()
     var encryptionManager = CryptManager()
-
-    
     // 이미지선택창 선택 여부
     @State private var presentsImagePicker = false
     // 카메라 선택 여부
@@ -28,7 +26,7 @@ struct SetBookProfileImageView: View {
     
     var body: some View {
         VStack(spacing:20) {
-            if let preview = viewModel.previewImage {
+            if let preview = viewModel.bookPreviewImage124 {
                 Image(uiImage: preview)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
@@ -60,7 +58,7 @@ struct SetBookProfileImageView: View {
                 .foregroundColor(.greyScale6)
                 .onTapGesture {
                     //bookProfileImage = Image("book_profile_124")
-                    viewModel.previewImage = UIImage(named: "book_profile_124")
+                    viewModel.bookPreviewImage124 = UIImage(named: "book_profile_124")
                 }
             Spacer()
             
@@ -71,8 +69,8 @@ struct SetBookProfileImageView: View {
                             if let url = encryptedURL {
                                 viewModel.encryptedImageUrl = url
                                 viewModel.changeProfile(inputStatus: "custom")
-                                viewModel.previewImage = selectedUIImage
-                                //ProfileManager.shared.setBookImageStateToCustom(url: url)
+                                viewModel.bookPreviewImage124 = selectedUIImage
+                                ProfileManager.shared.setBookImageStateToCustom(urlString: url)
                                 print("in image view: \(url)")
                             }
                         }
@@ -103,16 +101,17 @@ struct SetBookProfileImageView: View {
             }
         }
         .onAppear{
-         permissionManager.requestCameraPermission()
-         permissionManager.requestAlbumPermission()
-         }
+            permissionManager.requestCameraPermission()
+            permissionManager.requestAlbumPermission()
+            viewModel.loadBookPreviewImage()
+        }
         // 카메라 선택
         .sheet(isPresented: $onCamera) {
             CameraView(image: $selectedUIImage) { selectedImage in
                 if let selectedImage = selectedImage {
                     self.selectedUIImage = selectedImage
                     //self.bookProfileImage = Image(uiImage: selectedImage)
-                    viewModel.previewImage = selectedImage
+                    viewModel.bookPreviewImage124 = selectedImage
                 }
                 self.onCamera = false
             }
@@ -123,7 +122,7 @@ struct SetBookProfileImageView: View {
                 if let selectedImage = selectedImage {
                     self.selectedUIImage = selectedImage
                     //self.bookProfileImage = Image(uiImage: selectedImage)
-                    viewModel.previewImage = selectedImage
+                    viewModel.bookPreviewImage124 = selectedImage
                 }
                 self.onPhotoLibrary = false
             }
@@ -155,6 +154,6 @@ struct SetBookProfileImageView: View {
 
 struct SetBookProfileImageView_Previews: PreviewProvider {
     static var previews: some View {
-        SetBookProfileImageView(viewModel: SettingBookViewModel())
+        SetBookProfileImageView()
     }
 }

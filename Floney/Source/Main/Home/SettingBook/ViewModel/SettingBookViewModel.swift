@@ -34,7 +34,9 @@ class SettingBookViewModel : ObservableObject {
     
     @Published var role = "방장"
     
-    @Published var previewImage: UIImage?
+    @Published var bookPreviewImage124: UIImage?
+    @Published var bookPreviewImage34: UIImage?
+    @Published var bookPreviewImage36: UIImage?
     @Published var userImages : [String]?
 
     @Published var bookCode : String = ""
@@ -82,31 +84,15 @@ class SettingBookViewModel : ObservableObject {
                     
                     if let url = self.bookImg {
                         let decryptedUrl = self.cryprionManager.decrypt(url, using: self.cryprionManager.key!)
-                        self.loadImageFromURL(decryptedUrl!)
+                        ProfileManager.shared.setBookImageStateToCustom(urlString: decryptedUrl!)
                     } else {
-                        let image = UIImage(named: "book_profile_124")
-                        self.previewImage = image
+                        ProfileManager.shared.setBookImageStateToDefault()
                     }
+                    self.loadBookPreviewImage()
                 }
             }.store(in: &cancellableSet)
     }
-    func loadImageFromURL(_ urlString: String) {
-        guard let url = URL(string: urlString) else {
-            print("Invalid URL.")
-            return
-        }
-        
-        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
-            if let data = data, let image = UIImage(data: data) {
-                DispatchQueue.main.async {
-                    self.previewImage = image
-                }
-            } else {
-                print("Failed to load image: \(error?.localizedDescription ?? "Unknown error")")
-            }
-        }
-        task.resume()
-    }
+    
     func changeProfile(inputStatus: String) {
         bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
         var request : BookProfileRequest
@@ -262,6 +248,11 @@ class SettingBookViewModel : ObservableObject {
             print("해당 조건을 만족하는 사용자가 없습니다.")
             role = "팀원"
         }
+    }
+    func loadBookPreviewImage() {
+        self.bookPreviewImage124 = ProfileManager.shared.bookPreviewImage124
+        self.bookPreviewImage36 = ProfileManager.shared.bookPreviewImage36
+        self.bookPreviewImage34 = ProfileManager.shared.bookPreviewImage34
     }
     
     func createAlert( with error: NetworkError) {

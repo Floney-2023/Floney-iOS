@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ModifyingBookView: View {
-    @ObservedObject var viewModel : SettingBookViewModel
+    @StateObject var viewModel = SettingBookViewModel()
     //@State var nickname = ""
     @State var toggleOnOff = true
     @State var deleteAlert = false
@@ -48,7 +48,7 @@ struct ModifyingBookView: View {
             }
             
             VStack(spacing:30) {
-                NavigationLink(destination: SetBookProfileImageView(viewModel: viewModel)){
+                NavigationLink(destination: SetBookProfileImageView()){
                     HStack {
                         Text("프로필 이미지 변경")
                             .font(.pretendardFont(.medium, size: 14))
@@ -122,6 +122,6 @@ struct ModifyingBookView: View {
 
 struct ModifyingBookView_Previews: PreviewProvider {
     static var previews: some View {
-        ModifyingBookView(viewModel: SettingBookViewModel())
+        ModifyingBookView()
     }
 }
