@@ -14,6 +14,7 @@ struct CalculateView: View {
     @Binding var showingTabbar : Bool
     
     var body: some View {
+        ZStack {
             VStack {
                 HStack {
                     VStack(alignment: .leading) {
@@ -70,9 +71,7 @@ struct CalculateView: View {
                     EmptyView()
                 }
             }.padding(.top, 26)
-            
-            
-        
+        }
     }
 }
 

@@ -36,7 +36,7 @@ struct MainTabView: View {
                 switch selection {
                 case 0:
                     NavigationView {
-                        HomeView(showingTabbar: $showingTabbar)
+                        //HomeView(showingTabbar: $showingTabbar)
                     }
                 case 1:
                     NavigationView {
@@ -49,10 +49,11 @@ struct MainTabView: View {
                 case 3:
                     NavigationView {
                         CalculateView(showingTabbar: $showingTabbar)
+
                     }
                 default :
                     NavigationView {
-                        MyPageView(showingTabbar: $showingTabbar)
+                       // MyPageView(showingTabbar: $showingTabbar)
                     }
                 }
             }
@@ -60,40 +61,45 @@ struct MainTabView: View {
             //MARK: Tab Bar
             if showingTabbar {
                 Divider()
-                HStack {
-                    ForEach(0..<5, id: \.self) { number in
-                        Spacer()
-                        Button {
-                            if number == 2 {
-                                let dateFormatter = DateFormatter()
-                                dateFormatter.dateFormat = "yyyy-MM-dd"
-                                currentDate = dateFormatter.string(from: Date())
-                                self.showingAddView = true
-                            } else {
-                                self.selection = number
-                            }
-                        } label: {
-                            VStack {
+                VStack {
+                    HStack() {
+                        ForEach(0..<5, id: \.self) { number in
+                            Spacer()
+                            Button {
                                 if number == 2 {
-                                    // add button
-                                    Image(icons[number])
+                                    let dateFormatter = DateFormatter()
+                                    dateFormatter.dateFormat = "yyyy-MM-dd"
+                                    currentDate = dateFormatter.string(from: Date())
+                                    self.showingAddView = true
                                 } else {
-                                    Image(selection == number ? selectedIcons[number] : icons[number])
+                                    self.selection = number
                                 }
-                                if number != 2 {  // Add button에는 텍스트가 필요 없습니다.
-                                    Text(labels[number])
-                                        .font(.pretendardFont(.regular, size: 10))
+                            } label: {
+                                VStack {
+                                    if number == 2 {
+                                        // add button
+                                        Image(icons[number])
+                                    } else {
+                                        Image(selection == number ? selectedIcons[number] : icons[number])
+                                    }
+                                    if number != 2 {  // Add button에는 텍스트가 필요 없습니다.
+                                        Text(labels[number])
+                                            .font(.pretendardFont(.regular, size: 10))
+                                    }
                                 }
+                                .foregroundColor(selection == number ? .greyScale2 : .greyScale7)
                             }
-                            .foregroundColor(selection == number ? .greyScale2 : .greyScale7)
+                            Spacer()
+                            
                         }
-                        Spacer()
-                        
                     }
+                    Spacer()
                 }
+                .frame(height: 76)
             }
             
         }
+        .edgesIgnoringSafeArea(.bottom)
     }
 }
  
