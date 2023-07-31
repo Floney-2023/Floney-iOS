@@ -11,6 +11,9 @@ struct ModifyingBookView: View {
     @ObservedObject var viewModel : SettingBookViewModel
     //@State var nickname = ""
     @State var toggleOnOff = true
+    @State var deleteAlert = false
+    @State var deleteTitle = "가계부 삭제"
+    @State var deleteMessage = "가계부를 삭제할 시 모든 내역이 삭제됩니다. 삭제하시겠습니까?"
     var body: some View {
         VStack(spacing:36) {
             VStack(spacing:12) {
@@ -72,21 +75,24 @@ struct ModifyingBookView: View {
                 
             }
             if viewModel.role == "방장" {
-                NavigationLink(destination: WithdrawalView()){
-                    HStack {
-                        VStack {
-                            Text("가계부 삭제")
-                                .font(.pretendardFont(.regular, size: 12))
-                                .foregroundColor(.greyScale6)
-                            Divider()
-                                .padding(EdgeInsets(top: -10, leading: 0, bottom: 0, trailing: 0))
-                                .frame(width: 50,height: 1.0)
-                                .foregroundColor(.greyScale6)
-                            
-                        }
-                        Spacer()
+                
+                HStack {
+                    VStack {
+                        Text("가계부 삭제")
+                            .font(.pretendardFont(.regular, size: 12))
+                            .foregroundColor(.greyScale6)
+                        Divider()
+                            .padding(EdgeInsets(top: -10, leading: 0, bottom: 0, trailing: 0))
+                            .frame(width: 50,height: 1.0)
+                            .foregroundColor(.greyScale6)
+                        
                     }
+                    Spacer()
                 }
+                .onTapGesture {
+                    self.deleteAlert = true
+                }
+                
             }
             Spacer()
             
@@ -101,6 +107,15 @@ struct ModifyingBookView: View {
                     .foregroundColor(.greyScale1)
             }
         }
+        .overlay(
+            ZStack {
+                if deleteAlert {
+                    AlertView(isPresented: $deleteAlert, title: $deleteTitle, message: $deleteMessage, okColor: .alertRed, onOKAction: {
+                        viewModel.deleteBook()
+                    })
+                }
+            }
+        )
         
     }
 }

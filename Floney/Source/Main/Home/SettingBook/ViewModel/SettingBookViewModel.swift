@@ -202,6 +202,23 @@ class SettingBookViewModel : ObservableObject {
             }
             .store(in: &cancellableSet)
     }
+    func deleteBook() {
+        bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
+        let request = BookInfoRequest(bookKey: bookKey)
+        dataManager.deleteBook(parameters: request)
+            .sink { completion in
+                switch completion {
+                case .finished:
+                    print("Exit Book successfully changed.")
+                case .failure(let error):
+                    print("Error Exiting Book : \(error)")
+                }
+            } receiveValue: { data in
+                // TODO: Handle the received data if necessary.
+            }
+            .store(in: &cancellableSet)
+    }
+
 
     func getShareCode() {
         bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
