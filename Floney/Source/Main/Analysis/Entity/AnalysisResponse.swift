@@ -17,3 +17,14 @@ struct AssetData : Decodable, Hashable{
     let month: String
     let amount: Double
 }
+
+struct ExpenseIncomeResponse: Decodable, Hashable {
+    var total : Double
+    var differance : Double
+    var analyzeResult : [ExpenseIncome]
+}
+
+struct ExpenseIncome : Decodable, Hashable {
+    var category : String
+    var money : Double
+}

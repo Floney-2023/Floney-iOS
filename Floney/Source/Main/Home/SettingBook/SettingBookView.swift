@@ -133,9 +133,15 @@ struct SettingBookView: View {
                                             .font(.pretendardFont(.bold, size: 14))
                                             .foregroundColor(.greyScale2)
                                         
-                                        Text("\(viewModel.bookUsers[index].role)")
-                                            .font(.pretendardFont(.medium, size: 12))
-                                            .foregroundColor(.greyScale6)
+                                        if viewModel.bookUsers[index].me {
+                                            Text("\(viewModel.bookUsers[index].role)·나")
+                                                .font(.pretendardFont(.medium, size: 12))
+                                                .foregroundColor(.greyScale6)
+                                        } else {
+                                            Text("\(viewModel.bookUsers[index].role)")
+                                                .font(.pretendardFont(.medium, size: 12))
+                                                .foregroundColor(.greyScale6)
+                                        }
                                     }
                                     Spacer()
                                 }

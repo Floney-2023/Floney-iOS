@@ -47,7 +47,8 @@ struct AddView: View {
                         }
                     Spacer()
                 }
-                .padding(20)
+                .padding(.leading,20)
+                .padding(.top, 64)
 
                 VStack(spacing: 32){
                     //MARK: 금액
@@ -212,6 +213,7 @@ struct AddView: View {
                 .padding(20)
                 
                 Spacer()
+                
                 //MARK: 삭제/저장하기 버튼
                 HStack(spacing:0) {
                     Button {
@@ -224,6 +226,7 @@ struct AddView: View {
                         
                     }
                     .frame(maxWidth: .infinity)
+                    .frame(maxHeight: .infinity)
                     .padding()
                     .background(Color.greyScale2)
                     Button {
@@ -255,16 +258,17 @@ struct AddView: View {
                         
                     }
                     .frame(maxWidth: .infinity)
+                    .frame(maxHeight: .infinity)
                     .frame(width: UIScreen.main.bounds.width * 2/3)
                     .padding()
                     .background(Color.primary1)
                 }
                 .frame(maxWidth: .infinity)
-                .ignoresSafeArea()
                 .frame(height: 66)
                 
                 
             } // VStack
+            .ignoresSafeArea()
             .onAppear(perform : UIApplication.shared.hideKeyboard)
 
             CategoryBottomSheet(root: $root, categories: $viewModel.categories, isShowing: $isShowingBottomSheet, isSelectedAssetTypeIndex: $isSelectedAssetTypeIndex, isSelectedAssetType: $assetType, isSelectedCategoryIndex: $isSelectedCategoryIndex, isSelectedCategory: $category, isShowingEditCategory: $isShowingEditCategory)

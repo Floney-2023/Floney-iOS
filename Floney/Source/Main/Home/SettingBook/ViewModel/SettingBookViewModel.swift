@@ -61,6 +61,15 @@ class SettingBookViewModel : ObservableObject {
                     print(self.result)
                     
                     self.bookUsers = self.result.ourBookUsers
+                    self.bookUsers.sort {
+                        if $0.me != $1.me {
+                            return $0.me
+                        } else {
+                            // Here you can return the secondary criteria if `me` is equal.
+                            // For instance, you can sort by name.
+                            return $0.name < $1.name
+                        }
+                    }
                     self.bookImg = self.result.bookImg
                     
                     self.bookName = self.result.bookName
