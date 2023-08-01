@@ -31,10 +31,16 @@ struct AnalysisView: View {
                     
                     Spacer()
                     Image("leftSide")
-                    Text("11월")
+                        .onTapGesture {
+                            viewModel.moveBackward()
+                        }
+                    Text("\(viewModel.selectedMonth)월")
                         .font(.pretendardFont(.semiBold, size: 20))
                         .foregroundColor(.greyScale1)
                     Image("rightSide")
+                        .onTapGesture {
+                            viewModel.moveForward()
+                        }
                 }
                 .padding(.horizontal, 20)
                 .padding(.bottom, 8)

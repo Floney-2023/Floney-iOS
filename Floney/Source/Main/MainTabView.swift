@@ -36,13 +36,14 @@ struct MainTabView: View {
                 switch selection {
                 case 0:
                     NavigationView {
-                        //HomeView(showingTabbar: $showingTabbar)
+                        HomeView(showingTabbar: $showingTabbar)
                     }
                 case 1:
                     NavigationView {
                         AnalysisView(showingTabbar: $showingTabbar)
                     }
                 case 2:
+                    
                     NavigationView {
                         AddView(isPresented: $showingAddView, date: currentDate)
                     }
@@ -53,7 +54,7 @@ struct MainTabView: View {
                     }
                 default :
                     NavigationView {
-                       // MyPageView(showingTabbar: $showingTabbar)
+                       MyPageView(showingTabbar: $showingTabbar)
                     }
                 }
             }

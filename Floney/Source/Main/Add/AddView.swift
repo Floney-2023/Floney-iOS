@@ -37,7 +37,7 @@ struct AddView: View {
     @State var selectedOptions = 0
         
     var body: some View {
-        var moneyStr : String = String(describing: money)
+        //var moneyStr : String = String(describing: money)
         ZStack {
             VStack {
                 HStack {

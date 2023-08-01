@@ -27,4 +27,5 @@ struct ExpenseIncomeResponse: Decodable, Hashable {
 struct ExpenseIncome : Decodable, Hashable {
     var category : String
     var money : Double
+    var percentage : Double?
 }

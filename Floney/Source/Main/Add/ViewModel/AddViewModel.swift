@@ -14,8 +14,7 @@ class AddViewModel: ObservableObject {
     @Published var showAlert: Bool = false
     
     @Published var bookKey = ""
-    
-    
+
     //MARK: line
     @Published var lineResult : LinesResponse = LinesResponse(money: 0, flow: "", asset: "", line: "", description: "", except: false, nickname: "")
     @Published var money = ""
@@ -75,9 +74,19 @@ class AddViewModel: ObservableObject {
     func postLines() {
         bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
         nickname = Keychain.getKeychainValue(forKey: .userNickname)!
-        let moneyInt = Float(money)
-        print(moneyInt)
-        let request = LinesRequest(bookKey: bookKey, money: moneyInt!, lineDate: lineDate, flow: flow, asset: asset, line: line, description: description, except: except, nickname: nickname)
+        //let moneyInt = Double(money)
+        //print("money : \(moneyInt)")
+        var moneyDouble : Double = 0
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        if let number = formatter.number(from: money) {
+            moneyDouble = number.doubleValue
+            print(moneyDouble)  // 출력: 4500.0
+        } else {
+            print("Cannot convert to Double")
+        }
+        let request = LinesRequest(bookKey: bookKey, money: moneyDouble, lineDate: lineDate, flow: flow, asset: asset, line: line, description: description, except: except, nickname: nickname)
+        print("내역 추가 request : \(request)")
         dataManager.postLines(request)
             .sink { (dataResponse) in
                 if dataResponse.error != nil {

@@ -8,7 +8,7 @@
 import Foundation
 
 struct LinesResponse : Decodable {
-    var money : Int
+    var money : Double
     var flow : String
     var asset : String
     var line : String

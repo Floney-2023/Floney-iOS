@@ -104,7 +104,7 @@ struct SetUserCalcView: View {
             }
             .edgesIgnoringSafeArea(.bottom)
             .onAppear{
-                //viewModel.getBookUsers()
+                viewModel.getBookUsers()
                 isShowingTabbar = false
             }
     

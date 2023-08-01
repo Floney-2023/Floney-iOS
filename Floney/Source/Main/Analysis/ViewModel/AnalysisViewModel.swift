@@ -15,6 +15,15 @@ class AnalysisViewModel : ObservableObject {
     @Published var showAlert: Bool = false
     @Published var selectedColors : [Color] = []
     @Published var incomeSelectedColors : [Color] = []
+    
+    @Published var selectedDate = Date()
+    @Published var selectedMonth: Int = Calendar.current.component(.month, from: Date())
+    @Published var selectedDateStr = ""
+    
+    @Published var expenseResponse = ExpenseIncomeResponse(total: 0, differance: 0, analyzeResult: [])
+    @Published var incomeResponse = ExpenseIncomeResponse(total: 0, differance: 0, analyzeResult: [])
+    @Published var expensePercentage : [Double] = []
+    @Published var incomePercentage : [Double] = []
     let expenses : [ExpenseResponse] = [
     ExpenseResponse(content: "식비", percentage: 40, money: 400000),
     ExpenseResponse(content: "생활비", percentage: 40, money: 400000),
@@ -50,6 +59,7 @@ class AnalysisViewModel : ObservableObject {
     ]
     
     private var cancellableSet: Set<AnyCancellable> = []
+    private var cancellable: AnyCancellable?
     var dataManager: AnalysisProtocol
     
     
@@ -57,14 +67,17 @@ class AnalysisViewModel : ObservableObject {
         self.dataManager = dataManager
         self.selectColor()
         self.selectColor2()
+        updateDateString(selectedDate)
+        cancellable = $selectedDate
+            .sink { [weak self] in self?.updateDateString($0) }
     }
     func selectColor() {
-        for i in 0..<expenses.count {
+        for i in 0..<expensePercentage.count {
             getColor(index: i)
         }
     }
     func selectColor2() {
-        for i in 0..<incomes.count {
+        for i in 0..<incomePercentage.count {
             getColor2(index: i)
         }
     }
@@ -75,7 +88,6 @@ class AnalysisViewModel : ObservableObject {
         } else {
             let randomIndex = Int.random(in: 0..<randomColors.count)
             selectedColors.append(randomColors[randomIndex])
-           
         }
     }
     func getColor2(index: Int) {
@@ -87,7 +99,68 @@ class AnalysisViewModel : ObservableObject {
             incomeSelectedColors.append(incomeRandomColors[randomIndex])
         }
     }
+    func analysisExpenseIncome(root: String) {
+        let bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
+        
+        let request = ExpenseIncomeRequest(bookKey: bookKey, root: root, date: selectedDateStr)
+        print(request)
+        dataManager.analysisExpenseIncome(request)
+            .sink { (dataResponse) in
+                if dataResponse.error != nil {
+                    self.createAlert(with: dataResponse.error!)
+                    // 에러 처리
+                    print(dataResponse.error)
+                } else {
+                    if let expenseIncomeResponse = dataResponse.value {
+                        print("---분석 요청 성공---")
+                        
+                        // 원본 데이터를 복사하면서 percentage를 계산하여 새로운 배열 생성
+                        let updatedAnalyzeResult = expenseIncomeResponse.analyzeResult.map { expenseIncome -> ExpenseIncome in
+                            var updatedExpenseIncome = expenseIncome
+                            updatedExpenseIncome.percentage = expenseIncomeResponse.total == 0 ? 0 : (expenseIncome.money / expenseIncomeResponse.total) * 100
+                            return updatedExpenseIncome
+                        }
+                        
+                        // 새로운 ExpenseIncomeResponse 생성
+                        let updatedResponse = ExpenseIncomeResponse(total: expenseIncomeResponse.total, differance: expenseIncomeResponse.differance, analyzeResult: updatedAnalyzeResult)
+                        
+                        if root == "지출" {
+                            self.expenseResponse = updatedResponse
+                            self.expensePercentage = updatedResponse.analyzeResult.compactMap { $0.percentage }
+                            self.selectColor()
+                            print("지출 분석 : \(self.expenseResponse)")
+                        } else {
+                            self.incomeResponse = updatedResponse
+                            self.incomePercentage = updatedResponse.analyzeResult.compactMap { $0.percentage }
+                            self.selectColor2()
+                            print("수입 분석 : \(self.incomeResponse)")
+                        }
+                        
+                    }
+                    
+                   
+                }
+            }.store(in: &cancellableSet)
+    }
+    private func updateDateString(_ date: Date) {
+        let calendar = Calendar.current
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-01"
+        selectedDateStr = formatter.string(from: date)
+       
+        selectedMonth = calendar.component(.month, from: date)
+    }
+    // 이전 달로 이동하는 함수
+    func moveBackward() {
+        let newDate = Calendar.current.date(byAdding: .month, value: -1, to: selectedDate)
+        selectedDate = newDate ?? selectedDate
+    }
     
+    // 다음 달로 이동하는 함수
+    func moveForward() {
+        let newDate = Calendar.current.date(byAdding: .month, value: 1, to: selectedDate)
+        selectedDate = newDate ?? selectedDate
+    }
     
     func createAlert( with error: NetworkError) {
         loadingError = error.backendError == nil ? error.initialError.localizedDescription : error.backendError!.message

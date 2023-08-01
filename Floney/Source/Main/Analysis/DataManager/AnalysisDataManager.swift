@@ -19,17 +19,15 @@ class AnalysisService {
 
 extension AnalysisService: AnalysisProtocol {
     func analysisExpenseIncome(_ parameters: ExpenseIncomeRequest) -> AnyPublisher<Alamofire.DataResponse<ExpenseIncomeResponse, NetworkError>, Never> {
-        let bookKey = parameters.bookKey
-        let root = parameters.root
-        let urlString = "\(Constant.BASE_URL)/books/anayze/category?bookKey=\(bookKey)&root=\(root)"
-        print("\(urlString)")
-        let encodedString = urlString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
-        let url = URL(string: encodedString!)!
+      
+        let url = "\(Constant.BASE_URL)/books/analyze/category"
+        print("\(url)")
+      
         let token = Keychain.getKeychainValue(forKey: .accessToken)!
         return AF.request(url,
-                          method: .get,
-                          parameters: nil,
-                          encoding: JSONEncoding.default,
+                          method: .post,
+                          parameters: parameters,
+                          encoder: JSONParameterEncoder(),
                           headers: ["Authorization":"Bearer \(token)"])
             .validate()
             .publishDecodable(type: ExpenseIncomeResponse.self)
