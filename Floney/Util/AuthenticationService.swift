@@ -18,7 +18,7 @@ class AuthenticationService: ObservableObject {
 
     init() {
         //isUserLoggedIn = UserDefaults.standard.bool(forKey: "isLoggedIn")
-        bookExistenceViewModel.getBookExistence()
+        //bookExistenceViewModel.getBookExistence()
         //Keychain.setKeychain("C9C30C52", forKey: .bookKey)
     }
     func logoutDueToTokenExpiration() {
@@ -30,6 +30,8 @@ class AuthenticationService: ObservableObject {
         // 로그인 처리
         self.isUserLoggedIn = true
         UserDefaults.standard.set(true, forKey: "isLoggedIn")
+        
+        //bookExistenceViewModel.getBookExistence()
     }
     func bookExist() {
         bookExistenceViewModel.getBookExistence()

@@ -17,12 +17,12 @@ struct SplashScreenView: View {
             //SignInView()
             Group {
                 if userSession.isUserLoggedIn {
-                   // if userSession.bookStatus {
+                    if userSession.bookStatus {
                         MainTabView()
-                        /*
+                        
                     } else {
                         SendBookCodeView()
-                    }*/
+                    }
                 } else {
                     SignInView()
                 }

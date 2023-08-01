@@ -40,6 +40,7 @@ class SignInViewModel: ObservableObject {
         print(Keychain.getKeychainValue(forKey: .refreshToken))
     }
     
+    //MARK: 이메일 로그인
     func postSignIn() {
         let request = SignInRequest(email: email, password: password)
         dataManager.postSignIn(request)
@@ -64,7 +65,7 @@ class SignInViewModel: ObservableObject {
                 }
             }.store(in: &cancellableSet)
     }
-    
+    //MARK: 카카오 회원가입 되어있는지 체크
     func checkKakao(token : String) {
         dataManager.checkKakao(token)
             .sink { [weak self] completion in
@@ -78,18 +79,16 @@ class SignInViewModel: ObservableObject {
             } receiveValue: { [weak self] joined in
                 self?.hasJoined = joined
                 if let hasJoined = self?.hasJoined {
-                    if hasJoined {
+                    if hasJoined { // 회원가입 되어있으면 로그인
                         print("체크성공 -> 카카오 로그인")
                         self?.kakaoSignIn(token: token)
-                    } else {
+                    } else { // 안 되어 있으면 회원가입
                         print("체크성공 -> 카카오 회원가입")
                         self?.signUpViewModel.kakaoSignUp(token)
                     }
                 }
-
             }
             .store(in: &cancellableSet)
-        
     }
     func checkgoogle()  {
         dataManager.checkgoogle(token)
@@ -210,7 +209,6 @@ class SignInViewModel: ObservableObject {
         Keychain.setKeychain(email, forKey: .email)
         Keychain.setKeychain(password, forKey: .password)
         AuthenticationService.shared.logIn()
-        
     }
     
     //MARK: 자동로그인, 사용자가 입력하지 않아도 이미 저장되어 있는 이메일과 비밀번호를 불러와서 로그인을 진행한다.
@@ -226,7 +224,7 @@ class SignInViewModel: ObservableObject {
         
         return true
     }
-    
+    /*
     private func performAppleSignIn() {
         let coordinator = SignInWithAppleCoordinator { userId in
             print("Sign in successful, user id: \(userId)")
@@ -234,7 +232,9 @@ class SignInViewModel: ObservableObject {
             print("Sign in failed with error: \(error)")
         }
         coordinator.signIn()
-    }
+    }*/
+    
+    //MARK: 비밀번호 재설정
     func findPassword(email: String) {
         dataManager.findPassword(email: email)
             .sink { completion in

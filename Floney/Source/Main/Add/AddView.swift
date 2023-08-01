@@ -36,8 +36,9 @@ struct AddView: View {
     @State var options = ["지출", "수입", "이체"]
     @State var selectedOptions = 0
         
+    @ObservedObject private var keyboardResponder = KeyboardResponder()
     var body: some View {
-        //var moneyStr : String = String(describing: money)
+       
         ZStack {
             VStack {
                 HStack {
@@ -128,33 +129,38 @@ struct AddView: View {
                     
                     //MARK: 날짜/자산/분류/내용/제외여부
                     VStack(spacing:44) {
-                        HStack {
-                            Text("날짜")
-                                .font(.pretendardFont(.medium, size: 14))
-                                .foregroundColor(.greyScale4)
-                            Spacer()
-                            Text("\(date)")
-                                .font(.pretendardFont(.medium, size: 14))
-                                .foregroundColor(.greyScale2)
+                        if !keyboardResponder.isKeyboardVisible {
+                            HStack {
+                                Text("날짜")
+                                    .font(.pretendardFont(.medium, size: 14))
+                                    .foregroundColor(.greyScale4)
+                                Spacer()
+                                Text("\(date)")
+                                    .font(.pretendardFont(.medium, size: 14))
+                                    .foregroundColor(.greyScale2)
+                            }
+                            
+                            HStack {
+                                Text("자산")
+                                    .font(.pretendardFont(.medium, size: 14))
+                                    .foregroundColor(.greyScale4)
+                                Spacer()
+                                //MARK: 눌렀을 때 bottom sheet
+                                Text("\(assetType)")
+                                    .font(.pretendardFont(.medium, size: 14))
+                                    .foregroundColor(.greyScale6)
+                            }
+                            .onTapGesture {
+                                self.root = "자산"
+                                viewModel.root = self.root
+                                viewModel.getCategory()
+                                //self.categories = viewModel.categories
+                                print("\(self.categories)")
+                                self.isShowingBottomSheet.toggle()
+                            }
                         }
-                        HStack {
-                            Text("자산")
-                                .font(.pretendardFont(.medium, size: 14))
-                                .foregroundColor(.greyScale4)
-                            Spacer()
-                            //MARK: 눌렀을 때 bottom sheet
-                            Text("\(assetType)")
-                                .font(.pretendardFont(.medium, size: 14))
-                                .foregroundColor(.greyScale6)
-                        }
-                        .onTapGesture {
-                            self.root = "자산"
-                            viewModel.root = self.root
-                            viewModel.getCategory()
-                            //self.categories = viewModel.categories
-                            print("\(self.categories)")
-                            self.isShowingBottomSheet.toggle()
-                        }
+                  
+                        
                         HStack {
                             Text("분류")
                                 .font(.pretendardFont(.medium, size: 14))
@@ -283,6 +289,28 @@ struct AddView: View {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
         return formatter.string(from: NSNumber(value: n)) ?? ""
+    }
+}
+class KeyboardResponder: ObservableObject {
+    private var notificationCenter: NotificationCenter
+    @Published private(set) var isKeyboardVisible: Bool = false
+
+    init(center: NotificationCenter = .default) {
+        notificationCenter = center
+        notificationCenter.addObserver(self, selector: #selector(keyBoardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(keyBoardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+
+    deinit {
+        notificationCenter.removeObserver(self)
+    }
+
+    @objc func keyBoardWillShow(notification: Notification) {
+        isKeyboardVisible = true
+    }
+
+    @objc func keyBoardWillHide(notification: Notification) {
+        isKeyboardVisible = false
     }
 }
 
