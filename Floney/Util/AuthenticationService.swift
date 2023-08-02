@@ -35,6 +35,7 @@ class AuthenticationService: ObservableObject {
     }
     func bookExist() {
         bookExistenceViewModel.getBookExistence()
-        bookStatus = bookExistenceViewModel.bookExistence
+        //bookStatus = bookExistenceViewModel.bookExistence
+        print("book status : \(bookStatus)")
     }
 }

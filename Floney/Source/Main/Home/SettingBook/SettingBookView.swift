@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct SettingBookView: View {
+    @Binding var showingTabbar : Bool
     @Binding var isOnSettingBook : Bool
     @StateObject var viewModel = SettingBookViewModel()
     var encryptionManager = CryptManager()
@@ -345,6 +346,6 @@ struct SettingBookView: View {
 
 struct SettingBookView_Previews: PreviewProvider {
     static var previews: some View {
-        SettingBookView(isOnSettingBook: .constant(true))
+        SettingBookView(showingTabbar: .constant(false), isOnSettingBook: .constant(true))
     }
 }

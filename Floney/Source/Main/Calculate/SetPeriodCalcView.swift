@@ -113,7 +113,7 @@ struct SetPeriodCalcView: View {
             .edgesIgnoringSafeArea(.bottom)
           
             if isShowingCalendar {
-                CalendarBottomSheet(isShowing: $isShowingCalendar, viewModel: viewModel)
+                CalendarBottomSheet(isShowing: $isShowingCalendar, showingTab: $isShowingTabbar, viewModel: viewModel)
             }
         }
     }

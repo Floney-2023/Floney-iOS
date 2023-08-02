@@ -9,7 +9,6 @@ import Combine
 
 class BookExistenceViewModel: ObservableObject {
     var tokenViewModel = TokenReissueViewModel()
-    
     @Published var result : BookExistenceResponse = BookExistenceResponse()
     @Published var loadingError: String = ""
     @Published var showAlert: Bool = false
@@ -39,10 +38,10 @@ class BookExistenceViewModel: ObservableObject {
                         print("가계부 있음")
                         self.bookKey = book
                         Keychain.setKeychain(self.bookKey, forKey: .bookKey)
-                        self.bookExistence = true
+                        AuthenticationService.shared.bookStatus = true
                     } else {
                         print("가계부 없음")
-                        self.bookExistence = false
+                        AuthenticationService.shared.bookStatus = false
                     }
 
                 }

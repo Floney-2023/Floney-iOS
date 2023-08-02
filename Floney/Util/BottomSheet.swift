@@ -828,6 +828,7 @@ struct PasswordBottomSheet: View{
 struct CalendarBottomSheet: View {
     let buttonHeight: CGFloat = 46
     @Binding var isShowing : Bool
+    @Binding var showingTab :Bool
     @ObservedObject var viewModel : CalculateViewModel
     @State var pickerPresented = false
     
@@ -850,7 +851,7 @@ struct CalendarBottomSheet: View {
         .ignoresSafeArea()
         .animation(.easeInOut, value: isShowing)
         
-        PickerBottomSheet(isShowing: $pickerPresented, yearMonth: $viewModel.yearMonth, viewModel: viewModel)
+        PickerBottomSheet(showingTab: $showingTab, isShowing: $pickerPresented, yearMonth: $viewModel.yearMonth)
     }
 
 
@@ -1091,9 +1092,11 @@ struct Week: View {
 
 //MARK: 피커 bottom sheet
 struct PickerBottomSheet: View {
+    @State var availableChangeTabbarStatus = false
+    @Binding var showingTab : Bool
     @Binding var isShowing : Bool
     @Binding var yearMonth : YearMonthDuration
-    @ObservedObject var viewModel : CalculateViewModel
+    //@ObservedObject var viewModel : CalculateViewModel
     let years = Array(2000...2099)
     let months = Array(1...12)
 
@@ -1105,6 +1108,9 @@ struct PickerBottomSheet: View {
                     .ignoresSafeArea()
                     .onTapGesture {
                         isShowing.toggle()
+                        if availableChangeTabbarStatus {
+                            showingTab = true
+                        }
                     }
                     
                 VStack {
@@ -1112,6 +1118,9 @@ struct PickerBottomSheet: View {
                         Spacer()
                         Button("완료") {
                             isShowing = false
+                            if availableChangeTabbarStatus {
+                                showingTab = true
+                            }
                         }
                         .font(.pretendardFont(.semiBold, size: 16))
                         .foregroundColor(.greyScale2)

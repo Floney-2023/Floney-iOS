@@ -11,7 +11,7 @@ struct SplashScreenView: View {
     @State private var isActive = false
     @StateObject var signInViewModel = SignInViewModel()
     //@EnvironmentObject var viewModel: SignInViewModel
-    @EnvironmentObject var userSession: AuthenticationService
+    @StateObject var userSession = AuthenticationService.shared
     var body: some View {
         if isActive {
             //SignInView()
@@ -19,7 +19,6 @@ struct SplashScreenView: View {
                 if userSession.isUserLoggedIn {
                     if userSession.bookStatus {
                         MainTabView()
-                        
                     } else {
                         SendBookCodeView()
                     }

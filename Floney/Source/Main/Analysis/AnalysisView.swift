@@ -19,6 +19,7 @@ struct AnalysisView: View {
     @State private var selectedOptions = 0
     @State private var selectedOption = ButtonOptions.optionOne
     @StateObject var viewModel = AnalysisViewModel()
+    @State var isShowingPicker = false
     
     var body: some View {
         ZStack{
@@ -37,6 +38,10 @@ struct AnalysisView: View {
                     Text("\(viewModel.selectedMonth)월")
                         .font(.pretendardFont(.semiBold, size: 20))
                         .foregroundColor(.greyScale1)
+                        .onTapGesture {
+                            showingTabbar = false
+                            isShowingPicker = true
+                        }
                     Image("rightSide")
                         .onTapGesture {
                             viewModel.moveForward()
@@ -89,7 +94,7 @@ struct AnalysisView: View {
                 
             }.padding(.top, 26)
             
-            
+            PickerBottomSheet(availableChangeTabbarStatus : true, showingTab: $showingTabbar, isShowing: $isShowingPicker, yearMonth: $viewModel.yearMonth)
         }
     }
 }

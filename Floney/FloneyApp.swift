@@ -15,7 +15,7 @@ struct FloneyApp: App {
     
     var body: some Scene {
         WindowGroup {
-            SplashScreenView().environmentObject(AuthenticationService.shared)
+            SplashScreenView()
                 
         }
     }

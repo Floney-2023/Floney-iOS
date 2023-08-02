@@ -56,6 +56,7 @@ struct AlertView: View {
             .cornerRadius(14)
             .shadow(radius: 10)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .ignoresSafeArea()
             .background(Color.black.opacity(0.5))
             .edgesIgnoringSafeArea(.all)
             .transition(.opacity)

@@ -24,6 +24,15 @@ class AnalysisViewModel : ObservableObject {
     @Published var incomeResponse = ExpenseIncomeResponse(total: 0, differance: 0, analyzeResult: [])
     @Published var expensePercentage : [Double] = []
     @Published var incomePercentage : [Double] = []
+    
+    // 피커 뷰에서 선택된 연도, 월
+    @Published var yearMonth = YearMonthDuration(year: Date().year, month: Date().month) {
+        didSet {
+            selectedDate = Date.from(year: yearMonth.year, month: yearMonth.month)
+            print("in Year Month 프로퍼티 selectedDate: \(selectedDate)")
+        }
+    }
+    
     let expenses : [ExpenseResponse] = [
     ExpenseResponse(content: "식비", percentage: 40, money: 400000),
     ExpenseResponse(content: "생활비", percentage: 40, money: 400000),

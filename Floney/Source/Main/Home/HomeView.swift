@@ -27,7 +27,7 @@ struct HomeView: View {
                 {
                     Image("logo_floney_home")
                     Spacer()
-                    NavigationLink(destination: SettingBookView(isOnSettingBook: $isOnSettingBook),isActive: $isOnSettingBook){
+                    NavigationLink(destination: SettingBookView(showingTabbar: $showingTabbar, isOnSettingBook: $isOnSettingBook),isActive: $isOnSettingBook){
                         if let bookUrl = viewModel.bookProfileImage {
                             let url = encryptionManager.decrypt(bookUrl, using: encryptionManager.key!)
                             URLImage(url: URL(string: url!)!)
@@ -36,6 +36,7 @@ struct HomeView: View {
                                 .frame(width: 34, height: 34)
                                 .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
                                 .onTapGesture {
+                                    self.showingTabbar = false
                                     self.isOnSettingBook = true
                                 }
                         } else {
@@ -43,6 +44,7 @@ struct HomeView: View {
                                 .clipShape(Circle())
                                 .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
                                 .onTapGesture {
+                                    self.showingTabbar = false
                                     self.isOnSettingBook = true
                                 }
                         }
@@ -81,6 +83,9 @@ struct HomeView: View {
             NavigationView {
                 AddView.init(isPresented: $isShowingAddView, date:viewModel.selectedDateStr)
             }
+        }
+        .onAppear {
+            self.showingTabbar = true
         }
     }
 }
