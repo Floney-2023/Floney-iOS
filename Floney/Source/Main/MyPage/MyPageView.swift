@@ -29,6 +29,7 @@ struct MyPageView: View {
                     NavigationLink(destination: NotificationView(showingTabbar: $showingTabbar), isActive: $isShowingNotiView) {
                         Image("icon_notification")
                             .onTapGesture {
+                                showingTabbar = false
                                 isShowingNotiView = true
                             }
                     }
@@ -38,7 +39,7 @@ struct MyPageView: View {
                 
                 ScrollView(showsIndicators: false) {
                     VStack(spacing:16) {
-                        NavigationLink(destination: UserInformationView()) {
+                        NavigationLink(destination: UserInformationView(showingTabbar: $showingTabbar)) {
                             HStack {
                                 if let preview = viewModel.userPreviewImage36 {
                                     Image(uiImage: preview)
@@ -71,6 +72,7 @@ struct MyPageView: View {
                             }
                             .background(Color.primary10)
                             .cornerRadius(12)
+                            
                         }
                         
                         
