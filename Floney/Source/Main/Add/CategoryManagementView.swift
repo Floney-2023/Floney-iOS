@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct CategoryManagementView: View {
+    @Environment(\.presentationMode) var presentationMode
     var options = ["자산", "지출", "수입", "이체"]
     @State private var selectedOptions = 0
     @State var list = ["현금", "체크카드", "신용카드", "은행"]
@@ -27,6 +28,7 @@ struct CategoryManagementView: View {
                         Image("back_button")
                             .onTapGesture {
                                 isShowingEditCategory = false
+                                self.presentationMode.wrappedValue.dismiss()
                             }
                         Spacer()
                         if editState {
@@ -44,8 +46,6 @@ struct CategoryManagementView: View {
                                     self.editState = true
                                 }
                         }
-                        
-                        
                     }
                     .frame(height: 24)
                     .padding(.top, 0)

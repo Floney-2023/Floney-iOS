@@ -34,6 +34,8 @@ struct SettingBookView: View {
     @State var exitTitle = "가계부 나가기"
     @State var exitMessage = "가계부를 나갈 시 모든 내역이 삭제됩니다. 삭제하시겠습니까?"
     
+    @State var isShowingEditCategory = false
+    
     var body: some View {
         ZStack {
             ScrollView {
@@ -52,9 +54,9 @@ struct SettingBookView: View {
                         NavigationLink(destination: ModifyingBookView()) {
                             HStack(spacing:16) {
                                 /*
-                                Image("book_profile_36")
-                                    .clipShape(Circle())
-                                        .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))*/
+                                 Image("book_profile_36")
+                                 .clipShape(Circle())
+                                 .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))*/
                                 if let bookUrl = viewModel.bookImg {
                                     let url = encryptionManager.decrypt(bookUrl, using: encryptionManager.key!)
                                     URLImage(url: URL(string: url!)!)
@@ -66,7 +68,7 @@ struct SettingBookView: View {
                                     Image("book_profile_36")
                                         .clipShape(Circle())
                                         .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
-
+                                    
                                 }
                                 VStack(alignment: .leading, spacing:8){
                                     Text("\(viewModel.bookName)")
@@ -103,7 +105,7 @@ struct SettingBookView: View {
                                             Image("user_profile_32")
                                                 .clipShape(Circle())
                                                 .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
-                                                
+                                            
                                         } else if userImg[index].hasPrefix("random"){
                                             let components = userImg[index].components(separatedBy: CharacterSet.decimalDigits.inverted)
                                             let random = components.first!  // "random"
@@ -119,16 +121,16 @@ struct SettingBookView: View {
                                                 .clipShape(Circle())
                                                 .frame(width: 34, height: 34)
                                                 .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
-                                               
+                                            
                                         }
                                     } else {
                                         Image("user_profile_32")
                                             .clipShape(Circle())
                                             .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
-                                            
+                                        
                                     }
-
-                        
+                                    
+                                    
                                     VStack(alignment: .leading, spacing:8){
                                         Text("\(viewModel.bookUsers[index].name)")
                                             .font(.pretendardFont(.bold, size: 14))
@@ -187,7 +189,6 @@ struct SettingBookView: View {
                             self.isShowingCarriedOver.toggle()
                         }
                         if viewModel.role == "방장" {
-                            
                             HStack {
                                 VStack {
                                     Text("가계부 초기화")
@@ -235,13 +236,15 @@ struct SettingBookView: View {
                         }
                         
                     }
-                    HStack {
-                        Text("분류항목 관리")
-                            .font(.pretendardFont(.bold,size: 16))
-                            .foregroundColor(.greyScale1)
-                        Spacer()
-                        Image("forward_button")
-                        
+                    NavigationLink(destination: CategoryManagementView(isShowingEditCategory: $isShowingEditCategory)) {
+                        HStack {
+                            Text("분류항목 관리")
+                                .font(.pretendardFont(.bold,size: 16))
+                                .foregroundColor(.greyScale1)
+                            Spacer()
+                            Image("forward_button")
+                            
+                        }
                     }
                     if viewModel.role == "방장" {
                         HStack {
@@ -300,10 +303,7 @@ struct SettingBookView: View {
                 .navigationBarItems(leading: BackButton())
                 .onAppear{
                     viewModel.getBookInfo()
-                 
                 }
-                
-                
             }.sheet(isPresented: $onShareSheet) {
                 ActivityView(activityItems: [shareUrl ?? ""])
             }
@@ -333,8 +333,10 @@ struct SettingBookView: View {
             CarriedOverBottomSheet(isShowing: $isShowingCarriedOver, onOff: $viewModel.carryOver)
             
             ShareBookBottomSheet(viewModel: viewModel, isShowing: $isShowingShareBook, bookCode: $bookCode, onShareSheet: $onShareSheet, shareUrl: $shareUrl)
-                
-            //BottomSheet(isShowing: $isShowingShareBook, content: BottomSheetType.shareBook.view())
+            
+       
+            
+
         }
         
         
