@@ -49,6 +49,7 @@
 		2F28C2E42A55723900894F67 /* CompleteCalcView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F28C2E32A55723900894F67 /* CompleteCalcView.swift */; };
 		2F28C2E72A55814200894F67 /* CalculateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F28C2E62A55814200894F67 /* CalculateViewModel.swift */; };
 		2FAD92FF2A8335C900285C25 /* SetMonetaryUnitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FAD92FE2A8335C900285C25 /* SetMonetaryUnitView.swift */; };
+		2FAD93012A83431400285C25 /* FloneyAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FAD93002A83431400285C25 /* FloneyAlertView.swift */; };
 		2FB3DA6C2A5C25FD00E1486D /* CalculateDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB3DA6B2A5C25FD00E1486D /* CalculateDataManager.swift */; };
 		2FB3DA6E2A5C264800E1486D /* SettlementRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB3DA6D2A5C264800E1486D /* SettlementRequest.swift */; };
 		2FB3DA702A5C265700E1486D /* SettlementResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB3DA6F2A5C265700E1486D /* SettlementResponse.swift */; };
@@ -197,6 +198,7 @@
 		2F28C2E32A55723900894F67 /* CompleteCalcView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompleteCalcView.swift; sourceTree = "<group>"; };
 		2F28C2E62A55814200894F67 /* CalculateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculateViewModel.swift; sourceTree = "<group>"; };
 		2FAD92FE2A8335C900285C25 /* SetMonetaryUnitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetMonetaryUnitView.swift; sourceTree = "<group>"; };
+		2FAD93002A83431400285C25 /* FloneyAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloneyAlertView.swift; sourceTree = "<group>"; };
 		2FB3DA6B2A5C25FD00E1486D /* CalculateDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculateDataManager.swift; sourceTree = "<group>"; };
 		2FB3DA6D2A5C264800E1486D /* SettlementRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettlementRequest.swift; sourceTree = "<group>"; };
 		2FB3DA6F2A5C265700E1486D /* SettlementResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettlementResponse.swift; sourceTree = "<group>"; };
@@ -622,6 +624,7 @@
 		2FD7F3AA29B1E39400B99CAA /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				2FAD93002A83431400285C25 /* FloneyAlertView.swift */,
 				2FF7249E2A74078E008B9333 /* AlertView.swift */,
 				2FF724952A6A9123008B9333 /* ImageLoader.swift */,
 				2FF724932A67D6D7008B9333 /* ProfileManager.swift */,
@@ -1319,6 +1322,7 @@
 				2FFA303229EEAF6000412F83 /* SignInRequest.swift in Sources */,
 				2FB3DA762A5C86D800E1486D /* BudgetView.swift in Sources */,
 				2FF724802A5F1D1E008B9333 /* YearMonthPicker.swift in Sources */,
+				2FAD93012A83431400285C25 /* FloneyAlertView.swift in Sources */,
 				2FF25C8F29E7EE9D00737346 /* BottomSheet.swift in Sources */,
 				2FF724882A654AC7008B9333 /* BookExistenceResponse.swift in Sources */,
 				2FB3DA702A5C265700E1486D /* SettlementResponse.swift in Sources */,
