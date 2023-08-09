@@ -218,7 +218,8 @@ struct MyPageView: View {
                 showingTabbar = true
             }
             // MARK: Bottom Sheet
-            BottomSheet(isShowing: $isShowingBottomSheet, content: BottomSheetType.accountBook.view())
+            //BottomSheet(isShowing: $isShowingBottomSheet, content: BottomSheetType.accountBook.view())
+            AccountBookBottomSheet(isShowing: $isShowingBottomSheet, showingTabbar: $showingTabbar)
         }
     }
 }

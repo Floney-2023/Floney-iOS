@@ -9,21 +9,21 @@
 import SwiftUI
 //import UIKit
 
-enum BottomSheetType: Int {
-    case accountBook = 0
+//enum BottomSheetType: Int {
+   // case accountBook = 0
     //case shareBook = 1
     
-    func view() -> AnyView {
-        switch self {
-        case .accountBook:
-            return AnyView(AccountBookBottomSheet())
+   // func view() -> AnyView {
+        //switch self {
+        //case .accountBook:
+           // return AnyView(AccountBookBottomSheet(showingTabbar: <#Binding<Bool>#>))
             /*
              case .shareBook:
              return AnyView(ShareBookBottomSheet())*/
             
-        }
-    }
-}
+       // }
+   // }
+//}
 
 struct BottomSheet: View {
     
@@ -57,45 +57,111 @@ struct BottomSheet: View {
 
 //MARK: 가계부 생성, 코드 입력, 추가하기 bottom sheet
 struct AccountBookBottomSheet: View{
-    
     let buttonHeight: CGFloat = 46
+    @Binding var isShowing: Bool
+    @Binding var showingTabbar : Bool
     @State var isLinktoCreateBook = false
     @State var tag:Int? = nil
+    @State var isSelected = 0
     var body: some View{
-        
-        VStack(alignment: .leading, spacing: 20) {
-            
-            HStack {
-                Text("가계부 추가")
-                    .foregroundColor(.greyScale1)
-                    .font(.pretendardFont(.bold,size: 18))
-                Spacer()
-            }
-            .padding(.top, 24)
-            
-            
-            
-            VStack(spacing : 18) {
-                NavigationLink(destination: SetBookNameView(), isActive: $isLinktoCreateBook) {
-                    ButtonLarge(label: "가계부 생성하기",textColor: .greyScale1, strokeColor: .primary2, action: {
-                        self.isLinktoCreateBook.toggle()
-                    })
-                    .frame(height: buttonHeight)
+        ZStack(alignment: .bottom) {
+            if (isShowing) {
+                Color.black
+                    .opacity(0.7)
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        showingTabbar = true
+                        isShowing.toggle()
+                    }
+                
+                VStack(alignment: .leading, spacing: 20) {
+                    
+                    HStack {
+                        Text("가계부 추가")
+                            .foregroundColor(.greyScale1)
+                            .font(.pretendardFont(.bold,size: 18))
+                        Spacer()
+                    }
+                    .padding(.top, 24)
+                    
+                    VStack(spacing : 18) {
+                        
+                        Button {
+                            isSelected = 0
+                        } label: {
+                            HStack {
+                                Spacer()
+                                Text("가계부 생성하기")
+                                    .frame(alignment: .center)
+                                    .foregroundColor(isSelected == 0 ? .greyScale1 : .greyScale8)
+                                    .font(.pretendardFont(.regular, size: 14))
+                                    .lineLimit(1)
+                                Spacer()
+                                Image(isSelected == 0 ? "icon_check_circle_activated" : "icon_check_circle_disabled")
+                                    .padding(.trailing, 20)
+                            }
+                            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .stroke(isSelected == 0 ? Color.primary2 : Color.greyScale8, lineWidth: 1)
+                            )
+                        }
+                        .background(Color.white)
+                        .cornerRadius(12)
+                        .frame(height: buttonHeight)
+                        
+                        Button {
+                            isSelected = 1
+                        } label: {
+                            HStack {
+                                Spacer()
+                                Text("코드 입력하기")
+                                    .foregroundColor(isSelected == 1 ? .greyScale1 : .greyScale8)
+                                    .font(.pretendardFont(.regular, size: 14))
+                                    .lineLimit(1)
+                                Spacer()
+                                Image(isSelected == 1 ? "icon_check_circle_activated" : "icon_check_circle_disabled")
+                                    .padding(.trailing, 20)
+                            }
+                            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .stroke(isSelected == 1 ? Color.primary2 : Color.greyScale8, lineWidth: 1)
+                            )
+                        }
+                        .background(Color.white)
+                        .cornerRadius(12)
+                        .frame(height: buttonHeight)
+                        
+                        
+                        NavigationLink(destination: SetBookNameView(), isActive: $isLinktoCreateBook) {
+                            ButtonLarge(label: "추가하기", background: .primary1, textColor: .white,  strokeColor: .primary1, fontWeight: .bold, action: {
+                                if isSelected == 0 {
+                                    self.isLinktoCreateBook = true
+                                } else {
+                                    //코드 입력하기
+                                }
+                            })
+                            .frame(height: buttonHeight)
+                        }
+                    }
+                }
+                .padding(.horizontal, 20)
+                .padding(.bottom, 44)
+                .transition(.move(edge: .bottom))
+                .background(
+                    Color(.white)
+                )
+                .cornerRadius(12, corners: [.topLeft, .topRight])
+                .onAppear {
+                    showingTabbar = false
                 }
                 
-                ButtonLarge(label: "코드 입력하기",textColor: .greyScale1, strokeColor: .greyScale9, action: {
-                    
-                })
-                .frame(height: buttonHeight)
-                
-                ButtonLarge(label: "추가하기", background: .primary1, textColor: .white,  strokeColor: .primary1, fontWeight: .bold, action: {
-                    
-                })
-                .frame(height: buttonHeight)
             }
         }
-        .padding(.horizontal, 20)
-        
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
+        .ignoresSafeArea()
+        .animation(.easeInOut, value: isShowing)
     }
 }
 

@@ -26,6 +26,7 @@ class CalculateViewModel : ObservableObject {
     //MARK: 날짜 선택
     @Published var startDate : Date? = Date()
     @Published var endDate : Date? = Date()
+    @Published var selectedStartDateStr = ""
     @Published var startDateStr : String = ""
     @Published var endDateStr : String = ""
     @Published var selectedDates: [Date] = []
@@ -37,6 +38,7 @@ class CalculateViewModel : ObservableObject {
     @Published var selectedDate: Date = Date() {
         didSet {
             extractDate()
+            extractSelectedDatesStr()
         }
     }
     // 2차원 배열 달력
@@ -275,6 +277,8 @@ class CalculateViewModel : ObservableObject {
                     print("\(selectedDatesStr)")
                 }
             }
+            let newStartDate = startDateStr.replacingOccurrences(of: "-", with: ".")
+            self.selectedStartDateStr = newStartDate
         }
     }
     func createAlert( with error: NetworkError) {

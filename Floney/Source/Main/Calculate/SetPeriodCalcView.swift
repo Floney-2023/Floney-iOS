@@ -60,9 +60,15 @@ struct SetPeriodCalcView: View {
                     HStack(spacing: 12) {
                         Image("icon_calendar")
                         if viewModel.selectedDates.count == 2 {
-                            Text("\(viewModel.selectedDatesStr)")
+                            if viewModel.startDateStr == viewModel.endDateStr {
+                                Text("\(viewModel.selectedStartDateStr)")
                                 .font(.pretendardFont(.medium, size: 16))
                                 .foregroundColor(.greyScale2)
+                            } else  {
+                                Text("\(viewModel.selectedDatesStr)")
+                                .font(.pretendardFont(.medium, size: 16))
+                                .foregroundColor(.greyScale2)
+                                }
                         } else {
                             Text("\(text)")
                                 .font(.pretendardFont(.medium, size: 14))

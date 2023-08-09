@@ -30,7 +30,6 @@ struct CalculateMainView: View {
                 }
             }
             .navigationBarBackButtonHidden()
-            .background(Color.red)
             if viewModel.showLoadingView {
                 LoadingView()
             }
