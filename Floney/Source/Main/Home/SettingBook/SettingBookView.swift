@@ -247,13 +247,15 @@ struct SettingBookView: View {
                         }
                     }
                     if viewModel.role == "방장" {
-                        HStack {
-                            Text("화폐 설정")
-                                .font(.pretendardFont(.bold,size: 16))
-                                .foregroundColor(.greyScale1)
-                            Spacer()
-                            Image("forward_button")
-                            
+                        NavigationLink(destination: SetMonetaryUnitView()){
+                            HStack {
+                                Text("화폐 설정")
+                                    .font(.pretendardFont(.bold,size: 16))
+                                    .foregroundColor(.greyScale1)
+                                Spacer()
+                                Image("forward_button")
+                                
+                            }
                         }
                     }
                     

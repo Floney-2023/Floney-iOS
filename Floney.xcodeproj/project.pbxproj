@@ -48,6 +48,7 @@
 		2F28C2E22A556BC100894F67 /* SetContentCalcView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F28C2E12A556BC100894F67 /* SetContentCalcView.swift */; };
 		2F28C2E42A55723900894F67 /* CompleteCalcView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F28C2E32A55723900894F67 /* CompleteCalcView.swift */; };
 		2F28C2E72A55814200894F67 /* CalculateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F28C2E62A55814200894F67 /* CalculateViewModel.swift */; };
+		2FAD92FF2A8335C900285C25 /* SetMonetaryUnitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FAD92FE2A8335C900285C25 /* SetMonetaryUnitView.swift */; };
 		2FB3DA6C2A5C25FD00E1486D /* CalculateDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB3DA6B2A5C25FD00E1486D /* CalculateDataManager.swift */; };
 		2FB3DA6E2A5C264800E1486D /* SettlementRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB3DA6D2A5C264800E1486D /* SettlementRequest.swift */; };
 		2FB3DA702A5C265700E1486D /* SettlementResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB3DA6F2A5C265700E1486D /* SettlementResponse.swift */; };
@@ -195,6 +196,7 @@
 		2F28C2E12A556BC100894F67 /* SetContentCalcView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetContentCalcView.swift; sourceTree = "<group>"; };
 		2F28C2E32A55723900894F67 /* CompleteCalcView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompleteCalcView.swift; sourceTree = "<group>"; };
 		2F28C2E62A55814200894F67 /* CalculateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculateViewModel.swift; sourceTree = "<group>"; };
+		2FAD92FE2A8335C900285C25 /* SetMonetaryUnitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetMonetaryUnitView.swift; sourceTree = "<group>"; };
 		2FB3DA6B2A5C25FD00E1486D /* CalculateDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculateDataManager.swift; sourceTree = "<group>"; };
 		2FB3DA6D2A5C264800E1486D /* SettlementRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettlementRequest.swift; sourceTree = "<group>"; };
 		2FB3DA6F2A5C265700E1486D /* SettlementResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettlementResponse.swift; sourceTree = "<group>"; };
@@ -549,6 +551,7 @@
 				2FC3B1D42A25E30A00572804 /* SettingBookView.swift */,
 				2FC3B1D62A25F95600572804 /* ModifyingBookView.swift */,
 				2FC3B1D82A25F9F200572804 /* SetBookProfileImageView.swift */,
+				2FAD92FE2A8335C900285C25 /* SetMonetaryUnitView.swift */,
 			);
 			path = SettingBook;
 			sourceTree = "<group>";
@@ -1348,6 +1351,7 @@
 				2FF7247E2A5F0EC4008B9333 /* Date.swift in Sources */,
 				2F28C2E02A55689000894F67 /* SetPeriodCalcView.swift in Sources */,
 				2FB3DA6E2A5C264800E1486D /* SettlementRequest.swift in Sources */,
+				2FAD92FF2A8335C900285C25 /* SetMonetaryUnitView.swift in Sources */,
 				2F16148B2A0A76F20029E9A9 /* MyPageResponse.swift in Sources */,
 				2F1614702A0804E30029E9A9 /* CreateBookViewModel.swift in Sources */,
 				2FF7249F2A74078E008B9333 /* AlertView.swift in Sources */,
