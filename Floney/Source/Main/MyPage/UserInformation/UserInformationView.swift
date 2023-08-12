@@ -126,6 +126,6 @@ struct UserInformationView: View {
 
 struct UserInformationView_Previews: PreviewProvider {
     static var previews: some View {
-        UserInformationView(showingTabbar: .constant(false))
+        UserInformationView(showingTabbar: .constant(false), provider: .constant("EMAIL"))
     }
 }

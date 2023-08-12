@@ -30,6 +30,11 @@ class MyPageViewModel: ObservableObject {
     
     @Published var randomNumStr : String? = nil
     
+    //MARK: password
+    @Published var currentPassword: String = ""
+    @Published var newPassword : String = ""
+    @Published var newPasswordCheck : String = ""
+    
     private var cancellableSet: Set<AnyCancellable> = []
     var dataManager: MyPageProtocol
     
@@ -110,6 +115,21 @@ class MyPageViewModel: ObservableObject {
                     Keychain.setKeychain(self.changedNickname, forKey: .userNickname)
                 case .failure(let error):
                     print("Error changing nickname: \(error)")
+                }
+            } receiveValue: { data in
+                // TODO: Handle the received data if necessary.
+            }
+            .store(in: &cancellableSet)
+    }
+    func changePassword() {
+        dataManager.changePassword(password: newPassword)
+            .sink { completion in
+                switch completion {
+                case .finished:
+                    print("Password successfully changed.")
+                    Keychain.setKeychain(self.changedNickname, forKey: .userNickname)
+                case .failure(let error):
+                    print("Error changing password: \(error)")
                 }
             } receiveValue: { data in
                 // TODO: Handle the received data if necessary.

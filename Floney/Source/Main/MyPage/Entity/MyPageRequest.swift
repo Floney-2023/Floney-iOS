@@ -10,3 +10,4 @@ struct MyPageRequest: Encodable {
     var name: String
     var profileImg : String
 }
+

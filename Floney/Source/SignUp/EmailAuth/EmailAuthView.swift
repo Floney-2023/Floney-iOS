@@ -28,8 +28,7 @@ struct EmailAuthView: View {
                         Text("이메일 인증")
                             .font(.pretendardFont(.bold, size: 24))
                             .foregroundColor(.greyScale1)
-                        
-                        
+ 
                         Text("이메일 인증을 위해 사용 가능한\n이메일을 입력해주세요.")
                             .font(.pretendardFont(.medium, size: 13))
                             .foregroundColor(.greyScale6)
@@ -58,7 +57,6 @@ struct EmailAuthView: View {
                         Text("메일 보내기")
                             .padding()
                             .withNextButtonFormmating(.primary1)
-                        
                             .onTapGesture {
                                 viewModel.checkEmail()
                             }

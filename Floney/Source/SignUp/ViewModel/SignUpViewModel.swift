@@ -19,19 +19,14 @@ class SignUpViewModel: ObservableObject {
     @Published var password = ""
     @Published var passwordCheck = ""
     @Published var nickname = ""
-    //@Published var marketingAgree = 0
     @Published var isNextToAuthCode = false
     @Published var isNext = false
-    //@Published var provider = ""
-
-    //@Published var isValid = false
 
     private var cancellableSet: Set<AnyCancellable> = []
     var dataManager: SignUpProtocol
     
     init( dataManager: SignUpProtocol = SignUp.shared) {
         self.dataManager = dataManager
-        //postSignIn()
     }
     
     func postSignUp() {
@@ -63,8 +58,6 @@ class SignUpViewModel: ObservableObject {
                     self.isNext = true
                     self.setToken()
                     self.setEmailPassword()
-                    //let token = Keychain.setKeychain(self.result.accessToken, forKey: .authorization)
-                    //let token = Keychain.setKeychain(value: ,forKey: .authorization)
                     print(self.result.accessToken)
                 }
                 
@@ -82,8 +75,6 @@ class SignUpViewModel: ObservableObject {
                     self.isNext = true
                     self.setToken()
                     self.setEmailPassword()
-                    //let token = Keychain.setKeychain(self.result.accessToken, forKey: .authorization)
-                    //let token = Keychain.setKeychain(value: ,forKey: .authorization)
                     print(self.result.accessToken)
                 }
                 
@@ -102,28 +93,26 @@ class SignUpViewModel: ObservableObject {
         Keychain.setKeychain(nickname, forKey: .userNickname)
     }
     
-    /*
+    
     func authEmail() {
         let request = AuthEmailRequest(email: email)
         dataManager.authEmail(request)
-        
-            .sink { (dataResponse) in
-                if dataResponse.error != nil {
-                    self.createAlert(with: dataResponse.error!)
-                    print(dataResponse.error)
-                } else {
-                    //self.result = dataResponse.value!
-                    self.isNextToAuthCode = true
-                    //let token = Keychain.setKeychain(self.result.accessToken, forKey: .authorization)
-                    //let token = Keychain.setKeychain(value: ,forKey: .authorization)
-                    print("성공")
+            .sink { completion in
+                switch completion {
+                case .finished:
+                    print("call auth email successfully changed.")
+                    
+                case .failure(let error):
+                    print("Error calling auth email : \(error)")
                 }
-                
-            }.store(in: &cancellableSet)
+            } receiveValue: { data in
+                // TODO: Handle the received data if necessary.
+                print(data)
+            }
+            .store(in: &cancellableSet)
          
     }
-     */
-    
+     
     func validatePassword() {
         if (password != passwordCheck) {
         }
@@ -139,7 +128,8 @@ class SignUpViewModel: ObservableObject {
                 showAlert = true
                 isNextToAuthCode = false
             } else {
-                isNextToAuthCode = true
+                //isNextToAuthCode = true
+                self.authEmail()
             }
         }
     //MARK: 이메일 정규식 체크

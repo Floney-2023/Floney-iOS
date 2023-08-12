@@ -8,9 +8,10 @@
 import SwiftUI
 
 struct ChangePasswordView: View {
-    @State var password = ""
-    @State var newPassword = ""
-    @State var newPasswordCheck = ""
+    @StateObject var viewModel = MyPageViewModel()
+    //@State var password = ""
+    //@State var newPassword = ""
+    //@State var newPasswordCheck = ""
     var body: some View {
         VStack(spacing:30) {
             VStack(spacing:12) {
@@ -21,14 +22,14 @@ struct ChangePasswordView: View {
                     Spacer()
                 }
                 
-                TextField("", text: $password)
+                TextField("", text: $viewModel.currentPassword)
                     .padding()
                     .overlay(
                         Text("현재 비밀번호를 입력하세요.")
                             .padding()
                             .font(.pretendardFont(.regular, size: 14))
                             .foregroundColor(.greyScale7)
-                            .opacity(password.isEmpty ? 1 : 0), alignment: .leading
+                            .opacity(viewModel.currentPassword.isEmpty ? 1 : 0), alignment: .leading
                     )
                     .modifier(TextFieldModifier())
             }
@@ -42,14 +43,14 @@ struct ChangePasswordView: View {
                         Spacer()
                     }
                     
-                    TextField("", text: $newPassword)
+                    TextField("", text: $viewModel.newPassword)
                         .padding()
                         .overlay(
                             Text("영문 대소문자, 숫자 포함 8자 이상")
                                 .padding()
                                 .font(.pretendardFont(.regular, size: 14))
                                 .foregroundColor(.greyScale7)
-                                .opacity(newPassword.isEmpty ? 1 : 0), alignment: .leading
+                                .opacity(viewModel.newPassword.isEmpty ? 1 : 0), alignment: .leading
                         )
                         .modifier(TextFieldModifier())
                     
@@ -62,25 +63,26 @@ struct ChangePasswordView: View {
                         Spacer()
                     }
                     
-                    TextField("", text: $newPasswordCheck)
+                    TextField("", text: $viewModel.newPasswordCheck)
                         .padding()
                         .overlay(
                             Text("영문 대소문자, 숫자 포함 8자 이상")
                                 .padding()
                                 .font(.pretendardFont(.regular, size: 14))
                                 .foregroundColor(.greyScale7)
-                                .opacity(newPasswordCheck.isEmpty ? 1 : 0), alignment: .leading
+                                .opacity(viewModel.newPasswordCheck.isEmpty ? 1 : 0), alignment: .leading
                         )
                         .modifier(TextFieldModifier())
                     
                 }
             }
-            NavigationLink(destination: WelcomeView()){
-                Text("확인")
-                    .padding()
-                    .withNextButtonFormmating(.primary1)
-            }
-            
+ 
+            Text("확인")
+                .padding()
+                .withNextButtonFormmating(.primary1)
+                .onTapGesture {
+                    viewModel.changePassword()
+                }
             Spacer()
             
         }
