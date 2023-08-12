@@ -61,7 +61,7 @@ struct IncomeView: View {
                                 Text("\(viewModel.incomeResponse.analyzeResult[i].category)")
                                     .font(.pretendardFont(.medium, size: 14))
                                     .foregroundColor(.greyScale2)
-                                Text("\(viewModel.incomePercentage[i])%")
+                                Text("\(Int(viewModel.incomePercentage[i].rounded()))%")
                                     .font(.pretendardFont(.regular, size: 14))
                                     .foregroundColor(.greyScale5)
                             }

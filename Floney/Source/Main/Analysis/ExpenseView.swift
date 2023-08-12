@@ -62,7 +62,7 @@ struct ExpenseView: View {
                                 Text("\(viewModel.expenseResponse.analyzeResult[i].category)")
                                     .font(.pretendardFont(.medium, size: 14))
                                     .foregroundColor(.greyScale2)
-                                Text("\(viewModel.expensePercentage[i])%")
+                                Text("\(Int(viewModel.expensePercentage[i].rounded()))%")
                                     .font(.pretendardFont(.regular, size: 14))
                                     .foregroundColor(.greyScale5)
                             }
