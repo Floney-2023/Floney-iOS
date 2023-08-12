@@ -16,6 +16,7 @@ class MyPageViewModel: ObservableObject {
     
     @Published var nickname : String = ""
     @Published var email : String = ""
+    @Published var provider : String = ""
     @Published var userImg : String?
     @Published var myBooks : [MyBookResult] = []
     @Published var encryptedImageUrl : String = ""
@@ -52,6 +53,7 @@ class MyPageViewModel: ObservableObject {
                     self.email = self.result.email
                     self.myBooks = self.result.myBooks!
                     self.userImg = self.result.profileImg
+                    self.provider = self.result.provider
                     
                     if self.userImg == "user_default" {
                         ProfileManager.shared.setUserImageStateToDefault()

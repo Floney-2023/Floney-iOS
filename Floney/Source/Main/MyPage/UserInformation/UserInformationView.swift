@@ -10,6 +10,7 @@ import SwiftUI
 struct UserInformationView: View {
     @StateObject var viewModel = MyPageViewModel()
     @Binding var showingTabbar : Bool
+    @Binding var provider : String
     @State var showingLogoutAlert = false
     @State var title = "로그아웃"
     @State var message = "로그아웃 하시겠습니끼?"
@@ -57,13 +58,15 @@ struct UserInformationView: View {
                     }
                     
                 }
-                NavigationLink(destination: ChangePasswordView()){
-                    HStack {
-                        Text("비밀번호 변경")
-                            .font(.pretendardFont(.medium, size: 14))
-                            .foregroundColor(.greyScale2)
-                        Spacer()
-                        Image("forward_button")
+                if provider == "EMAIL" {
+                    NavigationLink(destination: ChangePasswordView()){
+                        HStack {
+                            Text("비밀번호 변경")
+                                .font(.pretendardFont(.medium, size: 14))
+                                .foregroundColor(.greyScale2)
+                            Spacer()
+                            Image("forward_button")
+                        }
                     }
                 }
                 HStack {
