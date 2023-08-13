@@ -9,9 +9,6 @@ import SwiftUI
 
 struct ChangePasswordView: View {
     @StateObject var viewModel = MyPageViewModel()
-    //@State var password = ""
-    //@State var newPassword = ""
-    //@State var newPasswordCheck = ""
     var body: some View {
         VStack(spacing:30) {
             VStack(spacing:12) {
@@ -81,8 +78,11 @@ struct ChangePasswordView: View {
                 .padding()
                 .withNextButtonFormmating(.primary1)
                 .onTapGesture {
-                    viewModel.changePassword()
+                    if viewModel.isValidInputs() {
+                        viewModel.changePassword()
+                    }
                 }
+                .disabled(!viewModel.isValidInputs())
             Spacer()
             
         }

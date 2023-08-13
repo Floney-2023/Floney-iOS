@@ -136,6 +136,26 @@ class MyPageViewModel: ObservableObject {
             }
             .store(in: &cancellableSet)
     }
+    
+    func isValidInputs() -> Bool {
+        return isCurrentPasswordEntered() && isNewPasswordValid() && doPasswordsMatch()
+    }
+    
+    func isCurrentPasswordEntered() -> Bool {
+        return !currentPassword.isEmpty
+    }
+    
+    func isNewPasswordValid() -> Bool {
+        // Checking if password is at least 8 characters long and contains at least one alphabet and one number
+        let passwordTest = NSPredicate(format: "SELF MATCHES %@", "^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$")
+        return passwordTest.evaluate(with: newPassword)
+    }
+    
+    func doPasswordsMatch() -> Bool {
+        return newPassword == newPasswordCheck
+    }
+    
+    
     func logout() {
         dataManager.logout()
             .sink { completion in
