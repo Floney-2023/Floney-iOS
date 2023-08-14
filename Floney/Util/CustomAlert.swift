@@ -83,7 +83,7 @@ enum ErrorMessage {
 
 struct CustomAlertView: View {
     var message: String
-    @State var type : String = "green"
+    @State var type : String = "red"
     @Binding var isPresented: Bool
     var body: some View {
         if (isPresented) {
@@ -124,6 +124,9 @@ struct CustomAlertView: View {
 
 struct CustomAlertView_Previews: PreviewProvider {
     static var previews: some View {
+        
         CustomAlertView(message:"error message", isPresented: .constant(true))
+   
     }
 }
+

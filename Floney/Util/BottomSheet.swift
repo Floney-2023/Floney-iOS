@@ -90,15 +90,18 @@ struct AccountBookBottomSheet: View{
                             isSelected = 0
                         } label: {
                             HStack {
-                                Spacer()
-                                Text("가계부 생성하기")
-                                    .frame(alignment: .center)
-                                    .foregroundColor(isSelected == 0 ? .greyScale1 : .greyScale8)
-                                    .font(.pretendardFont(.regular, size: 14))
-                                    .lineLimit(1)
-                                Spacer()
-                                Image(isSelected == 0 ? "icon_check_circle_activated" : "icon_check_circle_disabled")
-                                    .padding(.trailing, 20)
+                                ZStack {
+                                    Text("가계부 생성하기")
+                                        .frame(alignment: .center)
+                                        .foregroundColor(isSelected == 0 ? .greyScale1 : .greyScale8)
+                                        .font(.pretendardFont(.regular, size: 14))
+                                        .lineLimit(1)
+                                    HStack {
+                                        Spacer()
+                                        Image(isSelected == 0 ? "icon_check_circle_activated" : "icon_check_circle_disabled")
+                                            .padding(.trailing, 20)
+                                    }
+                                }
                             }
                             .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
                             .overlay(
@@ -114,14 +117,17 @@ struct AccountBookBottomSheet: View{
                             isSelected = 1
                         } label: {
                             HStack {
-                                Spacer()
-                                Text("코드 입력하기")
-                                    .foregroundColor(isSelected == 1 ? .greyScale1 : .greyScale8)
-                                    .font(.pretendardFont(.regular, size: 14))
-                                    .lineLimit(1)
-                                Spacer()
-                                Image(isSelected == 1 ? "icon_check_circle_activated" : "icon_check_circle_disabled")
-                                    .padding(.trailing, 20)
+                                ZStack {
+                                    Text("코드 입력하기")
+                                        .foregroundColor(isSelected == 1 ? .greyScale1 : .greyScale8)
+                                        .font(.pretendardFont(.regular, size: 14))
+                                        .lineLimit(1)
+                                    HStack {
+                                        Spacer()
+                                        Image(isSelected == 1 ? "icon_check_circle_activated" : "icon_check_circle_disabled")
+                                            .padding(.trailing, 20)
+                                    }
+                                }
                             }
                             .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
                             .overlay(
