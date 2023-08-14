@@ -189,7 +189,6 @@ struct MonthYearPickerBottomSheet: View {
     @State var availableChangeTabbarStatus = false
     @Binding var showingTab : Bool
     @Binding var isShowing : Bool
-    //@Binding var yearMonth : YearMonthDuration
     let years = Array(2000...2099)
     let months = Array(1...12)
 
