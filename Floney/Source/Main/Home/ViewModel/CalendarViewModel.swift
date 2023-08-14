@@ -99,9 +99,9 @@ class CalendarViewModel: ObservableObject {
                 } else {
                     self.dayLinesResult = dataResponse.value!
                     print("--성공--")
-                    
                     print(self.dayLinesResult)
-                    
+                    self.dayLinesTotalIncome = 0
+                    self.dayLinesTotalOutcome = 0
                     for asset in self.dayLinesResult.totalExpense {
                         if asset?.assetType == "INCOME" {
                             self.dayLinesTotalIncome = asset!.money
@@ -112,8 +112,6 @@ class CalendarViewModel: ObservableObject {
                     self.dayLines = self.dayLinesResult.dayLinesResponse
                     self.seeProfileImg = self.dayLinesResult.seeProfileImg
                     self.userImages = self.dayLines.compactMap { $0?.img }
-                    
-                    
                 }
             }.store(in: &cancellableSet)
     }
