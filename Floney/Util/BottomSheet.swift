@@ -1091,16 +1091,16 @@ struct Week: View {
                     VStack(spacing: 0) {
                             if value.day > 0 {
                                 Text("\(value.day)")
-                                    .padding()
+                                   // .padding(10)
                                     .font(.pretendardFont(.regular,size: 14))
                                     .foregroundColor(selectedDates.contains(value) ? .white : viewModel.selectedDate.month == value.month ? .greyScale2 : .greyScale7)
-                                    .background(selectedDates.contains(value) ? Color.primary5 : Color.clear)
-                                    .clipShape(Circle())
-                                
                             }
                     }
+                    .padding(10)
                     .frame(width: (UIScreen.main.bounds.width - 48) / 7)
                     .frame(height: 40)
+                    .background(selectedDates.contains(value) ? Color.primary5 : Color.clear)
+                    .clipShape(Circle())
                     .onTapGesture {
                         handleDateTap(value)
                         print("tap")
