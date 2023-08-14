@@ -60,19 +60,7 @@ struct HomeView: View {
             
             // MARK: Month Year Picker
             if isShowingMonthPicker {
-                Color.black
-                    .opacity(0.2)
-                    .edgesIgnoringSafeArea(.all)
-                    .ignoresSafeArea()
-                    .onTapGesture {
-                        isShowingMonthPicker.toggle()
-                    }
-                MonthYearPicker(viewModel : viewModel, date: $viewModel.selectedDate)
-                    .background(Color.white)
-                    .cornerRadius(10)
-                    .shadow(radius: 10)
-                    .frame(width: 300, height: 200)
-                    .offset(x: -40, y: -150)
+                MonthYearPickerBottomSheet(viewModel: viewModel, availableChangeTabbarStatus: true, showingTab: $showingTabbar, isShowing: $isShowingMonthPicker)
             }
             
             if isShowingBottomSheet {
@@ -195,73 +183,64 @@ struct CustomCalendarView: View {
         
     }
 }
-//MARK: 달 선택
-struct MonthYearPicker: View {
+//MARK: 피커 bottom sheet
+struct MonthYearPickerBottomSheet: View {
     @ObservedObject var viewModel : CalendarViewModel
-    @Binding var date: Date // 바뀐 날짜 업데이트
-    
+    @State var availableChangeTabbarStatus = false
+    @Binding var showingTab : Bool
+    @Binding var isShowing : Bool
+    //@Binding var yearMonth : YearMonthDuration
+    let years = Array(2000...2099)
+    let months = Array(1...12)
+
     var body: some View {
-        let year = Calendar.current.component(.year, from: date)
-        let month = Calendar.current.component(.month, from: date)
-        let yearStr = String(describing: year)
-        let monthRange = 1...12
-        let yearRange = 1900...2100
-        
-        return VStack {
-            HStack {
-                Button(action: {
-                    if year > yearRange.lowerBound {
-                        date = Calendar.current.date(from: DateComponents(year: year - 1, month: month))!
-                        viewModel.calcDate(date)
-                    }
-                }) {
-                    Image("icon_chevron_left")
-                }
-                
-                Spacer()
-                Text(yearStr)
-                    .foregroundColor(.white)
-                    .font(.pretendardFont(.medium, size: 14))
-                Spacer()
-                
-                Button(action: {
-                    if year < yearRange.upperBound {
-                        date = Calendar.current.date(from: DateComponents(year: year + 1, month: month))!
-                        viewModel.calcDate(date)
-                    }
-                }) {
-                    Image("icon_chevron_right")
-                }
-            }
-            .frame(maxWidth: .infinity)
-            .frame(height: 40)
-            .background(Color.primary1)
-            
-            ForEach(0..<3, id: \.self) { rowIndex in
-                HStack {
-                    ForEach(0..<4, id: \.self) { columnIndex in
-                        Spacer()
-                        Button {
-                            date = Calendar.current.date(from: DateComponents(year: year, month: rowIndex*4 + columnIndex + 1))!
-                            viewModel.calcDate(date)
-                            
-                        } label: {
-                            Text("\(rowIndex*4 + columnIndex + 1)월")
-                                .padding(.vertical, 10)
-                                .foregroundColor(month == (rowIndex*4 + columnIndex + 1) ? .greyScale1 : .greyScale7)
-                                .font(.pretendardFont(.regular, size: 13))
+        ZStack(alignment: .bottom) {
+            if (isShowing) {
+                Color.black
+                    .opacity(0.7)
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        isShowing.toggle()
+                        if availableChangeTabbarStatus {
+                            showingTab = true
                         }
-                
-                        Spacer()
                     }
-                 
+                VStack {
+                    HStack {
+                        Spacer()
+                        Button("완료") {
+                            isShowing = false
+                            if availableChangeTabbarStatus {
+                                showingTab = true
+                            }
+                            viewModel.selectedDate = Date.from(year: viewModel.yearMonth.year, month: viewModel.yearMonth.month)
+                            print("바뀐 selectedDate: \(viewModel.selectedDate)")
+                            viewModel.calcDate(viewModel.selectedDate)
+                        }
+                        .font(.pretendardFont(.semiBold, size: 16))
+                        .foregroundColor(.greyScale2)
+                        .padding()
+                    }
+                    YearMonthPicker(selection: $viewModel.yearMonth, years: years, months: months)
+                    // yearMonth가 바뀔 때마다 selectedDate가 바뀜
                 }
-                
+                .frame(alignment: .bottom)
+                .frame(maxWidth: .infinity)
+                .frame(height: UIScreen.main.bounds.height / 3)
+                .background(Color.greyScale12)
+                .transition(.move(edge: .bottom))
+                .cornerRadius(12, corners: [.allCorners])
+                .onAppear {
+                    showingTab = false
+                }
             }
-            
-        }.frame(width: 278)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
+        .ignoresSafeArea()
+        .animation(.easeInOut, value: isShowing)
     }
-    
+
+
 }
 
 //MARK: main 1
@@ -411,3 +390,90 @@ struct HomeView_Previews: PreviewProvider {
         HomeView(showingTabbar: .constant(true))
     }
 }
+
+/*
+Color.black
+    .opacity(0.2)
+    .edgesIgnoringSafeArea(.all)
+    .ignoresSafeArea()
+    .onTapGesture {
+        isShowingMonthPicker.toggle()
+    }
+
+MonthYearPicker(viewModel : viewModel, date: $viewModel.selectedDate)
+    .background(Color.white)
+    .cornerRadius(10)
+    .shadow(radius: 10)
+    .frame(width: 300, height: 200)
+    .offset(x: -40, y: -150)*/
+
+
+/*
+//MARK: 달 선택
+struct MonthYearPicker: View {
+    @ObservedObject var viewModel : CalendarViewModel
+    @Binding var date: Date // 바뀐 날짜 업데이트
+    
+    var body: some View {
+        let year = Calendar.current.component(.year, from: date)
+        let month = Calendar.current.component(.month, from: date)
+        let yearStr = String(describing: year)
+        let monthRange = 1...12
+        let yearRange = 1900...2100
+        
+        return VStack {
+            HStack {
+                Button(action: {
+                    if year > yearRange.lowerBound {
+                        date = Calendar.current.date(from: DateComponents(year: year - 1, month: month))!
+                        viewModel.calcDate(date)
+                    }
+                }) {
+                    Image("icon_chevron_left")
+                }
+                
+                Spacer()
+                Text(yearStr)
+                    .foregroundColor(.white)
+                    .font(.pretendardFont(.medium, size: 14))
+                Spacer()
+                
+                Button(action: {
+                    if year < yearRange.upperBound {
+                        date = Calendar.current.date(from: DateComponents(year: year + 1, month: month))!
+                        viewModel.calcDate(date)
+                    }
+                }) {
+                    Image("icon_chevron_right")
+                }
+            }
+            .frame(maxWidth: .infinity)
+            .frame(height: 40)
+            .background(Color.primary1)
+            
+            ForEach(0..<3, id: \.self) { rowIndex in
+                HStack {
+                    ForEach(0..<4, id: \.self) { columnIndex in
+                        Spacer()
+                        Button {
+                            date = Calendar.current.date(from: DateComponents(year: year, month: rowIndex*4 + columnIndex + 1))!
+                            viewModel.calcDate(date)
+                            
+                        } label: {
+                            Text("\(rowIndex*4 + columnIndex + 1)월")
+                                .padding(.vertical, 10)
+                                .foregroundColor(month == (rowIndex*4 + columnIndex + 1) ? .greyScale1 : .greyScale7)
+                                .font(.pretendardFont(.regular, size: 13))
+                        }
+                
+                        Spacer()
+                    }
+                 
+                }
+                
+            }
+            
+        }.frame(width: 278)
+    }
+    
+}*/

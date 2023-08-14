@@ -27,7 +27,10 @@ class CalendarViewModel: ObservableObject {
 
     //MARK: Selected Date
     // 연,월을 바꿀 경우에는 해당 연도 해당 달의 1일로 selected 변화
-    // 아래 모든 데이터는 같은 날짜를 가리켜야 함 
+    // 아래 모든 데이터는 같은 날짜를 가리켜야 함
+    // 피커 뷰에서 선택된 연도, 월
+    @Published var yearMonth = YearMonthDuration(year: Date().year, month: Date().month)
+    
     @Published var selectedDate: Date = Date() // Date type
     @Published var selectedYear: Int = 0 // year
     @Published var selectedMonth: Int = 0 // month
@@ -61,7 +64,6 @@ class CalendarViewModel: ObservableObject {
         self.dataManager = dataManager
         self.calcToday()
         self.calcDate(Date())
-        
     }
     
     //MARK: server
