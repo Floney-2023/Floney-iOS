@@ -254,6 +254,21 @@ class SignInViewModel: ObservableObject {
             .store(in: &cancellableSet)
     }
     
+    func checkValidation(email: String) {
+        if !isValidEmail(email) {
+            showAlert = true
+            errorMessage = ErrorMessage.findPassword01.value
+        }
+    }
+    
+    //MARK: 이메일 정규식 체크
+    func isValidEmail(_ email: String) -> Bool {
+        let emailFormat = "[A-Z0-9a-z._%+-]+@[A-Z0-9a-z.-]+\\.[A-Za-z]{2,}"
+        let emailPredicate = NSPredicate(format:"SELF MATCHES %@", emailFormat)
+        return emailPredicate.evaluate(with: email)
+    }
+
+    
     func createAlert( with error: NetworkError) {
         signInLoadingError = error.backendError == nil ? error.initialError.localizedDescription : error.backendError!.message
         if let errorCode = error.backendError?.code {

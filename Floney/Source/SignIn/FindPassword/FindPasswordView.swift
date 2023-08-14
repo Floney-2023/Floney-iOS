@@ -40,14 +40,12 @@ struct FindPasswordView: View {
                         .padding()
                         .withNextButtonFormmating(.primary1)
                         .onTapGesture {
-                            viewModel.isLoading = true
-                            viewModel.findPassword(email: email)
+                            //viewModel.isLoading = true
+                            //viewModel.findPassword(email: email)
+                            viewModel.checkValidation(email: email)
                         }
                 }
                 Spacer()
-                
-            
-
             }
             .padding(EdgeInsets(top: 52, leading: 24, bottom: 0, trailing: 24))
             .navigationBarBackButtonHidden(true)
@@ -59,10 +57,11 @@ struct FindPasswordView: View {
             .onAppear(perform : UIApplication.shared.hideKeyboard)
             // 내용을 불투명한 배경으로 가리는 로딩 화면
             if viewModel.isLoading {
-                
                 LoadingView()
             }
-            
+            if viewModel.showAlert {
+                CustomAlertView(message: viewModel.errorMessage, isPresented: $viewModel.showAlert)
+            }
             PasswordBottomSheet(isShowing: $viewModel.isShowingBottomSheet, isShowingLogin: $viewModel.isShowingLogin)
         }
     }

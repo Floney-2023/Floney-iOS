@@ -40,7 +40,6 @@ struct ChangePasswordView: View {
                                 .foregroundColor(.greyScale2)
                             Spacer()
                         }
-                        
                         TextField("", text: $viewModel.newPassword)
                             .padding()
                             .overlay(
@@ -71,7 +70,6 @@ struct ChangePasswordView: View {
                                     .opacity(viewModel.newPasswordCheck.isEmpty ? 1 : 0), alignment: .leading
                             )
                             .modifier(TextFieldModifier())
-                        
                     }
                 }
                 
@@ -79,12 +77,10 @@ struct ChangePasswordView: View {
                     .padding()
                     .withNextButtonFormmating(.primary1)
                     .onTapGesture {
-                        
                         if viewModel.isValidInputs() {
                             viewModel.changePassword()
                         }
                     }
-                    //.disabled(!viewModel.isValidInputs())
                 Spacer()
                 
             }
@@ -102,7 +98,6 @@ struct ChangePasswordView: View {
                 CustomAlertView(message: viewModel.errorMessage, isPresented: $viewModel.showAlert)
             }
         }
-        
     }
 }
 
