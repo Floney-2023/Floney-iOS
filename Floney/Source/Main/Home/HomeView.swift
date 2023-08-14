@@ -82,29 +82,36 @@ struct TotalView: View {
     @ObservedObject var viewModel : CalendarViewModel
     
     var body: some View {
-        HStack(spacing:23){
-            VStack(alignment: .leading, spacing: 8){
-                Text("총지출")
-                    .font(.pretendardFont(.medium, size: 12))
-                    .foregroundColor(.white)
-                
-                Text("\(viewModel.totalOutcome)")
-                    .font(.pretendardFont(.semiBold, size: 16))
-                    .foregroundColor(.white)
+        HStack(){
+            HStack {
+                VStack(alignment: .leading, spacing: 8){
+                    Text("총지출")
+                        .font(.pretendardFont(.medium, size: 12))
+                        .foregroundColor(.white)
+                    
+                    Text("\(viewModel.totalOutcome)원")
+                        .font(.pretendardFont(.semiBold, size: 16))
+                        .foregroundColor(.white)
+                }
+                Spacer()
             }
             .padding(20)
+            .frame(maxWidth: .infinity)
             
-            VStack(alignment: .leading, spacing: 8){
-                
-                Text("총수입")
-                    .font(.pretendardFont(.medium, size: 12))
-                    .foregroundColor(.white)
-                Text("\(viewModel.totalIncome)")
-                    .font(.pretendardFont(.semiBold, size: 16))
-                    .foregroundColor(.white)
+            HStack {
+                VStack(alignment: .leading, spacing: 8){
+                    
+                    Text("총수입")
+                        .font(.pretendardFont(.medium, size: 12))
+                        .foregroundColor(.white)
+                    Text("\(viewModel.totalIncome)원")
+                        .font(.pretendardFont(.semiBold, size: 16))
+                        .foregroundColor(.white)
+                }
+                Spacer()
             }
             .padding(20)
-            
+            .frame(maxWidth: .infinity)
         }
         .frame(maxWidth: .infinity)
         .background(Color.primary5)
@@ -386,7 +393,8 @@ struct MonthCalendar: View {
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeView(showingTabbar: .constant(true))
+        //HomeView(showingTabbar: .constant(true))
+        TotalView(viewModel: CalendarViewModel())
     }
 }
 
