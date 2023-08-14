@@ -65,8 +65,9 @@ struct DayLinesDetailView : View {
     @Binding var isShowingAddView : Bool
     var encryptionManager = CryptManager()
     @State var showingDetail = false
+    @State private var selectedIndex = 0
     var body: some View {
-        VStack(spacing:88) {
+        VStack(spacing:34) {
             HStack {
                 Text("내역")
                     .font(.pretendardFont(.bold, size: 16))
@@ -79,8 +80,8 @@ struct DayLinesDetailView : View {
                         isShowingAddView = true
                     }
             }
-            VStack {
-                ScrollView {
+            VStack(spacing:38) {
+                ScrollView(showsIndicators: false) {
                     if viewModel.dayLines.count == 0 {
                         Image("no_line")
                         Text("내역이 없습니다.")
@@ -153,20 +154,33 @@ struct DayLinesDetailView : View {
                                         
                                     }
                                 }
-                            }.onTapGesture {
+                            }
+                            .onTapGesture {
+                                selectedIndex = index
                                 showingDetail = true
                             }
                             .fullScreenCover(isPresented: $showingDetail) {
-                                NavigationView {
-                                    AddView(isPresented: $showingDetail, viewDiabled: true, mode : "check", date:viewModel.selectedDateStr, money: String(viewModel.dayLines[index]!.money), assetType: viewModel.dayLines[index]!.category[0], category:viewModel.dayLines[index]!.category[1], content: viewModel.dayLines[index]!.content)
+                                if let line = viewModel.dayLines[selectedIndex] {
+                                    NavigationView {
+                                        AddView(
+                                            isPresented: $showingDetail,
+                                            viewDiabled: true,
+                                            mode: "check",
+                                            date: viewModel.selectedDateStr,
+                                            money: String(line.money),
+                                            assetType: line.category[0],
+                                            category: line.category[1],
+                                            content: line.content
+                                        )
+                                    }
                                 }
                             }
                             
                         } //ForEach
                     } // else
                 } //ScrollView
-            }
-            Spacer()
+                .frame(maxHeight: .infinity)
+            }.frame(maxHeight: .infinity)
         }
         .frame(height: 366)
         .padding(20)

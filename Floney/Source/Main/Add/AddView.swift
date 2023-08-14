@@ -114,13 +114,13 @@ struct AddView: View {
                                     .onTapGesture {
                                         withAnimation(.interactiveSpring()) {
                                             selectedOptions = index
+                                            assetType = "자산을 선택하세요."
                                             toggleType = options[selectedOptions]
                                         }
                                     }
                             }
                             .overlay(
                                 Text(options[index])
-                                
                                     .font(.pretendardFont(.semiBold, size: 11))
                                     .foregroundColor(selectedOptions == index ? .greyScale2: .greyScale8)
                             )
@@ -211,16 +211,18 @@ struct AddView: View {
                         }
                         .disabled(viewDiabled)
                         
-                        HStack {
-                            Text("예산에서 제외")
-                                .font(.pretendardFont(.medium, size: 14))
-                                .foregroundColor(.greyScale4)
-                            Spacer()
-                            Toggle(isOn: $toggleOnOff) {
-                                
-                            }.padding(.trailing, 6)
+                        if selectedOptions != 2 {
+                            HStack {
+                                Text(selectedOptions == 0 ? "예산에서 제외" : "자산에서 제외")
+                                    .font(.pretendardFont(.medium, size: 14))
+                                    .foregroundColor(.greyScale4)
+                                Spacer()
+                                Toggle(isOn: $toggleOnOff) {
+                                    
+                                }.padding(.trailing, 6)
+                            }
+                            .disabled(viewDiabled)
                         }
-                        .disabled(viewDiabled)
                         
                     }.padding(.leading, 10)
                     .padding(.trailing, 6)
@@ -231,34 +233,38 @@ struct AddView: View {
                 Spacer()
                 
                 if mode == "add" {
-                    Button {
-                        viewModel.money = money
-                        viewModel.lineDate = date
-                        viewModel.flow = toggleType
-                        viewModel.asset = assetType
-                        viewModel.line = category
-                        viewModel.description = content
-                        viewModel.except = toggleOnOff
-                        
-                        print(viewModel.money)
-                        print(viewModel.lineDate)
-                        print(viewModel.flow)
-                        print(viewModel.asset)
-                        print(viewModel.line)
-                        print(viewModel.description)
-                        print(viewModel.except)
-                        
-                        viewModel.postLines()
-                        
-                    } label: {
-                        Text("저장하기")
-                            .font(.pretendardFont(.bold, size:14))
-                            .foregroundColor(.white)
+                    HStack {
+                        Button {
+                            viewModel.money = money // 금액
+                            viewModel.lineDate = date // 날짜
+                            viewModel.flow = toggleType // 수입, 지출, 이체
+                            viewModel.asset = assetType // 자산 타입
+                            viewModel.line = category // 분류 타입
+                            viewModel.description = content // 내용
+                            viewModel.except = toggleOnOff // 제외 여부 
+                            
+                            print(viewModel.money)
+                            print(viewModel.lineDate)
+                            print(viewModel.flow)
+                            print(viewModel.asset)
+                            print(viewModel.line)
+                            print(viewModel.description)
+                            print(viewModel.except)
+                            
+                            viewModel.postLines()
+                            
+                        } label: {
+                            Text("저장하기")
+                                .font(.pretendardFont(.bold, size:14))
+                                .foregroundColor(.white)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .frame(maxHeight: .infinity)
+                        .padding()
+                        .background(Color.primary1)
                     }
                     .frame(maxWidth: .infinity)
                     .frame(height : 66)
-                    .padding()
-                    .background(Color.primary1)
                     
                 } else if mode == "check" {
                     //MARK: 삭제/저장하기 버튼
@@ -299,60 +305,7 @@ struct AddView: View {
                     .frame(maxWidth: .infinity)
                     .frame(height: 66)
                 }
-                
-                /*
-                //MARK: 삭제/저장하기 버튼
-                HStack(spacing:0) {
-                    Button {
-                        //
-                    } label: {
-                        Text("삭제")
-                        
-                            .font(.pretendardFont(.bold, size:14))
-                            .foregroundColor(.white)
-                        
-                    }
-                    .frame(maxWidth: .infinity)
-                    .frame(maxHeight: .infinity)
-                    .padding()
-                    .background(Color.greyScale2)
-                    Button {
-                        //
-                        
-                        viewModel.money = money
-                        viewModel.lineDate = date
-                        viewModel.flow = toggleType
-                        viewModel.asset = assetType
-                        viewModel.line = category
-                        viewModel.description = content
-                        viewModel.except = toggleOnOff
-                        
-                        print(viewModel.money)
-                        print(viewModel.lineDate)
-                        print(viewModel.flow)
-                        print(viewModel.asset)
-                        print(viewModel.line)
-                        print(viewModel.description)
-                        print(viewModel.except)
-                        
-                        viewModel.postLines()
-                        
-                    } label: {
-                        Text("저장하기")
-                            .font(.pretendardFont(.bold, size:14))
-                        
-                            .foregroundColor(.white)
-                        
-                    }
-                    .frame(maxWidth: .infinity)
-                    .frame(maxHeight: .infinity)
-                    .frame(width: UIScreen.main.bounds.width * 2/3)
-                    .padding()
-                    .background(Color.primary1)
-                }
-                .frame(maxWidth: .infinity)
-                .frame(height: 66)*/
-                
+
                 
             } // VStack
             .edgesIgnoringSafeArea(.bottom)
@@ -364,7 +317,6 @@ struct AddView: View {
                 EmptyView()
             }
             
-            
         } // ZStack
     }
     func formatNumber(_ n: Int) -> String {
@@ -373,6 +325,7 @@ struct AddView: View {
         return formatter.string(from: NSNumber(value: n)) ?? ""
     }
 }
+
 class KeyboardResponder: ObservableObject {
     private var notificationCenter: NotificationCenter
     @Published private(set) var isKeyboardVisible: Bool = false
@@ -401,3 +354,56 @@ struct AddView_Previews: PreviewProvider {
         AddView(isPresented: .constant(true))
     }
 }
+
+/*
+//MARK: 삭제/저장하기 버튼
+HStack(spacing:0) {
+    Button {
+        //
+    } label: {
+        Text("삭제")
+        
+            .font(.pretendardFont(.bold, size:14))
+            .foregroundColor(.white)
+        
+    }
+    .frame(maxWidth: .infinity)
+    .frame(maxHeight: .infinity)
+    .padding()
+    .background(Color.greyScale2)
+    Button {
+        //
+        
+        viewModel.money = money
+        viewModel.lineDate = date
+        viewModel.flow = toggleType
+        viewModel.asset = assetType
+        viewModel.line = category
+        viewModel.description = content
+        viewModel.except = toggleOnOff
+        
+        print(viewModel.money)
+        print(viewModel.lineDate)
+        print(viewModel.flow)
+        print(viewModel.asset)
+        print(viewModel.line)
+        print(viewModel.description)
+        print(viewModel.except)
+        
+        viewModel.postLines()
+        
+    } label: {
+        Text("저장하기")
+            .font(.pretendardFont(.bold, size:14))
+        
+            .foregroundColor(.white)
+        
+    }
+    .frame(maxWidth: .infinity)
+    .frame(maxHeight: .infinity)
+    .frame(width: UIScreen.main.bounds.width * 2/3)
+    .padding()
+    .background(Color.primary1)
+}
+.frame(maxWidth: .infinity)
+.frame(height: 66)*/

@@ -15,6 +15,7 @@ enum ButtonOptions: String, CaseIterable {
 
 struct AnalysisView: View {
     @Binding var showingTabbar : Bool
+    @Binding var isLoading : Bool
     var options = ["지출", "수입", "예산", "자산"]
     @State private var selectedOptions = 0
     @State private var selectedOption = ButtonOptions.optionOne
@@ -93,16 +94,22 @@ struct AnalysisView: View {
                 Spacer()
                 
             }.padding(.top, 26)
+                .onChange(of: viewModel.isLoading) { newValue in
+                    isLoading = newValue
+                }
+
             
             PickerBottomSheet(availableChangeTabbarStatus : true, showingTab: $showingTabbar, isShowing: $isShowingPicker, yearMonth: $viewModel.yearMonth)
+            
         }
     }
+   
 }
 
 
 
 struct AnalysisView_Previews: PreviewProvider {
     static var previews: some View {
-        AnalysisView(showingTabbar: .constant(true))
+        AnalysisView(showingTabbar: .constant(true), isLoading: .constant(false))
     }
 }

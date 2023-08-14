@@ -11,6 +11,7 @@ import SwiftUI
 
 class AnalysisViewModel : ObservableObject {
     var tokenViewModel = TokenReissueViewModel()
+    @Published var isLoading: Bool = false
     @Published var loadingError: String = ""
     @Published var showAlert: Bool = false
     @Published var selectedColors : [Color] = []
@@ -110,16 +111,18 @@ class AnalysisViewModel : ObservableObject {
     }
     func analysisExpenseIncome(root: String) {
         let bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
-        
         let request = ExpenseIncomeRequest(bookKey: bookKey, root: root, date: selectedDateStr)
         print(request)
+        self.isLoading = true
         dataManager.analysisExpenseIncome(request)
             .sink { (dataResponse) in
                 if dataResponse.error != nil {
                     self.createAlert(with: dataResponse.error!)
                     // 에러 처리
                     print(dataResponse.error)
+                    self.isLoading = false
                 } else {
+                    self.isLoading = false
                     if let expenseIncomeResponse = dataResponse.value {
                         print("---분석 요청 성공---")
                         

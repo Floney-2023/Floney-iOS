@@ -73,7 +73,8 @@ struct IncomeView: View {
                     }
                 }
             } else {
-                Image("no_line")
+                Image("img_budget_0")
+                    .padding(.top, 100)
             }
             
             Spacer()
