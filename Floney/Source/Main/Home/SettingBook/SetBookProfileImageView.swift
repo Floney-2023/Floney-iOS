@@ -139,15 +139,15 @@ struct SetBookProfileImageView: View {
                     message: nil,
                     buttons: [
                         .default(
-                            Text("카메라"),
+                            Text("사진 촬영하기"),
                             action: { onCamera = true }
                         ),
                         .default(
-                            Text("사진 앨범"),
+                            Text("앨범에서 사진 선택"),
                             action: { onPhotoLibrary = true }
                         ),
                         .cancel(
-                            Text("돌아가기")
+                            Text("취소")
                         )
                     ]
                 )

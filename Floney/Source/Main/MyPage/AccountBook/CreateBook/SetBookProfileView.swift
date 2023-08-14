@@ -12,8 +12,20 @@ struct SetBookProfileView: View {
     var pageCountAll = 3
     //@State var bookTitle = ""
     @StateObject var viewModel = CreateBookViewModel()
+    @StateObject var permissionManager = PermissionManager()
+    var firebaseManager = FirebaseManager()
+    var encryptionManager = CryptManager()
     @State var name = ""
     @State var bookImg = ""
+    
+    // 이미지선택창 선택 여부
+    @State private var presentsImagePicker = false
+    // 카메라 선택 여부
+    @State private var onCamera = false
+    // 사진 앨범 선택 여부
+    @State private var onPhotoLibrary = false
+    @State private var selectedUIImage: UIImage? = UIImage(named: "book_profile_124")
+    
     var body: some View {
         VStack(spacing: 20) {
             HStack {
@@ -29,14 +41,20 @@ struct SetBookProfileView: View {
                     Text("사진을 설정하여 나만의 가계부를\n만들어 보세요.")
                         .font(.pretendardFont(.medium, size: 13))
                         .foregroundColor(.greyScale6)
-                    Image("btn_book_profile")
+                    Image(uiImage: selectedUIImage!)
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .clipShape(Circle()) // 프로필 이미지를 원형으로 자르기
+                        .frame(width: 124, height: 124)
                         .overlay(
                             Image("btn_photo_camera")
                                 .offset(x:45,y:45)
                         )
                         .padding(.top, 32)
+                        .onTapGesture {
+                            presentsImagePicker = true
+                        }
                 }
-                
                 Spacer()
             }
             
@@ -46,17 +64,68 @@ struct SetBookProfileView: View {
                 Text("다음으로")
                     .padding()
                     .withNextButtonFormmating(.primary1)
-                
                     .onTapGesture {
-                        viewModel.name = name
-                        viewModel.createBook()
+                        if let image = selectedUIImage {
+                            firebaseManager.uploadImageToFirebase(image: image) { encryptedURL in
+                                DispatchQueue.main.async {
+                                    if let url = encryptedURL {
+                                        viewModel.profileImg = url
+                                        viewModel.name = name
+                                        viewModel.createBook()
+                                        
+                                    }
+                                }
+                            }
+                        }
                     }
-                 
             }
+        }
+        .onAppear{
+            permissionManager.requestCameraPermission()
+            permissionManager.requestAlbumPermission()
         }
         .padding(EdgeInsets(top: 32, leading: 24, bottom: 0, trailing: 24))
         .navigationBarBackButtonHidden(true)
         .navigationBarItems(leading: BackButton())
+        //MARK: action sheet
+        .actionSheet(isPresented: $presentsImagePicker) {
+            ActionSheet(
+                title: Text("이미지 선택하기"),
+                message: nil,
+                buttons: [
+                    .default(
+                        Text("사진 촬영하기"),
+                        action: { onCamera = true }
+                    ),
+                    .default(
+                        Text("앨범에서 사진 선택"),
+                        action: { onPhotoLibrary = true }
+                    ),
+                    .cancel(
+                        Text("취소")
+                    )
+                ]
+            )
+        }
+        // 카메라 선택
+        .sheet(isPresented: $onCamera) {
+            CameraView(image: $selectedUIImage) { selectedImage in
+                if let selectedImage = selectedImage {
+                    self.selectedUIImage = selectedImage
+                }
+                self.onCamera = false
+            }
+        }
+        // 사진 앨범 선택
+        .sheet(isPresented: $onPhotoLibrary) {
+            PhotoPicker(image: $selectedUIImage) { selectedImage in
+                if let selectedImage = selectedImage {
+                    self.selectedUIImage = selectedImage
+                }
+                self.onPhotoLibrary = false
+            }
+        }
+
     }
 }
 
