@@ -39,8 +39,10 @@ struct SetMonetaryUnitView: View {
                                     .font(.pretendardFont(.medium,size:12))
                                     .foregroundColor(isSelected == index ? .primary2 : .greyScale6)
                                 Spacer()
-                                Image(isSelected == index ? "icon_check_circle_activated" : "icon_check_circle_disabled")
-                                    .padding(.trailing, 22)
+                                if isSelected == index {
+                                    Image("icon_check_circle_activated")
+                                        .padding(.trailing, 22)
+                                }
                             }
                             .padding(.leading, 22)
                             .padding(.vertical, 20)

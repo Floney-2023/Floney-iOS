@@ -9,6 +9,8 @@ import SwiftUI
 import Combine
 struct AddView: View {
     @Binding var isPresented: Bool
+    @State var viewDiabled : Bool = false
+    @State var mode : String = "add"
     
     @StateObject var viewModel = AddViewModel()
     @State var date : String = "2023-06-20"
@@ -93,6 +95,7 @@ struct AddView: View {
                                     money = String(digits.dropLast())
                                 }
                             }
+                            .disabled(viewDiabled)
                                                     
                     } // 금액 VStack
                     
@@ -126,6 +129,7 @@ struct AddView: View {
                     .frame(maxWidth: .infinity)
                     .frame(height: 38)
                     .cornerRadius(10)
+                    .disabled(viewDiabled)
                     
                     //MARK: 날짜/자산/분류/내용/제외여부
                     VStack(spacing:44) {
@@ -158,6 +162,7 @@ struct AddView: View {
                                 print("\(self.categories)")
                                 self.isShowingBottomSheet.toggle()
                             }
+                            .disabled(viewDiabled)
                         }
                   
                         
@@ -178,6 +183,8 @@ struct AddView: View {
                             
                             self.isShowingBottomSheet.toggle()
                         }
+                        .disabled(viewDiabled)
+                        
                         HStack {
                             Text("내용")
                                 .font(.pretendardFont(.medium, size: 14))
@@ -202,6 +209,8 @@ struct AddView: View {
                                 .foregroundColor(.greyScale2)
                             //.background(Color.red)
                         }
+                        .disabled(viewDiabled)
+                        
                         HStack {
                             Text("예산에서 제외")
                                 .font(.pretendardFont(.medium, size: 14))
@@ -211,6 +220,8 @@ struct AddView: View {
                                 
                             }.padding(.trailing, 6)
                         }
+                        .disabled(viewDiabled)
+                        
                     }.padding(.leading, 10)
                     .padding(.trailing, 6)
                     
@@ -219,6 +230,77 @@ struct AddView: View {
                 
                 Spacer()
                 
+                if mode == "add" {
+                    Button {
+                        viewModel.money = money
+                        viewModel.lineDate = date
+                        viewModel.flow = toggleType
+                        viewModel.asset = assetType
+                        viewModel.line = category
+                        viewModel.description = content
+                        viewModel.except = toggleOnOff
+                        
+                        print(viewModel.money)
+                        print(viewModel.lineDate)
+                        print(viewModel.flow)
+                        print(viewModel.asset)
+                        print(viewModel.line)
+                        print(viewModel.description)
+                        print(viewModel.except)
+                        
+                        viewModel.postLines()
+                        
+                    } label: {
+                        Text("저장하기")
+                            .font(.pretendardFont(.bold, size:14))
+                            .foregroundColor(.white)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .frame(height : 66)
+                    .padding()
+                    .background(Color.primary1)
+                    
+                } else if mode == "check" {
+                    //MARK: 삭제/저장하기 버튼
+                    HStack(spacing:0) {
+                        Button {
+                            if viewDiabled {
+                                
+                            } else {
+                                self.viewDiabled = true
+                            }
+                        } label: {
+                            Text(viewDiabled ? "삭제" : "취소")
+                                .font(.pretendardFont(.bold, size:14))
+                                .foregroundColor(.white)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .frame(maxHeight: .infinity)
+                        .padding()
+                        .background(Color.greyScale2)
+                        Button {
+                            if viewDiabled {
+                                self.viewDiabled = false
+                            } else {
+                                self.viewDiabled = true
+                            }
+                            
+                        } label: {
+                            Text(viewDiabled ? "수정하기" : "저장하기")
+                                .font(.pretendardFont(.bold, size:14))
+                                .foregroundColor(.white)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .frame(maxHeight: .infinity)
+                        .frame(width: UIScreen.main.bounds.width * 2/3)
+                        .padding()
+                        .background(Color.primary1)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 66)
+                }
+                
+                /*
                 //MARK: 삭제/저장하기 버튼
                 HStack(spacing:0) {
                     Button {
@@ -269,7 +351,7 @@ struct AddView: View {
                     .background(Color.primary1)
                 }
                 .frame(maxWidth: .infinity)
-                .frame(height: 66)
+                .frame(height: 66)*/
                 
                 
             } // VStack

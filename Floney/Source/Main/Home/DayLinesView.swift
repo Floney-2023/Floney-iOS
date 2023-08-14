@@ -31,6 +31,7 @@ struct DayTotalView : View {
     @ObservedObject var viewModel : CalendarViewModel
     @State var totalIncome = 0
     @State var totalOutcome = 0
+    
    
     var body: some View {
         HStack() {
@@ -63,6 +64,7 @@ struct DayLinesDetailView : View {
     @ObservedObject var viewModel : CalendarViewModel
     @Binding var isShowingAddView : Bool
     var encryptionManager = CryptManager()
+    @State var showingDetail = false
     var body: some View {
         VStack(spacing:88) {
             HStack {
@@ -151,7 +153,15 @@ struct DayLinesDetailView : View {
                                         
                                     }
                                 }
+                            }.onTapGesture {
+                                showingDetail = true
                             }
+                            .fullScreenCover(isPresented: $showingDetail) {
+                                NavigationView {
+                                    AddView(isPresented: $showingDetail, viewDiabled: true, mode : "check", date:viewModel.selectedDateStr, money: String(viewModel.dayLines[index]!.money), assetType: viewModel.dayLines[index]!.category[0], category:viewModel.dayLines[index]!.category[1], content: viewModel.dayLines[index]!.content)
+                                }
+                            }
+                            
                         } //ForEach
                     } // else
                 } //ScrollView
