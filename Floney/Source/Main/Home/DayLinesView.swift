@@ -35,26 +35,33 @@ struct DayTotalView : View {
    
     var body: some View {
         HStack() {
-            VStack(alignment: .leading, spacing: 8) {
-                Text("수입")
-                    .font(.pretendardFont(.medium, size: 12))
-                    .foregroundColor(.greyScale12)
-                
-                Text("\(viewModel.dayLinesTotalIncome)")
-                    .font(.pretendardFont(.semiBold, size: 18))
-                    .foregroundColor(.white)
+            HStack {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("수입")
+                        .font(.pretendardFont(.medium, size: 12))
+                        .foregroundColor(.greyScale12)
+                    
+                    Text("\(viewModel.dayLinesTotalIncome)원")
+                        .font(.pretendardFont(.semiBold, size: 18))
+                        .foregroundColor(.white)
+                }
+                Spacer()
             }
-            Spacer()
-            VStack(alignment: .leading, spacing: 8) {
-                Text("지출")
-                    .font(.pretendardFont(.medium, size: 12))
-                    .foregroundColor(.greyScale12)
-                Text("\(viewModel.dayLinesTotalOutcome)")
-                    .font(.pretendardFont(.semiBold, size: 18))
-                    .foregroundColor(.white)
+            .padding(20)
+            HStack{
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("지출")
+                        .font(.pretendardFont(.medium, size: 12))
+                        .foregroundColor(.greyScale12)
+                    Text("\(viewModel.dayLinesTotalOutcome)원")
+                        .font(.pretendardFont(.semiBold, size: 18))
+                        .foregroundColor(.white)
+                }
+                Spacer()
             }
+            .padding(20)
         }
-        .padding(30)
+        
         .frame(maxWidth: .infinity)
         .background(Color.primary5)
         .cornerRadius(12)
@@ -192,6 +199,7 @@ struct DayLinesDetailView : View {
 
 struct DateCalendarView_Previews: PreviewProvider {
     static var previews: some View {
-        DayLinesView(date : .constant("2023-06-20"), isShowingAddView: .constant(false), viewModel: CalendarViewModel())
+        //DayLinesView(date : .constant("2023-06-20"), isShowingAddView: .constant(false), viewModel: CalendarViewModel())
+        DayTotalView(viewModel: CalendarViewModel())
     }
 }
