@@ -36,3 +36,17 @@ struct BackButtonBlack : View {
         }
     }
 }
+
+struct BackButtonBlackWithAlert : View {
+    @Binding var showAlert : Bool
+    var body: some View {
+        Button(action: {
+            showAlert = true
+        }) {
+            HStack {
+                Image("back_button_black") // set image here
+                    .aspectRatio(contentMode: .fit)
+            }
+        }
+    }
+}

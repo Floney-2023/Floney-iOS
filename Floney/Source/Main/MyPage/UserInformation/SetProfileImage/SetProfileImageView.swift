@@ -8,8 +8,14 @@
 import SwiftUI
 
 struct SetProfileImageView: View {
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    @State var showAlert = false
+    @State var title = "잠깐!"
+    @State var message = "수정된 내용이 저장되지 않았습니다.\n그대로 나가시겠습니까?"
+    
     @StateObject var viewModel = MyPageViewModel()
     @StateObject var permissionManager = PermissionManager()
+    
     var firebaseManager = FirebaseManager()
     var encryptionManager = CryptManager()
    
@@ -24,131 +30,139 @@ struct SetProfileImageView: View {
     @State private var selectedUIImage: UIImage? = nil
 
     var body: some View {
-        VStack(spacing:20) {
-            if let preview = viewModel.userPreviewImage124 {
-                Image(uiImage: preview)
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .clipShape(Circle()) // 프로필 이미지를 원형으로 자르기
-                    .frame(width: 124, height: 124)
-                    .overlay(
-                        Image("btn_photo_camera")
-                            .offset(x:45,y:45)
-                    )
+        ZStack {
+            VStack(spacing:20) {
+                if let preview = viewModel.userPreviewImage124 {
+                    Image(uiImage: preview)
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .clipShape(Circle()) // 프로필 이미지를 원형으로 자르기
+                        .frame(width: 124, height: 124)
+                        .overlay(
+                            Image("btn_photo_camera")
+                                .offset(x:45,y:45)
+                        )
+                        .onTapGesture {
+                            presentsImagePicker = true
+                        }
+                } else {
+                    Image("user_profile_124")
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .clipShape(Circle()) // 프로필 이미지를 원형으로 자르기
+                        .frame(width: 124, height: 124)
+                        .overlay(
+                            Image("btn_photo_camera")
+                                .offset(x:45,y:45)
+                        )
+                        .onTapGesture {
+                            presentsImagePicker = true
+                        }
+                }
+                Text("기본 프로필로 변경")
+                    .font(.pretendardFont(.regular, size: 12))
+                    .foregroundColor(.greyScale6)
                     .onTapGesture {
-                        presentsImagePicker = true
+                        viewModel.randomNumStr = nil
+                        viewModel.userPreviewImage124 = UIImage(named: "user_profile_124")
                     }
-            } else {
-                Image("user_profile_124")
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .clipShape(Circle()) // 프로필 이미지를 원형으로 자르기
-                    .frame(width: 124, height: 124)
-                    .overlay(
-                        Image("btn_photo_camera")
-                            .offset(x:45,y:45)
-                    )
-                    .onTapGesture {
-                        presentsImagePicker = true
-                    }
-            }
-             Text("기본 프로필로 변경")
-                 .font(.pretendardFont(.regular, size: 12))
-                 .foregroundColor(.greyScale6)
-                 .onTapGesture {
-                     viewModel.randomNumStr = nil
-                     viewModel.userPreviewImage124 = UIImage(named: "user_profile_124")
-                 }
-             Spacer()
-             
-            Button("변경하기") {
-                if let image = selectedUIImage {
-                    print("selected:\(image)")
-                    firebaseManager.uploadImageToFirebase(image: image) { encryptedURL in
-                        DispatchQueue.main.async {
-                            if let url = encryptedURL {
-                                self.viewModel.encryptedImageUrl = url // 암호화된 url
-                                viewModel.changeProfile(imageStatus: "custom") // 서버에 전송
-                                print("in image view: \(url)")
+                Spacer()
+                
+                Button("변경하기") {
+                    if let image = selectedUIImage {
+                        print("selected:\(image)")
+                        firebaseManager.uploadImageToFirebase(image: image) { encryptedURL in
+                            DispatchQueue.main.async {
+                                if let url = encryptedURL {
+                                    self.viewModel.encryptedImageUrl = url // 암호화된 url
+                                    viewModel.changeProfile(imageStatus: "custom") // 서버에 전송
+                                    print("in image view: \(url)")
+                                }
                             }
                         }
-                    }
-                } else {
-                    if let randomNum = viewModel.randomNumStr {
-                        viewModel.changeProfile(imageStatus: "random") // 서버에 전송
                     } else {
-                        viewModel.changeProfile(imageStatus: "default") // 서버에 전송
+                        if let randomNum = viewModel.randomNumStr {
+                            viewModel.changeProfile(imageStatus: "random") // 서버에 전송
+                        } else {
+                            viewModel.changeProfile(imageStatus: "default") // 서버에 전송
+                        }
                     }
                 }
+                .padding(20)
+                .font(.pretendardFont(.bold, size: 14))
+                .foregroundColor(.white)
+                .frame(maxWidth: .infinity)
+                .background(Color.greyScale2)
+                .cornerRadius(12)
             }
-            .padding(20)
-            .font(.pretendardFont(.bold, size: 14))
-            .foregroundColor(.white)
-            .frame(maxWidth: .infinity)
-            .background(Color.greyScale2)
-            .cornerRadius(12)
-        }
-        .padding(EdgeInsets(top: 68, leading: 20, bottom: 0, trailing: 20))
-        .navigationBarBackButtonHidden(true)
-        .navigationBarItems(leading: BackButtonBlack())
-        .toolbar {
-            ToolbarItem(placement: .principal) {
-                Text("프로필 이미지 변경")
-                    .font(.pretendardFont(.semiBold, size: 16))
-                    .foregroundColor(.greyScale1)
-            }
-        }
-        .onAppear{
-            permissionManager.requestCameraPermission()
-            permissionManager.requestAlbumPermission()
-            viewModel.loadUserPreviewImage()
-         }
-        // 카메라 선택
-        .sheet(isPresented: $onCamera) {
-            CameraView(image: $selectedUIImage) { selectedImage in
-                if let selectedImage = selectedImage {
-                    self.selectedUIImage = selectedImage
-                    viewModel.userPreviewImage124 = selectedImage
-                    viewModel.randomNumStr = nil
+            .padding(EdgeInsets(top: 68, leading: 20, bottom: 0, trailing: 20))
+            .navigationBarBackButtonHidden(true)
+            .navigationBarItems(leading: BackButtonBlackWithAlert(showAlert: $showAlert))
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Text("프로필 이미지 변경")
+                        .font(.pretendardFont(.semiBold, size: 16))
+                        .foregroundColor(.greyScale1)
                 }
-                self.onCamera = false
             }
-        }
-        // 사진 앨범 선택
-        .sheet(isPresented: $onPhotoLibrary) {
-            PhotoPicker(image: $selectedUIImage) { selectedImage in
-                if let selectedImage = selectedImage {
-                    self.selectedUIImage = selectedImage
-                    viewModel.userPreviewImage124 = selectedImage
-                    viewModel.randomNumStr = nil
+            .onAppear{
+                permissionManager.requestCameraPermission()
+                permissionManager.requestAlbumPermission()
+                viewModel.loadUserPreviewImage()
+            }
+            // 카메라 선택
+            .sheet(isPresented: $onCamera) {
+                CameraView(image: $selectedUIImage) { selectedImage in
+                    if let selectedImage = selectedImage {
+                        self.selectedUIImage = selectedImage
+                        viewModel.userPreviewImage124 = selectedImage
+                        viewModel.randomNumStr = nil
+                    }
+                    self.onCamera = false
                 }
-                self.onPhotoLibrary = false
             }
-        }
-        .actionSheet(isPresented: $presentsImagePicker) {
-            ActionSheet(
-                title: Text("이미지 선택하기"),
-                message: nil,
-                buttons: [
-                    .default(
-                        Text("사진 촬영하기"),
-                        action: { onCamera = true }
-                    ),
-                    .default(
-                        Text("앨범에서 사진 선택"),
-                        action: { onPhotoLibrary = true }
-                    ),
-                    .default(
-                        Text("랜덤 이미지"),
-                        action: {
-                            viewModel.setRandomProfileImage()
-                        }
-                    ),
-                    .cancel(
-                        Text("취소")
-                    )
-                ]
-            )
+            // 사진 앨범 선택
+            .sheet(isPresented: $onPhotoLibrary) {
+                PhotoPicker(image: $selectedUIImage) { selectedImage in
+                    if let selectedImage = selectedImage {
+                        self.selectedUIImage = selectedImage
+                        viewModel.userPreviewImage124 = selectedImage
+                        viewModel.randomNumStr = nil
+                    }
+                    self.onPhotoLibrary = false
+                }
+            }
+            .actionSheet(isPresented: $presentsImagePicker) {
+                ActionSheet(
+                    title: Text("이미지 선택하기"),
+                    message: nil,
+                    buttons: [
+                        .default(
+                            Text("사진 촬영하기"),
+                            action: { onCamera = true }
+                        ),
+                        .default(
+                            Text("앨범에서 사진 선택"),
+                            action: { onPhotoLibrary = true }
+                        ),
+                        .default(
+                            Text("랜덤 이미지"),
+                            action: {
+                                viewModel.setRandomProfileImage()
+                            }
+                        ),
+                        .cancel(
+                            Text("취소")
+                        )
+                    ]
+                )
+            }
+            //MARK: alert
+            if showAlert {
+                AlertView(isPresented: $showAlert, title: $title, message: $message) {
+                    self.presentationMode.wrappedValue.dismiss()
+                }
+            }
         }
         
 
