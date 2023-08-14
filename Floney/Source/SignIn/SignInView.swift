@@ -164,10 +164,6 @@ struct SignInView: View {
                 CustomAlertView(message: viewModel.errorMessage, isPresented: $viewModel.showAlert)
             }
             .onAppear(perform : UIApplication.shared.hideKeyboard)
-            /*
-            .fullScreenCover(isPresented: $viewModel.isUserLoggedIn) {
-                MainTabView()
-            }*/
         }
     }
     

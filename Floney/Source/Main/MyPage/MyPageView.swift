@@ -39,7 +39,7 @@ struct MyPageView: View {
                 
                 ScrollView(showsIndicators: false) {
                     VStack(spacing:16) {
-                        NavigationLink(destination: UserInformationView(showingTabbar: $showingTabbar, provider: $viewModel.provider)) {
+                        NavigationLink(destination: UserInformationView(viewModel: viewModel, showingTabbar: $showingTabbar)) {
                             HStack {
                                 if let preview = viewModel.userPreviewImage36 {
                                     Image(uiImage: preview)

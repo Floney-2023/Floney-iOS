@@ -12,6 +12,7 @@ class MyPageViewModel: ObservableObject {
     var cryptionManager = CryptManager()
     @Published var result : MyPageResponse = MyPageResponse(nickname: "", email: "", profileImg: "", provider: "", subscribe: false, lastAdTime: nil, myBooks: [])
     @Published var myPageLoadingError: String = ""
+    @Published var errorMessage : String = ""
     @Published var showAlert: Bool = false
     
     @Published var nickname : String = ""
@@ -40,8 +41,6 @@ class MyPageViewModel: ObservableObject {
     
     init( dataManager: MyPageProtocol = MyPage.shared) {
         self.dataManager = dataManager
-        //postSignIn()
-        //getMyPage()
     }
     
     func getMyPage() {
@@ -138,11 +137,43 @@ class MyPageViewModel: ObservableObject {
     }
     
     func isValidInputs() -> Bool {
-        return isCurrentPasswordEntered() && isNewPasswordValid() && doPasswordsMatch()
+        let currentPasswordEntered = isCurrentPasswordEntered()
+        let newPasswordEntered = isNewPasswordEntered()
+        let newPasswordCheckEntered = isNewPasswordCheckEntered()
+        let newPasswordValid = isNewPasswordValid()
+        let passwordMatch = doPasswordsMatch()
+        
+        if !currentPasswordEntered {
+            showAlert = true
+            errorMessage = "현재 비밀번호를 입력해주세요."
+        }
+        else if !newPasswordEntered {
+            showAlert = true
+            errorMessage = "새 비밀번호를 입력해주세요."
+        }
+        else if !newPasswordCheckEntered {
+            showAlert = true
+            errorMessage = "새 비밀번호 확인을 입력해주세요."
+        }
+        else if !newPasswordValid {
+            showAlert = true
+            errorMessage = "비밀번호 양식을 확인해주세요."
+        }
+        else if !passwordMatch {
+            showAlert = true
+            errorMessage = "새 비밀번호가 일치하지 않습니다."
+        }
+        return  currentPasswordEntered && newPasswordEntered && newPasswordCheckEntered && newPasswordValid && passwordMatch
     }
     
     func isCurrentPasswordEntered() -> Bool {
         return !currentPassword.isEmpty
+    }
+    func isNewPasswordEntered() -> Bool {
+        return !newPassword.isEmpty
+    }
+    func isNewPasswordCheckEntered() -> Bool {
+        return !newPasswordCheck.isEmpty
     }
     
     func isNewPasswordValid() -> Bool {

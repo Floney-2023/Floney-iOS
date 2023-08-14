@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct UserInformationView: View {
-    @StateObject var viewModel = MyPageViewModel()
+    @ObservedObject var viewModel : MyPageViewModel
     @Binding var showingTabbar : Bool
-    @Binding var provider : String
+    //@Binding var provider : String
     @State var showingLogoutAlert = false
     @State var title = "로그아웃"
     @State var message = "로그아웃 하시겠습니끼?"
@@ -58,7 +58,7 @@ struct UserInformationView: View {
                     }
                     
                 }
-                if provider == "EMAIL" {
+                if viewModel.provider == "EMAIL" {
                     NavigationLink(destination: ChangePasswordView()){
                         HStack {
                             Text("비밀번호 변경")
@@ -100,7 +100,9 @@ struct UserInformationView: View {
             
         }
         .onAppear{
-            showingTabbar = false
+            DispatchQueue.main.async {
+                showingTabbar = false
+            }
         }
         .padding(EdgeInsets(top: 35, leading: 20, bottom: 0, trailing: 20))
         .navigationBarBackButtonHidden(true)
@@ -126,6 +128,6 @@ struct UserInformationView: View {
 
 struct UserInformationView_Previews: PreviewProvider {
     static var previews: some View {
-        UserInformationView(showingTabbar: .constant(false), provider: .constant("EMAIL"))
+        UserInformationView(viewModel: MyPageViewModel(), showingTabbar: .constant(false))
     }
 }
