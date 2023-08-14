@@ -75,8 +75,6 @@ enum ErrorMessage {
             return "일치하는 회원이 없습니다."
             
         }
-        
-        
         func errorMessage(_ type: ErrorMessage) -> String {
             return type.value
         }
@@ -85,28 +83,28 @@ enum ErrorMessage {
 
 struct CustomAlertView: View {
     var message: String
+    @State var type : String = "green"
     @Binding var isPresented: Bool
-    
     var body: some View {
-        
         if (isPresented) {
             VStack{
                 Spacer()
                 VStack {
-                    
                     HStack {
                         Button(action: {
                             isPresented = false
                         }) {
-                            Image("icon_cancel_circle_white")
+                            if type == "red" {
+                                Image("icon_cancel_circle_white")
+                            } else if type == "green" {
+                                Image("icon_varification_circle_white")
+                            }
                         }
-                        
                         Text(message)
                             .foregroundColor(Color.white)
                             .font(.pretendardFont(.medium,size: 14))
                         Spacer()
                     }.padding(.leading)
-                    
                 }
                 .frame(width: 360, height: 46)
                 .background(Color.black.opacity(0.8))
@@ -120,10 +118,8 @@ struct CustomAlertView: View {
                     }
                 }
             }
-            
         }
     }
-    
 }
 
 struct CustomAlertView_Previews: PreviewProvider {

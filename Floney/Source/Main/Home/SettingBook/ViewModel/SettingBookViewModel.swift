@@ -11,8 +11,11 @@ import SwiftUI
 
 class SettingBookViewModel : ObservableObject {
     var cryprionManager = CryptManager()
+    var alertManager = AlertManager.shared
     @Published var tokenViewModel = TokenReissueViewModel()
     
+    @Published var isLoading : Bool = false
+    @Published var ChangeProfileImageSuccess = false
     @Published var bookInfoLoadingError: String = ""
     @Published var showAlert: Bool = false
     
@@ -94,6 +97,7 @@ class SettingBookViewModel : ObservableObject {
     }
     
     func changeProfile(inputStatus: String) {
+        
         bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
         var request : BookProfileRequest
         if inputStatus == "default" {
@@ -108,8 +112,12 @@ class SettingBookViewModel : ObservableObject {
                 switch completion {
                 case .finished:
                     print("Profile successfully changed.")
+                    self.isLoading = false
+                    self.ChangeProfileImageSuccess = true
+                    self.alertManager.update(showAlert: true, message: "변경이 완료되었습니다.", buttonType: "green")
                 case .failure(let error):
                     print("Error changing profile: \(error)")
+                    self.isLoading = false
                 }
             } receiveValue: { data in
                 // TODO: Handle the received data if necessary.

@@ -69,6 +69,7 @@ struct SetProfileImageView: View {
                 Spacer()
                 
                 Button("변경하기") {
+                    viewModel.isLoading = true
                     if let image = selectedUIImage {
                         print("selected:\(image)")
                         firebaseManager.uploadImageToFirebase(image: image) { encryptedURL in
@@ -157,15 +158,20 @@ struct SetProfileImageView: View {
                     ]
                 )
             }
+            .onChange(of: viewModel.ChangeProfileImageSuccess) { newValue in
+                self.presentationMode.wrappedValue.dismiss()
+            }
             //MARK: alert
             if showAlert {
                 AlertView(isPresented: $showAlert, title: $title, message: $message) {
                     self.presentationMode.wrappedValue.dismiss()
                 }
             }
+            //MARK: loading
+            if viewModel.isLoading {
+                LoadingView()
+            }
         }
-        
-
     }
 }
 

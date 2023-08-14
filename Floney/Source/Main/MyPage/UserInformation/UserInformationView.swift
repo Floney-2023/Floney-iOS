@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct UserInformationView: View {
+    @StateObject var alertManager = AlertManager.shared
     @ObservedObject var viewModel : MyPageViewModel
     @Binding var showingTabbar : Bool
     //@Binding var provider : String
@@ -118,6 +119,9 @@ struct UserInformationView: View {
             ZStack {
                 if showingLogoutAlert {
                     AlertView(isPresented: $showingLogoutAlert, title: $title, message: $message, onOKAction: {viewModel.logout()})
+                }
+                if alertManager.showAlert {
+                    CustomAlertView(message: alertManager.message, type: alertManager.buttontType, isPresented: $alertManager.showAlert)
                 }
             }
         )

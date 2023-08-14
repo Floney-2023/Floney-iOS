@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ModifyingBookView: View {
+    @StateObject var alertManager = AlertManager.shared
     @StateObject var viewModel = SettingBookViewModel()
     //@State var nickname = ""
     @State var toggleOnOff = true
@@ -113,6 +114,9 @@ struct ModifyingBookView: View {
                     AlertView(isPresented: $deleteAlert, title: $deleteTitle, message: $deleteMessage, okColor: .alertRed, onOKAction: {
                         viewModel.deleteBook()
                     })
+                }
+                if alertManager.showAlert {
+                    CustomAlertView(message: alertManager.message, type: alertManager.buttontType, isPresented: $alertManager.showAlert)
                 }
             }
         )

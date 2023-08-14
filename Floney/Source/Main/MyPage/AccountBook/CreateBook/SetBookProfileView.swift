@@ -38,9 +38,11 @@ struct SetBookProfileView: View {
                     Text("가계부 프로필 설정하기")
                         .font(.pretendardFont(.bold, size: 24))
                         .foregroundColor(.greyScale1)
+                    
                     Text("사진을 설정하여 나만의 가계부를\n만들어 보세요.")
                         .font(.pretendardFont(.medium, size: 13))
                         .foregroundColor(.greyScale6)
+                    
                     Image(uiImage: selectedUIImage!)
                         .resizable()
                         .aspectRatio(contentMode: .fill)

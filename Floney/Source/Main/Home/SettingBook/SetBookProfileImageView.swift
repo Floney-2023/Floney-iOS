@@ -69,6 +69,7 @@ struct SetBookProfileImageView: View {
                 Spacer()
                 
                 Button("변경하기") {
+                    viewModel.isLoading = true
                     if let image = selectedUIImage {
                         firebaseManager.uploadImageToFirebase(image: image) { encryptedURL in
                             DispatchQueue.main.async {
@@ -152,6 +153,9 @@ struct SetBookProfileImageView: View {
                     ]
                 )
             }
+            .onChange(of: viewModel.ChangeProfileImageSuccess) { newValue in
+                self.presentationMode.wrappedValue.dismiss()
+            }
             
             
             //MARK: alert
@@ -160,6 +164,10 @@ struct SetBookProfileImageView: View {
                     self.presentationMode.wrappedValue.dismiss()
                 }
             }
+            if viewModel.isLoading {
+                LoadingView()
+            }
+            
         }
     }
     

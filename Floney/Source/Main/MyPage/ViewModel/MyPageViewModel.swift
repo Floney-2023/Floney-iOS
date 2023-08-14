@@ -10,7 +10,10 @@ import Combine
 import SwiftUI
 class MyPageViewModel: ObservableObject {
     var cryptionManager = CryptManager()
+    var alertManager = AlertManager.shared
     @Published var result : MyPageResponse = MyPageResponse(nickname: "", email: "", profileImg: "", provider: "", subscribe: false, lastAdTime: nil, myBooks: [])
+    @Published var isLoading : Bool = false
+    @Published var ChangeProfileImageSuccess : Bool = false
     @Published var myPageLoadingError: String = ""
     @Published var errorMessage : String = ""
     @Published var showAlert: Bool = false
@@ -88,6 +91,9 @@ class MyPageViewModel: ObservableObject {
             .sink { completion in
                 switch completion {
                 case .finished:
+                    self.isLoading = false
+                    self.ChangeProfileImageSuccess = true
+                    self.alertManager.update(showAlert: true, message: "변경이 완료되었습니다.", buttonType: "green")
                     print("Profile successfully changed.")
                     if imageStatus == "default" {
                         ProfileManager.shared.setUserImageStateToDefault() // 싱글톤으로 관리되는 profile manager에 저장
@@ -98,6 +104,7 @@ class MyPageViewModel: ObservableObject {
                         ProfileManager.shared.setUserImageStateToCustom(urlString: decryptedUrl!) // 싱글톤으로 관리되는 profile manager에 저장
                     }
                 case .failure(let error):
+                    self.isLoading = false
                     print("Error changing profile: \(error)")
                 }
             } receiveValue: { data in
