@@ -1087,7 +1087,6 @@ struct Week: View {
  
             HStack(spacing: 0) {
                 ForEach(days, id: \.self) { value in
-                    //CardView(value: days[i])
                     VStack(spacing: 0) {
                             if value.day > 0 {
                                 Text("\(value.day)")
@@ -1112,24 +1111,6 @@ struct Week: View {
         } //ZStack
         
     } //body
-    
-    /*
-    //MARK: 각각의 날짜에 대한 달력 칸 뷰
-    func CardView(value: Date) -> some View {
-        VStack(spacing: 0) {
-                if value.day > 0 {
-                    Text("\(value.day)")
-                        .padding()
-                        .font(.pretendardFont(.regular,size: 14))
-                        .foregroundColor(selectedDates.contains(value) ? .white : viewModel.selectedDate.year == value.year ? .greyScale2 : .greyScale7)
-                        .background(selectedDates.contains(value) ? Color.primary5 : Color.clear)
-                        .clipShape(Circle())
-                }
-        }
-        .frame(width: (UIScreen.main.bounds.width - 48) / 7)
-        .frame(height: 40)
-        
-    }*/
     
     func getLastDayOfMonth(date: Date) -> Int {
         let calendar = Calendar.current

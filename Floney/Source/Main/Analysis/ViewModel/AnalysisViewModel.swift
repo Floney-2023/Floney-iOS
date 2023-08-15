@@ -20,12 +20,6 @@ class AnalysisViewModel : ObservableObject {
     @Published var selectedDate = Date()
     @Published var selectedMonth: Int = Calendar.current.component(.month, from: Date())
     @Published var selectedDateStr = ""
-    
-    @Published var expenseResponse = ExpenseIncomeResponse(total: 0, differance: 0, analyzeResult: [])
-    @Published var incomeResponse = ExpenseIncomeResponse(total: 0, differance: 0, analyzeResult: [])
-    @Published var expensePercentage : [Double] = []
-    @Published var incomePercentage : [Double] = []
-    
     // 피커 뷰에서 선택된 연도, 월
     @Published var yearMonth = YearMonthDuration(year: Date().year, month: Date().month) {
         didSet {
@@ -34,6 +28,16 @@ class AnalysisViewModel : ObservableObject {
         }
     }
     
+    @Published var expenseResponse = ExpenseIncomeResponse(total: 0, differance: 0, analyzeResult: [])
+    @Published var incomeResponse = ExpenseIncomeResponse(total: 0, differance: 0, analyzeResult: [])
+    @Published var expensePercentage : [Double] = []
+    @Published var incomePercentage : [Double] = []
+    
+    @Published var leftBudget : Double = 0
+    @Published var totalBudget : Double = 0
+    @Published var budgetPercentage : Double = 0
+    @Published var budgetRatio : Double = 0
+        
     let expenses : [ExpenseResponse] = [
     ExpenseResponse(content: "식비", percentage: 40, money: 400000),
     ExpenseResponse(content: "생활비", percentage: 40, money: 400000),
@@ -110,7 +114,8 @@ class AnalysisViewModel : ObservableObject {
         }
     }
     func analysisExpenseIncome(root: String) {
-        let bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
+        let bookKey = "C9C30C52"
+        //let bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
         let request = ExpenseIncomeRequest(bookKey: bookKey, root: root, date: selectedDateStr)
         print(request)
         self.isLoading = true
@@ -154,6 +159,31 @@ class AnalysisViewModel : ObservableObject {
                 }
             }.store(in: &cancellableSet)
     }
+    func analysisBudget() {
+        let bookKey = "C9C30C52"
+        //let bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
+        let request = BudgetRequest(bookKey: bookKey, date: selectedDateStr)
+ 
+        self.isLoading = true
+        dataManager.analysisBudget(request)
+            .sink { (dataResponse) in
+                if dataResponse.error != nil {
+                    self.createAlert(with: dataResponse.error!)
+                    // 에러 처리
+                    print(dataResponse.error)
+                    self.isLoading = false
+                } else {
+                    self.isLoading = false
+                    self.leftBudget = dataResponse.value?.leftMoney ?? 0
+                    self.totalBudget = dataResponse.value?.totalMoney ?? 0
+                    if self.totalBudget > 0 {
+                        self.budgetPercentage = self.leftBudget / self.totalBudget * 100
+                        self.budgetRatio = self.leftBudget / self.totalBudget 
+                    }
+                }
+            }.store(in: &cancellableSet)
+    }
+
     private func updateDateString(_ date: Date) {
         let calendar = Calendar.current
         let formatter = DateFormatter()

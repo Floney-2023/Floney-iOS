@@ -29,3 +29,8 @@ struct ExpenseIncome : Decodable, Hashable {
     var money : Double
     var percentage : Double?
 }
+
+struct BudgetResponse: Decodable {
+    var leftMoney : Double
+    var totalMoney : Double
+}

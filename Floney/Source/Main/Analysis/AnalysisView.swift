@@ -84,7 +84,7 @@ struct AnalysisView: View {
                 case 1:
                     IncomeView(viewModel: viewModel)
                 case 2:
-                    BudgetView()
+                    BudgetView(viewModel: viewModel)
                 case 3:
                     AssetView()
                 default:

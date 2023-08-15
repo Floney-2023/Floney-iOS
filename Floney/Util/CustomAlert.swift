@@ -97,7 +97,7 @@ struct CustomAlertView: View {
                             if type == "red" {
                                 Image("icon_cancel_circle_white")
                             } else if type == "green" {
-                                Image("icon_varification_circle_white")
+                                Image("icon_varification_circle_white_vector")
                             }
                         }
                         Text(message)

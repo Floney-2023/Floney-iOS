@@ -12,16 +12,21 @@ struct SplashScreenView: View {
     @StateObject var signInViewModel = SignInViewModel()
     //@EnvironmentObject var viewModel: SignInViewModel
     @StateObject var userSession = AuthenticationService.shared
+    
+    @State var showingTabbar = false
+    @State var isLoading = false
     var body: some View {
         if isActive {
             //SignInView()
             Group {
                 if userSession.isUserLoggedIn {
+                    /*
                     if userSession.bookStatus {
                         MainTabView()
                     } else {
                         SendBookCodeView()
-                    }
+                    }*/
+                    AnalysisView(showingTabbar: $showingTabbar, isLoading: $isLoading)
                 } else {
                     SignInView()
                 }

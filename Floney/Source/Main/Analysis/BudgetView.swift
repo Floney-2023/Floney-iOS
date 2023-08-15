@@ -9,6 +9,7 @@ import SwiftUI
 
 struct BudgetView: View {
     @State private var progress: Double = 50 // 50%
+    @ObservedObject var viewModel : AnalysisViewModel
     
     var body: some View {
         VStack {
@@ -19,7 +20,7 @@ struct BudgetView: View {
                     .padding(.bottom,10)
                 HStack{
                     VStack(alignment:.leading, spacing: 10) {
-                        Text("60%를 사용했어요")
+                        Text("\(viewModel.budgetPercentage)%를 사용했어요")
                             .font(.pretendardFont(.bold,size: 22))
                             .foregroundColor(.greyScale1)
                         Text("남은 기간동안 하루에\n40,0000원을 사용할 수 있어요")
@@ -42,20 +43,67 @@ struct BudgetView: View {
                     .padding()
                 
                 Circle()
-                    .trim(from: 0.0, to: 0.6 * 0.5) // Adjust the completion to fill half of the circle
+                    .trim(from: 0.0, to: viewModel.budgetRatio * 0.5) // Adjust the completion to fill half of the circle
                     .stroke(Color.primary1, style: StrokeStyle(lineWidth: 20, lineCap: .round)) // .round option makes the line ends rounded
                     .frame(width: 200, height: 200)
                     .rotationEffect(.degrees(-180))
                     .padding()
                 VStack(spacing:-10) {
-                    Image("img_budget_50~79")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 100, height: 100) // Adjust the size as needed
-                        .offset(y: -20) // Move the image up
-                    VStack {
-                        Text("조금씩 지출을")
-                        Text("줄여볼까요?")
+                    switch viewModel.budgetPercentage {
+                    case 0 :
+                        Image("img_budget_0")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 100, height: 100) // Adjust the size as needed
+                            .offset(y: -20) // Move the image up
+                        VStack {
+                            Text("예산을")
+                            Text("사용하지 않았어요.")
+                        }
+                    case 1..<50 :
+                        Image("img_budget_0~49")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 100, height: 100) // Adjust the size as needed
+                            .offset(y: -20) // Move the image up
+                        VStack {
+                            Text("쓸 수 있는 예산이")
+                            Text("충분해요!")
+                            
+                        }
+                        
+                    case 50..<80 :
+                        Image("img_budget_50~79")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 100, height: 100) // Adjust the size as needed
+                            .offset(y: -20) // Move the image up
+                        VStack {
+                            Text("조금씩 지출을")
+                            Text("줄여볼까요?")
+                        }
+                        
+                    case 80..<100 :
+                        Image("img_budget_80~99")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 100, height: 100) // Adjust the size as needed
+                            .offset(y: -20) // Move the image up
+                        VStack {
+                            Text("예산을 넘기지 않게")
+                            Text("주의하세요!")
+                        }
+                        
+                    default:
+                        Image("img_budget_0")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 100, height: 100) // Adjust the size as needed
+                            .offset(y: -20) // Move the image up
+                        VStack {
+                            Text("예산을")
+                            Text("사용하지 않았어요.")
+                        }
                     }
                 }
                 .font(.pretendardFont(.medium, size: 12))
@@ -68,7 +116,7 @@ struct BudgetView: View {
                     Text("남은 금액")
                         .font(.pretendardFont(.medium, size: 14))
                         .foregroundColor(.greyScale6)
-                    Text("400,000원")
+                    Text("\(viewModel.leftBudget)원")
                         .font(.pretendardFont(.bold, size: 20))
                         .foregroundColor(.greyScale2)
                 }.frame(maxWidth: .infinity)
@@ -77,12 +125,18 @@ struct BudgetView: View {
                     Text("총 예산")
                         .font(.pretendardFont(.medium, size: 14))
                         .foregroundColor(.greyScale6)
-                    Text("1,000,000원")
+                    Text("\(viewModel.totalBudget)원")
                         .font(.pretendardFont(.bold, size: 20))
                         .foregroundColor(.greyScale2)
                 }.frame(maxWidth: .infinity)
             }//.padding(.horizontal, 24)
                 .frame(maxWidth: .infinity)
+                .onAppear{
+                    viewModel.analysisBudget()
+                }
+                .onChange(of: viewModel.selectedDate) { newValue in
+                    viewModel.analysisBudget()
+                }
                 
             
             
@@ -109,6 +163,6 @@ struct DonutSegment: Shape {
 }
 struct BudgetView_Previews: PreviewProvider {
     static var previews: some View {
-        BudgetView()
+        BudgetView(viewModel: AnalysisViewModel())
     }
 }
