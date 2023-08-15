@@ -28,26 +28,26 @@ class AnalysisViewModel : ObservableObject {
         }
     }
     
+    //MARK: 지출, 수입 분석
     @Published var expenseResponse = ExpenseIncomeResponse(total: 0, differance: 0, analyzeResult: [])
     @Published var incomeResponse = ExpenseIncomeResponse(total: 0, differance: 0, analyzeResult: [])
     @Published var expensePercentage : [Double] = []
     @Published var incomePercentage : [Double] = []
     
+    //MARK: 예산 분석
     @Published var leftBudget : Double = 0
     @Published var totalBudget : Double = 0
     @Published var budgetPercentage : Double = 0
     @Published var budgetRatio : Double = 0
-        
-    let expenses : [ExpenseResponse] = [
-    ExpenseResponse(content: "식비", percentage: 40, money: 400000),
-    ExpenseResponse(content: "생활비", percentage: 40, money: 400000),
-    ExpenseResponse(content: "기타", percentage: 20, money: 200000)
-    ]
-    let incomes : [ExpenseResponse] = [
-    ExpenseResponse(content: "식비", percentage: 40, money: 400000),
-    ExpenseResponse(content: "생활비", percentage: 40, money: 400000),
-    ExpenseResponse(content: "기타", percentage: 20, money: 200000)
-    ]
+    
+    //MARK: 자산 분석
+    @Published var monthList : [String] = []
+    @Published var assetList : [AssetResponse] = []
+    @Published var difference : Double = 0
+    @Published var currentAsset : Double = 0
+    @Published var initAsset : Double = 0
+    
+    
     let primaryColors: [Color] = [
         .yellow2, .orange3, .red2
     ]
@@ -162,7 +162,7 @@ class AnalysisViewModel : ObservableObject {
     func analysisBudget() {
         let bookKey = "C9C30C52"
         //let bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
-        let request = BudgetRequest(bookKey: bookKey, date: selectedDateStr)
+        let request = BudgetAssetRequest(bookKey: bookKey, date: selectedDateStr)
  
         self.isLoading = true
         dataManager.analysisBudget(request)
@@ -183,6 +183,47 @@ class AnalysisViewModel : ObservableObject {
                 }
             }.store(in: &cancellableSet)
     }
+    func analysisAsset(date: String) {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        var assetMonth = 0
+        if let date = dateFormatter.date(from: date) {
+            let calendar = Calendar.current
+            let components = calendar.dateComponents([.month], from: date)
+            if let month = components.month {
+                print(month) // 출력: 2
+                assetMonth = month
+            }
+        }
+        let bookKey = "C9C30C52"
+        //let bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
+        let request = BudgetAssetRequest(bookKey: bookKey, date: date)
+ 
+        self.isLoading = true
+        dataManager.analysisAsset(request)
+            .sink { (dataResponse) in
+                if dataResponse.error != nil {
+                    self.createAlert(with: dataResponse.error!)
+                    // 에러 처리
+                    print(dataResponse.error)
+                    self.isLoading = false
+                } else {
+                    self.isLoading = false
+                    var asset = dataResponse.value ?? AssetResponse(difference: 0, initAsset: 0, currentAsset: 0)
+                    asset.month = assetMonth  // 해당 월을 AssetResponse에 저장합니다.
+                    self.assetList.append(asset)
+                    if date == self.selectedDateStr {
+                        self.difference = dataResponse.value?.difference ?? 0
+                        self.currentAsset = dataResponse.value?.currentAsset ?? 0
+                        self.initAsset = dataResponse.value?.initAsset ?? 0
+                    }
+                }
+            }.store(in: &cancellableSet)
+    }
+    
+    func initAssetList() {
+        self.assetList = []
+    }
 
     private func updateDateString(_ date: Date) {
         let calendar = Calendar.current
@@ -202,6 +243,24 @@ class AnalysisViewModel : ObservableObject {
     func moveForward() {
         let newDate = Calendar.current.date(byAdding: .month, value: 1, to: selectedDate)
         selectedDate = newDate ?? selectedDate
+    }
+    
+    // asset의 달을 계산하는 함수
+    func calculateAssetMonth() -> [String] {
+        var dates : [String] = []
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        
+        for i in 0..<6 {
+            if let newDate = Calendar.current.date(byAdding: .month, value: -i, to: selectedDate) {
+                let dateString = formatter.string(from: newDate)
+                let components = Calendar.current.dateComponents([.year, .month], from: newDate)
+                if let year = components.year, let month = components.month {
+                    dates.append("\(year)-\(String(format: "%02d", month))-01")
+                }
+            }
+        }
+        return dates
     }
     
     func createAlert( with error: NetworkError) {

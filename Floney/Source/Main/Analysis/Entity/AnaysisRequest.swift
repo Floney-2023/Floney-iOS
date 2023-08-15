@@ -13,7 +13,7 @@ struct ExpenseIncomeRequest : Encodable {
     var date : String
 }
 
-struct BudgetRequest: Encodable {
+struct BudgetAssetRequest: Encodable {
     var bookKey : String
     var date : String
 }

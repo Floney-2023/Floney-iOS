@@ -26,7 +26,8 @@ struct SplashScreenView: View {
                     } else {
                         SendBookCodeView()
                     }*/
-                    AnalysisView(showingTabbar: $showingTabbar, isLoading: $isLoading)
+                    //AnalysisView(showingTabbar: $showingTabbar, isLoading: $isLoading)
+                    AssetView(viewModel: AnalysisViewModel())
                 } else {
                     SignInView()
                 }

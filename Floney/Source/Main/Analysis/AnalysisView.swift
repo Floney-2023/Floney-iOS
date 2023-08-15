@@ -86,7 +86,7 @@ struct AnalysisView: View {
                 case 2:
                     BudgetView(viewModel: viewModel)
                 case 3:
-                    AssetView()
+                    AssetView(viewModel: viewModel)
                 default:
                     ExpenseView(viewModel: viewModel)
                 }

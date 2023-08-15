@@ -7,12 +7,6 @@
 
 import Foundation
 
-struct ExpenseResponse: Decodable, Hashable {
-    var content : String
-    var percentage : Int
-    var money : Float
-}
-
 struct AssetData : Decodable, Hashable{
     let month: String
     let amount: Double
@@ -34,3 +28,10 @@ struct BudgetResponse: Decodable {
     var leftMoney : Double
     var totalMoney : Double
 }
+struct AssetResponse: Decodable {
+    var difference : Double
+    var initAsset : Double
+    var currentAsset : Double
+    var month : Int?
+}
+

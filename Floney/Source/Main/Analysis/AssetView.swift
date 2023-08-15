@@ -8,8 +8,9 @@
 import SwiftUI
 
 struct AssetView: View {
+    @ObservedObject var viewModel : AnalysisViewModel
+    /*
     var assetData: [AssetData] = [
-        
         AssetData(month: "6", amount: 500000.0),
         AssetData(month: "7", amount: 4000.0),
         AssetData(month: "8", amount: 6000.0),
@@ -17,18 +18,16 @@ struct AssetView: View {
         AssetData(month: "10", amount: 6500.0),
         AssetData(month: "이번달", amount: 4800000.0)
         
-    ]
-    var standardizedData : [AssetData]?
-    var normalizedData : [AssetData]?
+    ]*/
+    //var standardizedData : [AssetData]?
+    //var normalizedData : [AssetData]?
    
-    
-    
     var body: some View {
         // Log Transform the asset data
-        let logTransformedData = assetData.map { AssetData(month: $0.month, amount: log($0.amount)) }
+        //let logTransformedData = assetData.map { AssetData(month: $0.month, amount: log($0.amount)) }
         // Get the min and max of the log transformed data
-        let minLogAmount = logTransformedData.map { $0.amount }.min() ?? 0
-        let maxLogAmount = logTransformedData.map { $0.amount }.max() ?? 1
+        //let minLogAmount = logTransformedData.map { $0.amount }.min() ?? 0
+        //let maxLogAmount = logTransformedData.map { $0.amount }.max() ?? 1
        
         ScrollView(showsIndicators: false){
             VStack(spacing: 42) {
@@ -41,7 +40,7 @@ struct AssetView: View {
                             Text("지난달보다 증가했어요")
                                 .font(.pretendardFont(.bold,size: 22))
                                 .foregroundColor(.greyScale1)
-                            Text("지난달 대비 100,000원\n증가했어요")
+                            Text("지난달 대비 \(viewModel.difference)원\n증가했어요")
                                 .font(.pretendardFont(.medium,size: 13))
                                 .foregroundColor(.greyScale6)
                         }
@@ -66,14 +65,19 @@ struct AssetView: View {
                     
                 }.frame(height: 200)*/
                 HStack(alignment: .bottom, spacing: 40) {
-                    ForEach(logTransformedData.indices) { index in
-                        VStack {
-                            Spacer()
-                            Rectangle()
-                                .fill(index == self.assetData.count - 1 ? Color.primary1 : Color.greyScale10)
-                                .frame(width: 20, height: CGFloat(((logTransformedData[index].amount - 0) / (log(9999999999) - 0) * 200.0)) + 4)
-                            Text("\(self.assetData[index].month)")
-                                .font(.system(size: 12))
+                    if viewModel.assetList.count == 0 {
+                        Text("다시 확인")
+                            .font(.system(size: 12))
+                    } else {
+                        ForEach(viewModel.assetList.indices) { index in
+                            VStack {
+                                Spacer()
+                                Rectangle()
+                                    .fill(index == viewModel.assetList.count - 1 ? Color.primary1 : Color.greyScale10)
+                                    .frame(width: 20, height: CGFloat(((viewModel.assetList[index].currentAsset - 0) / (log(9999999999) - 0) * 200.0)) + 4)
+                                Text("\(viewModel.assetList[index].month!)")
+                                    .font(.system(size: 12))
+                            }
                         }
                     }
                 }.frame(height: 200)
@@ -84,7 +88,7 @@ struct AssetView: View {
                             Text("현재자산")
                                 .font(.pretendardFont(.medium, size: 14))
                                 .foregroundColor(.greyScale6)
-                            Text("1,100,000원")
+                            Text("\(viewModel.currentAsset)원")
                                 .font(.pretendardFont(.bold, size: 20))
                                 .foregroundColor(.greyScale2)
                         }
@@ -95,17 +99,29 @@ struct AssetView: View {
                         Text("초기자산")
                             .font(.pretendardFont(.medium, size: 14))
                             .foregroundColor(.greyScale6)
-                        Text("1,000,000원")
+                        Text("\(viewModel.initAsset)원")
                             .font(.pretendardFont(.bold, size: 20))
                             .foregroundColor(.greyScale2)
                     }
                 }
-                
                 .padding(.horizontal, 24)
-                
-                
                 Spacer()
             }
+            onAppear{
+                viewModel.initAssetList()
+                let dates = viewModel.calculateAssetMonth()
+                for date in dates {
+                    viewModel.analysisAsset(date: date)
+                }
+            }
+            .onChange(of: viewModel.selectedDate) { newValue in
+                viewModel.initAssetList()
+                let dates = viewModel.calculateAssetMonth()
+                for date in dates {
+                    viewModel.analysisAsset(date: date)
+                }
+            }
+            
         }
         
     }
@@ -113,6 +129,6 @@ struct AssetView: View {
 
 struct AssetView_Previews: PreviewProvider {
     static var previews: some View {
-        AssetView()
+        AssetView(viewModel: AnalysisViewModel())
     }
 }
