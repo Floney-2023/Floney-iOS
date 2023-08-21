@@ -20,14 +20,14 @@ struct SplashScreenView: View {
             //SignInView()
             Group {
                 if userSession.isUserLoggedIn {
-                    /*
+                    
                     if userSession.bookStatus {
                         MainTabView()
                     } else {
                         SendBookCodeView()
-                    }*/
+                    }
                     //AnalysisView(showingTabbar: $showingTabbar, isLoading: $isLoading)
-                    AssetView(viewModel: AnalysisViewModel())
+                    //AssetView(viewModel: AnalysisViewModel())
                 } else {
                     SignInView()
                 }

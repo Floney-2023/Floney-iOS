@@ -114,8 +114,8 @@ class AnalysisViewModel : ObservableObject {
         }
     }
     func analysisExpenseIncome(root: String) {
-        let bookKey = "C9C30C52"
-        //let bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
+
+        let bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
         let request = ExpenseIncomeRequest(bookKey: bookKey, root: root, date: selectedDateStr)
         print(request)
         self.isLoading = true
@@ -160,8 +160,8 @@ class AnalysisViewModel : ObservableObject {
             }.store(in: &cancellableSet)
     }
     func analysisBudget() {
-        let bookKey = "C9C30C52"
-        //let bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
+
+        let bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
         let request = BudgetAssetRequest(bookKey: bookKey, date: selectedDateStr)
  
         self.isLoading = true
@@ -195,8 +195,8 @@ class AnalysisViewModel : ObservableObject {
                 assetMonth = month
             }
         }
-        let bookKey = "C9C30C52"
-        //let bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
+
+        let bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
         let request = BudgetAssetRequest(bookKey: bookKey, date: date)
  
         self.isLoading = true

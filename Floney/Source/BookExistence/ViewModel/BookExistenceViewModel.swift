@@ -37,11 +37,12 @@ class BookExistenceViewModel: ObservableObject {
                     if let book = self.result.bookKey {
                         print("가계부 있음")
                         self.bookKey = book
+                        //let bookKey = "C9C30C52"
                         Keychain.setKeychain(self.bookKey, forKey: .bookKey)
                         AuthenticationService.shared.bookStatus = true
                     } else {
                         print("가계부 없음")
-                        AuthenticationService.shared.bookStatus = false
+                        AuthenticationService.shared.bookStatus = true
                     }
 
                 }
