@@ -29,11 +29,19 @@ struct HomeView: View {
                     Spacer()
                     NavigationLink(destination: SettingBookView(showingTabbar: $showingTabbar, isOnSettingBook: $isOnSettingBook),isActive: $isOnSettingBook){
                         if let bookUrl = viewModel.bookProfileImage {
+                            /*
                             let url = encryptionManager.decrypt(bookUrl, using: encryptionManager.key!)
                             URLImage(url: URL(string: url!)!)
                                 .aspectRatio(contentMode: .fill)
                                 .clipShape(Circle())
                                 .frame(width: 34, height: 34)
+                                .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
+                                .onTapGesture {
+                                    self.showingTabbar = false
+                                    self.isOnSettingBook = true
+                                }*/
+                            Image("book_profile_34")
+                                .clipShape(Circle())
                                 .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
                                 .onTapGesture {
                                     self.showingTabbar = false

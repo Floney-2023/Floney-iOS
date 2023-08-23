@@ -26,7 +26,7 @@ struct ExpenseIncome : Decodable, Hashable {
 
 struct BudgetResponse: Decodable {
     var leftMoney : Double
-    var totalMoney : Double
+    var initBudget : Double
 }
 struct AssetResponse: Decodable {
     var difference : Double

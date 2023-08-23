@@ -175,7 +175,7 @@ class AnalysisViewModel : ObservableObject {
                 } else {
                     self.isLoading = false
                     self.leftBudget = dataResponse.value?.leftMoney ?? 0
-                    self.totalBudget = dataResponse.value?.totalMoney ?? 0
+                    self.totalBudget = dataResponse.value?.initBudget ?? 0
                     if self.totalBudget > 0 {
                         self.budgetPercentage = self.leftBudget / self.totalBudget * 100
                         self.budgetRatio = self.leftBudget / self.totalBudget 

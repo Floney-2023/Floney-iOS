@@ -22,6 +22,8 @@ target 'Floney' do
   # For example, to use Firebase Authentication and Cloud Firestore
   pod 'FirebaseAuth'
   pod 'FirebaseFirestore'
+  pod 'Firebase/Messaging'
+  pod 'Firebase/Core'
   pod 'FirebaseStorage'
   pod 'FirebaseStorageSwift'
   pod 'FirebaseDynamicLinks'

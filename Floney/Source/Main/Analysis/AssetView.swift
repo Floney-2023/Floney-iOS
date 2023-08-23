@@ -9,26 +9,8 @@ import SwiftUI
 
 struct AssetView: View {
     @ObservedObject var viewModel : AnalysisViewModel
-    /*
-    var assetData: [AssetData] = [
-        AssetData(month: "6", amount: 500000.0),
-        AssetData(month: "7", amount: 4000.0),
-        AssetData(month: "8", amount: 6000.0),
-        AssetData(month: "9", amount: 3000.0),
-        AssetData(month: "10", amount: 6500.0),
-        AssetData(month: "이번달", amount: 4800000.0)
-        
-    ]*/
-    //var standardizedData : [AssetData]?
-    //var normalizedData : [AssetData]?
-   
     var body: some View {
-        // Log Transform the asset data
-        //let logTransformedData = assetData.map { AssetData(month: $0.month, amount: log($0.amount)) }
-        // Get the min and max of the log transformed data
-        //let minLogAmount = logTransformedData.map { $0.amount }.min() ?? 0
-        //let maxLogAmount = logTransformedData.map { $0.amount }.max() ?? 1
-       
+
         ScrollView(showsIndicators: false){
             VStack(spacing: 42) {
                 VStack(alignment:.leading, spacing: 0){
@@ -49,32 +31,19 @@ struct AssetView: View {
                     }
                 }
                 .padding(.horizontal, 24)
-                /*
+
                 HStack(alignment: .bottom, spacing: 40) {
-                    ForEach(assetData.indices) { index in
-                        VStack {
-                            Spacer()
-                            Rectangle()
-                                .fill(index == self.assetData.count - 1 ? Color.primary1 : Color.greyScale10)
-                                .frame(width: 20, height: CGFloat(self.assetData[index].amount) / 200.0)
-                            Text("\(self.assetData[index].month)")
-                                .font(.pretendardFont(.medium, size: 12))
-                                .foregroundColor(.greyScale6)
-                        }
-                    }
-                    
-                }.frame(height: 200)*/
-                HStack(alignment: .bottom, spacing: 40) {
-                    if viewModel.assetList.count == 0 {
+                    if viewModel.assetList.isEmpty {
                         Text("다시 확인")
                             .font(.system(size: 12))
                     } else {
+                        let maxAsset = viewModel.assetList.map { $0.currentAsset }.max() ?? 1.0
                         ForEach(viewModel.assetList.indices) { index in
                             VStack {
                                 Spacer()
                                 Rectangle()
                                     .fill(index == viewModel.assetList.count - 1 ? Color.primary1 : Color.greyScale10)
-                                    .frame(width: 20, height: CGFloat(((viewModel.assetList[index].currentAsset - 0) / (log(9999999999) - 0) * 200.0)) + 4)
+                                    .frame(width: 20, height: CGFloat((viewModel.assetList[index].currentAsset / maxAsset) * 200.0) + 4)
                                 Text("\(viewModel.assetList[index].month!)")
                                     .font(.system(size: 12))
                             }
