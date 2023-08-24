@@ -39,6 +39,7 @@ class AnalysisViewModel : ObservableObject {
     @Published var totalBudget : Double = 0
     @Published var budgetPercentage : Double = 0
     @Published var budgetRatio : Double = 0
+    @Published var dailyAvailableMoney : Double = 0
     
     //MARK: 자산 분석
     @Published var monthList : [String] = []
@@ -176,12 +177,47 @@ class AnalysisViewModel : ObservableObject {
                     self.isLoading = false
                     self.leftBudget = dataResponse.value?.leftMoney ?? 0
                     self.totalBudget = dataResponse.value?.initBudget ?? 0
-                    if self.totalBudget > 0 {
-                        self.budgetPercentage = self.leftBudget / self.totalBudget * 100
-                        self.budgetRatio = self.leftBudget / self.totalBudget 
+                    if self.totalBudget > 0 && self.leftBudget > 0 {
+                        self.budgetRatio = (self.totalBudget - self.leftBudget) / self.totalBudget
+                        self.budgetPercentage = self.budgetRatio * 100
+                    } else if self.leftBudget == 0 {
+                        self.budgetPercentage = 0
+                        self.budgetRatio = 0
+                    } else {
+                        self.budgetPercentage = 100
+                        self.budgetRatio = 1
                     }
+                    
+                    if self.leftBudget > 0 {
+                        self.calcDailyAvailableMoney()
+                    }
+                    print("left budget : \(self.leftBudget)")
+                    print("total budget : \(self.totalBudget)")
+                    print("budget percentage : \(self.budgetPercentage)")
+                    print("budget ratio : \(self.budgetRatio)")
+                    
                 }
             }.store(in: &cancellableSet)
+    }
+    func calcDailyAvailableMoney() {
+        let calendar = Calendar.current
+        let today = Date()
+
+        // 오늘의 날짜 구하기
+        let dayOfMonth = calendar.component(.day, from: today)
+
+        // 현재 달의 마지막 날짜 구하기
+        let range = calendar.range(of: .day, in: .month, for: today)
+        let lastDayOfMonth = range?.count ?? 30  // 기본값으로 30일을 사용합니다.
+
+        // 남은 날짜 계산
+        let remainingDays = lastDayOfMonth - dayOfMonth
+
+        // 하루에 사용할 수 있는 금액 계산
+        let dailyAvailableMoney = self.leftBudget / Double(remainingDays)
+
+        print("하루에 사용할 수 있는 금액은 \(dailyAvailableMoney)원 입니다.")
+        self.dailyAvailableMoney = dailyAvailableMoney
     }
     func analysisAsset(date: String) {
         let dateFormatter = DateFormatter()
@@ -212,6 +248,7 @@ class AnalysisViewModel : ObservableObject {
                     var asset = dataResponse.value ?? AssetResponse(difference: 0, initAsset: 0, currentAsset: 0)
                     asset.month = assetMonth  // 해당 월을 AssetResponse에 저장합니다.
                     self.assetList.append(asset)
+                    self.assetList = self.assetList.sorted { $0.month! < $1.month! }
                     if date == self.selectedDateStr {
                         self.difference = dataResponse.value?.difference ?? 0
                         self.currentAsset = dataResponse.value?.currentAsset ?? 0
@@ -246,21 +283,27 @@ class AnalysisViewModel : ObservableObject {
     }
     
     // asset의 달을 계산하는 함수
-    func calculateAssetMonth() -> [String] {
-        var dates : [String] = []
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd"
-        
-        for i in 0..<6 {
-            if let newDate = Calendar.current.date(byAdding: .month, value: -i, to: selectedDate) {
-                let dateString = formatter.string(from: newDate)
-                let components = Calendar.current.dateComponents([.year, .month], from: newDate)
-                if let year = components.year, let month = components.month {
-                    dates.append("\(year)-\(String(format: "%02d", month))-01")
+    func calculateAssetMonth() {
+        DispatchQueue.main.async {
+            self.assetList = []
+            var dates : [String] = []
+            let formatter = DateFormatter()
+            formatter.dateFormat = "yyyy-MM-dd"
+            for i in 0..<6 {
+                if let newDate = Calendar.current.date(byAdding: .month, value: -i, to: self.selectedDate) {
+                    let dateString = formatter.string(from: newDate)
+                    let components = Calendar.current.dateComponents([.year, .month], from: newDate)
+                    if let year = components.year, let month = components.month {
+                        dates.append("\(year)-\(String(format: "%02d", month))-01")
+                    }
                 }
             }
+            self.monthList = dates
+            
+            for date in self.monthList {
+                self.analysisAsset(date: date)
+            }
         }
-        return dates
     }
     
     func createAlert( with error: NetworkError) {

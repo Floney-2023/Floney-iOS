@@ -20,18 +20,28 @@ struct BudgetView: View {
                     .padding(.bottom,10)
                 HStack{
                     VStack(alignment:.leading, spacing: 10) {
-                        Text("\(viewModel.budgetPercentage)%를 사용했어요")
+                        Text("\(Int(viewModel.budgetPercentage))%를 사용했어요")
                             .font(.pretendardFont(.bold,size: 22))
                             .foregroundColor(.greyScale1)
-                        Text("남은 기간동안 하루에\n40,0000원을 사용할 수 있어요")
-                            .font(.pretendardFont(.medium,size: 13))
-                            .foregroundColor(.greyScale6)
+                        
+                        
+                        let calendar = Calendar.current
+                        let today = Date()
+                        let currentYear = calendar.component(.year, from: today)
+                        let currentMonth = calendar.component(.month, from: today)
+
+                        let selectedYear = calendar.component(.year, from: viewModel.selectedDate)
+                        let selectedMonth = calendar.component(.month, from: viewModel.selectedDate)
+                        if currentYear == selectedYear && currentMonth == selectedMonth {
+                            Text("남은 기간동안 하루에\n\(Int(viewModel.dailyAvailableMoney))원을 사용할 수 있어요")
+                                .font(.pretendardFont(.medium,size: 13))
+                                .foregroundColor(.greyScale6)
+                        }
                     }
                     Spacer()
                     Image("budget")
                 }
             }.padding(.bottom, 42)
-                .padding(.horizontal, 24)
         
             ZStack {
                 
@@ -48,6 +58,7 @@ struct BudgetView: View {
                     .frame(width: 200, height: 200)
                     .rotationEffect(.degrees(-180))
                     .padding()
+                
                 VStack(spacing:-10) {
                     switch viewModel.budgetPercentage {
                     case 0 :
@@ -83,7 +94,7 @@ struct BudgetView: View {
                             Text("줄여볼까요?")
                         }
                         
-                    case 80..<100 :
+                    case 80...100 :
                         Image("img_budget_80~99")
                             .resizable()
                             .aspectRatio(contentMode: .fit)
@@ -116,7 +127,7 @@ struct BudgetView: View {
                     Text("남은 금액")
                         .font(.pretendardFont(.medium, size: 14))
                         .foregroundColor(.greyScale6)
-                    Text("\(viewModel.leftBudget)원")
+                    Text("\(Int(viewModel.leftBudget))원")
                         .font(.pretendardFont(.bold, size: 20))
                         .foregroundColor(.greyScale2)
                 }.frame(maxWidth: .infinity)
@@ -125,11 +136,11 @@ struct BudgetView: View {
                     Text("총 예산")
                         .font(.pretendardFont(.medium, size: 14))
                         .foregroundColor(.greyScale6)
-                    Text("\(viewModel.totalBudget)원")
+                    Text("\(Int(viewModel.totalBudget))원")
                         .font(.pretendardFont(.bold, size: 20))
                         .foregroundColor(.greyScale2)
                 }.frame(maxWidth: .infinity)
-            }//.padding(.horizontal, 24)
+            }
                 .frame(maxWidth: .infinity)
                 .onAppear{
                     viewModel.analysisBudget()

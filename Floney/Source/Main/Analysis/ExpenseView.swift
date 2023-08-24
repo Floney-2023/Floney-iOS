@@ -80,7 +80,7 @@ struct ExpenseView: View {
             
             Spacer()
             
-        }.padding(.horizontal,24)
+        }//.padding(.horizontal,24)
             .onAppear{
                 viewModel.analysisExpenseIncome(root: "지출")
             }

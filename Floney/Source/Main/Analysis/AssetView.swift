@@ -10,7 +10,6 @@ import SwiftUI
 struct AssetView: View {
     @ObservedObject var viewModel : AnalysisViewModel
     var body: some View {
-
         ScrollView(showsIndicators: false){
             VStack(spacing: 42) {
                 VStack(alignment:.leading, spacing: 0){
@@ -18,36 +17,72 @@ struct AssetView: View {
                         .font(.pretendardFont(.bold,size: 22))
                         .foregroundColor(.greyScale1)
                     HStack{
-                        VStack(alignment:.leading, spacing: 10) {
-                            Text("지난달보다 증가했어요")
-                                .font(.pretendardFont(.bold,size: 22))
-                                .foregroundColor(.greyScale1)
-                            Text("지난달 대비 \(viewModel.difference)원\n증가했어요")
-                                .font(.pretendardFont(.medium,size: 13))
-                                .foregroundColor(.greyScale6)
+                        if viewModel.difference > 0 {
+                            VStack(alignment:.leading, spacing: 10) {
+        
+                                Text("지난달보다 증가했어요")
+                                    .font(.pretendardFont(.bold,size: 22))
+                                    .foregroundColor(.greyScale1)
+                                Text("지난달 대비 \(Int(viewModel.difference))원\n증가했어요")
+                                    .font(.pretendardFont(.medium,size: 13))
+                                    .foregroundColor(.greyScale6)
+                                
+                            }
+                            Spacer()
+                            Image("asset")
+                        } else if viewModel.difference < 0 {
+                            VStack(alignment:.leading, spacing: 10) {
+                                Text("지난달보다 감소했어요")
+                                    .font(.pretendardFont(.bold,size: 22))
+                                    .foregroundColor(.greyScale1)
+                                Text("지난달 대비 \(Int(abs(viewModel.difference)))원\n감소했어요")
+                                    .font(.pretendardFont(.medium,size: 13))
+                                    .foregroundColor(.greyScale6)
+                            }
+                            Spacer()
+                            Image("asset_decreased")
+                        } else {
+                            VStack(alignment:.leading, spacing: 10) {
+                                Text("지난달과 같아요")
+                                    .font(.pretendardFont(.bold,size: 22))
+                                    .foregroundColor(.greyScale1)
+                                Text("지난달 대비 0원\n증가했어요")
+                                    .font(.pretendardFont(.medium,size: 13))
+                                    .foregroundColor(.greyScale6)
+                            }
+                            Spacer()
+                            Image("asset")
                         }
-                        Spacer()
-                        Image("asset")
+                        
                     }
                 }
-                .padding(.horizontal, 24)
+                //.padding(.horizontal, 24)
 
                 HStack(alignment: .bottom, spacing: 40) {
-                    if viewModel.assetList.isEmpty {
-                        Text("다시 확인")
-                            .font(.system(size: 12))
-                    } else {
+                    if viewModel.assetList.count == 6 {
+                        // assetList를 month 기준으로 정렬합니다.
                         let maxAsset = viewModel.assetList.map { $0.currentAsset }.max() ?? 1.0
+                        let minHeight: CGFloat = 4.0
+                        let maxHeight: CGFloat = 200.0
+
                         ForEach(viewModel.assetList.indices) { index in
                             VStack {
                                 Spacer()
+                                let assetValue = viewModel.assetList[index].currentAsset
+                                let barHeight: CGFloat = assetValue <= 0 ? minHeight : (maxHeight - minHeight) * CGFloat(assetValue / maxAsset) + minHeight
                                 Rectangle()
                                     .fill(index == viewModel.assetList.count - 1 ? Color.primary1 : Color.greyScale10)
-                                    .frame(width: 20, height: CGFloat((viewModel.assetList[index].currentAsset / maxAsset) * 200.0) + 4)
+                                    .frame(width: 20, height: barHeight)
+                                    .cornerRadius(4)
+                                //index == viewModel.assetList.count - 1 ? "이번달" :
                                 Text("\(viewModel.assetList[index].month!)")
-                                    .font(.system(size: 12))
+                                    .font(.pretendardFont(.medium, size: 12))
+                                    .foregroundColor(.greyScale6)
                             }
                         }
+                    } else {
+                        Text("다시 확인")
+                            .font(.system(size: 12))
                     }
                 }.frame(height: 200)
                 
@@ -57,7 +92,7 @@ struct AssetView: View {
                             Text("현재자산")
                                 .font(.pretendardFont(.medium, size: 14))
                                 .foregroundColor(.greyScale6)
-                            Text("\(viewModel.currentAsset)원")
+                            Text("\(Int(viewModel.currentAsset))원")
                                 .font(.pretendardFont(.bold, size: 20))
                                 .foregroundColor(.greyScale2)
                         }
@@ -68,29 +103,26 @@ struct AssetView: View {
                         Text("초기자산")
                             .font(.pretendardFont(.medium, size: 14))
                             .foregroundColor(.greyScale6)
-                        Text("\(viewModel.initAsset)원")
+                        Text("\(Int(viewModel.initAsset))원")
                             .font(.pretendardFont(.bold, size: 20))
                             .foregroundColor(.greyScale2)
                     }
                 }
-                .padding(.horizontal, 24)
+                
                 Spacer()
             }
-            onAppear{
-                viewModel.initAssetList()
-                let dates = viewModel.calculateAssetMonth()
-                for date in dates {
-                    viewModel.analysisAsset(date: date)
-                }
+            .onAppear{
+                print("in asset view selectedDate : \(viewModel.selectedDate)")
+             
+                viewModel.calculateAssetMonth()
+               
             }
             .onChange(of: viewModel.selectedDate) { newValue in
-                viewModel.initAssetList()
-                let dates = viewModel.calculateAssetMonth()
-                for date in dates {
-                    viewModel.analysisAsset(date: date)
-                }
+                print("in asset view selectedDate : \(viewModel.selectedDate)")
+       
+                viewModel.calculateAssetMonth()
+                
             }
-            
         }
         
     }

@@ -25,7 +25,6 @@ struct AnalysisView: View {
     var body: some View {
         ZStack{
             VStack(spacing:24){
-                
                 HStack {
                     Text("분석")
                         .font(.pretendardFont(.bold, size: 22))
@@ -78,18 +77,20 @@ struct AnalysisView: View {
                 .cornerRadius(8)
                 .padding(.horizontal, 16)
                 
-                switch selectedOptions {
-                case 0:
-                    ExpenseView(viewModel: viewModel)
-                case 1:
-                    IncomeView(viewModel: viewModel)
-                case 2:
-                    BudgetView(viewModel: viewModel)
-                case 3:
-                    AssetView(viewModel: viewModel)
-                default:
-                    ExpenseView(viewModel: viewModel)
-                }
+                VStack {
+                    switch selectedOptions {
+                    case 0:
+                        ExpenseView(viewModel: viewModel)
+                    case 1:
+                        IncomeView(viewModel: viewModel)
+                    case 2:
+                        BudgetView(viewModel: viewModel)
+                    case 3:
+                        AssetView(viewModel: viewModel)
+                    default:
+                        ExpenseView(viewModel: viewModel)
+                    }
+                }.padding(.horizontal, 20)
                 
                 Spacer()
                 
