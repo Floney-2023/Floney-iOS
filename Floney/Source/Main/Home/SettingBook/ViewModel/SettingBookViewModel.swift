@@ -27,6 +27,8 @@ class SettingBookViewModel : ObservableObject {
     @Published var bookName = ""
     @Published var startDay = ""
     @Published var carryOver = true
+    @Published var stateOfCarryOver = false
+
     
     @Published var changedName = ""
     @Published var encryptedImageUrl : String = ""
@@ -183,6 +185,24 @@ class SettingBookViewModel : ObservableObject {
                     print("Setting Asset successfully changed.")
                 case .failure(let error):
                     print("Error changing nickname: \(error)")
+                }
+            } receiveValue: { data in
+                // TODO: Handle the received data if necessary.
+            }
+            .store(in: &cancellableSet)
+    }
+    func setCarryOver(status : Bool)  {
+        bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
+        let request = SetCarryOver(bookKey: bookKey, status: status)
+        dataManager.setCarryOver(parameters: request)
+            .sink { completion in
+                switch completion {
+                case .finished:
+                    print("Setting Carry Over successfully changed.")
+                    self.getBookInfo()
+                case .failure(let error):
+                    print("Error Settig Carry Over: \(error)")
+                   
                 }
             } receiveValue: { data in
                 // TODO: Handle the received data if necessary.

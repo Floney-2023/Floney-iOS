@@ -423,7 +423,7 @@ struct SetInitialAssetBottomSheet: View {
 struct CarriedOverBottomSheet: View {
     let buttonHeight: CGFloat = 46
     @Binding var isShowing: Bool
-    @Binding var onOff : Bool
+    @ObservedObject var viewModel :SettingBookViewModel
     var body: some View{
         ZStack(alignment: .bottom) {
             if (isShowing) {
@@ -485,34 +485,36 @@ struct CarriedOverBottomSheet: View {
                     .frame(maxWidth: .infinity)
                     HStack {
                         Button {
-                            self.onOff = false
+                            //self.onOff = false
+                            viewModel.setCarryOver(status: false)
                         } label: {
                             Text("OFF")
                                 .font(.pretendardFont(.medium, size: 14))
-                                .foregroundColor(onOff ? .greyScale8 : .primary2)
+                                .foregroundColor(viewModel.carryOver ? .greyScale8 : .primary2)
                                 .frame(alignment: .center)
                         }
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 16)
                         .overlay(
                             RoundedRectangle(cornerRadius: 12)
-                                .stroke(onOff ? Color.greyScale8 : Color.primary2, lineWidth: 1) // Set the border
+                                .stroke(viewModel.carryOver ? Color.greyScale8 : Color.primary2, lineWidth: 1) // Set the border
                         )
                         .frame(height: buttonHeight)
                         
                         Button {
-                            self.onOff = true
+                            //self.onOff = true
+                            viewModel.setCarryOver(status: true)
                         } label: {
                             Text("ON")
                                 .font(.pretendardFont(.medium, size: 14))
-                                .foregroundColor(onOff ? .primary2 : .greyScale8)
+                                .foregroundColor(viewModel.carryOver ? .primary2 : .greyScale8)
                                 .frame(alignment: .center)
                         }
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 16)
                         .overlay(
                             RoundedRectangle(cornerRadius: 12)
-                                .stroke(onOff ? Color.primary2 : Color.greyScale8, lineWidth: 1) // Set the border
+                                .stroke(viewModel.carryOver ? Color.primary2 : Color.greyScale8, lineWidth: 1) // Set the border
                         )
                         .frame(height: buttonHeight)
                         
@@ -527,6 +529,9 @@ struct CarriedOverBottomSheet: View {
                     Color(.white)
                 )
                 .cornerRadius(12, corners: [.topLeft, .topRight])
+                .onChange(of: viewModel.carryOver) { newValue in
+                    isShowing = false
+                }
             } // if
         } //ZStack
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
@@ -726,8 +731,34 @@ struct DayLinesBottomSheet: View {
                     }
                     .padding(.top, 24)
                     
-                    ScrollView {
-                        VStack {
+                    VStack {
+                    ScrollView(showsIndicators: false) {
+                       
+                            if Calendar.current.component(.day, from: viewModel.selectedDate) == 1 {
+                                
+                                if viewModel.dayLineCarryOver.carryOverStatus {
+                                    HStack {
+                                        if viewModel.seeProfileImg {
+                                            Image("book_profile_32")
+                                                .clipShape(Circle())
+                                                .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
+                                        }
+                                        VStack(alignment: .leading, spacing: 3){
+                                            Text("이월")
+                                                .font(.pretendardFont(.semiBold, size: 14))
+                                                .foregroundColor(.greyScale2)
+                                            Text("-")
+                                                .font(.pretendardFont(.medium, size: 12))
+                                                .foregroundColor(.greyScale6)
+                                        }
+                                        Spacer()
+                                        Text("\(Int(viewModel.dayLineCarryOver.carryOverMoney))")
+                                            .font(.pretendardFont(.semiBold, size: 16))
+                                            .foregroundColor(.greyScale2)
+                                    }
+                                    
+                                }
+                            }
                             if viewModel.dayLines.count == 0 {
                                 Image("no_line")
                                 Text("내역이 없습니다.")
@@ -804,16 +835,15 @@ struct DayLinesBottomSheet: View {
                                 } //ForEach
                             }
   
-                        } // VStack
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .frame(height: 200)
-                        //.background(Color.red)
-                        .onAppear {
-                            viewModel.dayLinesDate = viewModel.selectedDateStr
-                            viewModel.getDayLines()
-                        }
-                    } //ScrollView
+                        } // Scroll View
+                        
+                    } //VStack
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    //.frame(height: 200)
+                    .onAppear {
+                        viewModel.dayLinesDate = viewModel.selectedDateStr
+                        viewModel.getDayLines()
+                    }
                     
                 } // VStack
                 .padding(.horizontal, 20)

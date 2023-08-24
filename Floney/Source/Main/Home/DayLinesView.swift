@@ -73,6 +73,8 @@ struct DayLinesDetailView : View {
     var encryptionManager = CryptManager()
     @State var showingDetail = false
     @State private var selectedIndex = 0
+    @State var selectedToggleTypeIndex = 0
+    @State var selectedToggleType = ""
     var body: some View {
         VStack(spacing:34) {
             HStack {
@@ -89,6 +91,31 @@ struct DayLinesDetailView : View {
             }
             VStack(spacing:38) {
                 ScrollView(showsIndicators: false) {
+                    if Calendar.current.component(.day, from: viewModel.selectedDate) == 1 {
+                        
+                        if viewModel.dayLineCarryOver.carryOverStatus {
+                            HStack {
+                                if viewModel.seeProfileImg {
+                                    Image("book_profile_32")
+                                        .clipShape(Circle())
+                                        .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
+                                }
+                                VStack(alignment: .leading, spacing: 3){
+                                    Text("이월")
+                                        .font(.pretendardFont(.semiBold, size: 14))
+                                        .foregroundColor(.greyScale2)
+                                    Text("-")
+                                        .font(.pretendardFont(.medium, size: 12))
+                                        .foregroundColor(.greyScale6)
+                                }
+                                Spacer()
+                                Text("\(Int(viewModel.dayLineCarryOver.carryOverMoney))")
+                                    .font(.pretendardFont(.semiBold, size: 16))
+                                    .foregroundColor(.greyScale2)
+                            }
+                            
+                        }
+                    }
                     if viewModel.dayLines.count == 0 {
                         Image("no_line")
                         Text("내역이 없습니다.")
@@ -118,7 +145,7 @@ struct DayLinesDetailView : View {
                                                 URLImage(url: URL(string: url!)!)
                                                     .aspectRatio(contentMode: .fill)
                                                     .clipShape(Circle())
-                                                    .frame(width: 34, height: 34)
+                                                    .frame(width: 32, height: 32)
                                                     .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
                                                 
                                             }
@@ -165,19 +192,33 @@ struct DayLinesDetailView : View {
                             .onTapGesture {
                                 selectedIndex = index
                                 showingDetail = true
+                                if viewModel.dayLines[index]?.assetType == "OUTCOME" {
+                                    selectedToggleTypeIndex = 0
+                                    selectedToggleType = "지출"
+                                } else if viewModel.dayLines[index]?.assetType == "INCOME" {
+                                    selectedToggleTypeIndex = 1
+                                    selectedToggleType = "수입"
+                                } else if viewModel.dayLines[index]?.assetType == "BANK" {
+                                    selectedToggleTypeIndex = 2
+                                    selectedToggleType = "이체"
+                                }
                             }
                             .fullScreenCover(isPresented: $showingDetail) {
                                 if let line = viewModel.dayLines[selectedIndex] {
+                                    
                                     NavigationView {
                                         AddView(
                                             isPresented: $showingDetail,
-                                            viewDiabled: true,
                                             mode: "check",
                                             date: viewModel.selectedDateStr,
                                             money: String(line.money),
                                             assetType: line.category[0],
                                             category: line.category[1],
-                                            content: line.content
+                                            content: line.content,
+                                            toggleOnOff: line.exceptStatus,
+                                            toggleType: selectedToggleType,
+                                            selectedOptions: selectedToggleTypeIndex,
+                                            lineId : line.id
                                         )
                                     }
                                 }

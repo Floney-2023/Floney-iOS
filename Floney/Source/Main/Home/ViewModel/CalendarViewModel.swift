@@ -11,7 +11,7 @@ import Combine
 class CalendarViewModel: ObservableObject {
     var tokenViewModel = TokenReissueViewModel()
     
-    @Published var result : CalendarResponse = CalendarResponse(totalIncome: 0, totalOutcome: 0, expenses: [])
+    @Published var result : CalendarResponse = CalendarResponse(totalIncome: 0, totalOutcome: 0, expenses: [], carryOverInfo: CarryOverInfo(carryOverStatus: false, carryOverMoney: 0))
     @Published var expenses : [CalendarExpenses] = []
     @Published var calendarLoadingError: String = ""
     @Published var showAlert: Bool = false
@@ -46,12 +46,13 @@ class CalendarViewModel: ObservableObject {
     
     //MARK: Day Lines
     @Published var dayLinesDate: String = ""
-    @Published var dayLinesResult : DayLinesResponse = DayLinesResponse(dayLinesResponse: [], totalExpense: [], seeProfileImg: true)
+    @Published var dayLinesResult : DayLinesResponse = DayLinesResponse(dayLinesResponse: [], totalExpense: [], carryOverInfo: CarryOverInfo(carryOverStatus: false, carryOverMoney: 0), seeProfileImg: true)
     @Published var dayLinesTotalIncome : Int = 0
     @Published var dayLinesTotalOutcome : Int = 0
     @Published var dayLines : [DayLinesResults?] = []
     @Published var seeProfileImg : Bool = true
     @Published var userImages : [String?]?
+    @Published var dayLineCarryOver : CarryOverInfo = CarryOverInfo(carryOverStatus: false, carryOverMoney: 0)
     
     //MARK: book profile image
     @Published var bookInfoResult = BookInfoResponse(bookImg: "",bookName: "", startDay: "", seeProfileStatus: true, carryOver: true, ourBookUsers: [])
@@ -84,7 +85,37 @@ class CalendarViewModel: ObservableObject {
                     self.expenses = self.result.expenses
                     self.totalIncome = self.result.totalIncome
                     self.totalOutcome = self.result.totalOutcome
-                    
+                    // 이월 내역이 있음
+                    if self.result.carryOverInfo.carryOverStatus {
+                        if self.result.carryOverInfo.carryOverMoney > 0 {
+                            self.totalIncome += Int(self.result.carryOverInfo.carryOverMoney)
+                            let calendar = Calendar.current
+                            let components = calendar.dateComponents([.year, .month], from: self.selectedDate)
+                            
+                            if let year = components.year, let month = components.month {
+                                let firstDayOfMonthString = "\(year)-\(String(format: "%02d", month))-01"
+                                
+                                if let index = self.expenses.firstIndex(where: { $0.date == firstDayOfMonthString && $0.assetType == "INCOME" }) {
+                                    self.expenses[index].money += Int(self.result.carryOverInfo.carryOverMoney)
+                                }
+                            }
+                            
+                        } else if self.result.carryOverInfo.carryOverMoney < 0 {
+                            self.totalOutcome += Int(self.result.carryOverInfo.carryOverMoney)
+                            let calendar = Calendar.current
+                            let components = calendar.dateComponents([.year, .month], from: self.selectedDate)
+                            
+                            if let year = components.year, let month = components.month {
+                                let firstDayOfMonthString = "\(year)-\(String(format: "%02d", month))-01"
+                                
+                                if let index = self.expenses.firstIndex(where: { $0.date == firstDayOfMonthString && $0.assetType == "OUTCOME" }) {
+                                    self.expenses[index].money += Int(abs(self.result.carryOverInfo.carryOverMoney))
+                                }
+                            }
+                        }
+                        
+                        
+                    }
                 }
             }.store(in: &cancellableSet)
     }
@@ -112,7 +143,18 @@ class CalendarViewModel: ObservableObject {
                     self.dayLines = self.dayLinesResult.dayLinesResponse
                     self.seeProfileImg = self.dayLinesResult.seeProfileImg
                     self.userImages = self.dayLines.compactMap { $0?.img }
+                    
+                    print(self.dayLinesResult.carryOverInfo)
+                    self.dayLineCarryOver = self.dayLinesResult.carryOverInfo
+                    if self.dayLineCarryOver.carryOverStatus {
+                        if self.dayLineCarryOver.carryOverMoney > 0 {
+                            self.dayLinesTotalIncome += Int(self.dayLineCarryOver.carryOverMoney)
+                        } else if self.dayLineCarryOver.carryOverMoney < 0 {
+                            self.dayLinesTotalOutcome += Int(self.dayLineCarryOver.carryOverMoney)
+                        }
+                    }
                 }
+                
             }.store(in: &cancellableSet)
     }
     //MARK: server

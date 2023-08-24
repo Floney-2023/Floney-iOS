@@ -31,3 +31,7 @@ struct SetAssetRequest : Encodable {
     var bookKey : String
     var asset : Float
 }
+struct SetCarryOver : Encodable {
+    var bookKey : String
+    var status : Bool
+}

@@ -9,7 +9,6 @@ import SwiftUI
 import Combine
 struct AddView: View {
     @Binding var isPresented: Bool
-    @State var viewDiabled : Bool = false
     @State var mode : String = "add"
     
     @StateObject var viewModel = AddViewModel()
@@ -37,6 +36,8 @@ struct AddView: View {
     
     @State var options = ["지출", "수입", "이체"]
     @State var selectedOptions = 0
+    
+    @State var lineId = 0
         
     @ObservedObject private var keyboardResponder = KeyboardResponder()
     var body: some View {
@@ -95,7 +96,7 @@ struct AddView: View {
                                     money = String(digits.dropLast())
                                 }
                             }
-                            .disabled(viewDiabled)
+                    
                                                     
                     } // 금액 VStack
                     
@@ -115,6 +116,7 @@ struct AddView: View {
                                         withAnimation(.interactiveSpring()) {
                                             selectedOptions = index
                                             assetType = "자산을 선택하세요."
+                                            category = "분류를 선택하세요."
                                             toggleType = options[selectedOptions]
                                         }
                                     }
@@ -129,7 +131,7 @@ struct AddView: View {
                     .frame(maxWidth: .infinity)
                     .frame(height: 38)
                     .cornerRadius(10)
-                    .disabled(viewDiabled)
+              
                     
                     //MARK: 날짜/자산/분류/내용/제외여부
                     VStack(spacing:44) {
@@ -162,7 +164,7 @@ struct AddView: View {
                                 print("\(self.categories)")
                                 self.isShowingBottomSheet.toggle()
                             }
-                            .disabled(viewDiabled)
+                    
                         }
                   
                         
@@ -183,7 +185,7 @@ struct AddView: View {
                             
                             self.isShowingBottomSheet.toggle()
                         }
-                        .disabled(viewDiabled)
+
                         
                         HStack {
                             Text("내용")
@@ -209,7 +211,7 @@ struct AddView: View {
                                 .foregroundColor(.greyScale2)
                             //.background(Color.red)
                         }
-                        .disabled(viewDiabled)
+
                         
                         if selectedOptions != 2 {
                             HStack {
@@ -221,7 +223,7 @@ struct AddView: View {
                                     
                                 }.padding(.trailing, 6)
                             }
-                            .disabled(viewDiabled)
+                         
                         }
                         
                     }.padding(.leading, 10)
@@ -270,13 +272,9 @@ struct AddView: View {
                     //MARK: 삭제/저장하기 버튼
                     HStack(spacing:0) {
                         Button {
-                            if viewDiabled {
-                                
-                            } else {
-                                self.viewDiabled = true
-                            }
+                            
                         } label: {
-                            Text(viewDiabled ? "삭제" : "취소")
+                            Text("삭제")
                                 .font(.pretendardFont(.bold, size:14))
                                 .foregroundColor(.white)
                         }
@@ -285,14 +283,9 @@ struct AddView: View {
                         .padding()
                         .background(Color.greyScale2)
                         Button {
-                            if viewDiabled {
-                                self.viewDiabled = false
-                            } else {
-                                self.viewDiabled = true
-                            }
                             
                         } label: {
-                            Text(viewDiabled ? "수정하기" : "저장하기")
+                            Text("저장하기")
                                 .font(.pretendardFont(.bold, size:14))
                                 .foregroundColor(.white)
                         }
