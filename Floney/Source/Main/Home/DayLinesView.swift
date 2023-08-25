@@ -202,6 +202,11 @@ struct DayLinesDetailView : View {
                                     selectedToggleTypeIndex = 2
                                     selectedToggleType = "이체"
                                 }
+                                print("지출 수입 이체 인덱스 : \(selectedToggleTypeIndex)")
+                                print("지출 수입 이체 : \(selectedToggleType)")
+                                print("금액 : \(viewModel.dayLines[index]?.money)")
+                                print("제외 여부 : \(viewModel.dayLines[index]?.exceptStatus)")
+                                print("PK : \(viewModel.dayLines[index]?.id)")
                             }
                             .fullScreenCover(isPresented: $showingDetail) {
                                 if let line = viewModel.dayLines[selectedIndex] {

@@ -272,7 +272,8 @@ struct AddView: View {
                     //MARK: 삭제/저장하기 버튼
                     HStack(spacing:0) {
                         Button {
-                            
+                            viewModel.bookLineKey = lineId // PK
+                            viewModel.deleteLine()
                         } label: {
                             Text("삭제")
                                 .font(.pretendardFont(.bold, size:14))
@@ -283,7 +284,23 @@ struct AddView: View {
                         .padding()
                         .background(Color.greyScale2)
                         Button {
+                            viewModel.bookLineKey = lineId // PK
+                            viewModel.money = money // 금액
+                            viewModel.lineDate = date // 날짜
+                            viewModel.flow = toggleType // 수입, 지출, 이체
+                            viewModel.asset = assetType // 자산 타입
+                            viewModel.line = category // 분류 타입
+                            viewModel.description = content // 내용
+                            viewModel.except = toggleOnOff // 제외 여부
                             
+                            print(viewModel.money)
+                            print(viewModel.lineDate)
+                            print(viewModel.flow)
+                            print(viewModel.asset)
+                            print(viewModel.line)
+                            print(viewModel.description)
+                            print(viewModel.except)
+                            viewModel.changeLine()
                         } label: {
                             Text("저장하기")
                                 .font(.pretendardFont(.bold, size:14))

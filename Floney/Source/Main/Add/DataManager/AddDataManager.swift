@@ -13,6 +13,8 @@ protocol AddProtocol {
     func postLines(_ parameters:LinesRequest) -> AnyPublisher<DataResponse<LinesResponse, NetworkError>, Never>
     func postCategory(_ parameters:AddCategoryRequest) -> AnyPublisher<DataResponse<AddCategoryResponse, NetworkError>, Never>
     func deleteCategory(parameters: DeleteCategoryRequest) -> AnyPublisher<Void, NetworkError>
+    func deleteLine(parameters: DeleteLineRequest) -> AnyPublisher<Void, NetworkError>
+    func changeLine(parameters: ChangeLineRequest) -> AnyPublisher<DataResponse<LinesResponse, NetworkError>, Never>
 }
 
 class AddService {
@@ -124,6 +126,64 @@ extension AddService: AddProtocol {
         }
         .eraseToAnyPublisher()
         
+    }
+    func deleteLine(parameters: DeleteLineRequest) -> AnyPublisher<Void, NetworkError> {
+        let bookLineKey = String(parameters.bookLineKey)
+        let url = "\(Constant.BASE_URL)/books/lines/delete?bookLineKey=\(bookLineKey)"
+       
+        let token = Keychain.getKeychainValue(forKey: .accessToken)!
+        
+        return AF.request(url,
+                          method: .delete,
+                          parameters: parameters,
+                          encoder: JSONParameterEncoder(),
+                          headers: ["Authorization":"Bearer \(token)"])
+        .validate()
+        .publishData()
+        .tryMap { result in
+            // Check the status code
+            if let statusCode = result.response?.statusCode {
+                print("Status Code: \(statusCode)")
+                if statusCode == 200 {
+                    return // Success, return
+                } else {
+                    // Handle error based on status code
+                    let backendError = result.data.flatMap { try? JSONDecoder().decode(BackendError.self, from: $0)}
+                    if let backendError = backendError {
+                        throw NetworkError(initialError: result.error!, backendError: backendError)
+                    } else {
+                        throw NetworkError(initialError: result.error!, backendError: nil)
+                    }
+                }
+            } else {
+                throw NetworkError(initialError: result.error!, backendError: nil)
+            }
+        }
+        .mapError { error in
+            return error as! NetworkError
+        }
+        .eraseToAnyPublisher()
+        
+    }
+    func changeLine(parameters:ChangeLineRequest) -> AnyPublisher<DataResponse<LinesResponse, NetworkError>, Never> {
+        let url = "\(Constant.BASE_URL)/books/lines/change"
+        print("\(url)")
+        let token = Keychain.getKeychainValue(forKey: .accessToken)!
+        return AF.request(url,
+                          method: .post,
+                          parameters: parameters,
+                          encoder: JSONParameterEncoder(),
+                          headers: ["Authorization":"Bearer \(token)"])
+            .validate()
+            .publishDecodable(type: LinesResponse.self)
+            .map { response in
+                response.mapError { error in
+                    let backendError = response.data.flatMap { try? JSONDecoder().decode(BackendError.self, from: $0)}
+                    return NetworkError(initialError: error, backendError: backendError)
+                }
+            }
+            .receive(on: DispatchQueue.main)
+            .eraseToAnyPublisher()
     }
 
 }

@@ -17,3 +17,19 @@ struct LinesRequest : Encodable {
     var except: Bool
     var nickname: String
 }
+struct DeleteLineRequest : Encodable {
+    var bookLineKey : Int
+}
+
+struct ChangeLineRequest : Encodable {
+    var lineId : Int
+    var bookKey: String
+    var money: Double
+    var lineDate: String
+    var flow: String
+    var asset: String
+    var line: String
+    var description: String
+    var except: Bool
+    var nickname: String
+}

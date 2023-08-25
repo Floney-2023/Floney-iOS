@@ -34,6 +34,9 @@ class AddViewModel: ObservableObject {
     @Published var newCategoryName = ""
     @Published var deleteCategoryName = ""
     
+    //MARK: delete line
+    @Published var bookLineKey : Int = 0
+
     
     private var cancellableSet: Set<AnyCancellable> = []
     var dataManager: AddProtocol
@@ -136,7 +139,51 @@ class AddViewModel: ObservableObject {
             }
             .store(in: &cancellableSet)
     }
+    func deleteLine() {
+        let request = DeleteLineRequest(bookLineKey: bookLineKey)
+        dataManager.deleteLine(parameters: request)
+            .sink { completion in
+                switch completion {
+                case .finished:
+                    print(" successfully line delete.")
+                    self.getCategory()
+                case .failure(let error):
+                    print("Error deleting line: \(error)")
+                }
+            } receiveValue: { data in
+                // TODO: Handle the received data if necessary.
+            }
+            .store(in: &cancellableSet)
+    }
+    func changeLine() {
+        bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
+        nickname = Keychain.getKeychainValue(forKey: .userNickname)!
+        var moneyDouble : Double = 0
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        if let number = formatter.number(from: money) {
+            moneyDouble = number.doubleValue
+            print(moneyDouble)  // 출력: 4500.0
+        } else {
+            print("Cannot convert to Double")
+        }
+        let request = ChangeLineRequest(lineId: bookLineKey, bookKey: bookKey, money: moneyDouble, lineDate: lineDate, flow: flow, asset: asset, line: line, description: description, except: except, nickname: nickname)
+        print("내역 수정 request : \(request)")
+        dataManager.changeLine(parameters: request)
+            .sink { (dataResponse) in
+                if dataResponse.error != nil {
+                    self.createAlert(with: dataResponse.error!)
+                    // 에러 처리
+                    print(dataResponse.error)
+                } else {
+                    self.lineResult = dataResponse.value!
+                    print("--수정 성공--")
+                    print(self.lineResult)
+                   
+                }
+            }.store(in: &cancellableSet)
 
+    }
 
     func createAlert( with error: NetworkError) {
         addLoadingError = error.backendError == nil ? error.initialError.localizedDescription : error.backendError!.message
