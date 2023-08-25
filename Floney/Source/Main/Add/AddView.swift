@@ -8,36 +8,32 @@
 import SwiftUI
 import Combine
 struct AddView: View {
-    @Binding var isPresented: Bool
-    @State var mode : String = "add"
-    
     @StateObject var viewModel = AddViewModel()
-    @State var date : String = "2023-06-20"
-    @State var money : String = ""
-    @State var moneyMaxLength = 11
-    @State private var selectedView: Int = 1
-    @State var assetType = "자산을 선택하세요."
-    @State var category = "분류를 선택하세요."
-    @State var maxLength = 12
-    @State var content = ""
-    @State var toggleOnOff = false
-    
+    @Binding var isPresented: Bool
     @State var isShowingBottomSheet = false
+    @State var isShowingEditCategory = false
+    @State var moneyMaxLength = 11
+    @State var maxLength = 12
     @State var isSelectedAssetTypeIndex = 0
     @State var isSelectedCategoryIndex = 0
-    @State var root = ""
-    @State var toggleType = "지출"
-    
-    @State var selectedAssetType = ""
-    @State var selectedCategory = ""
-    
+    @State var root = "" // 자산, 지출, 수입, 이체
     @State var categories: [String] = ["현금", "체크카드", "신용카드", "은행","추가", "추가추가","추가/추가"]
-    @State var isShowingEditCategory = false
-    
     @State var options = ["지출", "수입", "이체"]
-    @State var selectedOptions = 0
     
-    @State var lineId = 0
+    @StateObject var lineModel : LineModel
+    //@State var mode : String = "add"
+    //@State var lineId = 0
+    @State var date : String = "2023-06-20"
+    @State var money : String = ""
+    @State var assetType = "자산을 선택하세요."
+    @State var category = "분류를 선택하세요."
+    @State var content = ""
+    @State var toggleOnOff = false
+    //@State var toggleType = "지출" // 지출, 수입, 이체
+    //@State var selectedOptions = 0
+    
+    //@State var selectedAssetType = ""
+    //@State var selectedCategory = ""
         
     @ObservedObject private var keyboardResponder = KeyboardResponder()
     var body: some View {
@@ -111,26 +107,27 @@ struct AddView: View {
                                     .fill(Color.white)
                                     .cornerRadius(8)
                                     .padding(4)
-                                    .opacity(selectedOptions == index ? 1 : 0.01)
+                                    .opacity(lineModel.selectedOptions == index ? 1 : 0.01)
                                     .onTapGesture {
                                         withAnimation(.interactiveSpring()) {
-                                            selectedOptions = index
+                                            lineModel.selectedOptions = index
                                             assetType = "자산을 선택하세요."
                                             category = "분류를 선택하세요."
-                                            toggleType = options[selectedOptions]
+                                            lineModel.toggleType = options[lineModel.selectedOptions]
                                         }
                                     }
                             }
                             .overlay(
                                 Text(options[index])
                                     .font(.pretendardFont(.semiBold, size: 11))
-                                    .foregroundColor(selectedOptions == index ? .greyScale2: .greyScale8)
+                                    .foregroundColor(lineModel.selectedOptions == index ? .greyScale2: .greyScale8)
                             )
                         }
                     }
                     .frame(maxWidth: .infinity)
                     .frame(height: 38)
                     .cornerRadius(10)
+                    .disabled(lineModel.mode == "check" ? true:false)
               
                     
                     //MARK: 날짜/자산/분류/내용/제외여부
@@ -160,7 +157,7 @@ struct AddView: View {
                                 self.root = "자산"
                                 viewModel.root = self.root
                                 viewModel.getCategory()
-                                //self.categories = viewModel.categories
+                                
                                 print("\(self.categories)")
                                 self.isShowingBottomSheet.toggle()
                             }
@@ -179,7 +176,7 @@ struct AddView: View {
                                 .foregroundColor(.greyScale6)
                         }
                         .onTapGesture {
-                            self.root = self.toggleType
+                            self.root = lineModel.toggleType
                             viewModel.root = self.root
                             viewModel.getCategory()
                             
@@ -209,13 +206,12 @@ struct AddView: View {
                                 )
                                 .font(.pretendardFont(.medium, size: 14))
                                 .foregroundColor(.greyScale2)
-                            //.background(Color.red)
                         }
 
                         
-                        if selectedOptions != 2 {
+                        if lineModel.selectedOptions != 2 {
                             HStack {
-                                Text(selectedOptions == 0 ? "예산에서 제외" : "자산에서 제외")
+                                Text(lineModel.selectedOptions == 0 ? "예산에서 제외" : "자산에서 제외")
                                     .font(.pretendardFont(.medium, size: 14))
                                     .foregroundColor(.greyScale4)
                                 Spacer()
@@ -234,16 +230,16 @@ struct AddView: View {
                 
                 Spacer()
                 
-                if mode == "add" {
+                if lineModel.mode == "add" {
                     HStack {
                         Button {
                             viewModel.money = money // 금액
                             viewModel.lineDate = date // 날짜
-                            viewModel.flow = toggleType // 수입, 지출, 이체
+                            viewModel.flow = lineModel.toggleType // 수입, 지출, 이체
                             viewModel.asset = assetType // 자산 타입
                             viewModel.line = category // 분류 타입
                             viewModel.description = content // 내용
-                            viewModel.except = toggleOnOff // 제외 여부 
+                            viewModel.except = toggleOnOff // 제외 여부
                             
                             print(viewModel.money)
                             print(viewModel.lineDate)
@@ -268,11 +264,11 @@ struct AddView: View {
                     .frame(maxWidth: .infinity)
                     .frame(height : 66)
                     
-                } else if mode == "check" {
+                } else if lineModel.mode == "check" {
                     //MARK: 삭제/저장하기 버튼
                     HStack(spacing:0) {
                         Button {
-                            viewModel.bookLineKey = lineId // PK
+                            viewModel.bookLineKey = lineModel.lineId // PK
                             viewModel.deleteLine()
                         } label: {
                             Text("삭제")
@@ -284,10 +280,10 @@ struct AddView: View {
                         .padding()
                         .background(Color.greyScale2)
                         Button {
-                            viewModel.bookLineKey = lineId // PK
+                            viewModel.bookLineKey = lineModel.lineId // PK
                             viewModel.money = money // 금액
                             viewModel.lineDate = date // 날짜
-                            viewModel.flow = toggleType // 수입, 지출, 이체
+                            viewModel.flow = lineModel.toggleType // 수입, 지출, 이체
                             viewModel.asset = assetType // 자산 타입
                             viewModel.line = category // 분류 타입
                             viewModel.description = content // 내용
@@ -320,6 +316,18 @@ struct AddView: View {
             } // VStack
             .edgesIgnoringSafeArea(.bottom)
             .onAppear(perform : UIApplication.shared.hideKeyboard)
+            .onAppear{
+                print(lineModel.mode)
+                print(date)
+                print(money)
+                print(assetType)
+                print(category)
+                print(content)
+                print(toggleOnOff)
+                print(lineModel.toggleType)
+                print(lineModel.selectedOptions)
+                print(lineModel.lineId)
+            }
 
             CategoryBottomSheet(root: $root, categories: $viewModel.categories, isShowing: $isShowingBottomSheet, isSelectedAssetTypeIndex: $isSelectedAssetTypeIndex, isSelectedAssetType: $assetType, isSelectedCategoryIndex: $isSelectedCategoryIndex, isSelectedCategory: $category, isShowingEditCategory: $isShowingEditCategory)
             
@@ -361,7 +369,7 @@ class KeyboardResponder: ObservableObject {
 
 struct AddView_Previews: PreviewProvider {
     static var previews: some View {
-        AddView(isPresented: .constant(true))
+        AddView(isPresented: .constant(true), lineModel: LineModel())
     }
 }
 

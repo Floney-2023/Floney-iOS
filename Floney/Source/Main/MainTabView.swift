@@ -12,6 +12,7 @@ struct MainTabView: View {
     @State var showingAddView = false
     @State var showingTabbar = true
     @State var isLoading = false
+    var lineModel = LineModel()
 
     let icons = ["icon_home_off", "icon_leaderboard_off", "icon_add_circle", "icon_calculate_off", "icon_person_off"]
     let selectedIcons = ["icon_home_on", "icon_leaderboard_on", "", "icon_calculate_on", "icon_person_on"]
@@ -27,12 +28,14 @@ struct MainTabView: View {
     
     var body: some View {
         @State var currentDate = dateFormatter.string(from: Date())
+        
         ZStack {
             VStack {
                 ZStack {
                     Spacer().fullScreenCover(isPresented: $showingAddView) {
+               
                         NavigationView {
-                            AddView(isPresented: $showingAddView, date: currentDate)
+                            AddView(isPresented: $showingAddView,lineModel: lineModel,date:currentDate)
                         }
                     }
                     switch selection {
@@ -47,7 +50,7 @@ struct MainTabView: View {
                     case 2:
                         
                         NavigationView {
-                            AddView(isPresented: $showingAddView, date: currentDate)
+                            AddView(isPresented: $showingAddView,lineModel: lineModel, date:currentDate)
                         }
                     case 3:
                         NavigationView {

@@ -63,6 +63,7 @@ class CalendarViewModel: ObservableObject {
     
     init( dataManager: CalendarProtocol = CalendarService.shared) {
         self.dataManager = dataManager
+        self.getMyInfo()
         self.calcToday()
         self.calcDate(Date())
     }
@@ -173,6 +174,21 @@ class CalendarViewModel: ObservableObject {
                     print(self.bookInfoResult)
                     self.bookProfileImage = self.bookInfoResult.bookImg
                     
+                }
+            }.store(in: &cancellableSet)
+    }
+    func getMyInfo() {
+        dataManager.getMyInfo()
+            .sink { (dataResponse) in
+                if dataResponse.error != nil {
+                    self.createAlert(with: dataResponse.error!)
+                    
+                    print(dataResponse.error)
+                } else {
+                    print(dataResponse.value?.nickname)
+                    if let nickname = dataResponse.value?.nickname {
+                        Keychain.setKeychain(nickname, forKey: .userNickname)
+                    }
                 }
             }.store(in: &cancellableSet)
     }

@@ -75,6 +75,7 @@ struct DayLinesDetailView : View {
     @State private var selectedIndex = 0
     @State var selectedToggleTypeIndex = 0
     @State var selectedToggleType = ""
+    var lineModel = LineModel()
     var body: some View {
         VStack(spacing:34) {
             HStack {
@@ -190,40 +191,46 @@ struct DayLinesDetailView : View {
                                 }
                             }
                             .onTapGesture {
-                                selectedIndex = index
-                                showingDetail = true
-                                if viewModel.dayLines[index]?.assetType == "OUTCOME" {
-                                    selectedToggleTypeIndex = 0
-                                    selectedToggleType = "지출"
-                                } else if viewModel.dayLines[index]?.assetType == "INCOME" {
-                                    selectedToggleTypeIndex = 1
-                                    selectedToggleType = "수입"
-                                } else if viewModel.dayLines[index]?.assetType == "BANK" {
-                                    selectedToggleTypeIndex = 2
-                                    selectedToggleType = "이체"
+                            
+                                self.selectedIndex = index
+                                    //self.showingDetail = true
+                                if let line = viewModel.dayLines[selectedIndex] {
+                                    if viewModel.dayLines[index]?.assetType == "OUTCOME" {
+                                        lineModel.selectedOptions = 0
+                                        lineModel.toggleType = "지출"
+                                    } else if viewModel.dayLines[index]?.assetType == "INCOME" {
+                                        lineModel.selectedOptions = 1
+                                        lineModel.toggleType = "수입"
+                                    } else if viewModel.dayLines[index]?.assetType == "BANK" {
+                                        lineModel.selectedOptions = 2
+                                        lineModel.toggleType = "이체"
+                                    }
+                                    lineModel.mode = "check"
+                                    lineModel.lineId = line.id
+                                    print("지출 수입 이체 인덱스 : \(self.selectedToggleTypeIndex)")
+                                    print("지출 수입 이체 : \(self.selectedToggleType)")
+                                    print("금액 : \(self.viewModel.dayLines[index]?.money)")
+                                    print("제외 여부 : \(self.viewModel.dayLines[index]?.exceptStatus)")
+                                    print("PK : \(self.viewModel.dayLines[index]?.id)")
                                 }
-                                print("지출 수입 이체 인덱스 : \(selectedToggleTypeIndex)")
-                                print("지출 수입 이체 : \(selectedToggleType)")
-                                print("금액 : \(viewModel.dayLines[index]?.money)")
-                                print("제외 여부 : \(viewModel.dayLines[index]?.exceptStatus)")
-                                print("PK : \(viewModel.dayLines[index]?.id)")
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                        self.showingDetail = true
+                                    } 
+                                
                             }
                             .fullScreenCover(isPresented: $showingDetail) {
                                 if let line = viewModel.dayLines[selectedIndex] {
-                                    
+                                  
                                     NavigationView {
                                         AddView(
                                             isPresented: $showingDetail,
-                                            mode: "check",
-                                            date: viewModel.selectedDateStr,
+                                            lineModel : lineModel,
+                                            date : viewModel.selectedDateStr,
                                             money: String(line.money),
-                                            assetType: line.category[0],
+                                            assetType : line.category[0],
                                             category: line.category[1],
-                                            content: line.content,
-                                            toggleOnOff: line.exceptStatus,
-                                            toggleType: selectedToggleType,
-                                            selectedOptions: selectedToggleTypeIndex,
-                                            lineId : line.id
+                                            content : line.content,
+                                            toggleOnOff: line.exceptStatus
                                         )
                                     }
                                 }

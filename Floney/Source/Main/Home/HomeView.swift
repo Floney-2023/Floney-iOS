@@ -15,6 +15,7 @@ struct HomeView: View {
     @State var isShowingMonthPicker = false
     @State var isShowingBottomSheet = false
     @State var isShowingAddView = false
+    var lineModel = LineModel()
     
     var body: some View {
         // ScrollView {
@@ -69,7 +70,8 @@ struct HomeView: View {
             
         }.fullScreenCover(isPresented: $isShowingAddView) {
             NavigationView {
-                AddView.init(isPresented: $isShowingAddView, date:viewModel.selectedDateStr)
+                
+                AddView.init(isPresented: $isShowingAddView, lineModel: lineModel, date: viewModel.selectedDateStr)
             }
         }
         .onAppear {
