@@ -48,6 +48,8 @@
 		2F28C2E42A55723900894F67 /* CompleteCalcView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F28C2E32A55723900894F67 /* CompleteCalcView.swift */; };
 		2F28C2E72A55814200894F67 /* CalculateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F28C2E62A55814200894F67 /* CalculateViewModel.swift */; };
 		2F3886902A98F83C00FCED6D /* LineModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F38868F2A98F83C00FCED6D /* LineModel.swift */; };
+		2F3886932A9D088C00FCED6D /* SubscriptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F3886922A9D088C00FCED6D /* SubscriptionView.swift */; };
+		2F3886962A9D15F100FCED6D /* QA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F3886952A9D15F100FCED6D /* QA.swift */; };
 		2FAD92FF2A8335C900285C25 /* SetMonetaryUnitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FAD92FE2A8335C900285C25 /* SetMonetaryUnitView.swift */; };
 		2FAD93012A83431400285C25 /* FloneyAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FAD93002A83431400285C25 /* FloneyAlertView.swift */; };
 		2FAD93032A8A15B700285C25 /* ProgressLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FAD93022A8A15B700285C25 /* ProgressLoadingView.swift */; };
@@ -201,6 +203,8 @@
 		2F28C2E32A55723900894F67 /* CompleteCalcView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompleteCalcView.swift; sourceTree = "<group>"; };
 		2F28C2E62A55814200894F67 /* CalculateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculateViewModel.swift; sourceTree = "<group>"; };
 		2F38868F2A98F83C00FCED6D /* LineModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineModel.swift; sourceTree = "<group>"; };
+		2F3886922A9D088C00FCED6D /* SubscriptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionView.swift; sourceTree = "<group>"; };
+		2F3886952A9D15F100FCED6D /* QA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QA.swift; sourceTree = "<group>"; };
 		2FAD92FE2A8335C900285C25 /* SetMonetaryUnitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetMonetaryUnitView.swift; sourceTree = "<group>"; };
 		2FAD93002A83431400285C25 /* FloneyAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloneyAlertView.swift; sourceTree = "<group>"; };
 		2FAD93022A8A15B700285C25 /* ProgressLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressLoadingView.swift; sourceTree = "<group>"; };
@@ -511,6 +515,23 @@
 			path = ViewModel;
 			sourceTree = "<group>";
 		};
+		2F3886912A9CDBBC00FCED6D /* Subscription */ = {
+			isa = PBXGroup;
+			children = (
+				2F3886942A9D15E200FCED6D /* Entity */,
+				2F3886922A9D088C00FCED6D /* SubscriptionView.swift */,
+			);
+			path = Subscription;
+			sourceTree = "<group>";
+		};
+		2F3886942A9D15E200FCED6D /* Entity */ = {
+			isa = PBXGroup;
+			children = (
+				2F3886952A9D15F100FCED6D /* QA.swift */,
+			);
+			path = Entity;
+			sourceTree = "<group>";
+		};
 		2FB3DA692A5C25E300E1486D /* DataManager */ = {
 			isa = PBXGroup;
 			children = (
@@ -678,6 +699,7 @@
 		2FD7F3AC29B1E3B100B99CAA /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				2F3886912A9CDBBC00FCED6D /* Subscription */,
 				2FF724832A654A7A008B9333 /* BookExistence */,
 				2FC3B1E02A321AC400572804 /* Photo */,
 				2F146A5C2A14B03F0089AB3D /* TokenReissue */,
@@ -1281,6 +1303,7 @@
 				2FEA2BA529B892CB00DE8E54 /* TextFieldModifier.swift in Sources */,
 				2FEA2BBC29BA066D00DE8E54 /* AddView.swift in Sources */,
 				2FEA2BBE29BA067800DE8E54 /* CalculateView.swift in Sources */,
+				2F3886932A9D088C00FCED6D /* SubscriptionView.swift in Sources */,
 				2FEA2BCF29C43F2400DE8E54 /* AuthCodeView.swift in Sources */,
 				2F1614572A07F2A60029E9A9 /* EnterBookCodeView.swift in Sources */,
 				2FFA302C29EEAEB900412F83 /* SignUpResponse.swift in Sources */,
@@ -1351,6 +1374,7 @@
 				2FFA302E29EEAEE100412F83 /* SignUpDataManager.swift in Sources */,
 				2FE23F642A39DAF6009FA8CA /* ShareView.swift in Sources */,
 				2FF724942A67D6D7008B9333 /* ProfileManager.swift in Sources */,
+				2F3886962A9D15F100FCED6D /* QA.swift in Sources */,
 				2FE23F732A4187DA009FA8CA /* LinesResponse.swift in Sources */,
 				2FD7F39C29B1E26D00B99CAA /* FloneyApp.swift in Sources */,
 				2FC3B1E22A321B1F00572804 /* ImagePicker.swift in Sources */,

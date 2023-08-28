@@ -17,6 +17,7 @@ struct MyPageView: View {
     @State var isShowingNotiView = false
     
     var body: some View {
+        NavigationView {
         ZStack {
             VStack(spacing:26) {
                 HStack {
@@ -75,15 +76,66 @@ struct MyPageView: View {
                             
                         }
                         
-                        
-                        Button("구독 내역 보기") {
+                        if viewModel.subscribe {
+                            Button("구독 내역 보기") {
+                            }
+                            .padding()
+                            .font(.pretendardFont(.semiBold, size: 13))
+                            .foregroundColor(.greyScale12)
+                            .frame(maxWidth: .infinity)
+                            .background(Color.greyScale2)
+                            .cornerRadius(12)
+                        } else {
+                            HStack(spacing:12){
+                                VStack {
+                                    HStack {
+                                        Text("앱스토어에서\n별점을 남겨주세요")
+                                            .font(.pretendardFont(.bold, size: 14))
+                                            .foregroundColor(.greyScale2)
+                                        Spacer()
+                                    }
+                                    Spacer()
+                                    Text("리뷰쓰기")
+                                        .font(.pretendardFont(.regular, size: 12))
+                                        .foregroundColor(.greyScale3)
+                                }
+                                .padding(20)
+                                .frame(maxWidth: .infinity)
+                                .frame(height: 150)
+                                .background(Color.greyScale12)
+                                .cornerRadius(12)
+                                NavigationLink(destination: SubscriptionView()) {
+                                    VStack {
+                                        HStack {
+                                            Text("월 3,800원으로\n더 많은 혜택을\n누려보세요!")
+                                                .font(.pretendardFont(.bold, size: 14))
+                                                .foregroundColor(.white)
+                                            Spacer()
+                                        }
+                                        Spacer()
+                                        Text("플랜보기")
+                                            .font(.pretendardFont(.medium, size: 12))
+                                            .foregroundColor(.background3)
+                                        
+                                    }
+                                    .padding(20)
+                                    .frame(maxWidth: .infinity)
+                                    .frame(height: 150)
+                                    .background(
+                                        LinearGradient(
+                                            stops: [
+                                                Gradient.Stop(color: Color(red: 0.6, green: 0.9, blue: 0.79), location: 0.00),
+                                                Gradient.Stop(color: Color(red: 0.24, green: 0.91, blue: 0.67), location: 1.00),
+                                            ],
+                                            startPoint: UnitPoint(x: 0.96, y: 0.03),
+                                            endPoint: UnitPoint(x: 0.05, y: 1)
+                                        )
+                                    )
+                                    .cornerRadius(12)
+                                    
+                                }
+                            }
                         }
-                        .padding()
-                        .font(.pretendardFont(.semiBold, size: 13))
-                        .foregroundColor(.greyScale12)
-                        .frame(maxWidth: .infinity)
-                        .background(Color.greyScale2)
-                        .cornerRadius(12)
                     }
                     
                     VStack(spacing:22) {
@@ -192,29 +244,31 @@ struct MyPageView: View {
                         }
                     }
                     
-                    NavigationLink(destination: ServiceAgreementView()){
-                        HStack {
-                            VStack {
-                                Text("구독 해지")
-                                    .font(.pretendardFont(.regular, size: 12))
-                                    .foregroundColor(.greyScale6)
-                                Divider()
-                                    .padding(EdgeInsets(top: -10, leading: 0, bottom: 0, trailing: 0))
-                                    .frame(width: 50,height: 1.0)
-                                    .foregroundColor(.greyScale6)
-                                
+                    if viewModel.subscribe {
+                        NavigationLink(destination: ServiceAgreementView()){
+                            HStack {
+                                VStack {
+                                    Text("구독 해지")
+                                        .font(.pretendardFont(.regular, size: 12))
+                                        .foregroundColor(.greyScale6)
+                                    Divider()
+                                        .padding(EdgeInsets(top: -10, leading: 0, bottom: 0, trailing: 0))
+                                        .frame(width: 50,height: 1.0)
+                                        .foregroundColor(.greyScale6)
+                                    
+                                }
+                                Spacer()
                             }
-                            Spacer()
                         }
                     }
                 }
                 .padding(.horizontal,20)
-                
+            }
                 
             }
             .padding(.top, 26)
             .onAppear{
-                viewModel.getMyPage()
+                //viewModel.getMyPage()
                 showingTabbar = true
             }
             // MARK: Bottom Sheet
