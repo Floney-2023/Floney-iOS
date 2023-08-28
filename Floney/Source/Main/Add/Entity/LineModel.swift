@@ -10,6 +10,6 @@ import Foundation
 class LineModel : ObservableObject{
     var mode : String = "add"
     var lineId = 0
-    var toggleType = "지출" // 지출, 수입, 이체
-    var selectedOptions = 0
+    @Published var toggleType = "지출" // 지출, 수입, 이체
+    @Published var selectedOptions = 0
 }

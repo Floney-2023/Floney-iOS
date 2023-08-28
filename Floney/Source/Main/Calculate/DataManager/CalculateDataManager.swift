@@ -35,7 +35,7 @@ extension CalculateService: CalculateProtocol {
         let url = "\(Constant.BASE_URL)/books/outcomes"
         let token = Keychain.getKeychainValue(forKey: .accessToken)!
         print(url)
-        
+        print(parameters)
         return  AF.request(url,
                            method: .post,
                            parameters: parameters,

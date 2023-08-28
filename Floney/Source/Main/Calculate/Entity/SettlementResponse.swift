@@ -44,9 +44,10 @@ struct SettlementListResponse : Decodable, Hashable {
 struct BookUsersResponse : Decodable, Hashable {
     var nickname : String
     var email : String
-    var subscribe : Bool
-    var lastAdTime : String
-    var provider : String
-    var status : String
+    //var subscribe : Bool
+    //var lastAdTime : String
+    //var provider : String
+    var profileImg : String
+    //var status : String
     var isSelected : Bool?
 }

@@ -23,12 +23,14 @@ struct AddView: View {
     @StateObject var lineModel : LineModel
     //@State var mode : String = "add"
     //@State var lineId = 0
+    
     @State var date : String = "2023-06-20"
     @State var money : String = ""
     @State var assetType = "자산을 선택하세요."
     @State var category = "분류를 선택하세요."
     @State var content = ""
     @State var toggleOnOff = false
+    @State var writer = ""
     //@State var toggleType = "지출" // 지출, 수입, 이체
     //@State var selectedOptions = 0
     
@@ -37,7 +39,7 @@ struct AddView: View {
         
     @ObservedObject private var keyboardResponder = KeyboardResponder()
     var body: some View {
-       
+        let nickname = lineModel.mode == "add" ? Keychain.getKeychainValue(forKey: .userNickname)! : writer
         ZStack {
             VStack {
                 HStack {
@@ -229,6 +231,10 @@ struct AddView: View {
                 .padding(20)
                 
                 Spacer()
+                Text("작성자 : \(nickname)")
+                    .font(.pretendardFont(.medium, size:12))
+                    .foregroundColor(.greyScale8)
+                    .padding(.bottom, 32)
                 
                 if lineModel.mode == "add" {
                     HStack {
