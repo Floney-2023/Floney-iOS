@@ -10,7 +10,7 @@ import Combine
 import AuthenticationServices
 import GoogleSignIn
 import FirebaseAuth
-
+import AdSupport
 @MainActor
 class SignInViewModel: ObservableObject {
     var tokenViewModel = TokenReissueViewModel()
@@ -36,8 +36,9 @@ class SignInViewModel: ObservableObject {
     init( dataManager: SignInProtocol = SignIn.shared) {
         self.dataManager = dataManager
         //postSignIn()
-        print(Keychain.getKeychainValue(forKey: .accessToken))
-        print(Keychain.getKeychainValue(forKey: .refreshToken))
+        //print("IDFA : \(ASIdentifierManager.shared().advertisingIdentifier.uuidString)")
+        //print(Keychain.getKeychainValue(forKey: .accessToken))
+        //print(Keychain.getKeychainValue(forKey: .refreshToken))
     }
     
     //MARK: 이메일 로그인

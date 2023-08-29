@@ -109,5 +109,5 @@ iOSInjectionProject/
 # End of https://www.toptal.com/developers/gitignore/api/swift,xcode,cocoapodis
 
 .DS_Store
-/Secret
+Floney/Configuration/Secret/
 

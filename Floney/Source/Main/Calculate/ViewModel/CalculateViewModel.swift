@@ -79,7 +79,7 @@ class CalculateViewModel : ObservableObject {
     func getSettlements() {
         userList = ["rudalswhdk12@naver.com","rudalswhdk12@gmail.com"]
         let bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
-        let request = SettlementRequest(bookKey: bookKey, usersEmails: userList, dates: SettlementDate(startDate: startDateStr, endDate: endDateStr))
+        let request = SettlementRequest(bookKey: bookKey, usersEmails: userList, duration: SettlementDate(startDate: startDateStr, endDate: endDateStr))
         
         dataManager.getSettlements(request)
             .sink { (dataResponse) in
