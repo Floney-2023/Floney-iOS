@@ -18,6 +18,7 @@ class SettingBookViewModel : ObservableObject {
     @Published var ChangeProfileImageSuccess = false
     @Published var bookInfoLoadingError: String = ""
     @Published var showAlert: Bool = false
+    @Published var shareUrl : String?
     
     @Published var bookKey = ""
     

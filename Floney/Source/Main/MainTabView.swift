@@ -12,6 +12,7 @@ struct MainTabView: View {
     @State var showingAddView = false
     @State var showingTabbar = true
     @State var isLoading = false
+    
     var lineModel = LineModel()
 
     let icons = ["icon_home_off", "icon_leaderboard_off", "icon_add_circle", "icon_calculate_off", "icon_person_off"]
@@ -36,6 +37,7 @@ struct MainTabView: View {
                
                         NavigationView {
                             AddView(isPresented: $showingAddView,lineModel: lineModel,date:currentDate)
+                                .transition(.moveAndFade)
                         }
                     }
                     switch selection {
@@ -48,9 +50,9 @@ struct MainTabView: View {
                             AnalysisView(showingTabbar: $showingTabbar, isLoading: $isLoading)
                         }
                     case 2:
-                        
                         NavigationView {
                             AddView(isPresented: $showingAddView,lineModel: lineModel, date:currentDate)
+                                .transition(.moveAndFade)
                         }
                     case 3:
                         NavigationView {
@@ -111,6 +113,7 @@ struct MainTabView: View {
                 ProgressLoadingView()
                 //DimmedLoadingView()
             }
+            
         }
     }
 }

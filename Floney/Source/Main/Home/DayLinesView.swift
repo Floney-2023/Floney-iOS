@@ -232,6 +232,7 @@ struct DayLinesDetailView : View {
                                             content : line.content,
                                             toggleOnOff: line.exceptStatus
                                         )
+                                        .transition(.moveAndFade)
                                     }
                                 }
                             }

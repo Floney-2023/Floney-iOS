@@ -9,7 +9,8 @@ import Foundation
 import Combine
 class AddViewModel: ObservableObject {
     var tokenViewModel = TokenReissueViewModel()
-    
+    var alertManager = AlertManager.shared
+    @Published var successAdd = false
     @Published var addLoadingError: String = ""
     @Published var showAlert: Bool = false
     
@@ -100,6 +101,8 @@ class AddViewModel: ObservableObject {
                     self.lineResult = dataResponse.value!
                     print("--성공--")
                     print(self.lineResult)
+                    self.alertManager.update(showAlert: true, message: "저장이 완료되었습니다.", buttonType: "green")
+                    self.successAdd = true
                    
                 }
             }.store(in: &cancellableSet)
@@ -179,6 +182,8 @@ class AddViewModel: ObservableObject {
                     self.lineResult = dataResponse.value!
                     print("--수정 성공--")
                     print(self.lineResult)
+                    self.alertManager.update(showAlert: true, message: "저장이 완료되었습니다.", buttonType: "green")
+                    self.successAdd = true
                    
                 }
             }.store(in: &cancellableSet)

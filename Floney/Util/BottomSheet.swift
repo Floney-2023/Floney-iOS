@@ -173,13 +173,13 @@ struct AccountBookBottomSheet: View{
 
 //MARK: 친구 초대하기 bottom sheet
 struct ShareBookBottomSheet: View{
-    var firebaseManager = FirebaseManager()
+    var appLinkManager = AppLinkManager()
     let buttonHeight: CGFloat = 46
     @ObservedObject var viewModel : SettingBookViewModel
     @Binding var isShowing : Bool
-    @Binding var bookCode : String
+    //@Binding var bookCode : String
     @Binding var onShareSheet : Bool
-    @Binding var shareUrl : URL?
+    //@Binding var shareUrl : String?
     var body: some View{
         ZStack(alignment: .bottom) {
             if (isShowing) {
@@ -213,11 +213,15 @@ struct ShareBookBottomSheet: View{
                             
                         }
                         ButtonLarge(label: "공유하기",background: .primary1, textColor: .white, strokeColor: .primary1,  fontWeight: .bold, action: {
-                            //let url = firebaseManager.createDynamicLink(for: "A9BC7ACE")!
-                            print("공유하기")
-                            //shareUrl = url
-                            isShowing = false
-                            onShareSheet = true
+                            DispatchQueue.main.async {
+                                let url = appLinkManager.generateDeepLink(inviteCode: viewModel.bookCode)
+                                print("share url : \(url)")
+                                print("공유하기")
+                                viewModel.shareUrl = url
+                                print("share url : \(viewModel.shareUrl)")
+                                onShareSheet = true
+                                isShowing = false
+                            }
                             
                         })
                         .frame(height: buttonHeight)

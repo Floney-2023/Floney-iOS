@@ -7,6 +7,7 @@
 import SwiftUI
 
 struct HomeView: View {
+    @StateObject var alertManager = AlertManager.shared
     @StateObject var viewModel = CalendarViewModel()
     var encryptionManager = CryptManager()
     var profileManager = ProfileManager.shared
@@ -58,6 +59,13 @@ struct HomeView: View {
                 }
                 
             }.padding(20)
+                .overlay(
+                    ZStack {
+                        if alertManager.showAlert {
+                            CustomAlertView(message: alertManager.message, type: alertManager.buttontType, isPresented: $alertManager.showAlert)
+                        }
+                    }
+                )
             
             // MARK: Month Year Picker
             if isShowingMonthPicker {

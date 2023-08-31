@@ -24,8 +24,8 @@ struct SettingBookView: View {
     @State var initialAsset = ""
     @State var onOff = false
     @State var onShareSheet = false
-    @State var bookCode = "A9BC7ACE"
-    @State private var shareUrl: URL? = nil
+    //@State var bookCode = "A9BC7ACE"
+    //@State var shareUrl: String? = nil
     
     @State var resetAlert = false
     @State var resetTitle = "가계부 초기화"
@@ -115,11 +115,15 @@ struct SettingBookView: View {
                                                 .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
                                         }
                                         else {
+                                            /*
                                             let url = encryptionManager.decrypt(userImg[index], using: encryptionManager.key!)
                                             URLImage(url: URL(string: url!)!)
                                                 .aspectRatio(contentMode: .fill)
                                                 .clipShape(Circle())
                                                 .frame(width: 34, height: 34)
+                                                .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))*/
+                                            Image("user_profile_32")
+                                                .clipShape(Circle())
                                                 .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
                                             
                                         }
@@ -307,7 +311,9 @@ struct SettingBookView: View {
                     viewModel.getBookInfo()
                 }
             }.sheet(isPresented: $onShareSheet) {
-                ActivityView(activityItems: [shareUrl ?? ""])
+                if let url = viewModel.shareUrl {
+                    ActivityView(activityItems: [url])
+                }
             }
             .overlay(
                 ZStack {
@@ -334,7 +340,7 @@ struct SettingBookView: View {
             
             CarriedOverBottomSheet(isShowing: $isShowingCarriedOver, viewModel:viewModel)
             
-            ShareBookBottomSheet(viewModel: viewModel, isShowing: $isShowingShareBook, bookCode: $bookCode, onShareSheet: $onShareSheet, shareUrl: $shareUrl)
+            ShareBookBottomSheet(viewModel: viewModel, isShowing: $isShowingShareBook, onShareSheet: $onShareSheet)
         }
         
         

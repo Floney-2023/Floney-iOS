@@ -334,6 +334,9 @@ struct AddView: View {
                 print(lineModel.selectedOptions)
                 print(lineModel.lineId)
             }
+            .onChange(of: viewModel.successAdd) { newValue in
+                self.isPresented = false
+            }
 
             CategoryBottomSheet(root: $root, categories: $viewModel.categories, isShowing: $isShowingBottomSheet, isSelectedAssetTypeIndex: $isSelectedAssetTypeIndex, isSelectedAssetType: $assetType, isSelectedCategoryIndex: $isSelectedCategoryIndex, isSelectedCategory: $category, isShowingEditCategory: $isShowingEditCategory)
             
@@ -376,6 +379,7 @@ class KeyboardResponder: ObservableObject {
 struct AddView_Previews: PreviewProvider {
     static var previews: some View {
         AddView(isPresented: .constant(true), lineModel: LineModel())
+            
     }
 }
 
