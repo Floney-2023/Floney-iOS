@@ -27,7 +27,9 @@ struct OnboardingView: View {
                         Spacer()
                     }
                     Image("onboarding_1")
-                        .shadow(radius: 5)
+                        .resizable()
+                        .scaledToFit()
+                        .shadow(color: .greyScale10,radius: 10)
                     Spacer()
                 }
                 .foregroundColor(.greyScale1)
@@ -46,7 +48,10 @@ struct OnboardingView: View {
                         Spacer()
                     }
                     Image("onboarding_2")
-                        .shadow(radius: 5)
+                        .resizable()
+                        .scaledToFit()
+                        .shadow(color: .greyScale10,radius: 10)
+
                     Spacer()
                 }
                 .foregroundColor(.greyScale1)
@@ -65,7 +70,10 @@ struct OnboardingView: View {
                         Spacer()
                     }
                     Image("onboarding_3")
-                        .shadow(radius: 5)
+                        .resizable()
+                        .scaledToFit()
+                        .shadow(color: .greyScale10,radius: 10)
+                        
                     Spacer()
                 }
                 .foregroundColor(.greyScale1)
@@ -76,16 +84,33 @@ struct OnboardingView: View {
             }
             .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
             
-            VStack {
-                Text("건너뛰기")
-                    .font(.pretendardFont(.regular, size: 12))
-                    .foregroundColor(.greyScale6)
-                Divider()
-                    .padding(EdgeInsets(top: -10, leading: 0, bottom: 0, trailing: 0))
-                    .frame(width: 50,height: 1.0)
-                    .foregroundColor(.greyScale6)
+            if selectedPageIndex == 2 {
+                Button {
+                    
+                } label: {
+                    Text("플로니 시작하기")
+                        .font(.pretendardFont(.bold, size: 14))
+                        .foregroundColor(.white)
+                        .padding()
+                }
+                .frame(maxWidth: .infinity)
+                .background(Color.primary1)
+                .cornerRadius(12)
+                .padding(.horizontal,20)
+                .padding(.bottom, 38)
+                
+            } else {
+                VStack {
+                    Text("건너뛰기")
+                        .font(.pretendardFont(.regular, size: 12))
+                        .foregroundColor(.greyScale6)
+                    Divider()
+                        .padding(EdgeInsets(top: -10, leading: 0, bottom: 0, trailing: 0))
+                        .frame(width: 50,height: 1.0)
+                        .foregroundColor(.greyScale6)
+                }
+                .padding(.bottom, 36)
             }
-            .padding(.bottom, 36)
         }
     }
 }
