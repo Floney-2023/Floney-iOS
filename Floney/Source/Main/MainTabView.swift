@@ -43,33 +43,42 @@ struct MainTabView: View {
                     switch selection {
                     case 0:
                         NavigationView {
+                           
                             HomeView(showingTabbar: $showingTabbar)
                         }
                     case 1:
                         NavigationView {
+                           
                             AnalysisView(showingTabbar: $showingTabbar, isLoading: $isLoading)
                         }
                     case 2:
                         NavigationView {
+                            
                             AddView(isPresented: $showingAddView,lineModel: lineModel, date:currentDate)
                                 .transition(.moveAndFade)
                         }
                     case 3:
                         NavigationView {
-                            CalculateView(showingTabbar: $showingTabbar)
+                            
+                           CalculateView(showingTabbar: $showingTabbar)
                             
                         }
                     default :
                         NavigationView {
-                            MyPageView(showingTabbar: $showingTabbar)
+                           
+                           MyPageView(showingTabbar: $showingTabbar)
                         }
                     }
                 }
-                Spacer()
+   
                 //MARK: Tab Bar
                 if showingTabbar {
-                    Divider()
-                    VStack {
+                    VStack(spacing:0) {
+                        Rectangle()
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 1)
+                            .foregroundColor(.greyScale10)
+                            .background(Color.greyScale10)
                         HStack() {
                             ForEach(0..<5, id: \.self) { number in
                                 Spacer()
@@ -97,16 +106,22 @@ struct MainTabView: View {
                                     }
                                     .foregroundColor(selection == number ? .greyScale2 : .greyScale7)
                                 }
+                                .padding(.bottom, 18)
                                 Spacer()
                                 
                             }
+                            //.frame(maxHeight: .infinity)
+                            .frame(height:UIScreen.main.bounds.height * 0.098)
+                            
                         }
-                        Spacer()
+                        .padding(.bottom, 18)
                     }
-                    .frame(height: 76)
+                    .background(Color.white)
+                    .frame(height:UIScreen.main.bounds.height * 0.098)
                 }
                 
             }
+           
             .edgesIgnoringSafeArea(.bottom)
             // Loading view overlay
             if isLoading {

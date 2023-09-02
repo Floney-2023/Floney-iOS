@@ -89,7 +89,7 @@ struct SetPeriodCalcView: View {
                 HStack(spacing:0){
                     
                     Text("이전으로")
-                        .padding()
+                        .padding(.bottom,10)
                         .font(.pretendardFont(.bold, size: 14))
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
@@ -100,7 +100,7 @@ struct SetPeriodCalcView: View {
                             pageCount = 1
                         }
                     Text("다음으로")
-                        .padding()
+                        .padding(.bottom,10)
                         .font(.pretendardFont(.bold, size: 14))
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
@@ -113,7 +113,7 @@ struct SetPeriodCalcView: View {
                             viewModel.getSettlements()
                         }
                 }
-                .frame(height: 66)
+                .frame(height:UIScreen.main.bounds.height * 0.084)
                 
             }
             .edgesIgnoringSafeArea(.bottom)

@@ -134,14 +134,14 @@ struct SettlementDetailView: View {
             HStack(spacing:0){
 
                 Text("공유하기")
-                    .padding()
+                    .padding(.bottom, 10)
                     .font(.pretendardFont(.bold, size: 14))
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
                     .frame(maxHeight: .infinity)
                     .background(Color.primary1)
             }
-            .frame(height:66)
+            .frame(height:UIScreen.main.bounds.height * 0.085)
             
         }
         .edgesIgnoringSafeArea(.bottom)

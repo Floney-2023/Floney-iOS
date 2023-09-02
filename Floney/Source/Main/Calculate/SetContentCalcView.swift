@@ -109,7 +109,7 @@ struct SetContentCalcView: View {
                 HStack(spacing:0){
                     
                     Text("이전으로")
-                        .padding()
+                        .padding(.bottom,10)
                         .font(.pretendardFont(.bold, size: 14))
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
@@ -120,7 +120,7 @@ struct SetContentCalcView: View {
                             pageCount = 2
                         }
                     Text("정산하기")
-                        .padding()
+                        .padding(.bottom,10)
                         .font(.pretendardFont(.bold, size: 14))
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
@@ -133,7 +133,7 @@ struct SetContentCalcView: View {
                             pageCount = 4 
                         }
                 }
-                .frame(height:66)
+                .frame(height: UIScreen.main.bounds.height * 0.085)
                 
             }
             .edgesIgnoringSafeArea(.bottom)

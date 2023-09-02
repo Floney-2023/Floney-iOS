@@ -268,7 +268,7 @@ struct MyPageView: View {
             }
             .padding(.top, 26)
             .onAppear{
-                //viewModel.getMyPage()
+                viewModel.getMyPage()
                 showingTabbar = true
             }
             // MARK: Bottom Sheet

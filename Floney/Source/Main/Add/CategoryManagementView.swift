@@ -156,10 +156,10 @@ struct CategoryManagementView: View {
                     Text("추가하기")
                         .font(.pretendardFont(.bold, size: 14))
                         .foregroundColor(.white)
-                        .padding()
+                        .padding(.bottom, 10)
                     
                 }.frame(maxWidth: .infinity)
-                    .frame(height:66)
+                    .frame(height:UIScreen.main.bounds.height * 0.085)
                     .background(Color.primary1)
             }
             .fullScreenCover(isPresented: $isShowingAdd) {

@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct SubscriptionView: View {
+    @ObservedObject var notificationManager = NotificationManager()
+    @State var productID = IAPProducts.FloneyPlusMonthly.rawValue
     @State var isSelected = 1
     let qaList: [QA] = [
         QA(id : 0,question: "방장이 구독 중인 경우, 같은 방에 있는 팀원들\n도 멤버를 추가할 수 있나요?", answer: "네.\n팀원들이 자유롭게 초대하여 추가할 수 있습니다."),
@@ -106,6 +108,7 @@ struct SubscriptionView: View {
                         .foregroundColor(.white)
                         Button {
                             isSelected = 1
+                            productID = IAPProducts.FloneyPlusMonthly.rawValue
                         } label: {
                             HStack{
                                 Text("월간 구독")
@@ -139,6 +142,7 @@ struct SubscriptionView: View {
                         }
                         Button {
                             isSelected = 2
+                            productID = IAPProducts.FloneyPlusYearly.rawValue
                         } label: {
                             HStack{
                                 Text("연간 구독")
@@ -171,9 +175,7 @@ struct SubscriptionView: View {
                             )
                             
                         }
-                        
-                        
-                        
+ 
                     }
                     .padding(.vertical,32)
                     .padding(.horizontal,20)
@@ -217,7 +219,10 @@ struct SubscriptionView: View {
             VStack {
                 Spacer()
                 Button {
-                    
+                    // 구매하지 않았으면 구매
+                    if !IAPManager.shared.isProductPurchased(productID) {
+                        IAPManager.shared.buyProduct(productID)
+                    }
                 } label: {
                     Text("floney Plus+ 구독하기")
                         .font(.pretendardFont(.bold, size: 14))

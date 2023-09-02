@@ -89,15 +89,15 @@ struct SetUserCalcView: View {
                 
                 
                 Text("다음으로")
-                    .padding()
+                    .padding(.bottom, 10)
                     .font(.pretendardFont(.bold, size: 14))
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
-                    .frame(height: 66)
+                    .frame(height:UIScreen.main.bounds.height * 0.085)
                     .background(Color.primary1)
                     .onTapGesture {
                         pageCount = 2
-                        //viewModel.checkUser()
+                        viewModel.checkUser()
                     }
                     //.frame(maxHeight: .infinity)
                     

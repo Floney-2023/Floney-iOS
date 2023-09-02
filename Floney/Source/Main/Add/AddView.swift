@@ -264,11 +264,11 @@ struct AddView: View {
                         }
                         .frame(maxWidth: .infinity)
                         .frame(maxHeight: .infinity)
-                        .padding()
+                        .padding(.bottom, 10)
                         .background(Color.primary1)
                     }
                     .frame(maxWidth: .infinity)
-                    .frame(height : 66)
+                    .frame(height:UIScreen.main.bounds.height * 0.085)
                     
                 } else if lineModel.mode == "check" {
                     //MARK: 삭제/저장하기 버튼
@@ -283,7 +283,7 @@ struct AddView: View {
                         }
                         .frame(maxWidth: .infinity)
                         .frame(maxHeight: .infinity)
-                        .padding()
+                        .padding(.bottom, 10)
                         .background(Color.greyScale2)
                         Button {
                             viewModel.bookLineKey = lineModel.lineId // PK
@@ -311,11 +311,11 @@ struct AddView: View {
                         .frame(maxWidth: .infinity)
                         .frame(maxHeight: .infinity)
                         .frame(width: UIScreen.main.bounds.width * 2/3)
-                        .padding()
+                        .padding(.bottom, 10)
                         .background(Color.primary1)
                     }
                     .frame(maxWidth: .infinity)
-                    .frame(height: 66)
+                    .frame(height:UIScreen.main.bounds.height * 0.085)
                 }
 
                 

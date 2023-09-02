@@ -61,10 +61,10 @@ struct DayTotalView : View {
             }
             .padding(20)
         }
-        
         .frame(maxWidth: .infinity)
         .background(Color.primary5)
         .cornerRadius(12)
+        .shadow(color: .black.opacity(0.05), radius: 2, x: 0, y: 1)
     }
 }
 struct DayLinesDetailView : View {
