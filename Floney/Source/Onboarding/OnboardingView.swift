@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct OnboardingView: View {
+    @Binding var hasSeenOnboarding: Bool
     @State private var selectedPageIndex = 0
 
     var body: some View {
@@ -86,6 +87,8 @@ struct OnboardingView: View {
             
             if selectedPageIndex == 2 {
                 Button {
+                    hasSeenOnboarding = true
+                    UserDefaults.standard.set(true, forKey: "HasSeenOnboarding")
                     
                 } label: {
                     Text("플로니 시작하기")
@@ -110,6 +113,10 @@ struct OnboardingView: View {
                         .foregroundColor(.greyScale6)
                 }
                 .padding(.bottom, 36)
+                .onTapGesture {
+                    hasSeenOnboarding = true
+                    UserDefaults.standard.set(true, forKey: "HasSeenOnboarding")
+                }
             }
         }
     }
@@ -134,6 +141,6 @@ struct PageDotsView: View {
 }
 struct OnboardingView_Previews: PreviewProvider {
     static var previews: some View {
-        OnboardingView()
+        OnboardingView(hasSeenOnboarding: .constant(false))
     }
 }

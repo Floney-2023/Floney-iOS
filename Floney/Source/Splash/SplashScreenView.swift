@@ -8,28 +8,27 @@
 import SwiftUI
 
 struct SplashScreenView: View {
+    @State private var hasSeenOnboarding: Bool = UserDefaults.standard.bool(forKey: "HasSeenOnboarding")
     @State private var isActive = false
-    @StateObject var signInViewModel = SignInViewModel()
-    //@EnvironmentObject var viewModel: SignInViewModel
     @StateObject var userSession = AuthenticationService.shared
     
     @State var showingTabbar = false
     @State var isLoading = false
     var body: some View {
         if isActive {
-            //SignInView()
             Group {
-                if userSession.isUserLoggedIn {
-                    
-                    if userSession.bookStatus {
-                        MainTabView()
-                    } else {
-                        SendBookCodeView()
-                    }
-                    //AnalysisView(showingTabbar: $showingTabbar, isLoading: $isLoading)
-                    //AssetView(viewModel: AnalysisViewModel())
+                if !hasSeenOnboarding {
+                    OnboardingView(hasSeenOnboarding: $hasSeenOnboarding)
                 } else {
-                    SignInView()
+                    if userSession.isUserLoggedIn {
+                        if userSession.bookStatus {
+                            MainTabView()
+                        } else {
+                            SendBookCodeView()
+                        }
+                    } else {
+                        SignInView()
+                    }
                 }
             }
         } else {
