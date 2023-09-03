@@ -15,6 +15,7 @@ struct FloneyApp: App {
     var body: some Scene {
         WindowGroup {
             SplashScreenView()
+            
                 .onOpenURL { url in
                     // Handle the URL
                     if let components = URLComponents(url: url, resolvingAgainstBaseURL: false), let queryItems = components.queryItems {
@@ -23,6 +24,8 @@ struct FloneyApp: App {
                             // If user is not logged in, navigate to login/signup, else handle the invite code
                             AppLinkManager.shared.hasDeepLink = true
                             AppLinkManager.shared.inviteCode = inviteCode
+                            print("\(AppLinkManager.shared.hasDeepLink)")
+                            print("\(AppLinkManager.shared.inviteCode)")
                         }
                     }
                 }

@@ -21,6 +21,8 @@
 			</array>
 		</dict>
 	</array>
+	<key>FirebaseAppDelegateProxyEnabled</key>
+	<string>NO</string>
 	<key>GIDClientID</key>
 	<string>${GOOGLE_CLIENT_ID}.apps.googleusercontent.com</string>
 	<key>KAKAO_NATIVE_APP_KEY</key>

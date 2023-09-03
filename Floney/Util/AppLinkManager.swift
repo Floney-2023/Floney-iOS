@@ -15,7 +15,7 @@ class AppLinkManager: ObservableObject {
     func generateDeepLink(inviteCode: String) -> String {
         // 대시보드에서 Onelink 생성하면 주는 Short Link이다.
         // 예시로 써놨으며, 이 링크 뒤에 OG 태그를 파라미터로 붙이면 된다.
-        let baseUrl = "https://floney.onelink.me/ex5G/6yxn0lwq"
+        let baseUrl = "https://floney.onelink.me/ZpHw/sm5liatr"
 
         // og 태그에 넣을 데이터들이다.
         //let inviteCode = Keychain.getKeychainValue(forKey: .bookKey)
