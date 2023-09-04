@@ -11,6 +11,7 @@ struct SplashScreenView: View {
     @State private var hasSeenOnboarding: Bool = UserDefaults.standard.bool(forKey: "HasSeenOnboarding")
     @State private var isActive = false
     @StateObject var userSession = AuthenticationService.shared
+    @StateObject var inviteManager = AppLinkManager.shared
     
     @State var showingTabbar = false
     @State var isLoading = false
@@ -20,12 +21,19 @@ struct SplashScreenView: View {
                 if !hasSeenOnboarding {
                     OnboardingView(hasSeenOnboarding: $hasSeenOnboarding)
                 } else {
+                    // 로그인 된 경우
                     if userSession.isUserLoggedIn {
-                        if userSession.bookStatus {
-                            MainTabView()
+                        // 초대 링크로 들어온 경우
+                        if inviteManager.hasDeepLink {
+                            InviteBookView()
                         } else {
-                            SendBookCodeView()
+                            if userSession.bookStatus {
+                                MainTabView()
+                            } else {
+                                SendBookCodeView()
+                            }
                         }
+                   // 로그인 되지 않은 경우
                     } else {
                         SignInView()
                     }
