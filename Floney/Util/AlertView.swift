@@ -52,7 +52,7 @@ struct AlertView: View {
           
             }
             .frame(width: geometry.size.width * 0.75)
-            .background(Color.alertGrey1.opacity(0.8))
+            .background(Color.alertGrey1)
             .cornerRadius(14)
             .shadow(radius: 10)
             .frame(maxWidth: .infinity, maxHeight: .infinity)

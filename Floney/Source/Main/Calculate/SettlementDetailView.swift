@@ -10,6 +10,8 @@ import SwiftUI
 struct SettlementDetailView: View {
     @Binding var isShowingTabbar : Bool
     @Binding var showingDetail : Bool
+    @Binding var settlementId : Int
+    @State var currency = CurrencyManager.shared.currentCurrency
     @ObservedObject var viewModel : CalculateViewModel
     var body: some View {
         VStack {
@@ -46,7 +48,7 @@ struct SettlementDetailView: View {
                         .font(.pretendardFont(.medium, size: 16))
                         .foregroundColor(.greyScale2)
                     Spacer()
-                    Text("\(Int(viewModel.totalOutcome))원")
+                    Text("\(Int(viewModel.totalOutcome))\(currency)")
                         .font(.pretendardFont(.bold, size: 16))
                         .foregroundColor(.greyScale2)
                 }.padding(.horizontal, 28)
@@ -68,7 +70,7 @@ struct SettlementDetailView: View {
                                 .font(.pretendardFont(.medium, size: 14))
                                 .foregroundColor(.greyScale6)
                             Spacer()
-                            Text("\(Int((detail.money + viewModel.outcomePerUser)))원")
+                            Text("\(Int((detail.money + viewModel.outcomePerUser)))\(currency)")
                                 .font(.pretendardFont(.medium, size: 14))
                                 .foregroundColor(.greyScale2)
                         }
@@ -92,7 +94,7 @@ struct SettlementDetailView: View {
                     Text("1인")
                         .font(.pretendardFont(.semiBold, size: 10))
                         .foregroundColor(.greyScale6)
-                    Text("\(Int(viewModel.outcomePerUser))원")
+                    Text("\(Int(viewModel.outcomePerUser))\(currency)")
                         .font(.pretendardFont(.bold, size: 16))
                         .foregroundColor(.primary2)
                 }
@@ -115,7 +117,7 @@ struct SettlementDetailView: View {
                                         .font(.pretendardFont(.bold, size: 16))
                                         .foregroundColor(.greyScale2)
                                     +
-                                    Text(detail.money > 0 ? "원 을 받아야해요." : "원 을 보내야해요")
+                                    Text(detail.money > 0 ? "\(currency) 을 받아야해요." : "\(currency) 을 보내야해요")
                                         .font(.pretendardFont(.regular, size: 16))
                                         .foregroundColor(.greyScale2)
                                 } else {
@@ -148,14 +150,13 @@ struct SettlementDetailView: View {
         .navigationBarBackButtonHidden()
         .navigationBarItems(leading: BackButton())
             .onAppear{
-                viewModel.getSettlementDetail()
+                viewModel.getSettlementDetail(id: settlementId)
             }
-
     }
 }
 
 struct SettlementDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        SettlementDetailView(isShowingTabbar: .constant(false), showingDetail: .constant(true), viewModel: CalculateViewModel())
+        SettlementDetailView(isShowingTabbar: .constant(false), showingDetail: .constant(true), settlementId: .constant(0), viewModel: CalculateViewModel())
     }
 }

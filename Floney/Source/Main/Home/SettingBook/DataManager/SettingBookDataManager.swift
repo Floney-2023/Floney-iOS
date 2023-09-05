@@ -20,7 +20,9 @@ protocol SettingBookProtocol {
     func getShareCode(_ parameters:BookInfoRequest) -> AnyPublisher<DataResponse<ShareCodeResponse, NetworkError>, Never>
     func exitBook(parameters: BookInfoRequest) -> AnyPublisher<Void, NetworkError>
     func deleteBook(parameters: BookInfoRequest) -> AnyPublisher<Void, NetworkError>
+    func resetBook(parameters: BookInfoRequest) -> AnyPublisher<Void, NetworkError>
     func setCarryOver(parameters: SetCarryOver) -> AnyPublisher<Void, NetworkError>
+    func setCurrency(_ parameters:SetCurrencyRequest) -> AnyPublisher<DataResponse<SetCurrencyResponse, NetworkError>, Never>
 }
 
 class SettingBookService {
@@ -29,6 +31,65 @@ class SettingBookService {
 }
 
 extension SettingBookService: SettingBookProtocol {
+    func setCurrency(_ parameters: SetCurrencyRequest) -> AnyPublisher<Alamofire.DataResponse<SetCurrencyResponse, NetworkError>, Never> {
+        let url = "\(Constant.BASE_URL)/books/info/currency"
+        let token = Keychain.getKeychainValue(forKey: .accessToken)!
+        return AF.request(url,
+                          method: .post,
+                          parameters: parameters,
+                          encoder : JSONParameterEncoder(),
+                          headers: ["Authorization":"Bearer \(token)"])
+        .validate()
+        .publishDecodable(type: SetCurrencyResponse.self)
+        .map { response in
+            response.mapError { error in
+                let backendError = response.data.flatMap { try? JSONDecoder().decode(BackendError.self, from: $0)}
+                return NetworkError(initialError: error, backendError: backendError)
+            }
+        }
+        .receive(on: DispatchQueue.main)
+        .eraseToAnyPublisher()
+    }
+    
+    func resetBook(parameters: BookInfoRequest) -> AnyPublisher<Void, NetworkError> {
+        let url = "\(Constant.BASE_URL)/books/info/delete/all?bookKey=\(parameters.bookKey)"
+        let token = Keychain.getKeychainValue(forKey: .accessToken)!
+        print("exit book : \n\(token)")
+        
+        return AF.request(url,
+                          method: .delete,
+                          parameters: nil,
+                          encoding: JSONEncoding.default,
+                          headers: ["Authorization":"Bearer \(token)"])
+        .validate()
+        .publishData()
+        .tryMap { result in
+            // Check the status code
+            if let statusCode = result.response?.statusCode {
+                print("Status Code: \(statusCode)")
+                if statusCode == 200 {
+                    return // Success, return
+                } else {
+                    // Handle error based on status code
+                    let backendError = result.data.flatMap { try? JSONDecoder().decode(BackendError.self, from: $0)}
+
+                    
+                    if let backendError = backendError {
+                        throw NetworkError(initialError: result.error!, backendError: backendError)
+                    } else {
+                        throw NetworkError(initialError: result.error!, backendError: nil)
+                    }
+                }
+            } else {
+                throw NetworkError(initialError: result.error!, backendError: nil)
+            }
+        }
+        .mapError { error in
+            return error as! NetworkError
+        }
+        .eraseToAnyPublisher()
+    }
+    
     func exitBook(parameters: BookInfoRequest) -> AnyPublisher<Void, NetworkError> {
         let url = "\(Constant.BASE_URL)/books/users/out"
         let token = Keychain.getKeychainValue(forKey: .accessToken)!
@@ -68,14 +129,14 @@ extension SettingBookService: SettingBookProtocol {
         .eraseToAnyPublisher()
     }
     func deleteBook(parameters: BookInfoRequest) -> AnyPublisher<Void, NetworkError> {
-        let url = "\(Constant.BASE_URL)/books/delete"
+        let url = "\(Constant.BASE_URL)/books/delete?bookKey=\(parameters.bookKey)"
         let token = Keychain.getKeychainValue(forKey: .accessToken)!
         print("exit book : \n\(token)")
         
         return AF.request(url,
                           method: .delete,
-                          parameters: parameters,
-                          encoder: JSONParameterEncoder(),
+                          parameters: nil,
+                          encoding : JSONEncoding.default,
                           headers: ["Authorization":"Bearer \(token)"])
         .validate()
         .publishData()

@@ -9,13 +9,13 @@ import SwiftUI
 
 struct ExpenseView: View {
     @ObservedObject var viewModel : AnalysisViewModel
-    
+    @State var currency = CurrencyManager.shared.currentCurrency
     let percentage = [40, 40, 20]
     
     var body: some View {
         VStack(){
             VStack(alignment:.leading, spacing: 0){
-                Text("총 \(Int(viewModel.expenseResponse.total))원을")
+                Text("총 \(Int(viewModel.expenseResponse.total))\(currency)을")
                     .font(.pretendardFont(.bold,size: 22))
                     .foregroundColor(.greyScale1)
                 HStack{
@@ -23,7 +23,7 @@ struct ExpenseView: View {
                         Text("소비했어요")
                             .font(.pretendardFont(.bold,size: 22))
                             .foregroundColor(.greyScale1)
-                        Text("저번 달 대비 \(Int(viewModel.expenseResponse.differance))원을\n더 사용했어요")
+                        Text("저번 달 대비 \(Int(viewModel.expenseResponse.differance))\(currency)을\n더 사용했어요")
                             .font(.pretendardFont(.medium,size: 13))
                             .foregroundColor(.greyScale6)
                     }
@@ -67,7 +67,7 @@ struct ExpenseView: View {
                                     .foregroundColor(.greyScale5)
                             }
                             Spacer()
-                            Text("\(Int(viewModel.expenseResponse.analyzeResult[i].money))원")
+                            Text("\(Int(viewModel.expenseResponse.analyzeResult[i].money))\(currency)")
                                 .font(.pretendardFont(.semiBold, size: 16))
                                 .foregroundColor(.greyScale2)
                         }.frame(height: 68)

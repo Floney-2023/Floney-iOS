@@ -25,3 +25,6 @@ struct BookUsers: Decodable, Hashable {
 struct ShareCodeResponse: Decodable {
     var code : String
 }
+struct SetCurrencyResponse : Decodable {
+    var myBookCurrency : String
+}

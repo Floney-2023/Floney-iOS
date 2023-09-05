@@ -16,6 +16,7 @@ struct HomeView: View {
     @State var isShowingMonthPicker = false
     @State var isShowingBottomSheet = false
     @State var isShowingAddView = false
+    
     var lineModel = LineModel()
     
     var body: some View {
@@ -59,13 +60,15 @@ struct HomeView: View {
                 }
                 
             }.padding(20)
+            /*
                 .overlay(
                     ZStack {
+                        /*
                         if alertManager.showAlert {
                             CustomAlertView(message: alertManager.message, type: alertManager.buttontType, isPresented: $alertManager.showAlert)
-                        }
+                        }*/
                     }
-                )
+                )*/
             
             // MARK: Month Year Picker
             if isShowingMonthPicker {
@@ -90,7 +93,7 @@ struct HomeView: View {
 //MARK: 총지출/총수입
 struct TotalView: View {
     @ObservedObject var viewModel : CalendarViewModel
-    
+    @State var currency = CurrencyManager.shared.currentCurrency
     var body: some View {
         HStack(){
             HStack {
@@ -99,7 +102,7 @@ struct TotalView: View {
                         .font(.pretendardFont(.medium, size: 12))
                         .foregroundColor(.white)
                     
-                    Text("\(viewModel.totalOutcome)원")
+                    Text("\(viewModel.totalOutcome)\(currency)")
                         .font(.pretendardFont(.semiBold, size: 16))
                         .foregroundColor(.white)
                 }
@@ -114,7 +117,7 @@ struct TotalView: View {
                     Text("총수입")
                         .font(.pretendardFont(.medium, size: 12))
                         .foregroundColor(.white)
-                    Text("\(viewModel.totalIncome)원")
+                    Text("\(viewModel.totalIncome)\(currency)")
                         .font(.pretendardFont(.semiBold, size: 16))
                         .foregroundColor(.white)
                 }

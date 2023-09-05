@@ -157,6 +157,9 @@ struct SignInView: View {
                                     }
                                 }
                             Image("btn_apple")
+                                .onTapGesture {
+                                    viewModel.performAppleSignIn()
+                                }
                         }
                     }
                     Spacer()

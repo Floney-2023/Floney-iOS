@@ -94,9 +94,10 @@ struct ChangePasswordView: View {
                         .foregroundColor(.greyScale1)
                 }
             }
+            /*
             if viewModel.showAlert {
                 CustomAlertView(message: viewModel.errorMessage, isPresented: $viewModel.showAlert)
-            }
+            }*/
         }
     }
 }

@@ -14,7 +14,7 @@ struct FloneyAlertView: View {
     @State var leftColor : Color = .greyScale6
     @State var rightColor : Color = .white
     @State var leftButtonText = "초기화하기"
-    @State var rightButtonText = "유지하기"
+    @State var rightButtonText = "취소하기"
     var onOKAction: () -> Void
     //var onCancelAction: () -> Void
     
@@ -73,6 +73,6 @@ struct FloneyAlertView: View {
 
 struct FloneyAlertView_Previews: PreviewProvider {
     static var previews: some View {
-        FloneyAlertView(isPresented: .constant(true), title: .constant("모든 내역이 사라집니다."), message: .constant("화폐 단위를 USD(으)로 변경하시겠습니까?\n변경 시 기록된 전체 내역이 초기화됩니다."), onOKAction: {})
+        FloneyAlertView(isPresented: .constant(true), title: .constant("가계부가 초기화됩니다"), message: .constant("화폐 단위를 USD(으)로 변경하시겠습니까?\n변경 시, 가계부가 초기화됩니다."), onOKAction: {})
     }
 }

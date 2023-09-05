@@ -10,6 +10,7 @@ import SwiftUI
 struct SetContentCalcView: View {
     @Binding var isShowingTabbar : Bool
     @Binding var isShowingCalc : Bool
+    @State var currency = CurrencyManager.shared.currentCurrency
    // @Binding var isShowingPeriod : Bool
     //@Binding var isShowingContent : Bool
     //@State var isShowingComplete = false
@@ -87,7 +88,7 @@ struct SetContentCalcView: View {
                                                 .foregroundColor(.greyScale6)
                                         }
                                         Spacer()
-                                        Text("\(Int(viewModel.lines[index].money))원")
+                                        Text("\(Int(viewModel.lines[index].money))\(currency)")
                                             .font(.pretendardFont(.medium, size: 14))
                                             .foregroundColor(.greyScale2)
                                     }.padding(.bottom, 8)

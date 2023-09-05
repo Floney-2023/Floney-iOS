@@ -10,17 +10,20 @@ import Combine
 import Alamofire
 
 class NaverShortenerService {
-    var cancellables: Set<AnyCancellable> = []
-
-    let headers: HTTPHeaders = [
-        "X-Naver-Client-Id": Secret.NAVER_CLIENT_ID,
-        "X-Naver-Client-Secret": Secret.NAVER_CLIENT_SECRET
-    ]
-
     func getShortenedURL(for url: String) -> AnyPublisher<DataResponse<NaverShortURLResponse, NetworkError>, Never> {
-        let parameters: Parameters = ["url": url]
-
-        return AF.request("https://openapi.naver.com/v1/util/shorturl", parameters: parameters, headers: headers)
+        let headers: HTTPHeaders = [
+            "Content-Type": "application/x-www-form-urlencoded",
+            "X-Naver-Client-Id": Secret.NAVER_CLIENT_ID,
+            "X-Naver-Client-Secret": Secret.NAVER_CLIENT_SECRET
+        ]
+        let parameters = NaverRequest(url: url)
+        
+        return AF.request("https://openapi.naver.com/v1/util/shorturl",
+                          method: .post,
+                          parameters: parameters,
+                          encoder: URLEncodedFormParameterEncoder(),
+                          headers: headers)
+            .validate()
             .publishDecodable(type: NaverShortURLResponse.self)
             .map { response in
                 response.mapError { error in
@@ -33,11 +36,16 @@ class NaverShortenerService {
     }
     
 }
+struct NaverRequest : Encodable {
+    let url : String
+}
 
 struct NaverShortURLResponse: Decodable {
     let result: NaverShortURLResult
 }
 
+
 struct NaverShortURLResult: Decodable {
     let url: String
+    let orgUrl : String
 }

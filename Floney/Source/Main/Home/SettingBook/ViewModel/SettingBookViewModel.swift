@@ -47,6 +47,8 @@ class SettingBookViewModel : ObservableObject {
 
     @Published var bookCode : String = ""
     
+    @Published var currency : String = ""
+    
     private var cancellableSet: Set<AnyCancellable> = []
     var dataManager: SettingBookProtocol
     
@@ -242,7 +244,22 @@ class SettingBookViewModel : ObservableObject {
             }
             .store(in: &cancellableSet)
     }
-
+    func resetBook() {
+        bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
+        let request = BookInfoRequest(bookKey: bookKey)
+        dataManager.resetBook(parameters: request)
+            .sink { completion in
+                switch completion {
+                case .finished:
+                    print("Reset Book successfully changed.")
+                case .failure(let error):
+                    print("Reset Exiting Book : \(error)")
+                }
+            } receiveValue: { data in
+                // TODO: Handle the received data if necessary.
+            }
+            .store(in: &cancellableSet)
+    }
 
     func getShareCode() {
         bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
@@ -260,8 +277,24 @@ class SettingBookViewModel : ObservableObject {
                 }
             }.store(in: &cancellableSet)
     }
+    func setCurrency() {
+        bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
+        let request = SetCurrencyRequest(requestCurrency: currency, bookKey: bookKey)
+        dataManager.setCurrency(request)
+            .sink { (dataResponse) in
+                if dataResponse.error != nil {
+                    self.createAlert(with: dataResponse.error!)
+                    // 에러 처리
+                    print(dataResponse.error)
+                } else {
+                    self.currency = dataResponse.value!.myBookCurrency
+                    print("--성공--")
+                    print("변경된 화폐 단위 : \(self.currency)")
+                    CurrencyManager.shared.getCurrency()
+                }
+            }.store(in: &cancellableSet)
+    }
 
-    
     //MARK: 방장 필터
     func hostFilter() {
         // role이 "방장"이고, me가 true인 요소를 필터링합니다.

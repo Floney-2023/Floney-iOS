@@ -14,6 +14,7 @@ struct YearMonthDuration {
 }
 
 class CalculateViewModel : ObservableObject {
+    var fcmManager = FCMDataManager()
     var tokenViewModel = TokenReissueViewModel()
     @Published var addLoadingError: String = ""
     @Published var showAlert: Bool = false
@@ -113,6 +114,7 @@ class CalculateViewModel : ObservableObject {
                     self.showLoadingView = false
                 } else {
                     print("--정산 요청 성공--")
+                    self.fcmManager.sendNotification(to: bookKey, title: "정산하기", body: "정산해보세요.")
                     self.showLoadingView = false
                     self.settlementResult = dataResponse.value!
                     print(self.settlementResult)
@@ -120,6 +122,7 @@ class CalculateViewModel : ObservableObject {
                     self.totalOutcome = self.settlementResult.totalOutcome
                     self.outcomePerUser = self.settlementResult.outcome
                     self.details = self.settlementResult.details
+                    self.id = self.settlementResult.id
 
                 }
             }.store(in: &cancellableSet)
@@ -142,8 +145,8 @@ class CalculateViewModel : ObservableObject {
                 }
             }.store(in: &cancellableSet)
     }
-    func getSettlementDetail() {
-        dataManager.getSettlementDetail(id: self.id)
+    func getSettlementDetail(id : Int) {
+        dataManager.getSettlementDetail(id: id)
             .sink { (dataResponse) in
                 if dataResponse.error != nil {
                     self.createAlert(with: dataResponse.error!)

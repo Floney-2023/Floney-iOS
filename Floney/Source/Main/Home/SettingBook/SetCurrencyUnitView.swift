@@ -1,5 +1,5 @@
 //
-//  SetMonetaryUnitView.swift
+//  SetcurrencyUnitView.swift
 //  Floney
 //
 //  Created by 남경민 on 2023/08/09.
@@ -7,12 +7,13 @@
 
 import SwiftUI
 
-struct SetMonetaryUnitView: View {
+struct SetCurrencyUnitView: View {
+    @ObservedObject var viewModel = SettingBookViewModel()
     @State var showingAlert = false
-    @State var title = "모든 내역이 사라집니다"
+    @State var title = "가계부가 초기화됩니다"
     @State var message = ""
     @State var selectedUnit = ""
-    @State var monetaryUnits = ["KRW(원)","USD($)","EUR(€)","JPY(¥)","CNY(¥)","GBP(£)"]
+    @State var currencyUnits = ["KRW(원)","USD($)","EUR(€)","JPY(¥)","CNY(¥)","GBP(£)"]
     @State var isSelected = 0
     var body: some View {
         ZStack{
@@ -27,15 +28,15 @@ struct SetMonetaryUnitView: View {
                             .foregroundColor(.greyScale6)
                     }
                     Spacer()
-                    Image("illust_monetary_unit")
+                    Image("illust_currency_unit")
                 }
                 .padding(.horizontal, 24)
                 
                 ScrollView(showsIndicators: false) {
                     VStack{
-                        ForEach(monetaryUnits.indices, id:\.self) { index in
+                        ForEach(currencyUnits.indices, id:\.self) { index in
                             HStack {
-                                Text("\(monetaryUnits[index])")
+                                Text("\(currencyUnits[index])")
                                     .font(.pretendardFont(.medium,size:12))
                                     .foregroundColor(isSelected == index ? .primary2 : .greyScale6)
                                 Spacer()
@@ -51,8 +52,11 @@ struct SetMonetaryUnitView: View {
                             .cornerRadius(12)
                             .onTapGesture {
                                 isSelected = index
-                                selectedUnit = monetaryUnits[isSelected]
-                                message = "화폐 단위를 \(selectedUnit)(으)로 변경하시겠습니까?\n변경 시, 기록된 전체 내역이 초기화됩니다."
+                                selectedUnit = currencyUnits[isSelected]
+                                let parsedCurrency = String(selectedUnit.prefix(while: { $0 != "(" })).trimmingCharacters(in: .whitespaces)
+                                viewModel.currency = parsedCurrency
+                                print(parsedCurrency)  // 출력: "KRW"
+                                message = "화폐 단위를 \(parsedCurrency)(으)로 변경하시겠습니까?\n변경 시, 가계부가 초기화됩니다."
                                 showingAlert = true
                             }
                         }
@@ -65,7 +69,9 @@ struct SetMonetaryUnitView: View {
             .navigationBarItems(leading: BackButton())
             
             if showingAlert {
-                FloneyAlertView(isPresented: $showingAlert, title: $title, message: $message, onOKAction: {})
+                FloneyAlertView(isPresented: $showingAlert, title: $title, message: $message, onOKAction: {
+                    viewModel.setCurrency()
+                })
             }
         }
     }
@@ -74,8 +80,8 @@ struct SetMonetaryUnitView: View {
 
 
 
-struct SetMonetaryUnitView_Previews: PreviewProvider {
+struct SetCurrencyUnitView_Previews: PreviewProvider {
     static var previews: some View {
-        SetMonetaryUnitView()
+        SetCurrencyUnitView()
     }
 }

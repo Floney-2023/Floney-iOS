@@ -11,6 +11,7 @@ struct SubscriptionView: View {
     @ObservedObject var notificationManager = NotificationManager()
     @State var productID = IAPProducts.FloneyPlusMonthly.rawValue
     @State var isSelected = 1
+    @State var currency = CurrencyManager.shared.currentCurrency
     let qaList: [QA] = [
         QA(id : 0,question: "방장이 구독 중인 경우, 같은 방에 있는 팀원들\n도 멤버를 추가할 수 있나요?", answer: "네.\n팀원들이 자유롭게 초대하여 추가할 수 있습니다."),
         QA(id : 1,question: "방장이 구독하지 않고, 같은 방에 있는 팀원이 \n구독중인 경우 멤버를 추가할 수 있나요?", answer: "아니요.\n방장이 구독을 해야 멤버 추가를 할 수 있습니다."),
@@ -118,7 +119,7 @@ struct SubscriptionView: View {
                                 Text("월")
                                     .font(.pretendardFont(.medium, size: 12))
                                     .foregroundColor(.greyScale5)
-                                Text("3,800원")
+                                Text("3,800\(currency)")
                                     .font(.pretendardFont(.bold, size: 20))
                                     .foregroundColor(.greyScale3)
                                 Image(isSelected == 1 ? "icon_check_circle_activated" : "icon_check_circle_disabled")
@@ -152,7 +153,7 @@ struct SubscriptionView: View {
                                 Text("연")
                                     .font(.pretendardFont(.medium, size: 12))
                                     .foregroundColor(.greyScale5)
-                                Text("38,000원")
+                                Text("38,000\(currency)")
                                     .font(.pretendardFont(.bold, size: 20))
                                     .foregroundColor(.greyScale3)
                                 Image(isSelected == 2 ? "icon_check_circle_activated" : "icon_check_circle_disabled")

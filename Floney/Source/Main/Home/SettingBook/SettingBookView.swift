@@ -251,7 +251,7 @@ struct SettingBookView: View {
                         }
                     }
                     if viewModel.role == "방장" {
-                        NavigationLink(destination: SetMonetaryUnitView()){
+                        NavigationLink(destination: SetCurrencyUnitView()){
                             HStack {
                                 Text("화폐 설정")
                                     .font(.pretendardFont(.bold,size: 16))
@@ -328,7 +328,7 @@ struct SettingBookView: View {
                 ZStack {
                     if resetAlert {
                         AlertView(isPresented: $resetAlert,title: $resetTitle, message: $resetMessage, okColor: .alertRed, onOKAction: {
-                            
+                            viewModel.resetBook()
                         })
                     }
                 }

@@ -9,6 +9,7 @@ import SwiftUI
 
 struct AssetView: View {
     @ObservedObject var viewModel : AnalysisViewModel
+    @State var currency = CurrencyManager.shared.currentCurrency
     var body: some View {
         ScrollView(showsIndicators: false){
             VStack(spacing: 42) {
@@ -23,7 +24,7 @@ struct AssetView: View {
                                 Text("지난달보다 증가했어요")
                                     .font(.pretendardFont(.bold,size: 22))
                                     .foregroundColor(.greyScale1)
-                                Text("지난달 대비 \(Int(viewModel.difference))원\n증가했어요")
+                                Text("지난달 대비 \(Int(viewModel.difference))\(currency)\n증가했어요")
                                     .font(.pretendardFont(.medium,size: 13))
                                     .foregroundColor(.greyScale6)
                                 
@@ -35,7 +36,7 @@ struct AssetView: View {
                                 Text("지난달보다 감소했어요")
                                     .font(.pretendardFont(.bold,size: 22))
                                     .foregroundColor(.greyScale1)
-                                Text("지난달 대비 \(Int(abs(viewModel.difference)))원\n감소했어요")
+                                Text("지난달 대비 \(Int(abs(viewModel.difference)))\(currency)\n감소했어요")
                                     .font(.pretendardFont(.medium,size: 13))
                                     .foregroundColor(.greyScale6)
                             }
@@ -46,7 +47,7 @@ struct AssetView: View {
                                 Text("지난달과 같아요")
                                     .font(.pretendardFont(.bold,size: 22))
                                     .foregroundColor(.greyScale1)
-                                Text("지난달 대비 0원\n증가했어요")
+                                Text("지난달 대비 0\(currency)\n증가했어요")
                                     .font(.pretendardFont(.medium,size: 13))
                                     .foregroundColor(.greyScale6)
                             }
@@ -92,7 +93,7 @@ struct AssetView: View {
                             Text("현재자산")
                                 .font(.pretendardFont(.medium, size: 14))
                                 .foregroundColor(.greyScale6)
-                            Text("\(Int(viewModel.currentAsset))원")
+                            Text("\(Int(viewModel.currentAsset))\(currency)")
                                 .font(.pretendardFont(.bold, size: 20))
                                 .foregroundColor(.greyScale2)
                         }
@@ -103,7 +104,7 @@ struct AssetView: View {
                         Text("초기자산")
                             .font(.pretendardFont(.medium, size: 14))
                             .foregroundColor(.greyScale6)
-                        Text("\(Int(viewModel.initAsset))원")
+                        Text("\(Int(viewModel.initAsset))\(currency)")
                             .font(.pretendardFont(.bold, size: 20))
                             .foregroundColor(.greyScale2)
                     }

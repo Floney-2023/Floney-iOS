@@ -8,7 +8,9 @@
 import SwiftUI
 
 struct InviteBookView: View {
-    @State var bookCode = "18758F7A"
+    var applinkManager = AppLinkManager.shared
+    @ObservedObject var viewModel = CreateBookViewModel()
+    //@State var bookCode = "18758F7A"
     @State var showAlert = false
     var body: some View {
         VStack {
@@ -39,7 +41,7 @@ struct InviteBookView: View {
                 Text("초대코드")
                     .font(.pretendardFont(.medium, size: 12))
                     .foregroundColor(.greyScale8)
-                Text("\(bookCode)")
+                Text("\(applinkManager.inviteCode!)")
                     .padding(16)
                     .frame(maxWidth: .infinity)
                     .font(.pretendardFont(.bold, size: 14))
@@ -50,7 +52,7 @@ struct InviteBookView: View {
             .padding(.horizontal,24)
             .onTapGesture {
                 // 클립보드에 값 복사하기
-                UIPasteboard.general.string = bookCode
+                UIPasteboard.general.string = applinkManager.inviteCode
                 showAlert = true
             }
             .alert(isPresented: $showAlert) {
@@ -58,7 +60,7 @@ struct InviteBookView: View {
             }
             Spacer()
             Button {
-                
+                viewModel.inviteBookCode()
             } label: {
                 Text("입장하기")
                     .padding(16)
@@ -70,10 +72,7 @@ struct InviteBookView: View {
                     
             }
             .padding(.horizontal,20)
-            
-            
-            
-            
+  
         }
     }
 }

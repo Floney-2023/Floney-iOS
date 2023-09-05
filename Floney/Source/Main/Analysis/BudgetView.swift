@@ -10,7 +10,7 @@ import SwiftUI
 struct BudgetView: View {
     @State private var progress: Double = 50 // 50%
     @ObservedObject var viewModel : AnalysisViewModel
-    
+    @State var currency = CurrencyManager.shared.currentCurrency
     var body: some View {
         VStack {
             VStack(alignment:.leading, spacing: 0){
@@ -33,7 +33,7 @@ struct BudgetView: View {
                         let selectedYear = calendar.component(.year, from: viewModel.selectedDate)
                         let selectedMonth = calendar.component(.month, from: viewModel.selectedDate)
                         if currentYear == selectedYear && currentMonth == selectedMonth {
-                            Text("남은 기간동안 하루에\n\(Int(viewModel.dailyAvailableMoney))원을 사용할 수 있어요")
+                            Text("남은 기간동안 하루에\n\(Int(viewModel.dailyAvailableMoney))\(currency)을 사용할 수 있어요")
                                 .font(.pretendardFont(.medium,size: 13))
                                 .foregroundColor(.greyScale6)
                         }
@@ -127,7 +127,7 @@ struct BudgetView: View {
                     Text("남은 금액")
                         .font(.pretendardFont(.medium, size: 14))
                         .foregroundColor(.greyScale6)
-                    Text("\(Int(viewModel.leftBudget))원")
+                    Text("\(Int(viewModel.leftBudget))\(currency)")
                         .font(.pretendardFont(.bold, size: 20))
                         .foregroundColor(.greyScale2)
                 }.frame(maxWidth: .infinity)
@@ -136,7 +136,7 @@ struct BudgetView: View {
                     Text("총 예산")
                         .font(.pretendardFont(.medium, size: 14))
                         .foregroundColor(.greyScale6)
-                    Text("\(Int(viewModel.totalBudget))원")
+                    Text("\(Int(viewModel.totalBudget))\(currency)")
                         .font(.pretendardFont(.bold, size: 20))
                         .foregroundColor(.greyScale2)
                 }.frame(maxWidth: .infinity)

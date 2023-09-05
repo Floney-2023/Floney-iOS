@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct CompleteCalcView: View {
+    @State var currency = CurrencyManager.shared.currentCurrency
     @StateObject var applinkManager = AppLinkManager.shared
     @Binding var isShowingTabbar : Bool
     @Binding var isShowingCalc : Bool
@@ -59,7 +60,7 @@ struct CompleteCalcView: View {
                         .font(.pretendardFont(.medium, size: 16))
                         .foregroundColor(.greyScale2)
                     Spacer()
-                    Text("\(Int(viewModel.totalOutcome))원")
+                    Text("\(Int(viewModel.totalOutcome))\(currency)")
                         .font(.pretendardFont(.bold, size: 16))
                         .foregroundColor(.greyScale2)
                 }
@@ -80,7 +81,7 @@ struct CompleteCalcView: View {
                                 .font(.pretendardFont(.medium, size: 14))
                                 .foregroundColor(.greyScale6)
                             Spacer()
-                            Text("\(Int((detail.money + viewModel.outcomePerUser)))원")
+                            Text("\(Int((detail.money + viewModel.outcomePerUser)))\(currency)")
                                 .font(.pretendardFont(.bold, size: 14))
                                 .foregroundColor(.greyScale2)
                         }
@@ -105,7 +106,7 @@ struct CompleteCalcView: View {
                     Text("1인")
                         .font(.pretendardFont(.semiBold, size: 10))
                         .foregroundColor(.greyScale6)
-                    Text("\(Int(viewModel.outcomePerUser))원")
+                    Text("\(Int(viewModel.outcomePerUser))\(currency)")
                         .font(.pretendardFont(.bold, size: 16))
                         .foregroundColor(.primary2)
                 }
@@ -124,7 +125,7 @@ struct CompleteCalcView: View {
                                     .font(.pretendardFont(.bold, size: 16))
                                     .foregroundColor(.greyScale2)
                                 +
-                                Text(detail.money > 0 ? "원 을 받아야해요." : "원 을 보내야해요")
+                                Text(detail.money > 0 ? "\(currency) 을 받아야해요." : "\(currency) 을 보내야해요")
                                     .font(.pretendardFont(.regular, size: 16))
                                     .foregroundColor(.greyScale2)
                             } else {
@@ -153,13 +154,12 @@ struct CompleteCalcView: View {
             }.frame(height:UIScreen.main.bounds.height * 0.085)
                 .onTapGesture {
                     applinkManager.generateSettlementLink(settlementId: viewModel.id, bookKey: Keychain.getKeychainValue(forKey: .bookKey)!)
-                    if let url = applinkManager.shortenedUrl {
-                        self.onShareSheet = true
-                    }
+                    print(applinkManager.shortenedUrl)
+                    
                 }
             
         }.edgesIgnoringSafeArea(.bottom)
-            .sheet(isPresented: $onShareSheet) {
+            .sheet(isPresented: $applinkManager.showingShareSheet) {
                 if let url = applinkManager.shortenedUrl {
                     ActivityView(activityItems: [url])
                 }

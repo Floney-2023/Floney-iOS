@@ -35,3 +35,8 @@ struct SetCarryOver : Encodable {
     var bookKey : String
     var status : Bool
 }
+
+struct SetCurrencyRequest : Encodable {
+    var requestCurrency : String
+    var bookKey : String
+}

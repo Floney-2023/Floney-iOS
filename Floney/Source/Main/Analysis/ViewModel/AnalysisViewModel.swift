@@ -216,7 +216,7 @@ class AnalysisViewModel : ObservableObject {
         // 하루에 사용할 수 있는 금액 계산
         let dailyAvailableMoney = self.leftBudget / Double(remainingDays)
 
-        print("하루에 사용할 수 있는 금액은 \(dailyAvailableMoney)원 입니다.")
+        print("하루에 사용할 수 있는 금액은 \(dailyAvailableMoney) 입니다.")
         self.dailyAvailableMoney = dailyAvailableMoney
     }
     func analysisAsset(date: String) {

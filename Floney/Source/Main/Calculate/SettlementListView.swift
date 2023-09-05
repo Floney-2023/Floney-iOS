@@ -10,8 +10,10 @@ import SwiftUI
 struct SettlementListView: View {
     @Binding var isShowing : Bool
     @Binding var showingTabbar : Bool
-    @State var showingDetail = false
+    @Binding var settlementId : Int
+    @Binding var showingDetail :Bool
     @StateObject var viewModel = CalculateViewModel()
+    @State var currency = CurrencyManager.shared.currentCurrency
     var body: some View {
         VStack(spacing:28) {
             HStack {
@@ -56,7 +58,7 @@ struct SettlementListView: View {
                                         .font(.pretendardFont(.medium,size: 13))
                                         .foregroundColor(.greyScale6)
                                     Spacer()
-                                    Text("\(Int(list.totalOutcome))원")
+                                    Text("\(Int(list.totalOutcome))\(currency)")
                                         .font(.pretendardFont(.medium,size: 13))
                                         .foregroundColor(.greyScale2)
                                     
@@ -83,7 +85,7 @@ struct SettlementListView: View {
                                 Text("1인")
                                     .font(.pretendardFont(.semiBold, size: 10))
                                     .foregroundColor(.greyScale6)
-                                Text("\(Int(list.outcome))원")
+                                Text("\(Int(list.outcome))\(currency)")
                                     .font(.pretendardFont(.bold, size: 16))
                                     .foregroundColor(.primary2)
                                 Image("forward_button")
@@ -94,9 +96,9 @@ struct SettlementListView: View {
                             .background(Color.primary10)
                             .cornerRadius(12)
                         }.onTapGesture {
-                            viewModel.id = list.id
+                            settlementId = list.id
+                            viewModel.id = settlementId
                             showingDetail = true
-                            
                         }
                     }
                 }
@@ -110,7 +112,7 @@ struct SettlementListView: View {
         }
         .navigationBarBackButtonHidden()
         
-        NavigationLink(destination: SettlementDetailView(isShowingTabbar: $showingTabbar, showingDetail: $showingDetail, viewModel: viewModel), isActive: $showingDetail) {
+        NavigationLink(destination: SettlementDetailView(isShowingTabbar: $showingTabbar, showingDetail: $showingDetail, settlementId: $settlementId, viewModel: viewModel), isActive: $showingDetail) {
             EmptyView()
         }
     }
@@ -118,6 +120,7 @@ struct SettlementListView: View {
 
 struct SettlementListView_Previews: PreviewProvider {
     static var previews: some View {
-        SettlementListView(isShowing: .constant(true), showingTabbar: .constant(false))
+        SettlementListView(isShowing: .constant(true), showingTabbar: .constant(false), settlementId: .constant(0), showingDetail: .constant(false))
     }
 }
+

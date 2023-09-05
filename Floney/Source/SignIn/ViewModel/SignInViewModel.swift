@@ -13,6 +13,8 @@ import FirebaseAuth
 import AdSupport
 @MainActor
 class SignInViewModel: ObservableObject {
+    private var appleSignInCoordinator: SignInWithAppleCoordinator?
+
     var tokenViewModel = TokenReissueViewModel()
    
     @Published var signUpViewModel = SignUpViewModel()
@@ -91,6 +93,8 @@ class SignInViewModel: ObservableObject {
             }
             .store(in: &cancellableSet)
     }
+    
+    //MARK: 구글 회원가입 되어있는지 체크
     func checkgoogle()  {
         dataManager.checkgoogle(token)
             .sink { [weak self] completion in
@@ -115,7 +119,7 @@ class SignInViewModel: ObservableObject {
             }
             .store(in: &cancellableSet)
     }
-    
+    //MARK: 앱 서버로 카카오 로그인
     func kakaoSignIn(token : String) {
         dataManager.kakaoSignIn(token)
             .sink { (dataResponse) in
@@ -135,7 +139,7 @@ class SignInViewModel: ObservableObject {
                 }
             }.store(in: &cancellableSet)
     }
-    //MARK: Connect with our server
+    //MARK: 앱 서버로 구글 로그인
     func googleSignIn() {
         dataManager.googleSignIn(token)
             .sink { (dataResponse) in
@@ -156,7 +160,7 @@ class SignInViewModel: ObservableObject {
                                     }
             }.store(in: &cancellableSet)
     }
-    //MARK: Connect with google
+    //MARK: 구글 서버에서 토큰 받아오기
     func signInGoogle() async throws {
         guard let topVC = Utilities.shared.topViewController() else {
             throw URLError(.cannotFindHost)
@@ -225,15 +229,19 @@ class SignInViewModel: ObservableObject {
         
         return true
     }
-    /*
-    private func performAppleSignIn() {
-        let coordinator = SignInWithAppleCoordinator { userId in
+    //MARK: 애플 서버에서 토큰 받아오기
+    func performAppleSignIn() {
+        appleSignInCoordinator = SignInWithAppleCoordinator { userId, name, email, identityToken  in
             print("Sign in successful, user id: \(userId)")
+            print("Sign in successful, name: \(name)")
+            print("Sign in successful, email: \(email)")
+            print("identityToken : \(identityToken)")
+            //sendServer
         } onError: { error in
             print("Sign in failed with error: \(error)")
         }
-        coordinator.signIn()
-    }*/
+        appleSignInCoordinator?.signIn()
+    }
     
     //MARK: 비밀번호 재설정
     func findPassword(email: String) {

@@ -8,9 +8,12 @@
 import Foundation
 import Combine
 import SwiftUI
+
 class MyPageViewModel: ObservableObject {
-    var cryptionManager = CryptManager()
     var alertManager = AlertManager.shared
+    var recentBookManager = RecentBookKeyManager()
+    var cryptionManager = CryptManager()
+   
     @Published var result : MyPageResponse = MyPageResponse(nickname: "", email: "", profileImg: "", provider: "", subscribe: false, lastAdTime: nil, myBooks: [])
     @Published var isLoading : Bool = false
     @Published var ChangeProfileImageSuccess : Bool = false
@@ -146,6 +149,7 @@ class MyPageViewModel: ObservableObject {
     }
     
     func isValidInputs() -> Bool {
+        
         let currentPasswordEntered = isCurrentPasswordEntered()
         let newPasswordEntered = isNewPasswordEntered()
         let newPasswordCheckEntered = isNewPasswordCheckEntered()
@@ -172,6 +176,7 @@ class MyPageViewModel: ObservableObject {
             showAlert = true
             errorMessage = "새 비밀번호가 일치하지 않습니다."
         }
+        alertManager.update(showAlert: showAlert, message: errorMessage, buttonType: "red")
         return  currentPasswordEntered && newPasswordEntered && newPasswordCheckEntered && newPasswordValid && passwordMatch
     }
     

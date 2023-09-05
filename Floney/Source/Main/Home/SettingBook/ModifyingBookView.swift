@@ -115,9 +115,10 @@ struct ModifyingBookView: View {
                         viewModel.deleteBook()
                     })
                 }
+                /*
                 if alertManager.showAlert {
                     CustomAlertView(message: alertManager.message, type: alertManager.buttontType, isPresented: $alertManager.showAlert)
-                }
+                }*/
             }
         )
         

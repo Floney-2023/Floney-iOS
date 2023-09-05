@@ -9,6 +9,8 @@ import SwiftUI
 import Combine
 struct AddView: View {
     @StateObject var viewModel = AddViewModel()
+    @State var currency = CurrencyManager.shared.currentCurrency
+    
     @Binding var isPresented: Bool
     @State var isShowingBottomSheet = false
     @State var isShowingEditCategory = false
@@ -79,7 +81,7 @@ struct AddView: View {
                             )
                         
                             .overlay(
-                                Text("\(money)원")
+                                Text("\(money)\(currency)")
                                         .font(.pretendardFont(.bold, size: 38))
                                         .foregroundColor(.primary2)
                                         .opacity(money.isEmpty ? 0 : 1)

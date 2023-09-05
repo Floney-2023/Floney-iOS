@@ -15,7 +15,7 @@ struct MyPageView: View {
     @State var isShowingBottomSheet = false
     @StateObject var viewModel = MyPageViewModel()
     @State var isShowingNotiView = false
-    
+    @State var currency = CurrencyManager.shared.currentCurrency
     var body: some View {
         NavigationView {
         ZStack {
@@ -107,7 +107,7 @@ struct MyPageView: View {
                                 NavigationLink(destination: SubscriptionView()) {
                                     VStack {
                                         HStack {
-                                            Text("월 3,800원으로\n더 많은 혜택을\n누려보세요!")
+                                            Text("월 3,800\(currency)으로\n더 많은 혜택을\n누려보세요!")
                                                 .font(.pretendardFont(.bold, size: 14))
                                                 .foregroundColor(.white)
                                             Spacer()

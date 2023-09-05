@@ -10,8 +10,10 @@ import SwiftUI
 struct CalculateView: View {
     var date = 11
     @State var isShowingCalc = false
-    @State var isShowingSettlement = false
+    @Binding var settlementId : Int
+    @Binding var isShowingSettlement : Bool
     @Binding var showingTabbar : Bool
+    @Binding var showingDetail : Bool
     
     var body: some View {
         ZStack {
@@ -67,7 +69,7 @@ struct CalculateView: View {
                 NavigationLink(destination : CalculateMainView(isShowingTabbar: $showingTabbar, isShowingCalc: $isShowingCalc), isActive: $isShowingCalc){
                     EmptyView()
                 }
-                NavigationLink(destination : SettlementListView(isShowing: $isShowingSettlement, showingTabbar: $showingTabbar), isActive: $isShowingSettlement){
+                NavigationLink(destination : SettlementListView(isShowing: $isShowingSettlement, showingTabbar: $showingTabbar, settlementId: $settlementId, showingDetail: $showingDetail), isActive: $isShowingSettlement){
                     EmptyView()
                 }
             }.padding(.top, 26)
@@ -77,6 +79,6 @@ struct CalculateView: View {
 
 struct CalculateView_Previews: PreviewProvider {
     static var previews: some View {
-        CalculateView(showingTabbar: .constant(true))
+        CalculateView(settlementId: .constant(0), isShowingSettlement: .constant(false), showingTabbar: .constant(true), showingDetail: .constant(false))
     }
 }

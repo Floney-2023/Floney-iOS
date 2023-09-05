@@ -120,9 +120,10 @@ struct UserInformationView: View {
                 if showingLogoutAlert {
                     AlertView(isPresented: $showingLogoutAlert, title: $title, message: $message, onOKAction: {viewModel.logout()})
                 }
+                /*
                 if alertManager.showAlert {
                     CustomAlertView(message: alertManager.message, type: alertManager.buttontType, isPresented: $alertManager.showAlert)
-                }
+                }*/
             }
         )
 

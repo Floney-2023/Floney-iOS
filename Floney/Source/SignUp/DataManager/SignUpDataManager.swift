@@ -73,7 +73,6 @@ extension SignUp: SignUpProtocol {
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
     }
-
     func authEmail(_ parameters:AuthEmailRequest) -> AnyPublisher<Int, NetworkError> {
         let url = "\(Constant.BASE_URL)/users/email?email=\(parameters.email)"
         print(url)

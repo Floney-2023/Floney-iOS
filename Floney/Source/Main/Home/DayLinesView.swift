@@ -31,7 +31,7 @@ struct DayTotalView : View {
     @ObservedObject var viewModel : CalendarViewModel
     @State var totalIncome = 0
     @State var totalOutcome = 0
-    
+    @State var currency = CurrencyManager.shared.currentCurrency
    
     var body: some View {
         HStack() {
@@ -41,7 +41,7 @@ struct DayTotalView : View {
                         .font(.pretendardFont(.medium, size: 12))
                         .foregroundColor(.greyScale12)
                     
-                    Text("\(viewModel.dayLinesTotalIncome)원")
+                    Text("\(viewModel.dayLinesTotalIncome)\(currency)")
                         .font(.pretendardFont(.semiBold, size: 18))
                         .foregroundColor(.white)
                 }
@@ -53,7 +53,7 @@ struct DayTotalView : View {
                     Text("지출")
                         .font(.pretendardFont(.medium, size: 12))
                         .foregroundColor(.greyScale12)
-                    Text("\(viewModel.dayLinesTotalOutcome)원")
+                    Text("\(viewModel.dayLinesTotalOutcome)\(currency)")
                         .font(.pretendardFont(.semiBold, size: 18))
                         .foregroundColor(.white)
                 }

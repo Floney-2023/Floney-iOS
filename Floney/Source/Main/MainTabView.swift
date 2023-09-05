@@ -9,18 +9,19 @@ import SwiftUI
 
 struct MainTabView: View {
     @State var selection = 0
+    @State var settlementId = 0
+    @State var showingSettlementList = false
+    @State var showingSettlementDetail = false
     @State var showingAddView = false
     @State var showingTabbar = true
     @State var isLoading = false
+    @StateObject var alertManager = AlertManager.shared
     
     var lineModel = LineModel()
-
     let icons = ["icon_home_off", "icon_leaderboard_off", "icon_add_circle", "icon_calculate_off", "icon_person_off"]
     let selectedIcons = ["icon_home_on", "icon_leaderboard_on", "", "icon_calculate_on", "icon_person_on"]
     let labels = ["홈", "분석", "", "정산", "마이"]
-    init() {
-
-    }
+    
     private var dateFormatter: DateFormatter {
         let formatter = DateFormatter()
         formatter.dateFormat = "YYYY-MM-dd"
@@ -29,7 +30,6 @@ struct MainTabView: View {
     
     var body: some View {
         @State var currentDate = dateFormatter.string(from: Date())
-        
         ZStack {
             VStack {
                 ZStack {
@@ -59,9 +59,7 @@ struct MainTabView: View {
                         }
                     case 3:
                         NavigationView {
-                            
-                           CalculateView(showingTabbar: $showingTabbar)
-                            
+                            CalculateView(settlementId: $settlementId, isShowingSettlement: $showingSettlementList, showingTabbar: $showingTabbar, showingDetail: $showingSettlementDetail)
                         }
                     default :
                         NavigationView {
@@ -128,6 +126,8 @@ struct MainTabView: View {
                 ProgressLoadingView()
                 //DimmedLoadingView()
             }
+            
+            CustomAlertView(message: alertManager.message, type : alertManager.buttontType,isPresented: $alertManager.showAlert)
             
         }
     }
