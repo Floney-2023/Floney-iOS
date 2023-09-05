@@ -10,3 +10,6 @@ struct CreateBookRequest: Encodable {
     var name: String
     var profileImg : String
 }
+struct InviteBookRequest : Encodable {
+    var code : String
+}

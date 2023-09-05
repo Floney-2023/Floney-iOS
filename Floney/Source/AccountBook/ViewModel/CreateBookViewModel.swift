@@ -40,6 +40,28 @@ class CreateBookViewModel: ObservableObject {
                 }
             }.store(in: &cancellableSet)
     }
+
+    func inviteBookCode() {
+        if let inviteCode = AppLinkManager.shared.inviteCode {
+            let request = InviteBookRequest(code: inviteCode)
+            dataManager.inviteBook(request)
+                .sink { (dataResponse) in
+                    if dataResponse.error != nil {
+                        self.createAlert(with: dataResponse.error!)
+                        print(dataResponse.error)
+                    } else {
+                        self.result = dataResponse.value!
+                        
+                        print(self.result) // bookkey & code
+                        // bookKey는 request할 때 사용, code는 초대할 때 사용
+                        print(self.result.code)
+                        self.setBookCode()
+                        AppLinkManager.shared.inviteStatus = false
+                        AppLinkManager.shared.hasDeepLink = false
+                    }
+                }.store(in: &cancellableSet)
+        }
+    }
     func setBookCode() {
         Keychain.setKeychain(self.result.bookKey, forKey: .bookKey)
         Keychain.setKeychain(self.result.code, forKey: .bookCode)

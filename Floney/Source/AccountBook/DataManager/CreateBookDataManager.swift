@@ -11,6 +11,7 @@ import Alamofire
 
 protocol CreateBookProtocol {
     func createBook(_ parameters:CreateBookRequest) -> AnyPublisher<DataResponse<CreateBookResponse, NetworkError>, Never>
+    func inviteBook(_ parameters:InviteBookRequest) -> AnyPublisher<DataResponse<CreateBookResponse, NetworkError>, Never>
 }
 
 
@@ -30,6 +31,25 @@ extension CreateBook: CreateBookProtocol {
             return
         }
         */
+        let token = Keychain.getKeychainValue(forKey: .accessToken)
+        return AF.request(url,
+                          method: .post,
+                          parameters: parameters,
+                          encoder: JSONParameterEncoder(),
+                          headers: ["Authorization":"Bearer \(token!)"])
+            .validate()
+            .publishDecodable(type: CreateBookResponse.self)
+            .map { response in
+                response.mapError { error in
+                    let backendError = response.data.flatMap { try? JSONDecoder().decode(BackendError.self, from: $0)}
+                    return NetworkError(initialError: error, backendError: backendError)
+                }
+            }
+            .receive(on: DispatchQueue.main)
+            .eraseToAnyPublisher()
+    }
+    func inviteBook(_ parameters:InviteBookRequest) -> AnyPublisher<DataResponse<CreateBookResponse, NetworkError>, Never> {
+        let url = "\(Constant.BASE_URL)/books/join"
         let token = Keychain.getKeychainValue(forKey: .accessToken)
         return AF.request(url,
                           method: .post,
