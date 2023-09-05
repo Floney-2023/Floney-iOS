@@ -15,6 +15,7 @@ import AppsFlyerLib
 import FirebaseMessaging
 import AdSupport
 import AppTrackingTransparency
+import AuthenticationServices
 
 class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate {
     var ConversionData: [AnyHashable: Any]? = nil
@@ -58,6 +59,26 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate {
             }
         }
         
+        // apple 연동되어 있는지 검증
+        if let appleId = Keychain.getKeychainValue(forKey: .appleUserId) {
+            let appleIDProvider = ASAuthorizationAppleIDProvider()
+            appleIDProvider.getCredentialState(forUserID: appleId) { (credentialState, error) in
+                switch credentialState {
+                case .authorized:
+                    // Authorization Logic
+                    break
+                case .revoked, .notFound:
+                    // Not Authorization Logic
+                    /*
+                     DispatchQueue.main.async {
+                     self.window?.rootViewController?.showLoginViewController()
+                     }*/
+                    break
+                default:
+                    break
+                }
+            }
+        }
         // Apps Flyer 초기화
         //  Set isDebug to true to see AppsFlyer debug logs
         AppsFlyerLib.shared().isDebug = true

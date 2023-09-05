@@ -26,6 +26,8 @@ struct FloneyApp: App {
                             AppLinkManager.shared.inviteCode = inviteCode
                             print("\(AppLinkManager.shared.hasDeepLink)")
                             print("\(AppLinkManager.shared.inviteCode)")
+                        } else {
+                            
                         }
                     }
                 }

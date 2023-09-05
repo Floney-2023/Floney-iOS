@@ -23,6 +23,10 @@ class Keychain {
         case bookName
         case userProfileState
         case bookProfileState
+        case fcmToken
+        case appleUserId
+        case appleEmail
+        case appleName
     }
     
     /**

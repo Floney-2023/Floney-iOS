@@ -8,10 +8,12 @@
 import SwiftUI
 
 struct CompleteCalcView: View {
+    @StateObject var applinkManager = AppLinkManager.shared
     @Binding var isShowingTabbar : Bool
     @Binding var isShowingCalc : Bool
     @State var totalMoney = 200000
     @Binding var pageCount : Int
+    @State var onShareSheet = false
     var pageCountAll = 4
     @ObservedObject var viewModel : CalculateViewModel
     var body: some View {
@@ -141,7 +143,6 @@ struct CompleteCalcView: View {
             }
             .padding(EdgeInsets(top: 32, leading: 24, bottom: 0, trailing: 24))
             HStack(spacing:0){
-
                 Text("공유하기")
                     .padding(.bottom, 10)
                     .font(.pretendardFont(.bold, size: 14))
@@ -150,9 +151,19 @@ struct CompleteCalcView: View {
                     .frame(maxHeight: .infinity)
                     .background(Color.primary1)
             }.frame(height:UIScreen.main.bounds.height * 0.085)
+                .onTapGesture {
+                    applinkManager.generateSettlementLink(settlementId: viewModel.id, bookKey: Keychain.getKeychainValue(forKey: .bookKey)!)
+                    if let url = applinkManager.shortenedUrl {
+                        self.onShareSheet = true
+                    }
+                }
             
         }.edgesIgnoringSafeArea(.bottom)
-
+            .sheet(isPresented: $onShareSheet) {
+                if let url = applinkManager.shortenedUrl {
+                    ActivityView(activityItems: [url])
+                }
+            }
     }
 
 }
