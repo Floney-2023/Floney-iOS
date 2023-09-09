@@ -223,6 +223,8 @@ struct SubscriptionView: View {
                     // 구매하지 않았으면 구매
                     if !IAPManager.shared.isProductPurchased(productID) {
                         IAPManager.shared.buyProduct(productID)
+                    } else {
+                        IAPManager.shared.verifyReceipt()
                     }
                 } label: {
                     Text("floney Plus+ 구독하기")
