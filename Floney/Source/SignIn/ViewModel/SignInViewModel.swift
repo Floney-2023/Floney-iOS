@@ -11,6 +11,7 @@ import AuthenticationServices
 import GoogleSignIn
 import FirebaseAuth
 import AdSupport
+
 @MainActor
 class SignInViewModel: ObservableObject {
     private var appleSignInCoordinator: SignInWithAppleCoordinator?

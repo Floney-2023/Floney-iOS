@@ -10,7 +10,7 @@ import Combine
 import SwiftUI
 
 class SettingBookViewModel : ObservableObject {
-    var cryprionManager = CryptManager()
+    //var cryprionManager = CryptManager()
     var alertManager = AlertManager.shared
     @Published var tokenViewModel = TokenReissueViewModel()
     
@@ -91,8 +91,8 @@ class SettingBookViewModel : ObservableObject {
                     self.userImages = self.bookUsers.compactMap { $0.profileImg }
                     
                     if let url = self.bookImg {
-                        let decryptedUrl = self.cryprionManager.decrypt(url, using: self.cryprionManager.key!)
-                        ProfileManager.shared.setBookImageStateToCustom(urlString: decryptedUrl!)
+                        //let decryptedUrl = self.cryprionManager.decrypt(url, using: self.cryprionManager.key!)
+                        ProfileManager.shared.setBookImageStateToCustom(urlString: url)
                     } else {
                         ProfileManager.shared.setBookImageStateToDefault()
                     }
@@ -119,6 +119,7 @@ class SettingBookViewModel : ObservableObject {
                     print("Profile successfully changed.")
                     self.isLoading = false
                     self.ChangeProfileImageSuccess = true
+                    ProfileManager.shared.setBookImageStateToCustom(urlString: self.encryptedImageUrl)
                     self.alertManager.update(showAlert: true, message: "변경이 완료되었습니다.", buttonType: "green")
                 case .failure(let error):
                     print("Error changing profile: \(error)")

@@ -18,7 +18,7 @@ struct SetBookProfileImageView: View {
     @StateObject var viewModel = SettingBookViewModel()
     @StateObject var permissionManager = PermissionManager()
     var firebaseManager = FirebaseManager()
-    var encryptionManager = CryptManager()
+    //var encryptionManager = CryptManager()
     // 이미지선택창 선택 여부
     @State private var presentsImagePicker = false
     // 카메라 선택 여부
@@ -71,13 +71,13 @@ struct SetBookProfileImageView: View {
                 Button("변경하기") {
                     viewModel.isLoading = true
                     if let image = selectedUIImage {
-                        firebaseManager.uploadImageToFirebase(image: image) { encryptedURL in
+                        firebaseManager.uploadImageToFirebase(image: image) { url in
                             DispatchQueue.main.async {
-                                if let url = encryptedURL {
+                                if let url = url {
                                     viewModel.encryptedImageUrl = url
                                     viewModel.changeProfile(inputStatus: "custom")
-                                    viewModel.bookPreviewImage124 = selectedUIImage
-                                    ProfileManager.shared.setBookImageStateToCustom(urlString: url)
+                                    //viewModel.bookPreviewImage124 = selectedUIImage
+                                    //ProfileManager.shared.setBookImageStateToCustom(urlString: url)
                                     print("in image view: \(url)")
                                 }
                             }
@@ -156,8 +156,7 @@ struct SetBookProfileImageView: View {
             .onChange(of: viewModel.ChangeProfileImageSuccess) { newValue in
                 self.presentationMode.wrappedValue.dismiss()
             }
-            
-            
+
             //MARK: alert
             if showAlert {
                 AlertView(isPresented: $showAlert, title: $title, message: $message) {

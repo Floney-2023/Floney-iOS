@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 
+// MARK: User Image State
 enum UserProfileImageState : String {
     case `default` = "default"
     case random0 = "random0"
@@ -18,28 +19,31 @@ enum UserProfileImageState : String {
     case random5 = "random5"
     case custom = "custom"
 }
+// MARK: Book Image State
 enum BookProfileImageState : String {
     case `default` = "default"
     case custom = "custom"
 }
+
 class ProfileManager: ObservableObject {
     static let shared = ProfileManager()  // Singleton instance
+    // User Image State
     @Published var userImageState: UserProfileImageState = .default
-    //@Published var userPreviewImageCustom : UIImage?
+    @Published var userImageUrl : String = ""
+    // User Preview Image
     @Published var userPreviewImage124 : UIImage?
     @Published var userPreviewImage36 : UIImage?
     @Published var userPreviewImage32 : UIImage?
+    
+    // Book Image State
+    @Published var bookImageState: BookProfileImageState = .default
+    @Published var bookImageUrl : String = ""
+    // Book Preview Image
     @Published var bookPreviewImage124 : UIImage?
     @Published var bookPreviewImage110 : UIImage?
     @Published var bookPreviewImage36 : UIImage?
     @Published var bookPreviewImage34 : UIImage?
-    //@Published var bookPreviewImage32 : UIImage?
 
-    @Published var userImageUrl : String = ""
-    @Published var bookImageState: BookProfileImageState = .default
-    @Published var bookImageUrl : String = ""
-    //@Published var bookPreviewImage : UIImage?
-    
     func getUserProfileImageState() -> UserProfileImageState {
         return userImageState
     }
@@ -48,6 +52,16 @@ class ProfileManager: ObservableObject {
         return bookImageState
     }
 
+    // User Preview Image default로 설정
+    func setUserImageStateToDefault() {
+        userImageState = .default
+  
+        self.userPreviewImage124 = UIImage(named: "user_profile_124")
+        self.userPreviewImage36 = UIImage(named: "user_profile_36")
+        self.userPreviewImage32 = UIImage(named: "user_profile_32")
+    }
+    
+    // User Preview Image를 Custom으로 설정
     func setUserImageStateToCustom(urlString: String) {
         userImageState = .custom
         userImageUrl = urlString
@@ -70,14 +84,8 @@ class ProfileManager: ObservableObject {
         task.resume()
 
     }
-    func setUserImageStateToDefault() {
-        userImageState = .default
-  
-        self.userPreviewImage124 = UIImage(named: "user_profile_124")
-        self.userPreviewImage36 = UIImage(named: "user_profile_36")
-        self.userPreviewImage32 = UIImage(named: "user_profile_32")
-    }
-
+    
+    // 가계부 Preview Image를 default로 설정
     func setBookImageStateToDefault() {
         bookImageState = .default
         
@@ -85,9 +93,8 @@ class ProfileManager: ObservableObject {
         self.bookPreviewImage110 = UIImage(named: "book_profile_110")
         self.bookPreviewImage36 = UIImage(named: "book_profile_36")
         self.bookPreviewImage34 = UIImage(named: "book_profile_34")
-       // self.bookPreviewImage32 = UIImage(named: "book_profile_32")
     }
-    
+    // 가계부 Preview Image를 custom으로 설정
     func setBookImageStateToCustom(urlString: String) {
         bookImageState = .custom
         bookImageUrl = urlString
@@ -112,6 +119,7 @@ class ProfileManager: ObservableObject {
         task.resume()
     }
     
+    // User Preview Image를 random으로 설정
     func setRandomProfileImage(randomNumStr : String) {
         switch randomNumStr {
         case "random0" :

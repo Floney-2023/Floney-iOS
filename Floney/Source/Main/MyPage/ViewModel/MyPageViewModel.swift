@@ -12,11 +12,11 @@ import SwiftUI
 class MyPageViewModel: ObservableObject {
     var alertManager = AlertManager.shared
     var recentBookManager = RecentBookKeyManager()
-    var cryptionManager = CryptManager()
+    //var cryptionManager = CryptManager()
    
     @Published var result : MyPageResponse = MyPageResponse(nickname: "", email: "", profileImg: "", provider: "", subscribe: false, lastAdTime: nil, myBooks: [])
     @Published var isLoading : Bool = false
-    @Published var ChangeProfileImageSuccess : Bool = false
+    
     @Published var myPageLoadingError: String = ""
     @Published var errorMessage : String = ""
     @Published var showAlert: Bool = false
@@ -26,16 +26,19 @@ class MyPageViewModel: ObservableObject {
     @Published var provider : String = ""
     @Published var subscribe : Bool = false
     @Published var userImg : String?
+    @Published var profileUrl : String?
     @Published var myBooks : [MyBookResult] = []
-    @Published var encryptedImageUrl : String = ""
+    
     
     @Published var changedNickname = ""
     
+    //MARK: Image
     @Published var imageLoading: Bool = true
+    @Published var ChangeProfileImageSuccess : Bool = false
+    @Published var encryptedImageUrl : String = ""
     @Published var userPreviewImage124 : UIImage? = nil
     @Published var userPreviewImage36 : UIImage? = nil
     @Published var userPreviewImage32 : UIImage? = nil
-    
     @Published var randomNumStr : String? = nil
     
     //MARK: password
@@ -67,18 +70,31 @@ class MyPageViewModel: ObservableObject {
                     self.provider = self.result.provider
                     self.subscribe = self.result.subscribe
                     
-                    if self.userImg == "user_default" {
-                        ProfileManager.shared.setUserImageStateToDefault()
-                    } else if self.userImg!.hasPrefix("random") {
-                        ProfileManager.shared.setRandomProfileImage(randomNumStr: self.userImg!)
+                    if let img = self.userImg {
+                        if img == "user_default" { // 디폴트라면
+                            ProfileManager.shared.setUserImageStateToDefault()
+                        } else if img.hasPrefix("random") { // 랜덤이라면
+                            ProfileManager.shared.setRandomProfileImage(randomNumStr: img)
+                        } else if self.isValidImageURL(img){ // 커스텀 프로필 이미지라면
+                            //let decryptedUrl = self.cryptionManager.decrypt(self.userImg!, using: self.cryptionManager.key!) // 복호화
+                            self.profileUrl = img
+                            ProfileManager.shared.setUserImageStateToCustom(urlString: img)
+                        } else {
+                            ProfileManager.shared.setUserImageStateToDefault()
+                        }
                     } else {
-                        let decryptedUrl = self.cryptionManager.decrypt(self.userImg!, using: self.cryptionManager.key!) // 복호화
-                        ProfileManager.shared.setUserImageStateToCustom(urlString: decryptedUrl!)
+                        ProfileManager.shared.setUserImageStateToDefault()
                     }
                     self.loadUserPreviewImage()
                    
                 }
             }.store(in: &cancellableSet)
+    }
+    // 이미지 url 형식 검증
+    func isValidImageURL(_ urlString: String) -> Bool {
+        let pattern = "^https://firebasestorage\\.googleapis\\.com/"
+        let regex = try! NSRegularExpression(pattern: pattern, options: [])
+        return regex.firstMatch(in: urlString, options: [], range: NSRange(location: 0, length: urlString.count)) != nil
     }
     func changeProfile(imageStatus: String) {
         var requestImage : String
@@ -105,8 +121,8 @@ class MyPageViewModel: ObservableObject {
                     } else if imageStatus == "random" {
                         ProfileManager.shared.setRandomProfileImage(randomNumStr: self.randomNumStr!)
                     } else {
-                        let decryptedUrl = self.cryptionManager.decrypt(self.encryptedImageUrl, using: self.cryptionManager.key!) // 복호화된 url
-                        ProfileManager.shared.setUserImageStateToCustom(urlString: decryptedUrl!) // 싱글톤으로 관리되는 profile manager에 저장
+                        //let decryptedUrl = self.cryptionManager.decrypt(self.encryptedImageUrl, using: self.cryptionManager.key!) // 복호화된 url
+                        ProfileManager.shared.setUserImageStateToCustom(urlString: self.encryptedImageUrl) // 싱글톤으로 관리되는 profile manager에 저장
                     }
                 case .failure(let error):
                     self.isLoading = false
@@ -148,6 +164,7 @@ class MyPageViewModel: ObservableObject {
             .store(in: &cancellableSet)
     }
     
+    // 비밀번호 검증
     func isValidInputs() -> Bool {
         
         let currentPasswordEntered = isCurrentPasswordEntered()
@@ -216,12 +233,14 @@ class MyPageViewModel: ObservableObject {
             }
             .store(in: &cancellableSet)
     }
+    // preview image를 설정한다.
     func loadUserPreviewImage() {
         self.userPreviewImage124 = ProfileManager.shared.userPreviewImage124
         self.userPreviewImage36 = ProfileManager.shared.userPreviewImage36
         self.userPreviewImage32 = ProfileManager.shared.userPreviewImage32
     }
     
+    // random profile을 설정한다.
     func setRandomProfileImage() {
         // 여기에서 랜덤 이미지를 선택하고 imageState를 업데이트합니다.
         let randomNumber = Int.random(in: 0...5)

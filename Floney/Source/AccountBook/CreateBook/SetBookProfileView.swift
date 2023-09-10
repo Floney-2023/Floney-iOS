@@ -14,7 +14,7 @@ struct SetBookProfileView: View {
     @StateObject var viewModel = CreateBookViewModel()
     @StateObject var permissionManager = PermissionManager()
     var firebaseManager = FirebaseManager()
-    var encryptionManager = CryptManager()
+    //var encryptionManager = CryptManager()
     @State var name = ""
     @State var bookImg = ""
     

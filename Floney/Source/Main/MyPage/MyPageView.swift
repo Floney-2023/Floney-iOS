@@ -6,10 +6,11 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct MyPageView: View {
     @Binding var showingTabbar : Bool
-    var encryptionManager = CryptManager()
+    //var encryptionManager = CryptManager()
     var profileManager = ProfileManager.shared
     
     @State var isShowingBottomSheet = false
@@ -42,21 +43,42 @@ struct MyPageView: View {
                     VStack(spacing:16) {
                         NavigationLink(destination: UserInformationView(viewModel: viewModel, showingTabbar: $showingTabbar)) {
                             HStack {
-                                if let preview = viewModel.userPreviewImage36 {
-                                    Image(uiImage: preview)
+                                if let profileUrl = viewModel.profileUrl {
+                                    let url = URL(string : profileUrl)
+                                    KFImage(url)
+                                        .placeholder { //플레이스 홀더 설정
+                                            Image("")
+                                        }.retry(maxCount: 3, interval: .seconds(5)) //재시도
+                                        .onSuccess { success in //성공
+                                            print("succes: \(success)")
+                                        }
+                                        .onFailure { error in //실패
+                                            print("failure: \(error)")
+                                        }
                                         .resizable()
                                         .aspectRatio(contentMode: .fill)
-                                        .clipShape(Circle())
-                                        .frame(width: 36, height: 36)
+                                        .clipShape(Circle()) // 프로필 이미지를 원형으로 자르기
+                                        .frame(width: 36, height: 36) //resize
                                         .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
                                         .padding(20)
                                 } else {
-                                    ProgressView()
-                                        .clipShape(Circle())
-                                        .frame(width: 36, height: 36)
-                                        .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
-                                        .padding(20)
+                                    if let preview = viewModel.userPreviewImage36 {
+                                        Image(uiImage: preview)
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fill)
+                                            .clipShape(Circle()) // 프로필 이미지를 원형으로 자르기
+                                            .frame(width: 36, height: 36)
+                                            .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
+                                            .padding(20)
+                                            
+                                    } else {
+                                        Image("user_profile_36")
+                                            .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
+                                            .padding(20)
+                                    }
                                 }
+                                
+
                                 
                                 VStack(alignment: .leading, spacing:5){
                                     Text("\(viewModel.nickname)")
@@ -151,13 +173,31 @@ struct MyPageView: View {
                                 HStack {
                                     
                                     if let bookUrl = book.bookImg {
-                                        let url = encryptionManager.decrypt(bookUrl, using: encryptionManager.key!)
-                                        URLImage(url: URL(string: url!)!)
+                                        //let url = encryptionManager.decrypt(bookUrl, using: encryptionManager.key!)
+                                        let url = URL(string : bookUrl)
+                                        KFImage(url)
+                                            .placeholder { //플레이스 홀더 설정
+                                                Image("")
+                                            }.retry(maxCount: 3, interval: .seconds(5)) //재시도
+                                            .onSuccess { success in //성공
+                                                print("succes: \(success)")
+                                            }
+                                            .onFailure { error in //실패
+                                                print("failure: \(error)")
+                                            }
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fill)
+                                            .clipShape(Circle()) // 프로필 이미지를 원형으로 자르기
+                                            .frame(width: 36, height: 36) //resize
+                                            .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
+                                            .padding(20)
+                                        /*
+                                        URLImage(url: URL(string: bookUrl))
                                             .aspectRatio(contentMode: .fill)
                                             .clipShape(Circle())
                                             .frame(width: 36, height: 36)
                                             .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
-                                            .padding(20)
+                                            .padding(20)*/
                                     } else {
                                         Image("book_profile_36")
                                             .clipShape(Circle())

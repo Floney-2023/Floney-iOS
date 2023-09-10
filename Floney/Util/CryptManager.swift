@@ -9,6 +9,8 @@ import Foundation
 import CryptoKit
 import Combine
 
+
+//MARK: 암호화 매니저
 class CryptManager : ObservableObject {
     @Published var key : SymmetricKey?
     

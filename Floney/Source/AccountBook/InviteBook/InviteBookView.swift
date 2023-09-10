@@ -9,8 +9,7 @@ import SwiftUI
 
 struct InviteBookView: View {
     var applinkManager = AppLinkManager.shared
-    @ObservedObject var viewModel = CreateBookViewModel()
-    //@State var bookCode = "18758F7A"
+    @StateObject var viewModel = CreateBookViewModel()
     @State var showAlert = false
     var body: some View {
         VStack {
@@ -28,11 +27,11 @@ struct InviteBookView: View {
             .padding(.bottom,48)
             
             Image("book_profile_110")
-            Text("team")
+            Text("\(viewModel.bookName)")
                 .font(.pretendardFont(.bold, size: 18))
                 .foregroundColor(.greyScale2)
                 .padding(.bottom,1)
-            Text("2022.11.01개설 ‧ 1명")
+            Text("\(viewModel.startDay) 개설 ‧ \(viewModel.memberCount)명")
                 .font(.pretendardFont(.medium, size: 14))
                 .foregroundColor(.greyScale3)
                 .padding(.bottom, 32)
@@ -73,6 +72,9 @@ struct InviteBookView: View {
             }
             .padding(.horizontal,20)
   
+        }
+        .onAppear {
+            viewModel.bookInfoByCode()
         }
     }
 }

@@ -9,6 +9,11 @@ import Foundation
 import Combine
 class CreateBookViewModel: ObservableObject {
     @Published var result : CreateBookResponse = CreateBookResponse(bookKey: "", code: "")
+    @Published var bookInfo = BookInfoByCodeResponse(bookName: "", startDay: "", memberCount: 0)
+    @Published var bookName = ""
+    @Published var startDay = ""
+    @Published var memberCount : String = ""
+    @Published var bookImg : String?
     @Published var createBookLoadingError: String = ""
     @Published var showAlert: Bool = false
     
@@ -58,6 +63,38 @@ class CreateBookViewModel: ObservableObject {
                         self.setBookCode()
                         AppLinkManager.shared.inviteStatus = false
                         AppLinkManager.shared.hasDeepLink = false
+                    }
+                }.store(in: &cancellableSet)
+        }
+    }
+    func bookInfoByCode() {
+        if let inviteCode = AppLinkManager.shared.inviteCode {
+            dataManager.bookInfoByCodeBook(bookCode: inviteCode)
+                .sink { (dataResponse) in
+                    if dataResponse.error != nil {
+                        self.createAlert(with: dataResponse.error!)
+                        print(dataResponse.error)
+                    } else {
+                        self.bookInfo = dataResponse.value!
+                        print(self.bookInfo)
+                        self.bookName = self.bookInfo.bookName
+                        
+                        let inputFormatter = DateFormatter()
+                        inputFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS" // 입력 문자열의 형식
+                        if let date = inputFormatter.date(from: self.bookInfo.startDay) {
+                            let outputFormatter = DateFormatter()
+                            outputFormatter.dateFormat = "yyyy.MM.dd" // 원하는 출력 형식
+                            
+                            let resultString = outputFormatter.string(from: date)
+                            self.startDay = resultString
+                            print(resultString) // 출력: 2023.07.17
+                        } else {
+                            print("Invalid date string")
+                        }
+                        self.memberCount = String(self.bookInfo.memberCount)
+                        if let img = self.bookInfo.bookImg {
+                            self.bookInfo.bookImg = img
+                        }
                     }
                 }.store(in: &cancellableSet)
         }

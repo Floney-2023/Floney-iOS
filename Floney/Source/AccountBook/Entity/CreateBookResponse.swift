@@ -19,3 +19,9 @@ struct CreateBookResponse: Decodable {
     var code : String
     
 }
+struct BookInfoByCodeResponse: Decodable {
+    var bookName : String
+    var bookImg : String?
+    var startDay : String
+    var memberCount : Int
+}

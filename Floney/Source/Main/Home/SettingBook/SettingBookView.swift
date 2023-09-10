@@ -6,12 +6,13 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct SettingBookView: View {
     @Binding var showingTabbar : Bool
     @Binding var isOnSettingBook : Bool
     @StateObject var viewModel = SettingBookViewModel()
-    var encryptionManager = CryptManager()
+    //var encryptionManager = CryptManager()
     var profileManager = ProfileManager.shared
     
     @State var nickname = "team"
@@ -58,12 +59,30 @@ struct SettingBookView: View {
                                  .clipShape(Circle())
                                  .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))*/
                                 if let bookUrl = viewModel.bookImg {
-                                    let url = encryptionManager.decrypt(bookUrl, using: encryptionManager.key!)
+                                    //let url = encryptionManager.decrypt(bookUrl, using: encryptionManager.key!)
+                                    let url = URL(string : bookUrl)
+                                    KFImage(url)
+                                        .placeholder { //플레이스 홀더 설정
+                                            Image("book_profile_36")
+                                        }.retry(maxCount: 3, interval: .seconds(5)) //재시도
+                                        .onSuccess { success in //성공
+                                            print("succes: \(success)")
+                                        }
+                                        .onFailure { error in //실패
+                                            print("failure: \(error)")
+                                        }
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fill)
+                                        .clipShape(Circle()) // 프로필 이미지를 원형으로 자르기
+                                        .frame(width: 36, height: 36) //resize
+                                        .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
+                                       
+                                    /*
                                     URLImage(url: URL(string: url!)!)
                                         .aspectRatio(contentMode: .fill)
                                         .clipShape(Circle())
                                         .frame(width: 36, height: 36)
-                                        .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
+                                        .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))*/
                                 } else {
                                     Image("book_profile_36")
                                         .clipShape(Circle())
@@ -122,9 +141,27 @@ struct SettingBookView: View {
                                                 .clipShape(Circle())
                                                 .frame(width: 34, height: 34)
                                                 .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))*/
+                                            let url = URL(string : userImg[index])
+                                            KFImage(url)
+                                                .placeholder { //플레이스 홀더 설정
+                                                    Image("user_profile_32")
+                                                }.retry(maxCount: 3, interval: .seconds(5)) //재시도
+                                                .onSuccess { success in //성공
+                                                    print("succes: \(success)")
+                                                }
+                                                .onFailure { error in //실패
+                                                    print("failure: \(error)")
+                                                }
+                                                .resizable()
+                                                .aspectRatio(contentMode: .fill)
+                                                .clipShape(Circle()) // 프로필 이미지를 원형으로 자르기
+                                                .frame(width: 32, height: 32) //resize
+                                                .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
+                                                .padding(20)
+                                            /*
                                             Image("user_profile_32")
                                                 .clipShape(Circle())
-                                                .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
+                                                .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))*/
                                             
                                         }
                                     } else {

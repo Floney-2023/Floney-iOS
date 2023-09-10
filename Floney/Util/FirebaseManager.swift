@@ -10,7 +10,7 @@ import FirebaseStorage
 import FirebaseDynamicLinks
 
 class FirebaseManager {
-    var encryptionManager = CryptManager()
+    //var encryptionManager = CryptManager()
     // completion: @escaping (URL?) -> Void)
    
     func uploadImageToFirebase(image: UIImage, completion: @escaping (String?) -> Void) {
@@ -41,6 +41,8 @@ class FirebaseManager {
                             // 키 존재
                             print("original url : \(url.absoluteString)")
                             
+                            completion(url.absoluteString)
+                            /*
                             if let key = self.encryptionManager.key {// 키
                                 let encryptedURL = self.encryptionManager.encrypt(url.absoluteString, using: key)
                                 print("completed : \(encryptedURL)")
@@ -48,7 +50,7 @@ class FirebaseManager {
                                 completion(encryptedURL)
                             } else {
                                 completion(nil)
-                            }
+                            }*/
                         }
                     }
                 }

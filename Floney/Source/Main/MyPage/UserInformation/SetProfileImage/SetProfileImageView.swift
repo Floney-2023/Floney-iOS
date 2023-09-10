@@ -17,7 +17,7 @@ struct SetProfileImageView: View {
     @StateObject var permissionManager = PermissionManager()
     
     var firebaseManager = FirebaseManager()
-    var encryptionManager = CryptManager()
+    //var encryptionManager = CryptManager()
    
     // 이미지선택창 선택 여부
     @State private var presentsImagePicker = false
@@ -72,10 +72,10 @@ struct SetProfileImageView: View {
                     viewModel.isLoading = true
                     if let image = selectedUIImage {
                         print("selected:\(image)")
-                        firebaseManager.uploadImageToFirebase(image: image) { encryptedURL in
+                        firebaseManager.uploadImageToFirebase(image: image) { url in
                             DispatchQueue.main.async {
-                                if let url = encryptedURL {
-                                    self.viewModel.encryptedImageUrl = url // 암호화된 url
+                                if let url = url {
+                                    self.viewModel.encryptedImageUrl = url // url
                                     viewModel.changeProfile(imageStatus: "custom") // 서버에 전송
                                     print("in image view: \(url)")
                                 }

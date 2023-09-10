@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct DayLinesView: View {
     @Binding var date: String
@@ -70,7 +71,7 @@ struct DayTotalView : View {
 struct DayLinesDetailView : View {
     @ObservedObject var viewModel : CalendarViewModel
     @Binding var isShowingAddView : Bool
-    var encryptionManager = CryptManager()
+    //var encryptionManager = CryptManager()
     @State var showingDetail = false
     @State private var selectedIndex = 0
     @State var selectedToggleTypeIndex = 0
@@ -142,12 +143,31 @@ struct DayLinesDetailView : View {
                                                     .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
                                             }
                                             else  {
-                                                let url = encryptionManager.decrypt(img, using: encryptionManager.key!)
+                                                //let url = encryptionManager.decrypt(img, using: encryptionManager.key!)
+                                                let url = URL(string : img)
+                                                KFImage(url)
+                                                    .placeholder { //플레이스 홀더 설정
+                                                        Image("user_profile_32")
+                                                    }.retry(maxCount: 3, interval: .seconds(5)) //재시도
+                                                    .onSuccess { success in //성공
+                                                        print("succes: \(success)")
+                                                    }
+                                                    .onFailure { error in //실패
+                                                        print("failure: \(error)")
+                                                    }
+                                                    .resizable()
+                                                    .aspectRatio(contentMode: .fill)
+                                                    .clipShape(Circle()) // 프로필 이미지를 원형으로 자르기
+                                                    .frame(width: 32, height: 32) //resize
+                                                    .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
+                                                
+                                                    
+                                                /*
                                                 URLImage(url: URL(string: url!)!)
                                                     .aspectRatio(contentMode: .fill)
                                                     .clipShape(Circle())
                                                     .frame(width: 32, height: 32)
-                                                    .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
+                                                    .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))*/
                                                 
                                             }
                                         } else { //null

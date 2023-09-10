@@ -5,11 +5,11 @@
 //  Created by 남경민 on 2023/03/09.
 //
 import SwiftUI
-
+import Kingfisher
 struct HomeView: View {
     @StateObject var alertManager = AlertManager.shared
     @StateObject var viewModel = CalendarViewModel()
-    var encryptionManager = CryptManager()
+    //var encryptionManager = CryptManager()
     var profileManager = ProfileManager.shared
     @Binding var showingTabbar : Bool
     @State var isOnSettingBook = false
@@ -32,7 +32,28 @@ struct HomeView: View {
                     Spacer()
                     NavigationLink(destination: SettingBookView(showingTabbar: $showingTabbar, isOnSettingBook: $isOnSettingBook),isActive: $isOnSettingBook){
                         if let bookUrl = viewModel.bookProfileImage {
-                            let url = encryptionManager.decrypt(bookUrl, using: encryptionManager.key!)
+                            //let url = encryptionManager.decrypt(bookUrl, using: encryptionManager.key!)
+                            let url = URL(string : bookUrl)
+                            KFImage(url)
+                                .placeholder { //플레이스 홀더 설정
+                                    Image("book_profile_34")
+                                }.retry(maxCount: 3, interval: .seconds(5)) //재시도
+                                .onSuccess { success in //성공
+                                    print("succes: \(success)")
+                                }
+                                .onFailure { error in //실패
+                                    print("failure: \(error)")
+                                }
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .clipShape(Circle()) // 프로필 이미지를 원형으로 자르기
+                                .frame(width: 34, height: 34) //resize
+                                .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
+                                .onTapGesture {
+                                    self.showingTabbar = false
+                                    self.isOnSettingBook = true
+                                }
+                            /*
                             URLImage(url: URL(string: url!)!)
                                 .aspectRatio(contentMode: .fill)
                                 .clipShape(Circle())
@@ -41,7 +62,7 @@ struct HomeView: View {
                                 .onTapGesture {
                                     self.showingTabbar = false
                                     self.isOnSettingBook = true
-                                }
+                                }*/
                         } else {
                             Image("book_profile_34")
                                 .clipShape(Circle())
