@@ -14,8 +14,8 @@ struct MainTabView: View {
     @State var showingSettlementDetail = false
     @State var showingAddView = false
     @State var showingTabbar = true
-    @State var isLoading = false
-    @StateObject var alertManager = AlertManager.shared
+    @ObservedObject var alertManager = AlertManager.shared
+    @ObservedObject var loadingManager = LoadingManager.shared
     
     var lineModel = LineModel()
     let icons = ["icon_home_off", "icon_leaderboard_off", "icon_add_circle", "icon_calculate_off", "icon_person_off"]
@@ -49,7 +49,7 @@ struct MainTabView: View {
                     case 1:
                         NavigationView {
                            
-                            AnalysisView(showingTabbar: $showingTabbar, isLoading: $isLoading)
+                            AnalysisView(showingTabbar: $showingTabbar)
                         }
                     case 2:
                         NavigationView {
@@ -122,12 +122,18 @@ struct MainTabView: View {
            
             .edgesIgnoringSafeArea(.bottom)
             // Loading view overlay
-            if isLoading {
-                ProgressLoadingView()
-                //DimmedLoadingView()
+            if loadingManager.showLoading {
+                if loadingManager.loadingType == .floneyLoading {
+                    LoadingView()
+                }
+                else if loadingManager.loadingType == .progressLoading{
+                    ProgressLoadingView()
+                } else {
+                    DimmedLoadingView()
+                }
             }
             
-            CustomAlertView(message: alertManager.message, type : alertManager.buttontType,isPresented: $alertManager.showAlert)
+            CustomAlertView(message: AlertManager.shared.message, type : $alertManager.buttontType, isPresented: $alertManager.showAlert)
             
         }
     }

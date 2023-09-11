@@ -164,7 +164,7 @@ struct SignInView: View {
                     }
                     Spacer()
                 }
-                CustomAlertView(message: viewModel.errorMessage, isPresented: $viewModel.showAlert)
+                CustomAlertView(message: viewModel.errorMessage, type: $viewModel.buttonType, isPresented: $viewModel.showAlert)
             }
             .onAppear(perform : UIApplication.shared.hideKeyboard)
         }

@@ -9,9 +9,9 @@ import SwiftUI
 
 struct UserInformationView: View {
     @StateObject var alertManager = AlertManager.shared
-    @ObservedObject var viewModel : MyPageViewModel
-    @Binding var showingTabbar : Bool
-    //@Binding var provider : String
+    @StateObject var viewModel = MyPageViewModel()
+
+    @State  var provider : String = Keychain.getKeychainValue(forKey: .provider) ?? ""
     @State var showingLogoutAlert = false
     @State var title = "로그아웃"
     @State var message = "로그아웃 하시겠습니끼?"
@@ -59,7 +59,7 @@ struct UserInformationView: View {
                     }
                     
                 }
-                if viewModel.provider == "EMAIL" {
+                if self.provider == "EMAIL" {
                     NavigationLink(destination: ChangePasswordView()){
                         HStack {
                             Text("비밀번호 변경")
@@ -100,11 +100,6 @@ struct UserInformationView: View {
             Spacer()
             
         }
-        .onAppear{
-            DispatchQueue.main.async {
-                showingTabbar = false
-            }
-        }
         .padding(EdgeInsets(top: 35, leading: 20, bottom: 0, trailing: 20))
         .navigationBarBackButtonHidden(true)
         .navigationBarItems(leading: BackButtonBlack())
@@ -120,10 +115,7 @@ struct UserInformationView: View {
                 if showingLogoutAlert {
                     AlertView(isPresented: $showingLogoutAlert, title: $title, message: $message, onOKAction: {viewModel.logout()})
                 }
-                /*
-                if alertManager.showAlert {
-                    CustomAlertView(message: alertManager.message, type: alertManager.buttontType, isPresented: $alertManager.showAlert)
-                }*/
+               
             }
         )
 
@@ -133,6 +125,6 @@ struct UserInformationView: View {
 
 struct UserInformationView_Previews: PreviewProvider {
     static var previews: some View {
-        UserInformationView(viewModel: MyPageViewModel(), showingTabbar: .constant(false))
+        UserInformationView()
     }
 }

@@ -10,6 +10,7 @@ import SwiftUI
 struct FindPasswordView: View {
     @State var email = ""
     @StateObject var viewModel = SignInViewModel()
+    @StateObject var alertManager = AlertManager.shared
     var body: some View {
         ZStack {
             VStack(spacing: 32) {
@@ -40,9 +41,10 @@ struct FindPasswordView: View {
                         .padding()
                         .withNextButtonFormmating(.primary1)
                         .onTapGesture {
-                            //viewModel.isLoading = true
-                            //viewModel.findPassword(email: email)
-                            viewModel.checkValidation(email: email)
+                            if viewModel.checkValidation(email: email) {
+                                LoadingManager.shared.update(showLoading: true, loadingType: .floneyLoading)
+                                viewModel.findPassword(email: email)
+                            }
                         }
                 }
                 Spacer()
@@ -55,12 +57,8 @@ struct FindPasswordView: View {
                 UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
             }
             .onAppear(perform : UIApplication.shared.hideKeyboard)
-            // 내용을 불투명한 배경으로 가리는 로딩 화면
-            if viewModel.isLoading {
-                LoadingView()
-            }
-            if viewModel.showAlert {
-                CustomAlertView(message: viewModel.errorMessage, isPresented: $viewModel.showAlert)
+            if AlertManager.shared.showAlert {
+                CustomAlertView(message: AlertManager.shared.message, type: $alertManager.buttontType, isPresented: $alertManager.showAlert)
             }
             PasswordBottomSheet(isShowing: $viewModel.isShowingBottomSheet, isShowingLogin: $viewModel.isShowingLogin)
         }

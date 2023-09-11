@@ -13,8 +13,6 @@ struct SplashScreenView: View {
     @StateObject var userSession = AuthenticationService.shared
     @StateObject var applinkManager = AppLinkManager.shared
     
-    @State var showingTabbar = false
-    @State var isLoading = false
     var body: some View {
         if isActive {
             Group {

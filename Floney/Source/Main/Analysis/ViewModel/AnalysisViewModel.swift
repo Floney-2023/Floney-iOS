@@ -11,7 +11,6 @@ import SwiftUI
 
 class AnalysisViewModel : ObservableObject {
     var tokenViewModel = TokenReissueViewModel()
-    @Published var isLoading: Bool = false
     @Published var loadingError: String = ""
     @Published var showAlert: Bool = false
     @Published var selectedColors : [Color] = []
@@ -119,16 +118,19 @@ class AnalysisViewModel : ObservableObject {
         let bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
         let request = ExpenseIncomeRequest(bookKey: bookKey, root: root, date: selectedDateStr)
         print(request)
-        self.isLoading = true
+  
+        LoadingManager.shared.update(showLoading: true, loadingType: .progressLoading)
         dataManager.analysisExpenseIncome(request)
             .sink { (dataResponse) in
                 if dataResponse.error != nil {
                     self.createAlert(with: dataResponse.error!)
                     // 에러 처리
                     print(dataResponse.error)
-                    self.isLoading = false
+            
+                    LoadingManager.shared.update(showLoading: false, loadingType: .progressLoading)
                 } else {
-                    self.isLoading = false
+          
+                    LoadingManager.shared.update(showLoading: false, loadingType: .progressLoading)
                     if let expenseIncomeResponse = dataResponse.value {
                         print("---분석 요청 성공---")
                         
@@ -165,16 +167,19 @@ class AnalysisViewModel : ObservableObject {
         let bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
         let request = BudgetAssetRequest(bookKey: bookKey, date: selectedDateStr)
  
-        self.isLoading = true
+
+        LoadingManager.shared.update(showLoading: true, loadingType: .progressLoading)
         dataManager.analysisBudget(request)
             .sink { (dataResponse) in
                 if dataResponse.error != nil {
                     self.createAlert(with: dataResponse.error!)
                     // 에러 처리
                     print(dataResponse.error)
-                    self.isLoading = false
+ 
+                    LoadingManager.shared.update(showLoading: false, loadingType: .progressLoading)
                 } else {
-                    self.isLoading = false
+
+                    LoadingManager.shared.update(showLoading: false, loadingType: .progressLoading)
                     self.leftBudget = dataResponse.value?.leftMoney ?? 0
                     self.totalBudget = dataResponse.value?.initBudget ?? 0
                     if self.totalBudget > 0 && self.leftBudget > 0 {
@@ -235,16 +240,19 @@ class AnalysisViewModel : ObservableObject {
         let bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
         let request = BudgetAssetRequest(bookKey: bookKey, date: date)
  
-        self.isLoading = true
+
+        LoadingManager.shared.update(showLoading: true, loadingType: .progressLoading)
         dataManager.analysisAsset(request)
             .sink { (dataResponse) in
                 if dataResponse.error != nil {
                     self.createAlert(with: dataResponse.error!)
                     // 에러 처리
                     print(dataResponse.error)
-                    self.isLoading = false
+
+                    LoadingManager.shared.update(showLoading: false, loadingType: .progressLoading)
                 } else {
-                    self.isLoading = false
+
+                    LoadingManager.shared.update(showLoading: false, loadingType: .progressLoading)
                     var asset = dataResponse.value ?? AssetResponse(difference: 0, initAsset: 0, currentAsset: 0)
                     asset.month = assetMonth  // 해당 월을 AssetResponse에 저장합니다.
                     self.assetList.append(asset)

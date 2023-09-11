@@ -50,22 +50,23 @@ extension MyPage: MyPageProtocol {
     }
     
     func changeProfile(img: String) -> AnyPublisher<Void, NetworkError> {
-        var url = "\(Constant.BASE_URL)/users/profileimg/update"
+        var url = "\(Constant.BASE_URL)/users/profileimg/update?profileImg=\(img)"
 
         print("My Page DataManager Change User Image \(url)")
         
-        var parameters = [String: String]()
+        //var parameters = [String: String]()
       
-        parameters["profileImg"] = img
+        //parameters["profileImg"] = img
         
-        print("parameters : \(parameters)")
+        //print("parameters : \(parameters)")
         let token = Keychain.getKeychainValue(forKey: .accessToken)!
         //print("My Page : \n\(token)")
         
-        return AF.request(url,
+        let encodedURL = url.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+        return AF.request(encodedURL!,
                           method: .get,
-                          parameters: parameters,
-                          encoding: CustomURLEncoding(),
+                          parameters: nil,
+                          encoding: JSONEncoding.default,
                           headers: ["Authorization":"Bearer \(token)"])
         .validate()
         .publishData()

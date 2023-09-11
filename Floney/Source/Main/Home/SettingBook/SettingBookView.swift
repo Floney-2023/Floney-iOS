@@ -54,12 +54,7 @@ struct SettingBookView: View {
                         //MARK: 가계부 정보
                         NavigationLink(destination: ModifyingBookView()) {
                             HStack(spacing:16) {
-                                /*
-                                 Image("book_profile_36")
-                                 .clipShape(Circle())
-                                 .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))*/
                                 if let bookUrl = viewModel.bookImg {
-                                    //let url = encryptionManager.decrypt(bookUrl, using: encryptionManager.key!)
                                     let url = URL(string : bookUrl)
                                     KFImage(url)
                                         .placeholder { //플레이스 홀더 설정
@@ -76,18 +71,10 @@ struct SettingBookView: View {
                                         .clipShape(Circle()) // 프로필 이미지를 원형으로 자르기
                                         .frame(width: 36, height: 36) //resize
                                         .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
-                                       
-                                    /*
-                                    URLImage(url: URL(string: url!)!)
-                                        .aspectRatio(contentMode: .fill)
-                                        .clipShape(Circle())
-                                        .frame(width: 36, height: 36)
-                                        .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))*/
                                 } else {
                                     Image("book_profile_36")
                                         .clipShape(Circle())
                                         .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
-                                    
                                 }
                                 VStack(alignment: .leading, spacing:8){
                                     Text("\(viewModel.bookName)")
@@ -100,12 +87,11 @@ struct SettingBookView: View {
                                 }
                                 Spacer()
                                 Image("forward_button")
-                                
                             }
                             .padding(20)
                             .background(Color.primary10)
                             .cornerRadius(12)
-                        }
+                        } // Navigation link
                     }
                     
                     //MARK: 사용자 목록
@@ -134,13 +120,6 @@ struct SettingBookView: View {
                                                 .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
                                         }
                                         else {
-                                            /*
-                                            let url = encryptionManager.decrypt(userImg[index], using: encryptionManager.key!)
-                                            URLImage(url: URL(string: url!)!)
-                                                .aspectRatio(contentMode: .fill)
-                                                .clipShape(Circle())
-                                                .frame(width: 34, height: 34)
-                                                .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))*/
                                             let url = URL(string : userImg[index])
                                             KFImage(url)
                                                 .placeholder { //플레이스 홀더 설정
@@ -157,12 +136,7 @@ struct SettingBookView: View {
                                                 .clipShape(Circle()) // 프로필 이미지를 원형으로 자르기
                                                 .frame(width: 32, height: 32) //resize
                                                 .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
-                                                .padding(20)
-                                            /*
-                                            Image("user_profile_32")
-                                                .clipShape(Circle())
-                                                .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))*/
-                                            
+                                                
                                         }
                                     } else {
                                         Image("user_profile_32")

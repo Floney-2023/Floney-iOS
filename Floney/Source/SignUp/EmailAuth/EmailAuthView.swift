@@ -73,7 +73,7 @@ struct EmailAuthView: View {
             .navigationBarItems(leading: BackButton())
             .onAppear(perform : UIApplication.shared.hideKeyboard)
             
-            CustomAlertView(message: viewModel.errorMessage, isPresented: $viewModel.showAlert)
+            CustomAlertView(message: viewModel.errorMessage, type: $viewModel.buttonType, isPresented: $viewModel.showAlert)
         }
     }
 }

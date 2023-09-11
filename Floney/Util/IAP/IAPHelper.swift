@@ -81,8 +81,8 @@ extension IAPHelper: SKPaymentTransactionObserver {
                 break
             @unknown default:
                 break
-                // close loading
-                //SystemManager.shared.closeLoading()
+               
+                LoadingManager.shared.update(showLoading: false, loadingType: .floneyLoading)
             }
         }
     }
@@ -135,7 +135,7 @@ extension IAPHelper: SKPaymentTransactionObserver {
                 object: (false, "")
             )
         }
-        //SystemManager.shared.closeLoading()
+        LoadingManager.shared.update(showLoading: false, loadingType: .floneyLoading)
         
     }
 }
@@ -284,7 +284,7 @@ extension IAPHelper {
 extension IAPHelper {
     // 인앱결제 상품을 구입할 때
     public func buyProduct(_ product: SKProduct) {
-        //SystemManager.shared.openLoading()
+        LoadingManager.shared.update(showLoading: true, loadingType: .floneyLoading)
         let payment = SKPayment(product: product)
         SKPaymentQueue.default().add(payment)
     }

@@ -69,13 +69,16 @@ struct SetProfileImageView: View {
                 Spacer()
                 
                 Button("변경하기") {
-                    viewModel.isLoading = true
+                   
+                    LoadingManager.shared.update(showLoading: true, loadingType: .dimmedLoading)
                     if let image = selectedUIImage {
                         print("selected:\(image)")
                         firebaseManager.uploadImageToFirebase(image: image) { url in
                             DispatchQueue.main.async {
                                 if let url = url {
                                     self.viewModel.encryptedImageUrl = url // url
+                                    print("in book url : \(url)")
+                                    print("in book url : \(viewModel.encryptedImageUrl)")
                                     viewModel.changeProfile(imageStatus: "custom") // 서버에 전송
                                     print("in image view: \(url)")
                                 }
@@ -167,10 +170,7 @@ struct SetProfileImageView: View {
                     self.presentationMode.wrappedValue.dismiss()
                 }
             }
-            //MARK: loading
-            if viewModel.isLoading {
-                LoadingView()
-            }
+           
         }
     }
 }

@@ -21,4 +21,5 @@ struct MyBookResult : Decodable, Hashable {
     var bookKey : String
     var name : String
     var memberCount : Int
+    var bookStatus : String
 }

@@ -66,7 +66,7 @@ struct ServiceAgreementView: View {
             .navigationBarBackButtonHidden(true)
             .navigationBarItems(leading: BackButton())
             
-            CustomAlertView(message: ErrorMessage.signup01.value, isPresented: $viewModel.showAlert)
+            CustomAlertView(message: ErrorMessage.signup01.value, type: $viewModel.buttonType, isPresented: $viewModel.showAlert)
         } //ZStack
     }
 }

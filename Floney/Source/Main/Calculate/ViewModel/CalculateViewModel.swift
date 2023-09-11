@@ -18,7 +18,7 @@ class CalculateViewModel : ObservableObject {
     var tokenViewModel = TokenReissueViewModel()
     @Published var addLoadingError: String = ""
     @Published var showAlert: Bool = false
-    @Published var showLoadingView = false
+  
     
     //MARK: 유저 조회
     @Published var bookUsers : [BookUsersResponse] = []
@@ -111,11 +111,13 @@ class CalculateViewModel : ObservableObject {
                     self.createAlert(with: dataResponse.error!)
                     // 에러 처리
                     print(dataResponse.error)
-                    self.showLoadingView = false
+              
+                    LoadingManager.shared.update(showLoading: false, loadingType: .floneyLoading)
                 } else {
                     print("--정산 요청 성공--")
                     self.fcmManager.sendNotification(to: bookKey, title: "정산하기", body: "정산해보세요.")
-                    self.showLoadingView = false
+               
+                    LoadingManager.shared.update(showLoading: false, loadingType: .floneyLoading)
                     self.settlementResult = dataResponse.value!
                     print(self.settlementResult)
                     self.userCount = self.settlementResult.userCount
@@ -135,10 +137,12 @@ class CalculateViewModel : ObservableObject {
                     self.createAlert(with: dataResponse.error!)
                     // 에러 처리
                     print(dataResponse.error)
-                    self.showLoadingView = false
+                  
+                    LoadingManager.shared.update(showLoading: false, loadingType: .floneyLoading)
                 } else {
                     print("--정산 내역 요청 성공--")
-                    self.showLoadingView = false
+                   
+                    LoadingManager.shared.update(showLoading: false, loadingType: .floneyLoading)
                     self.settlementList = dataResponse.value!
                     print(self.settlementList)
   
@@ -152,10 +156,12 @@ class CalculateViewModel : ObservableObject {
                     self.createAlert(with: dataResponse.error!)
                     // 에러 처리
                     print(dataResponse.error)
-                    self.showLoadingView = false
+                  
+                    LoadingManager.shared.update(showLoading: false, loadingType: .floneyLoading)
                 } else {
                     print("--정산 내역 디테일 요청 성공--")
-                    self.showLoadingView = false
+                  
+                    LoadingManager.shared.update(showLoading: false, loadingType: .floneyLoading)
                     self.settlementResult = dataResponse.value!
                     self.startDateStr = self.settlementResult.startDate
                     self.endDateStr = self.settlementResult.endDate

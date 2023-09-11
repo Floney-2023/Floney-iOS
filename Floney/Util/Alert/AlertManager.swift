@@ -11,9 +11,9 @@ class AlertManager: ObservableObject {
     static let shared = AlertManager()  // Singleton instance
     @Published var showAlert = false
     @Published var message = ""
-    @Published var buttontType = ""
+    @Published var buttontType : ButtonType = .red
     
-    func update(showAlert: Bool, message: String, buttonType : String) {
+    func update(showAlert: Bool, message: String, buttonType : ButtonType) {
         self.showAlert = showAlert
         self.message = message
         self.buttontType = buttonType

@@ -10,11 +10,9 @@ import Combine
 import SwiftUI
 
 class SettingBookViewModel : ObservableObject {
-    //var cryprionManager = CryptManager()
-    var alertManager = AlertManager.shared
+
     @Published var tokenViewModel = TokenReissueViewModel()
     
-    @Published var isLoading : Bool = false
     @Published var ChangeProfileImageSuccess = false
     @Published var bookInfoLoadingError: String = ""
     @Published var showAlert: Bool = false
@@ -117,13 +115,27 @@ class SettingBookViewModel : ObservableObject {
                 switch completion {
                 case .finished:
                     print("Profile successfully changed.")
-                    self.isLoading = false
+           
+                    DispatchQueue.main.async {
+                        LoadingManager.shared.update(showLoading: false, loadingType: .dimmedLoading)
+                    }
                     self.ChangeProfileImageSuccess = true
-                    ProfileManager.shared.setBookImageStateToCustom(urlString: self.encryptedImageUrl)
-                    self.alertManager.update(showAlert: true, message: "변경이 완료되었습니다.", buttonType: "green")
+                    
+                    if inputStatus == "default" {
+                        ProfileManager.shared.setBookImageStateToDefault()
+                    } else {
+                        ProfileManager.shared.setBookImageStateToCustom(urlString: self.encryptedImageUrl)
+                    }
+                    DispatchQueue.main.async {
+                        AlertManager.shared.update(showAlert: true, message: "변경이 완료되었습니다.", buttonType: .green)
+                    }
+                    
                 case .failure(let error):
                     print("Error changing profile: \(error)")
-                    self.isLoading = false
+                    DispatchQueue.main.async {
+                        LoadingManager.shared.update(showLoading: false, loadingType: .dimmedLoading)
+                    }
+                    
                 }
             } receiveValue: { data in
                 // TODO: Handle the received data if necessary.

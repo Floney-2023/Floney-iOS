@@ -15,7 +15,7 @@ class MyPageViewModel: ObservableObject {
     //var cryptionManager = CryptManager()
    
     @Published var result : MyPageResponse = MyPageResponse(nickname: "", email: "", profileImg: "", provider: "", subscribe: false, lastAdTime: nil, myBooks: [])
-    @Published var isLoading : Bool = false
+  
     
     @Published var myPageLoadingError: String = ""
     @Published var errorMessage : String = ""
@@ -68,6 +68,7 @@ class MyPageViewModel: ObservableObject {
                     self.myBooks = self.result.myBooks!
                     self.userImg = self.result.profileImg
                     self.provider = self.result.provider
+                    Keychain.setKeychain(self.provider, forKey: .provider)
                     self.subscribe = self.result.subscribe
                     
                     if let img = self.userImg {
@@ -78,6 +79,7 @@ class MyPageViewModel: ObservableObject {
                         } else if self.isValidImageURL(img){ // 커스텀 프로필 이미지라면
                             //let decryptedUrl = self.cryptionManager.decrypt(self.userImg!, using: self.cryptionManager.key!) // 복호화
                             self.profileUrl = img
+                            print("로드된 이미지 url : \(self.profileUrl)")
                             ProfileManager.shared.setUserImageStateToCustom(urlString: img)
                         } else {
                             ProfileManager.shared.setUserImageStateToDefault()
@@ -112,9 +114,10 @@ class MyPageViewModel: ObservableObject {
             .sink { completion in
                 switch completion {
                 case .finished:
-                    self.isLoading = false
+             
+                    LoadingManager.shared.update(showLoading: false, loadingType: .dimmedLoading)
                     self.ChangeProfileImageSuccess = true
-                    self.alertManager.update(showAlert: true, message: "변경이 완료되었습니다.", buttonType: "green")
+                    self.alertManager.update(showAlert: true, message: "변경이 완료되었습니다.", buttonType: .green)
                     print("Profile successfully changed.")
                     if imageStatus == "default" {
                         ProfileManager.shared.setUserImageStateToDefault() // 싱글톤으로 관리되는 profile manager에 저장
@@ -125,7 +128,8 @@ class MyPageViewModel: ObservableObject {
                         ProfileManager.shared.setUserImageStateToCustom(urlString: self.encryptedImageUrl) // 싱글톤으로 관리되는 profile manager에 저장
                     }
                 case .failure(let error):
-                    self.isLoading = false
+             
+                    LoadingManager.shared.update(showLoading: false, loadingType: .dimmedLoading)
                     print("Error changing profile: \(error)")
                 }
             } receiveValue: { data in
@@ -154,7 +158,7 @@ class MyPageViewModel: ObservableObject {
                 switch completion {
                 case .finished:
                     print("Password successfully changed.")
-                    Keychain.setKeychain(self.changedNickname, forKey: .userNickname)
+                    
                 case .failure(let error):
                     print("Error changing password: \(error)")
                 }
@@ -193,7 +197,7 @@ class MyPageViewModel: ObservableObject {
             showAlert = true
             errorMessage = "새 비밀번호가 일치하지 않습니다."
         }
-        alertManager.update(showAlert: showAlert, message: errorMessage, buttonType: "red")
+        alertManager.update(showAlert: showAlert, message: errorMessage, buttonType: .red)
         return  currentPasswordEntered && newPasswordEntered && newPasswordCheckEntered && newPasswordValid && passwordMatch
     }
     
@@ -235,9 +239,10 @@ class MyPageViewModel: ObservableObject {
     }
     // preview image를 설정한다.
     func loadUserPreviewImage() {
-        self.userPreviewImage124 = ProfileManager.shared.userPreviewImage124
-        self.userPreviewImage36 = ProfileManager.shared.userPreviewImage36
-        self.userPreviewImage32 = ProfileManager.shared.userPreviewImage32
+        
+        self.userPreviewImage124 = ProfileManager.shared.userPreviewImage124?.copied()
+        self.userPreviewImage36 = ProfileManager.shared.userPreviewImage36?.copied()
+        self.userPreviewImage32 = ProfileManager.shared.userPreviewImage32?.copied()
     }
     
     // random profile을 설정한다.

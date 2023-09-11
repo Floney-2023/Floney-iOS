@@ -48,7 +48,6 @@ extension IAPManager {
     
     // 구매
     func buyProduct(_ productID: String) {
-        // loading 시작
         for product in productList {
             if product.productIdentifier == productID {
                 iapHelper.buyProduct(product)

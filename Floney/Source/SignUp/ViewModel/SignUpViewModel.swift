@@ -14,6 +14,7 @@ class SignUpViewModel: ObservableObject {
     @Published var signUpLoadingError: String = ""
     @Published var showAlert: Bool = false
     @Published var errorMessage = ""
+    @Published var buttonType : ButtonType = .red
     
     @Published var email = ""
     @Published var password = ""

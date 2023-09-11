@@ -17,7 +17,8 @@ class SignInViewModel: ObservableObject {
     private var appleSignInCoordinator: SignInWithAppleCoordinator?
 
     var tokenViewModel = TokenReissueViewModel()
-   
+    @Published var buttonType : ButtonType = .red
+    
     @Published var signUpViewModel = SignUpViewModel()
     @Published var result : SignInResponse = SignInResponse(accessToken: "", refreshToken: "")
     @Published var signInLoadingError: String = ""
@@ -31,17 +32,13 @@ class SignInViewModel: ObservableObject {
     @Published var token = ""
     @Published var isShowingBottomSheet = false
     @Published var isShowingLogin = false
-    @Published var isLoading = false
+
     
     private var cancellableSet: Set<AnyCancellable> = []
     var dataManager: SignInProtocol
     
     init( dataManager: SignInProtocol = SignIn.shared) {
         self.dataManager = dataManager
-        //postSignIn()
-        //print("IDFA : \(ASIdentifierManager.shared().advertisingIdentifier.uuidString)")
-        //print(Keychain.getKeychainValue(forKey: .accessToken))
-        //print(Keychain.getKeychainValue(forKey: .refreshToken))
     }
     
     //MARK: 이메일 로그인
@@ -251,11 +248,13 @@ class SignInViewModel: ObservableObject {
                 switch completion {
                 case .finished:
                     print("Profile successfully changed.")
-                    self.isLoading = false
+                  
+                    LoadingManager.shared.update(showLoading: false, loadingType: .floneyLoading)
                     self.isShowingBottomSheet = true
                     
                 case .failure(let error):
-                    self.isLoading = false
+                    
+                    LoadingManager.shared.update(showLoading: false, loadingType: .floneyLoading)
                     print("Error finding password: \(error)")
                 }
             } receiveValue: { data in
@@ -264,11 +263,12 @@ class SignInViewModel: ObservableObject {
             .store(in: &cancellableSet)
     }
     
-    func checkValidation(email: String) {
+    func checkValidation(email: String) -> Bool{
         if !isValidEmail(email) {
-            showAlert = true
-            errorMessage = ErrorMessage.findPassword01.value
+            AlertManager.shared.update(showAlert: true, message: ErrorMessage.findPassword01.value, buttonType: .red)
+            return false
         }
+        return true
     }
     
     //MARK: 이메일 정규식 체크

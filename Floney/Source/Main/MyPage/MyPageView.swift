@@ -16,9 +16,9 @@ struct MyPageView: View {
     @State var isShowingBottomSheet = false
     @StateObject var viewModel = MyPageViewModel()
     @State var isShowingNotiView = false
+    @State var isShowingUserInfoView = false
     @State var currency = CurrencyManager.shared.currentCurrency
     var body: some View {
-        NavigationView {
         ZStack {
             VStack(spacing:26) {
                 HStack {
@@ -41,45 +41,49 @@ struct MyPageView: View {
                 
                 ScrollView(showsIndicators: false) {
                     VStack(spacing:16) {
-                        NavigationLink(destination: UserInformationView(viewModel: viewModel, showingTabbar: $showingTabbar)) {
+                        NavigationLink(destination: UserInformationView(), isActive: $isShowingUserInfoView) {
                             HStack {
-                                if let profileUrl = viewModel.profileUrl {
-                                    let url = URL(string : profileUrl)
-                                    KFImage(url)
-                                        .placeholder { //플레이스 홀더 설정
-                                            Image("")
-                                        }.retry(maxCount: 3, interval: .seconds(5)) //재시도
-                                        .onSuccess { success in //성공
-                                            print("succes: \(success)")
-                                        }
-                                        .onFailure { error in //실패
-                                            print("failure: \(error)")
-                                        }
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fill)
-                                        .clipShape(Circle()) // 프로필 이미지를 원형으로 자르기
-                                        .frame(width: 36, height: 36) //resize
-                                        .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
-                                        .padding(20)
-                                } else {
-                                    if let preview = viewModel.userPreviewImage36 {
-                                        Image(uiImage: preview)
-                                            .resizable()
-                                            .aspectRatio(contentMode: .fill)
-                                            .clipShape(Circle()) // 프로필 이미지를 원형으로 자르기
-                                            .frame(width: 36, height: 36)
+                                if let img = viewModel.userImg {
+                                    if img == "user_default" {
+                                        Image("user_profile_36")
+                                            .clipShape(Circle())
                                             .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
                                             .padding(20)
-                                            
-                                    } else {
-                                        Image("user_profile_36")
+                                        
+                                    } else if img.hasPrefix("random"){
+                                        let components = img.components(separatedBy: CharacterSet.decimalDigits.inverted)
+                                        let random = components.first!  // "random"
+                                        let number = components.last!   // "5"
+                                        Image("img_user_random_profile_0\(number)_36")
+                                            .clipShape(Circle())
                                             .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
                                             .padding(20)
                                     }
+                                    else {
+                                        let url = URL(string : img)
+                                        KFImage(url)
+                                            .placeholder { //플레이스 홀더 설정
+                                                Image("user_profile_36")
+                                            }.retry(maxCount: 3, interval: .seconds(5)) //재시도
+                                            .onSuccess { success in //성공
+                                                print("succes: \(success)")
+                                            }
+                                            .onFailure { error in //실패
+                                                print("failure: \(error)")
+                                            }
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fill)
+                                            .clipShape(Circle()) // 프로필 이미지를 원형으로 자르기
+                                            .frame(width: 36, height: 36) //resize
+                                            .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
+                                            .padding(20)
+                                    }
+                                } else {
+                                    Image("user_profile_36")
+                                        .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
+                                        .padding(20)
                                 }
-                                
 
-                                
                                 VStack(alignment: .leading, spacing:5){
                                     Text("\(viewModel.nickname)")
                                         .font(.pretendardFont(.bold, size: 14))
@@ -95,7 +99,10 @@ struct MyPageView: View {
                             }
                             .background(Color.primary10)
                             .cornerRadius(12)
-                            
+                            .onTapGesture {
+                                self.showingTabbar = false
+                                self.isShowingUserInfoView = true
+                            }
                         }
                         
                         if viewModel.subscribe {
@@ -192,12 +199,12 @@ struct MyPageView: View {
                                             .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
                                             .padding(20)
                                         /*
-                                        URLImage(url: URL(string: bookUrl))
-                                            .aspectRatio(contentMode: .fill)
-                                            .clipShape(Circle())
-                                            .frame(width: 36, height: 36)
-                                            .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
-                                            .padding(20)*/
+                                         URLImage(url: URL(string: bookUrl))
+                                         .aspectRatio(contentMode: .fill)
+                                         .clipShape(Circle())
+                                         .frame(width: 36, height: 36)
+                                         .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
+                                         .padding(20)*/
                                     } else {
                                         Image("book_profile_36")
                                             .clipShape(Circle())
@@ -304,18 +311,18 @@ struct MyPageView: View {
                 }
                 .padding(.horizontal,20)
             }
-                
-            }
-            .padding(.top, 26)
-            .onAppear{
-                viewModel.getMyPage()
-                showingTabbar = true
-            }
-            // MARK: Bottom Sheet
-            //BottomSheet(isShowing: $isShowingBottomSheet, content: BottomSheetType.accountBook.view())
-            AccountBookBottomSheet(isShowing: $isShowingBottomSheet, showingTabbar: $showingTabbar)
+            
         }
+        .padding(.top, 26)
+        .onAppear{
+            viewModel.getMyPage()
+            showingTabbar = true
+        }
+        // MARK: Bottom Sheet
+        //BottomSheet(isShowing: $isShowingBottomSheet, content: BottomSheetType.accountBook.view())
+        AccountBookBottomSheet(isShowing: $isShowingBottomSheet, showingTabbar: $showingTabbar)
     }
+    
 }
 
 

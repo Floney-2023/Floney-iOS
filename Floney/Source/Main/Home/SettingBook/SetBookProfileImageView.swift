@@ -69,12 +69,15 @@ struct SetBookProfileImageView: View {
                 Spacer()
                 
                 Button("변경하기") {
-                    viewModel.isLoading = true
+                  
+                    LoadingManager.shared.update(showLoading: true, loadingType: .dimmedLoading)
                     if let image = selectedUIImage {
                         firebaseManager.uploadImageToFirebase(image: image) { url in
                             DispatchQueue.main.async {
                                 if let url = url {
                                     viewModel.encryptedImageUrl = url
+                                    print("in book url : \(url)")
+                                    print("in book url : \(viewModel.encryptedImageUrl)")
                                     viewModel.changeProfile(inputStatus: "custom")
                                     //viewModel.bookPreviewImage124 = selectedUIImage
                                     //ProfileManager.shared.setBookImageStateToCustom(urlString: url)
@@ -85,7 +88,6 @@ struct SetBookProfileImageView: View {
                     } else {
                         viewModel.encryptedImageUrl = ""
                         viewModel.changeProfile(inputStatus: "default")
-                        ProfileManager.shared.setBookImageStateToDefault()
                     }
                 }
                 .padding(20)
@@ -162,9 +164,6 @@ struct SetBookProfileImageView: View {
                 AlertView(isPresented: $showAlert, title: $title, message: $message) {
                     self.presentationMode.wrappedValue.dismiss()
                 }
-            }
-            if viewModel.isLoading {
-                LoadingView()
             }
             
         }

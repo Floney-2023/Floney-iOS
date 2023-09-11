@@ -7,7 +7,10 @@
 
 import SwiftUI
 
-
+enum ButtonType {
+    case red
+    case green
+}
 enum ErrorMessage {
     case login01
     
@@ -83,7 +86,7 @@ enum ErrorMessage {
 
 struct CustomAlertView: View {
     var message: String
-    @State var type : String = "red"
+    @Binding var type : ButtonType
     @Binding var isPresented: Bool
     var body: some View {
         if (isPresented) {
@@ -94,9 +97,9 @@ struct CustomAlertView: View {
                         Button(action: {
                             isPresented = false
                         }) {
-                            if type == "red" {
+                            if type == .red {
                                 Image("icon_cancel_circle_white")
-                            } else if type == "green" {
+                            } else if type == .green {
                                 Image("icon_varification_circle_white_vector")
                             }
                         }
@@ -125,7 +128,7 @@ struct CustomAlertView: View {
 struct CustomAlertView_Previews: PreviewProvider {
     static var previews: some View {
         
-        CustomAlertView(message:"error message", isPresented: .constant(true))
+        CustomAlertView(message:"error message", type: .constant(.green), isPresented: .constant(true))
    
     }
 }

@@ -8,6 +8,7 @@ import SwiftUI
 import Combine
 
 class ServiceAgreementViewModel: ObservableObject {
+    @Published var buttonType : ButtonType = .red
     @Published var showAlert: Bool = false
     @Published var isTerm1Agreed: Bool = false {
         willSet {
