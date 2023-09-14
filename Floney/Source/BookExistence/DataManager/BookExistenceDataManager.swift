@@ -22,7 +22,7 @@ extension BookExistenceService: BookExistenceProtocol {
     func getBookExistence() -> AnyPublisher<DataResponse<BookExistenceResponse, NetworkError>, Never> {
         let url = "\(Constant.BASE_URL)/books/users/check"
         
-        let token = Keychain.getKeychainValue(forKey: .accessToken)!
+        let token = Keychain.getKeychainValue(forKey: .accessToken) ?? ""
         print("book existence manager Token : \(token)")
         return AF.request(url,
                           method: .get,
