@@ -13,9 +13,9 @@ class MyPageViewModel: ObservableObject {
     var alertManager = AlertManager.shared
     var recentBookManager = RecentBookKeyManager()
     //var cryptionManager = CryptManager()
-   
+    
     @Published var result : MyPageResponse = MyPageResponse(nickname: "", email: "", profileImg: "", provider: "", subscribe: false, lastAdTime: nil, myBooks: [])
-  
+    
     
     @Published var myPageLoadingError: String = ""
     @Published var errorMessage : String = ""
@@ -88,7 +88,7 @@ class MyPageViewModel: ObservableObject {
                         ProfileManager.shared.setUserImageStateToDefault()
                     }
                     self.loadUserPreviewImage()
-                   
+                    
                 }
             }.store(in: &cancellableSet)
     }
@@ -114,7 +114,6 @@ class MyPageViewModel: ObservableObject {
             .sink { completion in
                 switch completion {
                 case .finished:
-             
                     LoadingManager.shared.update(showLoading: false, loadingType: .dimmedLoading)
                     self.ChangeProfileImageSuccess = true
                     self.alertManager.update(showAlert: true, message: "변경이 완료되었습니다.", buttonType: .green)
@@ -128,7 +127,7 @@ class MyPageViewModel: ObservableObject {
                         ProfileManager.shared.setUserImageStateToCustom(urlString: self.encryptedImageUrl) // 싱글톤으로 관리되는 profile manager에 저장
                     }
                 case .failure(let error):
-             
+                    self.createAlert(with: error)
                     LoadingManager.shared.update(showLoading: false, loadingType: .dimmedLoading)
                     print("Error changing profile: \(error)")
                 }
@@ -144,13 +143,22 @@ class MyPageViewModel: ObservableObject {
                 case .finished:
                     print("Profile successfully changed.")
                     Keychain.setKeychain(self.changedNickname, forKey: .userNickname)
+                    self.alertManager.update(showAlert: true, message: "변경이 완료되었습니다.", buttonType: .green)
                 case .failure(let error):
+                    self.createAlert(with: error)
                     print("Error changing nickname: \(error)")
                 }
             } receiveValue: { data in
                 // TODO: Handle the received data if necessary.
             }
             .store(in: &cancellableSet)
+    }
+    func isValidChangedName() -> Bool {
+        if changedNickname.isEmpty {
+            AlertManager.shared.handleError(InputValidationError.emptyNickname)
+            return false
+        }
+        return true
     }
     func changePassword() {
         dataManager.changePassword(password: newPassword)
@@ -160,6 +168,7 @@ class MyPageViewModel: ObservableObject {
                     print("Password successfully changed.")
                     
                 case .failure(let error):
+                    self.createAlert(with: error)
                     print("Error changing password: \(error)")
                 }
             } receiveValue: { data in
@@ -230,6 +239,7 @@ class MyPageViewModel: ObservableObject {
                     print("logout success.")
                     AuthenticationService.shared.logoutDueToTokenExpiration()
                 case .failure(let error):
+                    self.createAlert(with: error)
                     print("Error changing nickname: \(error)")
                 }
             } receiveValue: { data in
@@ -237,12 +247,32 @@ class MyPageViewModel: ObservableObject {
             }
             .store(in: &cancellableSet)
     }
+    func changeBook(bookKey : String, bookStatus : String) {
+        Keychain.setKeychain(bookKey, forKey: .bookKey)
+        Keychain.setKeychain(bookStatus, forKey: .bookStatus)
+        let recentBookKeyManager = RecentBookKeyManager()
+        recentBookKeyManager.saveRecentBookKey(bookKey: bookKey)
+        CurrencyManager.shared.getCurrency()
+        getMyPage()
+    }
     // preview image를 설정한다.
     func loadUserPreviewImage() {
-        
         self.userPreviewImage124 = ProfileManager.shared.userPreviewImage124?.copied()
         self.userPreviewImage36 = ProfileManager.shared.userPreviewImage36?.copied()
         self.userPreviewImage32 = ProfileManager.shared.userPreviewImage32?.copied()
+    }
+    func sortedBooks() -> [MyBookResult] {
+        let selectedBookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
+        
+        return myBooks.sorted {
+            if $0.bookKey == selectedBookKey {
+                return true
+            }
+            if $1.bookKey == selectedBookKey {
+                return false
+            }
+            return false // or any other default sorting if needed
+        }
     }
     
     // random profile을 설정한다.
@@ -274,7 +304,34 @@ class MyPageViewModel: ObservableObject {
         }
     }
     func createAlert( with error: NetworkError) {
-        myPageLoadingError = error.backendError == nil ? error.initialError.localizedDescription : error.backendError!.message
-        self.showAlert = true
+        //loadingError = error.backendError == nil ? error.initialError.localizedDescription : error.backendError!.message
+        if let backendError = error.backendError {
+            guard let serverError = ServerError(rawValue: backendError.code) else {
+                // 서버 에러 코드가 정의되지 않은 경우의 처리
+                //showAlert(message: "알 수 없는 서버 에러가 발생했습니다.")
+                return
+            }
+            AlertManager.shared.handleError(serverError)
+            // 에러 메시지 처리
+            //showAlert(message: serverError.errorMessage)
+            
+            // 에러코드에 따른 추가 로직
+            if let errorCode = error.backendError?.code {
+                switch errorCode {
+                    // 토큰 재발급
+                case "U006" :
+                    AuthenticationService.shared.logoutDueToTokenExpiration()
+                    // 아예 틀린 토큰이므로 재로그인해서 다시 발급받아야 함.
+                case "U007" :
+                    AuthenticationService.shared.logoutDueToTokenExpiration()
+                default:
+                    break
+                }
+            }
+        } else {
+            // BackendError 없이 NetworkError만 발생한 경우
+            //showAlert(message: "네트워크 오류가 발생했습니다.")
+            
+        }
     }
 }

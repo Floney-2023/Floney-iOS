@@ -13,11 +13,16 @@ struct MyPageView: View {
     //var encryptionManager = CryptManager()
     var profileManager = ProfileManager.shared
     
-    @State var isShowingBottomSheet = false
+    @Binding var isShowingAccountBottomSheet : Bool
+    @Binding var isNextToCreateBook : Bool
+    @Binding var isNextToEnterCode : Bool
     @StateObject var viewModel = MyPageViewModel()
     @State var isShowingNotiView = false
     @State var isShowingUserInfoView = false
     @State var currency = CurrencyManager.shared.currentCurrency
+    @State var isNextToMySubscription = false
+    @State var isNextToUnSubscription = false
+    @State var isNextToSubscription = false
     var body: some View {
         ZStack {
             VStack(spacing:26) {
@@ -106,14 +111,21 @@ struct MyPageView: View {
                         }
                         
                         if viewModel.subscribe {
-                            Button("구독 내역 보기") {
+                            Button {
+                                self.isNextToMySubscription = true
+                            } label: {
+                                Text("구독 내역 보기")
+                                    .frame(maxWidth: .infinity)
+                                    .padding()
+                                    .font(.pretendardFont(.semiBold, size: 13))
+                                    .foregroundColor(.greyScale12)
+                                
                             }
-                            .padding()
-                            .font(.pretendardFont(.semiBold, size: 13))
-                            .foregroundColor(.greyScale12)
                             .frame(maxWidth: .infinity)
+                            .foregroundColor(.greyScale12)
                             .background(Color.greyScale2)
                             .cornerRadius(12)
+                            
                         } else {
                             HStack(spacing:12){
                                 VStack {
@@ -133,7 +145,7 @@ struct MyPageView: View {
                                 .frame(height: 150)
                                 .background(Color.greyScale12)
                                 .cornerRadius(12)
-                                NavigationLink(destination: SubscriptionView()) {
+                                NavigationLink(destination: SubscriptionView(showingTabbar: $showingTabbar), isActive: $isNextToSubscription) {
                                     VStack {
                                         HStack {
                                             Text("월 3,800\(currency)으로\n더 많은 혜택을\n누려보세요!")
@@ -161,6 +173,10 @@ struct MyPageView: View {
                                         )
                                     )
                                     .cornerRadius(12)
+                                    .onTapGesture {
+                                        isNextToSubscription = true
+                                        showingTabbar = false
+                                    }
                                     
                                 }
                             }
@@ -176,7 +192,7 @@ struct MyPageView: View {
                         }
                         
                         VStack(spacing:16) {
-                            ForEach(viewModel.myBooks, id:\.self) { book in
+                            ForEach(viewModel.sortedBooks(), id:\.self) { book in
                                 HStack {
                                     
                                     if let bookUrl = book.bookImg {
@@ -198,21 +214,14 @@ struct MyPageView: View {
                                             .frame(width: 36, height: 36) //resize
                                             .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
                                             .padding(20)
-                                        /*
-                                         URLImage(url: URL(string: bookUrl))
-                                         .aspectRatio(contentMode: .fill)
-                                         .clipShape(Circle())
-                                         .frame(width: 36, height: 36)
-                                         .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
-                                         .padding(20)*/
+                                     
                                     } else {
                                         Image("book_profile_36")
                                             .clipShape(Circle())
                                             .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
                                             .padding(20)
                                     }
-                                    
-                                    
+
                                     VStack(alignment: .leading, spacing:5){
                                         Text("\(book.name)")
                                             .font(.pretendardFont(.bold, size: 14))
@@ -223,18 +232,27 @@ struct MyPageView: View {
                                             .foregroundColor(.greyScale6)
                                     }
                                     Spacer()
-                                    Image("icon_check_circle")
-                                        .padding(20)
+                                    if book.bookKey == Keychain.getKeychainValue(forKey: .bookKey) ?? "" {
+                                        Image("icon_check_circle_activated")
+                                            .padding(20)
+                                    } else {
+                                        Image("icon_check_circle_disabled")
+                                            .padding(20)
+                                            
+                                    }
                                 }
                                 .background(Color.greyScale12)
                                 .cornerRadius(12)
+                                .onTapGesture {
+                                    viewModel.changeBook(bookKey: book.bookKey, bookStatus: book.bookStatus)
+                                }
                             }
                             
                             
                             // MARK: Bottom Sheet Toggle
                             Button(action: {
                                 withAnimation{
-                                    isShowingBottomSheet.toggle()
+                                    isShowingAccountBottomSheet = true
                                 }
                             }) {
                                 Image("icon_plus")
@@ -246,8 +264,8 @@ struct MyPageView: View {
                                     .stroke(Color.greyScale9, style:StrokeStyle(lineWidth: 1, dash: [6]))
                             )
                         }
-                    }
-                    VStack(spacing:30) {
+                    }.padding(.top, 32)
+                    VStack(spacing:42) {
                         HStack {
                             Text("고객지원")
                                 .font(.pretendardFont(.bold, size: 16))
@@ -289,38 +307,56 @@ struct MyPageView: View {
                             Spacer()
                             Image("forward_button")
                         }
-                    }
+                    }.padding(.top, 40)
                     
                     if viewModel.subscribe {
-                        NavigationLink(destination: ServiceAgreementView()){
-                            HStack {
-                                VStack {
-                                    Text("구독 해지")
-                                        .font(.pretendardFont(.regular, size: 12))
-                                        .foregroundColor(.greyScale6)
-                                    Divider()
-                                        .padding(EdgeInsets(top: -10, leading: 0, bottom: 0, trailing: 0))
-                                        .frame(width: 50,height: 1.0)
-                                        .foregroundColor(.greyScale6)
-                                    
-                                }
-                                Spacer()
+                        
+                        HStack {
+                            VStack {
+                                Text("구독 해지")
+                                    .font(.pretendardFont(.regular, size: 12))
+                                    .foregroundColor(.greyScale6)
+                                Divider()
+                                    .padding(EdgeInsets(top: -10, leading: 0, bottom: 0, trailing: 0))
+                                    .frame(width: 50,height: 1.0)
+                                    .foregroundColor(.greyScale6)
+                                
                             }
+                            Spacer()
+                        }
+                        .padding(.top, 44)
+                        .onTapGesture {
+                            self.showingTabbar = false
+                            self.isNextToUnSubscription = true
                         }
                     }
-                }
+                } // scroll view
                 .padding(.horizontal,20)
+                
+                NavigationLink(destination : SetBookNameView(), isActive: $isNextToCreateBook) {
+                    EmptyView()
+                }
+                NavigationLink(destination : EnterBookCodeView(), isActive: $isNextToEnterCode) {
+                    EmptyView()
+                }
+            } // vstack
+            .fullScreenCover(isPresented: $isNextToMySubscription) {
+                MySubscriptionView(showingTabbar: $showingTabbar, isShowing: $isNextToMySubscription, isShowingUnScribe: $isNextToUnSubscription)
+            }
+            .fullScreenCover(isPresented: $isNextToUnSubscription) {
+                UnsubscribeView(showingTabbar: $showingTabbar, isShowing: $isNextToUnSubscription)
             }
             
-        }
+        } // zstack
         .padding(.top, 26)
         .onAppear{
+            if IAPManager.shared.subscriptionStatus {
+                IAPManager.shared.verifyReceipt()
+            }
             viewModel.getMyPage()
             showingTabbar = true
         }
-        // MARK: Bottom Sheet
-        //BottomSheet(isShowing: $isShowingBottomSheet, content: BottomSheetType.accountBook.view())
-        AccountBookBottomSheet(isShowing: $isShowingBottomSheet, showingTabbar: $showingTabbar)
+
     }
     
 }
@@ -328,6 +364,6 @@ struct MyPageView: View {
 
 struct MyPageView_Previews: PreviewProvider {
     static var previews: some View {
-        MyPageView(showingTabbar: .constant(true))
+        MyPageView(showingTabbar: .constant(true), isShowingAccountBottomSheet: .constant(false), isNextToCreateBook: .constant(false), isNextToEnterCode: .constant(false))
     }
 }

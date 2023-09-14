@@ -91,11 +91,11 @@ struct WithdrawalView: View {
                  */
      
                 Spacer()
-                NavigationLink(destination: EmailAuthView()){
+                //NavigationLink(destination: EmailAuthView()){
                     Text("탈퇴하기")
                         .padding()
                         .withNextButtonFormmating(.primary1)
-                }
+               // }
 
             }
             .padding(EdgeInsets(top: 30, leading: 24, bottom: 0, trailing: 24))

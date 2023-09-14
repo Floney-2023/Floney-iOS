@@ -19,17 +19,8 @@ struct ChangePasswordView: View {
                             .foregroundColor(.greyScale2)
                         Spacer()
                     }
-                    
-                    TextField("", text: $viewModel.currentPassword)
-                        .padding()
-                        .overlay(
-                            Text("현재 비밀번호를 입력하세요.")
-                                .padding()
-                                .font(.pretendardFont(.regular, size: 14))
-                                .foregroundColor(.greyScale7)
-                                .opacity(viewModel.currentPassword.isEmpty ? 1 : 0), alignment: .leading
-                        )
-                        .modifier(TextFieldModifier())
+                    CustomTextField(text: $viewModel.currentPassword, placeholder: "현재 비밀번호를 입력하세요.",placeholderColor: .greyScale7)
+                        .frame(height: UIScreen.main.bounds.height * 0.06)
                 }
                 
                 VStack(spacing: 20) {
@@ -40,17 +31,8 @@ struct ChangePasswordView: View {
                                 .foregroundColor(.greyScale2)
                             Spacer()
                         }
-                        TextField("", text: $viewModel.newPassword)
-                            .padding()
-                            .overlay(
-                                Text("영문 대소문자, 숫자 포함 8자 이상")
-                                    .padding()
-                                    .font(.pretendardFont(.regular, size: 14))
-                                    .foregroundColor(.greyScale7)
-                                    .opacity(viewModel.newPassword.isEmpty ? 1 : 0), alignment: .leading
-                            )
-                            .modifier(TextFieldModifier())
-                        
+                        CustomTextField(text: $viewModel.newPassword, placeholder: "영문 대소문자, 숫자 포함 8자 이상",placeholderColor: .greyScale7)
+                            .frame(height: UIScreen.main.bounds.height * 0.06)
                     }
                     VStack(spacing: 12) {
                         HStack {
@@ -59,17 +41,8 @@ struct ChangePasswordView: View {
                                 .foregroundColor(.greyScale2)
                             Spacer()
                         }
-                        
-                        TextField("", text: $viewModel.newPasswordCheck)
-                            .padding()
-                            .overlay(
-                                Text("영문 대소문자, 숫자 포함 8자 이상")
-                                    .padding()
-                                    .font(.pretendardFont(.regular, size: 14))
-                                    .foregroundColor(.greyScale7)
-                                    .opacity(viewModel.newPasswordCheck.isEmpty ? 1 : 0), alignment: .leading
-                            )
-                            .modifier(TextFieldModifier())
+                        CustomTextField(text: $viewModel.newPasswordCheck, placeholder: "영문 대소문자, 숫자 포함 8자 이상",placeholderColor: .greyScale7)
+                            .frame(height: UIScreen.main.bounds.height * 0.06)
                     }
                 }
                 
@@ -94,10 +67,8 @@ struct ChangePasswordView: View {
                         .foregroundColor(.greyScale1)
                 }
             }
-            /*
-            if viewModel.showAlert {
-                CustomAlertView(message: viewModel.errorMessage, isPresented: $viewModel.showAlert)
-            }*/
+            .onAppear(perform : UIApplication.shared.hideKeyboard)
+            
         }
     }
 }

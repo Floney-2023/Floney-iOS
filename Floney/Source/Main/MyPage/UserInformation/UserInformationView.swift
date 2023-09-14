@@ -25,19 +25,13 @@ struct UserInformationView: View {
                     Spacer()
                 }
                 HStack(spacing: 8) {
-                    TextField("", text: $viewModel.changedNickname)
-                        .padding()
-                        .keyboardType(.emailAddress)
-                        .overlay(
-                            Text("닉네임을 입력하세요.")
-                                .padding()
-                                .font(.pretendardFont(.regular, size: 14))
-                                .foregroundColor(.greyScale7)
-                                .opacity(viewModel.changedNickname.isEmpty ? 1 : 0), alignment: .leading
-                        )
-                        .modifier(TextFieldModifier())
+                    CustomTextField(text: $viewModel.changedNickname, placeholder: "닉네임을 입력하세요",placeholderColor: .greyScale7)
+                        .frame(height: UIScreen.main.bounds.height * 0.06)
+                   
                     Button("변경하기"){
-                        viewModel.changeNickname()
+                        if viewModel.isValidChangedName() {
+                            viewModel.changeNickname()
+                        }
                     }
                     .padding()
                     .font(.pretendardFont(.bold, size: 14))
@@ -118,6 +112,7 @@ struct UserInformationView: View {
                
             }
         )
+        .onAppear(perform : UIApplication.shared.hideKeyboard)
 
     }
 }

@@ -29,7 +29,7 @@ extension MyPage: MyPageProtocol {
     func getMyPage() -> AnyPublisher<DataResponse<MyPageResponse, NetworkError>, Never> {
         let url = "\(Constant.BASE_URL)/users/mypage"
         
-        let token = Keychain.getKeychainValue(forKey: .accessToken)!
+        let token = Keychain.getKeychainValue(forKey: .accessToken) ?? ""
         print("My Page : \n\(token)")
         
         return AF.request(url,
@@ -59,7 +59,7 @@ extension MyPage: MyPageProtocol {
         //parameters["profileImg"] = img
         
         //print("parameters : \(parameters)")
-        let token = Keychain.getKeychainValue(forKey: .accessToken)!
+        let token = Keychain.getKeychainValue(forKey: .accessToken) ?? ""
         //print("My Page : \n\(token)")
         
         let encodedURL = url.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
@@ -102,7 +102,7 @@ extension MyPage: MyPageProtocol {
         print("\(urlString)")
         let encodedString = urlString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
         let url = URL(string: encodedString!)!
-        let token = Keychain.getKeychainValue(forKey: .accessToken)!
+        let token = Keychain.getKeychainValue(forKey: .accessToken) ?? ""
         print("change nickname : \n\(token)")
         
         return AF.request(url,
@@ -141,7 +141,7 @@ extension MyPage: MyPageProtocol {
     }
     func changePassword(password: String) -> AnyPublisher<Void, NetworkError> {
         let url = "\(Constant.BASE_URL)/users/password/update?password=\(password)"
-        let token = Keychain.getKeychainValue(forKey: .accessToken)!
+        let token = Keychain.getKeychainValue(forKey: .accessToken) ?? ""
         print("change password : \n\(token)\n url: \(url)")
         return AF.request(url,
                           method: .get,
@@ -178,7 +178,7 @@ extension MyPage: MyPageProtocol {
     }
     func logout() -> AnyPublisher<Void, NetworkError> {
 
-        let token = Keychain.getKeychainValue(forKey: .accessToken)!
+        let token = Keychain.getKeychainValue(forKey: .accessToken) ?? ""
         let url = "\(Constant.BASE_URL)/users/logout?accessToken=\(token)"
         print("change nickname : \n\(token)")
         
