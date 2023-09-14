@@ -18,13 +18,13 @@ class CalendarViewModel: ObservableObject {
     @Published var bookKey = ""
     @Published var requestDate: String = ""  // 0000-00-01
     @Published var options = ["캘린더", "일별"]
-        
+    
     //MARK: Today
     @Published var todayYear: Int = 0
     @Published var todayMonth: Int = 0
     @Published var todayDay: Int = 0
     var totalToday = ""
-
+    
     //MARK: Selected Date
     // 연,월을 바꿀 경우에는 해당 연도 해당 달의 1일로 selected 변화
     // 아래 모든 데이터는 같은 날짜를 가리켜야 함
@@ -53,11 +53,12 @@ class CalendarViewModel: ObservableObject {
     @Published var seeProfileImg : Bool = true
     @Published var userImages : [String?]?
     @Published var dayLineCarryOver : CarryOverInfo = CarryOverInfo(carryOverStatus: false, carryOverMoney: 0)
+    @Published var writer = ""
     
     //MARK: book profile image
     @Published var bookInfoResult = BookInfoResponse(bookImg: "",bookName: "", startDay: "", seeProfileStatus: true, carryOver: true, ourBookUsers: [])
     @Published var bookProfileImage : String?
-
+    
     private var cancellableSet: Set<AnyCancellable> = []
     var dataManager: CalendarProtocol
     
@@ -70,7 +71,7 @@ class CalendarViewModel: ObservableObject {
     
     //MARK: server
     func getCalendar() {
-        bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
+        bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
         let request = CalendarRequest(bookKey: bookKey, date: requestDate)
         dataManager.getCalendar(request)
             .sink { (dataResponse) in
@@ -121,8 +122,9 @@ class CalendarViewModel: ObservableObject {
             }.store(in: &cancellableSet)
     }
     func getDayLines() {
-        bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
+        bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
         let request = DayLinesRequest(bookKey: bookKey, date: dayLinesDate)
+        print(request)
         dataManager.getDayLines(request)
             .sink { (dataResponse) in
                 if dataResponse.error != nil {
@@ -154,13 +156,14 @@ class CalendarViewModel: ObservableObject {
                             self.dayLinesTotalOutcome += Int(self.dayLineCarryOver.carryOverMoney)
                         }
                     }
+                    
                 }
                 
             }.store(in: &cancellableSet)
     }
     //MARK: server
     func getBookInfo() {
-        bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
+        bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
         let request = BookInfoRequest(bookKey: bookKey)
         dataManager.getBookInfo(request)
             .sink { (dataResponse) in
@@ -192,7 +195,7 @@ class CalendarViewModel: ObservableObject {
                 }
             }.store(in: &cancellableSet)
     }
-
+    
     // MARK: 오늘 날짜 계산
     func calcToday() {
         let today = Date()
@@ -245,7 +248,7 @@ class CalendarViewModel: ObservableObject {
         }
         if let monthRange = calendar.range(of: .day, in: .month, for: date) {
             for day in monthRange {
-               
+                
                 var result = "\(year)-\(month)-\(day)"
                 
                 if (selectedMonth < 10) {
@@ -276,11 +279,11 @@ class CalendarViewModel: ObservableObject {
         let dayComponent = components.last
         return String(describing: dayComponent!)
     }
-    //MARK: 연, 월 추출 후 검사 
+    //MARK: 연, 월 추출 후 검사
     func extractYearMonth(from dateString: String) -> Bool {
         var result = false
         let components = dateString.split(separator: "-")
-   
+        
         if let year = Int(components[0]), let month = Int(components[1]) {
             if year == selectedYear && month == selectedMonth {
                 result = true
@@ -290,8 +293,8 @@ class CalendarViewModel: ObservableObject {
         }
         return result
     }
-
-
+    
+    
     func nextMonth() {
         selectedMonth += 1
         if selectedMonth > 12 {
@@ -300,7 +303,7 @@ class CalendarViewModel: ObservableObject {
         }
         getCalendar()
     }
-
+    
     func previousMonth() {
         selectedMonth -= 1
         if selectedMonth < 1 {
@@ -315,28 +318,36 @@ class CalendarViewModel: ObservableObject {
         formatter.dateFormat = "MM.dd"
         return formatter
     }()
-
+    
     func createAlert( with error: NetworkError) {
-        calendarLoadingError = error.backendError == nil ? error.initialError.localizedDescription : error.backendError!.message
-        self.showAlert = true
-        
-        if let errorCode = error.backendError?.code {
-            switch errorCode {
-                //case "U009" :
-                //print("\(errorCode) : alert")
-                //self.showAlert = true
-                //self.errorMessage = ErrorMessage.login01.value
-            // 토큰 재발급
-            case "U006" :
-                tokenViewModel.tokenReissue()
-            // 아예 틀린 토큰이므로 재로그인해서 다시 발급받아야 함.
-            case "U007" :
-                AuthenticationService.shared.logoutDueToTokenExpiration()
-            default:
-                break
+        //loadingError = error.backendError == nil ? error.initialError.localizedDescription : error.backendError!.message
+        if let backendError = error.backendError {
+            guard let serverError = ServerError(rawValue: backendError.code) else {
+                // 서버 에러 코드가 정의되지 않은 경우의 처리
+                //showAlert(message: "알 수 없는 서버 에러가 발생했습니다.")
+                return
             }
-            // 에러 처리
+            AlertManager.shared.handleError(serverError)
+            // 에러 메시지 처리
+            //showAlert(message: serverError.errorMessage)
+            
+            // 에러코드에 따른 추가 로직
+            if let errorCode = error.backendError?.code {
+                switch errorCode {
+                    // 토큰 재발급
+                case "U006" :
+                    AuthenticationService.shared.logoutDueToTokenExpiration()
+                    // 아예 틀린 토큰이므로 재로그인해서 다시 발급받아야 함.
+                case "U007" :
+                    AuthenticationService.shared.logoutDueToTokenExpiration()
+                default:
+                    break
+                }
+            }
+        } else {
+            // BackendError 없이 NetworkError만 발생한 경우
+            //showAlert(message: "네트워크 오류가 발생했습니다.")
+            
         }
     }
-    
 }

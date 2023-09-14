@@ -280,6 +280,8 @@ struct SettingBookView: View {
                             .foregroundColor(.greyScale1)
                         Spacer()
                         Image("forward_button")
+                    }.onTapGesture {
+                        viewModel.downloadExcelFile()
                     }
                     
                     HStack {
@@ -324,6 +326,13 @@ struct SettingBookView: View {
             }.sheet(isPresented: $onShareSheet) {
                 if let url = viewModel.shareUrl {
                     ActivityView(activityItems: [url])
+                }
+               
+            }
+            .sheet(isPresented: $viewModel.shareExcelStatus) {
+               
+                if let excelUrl = viewModel.excelURL {
+                    ActivityView(activityItems: [excelUrl])
                 }
             }
             .overlay(

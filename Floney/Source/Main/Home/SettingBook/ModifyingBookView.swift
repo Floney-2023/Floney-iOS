@@ -24,19 +24,14 @@ struct ModifyingBookView: View {
                     Spacer()
                 }
                 HStack(spacing: 8) {
-                    TextField("", text: $viewModel.changedName)
-                        .padding()
-                        //.keyboardType(.emailAddress)
-                        .overlay(
-                            Text("이름을 입력하세요.")
-                                .padding()
-                                .font(.pretendardFont(.regular, size: 14))
-                                .foregroundColor(.greyScale7)
-                                .opacity(viewModel.changedName.isEmpty ? 1 : 0), alignment: .leading
-                        )
-                        .modifier(TextFieldModifier())
+                    CustomTextField(text: $viewModel.changedName, placeholder: "이름을 입력하세요.", placeholderColor: .greyScale7)
+                        .frame(height: UIScreen.main.bounds.height * 0.06)
+                    
                     Button("변경하기"){
-                        viewModel.changeNickname()
+                        if viewModel.isValidChangedName() {
+                            viewModel.changeNickname()
+                        }
+                        
                     }
                     .padding()
                     .font(.pretendardFont(.bold, size: 14))
@@ -117,6 +112,7 @@ struct ModifyingBookView: View {
                 
             }
         )
+        .onAppear(perform : UIApplication.shared.hideKeyboard)
         
     }
 }

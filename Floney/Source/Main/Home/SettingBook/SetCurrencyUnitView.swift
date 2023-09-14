@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct SetCurrencyUnitView: View {
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @ObservedObject var viewModel = SettingBookViewModel()
     @State var showingAlert = false
     @State var title = "가계부가 초기화됩니다"
@@ -15,6 +16,8 @@ struct SetCurrencyUnitView: View {
     @State var selectedUnit = ""
     @State var currencyUnits = ["KRW(원)","USD($)","EUR(€)","JPY(¥)","CNY(¥)","GBP(£)"]
     @State var isSelected = 0
+    @State var newCurrency : String = ""
+
     var body: some View {
         ZStack{
             VStack(spacing: 32){
@@ -35,12 +38,15 @@ struct SetCurrencyUnitView: View {
                 ScrollView(showsIndicators: false) {
                     VStack{
                         ForEach(currencyUnits.indices, id:\.self) { index in
+                            let parsedCurrency = String(currencyUnits[index].prefix(while: { $0 != "(" })).trimmingCharacters(in: .whitespaces)
                             HStack {
+                                
                                 Text("\(currencyUnits[index])")
                                     .font(.pretendardFont(.medium,size:12))
-                                    .foregroundColor(isSelected == index ? .primary2 : .greyScale6)
+                                    .foregroundColor(parsedCurrency == viewModel.currency ? .primary2 : .greyScale6)
                                 Spacer()
-                                if isSelected == index {
+                                
+                                if parsedCurrency == viewModel.currency {
                                     Image("icon_check_circle_activated")
                                         .padding(.trailing, 22)
                                 }
@@ -48,15 +54,14 @@ struct SetCurrencyUnitView: View {
                             .padding(.leading, 22)
                             .padding(.vertical, 20)
                             .frame(maxWidth: .infinity)
-                            .background(isSelected == index ? Color.primary10 : Color.greyScale12)
+                            .background(parsedCurrency == viewModel.currency ? Color.primary10 : Color.greyScale12)
                             .cornerRadius(12)
                             .onTapGesture {
                                 isSelected = index
                                 selectedUnit = currencyUnits[isSelected]
-                                let parsedCurrency = String(selectedUnit.prefix(while: { $0 != "(" })).trimmingCharacters(in: .whitespaces)
-                                viewModel.currency = parsedCurrency
+                                newCurrency = String(selectedUnit.prefix(while: { $0 != "(" })).trimmingCharacters(in: .whitespaces)
                                 print(parsedCurrency)  // 출력: "KRW"
-                                message = "화폐 단위를 \(parsedCurrency)(으)로 변경하시겠습니까?\n변경 시, 가계부가 초기화됩니다."
+                                message = "화폐 단위를 \(newCurrency)(으)로 변경하시겠습니까?\n변경 시, 가계부가 초기화됩니다."
                                 showingAlert = true
                             }
                         }
@@ -70,7 +75,8 @@ struct SetCurrencyUnitView: View {
             
             if showingAlert {
                 FloneyAlertView(isPresented: $showingAlert, title: $title, message: $message, onOKAction: {
-                    viewModel.setCurrency()
+                    viewModel.setCurrency(currency: newCurrency)
+                    self.presentationMode.wrappedValue.dismiss()
                 })
             }
         }

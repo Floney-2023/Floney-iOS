@@ -37,6 +37,7 @@ struct DayLinesResults: Decodable, Hashable {
     var assetType : String
     var content : String
     var exceptStatus : Bool
+    var userNickName : String
 }
 
 struct DayTotalExpenses: Decodable {

@@ -10,9 +10,8 @@ import Combine
 import SwiftUI
 
 class SettingBookViewModel : ObservableObject {
-
-    @Published var tokenViewModel = TokenReissueViewModel()
     
+    @Published var tokenViewModel = TokenReissueViewModel()
     @Published var ChangeProfileImageSuccess = false
     @Published var bookInfoLoadingError: String = ""
     @Published var showAlert: Bool = false
@@ -27,7 +26,7 @@ class SettingBookViewModel : ObservableObject {
     @Published var startDay = ""
     @Published var carryOver = true
     @Published var stateOfCarryOver = false
-
+    
     
     @Published var changedName = ""
     @Published var encryptedImageUrl : String = ""
@@ -42,10 +41,14 @@ class SettingBookViewModel : ObservableObject {
     @Published var bookPreviewImage34: UIImage?
     @Published var bookPreviewImage36: UIImage?
     @Published var userImages : [String]?
-
+    
     @Published var bookCode : String = ""
     
-    @Published var currency : String = ""
+    @Published var currency : String = CurrencyManager.shared.currentCurrencyUnit
+    
+    //MARK: Excel
+    @Published var excelURL : URL?
+    @Published var shareExcelStatus = false
     
     private var cancellableSet: Set<AnyCancellable> = []
     var dataManager: SettingBookProtocol
@@ -55,7 +58,7 @@ class SettingBookViewModel : ObservableObject {
     }
     //MARK: server
     func getBookInfo() {
-        bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
+        bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
         let request = BookInfoRequest(bookKey: bookKey)
         dataManager.getBookInfo(request)
             .sink { (dataResponse) in
@@ -101,7 +104,7 @@ class SettingBookViewModel : ObservableObject {
     
     func changeProfile(inputStatus: String) {
         
-        bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
+        bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
         var request : BookProfileRequest
         if inputStatus == "default" {
             request = BookProfileRequest(newUrl: nil, bookKey: bookKey)
@@ -115,7 +118,7 @@ class SettingBookViewModel : ObservableObject {
                 switch completion {
                 case .finished:
                     print("Profile successfully changed.")
-           
+                    
                     DispatchQueue.main.async {
                         LoadingManager.shared.update(showLoading: false, loadingType: .dimmedLoading)
                     }
@@ -132,6 +135,7 @@ class SettingBookViewModel : ObservableObject {
                     
                 case .failure(let error):
                     print("Error changing profile: \(error)")
+                    self.createAlert(with: error)
                     DispatchQueue.main.async {
                         LoadingManager.shared.update(showLoading: false, loadingType: .dimmedLoading)
                     }
@@ -142,16 +146,18 @@ class SettingBookViewModel : ObservableObject {
             }
             .store(in: &cancellableSet)
     }
-
+    
     func changeNickname() {
-        bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
+        bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
         let request = BookNameRequest(name: changedName, bookKey: bookKey)
         dataManager.changeNickname(parameters: request)
             .sink { completion in
                 switch completion {
                 case .finished:
                     print("Changing nickname successfully changed.")
+                    AlertManager.shared.update(showAlert: true, message: "변경이 완료되었습니다.", buttonType: .green)
                 case .failure(let error):
+                    self.createAlert(with: error)
                     print("Error changing nickname: \(error)")
                 }
             } receiveValue: { data in
@@ -159,8 +165,15 @@ class SettingBookViewModel : ObservableObject {
             }
             .store(in: &cancellableSet)
     }
+    func isValidChangedName() -> Bool {
+        if changedName.isEmpty {
+            AlertManager.shared.handleError(InputValidationError.emptyBookName)
+            return false
+        }
+        return true
+    }
     func changeProfileStatus() {
-        bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
+        bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
         let request = SeeProfileRequest(bookKey: bookKey, seeProfileStatus: profileStatus)
         dataManager.changeProfileStatus(parameters: request)
             .sink { completion in
@@ -176,14 +189,15 @@ class SettingBookViewModel : ObservableObject {
             .store(in: &cancellableSet)
     }
     func setBudget() {
-        bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
-        let request = SetBudgetRequest(bookKey: bookKey, budget: budget)
+        bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
+        let request = SetBudgetRequest(bookKey: bookKey, budget: budget, date: "")
         dataManager.setBudget(parameters: request)
             .sink { completion in
                 switch completion {
                 case .finished:
                     print("Setting Budget successfully changed.")
                 case .failure(let error):
+                    self.createAlert(with: error)
                     print("Error changing nickname: \(error)")
                 }
             } receiveValue: { data in
@@ -192,7 +206,7 @@ class SettingBookViewModel : ObservableObject {
             .store(in: &cancellableSet)
     }
     func setAsset() {
-        bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
+        bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
         let request = SetAssetRequest(bookKey: bookKey, asset: asset)
         dataManager.setAsset(parameters: request)
             .sink { completion in
@@ -200,6 +214,7 @@ class SettingBookViewModel : ObservableObject {
                 case .finished:
                     print("Setting Asset successfully changed.")
                 case .failure(let error):
+                    self.createAlert(with: error)
                     print("Error changing nickname: \(error)")
                 }
             } receiveValue: { data in
@@ -208,7 +223,7 @@ class SettingBookViewModel : ObservableObject {
             .store(in: &cancellableSet)
     }
     func setCarryOver(status : Bool)  {
-        bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
+        bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
         let request = SetCarryOver(bookKey: bookKey, status: status)
         dataManager.setCarryOver(parameters: request)
             .sink { completion in
@@ -217,8 +232,9 @@ class SettingBookViewModel : ObservableObject {
                     print("Setting Carry Over successfully changed.")
                     self.getBookInfo()
                 case .failure(let error):
+                    self.createAlert(with: error)
                     print("Error Settig Carry Over: \(error)")
-                   
+                    
                 }
             } receiveValue: { data in
                 // TODO: Handle the received data if necessary.
@@ -226,7 +242,7 @@ class SettingBookViewModel : ObservableObject {
             .store(in: &cancellableSet)
     }
     func exitBook() {
-        bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
+        bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
         let request = BookInfoRequest(bookKey: bookKey)
         dataManager.exitBook(parameters: request)
             .sink { completion in
@@ -234,6 +250,7 @@ class SettingBookViewModel : ObservableObject {
                 case .finished:
                     print("Exit Book successfully changed.")
                 case .failure(let error):
+                    self.createAlert(with: error)
                     print("Error Exiting Book : \(error)")
                 }
             } receiveValue: { data in
@@ -242,7 +259,7 @@ class SettingBookViewModel : ObservableObject {
             .store(in: &cancellableSet)
     }
     func deleteBook() {
-        bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
+        bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
         let request = BookInfoRequest(bookKey: bookKey)
         dataManager.deleteBook(parameters: request)
             .sink { completion in
@@ -250,6 +267,7 @@ class SettingBookViewModel : ObservableObject {
                 case .finished:
                     print("Exit Book successfully changed.")
                 case .failure(let error):
+                    self.createAlert(with: error)
                     print("Error Exiting Book : \(error)")
                 }
             } receiveValue: { data in
@@ -258,7 +276,7 @@ class SettingBookViewModel : ObservableObject {
             .store(in: &cancellableSet)
     }
     func resetBook() {
-        bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
+        bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
         let request = BookInfoRequest(bookKey: bookKey)
         dataManager.resetBook(parameters: request)
             .sink { completion in
@@ -266,6 +284,7 @@ class SettingBookViewModel : ObservableObject {
                 case .finished:
                     print("Reset Book successfully changed.")
                 case .failure(let error):
+                    self.createAlert(with: error)
                     print("Reset Exiting Book : \(error)")
                 }
             } receiveValue: { data in
@@ -273,9 +292,9 @@ class SettingBookViewModel : ObservableObject {
             }
             .store(in: &cancellableSet)
     }
-
+    
     func getShareCode() {
-        bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
+        bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
         let request = BookInfoRequest(bookKey: bookKey)
         dataManager.getShareCode(request)
             .sink { (dataResponse) in
@@ -286,12 +305,12 @@ class SettingBookViewModel : ObservableObject {
                 } else {
                     self.bookCode = (dataResponse.value!.code)
                     print("--성공--")
-                    print(self.bookCode) 
+                    print(self.bookCode)
                 }
             }.store(in: &cancellableSet)
     }
-    func setCurrency() {
-        bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
+    func setCurrency(currency : String) {
+        bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
         let request = SetCurrencyRequest(requestCurrency: currency, bookKey: bookKey)
         dataManager.setCurrency(request)
             .sink { (dataResponse) in
@@ -303,11 +322,39 @@ class SettingBookViewModel : ObservableObject {
                     self.currency = dataResponse.value!.myBookCurrency
                     print("--성공--")
                     print("변경된 화폐 단위 : \(self.currency)")
-                    CurrencyManager.shared.getCurrency()
+                    DispatchQueue.main.async {
+                        CurrencyManager.shared.getCurrency()
+                    }
+                    AlertManager.shared.update(showAlert: true, message: "화폐 단위가 변경 완료 되었습니다.", buttonType: .green)
                 }
             }.store(in: &cancellableSet)
     }
-
+    
+    func downloadExcelFile() {
+        bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
+        let cancellable = dataManager.downloadExcelFile(bookKey: bookKey)
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case .finished:
+                    
+                    break
+                case .failure(let error):
+                   //x self.createAlert(with: error)
+                    print("Error downloading Excel file:", error.localizedDescription)
+                }
+            }, receiveValue: { localFileURL in
+                print("Excel file saved to:", localFileURL)
+                self.excelURL = localFileURL
+                self.shareExcelStatus = true
+            })
+            .store(in: &cancellableSet)
+    }
+    func shareExcelWithSNS() {
+        
+        
+    }
+    
     //MARK: 방장 필터
     func hostFilter() {
         // role이 "방장"이고, me가 true인 요소를 필터링합니다.
@@ -331,22 +378,34 @@ class SettingBookViewModel : ObservableObject {
     }
     
     func createAlert( with error: NetworkError) {
-        bookInfoLoadingError = error.backendError == nil ? error.initialError.localizedDescription : error.backendError!.message
-        self.showAlert = true
-        
-        if let errorCode = error.backendError?.code {
-            switch errorCode {
-                // 토큰 재발급
-            case "U006" :
-                tokenViewModel.tokenReissue()
-            // 아예 틀린 토큰이므로 재로그인해서 다시 발급받아야 함.
-            case "U007" :
-                AuthenticationService.shared.logoutDueToTokenExpiration()
-            default:
-                break
+        //loadingError = error.backendError == nil ? error.initialError.localizedDescription : error.backendError!.message
+        if let backendError = error.backendError {
+            guard let serverError = ServerError(rawValue: backendError.code) else {
+                // 서버 에러 코드가 정의되지 않은 경우의 처리
+                //showAlert(message: "알 수 없는 서버 에러가 발생했습니다.")
+                return
             }
-            // 에러 처리
+            AlertManager.shared.handleError(serverError)
+            // 에러 메시지 처리
+            //showAlert(message: serverError.errorMessage)
+            
+            // 에러코드에 따른 추가 로직
+            if let errorCode = error.backendError?.code {
+                switch errorCode {
+                    // 토큰 재발급
+                case "U006" :
+                    AuthenticationService.shared.logoutDueToTokenExpiration()
+                    // 아예 틀린 토큰이므로 재로그인해서 다시 발급받아야 함.
+                case "U007" :
+                    AuthenticationService.shared.logoutDueToTokenExpiration()
+                default:
+                    break
+                }
+            }
+        } else {
+            // BackendError 없이 NetworkError만 발생한 경우
+            //showAlert(message: "네트워크 오류가 발생했습니다.")
+            
         }
     }
-
 }

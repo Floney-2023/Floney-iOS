@@ -23,6 +23,7 @@ struct DayLinesView: View {
             .background(Color.clear)
             .onAppear{
                 print("date : \(date)")
+                viewModel.dayLinesDate = viewModel.selectedDateStr
                 viewModel.getDayLines()
             }
     }
@@ -250,7 +251,8 @@ struct DayLinesDetailView : View {
                                             assetType : line.category[0],
                                             category: line.category[1],
                                             content : line.content,
-                                            toggleOnOff: line.exceptStatus
+                                            toggleOnOff: line.exceptStatus,
+                                            writer: line.userNickName
                                         )
                                         .transition(.moveAndFade)
                                     }

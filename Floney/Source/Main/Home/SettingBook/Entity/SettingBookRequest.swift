@@ -26,6 +26,7 @@ struct SeeProfileRequest : Encodable {
 struct SetBudgetRequest : Encodable {
     var bookKey : String
     var budget : Float
+    var date : String
 }
 struct SetAssetRequest : Encodable {
     var bookKey : String

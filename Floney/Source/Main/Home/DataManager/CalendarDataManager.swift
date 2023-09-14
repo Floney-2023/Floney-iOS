@@ -28,7 +28,7 @@ extension CalendarService: CalendarProtocol {
         let date = parameters.date
         let url = "\(Constant.BASE_URL)/books/month?bookKey=\(bookKey)&date=\(date)"
         
-        let token = Keychain.getKeychainValue(forKey: .accessToken)!
+        let token = Keychain.getKeychainValue(forKey: .accessToken) ?? ""
         print("calendar data manager Token : \(token)")
         return AF.request(url,
                           method: .get,
@@ -52,7 +52,7 @@ extension CalendarService: CalendarProtocol {
         let date = parameters.date
         let url = "\(Constant.BASE_URL)/books/days?bookKey=\(bookKey)&date=\(date)"
         
-        let token = Keychain.getKeychainValue(forKey: .accessToken)!
+        let token = Keychain.getKeychainValue(forKey: .accessToken) ?? ""
         return AF.request(url,
                           method: .get,
                           parameters: nil,
@@ -74,7 +74,7 @@ extension CalendarService: CalendarProtocol {
         let bookKey = parameters.bookKey
         let url = "\(Constant.BASE_URL)/books/info?bookKey=\(bookKey)"
         print(url)
-        let token = Keychain.getKeychainValue(forKey: .accessToken)!
+        let token = Keychain.getKeychainValue(forKey: .accessToken) ?? ""
         return AF.request(url,
                           method: .get,
                           parameters: nil,
@@ -94,7 +94,7 @@ extension CalendarService: CalendarProtocol {
     func getMyInfo() -> AnyPublisher<DataResponse<MyPageResponse, NetworkError>, Never> {
         let url = "\(Constant.BASE_URL)/users/mypage"
         
-        let token = Keychain.getKeychainValue(forKey: .accessToken)!
+        let token = Keychain.getKeychainValue(forKey: .accessToken) ?? ""
         print("My Info : \n\(token)")
         
         return AF.request(url,
