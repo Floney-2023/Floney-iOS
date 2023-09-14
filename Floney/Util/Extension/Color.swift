@@ -47,6 +47,7 @@ extension Color {
     static let greyScale11 = Color(hex: "F4F4F4")
     static let greyScale12 = Color(hex: "FAFAFA")
     static let loadingGrey = Color(hex: "ADADAD")
+    static let tableGrey = Color(hex: "EBEBEB")
     
     static let background1 = Color(hex: "F5F5F5")
     static let background2 = Color(hex: "F6F6F6")
