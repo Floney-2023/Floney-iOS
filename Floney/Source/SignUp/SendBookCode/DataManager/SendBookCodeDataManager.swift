@@ -23,13 +23,13 @@ extension BookCode: BookCodeProtocol {
     func postBookCode(_ parameters:BookCodeRequest) -> AnyPublisher<DataResponse<BookCodeResponse, NetworkError>, Never> {
         let code = parameters.code
         let url = "\(Constant.BASE_URL)/books/join"
-                let token = Keychain.getKeychainValue(forKey: .accessToken)
+                let token = Keychain.getKeychainValue(forKey: .accessToken) ?? ""
 
         return AF.request(url,
                           method: .post,
                           parameters: parameters,
                           encoder : JSONParameterEncoder(),
-                          headers: ["Authorization":"Bearer \(token!)"])
+                          headers: ["Authorization":"Bearer \(token)"])
             .validate()
             .publishDecodable(type: BookCodeResponse.self)
             .map { response in

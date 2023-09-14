@@ -68,11 +68,17 @@ struct AuthCodeView: View {
                 Spacer()
             }
             Spacer()
-            NavigationLink(destination: UserInfoView(viewModel: viewModel)){
+            NavigationLink(destination: UserInfoView(viewModel: viewModel), isActive: $viewModel.isNextToUserInfo){
                 Text("다음으로")
                     .padding()
                     .withNextButtonFormmating(.primary1)
-                    
+                    .onTapGesture {
+                        let otpCode = otpModel.otpFields.joined()
+                        print(otpCode)
+                        viewModel.otpCode = otpCode
+                        print(viewModel.otpCode)
+                        viewModel.checkCode()
+                    }
             }
         }
         .padding(EdgeInsets(top: 32, leading: 24, bottom: 0, trailing: 24))
@@ -81,6 +87,7 @@ struct AuthCodeView: View {
         .onChange(of: otpModel.otpFields) { newValue in
             OTPCondition(value: newValue)
         }
+        .onAppear(perform : UIApplication.shared.hideKeyboard)
     }
     
     // MARK: Conditions For Custom OTP Field & Limiting Only one Text

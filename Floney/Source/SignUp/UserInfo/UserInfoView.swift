@@ -10,12 +10,8 @@ import SwiftUI
 struct UserInfoView: View {
     var pageCount = 4
     var pageCountAll = 4
-    @State var email = ""
-    @State var password = ""
-    @State var passwordCheck = ""
-    @State var nickname = ""
+   
     @ObservedObject var viewModel : SignUpViewModel
-    
     var body: some View {
         ZStack {
             VStack(spacing: 30) {
@@ -40,19 +36,7 @@ struct UserInfoView: View {
                                 .foregroundColor(.greyScale6)
                             Spacer()
                         }
-                        /*
-                        TextField("", text: $viewModel.email)
-                            .padding()
-                            .keyboardType(.emailAddress)
-                            .overlay(
-                                Text("이메일")
-                                    .padding()
-                                    .font(.pretendardFont(.regular, size: 14))
-                                    .foregroundColor(.greyScale6)
-                                    .opacity(viewModel.email.isEmpty ? 1 : 0), alignment: .leading
-                            )
-                            .modifier(TextFieldModifier())
-                         */
+                       
                         Text("\(viewModel.email)")
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .padding()
@@ -67,52 +51,39 @@ struct UserInfoView: View {
                             )
                         
                     }
-                    VStack(spacing: 14) {
-                        HStack {
-                            Text("비밀번호")
-                                .font(.pretendardFont(.semiBold, size: 14))
-                                .foregroundColor(.greyScale6)
-                            Spacer()
-                        }
-                        
-                        SecureField("", text: $viewModel.password)
-                            .padding()
-                            .overlay(
+                    if viewModel.providerStatus == .email {
+                        VStack(spacing: 14) {
+                            HStack {
                                 Text("비밀번호")
-                                    .padding()
-                                    .font(.pretendardFont(.regular, size: 14))
+                                    .font(.pretendardFont(.semiBold, size: 14))
                                     .foregroundColor(.greyScale6)
-                                    .opacity(viewModel.password.isEmpty ? 1 : 0), alignment: .leading
-                            )
-                            .modifier(TextFieldModifier())
-                        
-                    }
-                    VStack(spacing: 14) {
-                        HStack {
-                            Text("비밀번호 확인")
-                                .font(.pretendardFont(.semiBold, size: 14))
-                                .foregroundColor(.greyScale6)
-                            Spacer()
+                                Spacer()
+                            }
+                            
+                            CustomTextField(text: $viewModel.password, placeholder: "비밀번호",isSecure: true, placeholderColor: .greyScale6)
+                                .frame(height: UIScreen.main.bounds.height * 0.06)
+                            
+                            
                         }
-                        
-                        SecureField("", text: $viewModel.passwordCheck)
-                            .padding()
-                            .overlay(
+                        VStack(spacing: 14) {
+                            HStack {
                                 Text("비밀번호 확인")
-                                    .padding()
-                                    .font(.pretendardFont(.regular, size: 14))
+                                    .font(.pretendardFont(.semiBold, size: 14))
                                     .foregroundColor(.greyScale6)
-                                    .opacity(viewModel.passwordCheck.isEmpty ? 1 : 0), alignment: .leading
-                            )
-                            .modifier(TextFieldModifier())
-                        
-                        HStack {
-                            Text("* 영문, 숫자, 특수문자 포함 8자 이상")
-                                .font(.pretendardFont(.regular, size: 12))
-                                .foregroundColor(.greyScale6)
-                            Spacer()
+                                Spacer()
+                            }
+                            CustomTextField(text: $viewModel.passwordCheck, placeholder: "비밀번호 확인",isSecure: true, placeholderColor: .greyScale6)
+                                .frame(height: UIScreen.main.bounds.height * 0.06)
+                            
+                            
+                            HStack {
+                                Text("* 영문, 숫자, 특수문자 포함 8자 이상")
+                                    .font(.pretendardFont(.regular, size: 12))
+                                    .foregroundColor(.greyScale6)
+                                Spacer()
+                            }
+                            
                         }
-                        
                     }
                 }
                 VStack(spacing: 14) {
@@ -122,51 +93,34 @@ struct UserInfoView: View {
                             .foregroundColor(.greyScale6)
                         Spacer()
                     }
-                    
-                    TextField("", text: $viewModel.nickname)
-                        .padding()
-                        .keyboardType(.emailAddress)
-                        .overlay(
-                            Text("닉네임을 입력하세요.")
-                                .padding()
-                                .font(.pretendardFont(.regular, size: 14))
-                                .foregroundColor(.greyScale6)
-                                .opacity(viewModel.nickname.isEmpty ? 1 : 0), alignment: .leading
-                        )
-                        .modifier(TextFieldModifier())
+                    CustomTextField(text: $viewModel.nickname, placeholder: viewModel.nickname.isEmpty ? "닉네임을 입력하세요" : viewModel.nickname, placeholderColor: .greyScale6)
+                        .frame(height: UIScreen.main.bounds.height * 0.06)
                 }
                 Spacer()
-            //isActive: $viewModel.isNext
-                NavigationLink(destination: WelcomeView(), isActive: $viewModel.isNext){
-                    Text("다음으로")
-                        .padding()
-                        .withNextButtonFormmating(.primary1)
-                    
-                        .onTapGesture {
-                            // 모든 유효성 검사에서 통과할 때, post함.
-                            viewModel.postSignUp()
-                            // 유효성 검사 필요함...
-                            // viewmodel에서 유효성 검사
-                            
+                Text("다음으로")
+                    .padding()
+                    .withNextButtonFormmating(.primary1)
+                    .onTapGesture {
+                        // 모든 유효성 검사에서 통과할 때, post함.
+                        if viewModel.validateFields() {
+                            switch viewModel.providerStatus {
+                            case .email :
+                                viewModel.postSignUp()
+                            case .kakao :
+                                viewModel.kakaoSignUp()
+                            case .google :
+                                viewModel.googleSignUp()
+                            case .apple :
+                                viewModel.appleSignUp()
+                            }
                         }
-                     
-                     
-                }
+                    }
             }
             .padding(EdgeInsets(top: 32, leading: 24, bottom: 0, trailing: 24))
             .navigationBarBackButtonHidden(true)
             .navigationBarItems(leading: BackButton())
         }
-        .onTapGesture {
-            // Hide the keyboard
-            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-        }
-        .onAppear {
-            // Set the TextField as the first responder
-            DispatchQueue.main.async {
-                UIApplication.shared.windows.first?.rootViewController?.view.endEditing(false)
-            }
-        }
+        .onAppear(perform : UIApplication.shared.hideKeyboard)
     }
     
 }

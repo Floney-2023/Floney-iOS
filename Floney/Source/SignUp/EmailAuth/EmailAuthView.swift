@@ -11,7 +11,8 @@ struct EmailAuthView: View {
     @State var email = ""
     var pageCount = 2
     var pageCountAll = 4
-    @StateObject var viewModel = SignUpViewModel()
+    @ObservedObject var viewModel : SignUpViewModel
+    @ObservedObject var loadingManager = LoadingManager.shared
     @State var isAllActive = false
     @State var emailEmpty = true // 이메일이 비어있는지 유무
    
@@ -28,7 +29,7 @@ struct EmailAuthView: View {
                         Text("이메일 인증")
                             .font(.pretendardFont(.bold, size: 24))
                             .foregroundColor(.greyScale1)
- 
+                        
                         Text("이메일 인증을 위해 사용 가능한\n이메일을 입력해주세요.")
                             .font(.pretendardFont(.medium, size: 13))
                             .foregroundColor(.greyScale6)
@@ -37,18 +38,9 @@ struct EmailAuthView: View {
                     Spacer()
                     
                 }
-                TextField("", text: $viewModel.email)
-                    .padding()
-                    .keyboardType(.emailAddress)
-                    .overlay(
-                        Text("이메일을 입력하세요.")
-                            .padding()
-                            .font(.pretendardFont(.regular, size: 14))
-                            .foregroundColor(.greyScale6)
-                            .opacity(viewModel.email.isEmpty ? 1 : 0), alignment: .leading
-                    )
-                    .modifier(TextFieldModifier())
-                    
+                CustomTextField(text: $viewModel.email, placeholder: "이메일을 입력하세요",keyboardType: .emailAddress, placeholderColor: .greyScale6)
+                    .frame(height: UIScreen.main.bounds.height * 0.06)
+               
                 Spacer()
                 
                 //MARK: iOS 15.0 이상인 경우
@@ -74,12 +66,23 @@ struct EmailAuthView: View {
             .onAppear(perform : UIApplication.shared.hideKeyboard)
             
             CustomAlertView(message: viewModel.errorMessage, type: $viewModel.buttonType, isPresented: $viewModel.showAlert)
+            // Loading view overlay
+            if loadingManager.showLoading {
+                if loadingManager.loadingType == .floneyLoading {
+                    LoadingView()
+                }
+                else if loadingManager.loadingType == .progressLoading{
+                    ProgressLoadingView()
+                } else {
+                    DimmedLoadingView()
+                }
+            }
         }
     }
 }
 
 struct EmailAuthView_Previews: PreviewProvider {
     static var previews: some View {
-        EmailAuthView()
+        EmailAuthView(viewModel: SignUpViewModel())
     }
 }

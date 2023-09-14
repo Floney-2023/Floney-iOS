@@ -9,9 +9,11 @@ import Combine
 
 protocol SignUpProtocol {
     func postSignUp(_ parameters:SignUpRequest) -> AnyPublisher<DataResponse<SignUpResponse, NetworkError>, Never>
-    func kakaoSignUp(_ parameters:SignUpRequest, _ token: String) -> AnyPublisher<DataResponse<SignUpResponse, NetworkError>, Never>
-    func googleSignUp(_ parameters:SignUpRequest, _ token: String) -> AnyPublisher<DataResponse<SignUpResponse, NetworkError>, Never>
-    func authEmail(_ parameters:AuthEmailRequest) -> AnyPublisher<Int, NetworkError>
+    func kakaoSignUp(_ parameters:SNSSignUpRequest, _ token: String) -> AnyPublisher<DataResponse<SignUpResponse, NetworkError>, Never>
+    func googleSignUp(_ parameters:SNSSignUpRequest, _ token: String) -> AnyPublisher<DataResponse<SignUpResponse, NetworkError>, Never>
+    func appleSignUp(_ parameters:SNSSignUpRequest, _ token: String) -> AnyPublisher<DataResponse<SignUpResponse, NetworkError>, Never>
+    func authEmail(_ parameters:AuthEmailRequest) -> AnyPublisher<Void, NetworkError>
+    func checkCode(_ parameters:CheckCodeRequest) -> AnyPublisher<Void, NetworkError>
 }
 
 
@@ -38,7 +40,7 @@ extension SignUp: SignUpProtocol {
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
     }
-    func kakaoSignUp(_ parameters:SignUpRequest, _ token: String) -> AnyPublisher<DataResponse<SignUpResponse, NetworkError>, Never> {
+    func kakaoSignUp(_ parameters:SNSSignUpRequest, _ token: String) -> AnyPublisher<DataResponse<SignUpResponse, NetworkError>, Never> {
         let url = "\(Constant.BASE_URL)/auth/kakao/signup?token=\(token)"
         return AF.request(url,
                           method: .post,
@@ -56,7 +58,7 @@ extension SignUp: SignUpProtocol {
             .eraseToAnyPublisher()
     }
     
-    func googleSignUp(_ parameters:SignUpRequest, _ token: String) -> AnyPublisher<DataResponse<SignUpResponse, NetworkError>, Never> {
+    func googleSignUp(_ parameters:SNSSignUpRequest, _ token: String) -> AnyPublisher<DataResponse<SignUpResponse, NetworkError>, Never> {
         let url = "\(Constant.BASE_URL)/auth/google/signup?token=\(token)"
         return AF.request(url,
                           method: .post,
@@ -73,8 +75,26 @@ extension SignUp: SignUpProtocol {
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
     }
-    func authEmail(_ parameters:AuthEmailRequest) -> AnyPublisher<Int, NetworkError> {
-        let url = "\(Constant.BASE_URL)/users/email?email=\(parameters.email)"
+    func appleSignUp(_ parameters:SNSSignUpRequest, _ token: String) -> AnyPublisher<DataResponse<SignUpResponse, NetworkError>, Never> {
+        let url = "\(Constant.BASE_URL)/auth/apple/signup?token=\(token)"
+        print(url)
+        return AF.request(url,
+                          method: .post,
+                          parameters: parameters,
+                          encoder: JSONParameterEncoder())
+            .validate()
+            .publishDecodable(type: SignUpResponse.self)
+            .map { response in
+                response.mapError { error in
+                    let backendError = response.data.flatMap { try? JSONDecoder().decode(BackendError.self, from: $0)}
+                    return NetworkError(initialError: error, backendError: backendError)
+                }
+            }
+            .receive(on: DispatchQueue.main)
+            .eraseToAnyPublisher()
+    }
+    func authEmail(_ parameters:AuthEmailRequest) -> AnyPublisher<Void, NetworkError> {
+        let url = "\(Constant.BASE_URL)/users/email/mail?email=\(parameters.email)"
         print(url)
 
         return AF.request(url,
@@ -89,8 +109,8 @@ extension SignUp: SignUpProtocol {
                     print("Status Code: \(statusCode)")
                     if statusCode == 200 {
                         // Decode the response
-                        let number = try JSONDecoder().decode(Int.self, from: result.data ?? Data())
-                        return number
+                        print("success checking code")
+                        return
                     } else {
                         // Handle error based on status code
                         let backendError = result.data.flatMap { try? JSONDecoder().decode(BackendError.self, from: $0)}
@@ -110,6 +130,42 @@ extension SignUp: SignUpProtocol {
             .eraseToAnyPublisher()
 
     }
+    func checkCode(_ parameters:CheckCodeRequest) -> AnyPublisher<Void, NetworkError> {
+        let url = "\(Constant.BASE_URL)/users/email/mail"
+        print(url)
+
+        return AF.request(url,
+                       method: .post,
+                       parameters: parameters,
+                          encoder : JSONParameterEncoder())
+            .validate()
+            .publishData()
+            .tryMap { result in
+                // Check the status code
+                if let statusCode = result.response?.statusCode {
+                    print("Status Code: \(statusCode)")
+                    if statusCode == 200 {
+                        // Decode the response
+                        return
+                    } else {
+                        // Handle error based on status code
+                        let backendError = result.data.flatMap { try? JSONDecoder().decode(BackendError.self, from: $0)}
+                        if let backendError = backendError {
+                            throw NetworkError(initialError: result.error!, backendError: backendError)
+                        } else {
+                            throw NetworkError(initialError: result.error!, backendError: nil)
+                        }
+                    }
+                } else {
+                    throw NetworkError(initialError: result.error!, backendError: nil)
+                }
+            }
+            .mapError { error in
+                return error as! NetworkError
+            }
+            .eraseToAnyPublisher()
+    }
+
        
 }
 

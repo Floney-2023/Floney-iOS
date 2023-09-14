@@ -13,7 +13,16 @@ struct SignUpRequest: Encodable {
     //var marketingAgree : Int
     //var provider : String
 }
+struct SNSSignUpRequest : Encodable {
+    var email : String
+    var nickname: String
+}
 
 struct AuthEmailRequest: Encodable {
     var email: String
+}
+
+struct CheckCodeRequest : Encodable {
+    var email : String
+    var code : String
 }

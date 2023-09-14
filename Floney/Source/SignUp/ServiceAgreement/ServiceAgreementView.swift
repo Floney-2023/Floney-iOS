@@ -7,10 +7,12 @@
 
 import SwiftUI
 
+
 struct ServiceAgreementView: View {
     var pageCount = 1
     var pageCountAll = 4
     @StateObject private var viewModel = ServiceAgreementViewModel()
+    @StateObject var signupViewModel = SignUpViewModel()
     @State var isActive = false
     var body: some View {
         ZStack {
@@ -40,26 +42,42 @@ struct ServiceAgreementView: View {
                     
                     ServiceAgreementButton(isAgreed: $viewModel.isTerm1Agreed, title: "서비스 이용 약관 (필수)")
                     ServiceAgreementButton(isAgreed: $viewModel.isTerm2Agreed, title: "개인정보 수집 및 이용 동의 (필수)")
-                    
                     ServiceAgreementButton(isAgreed: $viewModel.isTerm3Agreed, forwardButton: false, title: "만 14세 이상 확인 (필수)")
                     
                 }
                 
                 Spacer()
                 
-                NavigationLink(destination: EmailAuthView(), isActive: $isActive){
-                    Text("다음으로")
-                        .padding()
-                        .withNextButtonFormmating(.primary1)
-                        .onTapGesture {
-                            if self.viewModel.isTerm1Agreed && self.viewModel.isTerm2Agreed && self.viewModel.isTerm3Agreed && self.viewModel.isAllAgreed {
-                                // Navigate to the next screen
-                                isActive = true
-                            } else {
-                                self.viewModel.showAlert = true
+                if signupViewModel.providerStatus != .email {
+                    NavigationLink(destination: UserInfoView(viewModel: signupViewModel), isActive: $signupViewModel.isNextToEmailAuth){
+                        Text("다음으로")
+                            .padding()
+                            .withNextButtonFormmating(.primary1)
+                            .onTapGesture {
+                                if self.viewModel.isTerm1Agreed && self.viewModel.isTerm2Agreed && self.viewModel.isTerm3Agreed && self.viewModel.isAllAgreed {
+                                    // Navigate to the next screen
+                                    signupViewModel.isNextToEmailAuth = true
+                                } else {
+                                    self.viewModel.showAlert = true
+                                }
                             }
-                        }
-                    
+                        
+                    }
+                } else {
+                    NavigationLink(destination: EmailAuthView(viewModel: signupViewModel), isActive: $signupViewModel.isNextToEmailAuth){
+                        Text("다음으로")
+                            .padding()
+                            .withNextButtonFormmating(.primary1)
+                            .onTapGesture {
+                                if self.viewModel.isTerm1Agreed && self.viewModel.isTerm2Agreed && self.viewModel.isTerm3Agreed && self.viewModel.isAllAgreed {
+                                    // Navigate to the next screen
+                                    signupViewModel.isNextToEmailAuth = true
+                                } else {
+                                    self.viewModel.showAlert = true
+                                }
+                            }
+                        
+                    }
                 }
             }
             .padding(EdgeInsets(top: 32, leading: 24, bottom: 0, trailing: 24))

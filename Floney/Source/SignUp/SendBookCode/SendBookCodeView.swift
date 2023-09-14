@@ -9,6 +9,7 @@ import SwiftUI
 struct SendBookCodeView: View {
     @State var accountCode = ""
     @StateObject var viewModel = BookCodeViewModel()
+    @State var isActive = false
     var body: some View {
         VStack(spacing: 30) {
             HStack {
@@ -22,26 +23,22 @@ struct SendBookCodeView: View {
                 }
                 Spacer()
             }
-            TextField("", text: $viewModel.code)
-                .padding()
-                .overlay(
-                    Text("코드를 입력하세요.")
-                        .padding()
-                        .font(.pretendardFont(.regular, size: 14))
-                        .foregroundColor(.greyScale6)
-                        .opacity(viewModel.code.isEmpty ? 1 : 0), alignment: .leading
-                )
-                .modifier(TextFieldModifier())
+            CustomTextField(text: $viewModel.code, placeholder: "코드를 입력하세요.", placeholderColor: .greyScale6)
+                .frame(height: UIScreen.main.bounds.height * 0.06)
+           
             
             Spacer()
             
             VStack(spacing: 12) {
-                NavigationLink(destination: EnterBookView()){
+                NavigationLink(destination: EnterBookView(), isActive: $isActive){
                     Text("입력 완료하기")
                         .padding()
                         .modifier(NextButtonModifier(backgroundColor: .primary1))
                         .onTapGesture {
-                            viewModel.postBookCode()
+                            if viewModel.isVaildBookCode() {
+                                isActive = true
+                                viewModel.postBookCode()
+                            }
                         }
                 }
                 NavigationLink(destination: SetBookNameView()){
@@ -54,10 +51,9 @@ struct SendBookCodeView: View {
             }
 
         }
-        .padding(EdgeInsets(top: 32, leading: 24, bottom: 0, trailing: 24))
+        .padding(EdgeInsets(top: 78, leading: 24, bottom: 0, trailing: 24))
         .navigationBarBackButtonHidden(true)
-        .navigationBarItems(leading: BackButton())
-        
+        .onAppear(perform : UIApplication.shared.hideKeyboard)
         
     }
 }
