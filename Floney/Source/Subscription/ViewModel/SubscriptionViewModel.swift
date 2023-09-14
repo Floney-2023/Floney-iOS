@@ -1,0 +1,96 @@
+//
+//  SubscriptionViewModel.swift
+//  Floney
+//
+//  Created by 남경민 on 2023/09/13.
+//
+
+import Foundation
+import Combine
+
+class SubscriptionViewModel: ObservableObject {
+    @Published var dismissSubscribe = false
+    @Published var remainingPeriod = 0
+    @Published var expiresDate = "2020-09-09"
+    @Published var productPrice = IAPManager.shared.productList[0].price
+    @Published var renewalStatus = false
+    private var priceFormatter : NumberFormatter {
+        let priceFormatter = NumberFormatter()
+        priceFormatter.numberStyle = .currency
+        priceFormatter.locale = IAPManager.shared.productList[0].priceLocale
+        return priceFormatter
+    }
+    
+    @Published var subscriptionInfo: IAPInfoResponse?
+    @Published var formattedPrice = ""
+    
+    private var cancellableSet: Set<AnyCancellable> = []
+    var dataManager: SubscriptionProtocol
+    
+    init( dataManager: SubscriptionProtocol = SubscriptionService.shared) {
+        self.dataManager = dataManager
+        self.getSubscriptionInfo()
+    }
+    
+    func getSubscriptionInfo() {
+        dataManager.getSubscriptionInfo()
+            .sink(receiveCompletion: { [weak self] completion in
+                switch completion {
+                case .finished:
+                    break
+                case .failure(let error):
+                    print(error)
+                }
+            }, receiveValue: { [weak self] response in
+                switch response.result {
+                case .success(let info):
+                    self?.subscriptionInfo = info
+                    if let price = self?.productPrice {
+                        self?.formattedPrice = self?.priceFormatter.string(from: price) ?? ""
+                    }
+                    if let date = Date(fromISO8601: info.expiresDate) {
+                        let dateFormatter = DateFormatter()
+                        dateFormatter.dateFormat = "yyyy-MM-dd"
+                        let formattedDate = dateFormatter.string(from: date)
+                        print(formattedDate) // 2023-09-13
+                        self?.expiresDate = formattedDate
+                        
+                        let currentDate = Date()
+                        let calendar = Calendar.current
+                        
+                        // 주의: 중간에 시간이 있는 경우, 정확하게 24시간 단위로 계산됩니다.
+                        // 그렇기 때문에 일(day) 단위로 비교하려면 두 날짜를 "yyyy-MM-dd" 형식으로 재정렬하는 것이 좋습니다.
+                        let currentDayStart = calendar.startOfDay(for: currentDate)
+                        let targetDayStart = calendar.startOfDay(for: date)
+                        if let diffDays = calendar.dateComponents([.day], from: currentDayStart, to: targetDayStart).day {
+                            print("남은 날짜는 \(diffDays)일입니다.")
+                            self?.remainingPeriod = diffDays
+                        } else {
+                            print("날짜 계산에 실패했습니다.")
+                        }
+                    } else {
+                        print("Invalid date string")
+                    }
+                    self?.renewalStatus = self?.subscriptionInfo?.renewalStatus ?? false
+                    
+                case .failure(let error):
+                    print(error)
+                }
+            })
+            .store(in: &cancellableSet)
+    }
+
+}
+
+
+
+extension Date {
+    init?(fromISO8601 string: String) {
+        let formatter = ISO8601DateFormatter()
+        if let date = formatter.date(from: string) {
+            self = date
+        } else {
+            return nil
+        }
+    }
+}
