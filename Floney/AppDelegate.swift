@@ -16,6 +16,7 @@ import FirebaseMessaging
 import AdSupport
 import AppTrackingTransparency
 import AuthenticationServices
+import GoogleSignInSwift
 
 class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate {
     var ConversionData: [AnyHashable: Any]? = nil
@@ -32,7 +33,6 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate {
         // fcm delegate
         UNUserNotificationCenter.current().delegate = self
         Messaging.messaging().delegate = self
-        
         // 푸시 알림 권한 요청
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { granted, error in
             print("Permission granted: \(granted)")
@@ -46,18 +46,24 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate {
             } else if let token = token {
                 print("FCM registration token: \(token)")
                 Keychain.setKeychain(token, forKey: .fcmToken)
-                print(Keychain.getKeychainValue(forKey: .fcmToken))
+                
             }
         }
+    
+   
+        
         
         // google 초기화
         GoogleSignIn.GIDSignIn.sharedInstance.restorePreviousSignIn { user, error in
             if error != nil || user == nil {
-                // GIDSignIn.sharedInstance.clientID = Secret.GOOGLE_CLIENT_ID
+                
             } else {
                 
             }
         }
+      
+
+        
         
         // apple 연동되어 있는지 검증
         if let appleId = Keychain.getKeychainValue(forKey: .appleUserId) {
