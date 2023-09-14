@@ -16,17 +16,14 @@ class Keychain {
         case password
         case bookKey
         case bookCode
-        case encryptionKey
-        case bookProfileImage
-        case userProfileImage
         case userNickname
         case bookName
-        case userProfileState
-        case bookProfileState
         case fcmToken
         case appleUserId
         case appleEmail
         case appleName
+        case provider
+        case bookStatus
     }
     
     /**

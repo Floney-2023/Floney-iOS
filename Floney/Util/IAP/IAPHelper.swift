@@ -9,10 +9,11 @@ import Foundation
 
 import StoreKit
 import Alamofire
-
+import Combine
 public typealias ProductsRequestCompletionHandler = (_ success: Bool, _ products: [SKProduct]?) -> Void
 
 class IAPHelper: NSObject  {
+    weak var delegate: IAPHelperDelegate?
     // 전체 상품
     private let productIdentifiers: Set<String>
     // 구매한 상품
@@ -64,7 +65,6 @@ extension IAPHelper: SKProductsRequestDelegate {
 
 //MARK: SKPaymentTransactionObserver
 extension IAPHelper: SKPaymentTransactionObserver {
-  
     public func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
         for transaction in transactions {
             switch (transaction.transactionState) {
@@ -90,6 +90,7 @@ extension IAPHelper: SKPaymentTransactionObserver {
     // 구입 성공
     private func complete(transaction: SKPaymentTransaction) {
         deliverPurchaseNotificationFor(identifier: transaction.payment.productIdentifier)
+        delegate?.didPurchaseProductSuccessfully(productID: transaction.payment.productIdentifier)
         SKPaymentQueue.default().finishTransaction(transaction)
     }
     
@@ -110,6 +111,8 @@ extension IAPHelper: SKPaymentTransactionObserver {
             let localizedDescription = transaction.error?.localizedDescription,
             transactionError.code != SKError.paymentCancelled.rawValue {
             print("Transaction Error: \(localizedDescription)")
+            delegate?.didFailToPurchaseProduct(error: transactionError)
+           
         }
         deliverPurchaseNotificationFor(identifier: nil)
         SKPaymentQueue.default().finishTransaction(transaction)
@@ -136,7 +139,6 @@ extension IAPHelper: SKPaymentTransactionObserver {
             )
         }
         LoadingManager.shared.update(showLoading: false, loadingType: .floneyLoading)
-        
     }
 }
 //MARK: 구매 이력
@@ -160,38 +162,41 @@ extension IAPHelper {
     }
     
     // 영수증 검증
-    func verifyReceipt() {
-        // 애플의 테스트 환경용 영수증 검증 URL
+    func verifyReceipt() -> AnyPublisher<[String: Any], NetworkError> {
         let verifyReceiptURL = "https://sandbox.itunes.apple.com/verifyReceipt"
+        // let verifyReceiptURL = "https://buy.itunes.apple.com/verifyReceipt" // 실제 환경에서만 사용
         
-        // 애플의 실제 환경용 영수증 검증 URL (실제 환경에서만 사용)
-        // let verifyReceiptURL = "https://buy.itunes.apple.com/verifyReceipt"
-
-        if let encodedReceiptData = getReceiptData() {
-            let parameters = ReceiptRequest(receiptData: encodedReceiptData, password: Secret.APP_SHARE_PASSWORD, excludeOldTransactions: true)
-            print(encodedReceiptData)
-            
-            AF.request(
-                verifyReceiptURL,
-                method: .post,
-                parameters: parameters,
-                encoder: JSONParameterEncoder())
-            .responseJSON { response in
-                switch response.result {
-                case .success(let value):
-                    if let jsonResponse = value as? [String: Any] {
-                        print(jsonResponse)
-                        self.sendToServer(receiptData: jsonResponse)
-                    }
-                    print("Validation success: \(value)")
-                case .failure(let error):
-                    print("Error verifying receipt: \(error.localizedDescription)")
-                }
-            }
+        guard let encodedReceiptData = getReceiptData() else {
+            let backendError = BackendError(code: "NO_RECEIPT", message: "No receipt data available")
+            return Fail(error: NetworkError(initialError: AFError.explicitlyCancelled, backendError: backendError)).eraseToAnyPublisher()
         }
+        
+        let parameters = ReceiptRequest(receiptData: encodedReceiptData, password: Secret.APP_SHARE_PASSWORD, excludeOldTransactions: true)
+        
+        return Future { promise in
+            AF.request(verifyReceiptURL, method: .post, parameters: parameters, encoder: JSONParameterEncoder.default)
+                .responseJSON { response in  // JSON으로 응답을 처리
+                    switch response.result {
+                    case .success(let value):
+                        if let jsonResponse = value as? [String: Any] {
+                            promise(.success(jsonResponse))
+                        } else {
+                            let backendError = BackendError(code: "INVALID_RESPONSE", message: "Response is not valid JSON format")
+                            promise(.failure(NetworkError(initialError: AFError.responseValidationFailed(reason: .dataFileNil), backendError: backendError)))
+                        }
+                    case .failure(let afError):
+                        if let data = response.data, let backendError = try? JSONDecoder().decode(BackendError.self, from: data) {
+                            promise(.failure(NetworkError(initialError: afError, backendError: backendError)))
+                        } else {
+                            promise(.failure(NetworkError(initialError: afError, backendError: nil)))
+                        }
+                    }
+                }
+        }
+        .eraseToAnyPublisher()
     }
     
-    func sendToServer(receiptData: [String: Any]) {
+    func sendToServer(receiptData: [String: Any]) -> IAPInfoRequest? {
         if let latestReceiptInfo = (receiptData["latest_receipt_info"] as? [[String: Any]])?.first,
            let pendingRenewalInfo = (receiptData["pending_renewal_info"] as? [[String: Any]])?.first {
 
@@ -233,11 +238,13 @@ extension IAPHelper {
                 renewalStatus: autoRenewStatus)
 
             print("서버에 보낼 데이터 : \(result)")
-            self.postSubscriptionInfo(parameters: result)
+            
+            return result
+            //self.postSubscriptionInfo(parameters: result)
             
         }
+        return nil
     }
-    
     // 구입 내역을 복원할 때
     public func restorePurchases() {
         for productID in productIdentifiers {
@@ -245,38 +252,71 @@ extension IAPHelper {
         }
         SKPaymentQueue.default().restoreCompletedTransactions()
     }
-    
-    func postSubscriptionInfo(parameters: IAPInfoRequest) {
+    func postSubscriptionInfo(parameters: IAPInfoRequest) -> AnyPublisher<DataResponse<[BookLeaderResponse], NetworkError>, Never>{
         let url = "\(Constant.BASE_URL)/users/subscribe"
-        let token = Keychain.getKeychainValue(forKey: .accessToken)!
+        let token = Keychain.getKeychainValue(forKey: .accessToken) ?? ""
         print(url)
         print("post subscription \(parameters)")
         print(token)
-        AF.request(url,
+        return AF.request(url,
                    method: .post,
                    parameters: parameters,
                    encoder: JSONParameterEncoder.default,
                    headers: ["Authorization": "Bearer \(token)"])
-        .response { response in
-            switch response.result {
-            case .success:
-                guard let statusCode = response.response?.statusCode else {
-                    print("Failed to retrieve the status code.")
-                    return
-                }
-                
-                if statusCode == 200 {
-                    print("change subscription info Success")
-                } else {
-                    // Optionally, handle other status codes or decode error from the response
-                    let backendError = response.data.flatMap { try? JSONDecoder().decode(BackendError.self, from: $0) }
-                    print("Error in success with status code other than 200: \(backendError)")
-                }
-            case .failure(let error):
-                print("Request failed with error: \(error)")
+        .validate()
+        .publishDecodable(type: [BookLeaderResponse].self)
+        .map { response in
+            response.mapError { error in
+                let backendError = response.data.flatMap { try? JSONDecoder().decode(BackendError.self, from: $0)}
+                return NetworkError(initialError: error, backendError: backendError)
             }
-            
         }
+        .receive(on: DispatchQueue.main)
+        .eraseToAnyPublisher()
+    }
+    func getSubscriptionInfo() -> AnyPublisher<DataResponse<IAPInfoResponse, NetworkError>, Never> {
+        let bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
+        let url = "\(Constant.BASE_URL)/users/subscribe?bookKey=\(bookKey)"
+        let token = Keychain.getKeychainValue(forKey: .accessToken) ?? ""
+        print(url)
+        print(token)
+        return AF.request(url,
+                   method: .get,
+                   parameters: nil,
+                   encoding: JSONEncoding.default,
+                   headers: ["Authorization": "Bearer \(token)"])
+        .validate()
+        .publishDecodable(type: IAPInfoResponse.self)
+        .map { response in
+            response.mapError { error in
+                let backendError = response.data.flatMap { try? JSONDecoder().decode(BackendError.self, from: $0)}
+                return NetworkError(initialError: error, backendError: backendError)
+            }
+        }
+        .receive(on: DispatchQueue.main)
+        .eraseToAnyPublisher()
+    }
+    func getSubscriptionStatus() -> AnyPublisher<DataResponse<MyPageResponse, NetworkError>, Never> {
+        let url = "\(Constant.BASE_URL)/users/mypage"
+        
+        let token = Keychain.getKeychainValue(forKey: .accessToken) ?? ""
+        print("My Page : \n\(token)")
+        
+        return AF.request(url,
+                          method: .get,
+                          parameters: nil,
+                          encoding: JSONEncoding.default,
+                          headers: ["Authorization":"Bearer \(token)"])
+        .validate()
+        .publishDecodable(type: MyPageResponse.self)
+        .map { response in
+            response.mapError { error in
+                let backendError = response.data.flatMap { try? JSONDecoder().decode(BackendError.self, from: $0)}
+                return NetworkError(initialError: error, backendError: backendError)
+            }
+        }
+        .receive(on: DispatchQueue.main)
+        .eraseToAnyPublisher()
     }
 }
 
