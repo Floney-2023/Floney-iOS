@@ -10,14 +10,13 @@ import Alamofire
 import Combine
 class CurrencyManager: ObservableObject {
     static let shared = CurrencyManager()
-    
     @Published var currentCurrencyUnit: String = "KRW"
     @Published var currentCurrency : String = "원"
     
     func getCurrency() {
-        let bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
+        let bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
         let url = "\(Constant.BASE_URL)/books/info/currency?bookKey=\(bookKey)"
-        let token = Keychain.getKeychainValue(forKey: .accessToken)!
+        let token = Keychain.getKeychainValue(forKey: .accessToken) ?? ""
         
         print(url)
         print(token)

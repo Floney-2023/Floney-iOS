@@ -16,4 +16,5 @@ struct NetworkError: Error {
 struct BackendError: Codable, Error {
     var code: String
     var message: String
+    var provider : String?
 }

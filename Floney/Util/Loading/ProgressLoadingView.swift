@@ -10,6 +10,7 @@ import SwiftUI
 struct ProgressLoadingView: View {
     var body: some View {
         VStack {
+            
             ProgressView()
                 .progressViewStyle(CircularProgressViewStyle(tint: Color.greyScale4))
                 .scaleEffect(2.0)
@@ -44,7 +45,7 @@ struct DimmedLoadingView: View {
 
 struct ProgressLoadingView_Previews: PreviewProvider {
     static var previews: some View {
-        //ProgressLoadingView()
-        DimmedLoadingView()
+        ProgressLoadingView()
+        //DimmedLoadingView()
     }
 }

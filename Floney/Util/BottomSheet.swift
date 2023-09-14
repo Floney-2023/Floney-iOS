@@ -61,7 +61,8 @@ struct AccountBookBottomSheet: View{
     let buttonHeight: CGFloat = 46
     @Binding var isShowing: Bool
     @Binding var showingTabbar : Bool
-    @State var isLinktoCreateBook = false
+    @Binding var isNextToCreateBook : Bool
+    @Binding var isNextToEnterCode : Bool
     @State var tag:Int? = nil
     @State var isSelected = 0
     var body: some View{
@@ -86,7 +87,6 @@ struct AccountBookBottomSheet: View{
                     .padding(.top, 24)
                     
                     VStack(spacing : 18) {
-                        
                         Button {
                             isSelected = 0
                         } label: {
@@ -141,16 +141,18 @@ struct AccountBookBottomSheet: View{
                         .frame(height: buttonHeight)
                         
                         
-                        NavigationLink(destination: SetBookNameView(), isActive: $isLinktoCreateBook) {
-                            ButtonLarge(label: "추가하기", background: .primary1, textColor: .white,  strokeColor: .primary1, fontWeight: .bold, action: {
-                                if isSelected == 0 {
-                                    self.isLinktoCreateBook = true
-                                } else {
-                                    //코드 입력하기
-                                }
-                            })
-                            .frame(height: buttonHeight)
-                        }
+                        ButtonLarge(label: "추가하기", background: .primary1, textColor: .white,  strokeColor: .primary1, fontWeight: .bold, action: {
+                          
+                            if isSelected == 0 {
+                                self.isNextToCreateBook = true
+                            } else {
+                                //코드 입력하기
+                                self.isNextToEnterCode = true
+                            }
+                            isShowing = false
+                        })
+                        .frame(height: buttonHeight)
+                        
                     }
                 }
                 .padding(.horizontal, 20)
@@ -251,7 +253,6 @@ struct ShareBookBottomSheet: View{
                 .onAppear {
                     viewModel.getShareCode()
                 }
-                
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
@@ -263,6 +264,7 @@ struct ShareBookBottomSheet: View{
 
 //MARK: 예산 설정 bottom sheet
 struct SetBudgetBottomSheet: View {
+    @State private var keyboardHeight: CGFloat = 0
     let buttonHeight: CGFloat = 46
     @State var label = "예산을 입력하세요."
     @Binding var isShowing: Bool
@@ -334,16 +336,33 @@ struct SetBudgetBottomSheet: View {
                     Color(.white)
                 )
                 .cornerRadius(12, corners: [.topLeft, .topRight])
+                .offset(y: -keyboardHeight)  // 여기에 오프셋 추가
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
         .ignoresSafeArea()
         .animation(.easeInOut, value: isShowing)
+        .onAppear {
+            NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: .main) { (notification) in
+                let value = notification.userInfo![UIResponder.keyboardFrameEndUserInfoKey] as! CGRect
+                let height = value.height
+                self.keyboardHeight = height
+            }
+
+            NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: .main) { _ in
+                self.keyboardHeight = 0
+            }
+        }
+        .onDisappear {
+            NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+            NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+        }
     }
 }
 
 //MARK: 초기 자산 설정 bottom sheet
 struct SetInitialAssetBottomSheet: View {
+    @State private var keyboardHeight: CGFloat = 0
     let buttonHeight: CGFloat = 46
     @State var label = "초기 자산을 입력하세요."
     @Binding var isShowing: Bool
@@ -416,11 +435,27 @@ struct SetInitialAssetBottomSheet: View {
                     Color(.white)
                 )
                 .cornerRadius(12, corners: [.topLeft, .topRight])
+                .offset(y: -keyboardHeight)  // 여기에 오프셋 추가
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
         .ignoresSafeArea()
         .animation(.easeInOut, value: isShowing)
+        .onAppear {
+            NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: .main) { (notification) in
+                let value = notification.userInfo![UIResponder.keyboardFrameEndUserInfoKey] as! CGRect
+                let height = value.height
+                self.keyboardHeight = height
+            }
+
+            NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: .main) { _ in
+                self.keyboardHeight = 0
+            }
+        }
+        .onDisappear {
+            NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+            NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+        }
     }
 }
 

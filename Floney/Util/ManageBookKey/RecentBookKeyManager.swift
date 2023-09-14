@@ -11,7 +11,7 @@ import Alamofire
 class RecentBookKeyManager {
     func saveRecentBookKey(bookKey: String) {
         let url = "\(Constant.BASE_URL)/users/bookKey"
-        let token = Keychain.getKeychainValue(forKey: .accessToken)!
+        let token = Keychain.getKeychainValue(forKey: .accessToken) ?? ""
         let parameters = RecentBookKeyRequest(bookKey: bookKey)
         print(url)
         print(parameters)

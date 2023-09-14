@@ -14,7 +14,7 @@ class AuthenticationService: ObservableObject {
     @Published var isUserLoggedIn: Bool = false
     @Published var tokenExpired: Bool = false
     @Published var bookStatus: Bool = false
-    @Published var bookExistenceViewModel = BookExistenceViewModel()
+ 
 
     init() {
         //isUserLoggedIn = UserDefaults.standard.bool(forKey: "isLoggedIn")
@@ -30,12 +30,7 @@ class AuthenticationService: ObservableObject {
         // 로그인 처리
         self.isUserLoggedIn = true
         UserDefaults.standard.set(true, forKey: "isLoggedIn")
-        
         //bookExistenceViewModel.getBookExistence()
     }
-    func bookExist() {
-        bookExistenceViewModel.getBookExistence()
-        //bookStatus = bookExistenceViewModel.bookExistence
-        print("book status : \(bookStatus)")
-    }
+
 }

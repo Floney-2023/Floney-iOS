@@ -26,6 +26,7 @@ enum LoadingType {
 
 class LoadingManager: ObservableObject {
     static let shared = LoadingManager()  // Singleton instance
+    @Published var showLoadingForSubscribe = false
     @Published var showLoading = false
     @Published var loadingType : LoadingType = .progressLoading
     

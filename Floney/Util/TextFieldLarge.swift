@@ -12,18 +12,8 @@ struct TextFieldLarge: View {
     @Binding var content : String
 
     var body: some View {
-        TextField("", text: $content)
-            .multilineTextAlignment(.center)
+        CustomTextField(text: $content, placeholder: label, keyboardType: .decimalPad, alignment: .center, placeholderColor: .greyScale6)
             .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
-            .keyboardType(.numberPad)
-            .modifier(TextFieldModifier())
-            .overlay(
-                Text(label)
-                    .padding()
-                    .font(.pretendardFont(.regular, size: 14))
-                    .foregroundColor(.greyScale6)
-                    .opacity(content.isEmpty ? 1 : 0), alignment: .center
-            )
-           
+  
     }
 }

@@ -20,7 +20,7 @@ class NotificationManager: ObservableObject {
         removeNotificationObserver()
     }
     // IAP 노티 구독
-    private func addNotificationObserver() {
+    func addNotificationObserver() {
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(handlePurchaseNoti(_ :)),
