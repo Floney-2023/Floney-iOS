@@ -18,7 +18,7 @@ class CalculateViewModel : ObservableObject {
     var tokenViewModel = TokenReissueViewModel()
     @Published var addLoadingError: String = ""
     @Published var showAlert: Bool = false
-  
+    
     
     //MARK: 유저 조회
     @Published var bookUsers : [BookUsersResponse] = []
@@ -34,6 +34,8 @@ class CalculateViewModel : ObservableObject {
     @Published var selectedDatesStr = ""
     
     @Published var daysOfTheWeek = ["일","월","화","수","목","금","토"]
+    
+    @Published var passedDays = 0
     
     // 메인으로 선택된 날짜 -> 이 날짜에 의해 좌우됨.
     @Published var selectedDate: Date = Date() {
@@ -79,7 +81,7 @@ class CalculateViewModel : ObservableObject {
     //MARK: server
     func getSettlements() {
         userList = ["rudalswhdk12@naver.com","rudalswhdk12@gmail.com"]
-        let bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
+        let bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
         let request = SettlementRequest(bookKey: bookKey, usersEmails: userList, duration: SettlementDate(startDate: startDateStr, endDate: endDateStr))
         
         dataManager.getSettlements(request)
@@ -102,7 +104,8 @@ class CalculateViewModel : ObservableObject {
             }.store(in: &cancellableSet)
     }
     func postSettlements() {
-        let bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
+        let bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
+        let bookName = Keychain.getKeychainValue(forKey: .bookName) ?? ""
         let request = AddSettlementRequest(bookKey: bookKey, userEmails: userList, startDate: startDateStr, endDate: endDateStr, outcomes: outcomeRequest)
         
         dataManager.postSettlements(request)
@@ -111,12 +114,11 @@ class CalculateViewModel : ObservableObject {
                     self.createAlert(with: dataResponse.error!)
                     // 에러 처리
                     print(dataResponse.error)
-              
+                    
                     LoadingManager.shared.update(showLoading: false, loadingType: .floneyLoading)
                 } else {
                     print("--정산 요청 성공--")
-                    self.fcmManager.sendNotification(to: bookKey, title: "정산하기", body: "정산해보세요.")
-               
+                    self.fcmManager.sendNotification(to: bookKey, title: "플로니", body: "\(bookName)의 가계부를 정산해보세요!")   
                     LoadingManager.shared.update(showLoading: false, loadingType: .floneyLoading)
                     self.settlementResult = dataResponse.value!
                     print(self.settlementResult)
@@ -125,7 +127,7 @@ class CalculateViewModel : ObservableObject {
                     self.outcomePerUser = self.settlementResult.outcome
                     self.details = self.settlementResult.details
                     self.id = self.settlementResult.id
-
+                    
                 }
             }.store(in: &cancellableSet)
     }
@@ -137,15 +139,15 @@ class CalculateViewModel : ObservableObject {
                     self.createAlert(with: dataResponse.error!)
                     // 에러 처리
                     print(dataResponse.error)
-                  
+                    
                     LoadingManager.shared.update(showLoading: false, loadingType: .floneyLoading)
                 } else {
                     print("--정산 내역 요청 성공--")
-                   
+                    
                     LoadingManager.shared.update(showLoading: false, loadingType: .floneyLoading)
                     self.settlementList = dataResponse.value!
                     print(self.settlementList)
-  
+                    
                 }
             }.store(in: &cancellableSet)
     }
@@ -156,11 +158,10 @@ class CalculateViewModel : ObservableObject {
                     self.createAlert(with: dataResponse.error!)
                     // 에러 처리
                     print(dataResponse.error)
-                  
+                    
                     LoadingManager.shared.update(showLoading: false, loadingType: .floneyLoading)
                 } else {
                     print("--정산 내역 디테일 요청 성공--")
-                  
                     LoadingManager.shared.update(showLoading: false, loadingType: .floneyLoading)
                     self.settlementResult = dataResponse.value!
                     self.startDateStr = self.settlementResult.startDate
@@ -190,6 +191,21 @@ class CalculateViewModel : ObservableObject {
                         item.isSelected = false
                         return item
                     }
+                }
+            }.store(in: &cancellableSet)
+    }
+    func getPassedDays() {
+        dataManager.getPassedDays()
+            .sink { (dataResponse) in
+                if dataResponse.error != nil {
+                    self.createAlert(with: dataResponse.error!)
+                    // 에러 처리
+                    print(dataResponse.error)
+                    
+                } else {
+                    print("--마지막 정산일 요청 성공--")
+                    self.passedDays = dataResponse.value?.passedDays ?? 0
+                    
                 }
             }.store(in: &cancellableSet)
     }
@@ -291,21 +307,34 @@ class CalculateViewModel : ObservableObject {
         }
     }
     func createAlert( with error: NetworkError) {
-        addLoadingError = error.backendError == nil ? error.initialError.localizedDescription : error.backendError!.message
-        self.showAlert = true
-        // 에러 처리
-        
-        if let errorCode = error.backendError?.code {
-            switch errorCode {
-            case "U006" :
-                tokenViewModel.tokenReissue()
-                // 아예 틀린 토큰이므로 재로그인해서 다시 발급받아야 함.
-            case "U007" :
-                AuthenticationService.shared.logoutDueToTokenExpiration()
-            default:
-                break
+        //loadingError = error.backendError == nil ? error.initialError.localizedDescription : error.backendError!.message
+        if let backendError = error.backendError {
+            guard let serverError = ServerError(rawValue: backendError.code) else {
+                // 서버 에러 코드가 정의되지 않은 경우의 처리
+                //showAlert(message: "알 수 없는 서버 에러가 발생했습니다.")
+                return
             }
-            // 에러 처리
+            AlertManager.shared.handleError(serverError)
+            // 에러 메시지 처리
+            //showAlert(message: serverError.errorMessage)
+            
+            // 에러코드에 따른 추가 로직
+            if let errorCode = error.backendError?.code {
+                switch errorCode {
+                    // 토큰 재발급
+                case "U006" :
+                    AuthenticationService.shared.logoutDueToTokenExpiration()
+                    // 아예 틀린 토큰이므로 재로그인해서 다시 발급받아야 함.
+                case "U007" :
+                    AuthenticationService.shared.logoutDueToTokenExpiration()
+                default:
+                    break
+                }
+            }
+        } else {
+            // BackendError 없이 NetworkError만 발생한 경우
+            //showAlert(message: "네트워크 오류가 발생했습니다.")
+            
         }
     }
 }

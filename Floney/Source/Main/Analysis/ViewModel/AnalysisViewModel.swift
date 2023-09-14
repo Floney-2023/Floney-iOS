@@ -98,7 +98,7 @@ class AnalysisViewModel : ObservableObject {
     func getColor(index: Int) {
         if index < primaryColors.count {
             selectedColors.append(primaryColors[index])
-           
+            
         } else {
             let randomIndex = Int.random(in: 0..<randomColors.count)
             selectedColors.append(randomColors[randomIndex])
@@ -107,18 +107,18 @@ class AnalysisViewModel : ObservableObject {
     func getColor2(index: Int) {
         if index < primaryColors.count {
             incomeSelectedColors.append(incomeColors[index])
-           
+            
         } else {
             let randomIndex = Int.random(in: 0..<randomColors.count)
             incomeSelectedColors.append(incomeRandomColors[randomIndex])
         }
     }
     func analysisExpenseIncome(root: String) {
-
-        let bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
+        
+        let bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
         let request = ExpenseIncomeRequest(bookKey: bookKey, root: root, date: selectedDateStr)
         print(request)
-  
+        
         LoadingManager.shared.update(showLoading: true, loadingType: .progressLoading)
         dataManager.analysisExpenseIncome(request)
             .sink { (dataResponse) in
@@ -126,10 +126,10 @@ class AnalysisViewModel : ObservableObject {
                     self.createAlert(with: dataResponse.error!)
                     // 에러 처리
                     print(dataResponse.error)
-            
+                    
                     LoadingManager.shared.update(showLoading: false, loadingType: .progressLoading)
                 } else {
-          
+                    
                     LoadingManager.shared.update(showLoading: false, loadingType: .progressLoading)
                     if let expenseIncomeResponse = dataResponse.value {
                         print("---분석 요청 성공---")
@@ -158,16 +158,16 @@ class AnalysisViewModel : ObservableObject {
                         
                     }
                     
-                   
+                    
                 }
             }.store(in: &cancellableSet)
     }
     func analysisBudget() {
-
-        let bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
+        
+        let bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
         let request = BudgetAssetRequest(bookKey: bookKey, date: selectedDateStr)
- 
-
+        
+        
         LoadingManager.shared.update(showLoading: true, loadingType: .progressLoading)
         dataManager.analysisBudget(request)
             .sink { (dataResponse) in
@@ -175,10 +175,10 @@ class AnalysisViewModel : ObservableObject {
                     self.createAlert(with: dataResponse.error!)
                     // 에러 처리
                     print(dataResponse.error)
- 
+                    
                     LoadingManager.shared.update(showLoading: false, loadingType: .progressLoading)
                 } else {
-
+                    
                     LoadingManager.shared.update(showLoading: false, loadingType: .progressLoading)
                     self.leftBudget = dataResponse.value?.leftMoney ?? 0
                     self.totalBudget = dataResponse.value?.initBudget ?? 0
@@ -207,20 +207,20 @@ class AnalysisViewModel : ObservableObject {
     func calcDailyAvailableMoney() {
         let calendar = Calendar.current
         let today = Date()
-
+        
         // 오늘의 날짜 구하기
         let dayOfMonth = calendar.component(.day, from: today)
-
+        
         // 현재 달의 마지막 날짜 구하기
         let range = calendar.range(of: .day, in: .month, for: today)
         let lastDayOfMonth = range?.count ?? 30  // 기본값으로 30일을 사용합니다.
-
+        
         // 남은 날짜 계산
         let remainingDays = lastDayOfMonth - dayOfMonth
-
+        
         // 하루에 사용할 수 있는 금액 계산
         let dailyAvailableMoney = self.leftBudget / Double(remainingDays)
-
+        
         print("하루에 사용할 수 있는 금액은 \(dailyAvailableMoney) 입니다.")
         self.dailyAvailableMoney = dailyAvailableMoney
     }
@@ -236,11 +236,11 @@ class AnalysisViewModel : ObservableObject {
                 assetMonth = month
             }
         }
-
-        let bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
+        
+        let bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
         let request = BudgetAssetRequest(bookKey: bookKey, date: date)
- 
-
+        
+        
         LoadingManager.shared.update(showLoading: true, loadingType: .progressLoading)
         dataManager.analysisAsset(request)
             .sink { (dataResponse) in
@@ -248,10 +248,10 @@ class AnalysisViewModel : ObservableObject {
                     self.createAlert(with: dataResponse.error!)
                     // 에러 처리
                     print(dataResponse.error)
-
+                    
                     LoadingManager.shared.update(showLoading: false, loadingType: .progressLoading)
                 } else {
-
+                    
                     LoadingManager.shared.update(showLoading: false, loadingType: .progressLoading)
                     var asset = dataResponse.value ?? AssetResponse(difference: 0, initAsset: 0, currentAsset: 0)
                     asset.month = assetMonth  // 해당 월을 AssetResponse에 저장합니다.
@@ -269,13 +269,13 @@ class AnalysisViewModel : ObservableObject {
     func initAssetList() {
         self.assetList = []
     }
-
+    
     private func updateDateString(_ date: Date) {
         let calendar = Calendar.current
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-01"
         selectedDateStr = formatter.string(from: date)
-       
+        
         selectedMonth = calendar.component(.month, from: date)
     }
     // 이전 달로 이동하는 함수
@@ -315,26 +315,34 @@ class AnalysisViewModel : ObservableObject {
     }
     
     func createAlert( with error: NetworkError) {
-        loadingError = error.backendError == nil ? error.initialError.localizedDescription : error.backendError!.message
-        self.showAlert = true
-        // 에러 처리
-        
-        if let errorCode = error.backendError?.code {
-            switch errorCode {
-                //case "U009" :
-                //print("\(errorCode) : alert")
-                //self.showAlert = true
-                //self.errorMessage = ErrorMessage.login01.value
-                // 토큰 재발급
-            case "U006" :
-                tokenViewModel.tokenReissue()
-                // 아예 틀린 토큰이므로 재로그인해서 다시 발급받아야 함.
-            case "U007" :
-                AuthenticationService.shared.logoutDueToTokenExpiration()
-            default:
-                break
+        //loadingError = error.backendError == nil ? error.initialError.localizedDescription : error.backendError!.message
+        if let backendError = error.backendError {
+            guard let serverError = ServerError(rawValue: backendError.code) else {
+                // 서버 에러 코드가 정의되지 않은 경우의 처리
+                //showAlert(message: "알 수 없는 서버 에러가 발생했습니다.")
+                return
             }
-            // 에러 처리
+            AlertManager.shared.handleError(serverError)
+            // 에러 메시지 처리
+            //showAlert(message: serverError.errorMessage)
+            
+            // 에러코드에 따른 추가 로직
+            if let errorCode = error.backendError?.code {
+                switch errorCode {
+                    // 토큰 재발급
+                case "U006" :
+                    AuthenticationService.shared.logoutDueToTokenExpiration()
+                    // 아예 틀린 토큰이므로 재로그인해서 다시 발급받아야 함.
+                case "U007" :
+                    AuthenticationService.shared.logoutDueToTokenExpiration()
+                default:
+                    break
+                }
+            }
+        } else {
+            // BackendError 없이 NetworkError만 발생한 경우
+            //showAlert(message: "네트워크 오류가 발생했습니다.")
+            
         }
     }
 }

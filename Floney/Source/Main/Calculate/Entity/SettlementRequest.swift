@@ -30,3 +30,4 @@ struct OutComes : Encodable {
     var outcome : Float
     var userEmail : String
 }
+

@@ -16,18 +16,23 @@ struct SettlementListView: View {
     @State var currency = CurrencyManager.shared.currentCurrency
     var body: some View {
         VStack(spacing:28) {
-            HStack {
-                Spacer()
+            ZStack {
+                HStack {
+                    Spacer()
+                    Image("icon_close")
+                        .padding(.trailing, 20)
+                        .onTapGesture {
+                            showingTabbar = true
+                            isShowing = false
+                        }
+                    
+                }
                 Text("정산 내역")
                     .font(.pretendardFont(.semiBold, size: 16))
                     .foregroundColor(.greyScale1)
-                Spacer()
-                Image("icon_close")
-                    .onTapGesture {
-                        showingTabbar = true
-                        isShowing = false
-                    }
-            }.padding(.bottom,6)
+                
+            }.padding(.top, 18)
+            .padding(.bottom,10)
             /*
             if viewModel.settlementList.count == 0 {
                 VStack {

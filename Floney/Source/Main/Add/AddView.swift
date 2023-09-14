@@ -23,25 +23,28 @@ struct AddView: View {
     @State var options = ["지출", "수입", "이체"]
     
     @StateObject var lineModel : LineModel
-    //@State var mode : String = "add"
-    //@State var lineId = 0
-    
+    @ObservedObject var alertManager = AlertManager.shared
+
     @State var date : String = "2023-06-20"
     @State var money : String = ""
-    @State var assetType = "자산을 선택하세요."
-    @State var category = "분류를 선택하세요."
+    let numberFormatter: NumberFormatter = {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        return formatter
+    }()
+    @State var assetType = "자산을 선택하세요"
+    @State var category = "분류를 선택하세요"
     @State var content = ""
     @State var toggleOnOff = false
     @State var writer = ""
-    //@State var toggleType = "지출" // 지출, 수입, 이체
-    //@State var selectedOptions = 0
-    
-    //@State var selectedAssetType = ""
-    //@State var selectedCategory = ""
-        
+
+    var formattedValue: Double? {
+            let valueWithoutCommas = money.replacingOccurrences(of: ",", with: "")
+            return Double(valueWithoutCommas)
+        }
     @ObservedObject private var keyboardResponder = KeyboardResponder()
     var body: some View {
-        let nickname = lineModel.mode == "add" ? Keychain.getKeychainValue(forKey: .userNickname)! : writer
+        let nickname = lineModel.mode == "add" ? Keychain.getKeychainValue(forKey: .userNickname) ?? "" : writer
         ZStack {
             VStack {
                 HStack {
@@ -62,6 +65,7 @@ struct AddView: View {
                                 .foregroundColor(.greyScale6)
                             Spacer()
                         }
+                       /*
                         TextField("", text: $money)
                             .keyboardType(.decimalPad)
                             .foregroundColor(.primary2)
@@ -87,11 +91,13 @@ struct AddView: View {
                                         .opacity(money.isEmpty ? 0 : 1)
                                     , alignment: .leading
                                 
-                            )
+                            )*/
+                        MoneyTextField(text: $money, placeholder: "금액을 입력하세요")
+                            .frame(height: UIScreen.main.bounds.height * 0.0487)
                             .onReceive(Just(money)) { value in
                                 let digits = value.filter { "0"..."9" ~= $0 }
-                                if let intValue = Int(digits), intValue <= 100_000_000_000 {
-                                    money = formatNumber(intValue)
+                                if let doubleValue = Double(digits), doubleValue <= 100_000_000_000 {
+                                    money = formatNumber(Int(doubleValue))
                                 } else {
                                     money = String(digits.dropLast())
                                 }
@@ -131,7 +137,7 @@ struct AddView: View {
                     .frame(maxWidth: .infinity)
                     .frame(height: 38)
                     .cornerRadius(10)
-                    .disabled(lineModel.mode == "check" ? true:false)
+                  
               
                     
                     //MARK: 날짜/자산/분류/내용/제외여부
@@ -193,13 +199,16 @@ struct AddView: View {
                                 .font(.pretendardFont(.medium, size: 14))
                                 .foregroundColor(.greyScale4)
                             
-                            TextField("", text: $content)
-                                .multilineTextAlignment(.trailing)
+                            //TextField("", text: $content)
+                            //    .multilineTextAlignment(.trailing)
+                            ContentTextField(text: $content, placeholder: "내용을 입력하세요")
+                                .frame(height: UIScreen.main.bounds.height * 0.018)
                                 .onChange(of: content) { newValue in
                                     if newValue.count > maxLength {
                                         content = String(newValue.prefix(maxLength))
                                     }
                                 }
+                            /*
                                 .overlay(
                                     Text("내용을 입력하세요.")
                                         .font(.pretendardFont(.medium, size: 14))
@@ -209,7 +218,7 @@ struct AddView: View {
                                     , alignment: .trailing
                                 )
                                 .font(.pretendardFont(.medium, size: 14))
-                                .foregroundColor(.greyScale2)
+                                .foregroundColor(.greyScale2)*/
                         }
 
                         
@@ -241,23 +250,29 @@ struct AddView: View {
                 if lineModel.mode == "add" {
                     HStack {
                         Button {
-                            viewModel.money = money // 금액
-                            viewModel.lineDate = date // 날짜
-                            viewModel.flow = lineModel.toggleType // 수입, 지출, 이체
-                            viewModel.asset = assetType // 자산 타입
-                            viewModel.line = category // 분류 타입
-                            viewModel.description = content // 내용
-                            viewModel.except = toggleOnOff // 제외 여부
-                            
-                            print(viewModel.money)
-                            print(viewModel.lineDate)
-                            print(viewModel.flow)
-                            print(viewModel.asset)
-                            print(viewModel.line)
-                            print(viewModel.description)
-                            print(viewModel.except)
-                            
-                            viewModel.postLines()
+                            if viewModel.isVaildAdd(money: money, asset: assetType, category: category) {
+                                viewModel.money = money // 금액
+                                viewModel.lineDate = date // 날짜
+                                viewModel.flow = lineModel.toggleType // 수입, 지출, 이체
+                                viewModel.asset = assetType // 자산 타입
+                                viewModel.line = category // 분류 타입
+                                if content.isEmpty {
+                                    viewModel.description = category
+                                } else {
+                                    viewModel.description = content // 내용
+                                }
+                                viewModel.except = toggleOnOff // 제외 여부
+                                
+                                print(viewModel.money)
+                                print(viewModel.lineDate)
+                                print(viewModel.flow)
+                                print(viewModel.asset)
+                                print(viewModel.line)
+                                print(viewModel.description)
+                                print(viewModel.except)
+                                
+                                viewModel.postLines()
+                            }
                             
                         } label: {
                             Text("저장하기")
@@ -288,23 +303,32 @@ struct AddView: View {
                         .padding(.bottom, 10)
                         .background(Color.greyScale2)
                         Button {
-                            viewModel.bookLineKey = lineModel.lineId // PK
-                            viewModel.money = money // 금액
-                            viewModel.lineDate = date // 날짜
-                            viewModel.flow = lineModel.toggleType // 수입, 지출, 이체
-                            viewModel.asset = assetType // 자산 타입
-                            viewModel.line = category // 분류 타입
-                            viewModel.description = content // 내용
-                            viewModel.except = toggleOnOff // 제외 여부
+                            if viewModel.isVaildAdd(money: money, asset: assetType, category: category) {
+                                
+                                viewModel.bookLineKey = lineModel.lineId // PK
+                                viewModel.money = money // 금액
+                                viewModel.lineDate = date // 날짜
+                                viewModel.flow = lineModel.toggleType // 수입, 지출, 이체
+                                viewModel.asset = assetType // 자산 타입
+                                viewModel.line = category // 분류 타입
+                                if content.isEmpty {
+                                    viewModel.description = category
+                                } else {
+                                    viewModel.description = content // 내용
+                                }
+                                viewModel.except = toggleOnOff // 제외 여부
+                                
+                                print(viewModel.money)
+                                print(viewModel.lineDate)
+                                print(viewModel.flow)
+                                print(viewModel.asset)
+                                print(viewModel.line)
+                                print(viewModel.description)
+                                print(viewModel.except)
+                                viewModel.changeLine()
+                                
+                            }
                             
-                            print(viewModel.money)
-                            print(viewModel.lineDate)
-                            print(viewModel.flow)
-                            print(viewModel.asset)
-                            print(viewModel.line)
-                            print(viewModel.description)
-                            print(viewModel.except)
-                            viewModel.changeLine()
                         } label: {
                             Text("저장하기")
                                 .font(.pretendardFont(.bold, size:14))
@@ -339,12 +363,13 @@ struct AddView: View {
             .onChange(of: viewModel.successAdd) { newValue in
                 self.isPresented = false
             }
-
+            CustomAlertView(message: AlertManager.shared.message, type: $alertManager.buttontType, isPresented: $alertManager.showAlert)
             CategoryBottomSheet(root: $root, categories: $viewModel.categories, isShowing: $isShowingBottomSheet, isSelectedAssetTypeIndex: $isSelectedAssetTypeIndex, isSelectedAssetType: $assetType, isSelectedCategoryIndex: $isSelectedCategoryIndex, isSelectedCategory: $category, isShowingEditCategory: $isShowingEditCategory)
             
             NavigationLink(destination: CategoryManagementView(isShowingEditCategory: $isShowingEditCategory), isActive: $isShowingEditCategory) {
                 EmptyView()
             }
+            
             
         } // ZStack
     }
@@ -353,6 +378,7 @@ struct AddView: View {
         formatter.numberStyle = .decimal
         return formatter.string(from: NSNumber(value: n)) ?? ""
     }
+ 
 }
 
 class KeyboardResponder: ObservableObject {
@@ -376,6 +402,7 @@ class KeyboardResponder: ObservableObject {
     @objc func keyBoardWillHide(notification: Notification) {
         isKeyboardVisible = false
     }
+    
 }
 
 struct AddView_Previews: PreviewProvider {
@@ -385,55 +412,3 @@ struct AddView_Previews: PreviewProvider {
     }
 }
 
-/*
-//MARK: 삭제/저장하기 버튼
-HStack(spacing:0) {
-    Button {
-        //
-    } label: {
-        Text("삭제")
-        
-            .font(.pretendardFont(.bold, size:14))
-            .foregroundColor(.white)
-        
-    }
-    .frame(maxWidth: .infinity)
-    .frame(maxHeight: .infinity)
-    .padding()
-    .background(Color.greyScale2)
-    Button {
-        //
-        
-        viewModel.money = money
-        viewModel.lineDate = date
-        viewModel.flow = toggleType
-        viewModel.asset = assetType
-        viewModel.line = category
-        viewModel.description = content
-        viewModel.except = toggleOnOff
-        
-        print(viewModel.money)
-        print(viewModel.lineDate)
-        print(viewModel.flow)
-        print(viewModel.asset)
-        print(viewModel.line)
-        print(viewModel.description)
-        print(viewModel.except)
-        
-        viewModel.postLines()
-        
-    } label: {
-        Text("저장하기")
-            .font(.pretendardFont(.bold, size:14))
-        
-            .foregroundColor(.white)
-        
-    }
-    .frame(maxWidth: .infinity)
-    .frame(maxHeight: .infinity)
-    .frame(width: UIScreen.main.bounds.width * 2/3)
-    .padding()
-    .background(Color.primary1)
-}
-.frame(maxWidth: .infinity)
-.frame(height: 66)*/

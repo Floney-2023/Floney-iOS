@@ -14,6 +14,10 @@ struct MainTabView: View {
     @State var showingSettlementDetail = false
     @State var showingAddView = false
     @State var showingTabbar = true
+    @State var isNextToCreateBook = false
+    @State var isNextToEnterCode = false
+    
+    @State var isShowingAccountBottomSheet = false
     @ObservedObject var alertManager = AlertManager.shared
     @ObservedObject var loadingManager = LoadingManager.shared
     
@@ -63,8 +67,7 @@ struct MainTabView: View {
                         }
                     default :
                         NavigationView {
-                           
-                           MyPageView(showingTabbar: $showingTabbar)
+                            MyPageView(showingTabbar: $showingTabbar, isShowingAccountBottomSheet: $isShowingAccountBottomSheet, isNextToCreateBook: $isNextToCreateBook, isNextToEnterCode: $isNextToEnterCode)
                         }
                     }
                 }
@@ -132,7 +135,7 @@ struct MainTabView: View {
                     DimmedLoadingView()
                 }
             }
-            
+            AccountBookBottomSheet(isShowing: $isShowingAccountBottomSheet, showingTabbar: $showingTabbar, isNextToCreateBook: $isNextToCreateBook, isNextToEnterCode: $isNextToEnterCode)
             CustomAlertView(message: AlertManager.shared.message, type : $alertManager.buttontType, isPresented: $alertManager.showAlert)
             
         }

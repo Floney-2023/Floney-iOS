@@ -174,6 +174,9 @@ struct CategoryManagementView: View {
                 viewModel.root = options[newValue]
                 viewModel.getCategory()
             }
+            .onChange(of: isShowingAdd) { newValue in
+                viewModel.getCategory()
+            }
             .navigationBarBackButtonHidden(true)
             .overlay(
                 ZStack {

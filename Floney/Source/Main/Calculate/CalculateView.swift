@@ -14,6 +14,7 @@ struct CalculateView: View {
     @Binding var isShowingSettlement : Bool
     @Binding var showingTabbar : Bool
     @Binding var showingDetail : Bool
+    @StateObject var viewModel = CalculateViewModel()
     
     var body: some View {
         ZStack {
@@ -25,7 +26,7 @@ struct CalculateView: View {
                             .foregroundColor(.greyScale1)
                             .padding(.bottom, 34)
                         
-                        Text("마지막 정산일로부터\n\(date)일 지났어요")
+                        Text("마지막 정산일로부터\n\(viewModel.passedDays)일 지났어요")
                             .font(.pretendardFont(.bold, size: 22))
                             .foregroundColor(.greyScale1)
                             .padding(.bottom, 10)
@@ -73,6 +74,10 @@ struct CalculateView: View {
                     EmptyView()
                 }
             }.padding(.top, 26)
+                .onAppear{
+                    viewModel.getPassedDays()
+                }
+            
         }
     }
 }

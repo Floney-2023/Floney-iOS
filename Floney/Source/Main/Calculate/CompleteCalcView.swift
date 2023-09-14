@@ -153,7 +153,7 @@ struct CompleteCalcView: View {
                     .background(Color.primary1)
             }.frame(height:UIScreen.main.bounds.height * 0.085)
                 .onTapGesture {
-                    applinkManager.generateSettlementLink(settlementId: viewModel.id, bookKey: Keychain.getKeychainValue(forKey: .bookKey)!)
+                    applinkManager.generateSettlementLink(settlementId: viewModel.id, bookKey: Keychain.getKeychainValue(forKey: .bookKey) ?? "")
                     print(applinkManager.shortenedUrl)
                     
                 }

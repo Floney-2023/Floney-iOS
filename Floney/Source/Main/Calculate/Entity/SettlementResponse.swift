@@ -51,3 +51,6 @@ struct BookUsersResponse : Decodable, Hashable {
     //var status : String
     var isSelected : Bool?
 }
+struct PassedDays : Decodable {
+    var passedDays : Int
+}

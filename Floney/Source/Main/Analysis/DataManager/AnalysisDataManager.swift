@@ -24,7 +24,7 @@ extension AnalysisService: AnalysisProtocol {
         let url = "\(Constant.BASE_URL)/analyze/asset"
         print("\(url)")
       
-        let token = Keychain.getKeychainValue(forKey: .accessToken)!
+        let token = Keychain.getKeychainValue(forKey: .accessToken) ?? ""
         return AF.request(url,
                           method: .post,
                           parameters: parameters,
@@ -46,7 +46,7 @@ extension AnalysisService: AnalysisProtocol {
         let url = "\(Constant.BASE_URL)/analyze/budget"
         print("\(url)")
       
-        let token = Keychain.getKeychainValue(forKey: .accessToken)!
+        let token = Keychain.getKeychainValue(forKey: .accessToken) ?? ""
         return AF.request(url,
                           method: .post,
                           parameters: parameters,
@@ -70,7 +70,7 @@ extension AnalysisService: AnalysisProtocol {
         let url = "\(Constant.BASE_URL)/analyze/category"
         print("\(url)")
       
-        let token = Keychain.getKeychainValue(forKey: .accessToken)!
+        let token = Keychain.getKeychainValue(forKey: .accessToken) ?? ""
         return AF.request(url,
                           method: .post,
                           parameters: parameters,

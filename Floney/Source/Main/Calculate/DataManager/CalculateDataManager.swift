@@ -15,6 +15,7 @@ protocol CalculateProtocol {
     func getSettlementList() -> AnyPublisher<DataResponse<[SettlementListResponse], NetworkError>, Never>
     func getSettlementDetail(id : Int) -> AnyPublisher<DataResponse<AddSettlementResponse, NetworkError>, Never>
     func getBookUsers() -> AnyPublisher<DataResponse<[BookUsersResponse], NetworkError>, Never>
+    func getPassedDays() -> AnyPublisher<DataResponse<PassedDays, NetworkError>, Never>
 }
 
 class CalculateService {
@@ -33,7 +34,7 @@ extension CalculateService: CalculateProtocol {
     func getSettlements(_ parameters:SettlementRequest) -> AnyPublisher<DataResponse<[SettlementResponse], NetworkError>, Never> {
         
         let url = "\(Constant.BASE_URL)/books/outcomes"
-        let token = Keychain.getKeychainValue(forKey: .accessToken)!
+        let token = Keychain.getKeychainValue(forKey: .accessToken) ?? ""
         print(url)
         print(parameters)
         return  AF.request(url,
@@ -55,7 +56,7 @@ extension CalculateService: CalculateProtocol {
     func postSettlements(_ parameters:AddSettlementRequest) -> AnyPublisher<DataResponse<AddSettlementResponse, NetworkError>, Never> {
         
         let url = "\(Constant.BASE_URL)/settlement"
-        let token = Keychain.getKeychainValue(forKey: .accessToken)!
+        let token = Keychain.getKeychainValue(forKey: .accessToken) ?? ""
         print("정산 요청 : \(parameters)")
         return  AF.request(url,
                            method: .post,
@@ -74,9 +75,9 @@ extension CalculateService: CalculateProtocol {
             .eraseToAnyPublisher()
     }
     func getSettlementList() -> AnyPublisher<DataResponse<[SettlementListResponse], NetworkError>, Never> {
-        let bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
+        let bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
         let url = "\(Constant.BASE_URL)/settlement?bookKey=\(bookKey)"
-        let token = Keychain.getKeychainValue(forKey: .accessToken)!
+        let token = Keychain.getKeychainValue(forKey: .accessToken) ?? ""
         
         return  AF.request(url,
                            method: .get,
@@ -98,7 +99,7 @@ extension CalculateService: CalculateProtocol {
     func getSettlementDetail(id : Int) -> AnyPublisher<DataResponse<AddSettlementResponse, NetworkError>, Never> {
         
         let url = "\(Constant.BASE_URL)/settlement/\(id)"
-        let token = Keychain.getKeychainValue(forKey: .accessToken)!
+        let token = Keychain.getKeychainValue(forKey: .accessToken) ?? ""
         print(url)
         
         return  AF.request(url,
@@ -120,9 +121,9 @@ extension CalculateService: CalculateProtocol {
     }
     func getBookUsers() -> AnyPublisher<DataResponse<[BookUsersResponse], NetworkError>, Never> {
         
-        let bookKey = Keychain.getKeychainValue(forKey: .bookKey)!
+        let bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
         let url = "\(Constant.BASE_URL)/books/users?bookKey=\(bookKey)"
-        let token = Keychain.getKeychainValue(forKey: .accessToken)!
+        let token = Keychain.getKeychainValue(forKey: .accessToken) ?? ""
         print(url)
         
         return  AF.request(url,
@@ -132,6 +133,30 @@ extension CalculateService: CalculateProtocol {
                            headers: ["Authorization":"Bearer \(token)"])
             .validate()
             .publishDecodable(type: [BookUsersResponse].self)
+            .map { response in
+                response.mapError { error in
+                    let backendError = response.data.flatMap { try? JSONDecoder().decode(BackendError.self, from: $0)}
+                    return NetworkError(initialError: error, backendError: backendError)
+                }
+            }
+            .receive(on: DispatchQueue.main)
+            .eraseToAnyPublisher()
+        
+    }
+    func getPassedDays() -> AnyPublisher<DataResponse<PassedDays, NetworkError>, Never> {
+        
+        let bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
+        let url = "\(Constant.BASE_URL)/books/settlement/last?bookKey=\(bookKey)"
+        let token = Keychain.getKeychainValue(forKey: .accessToken) ?? ""
+        print(url)
+        
+        return  AF.request(url,
+                           method: .get,
+                           parameters: nil,
+                           encoding: JSONEncoding.default,
+                           headers: ["Authorization":"Bearer \(token)"])
+            .validate()
+            .publishDecodable(type: PassedDays.self)
             .map { response in
                 response.mapError { error in
                     let backendError = response.data.flatMap { try? JSONDecoder().decode(BackendError.self, from: $0)}

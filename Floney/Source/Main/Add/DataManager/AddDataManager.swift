@@ -30,7 +30,7 @@ extension AddService: AddProtocol {
         print("\(urlString)")
         let encodedString = urlString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
         let url = URL(string: encodedString!)!
-        let token = Keychain.getKeychainValue(forKey: .accessToken)!
+        let token = Keychain.getKeychainValue(forKey: .accessToken) ?? ""
         return AF.request(url,
                           method: .get,
                           parameters: nil,
@@ -51,7 +51,7 @@ extension AddService: AddProtocol {
     func postLines(_ parameters:LinesRequest) -> AnyPublisher<DataResponse<LinesResponse, NetworkError>, Never> {
         let url = "\(Constant.BASE_URL)/books/lines"
         print("\(url)")
-        let token = Keychain.getKeychainValue(forKey: .accessToken)!
+        let token = Keychain.getKeychainValue(forKey: .accessToken) ?? ""
         return AF.request(url,
                           method: .post,
                           parameters: parameters,
@@ -71,7 +71,7 @@ extension AddService: AddProtocol {
     func postCategory(_ parameters:AddCategoryRequest) -> AnyPublisher<DataResponse<AddCategoryResponse, NetworkError>, Never> {
         let url = "\(Constant.BASE_URL)/books/categories"
         print("\(url)")
-        let token = Keychain.getKeychainValue(forKey: .accessToken)!
+        let token = Keychain.getKeychainValue(forKey: .accessToken) ?? ""
         return AF.request(url,
                           method: .post,
                           parameters: parameters,
@@ -91,7 +91,7 @@ extension AddService: AddProtocol {
     func deleteCategory(parameters: DeleteCategoryRequest) -> AnyPublisher<Void, NetworkError> {
         let url = "\(Constant.BASE_URL)/books/categories"
        
-        let token = Keychain.getKeychainValue(forKey: .accessToken)!
+        let token = Keychain.getKeychainValue(forKey: .accessToken) ?? ""
         
         return AF.request(url,
                           method: .delete,
@@ -131,7 +131,7 @@ extension AddService: AddProtocol {
         let bookLineKey = String(parameters.bookLineKey)
         let url = "\(Constant.BASE_URL)/books/lines/delete?bookLineKey=\(bookLineKey)"
        
-        let token = Keychain.getKeychainValue(forKey: .accessToken)!
+        let token = Keychain.getKeychainValue(forKey: .accessToken) ?? ""
         
         return AF.request(url,
                           method: .delete,
@@ -168,7 +168,7 @@ extension AddService: AddProtocol {
     func changeLine(parameters:ChangeLineRequest) -> AnyPublisher<DataResponse<LinesResponse, NetworkError>, Never> {
         let url = "\(Constant.BASE_URL)/books/lines/change"
         print("\(url)")
-        let token = Keychain.getKeychainValue(forKey: .accessToken)!
+        let token = Keychain.getKeychainValue(forKey: .accessToken) ?? ""
         return AF.request(url,
                           method: .post,
                           parameters: parameters,
