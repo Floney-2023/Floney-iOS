@@ -11,28 +11,38 @@ import AuthenticationServices
 import GoogleSignIn
 import FirebaseAuth
 import AdSupport
+import KakaoSDKCommon
+import KakaoSDKAuth
+import KakaoSDKUser
+
+
+enum ProviderType {
+    case email
+    case kakao
+    case google
+    case apple
+}
 
 @MainActor
 class SignInViewModel: ObservableObject {
     private var appleSignInCoordinator: SignInWithAppleCoordinator?
-
     var tokenViewModel = TokenReissueViewModel()
-    @Published var buttonType : ButtonType = .red
     
-    @Published var signUpViewModel = SignUpViewModel()
+    @Published var buttonType : ButtonType = .red
     @Published var result : SignInResponse = SignInResponse(accessToken: "", refreshToken: "")
     @Published var signInLoadingError: String = ""
     @Published var errorMessage = ""
     @Published var showAlert: Bool = false
     @Published var email = ""
     @Published var password = ""
-    
-    @Published var isNext = false
+    @Published var nickname = ""
+    @Published var providerStatus : ProviderType = .email
+
+    @Published var isNextToServiceAgreement = false
     @Published var hasJoined: Bool = false
-    @Published var token = ""
+    @Published var authToken = ""
     @Published var isShowingBottomSheet = false
     @Published var isShowingLogin = false
-
     
     private var cancellableSet: Set<AnyCancellable> = []
     var dataManager: SignInProtocol
@@ -52,23 +62,22 @@ class SignInViewModel: ObservableObject {
                     print(dataResponse.error)
                 } else {
                     self.result = dataResponse.value!
-                    self.isNext = true
                     self.setToken()
-                    
+                    IAPManager.shared.getSubscriptionStatus()
                     if (AuthenticationService.shared.isUserLoggedIn == false){
                         self.setEmailPassword()
                         AuthenticationService.shared.logIn()
                     }
-                    
                     print("--성공--")
                     print(self.result)
-                    AuthenticationService.shared.bookExist()
+                    BookExistenceViewModel.shared.getBookExistence()
                 }
             }.store(in: &cancellableSet)
     }
+    
     //MARK: 카카오 회원가입 되어있는지 체크
-    func checkKakao(token : String) {
-        dataManager.checkKakao(token)
+    func checkKakao() {
+        dataManager.checkKakao(authToken)
             .sink { [weak self] completion in
                 switch completion {
                 case .failure(let error):
@@ -82,10 +91,12 @@ class SignInViewModel: ObservableObject {
                 if let hasJoined = self?.hasJoined {
                     if hasJoined { // 회원가입 되어있으면 로그인
                         print("체크성공 -> 카카오 로그인")
-                        self?.kakaoSignIn(token: token)
+                        self?.kakaoSignIn()
                     } else { // 안 되어 있으면 회원가입
                         print("체크성공 -> 카카오 회원가입")
-                        self?.signUpViewModel.kakaoSignUp(token)
+                        self?.providerStatus = .kakao
+                        self?.isNextToServiceAgreement = true
+                        
                     }
                 }
             }
@@ -94,7 +105,7 @@ class SignInViewModel: ObservableObject {
     
     //MARK: 구글 회원가입 되어있는지 체크
     func checkgoogle()  {
-        dataManager.checkgoogle(token)
+        dataManager.checkgoogle(authToken)
             .sink { [weak self] completion in
                 switch completion {
                 case .failure(let error):
@@ -111,15 +122,42 @@ class SignInViewModel: ObservableObject {
                         self?.googleSignIn()
                     } else {
                         print("체크성공 -> 구글 회원가입")
-                        self?.signUpViewModel.googleSignUp(self!.token)
+                        self?.providerStatus = .kakao
+                        self?.isNextToServiceAgreement = true
+                    }
+                }
+            }
+            .store(in: &cancellableSet)
+    }
+    //MARK: 애플 회원가입 되어있는지 체크
+    func checkApple()  {
+        dataManager.checkApple(authToken)
+            .sink { [weak self] completion in
+                switch completion {
+                case .failure(let error):
+                    self?.errorMessage = (self?.getErrorMessage(from: error as! NetworkError))!
+                    print(self?.errorMessage)
+                case .finished:
+                    break
+                }
+            } receiveValue: { [weak self] joined in
+                self?.hasJoined = joined
+                if let hasJoined = self?.hasJoined {
+                    if hasJoined {
+                        print("체크성공 -> 애플 로그인")
+                        self?.appleSignIn()
+                    } else {
+                        print("체크성공 -> 애플 회원가입")
+                        self?.providerStatus = .apple
+                        self?.isNextToServiceAgreement = true
                     }
                 }
             }
             .store(in: &cancellableSet)
     }
     //MARK: 앱 서버로 카카오 로그인
-    func kakaoSignIn(token : String) {
-        dataManager.kakaoSignIn(token)
+    func kakaoSignIn() {
+        dataManager.kakaoSignIn(authToken)
             .sink { (dataResponse) in
                 if dataResponse.error != nil {
                     self.createAlert(with: dataResponse.error!)
@@ -127,19 +165,23 @@ class SignInViewModel: ObservableObject {
                     print(dataResponse.error)
                 } else {
                     self.result = dataResponse.value!
-                    self.isNext = true
                     self.setToken()
                     // 자동로그인을 한 경우는 isLoggedIn이 true이므로 email과 password를 다시 저장하지 않아도 괜찮다.
-                    if (AuthenticationService.shared.isUserLoggedIn == false) {self.setEmailPassword()}
+                    IAPManager.shared.getSubscriptionStatus()
+                    if (AuthenticationService.shared.isUserLoggedIn == false) {
+                        self.setEmailPassword()
+                        AuthenticationService.shared.logIn()
+                    }
                     print("--성공--")
-                    print(self.result.accessToken)
+                    print(self.result)
+                    BookExistenceViewModel.shared.getBookExistence()
                     
                 }
             }.store(in: &cancellableSet)
     }
     //MARK: 앱 서버로 구글 로그인
     func googleSignIn() {
-        dataManager.googleSignIn(token)
+        dataManager.googleSignIn(authToken)
             .sink { (dataResponse) in
                 if dataResponse.error != nil {
                     self.createAlert(with: dataResponse.error!)
@@ -147,64 +189,64 @@ class SignInViewModel: ObservableObject {
                     print(dataResponse.error)
                 } else {
                     self.result = dataResponse.value!
-                    self.isNext = true
+                    //self.isNext = true
                     print("--성공--")
                     print("로그인 성공 후 : \n\(self.result.accessToken)")
                     print("set token 호출 전")
                     self.setToken()
                     print("set token 호출 후")
                     // 자동로그인을 한 경우는 isLoggedIn이 true이므로 email과 password를 다시 저장하지 않아도 괜찮다.
-                    if (AuthenticationService.shared.isUserLoggedIn == false) {self.setEmailPassword()}
-                                    }
+                    // 자동로그인을 한 경우는 isLoggedIn이 true이므로 email과 password를 다시 저장하지 않아도 괜찮다.
+                    IAPManager.shared.getSubscriptionStatus()
+                    if (AuthenticationService.shared.isUserLoggedIn == false) {
+                        self.setEmailPassword()
+                        AuthenticationService.shared.logIn()
+                        
+                    }
+                    print("--성공--")
+                    print(self.result)
+                    BookExistenceViewModel.shared.getBookExistence()
+                    
+                }
             }.store(in: &cancellableSet)
     }
-    //MARK: 구글 서버에서 토큰 받아오기
-    func signInGoogle() async throws {
-        guard let topVC = Utilities.shared.topViewController() else {
-            throw URLError(.cannotFindHost)
-        }
-        
-        let gidSignInResult = try await GIDSignIn.sharedInstance.signIn(withPresenting: topVC)
-        let userProfile = gidSignInResult.user.profile
-        
-        guard let idToken = gidSignInResult.user.idToken?.tokenString else {
-            throw URLError(.badServerResponse)
-        }
-        
-        let accessToken = gidSignInResult.user.accessToken.tokenString
-        let email = gidSignInResult.user.profile?.email
-        let nickname = gidSignInResult.user.profile?.name
-        var imageUrl : URL? = nil
-        if let hasImage = userProfile?.hasImage {
-            if hasImage {
-                imageUrl = userProfile?.imageURL(withDimension: 0)
-            }
-        }
-        self.token = idToken
-        signUpViewModel.email = email!
-        signUpViewModel.nickname = nickname!
-        //signUpViewModel.provider = "google"
-        
-        print("id token : \(idToken)")
-        print("access token : \(accessToken)")
-        print("name: \(String(describing: userProfile?.name))")
-        print("given name : \(String(describing: userProfile?.givenName))")
-        print("family name : \(String(describing: userProfile?.familyName))")
-        
-        print("has image : \(String(describing: userProfile?.hasImage))")
-        
-        print("image url : \(String(describing: userProfile?.imageURL(withDimension: 0)))")
-        print("email : \(String(describing: userProfile?.email))")
-      
-        self.checkgoogle()
+    //MARK: 앱 서버로 애플 로그인
+    func appleSignIn() {
+        dataManager.appleSignIn(authToken)
+            .sink { (dataResponse) in
+                if dataResponse.error != nil {
+                    self.createAlert(with: dataResponse.error!)
+                    // 에러 처리
+                    print(dataResponse.error)
+                } else {
+                    self.result = dataResponse.value!
+                    //self.isNext = true
+                    print("--성공--")
+                    print("로그인 성공 후 : \n\(self.result.accessToken)")
+                    print("set token 호출 전")
+                    self.setToken()
+                    print("set token 호출 후")
+                    // 자동로그인을 한 경우는 isLoggedIn이 true이므로 email과 password를 다시 저장하지 않아도 괜찮다.
+                    // 자동로그인을 한 경우는 isLoggedIn이 true이므로 email과 password를 다시 저장하지 않아도 괜찮다.
+                    IAPManager.shared.getSubscriptionStatus()
+                    if (AuthenticationService.shared.isUserLoggedIn == false) {
+                        self.setEmailPassword()
+                        AuthenticationService.shared.logIn()
+                        
+                    }
+                    print("--성공--")
+                    print(self.result)
+                    BookExistenceViewModel.shared.getBookExistence()
+                    
+                }
+            }.store(in: &cancellableSet)
     }
+
     
     //MARK: 토큰 저장하기
     func setToken() {
         Keychain.setKeychain(self.result.accessToken, forKey: .accessToken)
         Keychain.setKeychain(self.result.refreshToken, forKey: .refreshToken)
-        print("in Set Token에서 view model 내부에 저장된 토큰 : \n\(self.result.accessToken)")
-        print("in Set Token에서 key chain에 저장된 토큰 : \n\(Keychain.getKeychainValue(forKey: .accessToken))")
     }
     
     //MARK: 자동로그인을 위한 email, password 저장하기, 사용자가 이메일과 비밀번호 입력한 경우이다.
@@ -227,6 +269,50 @@ class SignInViewModel: ObservableObject {
         
         return true
     }
+    //MARK: 구글 서버에서 토큰 받아오기
+    func signInGoogle() async throws {
+        guard let topVC = Utilities.shared.topViewController() else {
+            throw URLError(.cannotFindHost)
+        }
+       
+        let gidSignInResult = try await GIDSignIn.sharedInstance.signIn(withPresenting: topVC)
+        let userProfile = gidSignInResult.user.profile
+        
+        guard let idToken = gidSignInResult.user.idToken?.tokenString else {
+            throw URLError(.badServerResponse)
+        }
+        
+        let accessToken = gidSignInResult.user.accessToken.tokenString
+        let email = gidSignInResult.user.profile?.email
+        let nickname = gidSignInResult.user.profile?.name
+        var imageUrl : URL? = nil
+        if let hasImage = userProfile?.hasImage {
+            if hasImage {
+                imageUrl = userProfile?.imageURL(withDimension: 0)
+            }
+        }
+        self.authToken = idToken
+        self.email = email!
+        self.nickname = nickname!
+
+        //signUpViewModel.email = email!
+        //signUpViewModel.nickname = nickname!
+        //signUpViewModel.provider = "google"
+        
+        print("id token : \(idToken)")
+        print("access token : \(accessToken)")
+        print("name: \(String(describing: userProfile?.name))")
+        print("given name : \(String(describing: userProfile?.givenName))")
+        print("family name : \(String(describing: userProfile?.familyName))")
+        
+        print("has image : \(String(describing: userProfile?.hasImage))")
+        
+        print("image url : \(String(describing: userProfile?.imageURL(withDimension: 0)))")
+        print("email : \(String(describing: userProfile?.email))")
+      
+        self.checkgoogle()
+    }
+
     //MARK: 애플 서버에서 토큰 받아오기
     func performAppleSignIn() {
         appleSignInCoordinator = SignInWithAppleCoordinator { userId, name, email, identityToken  in
@@ -234,11 +320,79 @@ class SignInViewModel: ObservableObject {
             print("Sign in successful, name: \(name)")
             print("Sign in successful, email: \(email)")
             print("identityToken : \(identityToken)")
+            
+            if !email.isEmpty && !name.isEmpty {
+                Keychain.setKeychain(email, forKey: .appleEmail)
+                Keychain.setKeychain(name, forKey: .appleName)
+                self.email = email
+                self.nickname = name
+                
+            } else {
+                self.email = Keychain.getKeychainValue(forKey: .appleEmail) ?? ""
+                self.nickname = Keychain.getKeychainValue(forKey: .appleName) ?? ""
+                print(self.email)
+                print(self.nickname)
+            }
+            
+            self.authToken = identityToken
+            self.checkApple()
             //sendServer
         } onError: { error in
             print("Sign in failed with error: \(error)")
         }
         appleSignInCoordinator?.signIn()
+    }
+    //MARK: 카카오 서버에서 토큰 받아오기
+    func performKakaoSignIn() {
+        // view model에 저장해야 함.
+        //카카오톡이 깔려있는지 확인하는 함수
+        if (UserApi.isKakaoTalkLoginAvailable()) {
+            //카카오톡이 설치되어있다면 카카오톡을 통한 로그인 진행
+            UserApi.shared.loginWithKakaoTalk {(oauthToken, error) in
+                if let error = error {
+                    print(error)
+                }
+                if let oauthToken = oauthToken{
+                    // 소셜 로그인(회원가입 API CALL)
+                    print("성공")
+                    
+                    UserApi.shared.me() {(user, error) in
+                        if let error = error {
+                            print(error)
+                        }
+                        else {
+                            print("me() success.")
+                            
+                            let nickname = user?.kakaoAccount?.profile?.nickname
+                            let email = user?.kakaoAccount?.email
+                            
+                            print("nickname : \(nickname)")
+                            print("email : \(email)")
+                            print("oauthToken : \(oauthToken)")
+                            let token = String(describing: oauthToken.accessToken)
+                            
+                            self.email = email!
+                            self.nickname = nickname!
+                            self.authToken = token
+                            //viewModel.signUpViewModel.email = email!
+                            //viewModel.signUpViewModel.nickname = nickname!
+                            //viewModel.signUpViewModel.provider = "kakao"
+                            
+                           
+                            self.checkKakao()
+                            // "is_email_valid" = 1;
+                            // "is_email_verified" = 1;
+                        }
+                    }
+                }
+            }
+        }else{
+            //카카오톡이 설치되어있지 않다면 사파리를 통한 로그인 진행
+            UserApi.shared.loginWithKakaoAccount {(oauthToken, error) in
+                print(oauthToken?.accessToken)
+                print(error)
+            }
+        }
     }
     
     //MARK: 비밀번호 재설정
@@ -248,12 +402,11 @@ class SignInViewModel: ObservableObject {
                 switch completion {
                 case .finished:
                     print("Profile successfully changed.")
-                  
                     LoadingManager.shared.update(showLoading: false, loadingType: .floneyLoading)
                     self.isShowingBottomSheet = true
                     
                 case .failure(let error):
-                    
+                    self.createAlert(with: error)
                     LoadingManager.shared.update(showLoading: false, loadingType: .floneyLoading)
                     print("Error finding password: \(error)")
                 }
@@ -280,27 +433,34 @@ class SignInViewModel: ObservableObject {
 
     
     func createAlert( with error: NetworkError) {
-        signInLoadingError = error.backendError == nil ? error.initialError.localizedDescription : error.backendError!.message
-        if let errorCode = error.backendError?.code {
-            switch errorCode {
-            case "U009" :
-                print("\(errorCode) : alert")
-                self.showAlert = true
-                self.errorMessage = ErrorMessage.login01.value
-            case "U008" :
-                print("\(errorCode) : alert")
-                self.showAlert = true
-                self.errorMessage = ErrorMessage.login01.value
-                // 토큰 재발급
-            case "U006" :
-                tokenViewModel.tokenReissue()
-                // 아예 틀린 토큰이므로 재로그인해서 다시 발급받아야 함.
-            case "U007" :
-                AuthenticationService.shared.logoutDueToTokenExpiration()
-            default:
-                break
+        //loadingError = error.backendError == nil ? error.initialError.localizedDescription : error.backendError!.message
+        if let backendError = error.backendError {
+            guard let serverError = ServerError(rawValue: backendError.code) else {
+                // 서버 에러 코드가 정의되지 않은 경우의 처리
+                //showAlert(message: "알 수 없는 서버 에러가 발생했습니다.")
+                return
             }
-            // 에러 처리
+            AlertManager.shared.handleError(serverError)
+            // 에러 메시지 처리
+            //showAlert(message: serverError.errorMessage)
+            
+            // 에러코드에 따른 추가 로직
+            if let errorCode = error.backendError?.code {
+                switch errorCode {
+                    // 토큰 재발급
+                case "U006" :
+                    AuthenticationService.shared.logoutDueToTokenExpiration()
+                // 아예 틀린 토큰이므로 재로그인해서 다시 발급받아야 함.
+                case "U007" :
+                    AuthenticationService.shared.logoutDueToTokenExpiration()
+                default:
+                    break
+                }
+            }
+        } else {
+            // BackendError 없이 NetworkError만 발생한 경우
+            //showAlert(message: "네트워크 오류가 발생했습니다.")
+            
         }
     }
     
@@ -308,6 +468,7 @@ class SignInViewModel: ObservableObject {
         // Format the error message based on the NetworkError
         // This is just a simple example. You should adjust this to suit your needs.
         if let backendError = error.backendError {
+            AlertManager.shared.handleError(ServerError(rawValue: backendError.code)!)
             return backendError.message
         } else {
             return error.initialError.errorDescription ?? "Unknown Error"

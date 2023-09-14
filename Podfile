@@ -1,5 +1,5 @@
 # Uncomment the next line to define a global platform for your project
-# platform :ios, '10.0'
+ platform :ios, '13.0'
 
 target 'Floney' do
   # Pods for Floney  
@@ -31,6 +31,9 @@ target 'Floney' do
   pod 'GoogleSignIn'
   pod 'BoringSSL-GRPC', :modular_headers => false
   pod 'gRPC-Core', :modular_headers => false
-
+  pod 'GoogleSignInSwiftSupport'
   pod 'AppsFlyerFramework'
+  pod 'SwiftJWT'
+  
+  pod 'Kingfisher'
 end

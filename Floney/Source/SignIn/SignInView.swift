@@ -13,9 +13,8 @@ import AuthenticationServices
 import GoogleSignIn
 
 struct SignInView: View {
-    @StateObject var viewModel = SignInViewModel()
-    @StateObject var kakaoviewModel = SignUpViewModel()
-    
+    @StateObject var signInViewModel = SignInViewModel()
+    @StateObject var signUpViewModel = SignUpViewModel()
     var body: some View {
         NavigationView {
             ZStack {
@@ -24,35 +23,20 @@ struct SignInView: View {
                         .padding(EdgeInsets(top: 128, leading: 0, bottom: 0, trailing: 0))
                     
                     VStack(spacing: 20) {
-                        TextField("", text: $viewModel.email)
-                            .padding()
-                            .keyboardType(.emailAddress)
-                            .overlay(
-                                Text("이메일")
-                                    .padding()
-                                    .font(.pretendardFont(.regular, size: 14))
-                                    .foregroundColor(.greyScale7)
-                                    .opacity(viewModel.email.isEmpty ? 1 : 0), alignment: .leading
-                            )
-                            .modifier(TextFieldModifier())
-                        
-                        
-                        SecureField("", text: $viewModel.password)
-                            .padding()
-                            .overlay(
-                                Text("비밀번호")
-                                    .padding()
-                                    .font(.pretendardFont(.regular, size: 14))
-                                    .foregroundColor(.greyScale7)
-                                    .opacity(viewModel.password.isEmpty ? 1 : 0), alignment: .leading
-                            )
-                            .modifier(TextFieldModifier())
+
+                        CustomTextField(text: $signInViewModel.email, placeholder: "이메일", keyboardType: .emailAddress,placeholderColor: .greyScale7)
+                            .frame(height: UIScreen.main.bounds.height * 0.06)
+                            
+    
+                        CustomTextField(text: $signInViewModel.password, placeholder: "비밀번호", isSecure: true,placeholderColor: .greyScale7)
+                            .frame(height: UIScreen.main.bounds.height * 0.06)
+                       
 
                         Text("로그인 하기")
                             .padding()
                             .withNextButtonFormmating(.primary1)
                             .onTapGesture {
-                                viewModel.postSignIn()
+                                signInViewModel.postSignIn()
                             }
 
                         HStack(spacing:50) {
@@ -69,8 +53,8 @@ struct SignInView: View {
                                         .foregroundColor(.greyScale6)
                                 }
                             }
-                            //ServiceAgreementView()
-                            NavigationLink(destination: ServiceAgreementView()){
+
+                            NavigationLink(destination: signInViewModel.providerStatus != .email ? ServiceAgreementView(signupViewModel: SignUpViewModel(email: signInViewModel.email, authToken: signInViewModel.authToken, nickname: signInViewModel.nickname, providerStatus: signInViewModel.providerStatus)) : ServiceAgreementView(), isActive: $signInViewModel.isNextToServiceAgreement){
                                 VStack {
                                     Text("회원가입 하기")
                                         .font(.pretendardFont(.regular, size: 12))
@@ -81,9 +65,12 @@ struct SignInView: View {
                                         .foregroundColor(.greyScale6)
                                     
                                 }
+                                .onTapGesture {
+                                    signInViewModel.providerStatus = .email
+                                    signInViewModel.isNextToServiceAgreement = true
+                                }
                             }
                         }
-                        
                     }
                     .padding(20)
                     VStack(spacing:20) {
@@ -92,65 +79,13 @@ struct SignInView: View {
                         HStack(spacing:30) {
                             Image("btn_kakao")
                                 .onTapGesture {
-                                    // view model에 저장해야 함.
-                                    //카카오톡이 깔려있는지 확인하는 함수
-                                    if (UserApi.isKakaoTalkLoginAvailable()) {
-                                        //카카오톡이 설치되어있다면 카카오톡을 통한 로그인 진행
-                                        UserApi.shared.loginWithKakaoTalk {(oauthToken, error) in
-                                            if let error = error {
-                                                print(error)
-                                            }
-                                            if let oauthToken = oauthToken{
-                                                // 소셜 로그인(회원가입 API CALL)
-                                                print("성공")
-                                                
-                                                UserApi.shared.me() {(user, error) in
-                                                    if let error = error {
-                                                        print(error)
-                                                    }
-                                                    else {
-                                                        print("me() success.")
-                                                        
-                                                        let nickname = user?.kakaoAccount?.profile?.nickname
-                                                        let email = user?.kakaoAccount?.email
-                                                        
-                                                        print("nickname : \(nickname)")
-                                                        print("email : \(email)")
-                                                        print("oauthToken : \(oauthToken)")
-                                                        
-                                                        viewModel.signUpViewModel.email = email!
-                                                        viewModel.signUpViewModel.nickname = nickname!
-                                                        //viewModel.signUpViewModel.provider = "kakao"
-                                                        
-                                                        let token = String(describing: oauthToken.accessToken)
-                                                        viewModel.checkKakao(token: token)
-                                                        // "is_email_valid" = 1;
-                                                        // "is_email_verified" = 1;
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }else{
-                                        //카카오톡이 설치되어있지 않다면 사파리를 통한 로그인 진행
-                                        UserApi.shared.loginWithKakaoAccount {(oauthToken, error) in
-                                            print(oauthToken?.accessToken)
-                                            print(error)
-                                        }
-                                    }
+                                    signInViewModel.performKakaoSignIn()
                                 }
-                            //ios가 버전이 올라감에 따라 sceneDelegate를 더이상 사용하지 않게되었다
-                            //그래서 로그인을 한후 리턴값을 인식을 하여야하는데 해당 코드를 적어주지않으면 리턴값을 인식되지않는다
-                            //swiftUI로 바뀌면서 가장큰 차이점이다.
-                                .onOpenURL(perform: { url in
-                                    if (AuthApi.isKakaoTalkLoginUrl(url)) {
-                                        _ = AuthController.handleOpenUrl(url: url)
-                                    }
-                                })
                             Image("btn_google")
                                 .onTapGesture {
                                     Task {
                                         do {
-                                            try await viewModel.signInGoogle()
+                                            try await signInViewModel.signInGoogle()
                                         } catch {
                                             print(error)
                                         }
@@ -158,26 +93,19 @@ struct SignInView: View {
                                 }
                             Image("btn_apple")
                                 .onTapGesture {
-                                    viewModel.performAppleSignIn()
+                                    signInViewModel.performAppleSignIn()
                                 }
                         }
                     }
                     Spacer()
                 }
-                CustomAlertView(message: viewModel.errorMessage, type: $viewModel.buttonType, isPresented: $viewModel.showAlert)
+                CustomAlertView(message: signInViewModel.errorMessage, type: $signInViewModel.buttonType, isPresented: $signInViewModel.showAlert)
+                
             }
             .onAppear(perform : UIApplication.shared.hideKeyboard)
         }
     }
     
-}
-
-struct SignInWithAppleView: UIViewRepresentable {
-    func makeUIView(context: Context) -> ASAuthorizationAppleIDButton {
-        return ASAuthorizationAppleIDButton(type: .signIn, style: .black)
-    }
-    
-    func updateUIView(_ uiView: ASAuthorizationAppleIDButton, context: Context) {}
 }
 
 struct SignInView_Previews: PreviewProvider {

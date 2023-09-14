@@ -11,6 +11,7 @@ struct FindPasswordView: View {
     @State var email = ""
     @StateObject var viewModel = SignInViewModel()
     @StateObject var alertManager = AlertManager.shared
+    @ObservedObject var loadingManager = LoadingManager.shared
     var body: some View {
         ZStack {
             VStack(spacing: 32) {
@@ -26,17 +27,9 @@ struct FindPasswordView: View {
                     Spacer()
                 }
                 VStack(spacing: 20) {
-                    TextField("", text: $email)
-                        .padding()
-                        .keyboardType(.emailAddress)
-                        .overlay(
-                            Text("이메일을 입력하세요")
-                                .padding()
-                                .font(.pretendardFont(.regular, size: 14))
-                                .foregroundColor(.greyScale6)
-                                .opacity(email.isEmpty ? 1 : 0), alignment: .leading
-                        )
-                        .modifier(TextFieldModifier())
+                    CustomTextField(text: $email, placeholder: "이메일을 입력하세요.", keyboardType: .emailAddress,placeholderColor: .greyScale6)
+                        .frame(height: UIScreen.main.bounds.height * 0.06)
+                    
                     Text("인증 메일 보내기")
                         .padding()
                         .withNextButtonFormmating(.primary1)
@@ -60,8 +53,21 @@ struct FindPasswordView: View {
             if AlertManager.shared.showAlert {
                 CustomAlertView(message: AlertManager.shared.message, type: $alertManager.buttontType, isPresented: $alertManager.showAlert)
             }
+            
             PasswordBottomSheet(isShowing: $viewModel.isShowingBottomSheet, isShowingLogin: $viewModel.isShowingLogin)
+            // Loading view overlay
+            if loadingManager.showLoading {
+                if loadingManager.loadingType == .floneyLoading {
+                    LoadingView()
+                }
+                else if loadingManager.loadingType == .progressLoading{
+                    ProgressLoadingView()
+                } else {
+                    DimmedLoadingView()
+                }
+            }
         }
+        .onAppear(perform : UIApplication.shared.hideKeyboard)
     }
 }
 
