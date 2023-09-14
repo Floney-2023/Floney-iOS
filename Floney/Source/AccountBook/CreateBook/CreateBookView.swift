@@ -12,7 +12,8 @@ struct CreateBookView: View {
     var pageCountAll = 3
     @State var bookTitle = ""
     @State var isShowingBottomSheet = false
-
+    @State var onShareSheet = false
+    @StateObject var viewModel = SettingBookViewModel()
     var body: some View {
         ZStack {
             VStack(spacing: 32) {
@@ -22,7 +23,6 @@ struct CreateBookView: View {
                             .foregroundColor(.greyScale2)
                         + Text(" / \(pageCountAll)")
                             .foregroundColor(.greyScale6)
-                        
                         Text("가계부가 생성되었어요!")
                             .font(.pretendardFont(.bold, size: 24))
                             .foregroundColor(.greyScale1)
@@ -38,11 +38,14 @@ struct CreateBookView: View {
                 Spacer()
                 
                 VStack(spacing: 12) {
-                    NavigationLink(destination: MainTabView()){
-                        Text("작성하러 가기")
-                            .padding()
-                            .withNextButtonFormmating(.primary1)
-                    }
+                    
+                    Text("작성하러 가기")
+                        .padding()
+                        .withNextButtonFormmating(.primary1)
+                        .onTapGesture {
+                            BookExistenceViewModel.shared.getBookExistence()
+                        }
+                    
                     Text("친구 초대하기")
                         .padding()
                         .foregroundColor(.primary1)
@@ -54,11 +57,17 @@ struct CreateBookView: View {
             }
             .padding(EdgeInsets(top: 32, leading: 24, bottom: 40, trailing: 24))
             .navigationBarBackButtonHidden(true)
-            //.navigationBarItems(leading: BackButton())
-            
+            .sheet(isPresented: $onShareSheet) {
+                if let url = viewModel.shareUrl {
+                    ActivityView(activityItems: [url])
+                }
+               
+            }
             // MARK: Bottom Sheet
-           // BottomSheet(isShowing: $isShowingBottomSheet, content: BottomSheetType.shareBook.view())
-        }     
+            // BottomSheet(isShowing: $isShowingBottomSheet, content: BottomSheetType.shareBook.view())
+            
+            ShareBookBottomSheet(viewModel: viewModel, isShowing: $isShowingBottomSheet, onShareSheet: $onShareSheet)
+        }
     }
 }
 

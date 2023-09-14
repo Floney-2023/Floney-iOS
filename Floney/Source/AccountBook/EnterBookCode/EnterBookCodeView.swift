@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct EnterBookCodeView: View {
-    @State var accountCode = ""
+    @State var isActive = false
+    @StateObject var viewModel = CreateBookViewModel()
     
     var body: some View {
         VStack(spacing: 30) {
@@ -23,24 +24,22 @@ struct EnterBookCodeView: View {
                 }
                 Spacer()
             }
-            TextField("", text: $accountCode)
-                .padding()
-                .overlay(
-                    Text("코드를 입력하세요.")
-                        .padding()
-                        .font(.pretendardFont(.regular, size: 14))
-                        .foregroundColor(.greyScale6)
-                        .opacity(accountCode.isEmpty ? 1 : 0), alignment: .leading
-                )
-                .modifier(TextFieldModifier())
-            
+            CustomTextField(text: $viewModel.bookCode, placeholder: "코드를 입력하세요.", placeholderColor: .greyScale6)
+                .frame(height: UIScreen.main.bounds.height * 0.06)
+  
             Spacer()
             
             VStack(spacing: 12) {
-                NavigationLink(destination: EnterBookView()){
+                NavigationLink(destination: EnterBookView(), isActive: $isActive){
                     Text("추가하기")
                         .padding()
                         .modifier(NextButtonModifier(backgroundColor: .primary1))
+                        .onTapGesture {
+                            if viewModel.isValidBookCode() {
+                                isActive = true
+                                viewModel.joinBook()
+                            }
+                        }
                 }
                
             }
@@ -49,6 +48,7 @@ struct EnterBookCodeView: View {
         .padding(EdgeInsets(top: 32, leading: 24, bottom: 0, trailing: 24))
         .navigationBarBackButtonHidden(true)
         .navigationBarItems(leading: BackButton())
+        .onAppear(perform : UIApplication.shared.hideKeyboard)
         
         
     }

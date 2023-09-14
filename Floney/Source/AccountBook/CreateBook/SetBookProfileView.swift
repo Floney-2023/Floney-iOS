@@ -11,11 +11,9 @@ struct SetBookProfileView: View {
     var pageCount = 2
     var pageCountAll = 3
     //@State var bookTitle = ""
-    @StateObject var viewModel = CreateBookViewModel()
+    @ObservedObject var viewModel : CreateBookViewModel
     @StateObject var permissionManager = PermissionManager()
     var firebaseManager = FirebaseManager()
-    //var encryptionManager = CryptManager()
-    @State var name = ""
     @State var bookImg = ""
     
     // 이미지선택창 선택 여부
@@ -68,16 +66,27 @@ struct SetBookProfileView: View {
                     .withNextButtonFormmating(.primary1)
                     .onTapGesture {
                         if let image = selectedUIImage {
-                            firebaseManager.uploadImageToFirebase(image: image) { encryptedURL in
-                                DispatchQueue.main.async {
-                                    if let url = encryptedURL {
-                                        viewModel.profileImg = url
-                                        viewModel.name = name
-                                        viewModel.createBook()
-                                        
+                            print("selectedUIImage있음 ")
+                            if image == UIImage(named: "book_profile_124") {
+                                print("기본 이미지임")
+                                print("book name : \(viewModel.bookName)")
+                                if !viewModel.bookName.isEmpty {
+                                    print("북 생성")
+                                    viewModel.createBook()
+                                }
+                            } else {
+                                firebaseManager.uploadImageToFirebase(image: image) { encryptedURL in
+                                    DispatchQueue.main.async {
+                                        if let url = encryptedURL {
+                                            viewModel.profileImg = url
+                                            if !viewModel.bookName.isEmpty {
+                                                viewModel.createBook()
+                                            }
+                                        }
                                     }
                                 }
                             }
+                           
                         }
                     }
             }
@@ -133,6 +142,6 @@ struct SetBookProfileView: View {
 
 struct SetBookProfileView_Previews: PreviewProvider {
     static var previews: some View {
-        SetBookProfileView()
+        SetBookProfileView(viewModel: CreateBookViewModel())
     }
 }

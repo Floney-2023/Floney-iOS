@@ -12,7 +12,7 @@ struct SetBookNameView: View {
     var pageCountAll = 3
     //@State var bookTitle = ""
     @StateObject var viewModel = CreateBookViewModel()
-    @State var name = ""
+    @State var isActive = false
     var body: some View {
         VStack(spacing: 20) {
             HStack {
@@ -32,17 +32,8 @@ struct SetBookNameView: View {
                 Spacer()
             }
             VStack(spacing: 14) {
-                TextField("", text: $name)
-                    .padding()
-                    .keyboardType(.emailAddress)
-                    .overlay(
-                        Text("가계부 이름을 입력하세요")
-                            .padding()
-                            .font(.pretendardFont(.regular, size: 14))
-                            .foregroundColor(.greyScale6)
-                            .opacity(name.isEmpty ? 1 : 0), alignment: .leading
-                    )
-                    .modifier(TextFieldModifier())
+                CustomTextField(text: $viewModel.bookName, placeholder: "가계부 이름을 입력하세요",placeholderColor: .greyScale6)
+                    .frame(height: UIScreen.main.bounds.height * 0.06)
                 HStack {
                     Text("* 최대 10자까지 쓸 수 있어요.")
                         .font(.pretendardFont(.regular, size: 12))
@@ -54,15 +45,21 @@ struct SetBookNameView: View {
             
             Spacer()
             
-            NavigationLink(destination: SetBookProfileView(name: name)){
+            NavigationLink(destination: SetBookProfileView(viewModel: viewModel), isActive: $isActive){
                 Text("다음으로")
                     .padding()
                     .withNextButtonFormmating(.primary1)
+                    .onTapGesture {
+                        if viewModel.isVaildBookName() {
+                            isActive = true
+                        }
+                    }
             }
         }
         .padding(EdgeInsets(top: 32, leading: 24, bottom: 0, trailing: 24))
         .navigationBarBackButtonHidden(true)
         .navigationBarItems(leading: BackButton())
+        .onAppear(perform : UIApplication.shared.hideKeyboard)
     }
 }
 

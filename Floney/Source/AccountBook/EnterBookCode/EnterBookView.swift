@@ -14,7 +14,7 @@ struct EnterBookView: View {
                 HStack {
                     VStack(alignment: .leading, spacing: 16) {
                         
-                        Text("가계부가 생성되었어요!")
+                        Text("가계부에 초대되었어요!")
                             .font(.pretendardFont(.bold, size: 24))
                             .foregroundColor(.greyScale1)
                         Text("간편하고 쉬운 가계부, 플로니와 함께 해요")
@@ -29,18 +29,16 @@ struct EnterBookView: View {
                 Spacer()
                 
                 
-                NavigationLink(destination: CreateBookView()){
-                    Text("작성하러 가기")
-                        .padding()
-                        .withNextButtonFormmating(.primary1)
-                }
-                
-                
+                Text("작성하러 가기")
+                    .padding()
+                    .withNextButtonFormmating(.primary1)
+                    .onTapGesture {
+                        BookExistenceViewModel.shared.getBookExistence()
+                    }
+
             }
             .padding(EdgeInsets(top: 32, leading: 24, bottom: 40, trailing: 24))
             .navigationBarBackButtonHidden(true)
-            //.navigationBarItems(leading: BackButton())
-            
 
         }
     }
