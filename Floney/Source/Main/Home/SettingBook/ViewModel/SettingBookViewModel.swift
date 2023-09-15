@@ -50,11 +50,36 @@ class SettingBookViewModel : ObservableObject {
     @Published var excelURL : URL?
     @Published var shareExcelStatus = false
     
+    //MARK: Budget
+    @Published var yearlyData: [Int: [MonthlyAmount]] = [:]
+    @Published var selectedYear: Int = 2023{
+        didSet {
+            getYearlyBudget()
+        }
+    }
+    
     private var cancellableSet: Set<AnyCancellable> = []
     var dataManager: SettingBookProtocol
     
     init( dataManager: SettingBookProtocol = SettingBookService.shared) {
         self.dataManager = dataManager
+        getYearlyBudget()
+    }
+    func getYearlyBudget() {
+        yearlyData[selectedYear] = [
+            MonthlyAmount(month: 1, amount: 100.0),
+            MonthlyAmount(month: 2, amount: 200.0),
+            MonthlyAmount(month: 3, amount: 100.0),
+            MonthlyAmount(month: 4, amount: 200.0),
+            MonthlyAmount(month: 5, amount: 100.0),
+            MonthlyAmount(month: 6, amount: 200.0),
+            MonthlyAmount(month: 7, amount: 100.0),
+            MonthlyAmount(month: 8, amount: 200.0),
+            MonthlyAmount(month: 9, amount: 100.0),
+            MonthlyAmount(month: 10, amount: 200.0),
+            MonthlyAmount(month: 11, amount: 100.0),
+            MonthlyAmount(month: 12, amount: 200.0)
+        ]
     }
     //MARK: server
     func getBookInfo() {
