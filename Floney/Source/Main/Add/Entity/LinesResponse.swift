@@ -12,6 +12,7 @@ struct LinesResponse : Decodable {
     var flow : String
     var asset : String
     var line : String
+    var lineDate : String
     var description : String
     var except : Bool
     var nickname : String

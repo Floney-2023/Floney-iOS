@@ -121,8 +121,8 @@ struct AddView: View {
                                     .onTapGesture {
                                         withAnimation(.interactiveSpring()) {
                                             lineModel.selectedOptions = index
-                                            assetType = "자산을 선택하세요."
-                                            category = "분류를 선택하세요."
+                                            assetType = "자산을 선택하세요"
+                                            category = "분류를 선택하세요"
                                             lineModel.toggleType = options[lineModel.selectedOptions]
                                         }
                                     }

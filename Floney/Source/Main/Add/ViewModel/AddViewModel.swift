@@ -18,7 +18,7 @@ class AddViewModel: ObservableObject {
     @Published var bookKey = ""
     
     //MARK: line
-    @Published var lineResult : LinesResponse = LinesResponse(money: 0, flow: "", asset: "", line: "", description: "", except: false, nickname: "")
+    @Published var lineResult : LinesResponse = LinesResponse(money: 0, flow: "", asset: "", line: "", lineDate: "", description: "", except: false, nickname: "")
     @Published var money = ""
     @Published var lineDate = ""
     @Published var flow = ""
