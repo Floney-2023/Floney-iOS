@@ -32,8 +32,8 @@ class SettingBookViewModel : ObservableObject {
     @Published var encryptedImageUrl : String = ""
     @Published var profileStatus = true
     
-    @Published var budget : Float = 0
-    @Published var asset : Float = 0
+    @Published var budget : Double = 0
+    @Published var asset : Double = 0
     
     @Published var role = "방장"
     
@@ -229,6 +229,9 @@ class SettingBookViewModel : ObservableObject {
                 // TODO: Handle the received data if necessary.
             }
             .store(in: &cancellableSet)
+    }
+    func onlyNumberValid(input: String) -> Bool {
+        return true
     }
     func setAsset() {
         bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""

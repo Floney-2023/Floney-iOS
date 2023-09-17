@@ -230,14 +230,16 @@ struct SettingBookView: View {
                                 .foregroundColor(.greyScale1)
                             Spacer()
                         }
-                        HStack {
-                            Text("예산 설정")
-                                .font(.pretendardFont(.regular, size: 14))
-                                .foregroundColor(.greyScale2)
-                            Spacer()
-                        }
-                        .onTapGesture {
-                            self.isShowingSetBudget.toggle()
+                        NavigationLink(destination :SetBudgetView(), isActive: $isShowingSetBudget) {
+                            HStack {
+                                Text("예산 설정")
+                                    .font(.pretendardFont(.regular, size: 14))
+                                    .foregroundColor(.greyScale2)
+                                Spacer()
+                            }
+                            .onTapGesture {
+                                self.isShowingSetBudget.toggle()
+                            }
                         }
                         HStack {
                             Text("초기 자산 설정")
@@ -354,7 +356,7 @@ struct SettingBookView: View {
                 }
             )
             
-            SetBudgetBottomSheet(isShowing: $isShowingSetBudget, viewModel: viewModel)
+            //SetBudgetBottomSheet(isShowing: $isShowingSetBudget, viewModel: viewModel)
             
             SetInitialAssetBottomSheet(isShowing: $isShowingSetInitialAsset, viewModel: viewModel)
             

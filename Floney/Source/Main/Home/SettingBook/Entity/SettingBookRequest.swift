@@ -25,12 +25,12 @@ struct SeeProfileRequest : Encodable {
 }
 struct SetBudgetRequest : Encodable {
     var bookKey : String
-    var budget : Float
+    var budget : Double
     var date : String
 }
 struct SetAssetRequest : Encodable {
     var bookKey : String
-    var asset : Float
+    var asset : Double
 }
 struct SetCarryOver : Encodable {
     var bookKey : String
