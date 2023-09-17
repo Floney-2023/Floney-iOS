@@ -45,8 +45,7 @@ class AddViewModel: ObservableObject {
     
     //MARK: delete line
     @Published var bookLineKey : Int = 0
-    
-    
+
     private var cancellableSet: Set<AnyCancellable> = []
     var dataManager: AddProtocol
     
@@ -140,7 +139,6 @@ class AddViewModel: ObservableObject {
     }
     func postCategory() {
         bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
-        
         let request = AddCategoryRequest(bookKey: bookKey, parent: root, name: newCategoryName)
         dataManager.postCategory(request)
             .sink { (dataResponse) in
@@ -252,5 +250,7 @@ class AddViewModel: ObservableObject {
             // BackendError 없이 NetworkError만 발생한 경우
             //showAlert(message: "네트워크 오류가 발생했습니다.")
             
-        }}
+        }
+        
+    }
 }

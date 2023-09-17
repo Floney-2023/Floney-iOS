@@ -122,7 +122,7 @@ struct AccountBookBottomSheet: View{
                         
                         
                         ButtonLarge(label: "추가하기", background: .primary1, textColor: .white,  strokeColor: .primary1, fontWeight: .bold, action: {
-                          
+                            
                             if isSelected == 0 {
                                 self.isNextToCreateBook = true
                             } else {
@@ -161,7 +161,7 @@ struct ShareBookBottomSheet: View{
     @ObservedObject var viewModel : SettingBookViewModel
     @Binding var isShowing : Bool
     @Binding var onShareSheet : Bool
-
+    
     var body: some View{
         ZStack(alignment: .bottom) {
             if (isShowing) {
@@ -261,9 +261,9 @@ struct SetBudgetBottomSheet: View {
                     }
                 VStack(spacing: 24) {
                     HStack(alignment:.center) {
-                            Text("\(month)월 예산")
-                                .foregroundColor(.greyScale1)
-                                .font(.pretendardFont(.bold,size: 16))
+                        Text("\(month)월 예산")
+                            .foregroundColor(.greyScale1)
+                            .font(.pretendardFont(.bold,size: 16))
                         Spacer()
                         VStack {
                             Text("초기화하기")
@@ -273,7 +273,7 @@ struct SetBudgetBottomSheet: View {
                                 .frame(width: 70,height: 1.0)
                                 .padding(EdgeInsets(top: -10, leading: 0, bottom: 0, trailing: 0))
                                 .foregroundColor(.greyScale6)
-                          
+                            
                         }
                         .onTapGesture {
                             budget = "0"
@@ -402,7 +402,7 @@ struct SetInitialAssetBottomSheet: View {
                 let height = value.height
                 self.keyboardHeight = height
             }
-
+            
             NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: .main) { _ in
                 self.keyboardHeight = 0
             }
@@ -565,18 +565,18 @@ struct CategoryBottomSheet: View {
                         Spacer()
                         
                         Button  {
-                    
-                                print("category 편집 토글")
-                                isShowingEditCategory = true
                             
-                                
+                            print("category 편집 토글")
+                            isShowingEditCategory = true
+                            
+                            
                         } label: {
                             Text("편집")
                                 .foregroundColor(.greyScale4)
                                 .font(.pretendardFont(.regular,size: 14))
-                                
+                            
                         }
-
+                        
                     }
                     .padding(.top, 24)
                     
@@ -682,7 +682,11 @@ struct DayLinesBottomSheet: View {
     @StateObject var viewModel : CalendarViewModel
     @Binding var isShowing: Bool
     @Binding var isShowingAddView : Bool
-    //var encryptionManager = CryptManager()
+    @State var showingDetail = false
+    @State private var selectedIndex = 0
+    @State var selectedToggleTypeIndex = 0
+    @State var selectedToggleType = ""
+    var lineModel = LineModel()
     
     var body: some View{
         let year = String(describing: viewModel.selectedYear)
@@ -720,9 +724,10 @@ struct DayLinesBottomSheet: View {
                         }
                     }
                     .padding(.top, 24)
+                    .padding(.bottom, 30)
                     
-                    VStack(spacing:38) {
                     ScrollView(showsIndicators: false) {
+                        VStack (spacing:28) {
                             // 1일인데 이월 금액이 존재한다면 이월금액 보여주기.
                             if Calendar.current.component(.day, from: viewModel.selectedDate) == 1 {
                                 if viewModel.dayLineCarryOver.carryOverStatus {
@@ -751,10 +756,14 @@ struct DayLinesBottomSheet: View {
                                 // 1일이고, 이월금액이 존재한다면
                                 if Calendar.current.component(.day, from: viewModel.selectedDate) == 1 && viewModel.dayLineCarryOver.carryOverStatus {
                                 } else {
-                                    Image("no_line")
-                                    Text("내역이 없습니다.")
-                                        .font(.pretendardFont(.medium, size: 12))
-                                        .foregroundColor(.greyScale6)
+                                    Spacer()
+                                    VStack(spacing:5) {
+                                        Image("no_line")
+                                        Text("내역이 없습니다.")
+                                            .font(.pretendardFont(.medium, size: 12))
+                                            .foregroundColor(.greyScale6)
+                                    }
+                                    Spacer()
                                 }
                             } else {
                                 ForEach(viewModel.dayLines.indices, id: \.self) { index in
@@ -776,7 +785,7 @@ struct DayLinesBottomSheet: View {
                                                             .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
                                                     }
                                                     else  {
-                                                        //let url = encryptionManager.decrypt(img, using: encryptionManager.key!)
+                                                        
                                                         let url = URL(string : img)
                                                         KFImage(url)
                                                             .placeholder { //플레이스 홀더 설정
@@ -793,7 +802,7 @@ struct DayLinesBottomSheet: View {
                                                             .clipShape(Circle()) // 프로필 이미지를 원형으로 자르기
                                                             .frame(width: 32, height: 32) //resize
                                                             .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
-                                                     
+                                                        
                                                         
                                                     }
                                                 } else {
@@ -805,7 +814,7 @@ struct DayLinesBottomSheet: View {
                                                 Image("user_profile_32")
                                                     .clipShape(Circle())
                                                     .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
-                                                    
+                                                
                                             }
                                         }
                                         if let line = viewModel.dayLines[index] {
@@ -833,11 +842,61 @@ struct DayLinesBottomSheet: View {
                                                     .foregroundColor(.greyScale2)
                                                 
                                             }
+                                            else if line.assetType == "BANK" {
+                                                Text("-\(line.money)")
+                                                    .font(.pretendardFont(.semiBold, size: 16))
+                                                    .foregroundColor(.greyScale2)
+                                                
+                                            }
+                                        }
+                                    }
+                                    .onTapGesture {
+                                        self.selectedIndex = index
+                                        
+                                        if let line = viewModel.dayLines[selectedIndex] {
+                                            if viewModel.dayLines[index]?.assetType == "OUTCOME" {
+                                                lineModel.selectedOptions = 0
+                                                lineModel.toggleType = "지출"
+                                            } else if viewModel.dayLines[index]?.assetType == "INCOME" {
+                                                lineModel.selectedOptions = 1
+                                                lineModel.toggleType = "수입"
+                                            } else if viewModel.dayLines[index]?.assetType == "BANK" {
+                                                lineModel.selectedOptions = 2
+                                                lineModel.toggleType = "이체"
+                                            }
+                                            lineModel.mode = "check"
+                                            lineModel.lineId = line.id
+                                            print("지출 수입 이체 인덱스 : \(self.selectedToggleTypeIndex)")
+                                            print("지출 수입 이체 : \(self.selectedToggleType)")
+                                            print("금액 : \(self.viewModel.dayLines[index]?.money)")
+                                            print("제외 여부 : \(self.viewModel.dayLines[index]?.exceptStatus)")
+                                            print("PK : \(self.viewModel.dayLines[index]?.id)")
+                                        }
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                            self.showingDetail = true
+                                        }
+                                    }
+                                    .fullScreenCover(isPresented: $showingDetail) {
+                                        if let line = viewModel.dayLines[selectedIndex] {
+                                            
+                                            NavigationView {
+                                                AddView(
+                                                    isPresented: $showingDetail,
+                                                    lineModel : lineModel,
+                                                    date : viewModel.selectedDateStr,
+                                                    money: String(line.money),
+                                                    assetType : line.category[0],
+                                                    category: line.category[1],
+                                                    content : line.content,
+                                                    toggleOnOff: line.exceptStatus,
+                                                    writer: line.userNickName
+                                                )
+                                                .transition(.moveAndFade)
+                                            }
                                         }
                                     }
                                 } //ForEach
                             }
-  
                         } // Scroll View
                         
                     } //VStack
@@ -892,12 +951,12 @@ struct PasswordBottomSheet: View{
                     .padding(.top, 24)
                     
                     VStack(spacing : 28) {
-                            HStack {
-                                Text("임시 비밀번호로 로그인 후\n새로운 비밀번호로 변경해 주세요.")
-                                    .font(.pretendardFont(.medium, size: 13))
-                                    .foregroundColor(.greyScale6)
-                                Spacer()
-                            }
+                        HStack {
+                            Text("임시 비밀번호로 로그인 후\n새로운 비밀번호로 변경해 주세요.")
+                                .font(.pretendardFont(.medium, size: 13))
+                                .foregroundColor(.greyScale6)
+                            Spacer()
+                        }
                         ButtonLarge(label: "다시 로그인하기",background: .primary1, textColor: .white, strokeColor: .primary1,  fontWeight: .bold, action: {
                             //let url = firebaseManager.createDynamicLink(for: "A9BC7ACE")!
                             print("다시 로그인 하기")
@@ -909,7 +968,7 @@ struct PasswordBottomSheet: View{
                         
                         
                     }
-                   
+                    
                 }
                 .padding(.horizontal, 20)
                 .padding(.bottom, 44)
@@ -946,9 +1005,9 @@ struct CalendarBottomSheet: View {
                     .onTapGesture {
                         isShowing.toggle()
                     }
-
+                
                 MonthView(viewModel: viewModel, isShowing: $isShowing, pickerPresented: $pickerPresented)
-                    
+                
             }
             
         } //
@@ -958,15 +1017,15 @@ struct CalendarBottomSheet: View {
         
         PickerBottomSheet(showingTab: $showingTab, isShowing: $pickerPresented, yearMonth: $viewModel.yearMonth)
     }
-
-
+    
+    
 }
 
 struct MonthView: View {
     @ObservedObject var viewModel : CalculateViewModel
     @Binding var isShowing : Bool
     @Binding var pickerPresented : Bool
-
+    
     private var dateFormatter : DateFormatter {
         let formatter = DateFormatter()
         formatter.dateFormat = "YYYY-MM-dd"
@@ -978,86 +1037,86 @@ struct MonthView: View {
         formatter.dateFormat = "YYYY.MM"
         return formatter
     }
-
+    
     var body: some View {
         @State var weeks = viewModel.daysList
-            VStack {
-                HStack {
-                    Image("icon_left")
-                        .onTapGesture {
-                            // 한달 전으로 이동
-                            viewModel.selectedDate = Calendar.current.date(byAdding: .month, value: -1, to: viewModel.selectedDate) ?? viewModel.selectedDate
-                        }
-                    
-                    Spacer()
-                    
-                    Button(action: {
-                        // 피커 뷰 표시
-                        self.pickerPresented = true
-                        
-                    }) {
-                        Text("\(yearAndMonthFormatter.string(from:viewModel.selectedDate))")
-                            .font(.pretendardFont(.semiBold, size: 22))
-                            .foregroundColor(.greyScale2)
+        VStack {
+            HStack {
+                Image("icon_left")
+                    .onTapGesture {
+                        // 한달 전으로 이동
+                        viewModel.selectedDate = Calendar.current.date(byAdding: .month, value: -1, to: viewModel.selectedDate) ?? viewModel.selectedDate
                     }
+                
+                Spacer()
+                
+                Button(action: {
+                    // 피커 뷰 표시
+                    self.pickerPresented = true
                     
-                    Spacer()
-                    
-                    Image("icon_right")
-                        .onTapGesture {
-                            // 한달 후로 이동
-                            viewModel.selectedDate = Calendar.current.date(byAdding: .month, value: 1, to: viewModel.selectedDate) ?? viewModel.selectedDate
-                        }
+                }) {
+                    Text("\(yearAndMonthFormatter.string(from:viewModel.selectedDate))")
+                        .font(.pretendardFont(.semiBold, size: 22))
+                        .foregroundColor(.greyScale2)
                 }
                 
-                //MARK: 요일
-                HStack {
-                    ForEach(viewModel.daysOfTheWeek, id: \.self) { day in
-                        Text(day)
-                            .frame(maxWidth: .infinity)
-                            .font(.pretendardFont(.regular, size: 14))
-                            .foregroundColor(.greyScale6)
-                    }
-                }
-                .padding(.top, 20)
-                .padding(.bottom, 15)
-
-                //MARK: 날짜
-                ForEach(weeks.indices, id: \.self) { i in
-                    Week(viewModel: viewModel, days: $weeks[i], selectedDates: $viewModel.selectedDates)
-                }
                 Spacer()
-                //MARK: 선택하기 버튼
-                Button {
-                    if let startDate = viewModel.selectedDates.first, let endDate = viewModel.selectedDates.last {
-                        viewModel.startDateStr = dateFormatter.string(from: startDate)
-                        viewModel.endDateStr = dateFormatter.string(from: endDate)
-                        viewModel.extractSelectedDatesStr()
-                        print("시작 날짜 \(viewModel.startDateStr)")
-                        print("끝나는 날짜 \(viewModel.endDateStr)")
+                
+                Image("icon_right")
+                    .onTapGesture {
+                        // 한달 후로 이동
+                        viewModel.selectedDate = Calendar.current.date(byAdding: .month, value: 1, to: viewModel.selectedDate) ?? viewModel.selectedDate
                     }
-                    isShowing = false
-                } label: {
-                    Text("선택")
-                        .padding()
-                        .withNextButtonFormmating(.primary1)
+            }
+            
+            //MARK: 요일
+            HStack {
+                ForEach(viewModel.daysOfTheWeek, id: \.self) { day in
+                    Text(day)
+                        .frame(maxWidth: .infinity)
+                        .font(.pretendardFont(.regular, size: 14))
+                        .foregroundColor(.greyScale6)
                 }
             }
-            .frame(height: 490)
-            .frame(maxWidth: .infinity)
-            .padding(.horizontal, 20)
-            .padding(.bottom, 44)
-            .padding(.top, 24)
-            .transition(.move(edge: .bottom))
-            .background(
-                Color(.white)
-            )
-            .cornerRadius(12, corners: [.topLeft, .topRight])
-            .onChange(of: viewModel.daysList) { newValue in
-                weeks = newValue
+            .padding(.top, 20)
+            .padding(.bottom, 15)
+            
+            //MARK: 날짜
+            ForEach(weeks.indices, id: \.self) { i in
+                Week(viewModel: viewModel, days: $weeks[i], selectedDates: $viewModel.selectedDates)
             }
+            Spacer()
+            //MARK: 선택하기 버튼
+            Button {
+                if let startDate = viewModel.selectedDates.first, let endDate = viewModel.selectedDates.last {
+                    viewModel.startDateStr = dateFormatter.string(from: startDate)
+                    viewModel.endDateStr = dateFormatter.string(from: endDate)
+                    viewModel.extractSelectedDatesStr()
+                    print("시작 날짜 \(viewModel.startDateStr)")
+                    print("끝나는 날짜 \(viewModel.endDateStr)")
+                }
+                isShowing = false
+            } label: {
+                Text("선택")
+                    .padding()
+                    .withNextButtonFormmating(.primary1)
+            }
+        }
+        .frame(height: 490)
+        .frame(maxWidth: .infinity)
+        .padding(.horizontal, 20)
+        .padding(.bottom, 44)
+        .padding(.top, 24)
+        .transition(.move(edge: .bottom))
+        .background(
+            Color(.white)
+        )
+        .cornerRadius(12, corners: [.topLeft, .topRight])
+        .onChange(of: viewModel.daysList) { newValue in
+            weeks = newValue
+        }
     }
-   
+    
 }
 
 //MARK: 일주일씩 그리기
@@ -1067,7 +1126,7 @@ struct Week: View {
     @Binding var selectedDates : [Date]
     
     let colWidth = UIScreen.main.bounds.width / 7
-
+    
     var body: some View {
         @State var checkPeriod = validPeriod()
         let weekFirst = days.first!
@@ -1076,7 +1135,7 @@ struct Week: View {
         
         ZStack {
             if selectedDates.count == 2 {
-                    if checkPeriod {
+                if checkPeriod {
                     VStack(spacing: 0) {
                         
                         HStack(spacing: 0) {
@@ -1090,7 +1149,7 @@ struct Week: View {
                                     .frame(width: firstSpacerWidth, height: 20)
                             }
                             
-
+                            
                             Text("")
                                 .font(.pretendardFont(.regular, size: 14))
                                 .foregroundColor(.greyScale2)
@@ -1098,17 +1157,17 @@ struct Week: View {
                                 .frame(maxWidth: .infinity)
                                 .frame(height: 32)
                                 .background(Color.greyScale12)
-
+                            
                             
                             let lastDayOfSelectedDates = getLastDayOfMonth(date: selectedDates.last!)
                             let lastStartDay = selectedDates.last!.day
                             let lastEndDay = (weekLast.month == selectedDates.last!.month) ? weekLast.day : (lastDayOfSelectedDates + weekLast.day)
-
-                                let lastSpacerWidth = colWidth * CGFloat(lastEndDay - lastStartDay)
-                                if (weekFirst <= selectedDates.last! && selectedDates.last! <= weekLast ) {
-                                    Spacer()
-                                        .frame(width: lastSpacerWidth, height: 20)
-                                }
+                            
+                            let lastSpacerWidth = colWidth * CGFloat(lastEndDay - lastStartDay)
+                            if (weekFirst <= selectedDates.last! && selectedDates.last! <= weekLast ) {
+                                Spacer()
+                                    .frame(width: lastSpacerWidth, height: 20)
+                            }
                         }
                         //ForEach
                     } //VStack
@@ -1117,16 +1176,16 @@ struct Week: View {
                     }
                 } //if
             }
- 
+            
             HStack(spacing: 0) {
                 ForEach(days, id: \.self) { value in
                     VStack(spacing: 0) {
-                            if value.day > 0 {
-                                Text("\(value.day)")
-                                   // .padding(10)
-                                    .font(.pretendardFont(.regular,size: 14))
-                                    .foregroundColor(selectedDates.contains(value) ? .white : viewModel.selectedDate.month == value.month ? .greyScale2 : .greyScale7)
-                            }
+                        if value.day > 0 {
+                            Text("\(value.day)")
+                            // .padding(10)
+                                .font(.pretendardFont(.regular,size: 14))
+                                .foregroundColor(selectedDates.contains(value) ? .white : viewModel.selectedDate.month == value.month ? .greyScale2 : .greyScale7)
+                        }
                     }
                     .padding(10)
                     .frame(width: (UIScreen.main.bounds.width - 48) / 7)
@@ -1245,7 +1304,7 @@ struct YearPickerSheetView: View {
 struct YearBottomSheet: View {
     @Binding var selectedYear: Int
     @Binding var isShowing: Bool
-  
+    
     var body: some View{
         ZStack(alignment: .bottom) {
             if (isShowing) {
@@ -1256,7 +1315,7 @@ struct YearBottomSheet: View {
                         isShowing.toggle()
                     }
                 VStack() {
-                   YearPickerSheetView(selectedYear: $selectedYear)
+                    YearPickerSheetView(selectedYear: $selectedYear)
                 }
                 .padding(.horizontal, 20)
                 .padding(.bottom, 44)
@@ -1271,6 +1330,6 @@ struct YearBottomSheet: View {
         .ignoresSafeArea()
         .animation(.easeInOut, value: isShowing)
     }
-
+    
 }
 

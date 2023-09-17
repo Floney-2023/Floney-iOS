@@ -13,19 +13,19 @@ struct DayLinesView: View {
     @Binding var isShowingAddView : Bool
     @ObservedObject var viewModel : CalendarViewModel
     
-
+    
     var body: some View {
-            VStack {
-                DayTotalView(viewModel: viewModel)
-                DayLinesDetailView(viewModel: viewModel, isShowingAddView: $isShowingAddView)
-                Spacer()
-            }//.padding(20)
-            .background(Color.clear)
-            .onAppear{
-                print("date : \(date)")
-                viewModel.dayLinesDate = viewModel.selectedDateStr
-                viewModel.getDayLines()
-            }
+        VStack {
+            DayTotalView(viewModel: viewModel)
+            DayLinesDetailView(viewModel: viewModel, isShowingAddView: $isShowingAddView)
+            Spacer()
+        }//.padding(20)
+        .background(Color.clear)
+        .onAppear{
+            print("date : \(date)")
+            viewModel.dayLinesDate = viewModel.selectedDateStr
+            viewModel.getDayLines()
+        }
     }
 }
 
@@ -34,7 +34,7 @@ struct DayTotalView : View {
     @State var totalIncome = 0
     @State var totalOutcome = 0
     @State var currency = CurrencyManager.shared.currentCurrency
-   
+    
     var body: some View {
         HStack() {
             HStack {
@@ -92,39 +92,48 @@ struct DayLinesDetailView : View {
                         isShowingAddView = true
                     }
             }
-            VStack(spacing:38) {
-                ScrollView(showsIndicators: false) {
-                    if Calendar.current.component(.day, from: viewModel.selectedDate) == 1 {
-                        
-                        if viewModel.dayLineCarryOver.carryOverStatus {
-                            HStack {
-                                if viewModel.seeProfileImg {
-                                    Image("book_profile_32")
-                                        .clipShape(Circle())
-                                        .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
-                                }
-                                VStack(alignment: .leading, spacing: 3){
-                                    Text("이월")
-                                        .font(.pretendardFont(.semiBold, size: 14))
-                                        .foregroundColor(.greyScale2)
-                                    Text("-")
-                                        .font(.pretendardFont(.medium, size: 12))
-                                        .foregroundColor(.greyScale6)
-                                }
-                                Spacer()
-                                Text("\(Int(viewModel.dayLineCarryOver.carryOverMoney))")
-                                    .font(.pretendardFont(.semiBold, size: 16))
-                                    .foregroundColor(.greyScale2)
+            ScrollView(showsIndicators: false) {
+                VStack(spacing:28) {
+                if Calendar.current.component(.day, from: viewModel.selectedDate) == 1 {
+                    
+                    if viewModel.dayLineCarryOver.carryOverStatus {
+                        HStack {
+                            if viewModel.seeProfileImg {
+                                Image("book_profile_32")
+                                    .clipShape(Circle())
+                                    .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
                             }
-                            
+                            VStack(alignment: .leading, spacing: 3){
+                                Text("이월")
+                                    .font(.pretendardFont(.semiBold, size: 14))
+                                    .foregroundColor(.greyScale2)
+                                Text("-")
+                                    .font(.pretendardFont(.medium, size: 12))
+                                    .foregroundColor(.greyScale6)
+                            }
+                            Spacer()
+                            Text("\(Int(viewModel.dayLineCarryOver.carryOverMoney))")
+                                .font(.pretendardFont(.semiBold, size: 16))
+                                .foregroundColor(.greyScale2)
                         }
+                        
                     }
-                    if viewModel.dayLines.count == 0 {
-                        Image("no_line")
-                        Text("내역이 없습니다.")
-                            .font(.pretendardFont(.medium, size: 12))
-                            .foregroundColor(.greyScale6)
+                }
+                if viewModel.dayLines.count == 0 {
+                    // 1일이고, 이월금액이 존재한다면
+                    if Calendar.current.component(.day, from: viewModel.selectedDate) == 1 && viewModel.dayLineCarryOver.carryOverStatus {
                     } else {
+                        Spacer()
+                        VStack(spacing:5) {
+                            Image("no_line")
+                            Text("내역이 없습니다.")
+                                .font(.pretendardFont(.medium, size: 12))
+                                .foregroundColor(.greyScale6)
+                        }
+                        Spacer()
+                    }
+                } else {
+                    
                         ForEach(viewModel.dayLines.indices, id: \.self) { index in
                             HStack {
                                 if viewModel.seeProfileImg {
@@ -144,7 +153,7 @@ struct DayLinesDetailView : View {
                                                     .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
                                             }
                                             else  {
-                                                //let url = encryptionManager.decrypt(img, using: encryptionManager.key!)
+                                                
                                                 let url = URL(string : img)
                                                 KFImage(url)
                                                     .placeholder { //플레이스 홀더 설정
@@ -162,14 +171,6 @@ struct DayLinesDetailView : View {
                                                     .frame(width: 32, height: 32) //resize
                                                     .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
                                                 
-                                                    
-                                                /*
-                                                URLImage(url: URL(string: url!)!)
-                                                    .aspectRatio(contentMode: .fill)
-                                                    .clipShape(Circle())
-                                                    .frame(width: 32, height: 32)
-                                                    .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))*/
-                                                
                                             }
                                         } else { //null
                                             Image("book_profile_32")
@@ -180,7 +181,7 @@ struct DayLinesDetailView : View {
                                         Image("user_profile_32")
                                             .clipShape(Circle())
                                             .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
-                                            
+                                        
                                     }
                                 }
                                 if let line = viewModel.dayLines[index] {
@@ -208,13 +209,18 @@ struct DayLinesDetailView : View {
                                             .font(.pretendardFont(.semiBold, size: 16))
                                             .foregroundColor(.greyScale2)
                                         
+                                    } else if line.assetType == "BANK" {
+                                        Text("-\(line.money)")
+                                            .font(.pretendardFont(.semiBold, size: 16))
+                                            .foregroundColor(.greyScale2)
+                                        
                                     }
                                 }
                             }
                             .onTapGesture {
-                            
+                                
                                 self.selectedIndex = index
-                                    //self.showingDetail = true
+                                
                                 if let line = viewModel.dayLines[selectedIndex] {
                                     if viewModel.dayLines[index]?.assetType == "OUTCOME" {
                                         lineModel.selectedOptions = 0
@@ -235,13 +241,13 @@ struct DayLinesDetailView : View {
                                     print("PK : \(self.viewModel.dayLines[index]?.id)")
                                 }
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                                        self.showingDetail = true
-                                    } 
+                                    self.showingDetail = true
+                                }
                                 
                             }
                             .fullScreenCover(isPresented: $showingDetail) {
                                 if let line = viewModel.dayLines[selectedIndex] {
-                                  
+                                    
                                     NavigationView {
                                         AddView(
                                             isPresented: $showingDetail,
@@ -262,7 +268,6 @@ struct DayLinesDetailView : View {
                         } //ForEach
                     } // else
                 } //ScrollView
-                .frame(maxHeight: .infinity)
             }.frame(maxHeight: .infinity)
         }
         .frame(height: 366)

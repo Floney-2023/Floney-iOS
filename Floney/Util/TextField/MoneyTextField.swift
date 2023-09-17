@@ -9,7 +9,6 @@ import Foundation
 import UIKit
 import SwiftUI
 struct MoneyTextField: UIViewRepresentable {
-    
     @Binding var text: String
     var placeholder: String
     
@@ -49,8 +48,8 @@ struct MoneyTextField: UIViewRepresentable {
         // 텍스트 정렬 설정
         textField.textAlignment = alignment  // 정렬 속성 적용
         textField.rightView = wonLabel
-        textField.rightViewMode = .always  // 항상 표시
         
+        textField.rightViewMode = .whileEditing
         return textField
     }
     
@@ -58,7 +57,15 @@ struct MoneyTextField: UIViewRepresentable {
         uiView.text = text
         uiView.placeholder = placeholder
         uiView.backgroundColor = backgroundColor
-        
+        if let text = uiView.text {
+            if !text.isEmpty {
+                uiView.rightViewMode = .always
+            }
+            else {
+                uiView.rightViewMode = .never
+            }
+        }
+   
     }
     
     func makeCoordinator() -> Coordinator {
@@ -71,21 +78,19 @@ struct MoneyTextField: UIViewRepresentable {
         init(_ parent: MoneyTextField) {
             self.parent = parent
         }
-        
         func textFieldDidChangeSelection(_ textField: UITextField) {
             parent.text = textField.text ?? ""
             // '원' 레이블의 위치 업데이트
             if let rightView = textField.rightView as? UILabel {
-                    rightView.sizeToFit()
-                    
-                    // 텍스트 필드의 내용 영역을 얻습니다.
-                    let contentRect = textField.textRect(forBounds: textField.bounds)
-                    
-                    // "원" 레이블의 x 위치를 텍스트 필드의 내용 영역의 너비로 설정합니다.
-                    let xPosition = contentRect.width
-                    
-                    rightView.frame = CGRect(x: xPosition, y: 0, width: rightView.frame.width, height: rightView.frame.height)
-                }
+                rightView.sizeToFit()
+                
+                // 텍스트 필드의 내용 영역을 얻습니다.
+                let contentRect = textField.textRect(forBounds: textField.bounds)
+                
+                // "원" 레이블의 x 위치를 텍스트 필드의 내용 영역의 너비로 설정합니다.
+                var xPosition = contentRect.width
+                rightView.frame = CGRect(x: xPosition, y: 0, width: rightView.frame.width, height: rightView.frame.height)
+            }
         }
     }
 }
