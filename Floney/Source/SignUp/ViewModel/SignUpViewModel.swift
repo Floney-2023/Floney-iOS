@@ -21,7 +21,13 @@ class SignUpViewModel: ObservableObject {
     @Published var email = ""
     @Published var password = ""
     @Published var passwordCheck = ""
-    @Published var nickname = ""
+    @Published var nickname = "" {
+        didSet {
+            if nickname.count > 8 {
+                nickname = String(nickname.prefix(8))
+            }
+        }
+    }
     @Published var isNextToServiceAgreement = false
     @Published var isNextToEmailAuth = false
     @Published var isNextToAuthCode = false

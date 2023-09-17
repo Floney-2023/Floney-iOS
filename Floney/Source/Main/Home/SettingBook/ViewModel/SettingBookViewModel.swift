@@ -8,7 +8,10 @@
 import Foundation
 import Combine
 import SwiftUI
-
+enum BudgetAssetType {
+    case budget
+    case asset
+}
 class SettingBookViewModel : ObservableObject {
     
     @Published var tokenViewModel = TokenReissueViewModel()
@@ -22,7 +25,13 @@ class SettingBookViewModel : ObservableObject {
     @Published var result : BookInfoResponse = BookInfoResponse(bookImg: nil, bookName: "", startDay: "", seeProfileStatus: true, carryOver: true, ourBookUsers: [])
     @Published var bookUsers : [BookUsers] = []
     @Published var bookImg : String?
-    @Published var bookName = ""
+    @Published var bookName = "" {
+        didSet {
+            if bookName.count > 10 {
+                bookName = String(bookName.prefix(10))
+            }
+        }
+    }
     @Published var startDay = ""
     @Published var carryOver = true
     @Published var stateOfCarryOver = false
@@ -31,8 +40,7 @@ class SettingBookViewModel : ObservableObject {
     @Published var changedName = ""
     @Published var encryptedImageUrl : String = ""
     @Published var profileStatus = true
-    
-    @Published var budget : Double = 0
+
     @Published var asset : Double = 0
     
     @Published var role = "방장"
@@ -51,12 +59,14 @@ class SettingBookViewModel : ObservableObject {
     @Published var shareExcelStatus = false
     
     //MARK: Budget
+    @Published var budget : Double = 0
     @Published var yearlyData: [Int: [MonthlyAmount]] = [:]
     @Published var selectedYear: Int = 2023{
         didSet {
             getYearlyBudget()
         }
     }
+    @Published var budgetDate = ""
     
     private var cancellableSet: Set<AnyCancellable> = []
     var dataManager: SettingBookProtocol
@@ -107,7 +117,6 @@ class SettingBookViewModel : ObservableObject {
                         }
                     }
                     self.bookImg = self.result.bookImg
-                    
                     self.bookName = self.result.bookName
                     self.startDay = self.result.startDay
                     self.carryOver = self.result.carryOver
@@ -215,12 +224,13 @@ class SettingBookViewModel : ObservableObject {
     }
     func setBudget() {
         bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
-        let request = SetBudgetRequest(bookKey: bookKey, budget: budget, date: "")
+        let request = SetBudgetRequest(bookKey: bookKey, budget: budget, date: budgetDate)
         dataManager.setBudget(parameters: request)
             .sink { completion in
                 switch completion {
                 case .finished:
                     print("Setting Budget successfully changed.")
+                    AlertManager.shared.update(showAlert: true, message: "변경이 완료되었습니다.", buttonType: .green)
                 case .failure(let error):
                     self.createAlert(with: error)
                     print("Error changing nickname: \(error)")
@@ -230,9 +240,29 @@ class SettingBookViewModel : ObservableObject {
             }
             .store(in: &cancellableSet)
     }
-    func onlyNumberValid(input: String) -> Bool {
-        return true
+    
+    func onlyNumberValid(input: String, budgetAssetType : BudgetAssetType) -> Bool {
+        if let doubleValue = Double(input) {
+            // 변환 성공
+            print("변환 성공")
+            print(doubleValue) // 출력: 3200.4
+            if budgetAssetType == .budget {
+                budget = doubleValue
+                setBudget()
+            } else {
+                asset = doubleValue
+                setAsset()
+            }
+            return true
+        } else {
+            // 변환 실패
+            print("변환 실패")
+            AlertManager.shared.handleError(InputValidationError.onlyNumberValid)
+            return false
+        }
+        return false
     }
+    
     func setAsset() {
         bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
         let request = SetAssetRequest(bookKey: bookKey, asset: asset)
@@ -241,6 +271,7 @@ class SettingBookViewModel : ObservableObject {
                 switch completion {
                 case .finished:
                     print("Setting Asset successfully changed.")
+                    AlertManager.shared.update(showAlert: true, message: "변경이 완료되었습니다.", buttonType: .green)
                 case .failure(let error):
                     self.createAlert(with: error)
                     print("Error changing nickname: \(error)")
@@ -250,6 +281,7 @@ class SettingBookViewModel : ObservableObject {
             }
             .store(in: &cancellableSet)
     }
+    
     func setCarryOver(status : Bool)  {
         bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
         let request = SetCarryOver(bookKey: bookKey, status: status)
@@ -269,6 +301,7 @@ class SettingBookViewModel : ObservableObject {
             }
             .store(in: &cancellableSet)
     }
+    
     func exitBook() {
         bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
         let request = BookInfoRequest(bookKey: bookKey)
@@ -286,6 +319,7 @@ class SettingBookViewModel : ObservableObject {
             }
             .store(in: &cancellableSet)
     }
+    
     func deleteBook() {
         bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
         let request = BookInfoRequest(bookKey: bookKey)
@@ -378,10 +412,7 @@ class SettingBookViewModel : ObservableObject {
             })
             .store(in: &cancellableSet)
     }
-    func shareExcelWithSNS() {
-        
-        
-    }
+
     
     //MARK: 방장 필터
     func hostFilter() {

@@ -8,30 +8,10 @@
 
 import SwiftUI
 import Kingfisher
-//import UIKit
-
-//enum BottomSheetType: Int {
-   // case accountBook = 0
-    //case shareBook = 1
-    
-   // func view() -> AnyView {
-        //switch self {
-        //case .accountBook:
-           // return AnyView(AccountBookBottomSheet(showingTabbar: <#Binding<Bool>#>))
-            /*
-             case .shareBook:
-             return AnyView(ShareBookBottomSheet())*/
-            
-       // }
-   // }
-//}
 
 struct BottomSheet: View {
-    
     @Binding var isShowing: Bool
-    
     var content: AnyView
-    
     var body: some View {
         ZStack(alignment: .bottom) {
             if (isShowing) {
@@ -180,9 +160,8 @@ struct ShareBookBottomSheet: View{
     let buttonHeight: CGFloat = 46
     @ObservedObject var viewModel : SettingBookViewModel
     @Binding var isShowing : Bool
-    //@Binding var bookCode : String
     @Binding var onShareSheet : Bool
-    //@Binding var shareUrl : String?
+
     var body: some View{
         ZStack(alignment: .bottom) {
             if (isShowing) {
@@ -285,9 +264,7 @@ struct SetBudgetBottomSheet: View {
                             Text("\(month)월 예산")
                                 .foregroundColor(.greyScale1)
                                 .font(.pretendardFont(.bold,size: 16))
-                      
                         Spacer()
-                        
                         VStack {
                             Text("초기화하기")
                                 .font(.pretendardFont(.regular, size: 12))
@@ -299,32 +276,21 @@ struct SetBudgetBottomSheet: View {
                           
                         }
                         .onTapGesture {
-                            print(viewModel.budget) // 출력: 3200.4
-                            viewModel.budget = 0
-                            viewModel.setBudget()
+                            budget = "0"
                         }
                     }
                     .padding(.top, 24)
-                    
                     VStack(spacing : 28) {
                         TextFieldLarge(label: $label, content: $budget)
                             .frame(height: buttonHeight)
                         
-                        ButtonLarge(label: "저장하기",background: .primary1, textColor: .white, strokeColor: .primary1,  fontWeight: .bold, action: {
-                            if let doubleValue = Double(budget) {
-                                // 변환 성공
-                                print(doubleValue) // 출력: 3200.4
-                                viewModel.budget = doubleValue
-                                viewModel.setBudget()
-                            } else {
-                                // 변환 실패
-                                print("변환 실패")
+                        ButtonLarge(label: "저장하기", background: .primary1, textColor: .white, strokeColor: .primary1,  fontWeight: .bold, action: {
+                            if viewModel.onlyNumberValid(input: budget, budgetAssetType: .budget) {
+                                isShowing = false
                             }
                         })
                         .frame(height: buttonHeight)
-                        
                     }
-                    
                 }
                 .padding(.horizontal, 20)
                 .padding(.bottom, 44)
@@ -345,7 +311,6 @@ struct SetBudgetBottomSheet: View {
                 let height = value.height
                 self.keyboardHeight = height
             }
-            
             NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: .main) { _ in
                 self.keyboardHeight = 0
             }
@@ -376,20 +341,34 @@ struct SetInitialAssetBottomSheet: View {
                     }
                 VStack(spacing: 24) {
                     HStack {
-                        VStack(alignment: .leading, spacing: 16) {
+                        VStack(alignment: .leading) {
                             Text("초기 자산 설정")
                                 .foregroundColor(.greyScale1)
                                 .font(.pretendardFont(.bold,size: 18))
-                            
-                            Text("현재 모아놓은 자산을 입력해 주세요.\n플로니가 앞으로의 자산 흐름을 보여드릴게요.")
-                                .foregroundColor(.greyScale6)
-                                .font(.pretendardFont(.medium,size: 13))
-                            
                         }
-                        
                         Spacer()
+                        // 초기화
+                        VStack {
+                            Text("초기화하기")
+                                .font(.pretendardFont(.regular, size: 12))
+                                .foregroundColor(.greyScale6)
+                            Divider()
+                                .frame(width: 70,height: 1.0)
+                                .padding(EdgeInsets(top: -10, leading: 0, bottom: 0, trailing: 0))
+                                .foregroundColor(.greyScale6)
+                        }
+                        .onTapGesture {
+                            initialAsset = "0"
+                        }
                     }
                     .padding(.top, 24)
+                    HStack {
+                        Text("현재 모아놓은 자산을 입력해 주세요.\n플로니가 앞으로의 자산 흐름을 보여드릴게요.")
+                            .frame(alignment: .leading)
+                            .foregroundColor(.greyScale6)
+                            .font(.pretendardFont(.medium,size: 13))
+                        Spacer()
+                    }
                     
                     VStack(spacing : 28) {
                         
@@ -397,32 +376,11 @@ struct SetInitialAssetBottomSheet: View {
                             .frame(height: buttonHeight)
                         
                         ButtonLarge(label: "저장하기",background: .primary1, textColor: .white, strokeColor: .primary1,  fontWeight: .bold, action: {
-                            if let doubleValue = Double(initialAsset) {
-                                // 변환 성공
-                                print(doubleValue) // 출력: 3200.4
-                                viewModel.asset = doubleValue
-                                viewModel.setAsset()
-                            } else {
-                                // 변환 실패
-                                print("변환 실패")
+                            if viewModel.onlyNumberValid(input: initialAsset, budgetAssetType: .asset) {
+                                isShowing = false
                             }
                         })
                         .frame(height: buttonHeight)
-                        
-                    }
-                    VStack {
-                        Text("초기화하기")
-                            .font(.pretendardFont(.regular, size: 12))
-                            .foregroundColor(.greyScale6)
-                        Divider()
-                            .frame(width: 70,height: 1.0)
-                            .padding(EdgeInsets(top: -10, leading: 0, bottom: 0, trailing: 0))
-                            .foregroundColor(.greyScale6)
-                    }
-                    .onTapGesture {
-                        print(viewModel.asset) // 출력: 3200.4
-                        viewModel.asset = 0
-                        viewModel.setAsset()
                     }
                 }
                 .padding(.horizontal, 20)
@@ -653,9 +611,6 @@ struct CategoryBottomSheet: View {
     }
 }
 
-
-
-
 struct CategoryFlowLayout: View {
     @Binding var root : String
     @State private var totalWidth = CGFloat.zero
@@ -755,7 +710,6 @@ struct DayLinesBottomSheet: View {
                         }
                         Spacer()
                         VStack {
-                            // Spacer()
                             Text("내역 추가")
                                 .font(.pretendardFont(.semiBold, size: 12))
                                 .foregroundColor(.primary2)
@@ -763,16 +717,14 @@ struct DayLinesBottomSheet: View {
                                     isShowing.toggle()
                                     self.isShowingAddView.toggle()
                                 }
-                            //Spacer()
                         }
                     }
                     .padding(.top, 24)
                     
-                    VStack {
+                    VStack(spacing:38) {
                     ScrollView(showsIndicators: false) {
-                       
+                            // 1일인데 이월 금액이 존재한다면 이월금액 보여주기.
                             if Calendar.current.component(.day, from: viewModel.selectedDate) == 1 {
-                                
                                 if viewModel.dayLineCarryOver.carryOverStatus {
                                     HStack {
                                         if viewModel.seeProfileImg {
@@ -793,14 +745,17 @@ struct DayLinesBottomSheet: View {
                                             .font(.pretendardFont(.semiBold, size: 16))
                                             .foregroundColor(.greyScale2)
                                     }
-                                    
                                 }
                             }
                             if viewModel.dayLines.count == 0 {
-                                Image("no_line")
-                                Text("내역이 없습니다.")
-                                    .font(.pretendardFont(.medium, size: 12))
-                                    .foregroundColor(.greyScale6)
+                                // 1일이고, 이월금액이 존재한다면
+                                if Calendar.current.component(.day, from: viewModel.selectedDate) == 1 && viewModel.dayLineCarryOver.carryOverStatus {
+                                } else {
+                                    Image("no_line")
+                                    Text("내역이 없습니다.")
+                                        .font(.pretendardFont(.medium, size: 12))
+                                        .foregroundColor(.greyScale6)
+                                }
                             } else {
                                 ForEach(viewModel.dayLines.indices, id: \.self) { index in
                                     HStack {
@@ -839,15 +794,9 @@ struct DayLinesBottomSheet: View {
                                                             .frame(width: 32, height: 32) //resize
                                                             .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
                                                      
-                                                        /*
-                                                        URLImage(url: URL(string: url!)!)
-                                                            .aspectRatio(contentMode: .fill)
-                                                            .clipShape(Circle())
-                                                            .frame(width: 34, height: 34)
-                                                            .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))*/
                                                         
                                                     }
-                                                } else { //null
+                                                } else {
                                                     Image("book_profile_32")
                                                         .clipShape(Circle())
                                                         .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
@@ -870,7 +819,6 @@ struct DayLinesBottomSheet: View {
                                                             .font(.pretendardFont(.medium, size: 12))
                                                             .foregroundColor(.greyScale6)
                                                     }
-                                                    
                                                 }
                                             }
                                             
@@ -1196,7 +1144,6 @@ struct Week: View {
         } //ZStack
         
     } //body
-    
     func getLastDayOfMonth(date: Date) -> Int {
         let calendar = Calendar.current
         if let interval = calendar.range(of: .day, in: .month, for: date) {
@@ -1212,7 +1159,6 @@ struct Week: View {
         }
         selectedDates.sort()
     }
-    
     func validPeriod() -> Bool {
         for day in days {
             if let firstDate = selectedDates.first,
@@ -1225,9 +1171,6 @@ struct Week: View {
         return false
     }
 }
-
-
-
 //MARK: 피커 bottom sheet
 struct PickerBottomSheet: View {
     @State var availableChangeTabbarStatus = false
@@ -1237,7 +1180,7 @@ struct PickerBottomSheet: View {
     //@ObservedObject var viewModel : CalculateViewModel
     let years = Array(2000...2099)
     let months = Array(1...12)
-
+    
     var body: some View {
         ZStack(alignment: .bottom) {
             if (isShowing) {
@@ -1250,7 +1193,6 @@ struct PickerBottomSheet: View {
                             showingTab = true
                         }
                     }
-                    
                 VStack {
                     HStack {
                         Spacer()
@@ -1276,16 +1218,12 @@ struct PickerBottomSheet: View {
             }
             
         }
-        
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
         .ignoresSafeArea()
         .animation(.easeInOut, value: isShowing)
     }
-
-
 }
-
-//MARK: 예산 연도 설정
+//MARK: 예산 연도 설정 PICKER
 struct YearPickerSheetView: View {
     @Binding var selectedYear: Int
     let years: [Int] = Array(1990...2099)
@@ -1303,7 +1241,6 @@ struct YearPickerSheetView: View {
         
     }
 }
-
 //MARK: 예산 연도 설정
 struct YearBottomSheet: View {
     @Binding var selectedYear: Int

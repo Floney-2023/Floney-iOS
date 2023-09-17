@@ -53,16 +53,6 @@ struct HomeView: View {
                                     self.showingTabbar = false
                                     self.isOnSettingBook = true
                                 }
-                            /*
-                            URLImage(url: URL(string: url!)!)
-                                .aspectRatio(contentMode: .fill)
-                                .clipShape(Circle())
-                                .frame(width: 34, height: 34)
-                                .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
-                                .onTapGesture {
-                                    self.showingTabbar = false
-                                    self.isOnSettingBook = true
-                                }*/
                         } else {
                             Image("book_profile_34")
                                 .clipShape(Circle())
@@ -81,16 +71,7 @@ struct HomeView: View {
                 }
                 
             }.padding(20)
-            /*
-                .overlay(
-                    ZStack {
-                        /*
-                        if alertManager.showAlert {
-                            CustomAlertView(message: alertManager.message, type: alertManager.buttontType, isPresented: $alertManager.showAlert)
-                        }*/
-                    }
-                )*/
-            
+       
             // MARK: Month Year Picker
             if isShowingMonthPicker {
                 MonthYearPickerBottomSheet(viewModel: viewModel, availableChangeTabbarStatus: true, showingTab: $showingTabbar, isShowing: $isShowingMonthPicker)

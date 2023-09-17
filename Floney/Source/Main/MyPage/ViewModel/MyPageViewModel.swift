@@ -21,7 +21,13 @@ class MyPageViewModel: ObservableObject {
     @Published var errorMessage : String = ""
     @Published var showAlert: Bool = false
     
-    @Published var nickname : String = ""
+    @Published var nickname : String = ""{
+        didSet {
+            if nickname.count > 8 {
+                nickname = String(nickname.prefix(8))
+            }
+        }
+    }
     @Published var email : String = ""
     @Published var provider : String = ""
     @Published var subscribe : Bool = false
