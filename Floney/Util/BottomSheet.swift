@@ -268,6 +268,7 @@ struct SetBudgetBottomSheet: View {
     let buttonHeight: CGFloat = 46
     @State var label = "예산을 입력하세요."
     @Binding var isShowing: Bool
+    @Binding var month : Int
     @ObservedObject var viewModel : SettingBookViewModel
     @State var budget : String = ""
     var body: some View{
@@ -280,30 +281,40 @@ struct SetBudgetBottomSheet: View {
                         isShowing.toggle()
                     }
                 VStack(spacing: 24) {
-                    
-                    HStack {
-                        Text("예산 설정")
-                            .foregroundColor(.greyScale1)
-                            .font(.pretendardFont(.bold,size: 18))
+                    HStack(alignment:.center) {
+                            Text("\(month)월 예산")
+                                .foregroundColor(.greyScale1)
+                                .font(.pretendardFont(.bold,size: 16))
+                      
                         Spacer()
+                        
+                        VStack {
+                            Text("초기화하기")
+                                .font(.pretendardFont(.regular, size: 12))
+                                .foregroundColor(.greyScale6)
+                            Divider()
+                                .frame(width: 70,height: 1.0)
+                                .padding(EdgeInsets(top: -10, leading: 0, bottom: 0, trailing: 0))
+                                .foregroundColor(.greyScale6)
+                          
+                        }
+                        .onTapGesture {
+                            print(viewModel.budget) // 출력: 3200.4
+                            viewModel.budget = 0
+                            viewModel.setBudget()
+                        }
                     }
                     .padding(.top, 24)
                     
                     VStack(spacing : 28) {
-                        /*
-                         ButtonLarge(label: "예산을 입력하세요", background: .greyScale12, textColor: .greyScale2, strokeColor: .greyScale12, action: {
-                         
-                         })
-                         .frame(height: buttonHeight)
-                         */
                         TextFieldLarge(label: $label, content: $budget)
                             .frame(height: buttonHeight)
                         
                         ButtonLarge(label: "저장하기",background: .primary1, textColor: .white, strokeColor: .primary1,  fontWeight: .bold, action: {
-                            if let floatValue = Float(budget) {
+                            if let doubleValue = Double(budget) {
                                 // 변환 성공
-                                print(floatValue) // 출력: 3200.4
-                                viewModel.budget = floatValue
+                                print(doubleValue) // 출력: 3200.4
+                                viewModel.budget = doubleValue
                                 viewModel.setBudget()
                             } else {
                                 // 변환 실패
@@ -313,23 +324,9 @@ struct SetBudgetBottomSheet: View {
                         .frame(height: buttonHeight)
                         
                     }
-                    VStack {
-                        Text("초기화하기")
-                            .font(.pretendardFont(.regular, size: 12))
-                            .foregroundColor(.greyScale6)
-                        Divider()
-                            .frame(width: 70,height: 1.0)
-                            .padding(EdgeInsets(top: -10, leading: 0, bottom: 0, trailing: 0))
-                            .foregroundColor(.greyScale6)
-                    }
-                    .onTapGesture {
-                        print(viewModel.budget) // 출력: 3200.4
-                        viewModel.budget = 0
-                        viewModel.setBudget()
-                    }
+                    
                 }
                 .padding(.horizontal, 20)
-                
                 .padding(.bottom, 44)
                 .transition(.move(edge: .bottom))
                 .background(
@@ -348,7 +345,7 @@ struct SetBudgetBottomSheet: View {
                 let height = value.height
                 self.keyboardHeight = height
             }
-
+            
             NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: .main) { _ in
                 self.keyboardHeight = 0
             }
@@ -400,10 +397,10 @@ struct SetInitialAssetBottomSheet: View {
                             .frame(height: buttonHeight)
                         
                         ButtonLarge(label: "저장하기",background: .primary1, textColor: .white, strokeColor: .primary1,  fontWeight: .bold, action: {
-                            if let floatValue = Float(initialAsset) {
+                            if let doubleValue = Double(initialAsset) {
                                 // 변환 성공
-                                print(floatValue) // 출력: 3200.4
-                                viewModel.asset = floatValue
+                                print(doubleValue) // 출력: 3200.4
+                                viewModel.asset = doubleValue
                                 viewModel.setAsset()
                             } else {
                                 // 변환 실패
@@ -1285,6 +1282,58 @@ struct PickerBottomSheet: View {
         .animation(.easeInOut, value: isShowing)
     }
 
+
+}
+
+//MARK: 예산 연도 설정
+struct YearPickerSheetView: View {
+    @Binding var selectedYear: Int
+    let years: [Int] = Array(1990...2099)
+    var body: some View {
+        VStack {
+            Picker("Select Year", selection: $selectedYear) {
+                ForEach(years, id: \.self) { year in
+                    Text("\(String(year))").tag(year)
+                }
+            }
+            .pickerStyle(WheelPickerStyle())
+            .labelsHidden()
+        }
+        .padding()
+        
+    }
+}
+
+//MARK: 예산 연도 설정
+struct YearBottomSheet: View {
+    @Binding var selectedYear: Int
+    @Binding var isShowing: Bool
+  
+    var body: some View{
+        ZStack(alignment: .bottom) {
+            if (isShowing) {
+                Color.black
+                    .opacity(0.7)
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        isShowing.toggle()
+                    }
+                VStack() {
+                   YearPickerSheetView(selectedYear: $selectedYear)
+                }
+                .padding(.horizontal, 20)
+                .padding(.bottom, 44)
+                .transition(.move(edge: .bottom))
+                .background(
+                    Color(.white)
+                )
+                .cornerRadius(12, corners: [.topLeft, .topRight])
+            }
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
+        .ignoresSafeArea()
+        .animation(.easeInOut, value: isShowing)
+    }
 
 }
 

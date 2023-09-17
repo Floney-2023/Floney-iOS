@@ -127,6 +127,7 @@ enum InputValidationError: CustomError {
     case assetTypeEmpty
     case categoryTypeEmpty
     case bookCodeEmpty
+    case onlyNumberValid
     var errorMessage: String {
         switch self {
         case .emailInvalid:
@@ -161,6 +162,8 @@ enum InputValidationError: CustomError {
             return "분류를 선택해주세요."
         case .bookCodeEmpty:
             return "코드를 입력하세요."
+        case .onlyNumberValid:
+            return "숫자만 입력해주세요."
         }
     }
 }
