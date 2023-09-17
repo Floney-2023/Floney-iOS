@@ -122,7 +122,7 @@ class SignInViewModel: ObservableObject {
                         self?.googleSignIn()
                     } else {
                         print("체크성공 -> 구글 회원가입")
-                        self?.providerStatus = .kakao
+                        self?.providerStatus = .google
                         self?.isNextToServiceAgreement = true
                     }
                 }

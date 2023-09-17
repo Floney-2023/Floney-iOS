@@ -169,12 +169,3 @@ extension SignUp: SignUpProtocol {
        
 }
 
-/*
- .map { response in
- response.mapError { error in
- let backendError = response.data.flatMap { try? JSONDecoder().decode(BackendError.self, from: $0)}
- return NetworkError(initialError: error, backendError: backendError)
- }
- }*/
-// .receive(on: DispatchQueue.main)
-//.eraseToAnyPublisher()
