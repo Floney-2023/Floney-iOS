@@ -64,6 +64,28 @@ extension CreateBook: CreateBookProtocol {
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
     }
+    func addBook(_ parameters:CreateBookRequest) -> AnyPublisher<DataResponse<CreateBookResponse, NetworkError>, Never> {
+        let url = "\(Constant.BASE_URL)/books/add"
+     
+        let token = Keychain.getKeychainValue(forKey: .accessToken) ?? ""
+        print("가계부 추가 생성 : \(parameters)")
+        return AF.request(url,
+                          method: .post,
+                          parameters: parameters,
+                          encoder: JSONParameterEncoder(),
+                          headers: ["Authorization":"Bearer \(token)"])
+            .validate()
+            .publishDecodable(type: CreateBookResponse.self)
+            .map { response in
+                response.mapError { error in
+                    let backendError = response.data.flatMap { try? JSONDecoder().decode(BackendError.self, from: $0)}
+                    return NetworkError(initialError: error, backendError: backendError)
+                }
+            }
+            .receive(on: DispatchQueue.main)
+            .eraseToAnyPublisher()
+    }
+
     func inviteBook(_ parameters:InviteBookRequest) -> AnyPublisher<DataResponse<CreateBookResponse, NetworkError>, Never> {
         let url = "\(Constant.BASE_URL)/books/join"
         let token = Keychain.getKeychainValue(forKey: .accessToken) ?? ""

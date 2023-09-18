@@ -12,6 +12,7 @@ struct SetBookNameView: View {
     var pageCountAll = 3
     //@State var bookTitle = ""
     @StateObject var viewModel = CreateBookViewModel()
+    @State var createBookType : createBookType = .initial
     @State var isActive = false
     var body: some View {
         VStack(spacing: 20) {
@@ -41,11 +42,11 @@ struct SetBookNameView: View {
                     Spacer()
                 }
             }
-           
+            
             
             Spacer()
             
-            NavigationLink(destination: SetBookProfileView(viewModel: viewModel), isActive: $isActive){
+            NavigationLink(destination: SetBookProfileView(createBookType: $createBookType, viewModel: viewModel), isActive: $isActive){
                 Text("다음으로")
                     .padding()
                     .withNextButtonFormmating(.primary1)
@@ -57,9 +58,12 @@ struct SetBookNameView: View {
             }
         }
         .padding(EdgeInsets(top: 32, leading: 24, bottom: 0, trailing: 24))
-        .navigationBarBackButtonHidden(true)
-        .navigationBarItems(leading: BackButton())
+        .customNavigationBar(
+            leftView: { BackButton() }
+        )
         .onAppear(perform : UIApplication.shared.hideKeyboard)
+
+    
     }
 }
 

@@ -31,7 +31,6 @@ struct CreateBookView: View {
                             .foregroundColor(.greyScale6)
                         
                     }
-                    
                     Spacer()
                 }
                 Image("book_illust")
@@ -55,17 +54,14 @@ struct CreateBookView: View {
                         }
                 }
             }
-            .padding(EdgeInsets(top: 32, leading: 24, bottom: 40, trailing: 24))
             .navigationBarBackButtonHidden(true)
+            .padding(EdgeInsets(top: 78, leading: 24, bottom: 40, trailing: 24))
             .sheet(isPresented: $onShareSheet) {
                 if let url = viewModel.shareUrl {
                     ActivityView(activityItems: [url])
                 }
                
             }
-            // MARK: Bottom Sheet
-            // BottomSheet(isShowing: $isShowingBottomSheet, content: BottomSheetType.shareBook.view())
-            
             ShareBookBottomSheet(viewModel: viewModel, isShowing: $isShowingBottomSheet, onShareSheet: $onShareSheet)
         }
     }

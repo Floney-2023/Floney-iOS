@@ -7,6 +7,11 @@
 
 import Foundation
 import Combine
+
+enum createBookType {
+    case initial
+    case add
+}
 class CreateBookViewModel: ObservableObject {
     @Published var result : CreateBookResponse = CreateBookResponse(bookKey: "", code: "")
     @Published var bookInfo = BookInfoByCodeResponse(bookName: "", startDay: "", memberCount: 0)
@@ -24,9 +29,9 @@ class CreateBookViewModel: ObservableObject {
     @Published var showAlert: Bool = false
     
    // @Published var name : String = ""
+    @Published var createBookType : createBookType = .initial
     @Published var profileImg : String?
     @Published var isNextToCreateBook : Bool = false
-    
     @Published var bookCode = ""
     
     private var cancellableSet: Set<AnyCancellable> = []
@@ -50,6 +55,7 @@ class CreateBookViewModel: ObservableObject {
                 if dataResponse.error != nil {
                     self.createAlert(with: dataResponse.error!)
                     print(dataResponse.error)
+                    LoadingManager.shared.update(showLoading: false, loadingType: .dimmedLoading)
                 } else {
                     self.result = dataResponse.value!
                     self.isNextToCreateBook = true
@@ -58,9 +64,32 @@ class CreateBookViewModel: ObservableObject {
                     print(self.result.code)
                     self.setBookCode()
                     Keychain.setKeychain(self.bookName, forKey: .bookName)
+                    LoadingManager.shared.update(showLoading: false, loadingType: .dimmedLoading)
                 }
             }.store(in: &cancellableSet)
     }
+    func addBook() {
+        let request = CreateBookRequest(name: bookName, profileImg: profileImg)
+        print(request)
+        dataManager.createBook(request)
+            .sink { (dataResponse) in
+                if dataResponse.error != nil {
+                    self.createAlert(with: dataResponse.error!)
+                    print(dataResponse.error)
+                    LoadingManager.shared.update(showLoading: false, loadingType: .dimmedLoading)
+                } else {
+                    self.result = dataResponse.value!
+                    self.isNextToCreateBook = true
+                    print(self.result) // bookkey & code
+                    // bookKey는 request할 때 사용, code는 초대할 때 사용
+                    print(self.result.code)
+                    self.setBookCode()
+                    Keychain.setKeychain(self.bookName, forKey: .bookName)
+                    LoadingManager.shared.update(showLoading: false, loadingType: .dimmedLoading)
+                }
+            }.store(in: &cancellableSet)
+    }
+
     func joinBook() {
         let request = InviteBookRequest(code: bookCode)
         dataManager.inviteBook(request)

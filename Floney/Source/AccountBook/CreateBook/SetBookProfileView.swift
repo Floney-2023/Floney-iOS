@@ -10,7 +10,7 @@ import SwiftUI
 struct SetBookProfileView: View {
     var pageCount = 2
     var pageCountAll = 3
-    //@State var bookTitle = ""
+    @Binding var createBookType : createBookType
     @ObservedObject var viewModel : CreateBookViewModel
     @StateObject var permissionManager = PermissionManager()
     var firebaseManager = FirebaseManager()
@@ -65,6 +65,7 @@ struct SetBookProfileView: View {
                     .padding()
                     .withNextButtonFormmating(.primary1)
                     .onTapGesture {
+                        LoadingManager.shared.update(showLoading: true, loadingType: .dimmedLoading)
                         if let image = selectedUIImage {
                             print("selectedUIImage있음 ")
                             if image == UIImage(named: "book_profile_124") {
@@ -72,7 +73,11 @@ struct SetBookProfileView: View {
                                 print("book name : \(viewModel.bookName)")
                                 if !viewModel.bookName.isEmpty {
                                     print("북 생성")
-                                    viewModel.createBook()
+                                    if createBookType == .initial {
+                                        viewModel.createBook()
+                                    } else {
+                                        viewModel.addBook()
+                                    }
                                 }
                             } else {
                                 firebaseManager.uploadImageToFirebase(image: image) { encryptedURL in
@@ -80,7 +85,11 @@ struct SetBookProfileView: View {
                                         if let url = encryptedURL {
                                             viewModel.profileImg = url
                                             if !viewModel.bookName.isEmpty {
-                                                viewModel.createBook()
+                                                if createBookType == .initial {
+                                                    viewModel.createBook()
+                                                } else {
+                                                    viewModel.addBook()
+                                                }
                                             }
                                         }
                                     }
@@ -97,7 +106,7 @@ struct SetBookProfileView: View {
         }
         .padding(EdgeInsets(top: 32, leading: 24, bottom: 0, trailing: 24))
         .navigationBarBackButtonHidden(true)
-        .navigationBarItems(leading: BackButton())
+        .navigationBarItems(leading: BackButtonBlack())
         //MARK: action sheet
         .actionSheet(isPresented: $presentsImagePicker) {
             ActionSheet(
@@ -142,6 +151,6 @@ struct SetBookProfileView: View {
 
 struct SetBookProfileView_Previews: PreviewProvider {
     static var previews: some View {
-        SetBookProfileView(viewModel: CreateBookViewModel())
+        SetBookProfileView(createBookType: .constant(.initial), viewModel: CreateBookViewModel())
     }
 }
