@@ -70,8 +70,9 @@ struct SetCurrencyUnitView: View {
                 .padding(.horizontal, 20)
             }
             .padding(.top, 52)
-            .navigationBarBackButtonHidden()
-            .navigationBarItems(leading: BackButton())
+            .customNavigationBar(
+                leftView: { BackButton() }
+                )
             
             if showingAlert {
                 FloneyAlertView(isPresented: $showingAlert, title: $title, message: $message, onOKAction: {

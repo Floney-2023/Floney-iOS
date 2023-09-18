@@ -165,14 +165,6 @@ struct SubscriptionView: View {
             VStack {
                 Spacer()
                 Button {
-                    /*
-                    // 구매하지 않았으면 구매
-                    if !IAPManager.shared.isProductPurchased(productID) {
-                       
-                    } else {
-                        IAPManager.shared.verifyReceipt()
-                    }*/
-                    
                     IAPManager.shared.buyProduct(productID)
                     
                 } label: {
@@ -188,16 +180,12 @@ struct SubscriptionView: View {
             .padding(20)
 
         }// ZStack
-        .navigationBarBackButtonHidden(true)
-        .navigationBarItems(leading: BackButtonBlack())
-        .toolbar {
-            ToolbarItem(placement: .principal) {
-                Text("구독 플랜")
+        .customNavigationBar(
+            leftView: { BackButtonBlack() } ,
+            centerView: { Text("구독 플랜")
                     .font(.pretendardFont(.semiBold, size: 16))
                     .foregroundColor(.greyScale1)
-            }
-        }
-        
+            })
     }
 
     

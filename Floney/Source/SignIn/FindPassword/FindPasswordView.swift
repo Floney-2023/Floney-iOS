@@ -43,12 +43,9 @@ struct FindPasswordView: View {
                 Spacer()
             }
             .padding(EdgeInsets(top: 52, leading: 24, bottom: 0, trailing: 24))
-            .navigationBarBackButtonHidden(true)
-            .navigationBarItems(leading: BackButton())
-            .onTapGesture {
-                // Hide the keyboard
-                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-            }
+            .customNavigationBar(
+                leftView: { BackButton() }
+                )
             .onAppear(perform : UIApplication.shared.hideKeyboard)
             if AlertManager.shared.showAlert {
                 CustomAlertView(message: AlertManager.shared.message, type: $alertManager.buttontType, isPresented: $alertManager.showAlert)

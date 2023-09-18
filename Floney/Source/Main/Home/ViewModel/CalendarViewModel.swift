@@ -16,7 +16,6 @@ class CalendarViewModel: ObservableObject {
     @Published var calendarLoadingError: String = ""
     @Published var showAlert: Bool = false
     @Published var bookKey = ""
-    @Published var requestDate: String = ""  // 0000-00-01
     @Published var options = ["캘린더", "일별"]
     
     //MARK: Today
@@ -30,7 +29,7 @@ class CalendarViewModel: ObservableObject {
     // 아래 모든 데이터는 같은 날짜를 가리켜야 함
     // 피커 뷰에서 선택된 연도, 월
     @Published var yearMonth = YearMonthDuration(year: Date().year, month: Date().month)
-    
+    @Published var requestDate: String = ""  // 0000-00-01
     @Published var selectedDate: Date = Date() // Date type
     @Published var selectedYear: Int = 0 // year
     @Published var selectedMonth: Int = 0 // month
@@ -229,6 +228,7 @@ class CalendarViewModel: ObservableObject {
                 selectedDateStr = "\(selectedYear)-\(selectedMonth)-\(selectedDay)"
             }
         }
+        dayLinesDate = selectedDateStr
         print("selectedDate : \(selectedDateStr)")
         print("requestDate : \(requestDate)")
     }
@@ -293,26 +293,33 @@ class CalendarViewModel: ObservableObject {
         }
         return result
     }
-    
-    
-    func nextMonth() {
-        selectedMonth += 1
-        if selectedMonth > 12 {
-            selectedMonth = 1
-            selectedYear += 1
-        }
-        getCalendar()
+    // 이전 달로 이동하는 함수
+    func moveOneMonthBackward() {
+        let newDate = Calendar.current.date(byAdding: .month, value: -1, to: selectedDate)
+        selectedDate = newDate ?? selectedDate
+        calcDate(selectedDate)
     }
     
-    func previousMonth() {
-        selectedMonth -= 1
-        if selectedMonth < 1 {
-            selectedMonth = 12
-            selectedYear -= 1
-        }
-        getCalendar()
+    // 다음 달로 이동하는 함수
+    func moveOneMonthForward() {
+        let newDate = Calendar.current.date(byAdding: .month, value: 1, to: selectedDate)
+        selectedDate = newDate ?? selectedDate
+        calcDate(selectedDate)
+    }
+    // 하루 전으로 이동하는 함수
+    func moveOneDayBackward() {
+        let newDate = Calendar.current.date(byAdding: .day, value: -1, to: selectedDate)
+        selectedDate = newDate ?? selectedDate
+        calcDate(selectedDate)
     }
     
+    // 하루 이후로 이동하는 함수
+    func moveOneDayForward() {
+        let newDate = Calendar.current.date(byAdding: .day, value: 1, to: selectedDate)
+        selectedDate = newDate ?? selectedDate
+        calcDate(selectedDate)
+    }
+
     var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "MM.dd"

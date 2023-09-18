@@ -17,7 +17,6 @@ class TokenReissueViewModel: ObservableObject {
     
     init( dataManager: TokenReissueProtocol = TokenReissue.shared) {
         self.dataManager = dataManager
-        //postSignIn()
     }
     
     func tokenReissue() {
@@ -34,7 +33,6 @@ class TokenReissueViewModel: ObservableObject {
                         print("reissue token : \(self.result)")
                         self.setToken()
                     }
-                    
                 }.store(in: &cancellableSet)
         }
     }
@@ -43,9 +41,7 @@ class TokenReissueViewModel: ObservableObject {
         Keychain.setKeychain(self.result.accessToken, forKey: .accessToken)
         Keychain.setKeychain(self.result.refreshToken, forKey: .refreshToken)
     }
-    
     func createAlert( with error: NetworkError) {
-        //loadingError = error.backendError == nil ? error.initialError.localizedDescription : error.backendError!.message
         if let backendError = error.backendError {
             guard let serverError = ServerError(rawValue: backendError.code) else {
                 // 서버 에러 코드가 정의되지 않은 경우의 처리
@@ -53,8 +49,6 @@ class TokenReissueViewModel: ObservableObject {
                 return
             }
             AlertManager.shared.handleError(serverError)
-            // 에러 메시지 처리
-            //showAlert(message: serverError.errorMessage)
             
             // 에러코드에 따른 추가 로직
             if let errorCode = error.backendError?.code {

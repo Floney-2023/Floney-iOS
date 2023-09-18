@@ -117,8 +117,9 @@ struct UserInfoView: View {
                     }
             }
             .padding(EdgeInsets(top: 32, leading: 24, bottom: 0, trailing: 24))
-            .navigationBarBackButtonHidden(true)
-            .navigationBarItems(leading: BackButton())
+            .customNavigationBar(
+                leftView: { BackButton() }
+                )
         }
         .onAppear(perform : UIApplication.shared.hideKeyboard)
     }

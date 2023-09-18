@@ -95,15 +95,13 @@ struct UserInformationView: View {
             
         }
         .padding(EdgeInsets(top: 35, leading: 20, bottom: 0, trailing: 20))
-        .navigationBarBackButtonHidden(true)
-        .navigationBarItems(leading: BackButtonBlack())
-        .toolbar {
-            ToolbarItem(placement: .principal) {
-                Text("회원 정보")
+        .customNavigationBar(
+            leftView: { BackButtonBlack() },
+            centerView: { Text("회원 정보")
                     .font(.pretendardFont(.semiBold, size: 16))
-                    .foregroundColor(.greyScale1)
-            }
-        }
+                .foregroundColor(.greyScale1)}
+            
+            )
         .overlay(
             ZStack {
                 if showingLogoutAlert {

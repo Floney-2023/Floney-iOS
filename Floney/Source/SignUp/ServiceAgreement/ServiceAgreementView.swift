@@ -81,8 +81,9 @@ struct ServiceAgreementView: View {
                 }
             }
             .padding(EdgeInsets(top: 32, leading: 24, bottom: 0, trailing: 24))
-            .navigationBarBackButtonHidden(true)
-            .navigationBarItems(leading: BackButton())
+            .customNavigationBar(
+                leftView: { BackButton() }
+                )
             
             CustomAlertView(message: ErrorMessage.signup01.value, type: $viewModel.buttonType, isPresented: $viewModel.showAlert)
         } //ZStack

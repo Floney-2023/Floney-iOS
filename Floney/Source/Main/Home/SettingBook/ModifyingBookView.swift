@@ -93,15 +93,14 @@ struct ModifyingBookView: View {
             
         }
         .padding(EdgeInsets(top: 35, leading: 20, bottom: 0, trailing: 20))
-        .navigationBarBackButtonHidden(true)
-        .navigationBarItems(leading: BackButtonBlack())
-        .toolbar {
-            ToolbarItem(placement: .principal) {
+        .customNavigationBar(
+            leftView: { BackButtonBlack() },
+            centerView: {
                 Text("가계부 편집")
                     .font(.pretendardFont(.semiBold, size: 16))
                     .foregroundColor(.greyScale1)
             }
-        }
+        )
         .overlay(
             ZStack {
                 if deleteAlert {

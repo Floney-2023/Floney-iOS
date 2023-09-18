@@ -107,10 +107,9 @@ struct AddCategoryView: View {
                             Spacer()
                         }.padding(.top, 2)
                     }
-                    
                     Spacer()
                 }.padding(.horizontal, 20)
-                    .padding(.top, 18)
+                .padding(.top, 18)
                 Button {
                     if viewModel.isValidCategoryName() {
                         viewModel.root = self.root[selectedIndex]
@@ -130,6 +129,7 @@ struct AddCategoryView: View {
             }
             .edgesIgnoringSafeArea(.bottom)
             .onAppear(perform : UIApplication.shared.hideKeyboard)
+            
             if AlertManager.shared.showAlert {
                 CustomAlertView(message: alertManager.message, type: $alertManager.buttontType, isPresented: $alertManager.showAlert)
             }

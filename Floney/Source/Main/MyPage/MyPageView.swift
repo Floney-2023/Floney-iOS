@@ -330,10 +330,11 @@ struct MyPageView: View {
                             self.isNextToUnSubscription = true
                         }
                     }
+                    
                 } // scroll view
                 .padding(.horizontal,20)
                 
-                NavigationLink(destination : SetBookNameView(), isActive: $isNextToCreateBook) {
+                NavigationLink(destination : SetBookNameView(createBookType: .add), isActive: $isNextToCreateBook) {
                     EmptyView()
                 }
                 NavigationLink(destination : EnterBookCodeView(), isActive: $isNextToEnterCode) {
@@ -347,7 +348,8 @@ struct MyPageView: View {
                 UnsubscribeView(showingTabbar: $showingTabbar, isShowing: $isNextToUnSubscription)
             }
             
-        } // zstack
+            
+        } // ZStack
         .padding(.top, 26)
         .onAppear{
             if IAPManager.shared.subscriptionStatus {
@@ -356,11 +358,8 @@ struct MyPageView: View {
             viewModel.getMyPage()
             showingTabbar = true
         }
-
     }
-    
 }
-
 
 struct MyPageView_Previews: PreviewProvider {
     static var previews: some View {

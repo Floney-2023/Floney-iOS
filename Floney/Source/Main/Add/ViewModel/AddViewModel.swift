@@ -60,7 +60,7 @@ class AddViewModel: ObservableObject {
         return true
     }
     func isVaildAdd(money: String, asset: String, category: String) -> Bool {
-        if money.isEmpty {
+        if money.isEmpty || money == "0" {
             alertManager.handleError(InputValidationError.moneyEmpty)
             return false
         }

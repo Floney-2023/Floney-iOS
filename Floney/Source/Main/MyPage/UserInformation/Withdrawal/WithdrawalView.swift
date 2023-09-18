@@ -99,8 +99,9 @@ struct WithdrawalView: View {
 
             }
             .padding(EdgeInsets(top: 30, leading: 24, bottom: 0, trailing: 24))
-            .navigationBarBackButtonHidden(true)
-            .navigationBarItems(leading: BackButton())
+            .customNavigationBar(
+                leftView: { BackButton() }
+            )
             
             
         }

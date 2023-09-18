@@ -92,15 +92,14 @@ struct NotificationView: View {
                 )
             }
         }
-        .navigationBarBackButtonHidden()
-        .navigationBarItems(leading: BackButtonBlack())
-        .toolbar {
-            ToolbarItem(placement: .principal) {
+        .customNavigationBar(
+            leftView: { BackButtonBlack() },
+            centerView: {
                 Text("가계부 알림")
-                    .font(.pretendardFont(.semiBold, size: 16))
-                    .foregroundColor(.greyScale1)
-            }
-        }
+                .font(.pretendardFont(.semiBold, size: 16))
+                .foregroundColor(.greyScale1)}
+            
+            )
         .onAppear{
             showingTabbar = false
         }

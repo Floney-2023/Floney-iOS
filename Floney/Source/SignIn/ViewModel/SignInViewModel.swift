@@ -65,7 +65,7 @@ class SignInViewModel: ObservableObject {
                     self.setToken()
                     IAPManager.shared.getSubscriptionStatus()
                     if (AuthenticationService.shared.isUserLoggedIn == false){
-                        self.setEmailPassword()
+                        self.setEmailPassword(provider: .email)
                         AuthenticationService.shared.logIn()
                     }
                     print("--성공--")
@@ -169,7 +169,7 @@ class SignInViewModel: ObservableObject {
                     // 자동로그인을 한 경우는 isLoggedIn이 true이므로 email과 password를 다시 저장하지 않아도 괜찮다.
                     IAPManager.shared.getSubscriptionStatus()
                     if (AuthenticationService.shared.isUserLoggedIn == false) {
-                        self.setEmailPassword()
+                        self.setEmailPassword(provider: .kakao)
                         AuthenticationService.shared.logIn()
                     }
                     print("--성공--")
@@ -195,11 +195,9 @@ class SignInViewModel: ObservableObject {
                     print("set token 호출 전")
                     self.setToken()
                     print("set token 호출 후")
-                    // 자동로그인을 한 경우는 isLoggedIn이 true이므로 email과 password를 다시 저장하지 않아도 괜찮다.
-                    // 자동로그인을 한 경우는 isLoggedIn이 true이므로 email과 password를 다시 저장하지 않아도 괜찮다.
                     IAPManager.shared.getSubscriptionStatus()
                     if (AuthenticationService.shared.isUserLoggedIn == false) {
-                        self.setEmailPassword()
+                        self.setEmailPassword(provider: .google)
                         AuthenticationService.shared.logIn()
                         
                     }
@@ -230,9 +228,8 @@ class SignInViewModel: ObservableObject {
                     // 자동로그인을 한 경우는 isLoggedIn이 true이므로 email과 password를 다시 저장하지 않아도 괜찮다.
                     IAPManager.shared.getSubscriptionStatus()
                     if (AuthenticationService.shared.isUserLoggedIn == false) {
-                        self.setEmailPassword()
+                        self.setEmailPassword(provider: .apple)
                         AuthenticationService.shared.logIn()
-                        
                     }
                     print("--성공--")
                     print(self.result)
@@ -250,25 +247,83 @@ class SignInViewModel: ObservableObject {
     }
     
     //MARK: 자동로그인을 위한 email, password 저장하기, 사용자가 이메일과 비밀번호 입력한 경우이다.
-    func setEmailPassword() {
+    func setEmailPassword(provider : ProviderType) {
         Keychain.setKeychain(email, forKey: .email)
-        Keychain.setKeychain(password, forKey: .password)
+        if provider == .email {
+            Keychain.setKeychain(password, forKey: .password)
+            Keychain.setKeychain("EMAIL", forKey: .provider)
+        } else if provider == .kakao {
+            Keychain.setKeychain("KAKAO", forKey: .provider)
+        } else if provider == .google {
+            Keychain.setKeychain("GOOGLE", forKey: .provider)
+        } else if provider == .apple {
+            Keychain.setKeychain("APPLE", forKey: .provider)
+        }
         AuthenticationService.shared.logIn()
     }
     
     //MARK: 자동로그인, 사용자가 입력하지 않아도 이미 저장되어 있는 이메일과 비밀번호를 불러와서 로그인을 진행한다.
     func autoLogin() -> Bool {
-        guard let email = Keychain.getKeychainValue(forKey: .email),
-                let password = Keychain.getKeychainValue(forKey: .password) else {
-            AuthenticationService.shared.logoutDueToTokenExpiration()
+        guard let provider = Keychain.getKeychainValue(forKey: .provider) else {
             return false
         }
-        self.email = email
-        self.password = password
-        postSignIn()
         
-        return true
+        if provider == "EMAIL" {
+            guard let email = Keychain.getKeychainValue(forKey: .email),
+                  let password = Keychain.getKeychainValue(forKey: .password) else {
+                AuthenticationService.shared.logoutDueToTokenExpiration()
+                return false
+            }
+            self.email = email
+            self.password = password
+            postSignIn()
+            return true
+        }
+        if provider == "KAKAO" {
+            // 토큰 존재 여부 확인하기
+            if (AuthApi.hasToken()) {
+                UserApi.shared.accessTokenInfo { (_, error) in
+                    if let error = error {
+                        if let sdkError = error as? SdkError, sdkError.isInvalidTokenError() == true  {
+                            //로그인 필요
+                        }
+                        else {
+                            //기타 에러
+                        }
+                    }
+                    else {
+                        //토큰 유효성 체크 성공(필요 시 토큰 갱신됨)
+                        // 사용자 엑세스 토큰 정보 조회(캐시에 저장하여 사용중인 토큰)
+                        UserApi.shared.accessTokenInfo {(accessTokenInfo, error) in
+                            if let error = error {
+                                print(error)
+                            }
+                            else {
+                                print("엑세스 토큰 정보 가져오기 성공")
+                                _ = accessTokenInfo
+                            }
+                        }
+                    }
+                }
+            }
+            else {
+                //로그인 필요
+            }
+            return true
+        }
+        if provider == "GOOGLE" {
+            
+            return true
+        }
+        if provider == "APPLE" {
+            
+            return true
+        }
+        return false
     }
+    
+    
+    
     //MARK: 구글 서버에서 토큰 받아오기
     func signInGoogle() async throws {
         guard let topVC = Utilities.shared.topViewController() else {
@@ -294,10 +349,6 @@ class SignInViewModel: ObservableObject {
         self.authToken = idToken
         self.email = email!
         self.nickname = nickname!
-
-        //signUpViewModel.email = email!
-        //signUpViewModel.nickname = nickname!
-        //signUpViewModel.provider = "google"
         
         print("id token : \(idToken)")
         print("access token : \(accessToken)")
@@ -362,23 +413,15 @@ class SignInViewModel: ObservableObject {
                         }
                         else {
                             print("me() success.")
-                            
                             let nickname = user?.kakaoAccount?.profile?.nickname
                             let email = user?.kakaoAccount?.email
-                            
                             print("nickname : \(nickname)")
                             print("email : \(email)")
                             print("oauthToken : \(oauthToken)")
                             let token = String(describing: oauthToken.accessToken)
-                            
                             self.email = email!
                             self.nickname = nickname!
                             self.authToken = token
-                            //viewModel.signUpViewModel.email = email!
-                            //viewModel.signUpViewModel.nickname = nickname!
-                            //viewModel.signUpViewModel.provider = "kakao"
-                            
-                           
                             self.checkKakao()
                             // "is_email_valid" = 1;
                             // "is_email_verified" = 1;
@@ -449,7 +492,7 @@ class SignInViewModel: ObservableObject {
                 switch errorCode {
                     // 토큰 재발급
                 case "U006" :
-                    AuthenticationService.shared.logoutDueToTokenExpiration()
+                    tokenViewModel.tokenReissue()
                 // 아예 틀린 토큰이므로 재로그인해서 다시 발급받아야 함.
                 case "U007" :
                     AuthenticationService.shared.logoutDueToTokenExpiration()

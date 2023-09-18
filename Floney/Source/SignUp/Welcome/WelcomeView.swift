@@ -33,8 +33,7 @@ struct WelcomeView: View {
                 }
             }
             .padding(EdgeInsets(top: 78, leading: 24, bottom: 0, trailing: 24))
-            .navigationBarBackButtonHidden(true)
-            
+            .navigationBarBackButtonHidden(true) 
         }
     }
 }

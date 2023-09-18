@@ -65,33 +65,7 @@ struct AddView: View {
                                 .foregroundColor(.greyScale6)
                             Spacer()
                         }
-                       /*
-                        TextField("", text: $money)
-                            .keyboardType(.decimalPad)
-                            .foregroundColor(.primary2)
-                            .font(.pretendardFont(.bold, size: 38))
-                            .onChange(of: money) { newValue in
-                                if newValue.count > moneyMaxLength {
-                                    money = String(newValue.prefix(moneyMaxLength))
-                                }
-                            }
-                            .overlay(
-                                Text("금액을 입력하세요.")
-                                    .font(.pretendardFont(.bold, size: 36))
-                                    .foregroundColor(.greyScale9)
-                                    .opacity(money.isEmpty ? 1 : 0)
-                                
-                                , alignment: .leading
-                            )
-                        
-                            .overlay(
-                                Text("\(money)\(currency)")
-                                        .font(.pretendardFont(.bold, size: 38))
-                                        .foregroundColor(.primary2)
-                                        .opacity(money.isEmpty ? 0 : 1)
-                                    , alignment: .leading
-                                
-                            )*/
+                        /*
                         MoneyTextField(text: $money, placeholder: "금액을 입력하세요")
                             .frame(height: UIScreen.main.bounds.height * 0.0487)
                             .onReceive(Just(money)) { value in
@@ -101,9 +75,31 @@ struct AddView: View {
                                 } else {
                                     money = String(digits.dropLast())
                                 }
+                            }*/
+                        
+                        MoneyTextField(text: $money, placeholder: "금액을 입력하세요")
+                            .frame(height: UIScreen.main.bounds.height * 0.0487)
+                            .onReceive(Just(money)) { value in
+                                let trimmedValue = value.filter { "0"..."9" ~= $0 || $0 == "." }
+                                let components = trimmedValue.split(separator: ".")
+                                
+                                // 소수점이 없거나 하나만 있는 경우
+                                if components.count <= 1 || (components.count == 2 && components[1].count <= 2) {
+                                    if let doubleValue = Double(trimmedValue), doubleValue <= 100_000_000_000 {
+                                        money = trimmedValue
+                                    } else if let doubleValue = Double(trimmedValue) {
+                                        money = String(trimmedValue.dropLast())
+                                    }
+                                }
+                                // 소수점이 둘째 자리 이후로 입력된 경우
+                                else if components.count == 2 && components[1].count > 2 {
+                                    money = String(components[0]) + "." + components[1].prefix(2)
+                                }
+                                // 두 개 이상의 소수점이 포함된 경우
+                                else {
+                                    money = String(components.dropLast().joined(separator: "."))
+                                }
                             }
-                    
-                                                    
                     } // 금액 VStack
                     
                     //MARK: 지출/수입/이체 선택 토글 버튼
@@ -199,8 +195,6 @@ struct AddView: View {
                                 .font(.pretendardFont(.medium, size: 14))
                                 .foregroundColor(.greyScale4)
                             
-                            //TextField("", text: $content)
-                            //    .multilineTextAlignment(.trailing)
                             ContentTextField(text: $content, placeholder: "내용을 입력하세요")
                                 .frame(height: UIScreen.main.bounds.height * 0.018)
                                 .onChange(of: content) { newValue in
@@ -208,17 +202,6 @@ struct AddView: View {
                                         content = String(newValue.prefix(maxLength))
                                     }
                                 }
-                            /*
-                                .overlay(
-                                    Text("내용을 입력하세요.")
-                                        .font(.pretendardFont(.medium, size: 14))
-                                        .foregroundColor(.greyScale6)
-                                        .opacity(content.isEmpty ? 1 : 0)
-                                    
-                                    , alignment: .trailing
-                                )
-                                .font(.pretendardFont(.medium, size: 14))
-                                .foregroundColor(.greyScale2)*/
                         }
 
                         
@@ -369,8 +352,6 @@ struct AddView: View {
             NavigationLink(destination: CategoryManagementView(isShowingEditCategory: $isShowingEditCategory), isActive: $isShowingEditCategory) {
                 EmptyView()
             }
-            
-            
         } // ZStack
     }
     func formatNumber(_ n: Int) -> String {

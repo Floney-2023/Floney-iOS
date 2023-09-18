@@ -61,9 +61,10 @@ struct EmailAuthView: View {
                 
             }
             .padding(EdgeInsets(top: 32, leading: 24, bottom: 0, trailing: 24))
-            .navigationBarBackButtonHidden(true)
-            .navigationBarItems(leading: BackButton())
             .onAppear(perform : UIApplication.shared.hideKeyboard)
+            .customNavigationBar(
+                leftView: { BackButton() }
+                )
             
             CustomAlertView(message: viewModel.errorMessage, type: $viewModel.buttonType, isPresented: $viewModel.showAlert)
             // Loading view overlay

@@ -15,19 +15,6 @@ struct SettlementDetailView: View {
     @ObservedObject var viewModel : CalculateViewModel
     var body: some View {
         VStack {
-            /*
-            HStack {
-                Image("back_button")
-                    .onTapGesture {
-                        print("back button tapped")
-                        self.showingDetail = false
-                    }
-                Spacer()
-                
-            }
-            .padding(.vertical, 22)
-            .padding(.leading, 20)*/
-
             VStack(alignment: .leading,spacing: 32) {
                 HStack {
                     VStack(alignment: .leading, spacing: 12) {
@@ -147,11 +134,12 @@ struct SettlementDetailView: View {
             
         }
         .edgesIgnoringSafeArea(.bottom)
-        .navigationBarBackButtonHidden()
-        .navigationBarItems(leading: BackButton())
-            .onAppear{
-                viewModel.getSettlementDetail(id: settlementId)
-            }
+        .customNavigationBar(
+            leftView: { BackButton() }
+        )
+        .onAppear{
+            viewModel.getSettlementDetail(id: settlementId)
+        }
     }
 }
 

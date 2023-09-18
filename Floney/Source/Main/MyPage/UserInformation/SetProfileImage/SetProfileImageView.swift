@@ -100,15 +100,13 @@ struct SetProfileImageView: View {
                 .cornerRadius(12)
             }
             .padding(EdgeInsets(top: 68, leading: 20, bottom: 0, trailing: 20))
-            .navigationBarBackButtonHidden(true)
-            .navigationBarItems(leading: BackButtonBlackWithAlert(showAlert: $showAlert))
-            .toolbar {
-                ToolbarItem(placement: .principal) {
-                    Text("프로필 이미지 변경")
+            .customNavigationBar(
+                leftView: { BackButtonBlackWithAlert(showAlert: $showAlert) },
+                centerView: { Text("프로필 이미지 변경")
                         .font(.pretendardFont(.semiBold, size: 16))
-                        .foregroundColor(.greyScale1)
-                }
-            }
+                    .foregroundColor(.greyScale1)}
+                
+                )
             .onAppear{
                 permissionManager.requestCameraPermission()
                 permissionManager.requestAlbumPermission()

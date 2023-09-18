@@ -9,6 +9,7 @@ import SwiftUI
 
 struct CategoryManagementView: View {
     @Environment(\.presentationMode) var presentationMode
+    
     var options = ["자산", "지출", "수입", "이체"]
     @State private var selectedOptions = 0
     @State var list = ["현금", "체크카드", "신용카드", "은행"]
@@ -24,34 +25,6 @@ struct CategoryManagementView: View {
         ZStack {
             VStack {
                 VStack{
-                    HStack {
-                        Image("back_button")
-                            .onTapGesture {
-                                isShowingEditCategory = false
-                                self.presentationMode.wrappedValue.dismiss()
-                            }
-                        Spacer()
-                        if editState {
-                            Button {
-                                self.editState = false
-                            } label: {
-                                Text("완료")
-                                    .font(.pretendardFont(.regular,size: 14))
-                                    .foregroundColor(.greyScale2)
-                            }
-
-                        } else {
-                            Image("icon_edit")
-                                .onTapGesture {
-                                    self.editState = true
-                                }
-                        }
-                    }
-                    .frame(height: 24)
-                    .padding(.top, 0)
-                    .padding(.bottom, 52)
-                    .padding(.horizontal, 24)
-                    
                     VStack(alignment:.leading, spacing: 0){
                         HStack{
                             VStack(alignment:.leading, spacing: 10) {
@@ -67,7 +40,6 @@ struct CategoryManagementView: View {
                             
                         }
                     }
-                    
                     .padding(.horizontal, 24)
                     
                     HStack(spacing: 0) {
@@ -95,27 +67,11 @@ struct CategoryManagementView: View {
                             )
                         }
                     }
-                    
                     .frame(maxWidth: .infinity)
                     .frame(height: 38)
                     .cornerRadius(8)
                     .padding(.horizontal,20)
-                    
-                    //.padding(.horizontal, 16)
-                    /*
-                     switch selectedOptions {
-                     case 0:
-                     
-                     case 1:
-                     
-                     case 2:
-                     
-                     case 3:
-                     
-                     default:
-                     
-                     }
-                     */
+
                     ScrollView(showsIndicators: false) {
                         VStack(alignment: .leading) {
                             ForEach(viewModel.categories.indices, id: \.self) { i in
@@ -145,23 +101,9 @@ struct CategoryManagementView: View {
                             }
                             
                         }.padding(.horizontal,22)
-                       
                     }
-                    
-                }
-               // .padding(.horizontal, 24)
-                Button {
-                    isShowingAdd = true
-                } label: {
-                    Text("추가하기")
-                        .font(.pretendardFont(.bold, size: 14))
-                        .foregroundColor(.white)
-                        .padding(.bottom, 10)
-                    
-                }.frame(maxWidth: .infinity)
-                    .frame(height:UIScreen.main.bounds.height * 0.085)
-                    .background(Color.primary1)
-            }
+                } // VStack
+            } // VStack
             .fullScreenCover(isPresented: $isShowingAdd) {
                 AddCategoryView(isShowingAdd: $isShowingAdd)
             }
@@ -177,17 +119,56 @@ struct CategoryManagementView: View {
             .onChange(of: isShowingAdd) { newValue in
                 viewModel.getCategory()
             }
-            .navigationBarBackButtonHidden(true)
-            .overlay(
-                ZStack {
-                    if deleteAlert {
-                        AlertView(isPresented: $deleteAlert, title: $title, message: $message, onOKAction: {
-                            viewModel.deleteCategory()
-                        })
+            .customNavigationBar(
+                leftView: {
+                Image("back_button")
+                    .onTapGesture {
+                        isShowingEditCategory = false
+                        self.presentationMode.wrappedValue.dismiss()
+                    }
+                },
+                rightView: {
+                    Group {
+                        if editState {
+                            Button {
+                                self.editState = false
+                            } label: {
+                                Text("완료")
+                                    .font(.pretendardFont(.regular,size: 14))
+                                    .foregroundColor(.greyScale2)
+                            }
+                            
+                        } else {
+                            Image("icon_edit")
+                                .onTapGesture {
+                                    self.editState = true
+                                }
+                        }
                     }
                 }
             )
-        }
+            VStack {
+                Spacer()
+                Button {
+                    isShowingAdd = true
+                } label: {
+                    Text("추가하기")
+                        .font(.pretendardFont(.bold, size: 14))
+                        .foregroundColor(.white)
+                        .padding(.bottom, 10)
+                    
+                }.frame(maxWidth: .infinity)
+                    .frame(height:UIScreen.main.bounds.height * 0.085)
+                    .background(Color.primary1)
+            }.edgesIgnoringSafeArea(.bottom)
+            
+            if deleteAlert {
+                AlertView(isPresented: $deleteAlert, title: $title, message: $message, onOKAction: {
+                    viewModel.deleteCategory()
+                })
+            }
+        }// ZStack
+      
     }
 }
 

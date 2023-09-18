@@ -12,16 +12,12 @@ import SwiftUI
 class MyPageViewModel: ObservableObject {
     var alertManager = AlertManager.shared
     var recentBookManager = RecentBookKeyManager()
-    //var cryptionManager = CryptManager()
-    
+
     @Published var result : MyPageResponse = MyPageResponse(nickname: "", email: "", profileImg: "", provider: "", subscribe: false, lastAdTime: nil, myBooks: [])
-    
-    
     @Published var myPageLoadingError: String = ""
     @Published var errorMessage : String = ""
     @Published var showAlert: Bool = false
-    
-    @Published var nickname : String = ""{
+    @Published var nickname : String = "" {
         didSet {
             if nickname.count > 8 {
                 nickname = String(nickname.prefix(8))
@@ -34,10 +30,13 @@ class MyPageViewModel: ObservableObject {
     @Published var userImg : String?
     @Published var profileUrl : String?
     @Published var myBooks : [MyBookResult] = []
-    
-    
-    @Published var changedNickname = ""
-    
+    @Published var changedNickname = "" {
+        didSet {
+            if changedNickname.count > 8 {
+                changedNickname = String(changedNickname.prefix(8))
+            }
+        }
+    }
     //MARK: Image
     @Published var imageLoading: Bool = true
     @Published var ChangeProfileImageSuccess : Bool = false

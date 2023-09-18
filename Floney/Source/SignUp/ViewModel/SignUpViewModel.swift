@@ -62,7 +62,7 @@ class SignUpViewModel: ObservableObject {
            
                     self.setToken()
                     if (AuthenticationService.shared.isUserLoggedIn == false) {
-                        self.setEmailPassword()
+                        self.setEmailPassword(provider: .email)
                         AuthenticationService.shared.logIn()
                         
                     }
@@ -85,7 +85,7 @@ class SignUpViewModel: ObservableObject {
                     
                     self.setToken()
                     if (AuthenticationService.shared.isUserLoggedIn == false) {
-                        self.setEmailPassword()
+                        self.setEmailPassword(provider: .kakao)
                         AuthenticationService.shared.logIn()
                         
                     }
@@ -108,7 +108,7 @@ class SignUpViewModel: ObservableObject {
                 
                     self.setToken()
                     if (AuthenticationService.shared.isUserLoggedIn == false) {
-                        self.setEmailPassword()
+                        self.setEmailPassword(provider: .google)
                         AuthenticationService.shared.logIn()
                         
                     }
@@ -131,9 +131,8 @@ class SignUpViewModel: ObservableObject {
                   
                     self.setToken()
                     if (AuthenticationService.shared.isUserLoggedIn == false) {
-                        self.setEmailPassword()
+                        self.setEmailPassword(provider: .apple)
                         AuthenticationService.shared.logIn()
-                        
                     }
                     print("--성공--")
                     print(self.result)
@@ -146,15 +145,23 @@ class SignUpViewModel: ObservableObject {
     func setToken() {
         Keychain.setKeychain(self.result.accessToken, forKey: .accessToken)
         Keychain.setKeychain(self.result.refreshToken, forKey: .refreshToken)
-        
     }
-    //MARK: 자동로그인을 위한 email, password 저장하기, 사용자가 이메일과 비밀번호 입력한 경우이다.
-    func setEmailPassword() {
+    //MARK: 자동로그인을 위한 email, password 저장하기
+    func setEmailPassword(provider : ProviderType) {
         Keychain.setKeychain(email, forKey: .email)
-        Keychain.setKeychain(password, forKey: .password)
-        Keychain.setKeychain(nickname, forKey: .userNickname)
+        if provider == .email {
+            Keychain.setKeychain(password, forKey: .password)
+            Keychain.setKeychain("EMAIL", forKey: .provider)
+        } else if provider == .kakao {
+            Keychain.setKeychain("KAKAO", forKey: .provider)
+        } else if provider == .google {
+            Keychain.setKeychain("GOOGLE", forKey: .provider)
+        } else if provider == .apple {
+            Keychain.setKeychain("APPLE", forKey: .provider)
+        }
+        AuthenticationService.shared.logIn()
     }
-    
+
     //MARK: EMAIL에 인증코드 보내기
     func authEmail() {
         DispatchQueue.main.async {

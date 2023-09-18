@@ -26,7 +26,6 @@ struct SendBookCodeView: View {
             CustomTextField(text: $viewModel.code, placeholder: "코드를 입력하세요.", placeholderColor: .greyScale6)
                 .frame(height: UIScreen.main.bounds.height * 0.06)
            
-            
             Spacer()
             
             VStack(spacing: 12) {
@@ -41,15 +40,14 @@ struct SendBookCodeView: View {
                             }
                         }
                 }
-                NavigationLink(destination: SetBookNameView()){
+                NavigationLink(destination: SetBookNameView(createBookType: .initial)){
                     Text("새 가계부 만들기")
                         .padding()
                         .foregroundColor(.primary1)
                         .modifier(NextButtonModifier(backgroundColor: .primary9))
-                        
+                    
                 }
             }
-
         }
         .padding(EdgeInsets(top: 78, leading: 24, bottom: 0, trailing: 24))
         .navigationBarBackButtonHidden(true)

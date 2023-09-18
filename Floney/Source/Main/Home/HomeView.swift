@@ -151,6 +151,14 @@ struct CustomCalendarView: View {
             // MARK: 날짜 헤더
             HStack {
                 Image("leftSide")
+                    .onTapGesture {
+                        if viewModel.selectedView == 0 {
+                            viewModel.moveOneMonthBackward()
+                        } else if viewModel.selectedView == 1 {
+                            viewModel.moveOneDayBackward()
+                        }
+                    }
+                    .padding(.trailing, 10)
                 
                 Button(action: {
                     withAnimation {
@@ -162,9 +170,16 @@ struct CustomCalendarView: View {
                     Text(viewModel.selectedView == 0 ? "\(viewModel.selectedYearMonth)" : "\(viewModel.selectedMonth).\(viewModel.selectedDay)")
                         .font(.pretendardFont(.semiBold, size: 20))
                         .foregroundColor(.greyScale1)
-                }
+                }.disabled(viewModel.selectedView == 1 ? true : false)
                 
                 Image("rightSide")
+                    .onTapGesture {
+                        if viewModel.selectedView == 0 {
+                            viewModel.moveOneMonthForward()
+                        } else if viewModel.selectedView == 1 {
+                            viewModel.moveOneDayForward()
+                        }
+                    }.padding(.leading, 10)
                 Spacer()
                 //MARK: 캘린더, 일별 toggle
                 HStack(spacing: 0) {
@@ -295,7 +310,6 @@ struct MonthCalendar: View {
                     ForEach(0..<numberOfRows, id: \.self) { rowIndex in
                         HStack {
                             ForEach(0..<7, id: \.self) { columnIndex in
-                              
                                 if rowIndex * 7 + columnIndex < dates.count {
                                     let date = dates[rowIndex * 7 + columnIndex]
                                     let isSelected = viewModel.selectedDateStr == date
@@ -366,10 +380,7 @@ struct MonthCalendar: View {
                                         
                                         
                                     }
-                                    //.frame(height: 60)
                                     .frame(maxHeight: .infinity)
-                                    //.background(Color.yellow2)
-                                    
                                     
                                 } else {
                                     Text("")

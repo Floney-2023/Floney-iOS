@@ -222,8 +222,10 @@ class SettingBookViewModel : ObservableObject {
             }
             .store(in: &cancellableSet)
     }
+    // 예산 설정
     func setBudget() {
         bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
+        
         let request = SetBudgetRequest(bookKey: bookKey, budget: budget, date: budgetDate)
         dataManager.setBudget(parameters: request)
             .sink { completion in
@@ -239,6 +241,15 @@ class SettingBookViewModel : ObservableObject {
                 // TODO: Handle the received data if necessary.
             }
             .store(in: &cancellableSet)
+    }
+    
+    // 예산 date
+    func setBudgetDate(month: Int) {
+        if month < 10 {
+            self.budgetDate = "\(selectedYear)-\(month)-01"
+        } else {
+            self.budgetDate = "\(selectedYear)-0\(month)-01"
+        }
     }
     
     func onlyNumberValid(input: String, budgetAssetType : BudgetAssetType) -> Bool {

@@ -58,6 +58,7 @@ struct SetBudgetView: View {
                             .background(monthlyAmount.amount > 0 ? Color.primary10 : Color.greyScale12)
                             .cornerRadius(12)
                             .onTapGesture {
+                                viewModel.setBudgetDate(month: month)
                                 month = monthlyAmount.month
                                 setBudgetBottonSheet = true
                             }
@@ -65,7 +66,15 @@ struct SetBudgetView: View {
                         }
                     }.padding(.horizontal, 20)
                 }
+                .customNavigationBar(
+                    leftView: { BackButtonBlack() },
+                    centerView: { Text("예산 설정")
+                            .font(.pretendardFont(.semiBold, size: 16))
+                        .foregroundColor(.greyScale1)}
+                    
+                    )
             }
+            
             YearBottomSheet(selectedYear: $viewModel.selectedYear, isShowing: $showingSheet)
             SetBudgetBottomSheet(isShowing: $setBudgetBottonSheet, month: $month, viewModel: viewModel)
             

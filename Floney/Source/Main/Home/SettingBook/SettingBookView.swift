@@ -217,11 +217,12 @@ struct SettingBookView: View {
                                 }
                                 Spacer()
                             }
+                            .padding(.top, 2)
                             .onTapGesture {
                                 self.resetAlert = true
                             }
                         }
-                    }
+                    }.padding(.bottom, 8)
                     //MARK: 예산 자산
                     VStack(spacing:30) {
                         HStack {
@@ -248,25 +249,17 @@ struct SettingBookView: View {
                                 .foregroundColor(.greyScale2)
                             Spacer()
                         }
+                        .padding(.top, 2)
                         .onTapGesture {
                             self.isShowingSetInitialAsset.toggle()
                         }
                         
                     }
-                    NavigationLink(destination: CategoryManagementView(isShowingEditCategory: $isShowingEditCategory)) {
-                        HStack {
-                            Text("분류항목 관리")
-                                .font(.pretendardFont(.bold,size: 16))
-                                .foregroundColor(.greyScale1)
-                            Spacer()
-                            Image("forward_button")
-                            
-                        }
-                    }
-                    if viewModel.role == "방장" {
-                        NavigationLink(destination: SetCurrencyUnitView()){
+                    .padding(.bottom, 24)
+                    VStack(spacing:50) {
+                        NavigationLink(destination: CategoryManagementView(isShowingEditCategory: $isShowingEditCategory)) {
                             HStack {
-                                Text("화폐 설정")
+                                Text("분류항목 관리")
                                     .font(.pretendardFont(.bold,size: 16))
                                     .foregroundColor(.greyScale1)
                                 Spacer()
@@ -274,27 +267,40 @@ struct SettingBookView: View {
                                 
                             }
                         }
-                    }
-                    
-                    HStack {
-                        Text("엑셀 내보내기")
-                            .font(.pretendardFont(.bold,size: 16))
-                            .foregroundColor(.greyScale1)
-                        Spacer()
-                        Image("forward_button")
-                    }.onTapGesture {
-                        viewModel.downloadExcelFile()
-                    }
-                    
-                    HStack {
-                        Text("친구 초대하기")
-                            .font(.pretendardFont(.bold,size: 16))
-                            .foregroundColor(.greyScale1)
-                        Spacer()
-                        Image("forward_button")
-                    }
-                    .onTapGesture {
-                        self.isShowingShareBook.toggle()
+                        if viewModel.role == "방장" {
+                            NavigationLink(destination: SetCurrencyUnitView()){
+                                HStack {
+                                    Text("화폐 설정")
+                                        .font(.pretendardFont(.bold,size: 16))
+                                        .foregroundColor(.greyScale1)
+                                    Spacer()
+                                    Image("forward_button")
+                                    
+                                }
+                            }
+                        }
+                        
+                        HStack {
+                            Text("엑셀 내보내기")
+                                .font(.pretendardFont(.bold,size: 16))
+                                .foregroundColor(.greyScale1)
+                            Spacer()
+                            Image("forward_button")
+                        }.onTapGesture {
+                            viewModel.downloadExcelFile()
+                        }
+                        
+                        HStack {
+                            Text("친구 초대하기")
+                                .font(.pretendardFont(.bold,size: 16))
+                                .foregroundColor(.greyScale1)
+                            Spacer()
+                            Image("forward_button")
+                        }
+                        .onTapGesture {
+                            self.isShowingShareBook.toggle()
+                        }
+                        
                     }
                     if viewModel.role == "팀원" {
                         //MARK: 가계부 나가기
@@ -312,16 +318,18 @@ struct SettingBookView: View {
                             }
                             Spacer()
                         }
+                        .padding(.top, 8)
                         .onTapGesture {
                             self.exitAlert = true
+                            
                         }
                     }
-                    
                     Spacer()
                 }
                 .padding(EdgeInsets(top: 30, leading: 20, bottom: 0, trailing: 20))
-                .navigationBarBackButtonHidden(true)
-                .navigationBarItems(leading: BackButton())
+                .customNavigationBar(
+                    leftView: { BackButton() }
+                    )
                 .onAppear{
                     viewModel.getBookInfo()
                 }
