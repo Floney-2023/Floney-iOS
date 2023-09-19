@@ -9,8 +9,9 @@ import SwiftUI
 
 @available(iOS 15.0, *)
 struct AuthCodeView: View {
-    @State private var remainingTime: Int = 5 * 60 // 초 단위로 5분
-    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    @State private var remainingTime: Double = 5 * 60 // 초 단위로 5분
+    @State private var startTime = Date.now
+    @Environment(\.scenePhase) var scenePhase
        
     @StateObject var otpModel : OTPViewModel = .init()
     @ObservedObject var viewModel : SignUpViewModel
@@ -42,17 +43,38 @@ struct AuthCodeView: View {
             
             OTPField()
             
-            Text("\(remainingTime / 60):\(remainingTime % 60)")
+            Text(getTimeString(time:remainingTime))
                 .padding(6)
                 .font(.pretendardFont(.medium,size:20))
                 .foregroundColor(.primary2)
                 .background(Color.primary10)
                 .cornerRadius(8)
-                .onReceive(timer) { _ in
-                    if self.remainingTime > 0 {
-                        self.remainingTime -= 1
+                .onAppear {
+                    Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { Timer in
+                        if self.remainingTime > 0 {
+                            self.remainingTime -= 1
+                        } else {
+                            Timer.invalidate()
+                        }
+                    })
+                    
+                }
+                .onChange(of: scenePhase) { newScenePhase in
+                    switch newScenePhase {
+                    case .active:
+                        print("active")
+                        // 앱이 전면으로 왔을 때
+                        bgTimer()
+                    case .inactive:
+                        print("Inactive")
+                    case .background:
+                        print("background")
+                        // 앱이 백그라운드로 갈 때
+                    @unknown default:
+                        print("scenePhase err")
                     }
-                }.padding(.bottom, 24)
+                }
+                .padding(.bottom, 24)
             HStack {
                 VStack(alignment: .leading, spacing:5) {
                     Text("-유효 시간이 지났을 경우 인증 메일을 다시 보내주세요.")
@@ -112,6 +134,21 @@ struct AuthCodeView: View {
                 otpModel.otpFields[index] = String(value[index].last!)
                 
             }
+        }
+    }
+    func getTimeString(time: Double) -> String {
+        let minutes = Int(time) / 60 % 60
+        let seconds = Int(time) % 60
+        return String(format: "%02i:%02i", minutes, seconds)
+    }
+    func bgTimer() {
+        let curTime = Date.now
+        let diffTime = curTime.distance(to: startTime)
+        let result = Double(diffTime.formatted())!
+        remainingTime = 5*60 + result
+        
+        if remainingTime < 0 {
+            remainingTime = 0
         }
     }
     
