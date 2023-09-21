@@ -15,6 +15,7 @@ protocol IAPHelperDelegate: AnyObject {
 }
 
 class IAPManager : ObservableObject{
+    var tokenViewModel = TokenReissueViewModel()
     // 서버에서 가져온 구독 정보
     @Published var subscriptionInfo: IAPInfoResponse?
     @Published var receiptData: [String: Any]?
@@ -206,7 +207,7 @@ extension IAPManager  {
                 switch errorCode {
                     // 토큰 재발급
                 case "U006" :
-                    AuthenticationService.shared.logoutDueToTokenExpiration()
+                    tokenViewModel.tokenReissue()
                 // 아예 틀린 토큰이므로 재로그인해서 다시 발급받아야 함.
                 case "U007" :
                     AuthenticationService.shared.logoutDueToTokenExpiration()

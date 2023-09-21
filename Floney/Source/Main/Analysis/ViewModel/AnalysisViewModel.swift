@@ -195,6 +195,8 @@ class AnalysisViewModel : ObservableObject {
                     
                     if self.leftBudget > 0 {
                         self.calcDailyAvailableMoney()
+                    } else {
+                        self.dailyAvailableMoney = 0
                     }
                     print("left budget : \(self.leftBudget)")
                     print("total budget : \(self.totalBudget)")
@@ -331,7 +333,7 @@ class AnalysisViewModel : ObservableObject {
                 switch errorCode {
                     // 토큰 재발급
                 case "U006" :
-                    AuthenticationService.shared.logoutDueToTokenExpiration()
+                    tokenViewModel.tokenReissue()
                     // 아예 틀린 토큰이므로 재로그인해서 다시 발급받아야 함.
                 case "U007" :
                     AuthenticationService.shared.logoutDueToTokenExpiration()

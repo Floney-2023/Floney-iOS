@@ -14,7 +14,7 @@ struct AddCategoryView: View {
     @State var text = ""
     @ObservedObject var alertManager = AlertManager.shared
     
-    @StateObject var viewModel = AddViewModel()
+    @ObservedObject var viewModel : AddViewModel
     var body: some View {
         ZStack {
             VStack {
@@ -115,6 +115,7 @@ struct AddCategoryView: View {
                         viewModel.root = self.root[selectedIndex]
                         viewModel.postCategory()
                         isShowingAdd = false
+                        
                     }
                     
                 } label: {
@@ -139,6 +140,6 @@ struct AddCategoryView: View {
 
 struct AddCategoryView_Previews: PreviewProvider {
     static var previews: some View {
-        AddCategoryView(isShowingAdd: .constant(true))
+        AddCategoryView(isShowingAdd: .constant(true), viewModel: AddViewModel())
     }
 }

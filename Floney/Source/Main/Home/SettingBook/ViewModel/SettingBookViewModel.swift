@@ -77,18 +77,18 @@ class SettingBookViewModel : ObservableObject {
     }
     func getYearlyBudget() {
         yearlyData[selectedYear] = [
-            MonthlyAmount(month: 1, amount: 100.0),
-            MonthlyAmount(month: 2, amount: 200.0),
-            MonthlyAmount(month: 3, amount: 100.0),
-            MonthlyAmount(month: 4, amount: 200.0),
-            MonthlyAmount(month: 5, amount: 100.0),
-            MonthlyAmount(month: 6, amount: 200.0),
-            MonthlyAmount(month: 7, amount: 100.0),
-            MonthlyAmount(month: 8, amount: 200.0),
-            MonthlyAmount(month: 9, amount: 100.0),
-            MonthlyAmount(month: 10, amount: 200.0),
-            MonthlyAmount(month: 11, amount: 100.0),
-            MonthlyAmount(month: 12, amount: 200.0)
+            MonthlyAmount(month: 1, amount: 0),
+            MonthlyAmount(month: 2, amount: 0),
+            MonthlyAmount(month: 3, amount: 0),
+            MonthlyAmount(month: 4, amount: 0),
+            MonthlyAmount(month: 5, amount: 0),
+            MonthlyAmount(month: 6, amount: 0),
+            MonthlyAmount(month: 7, amount: 0),
+            MonthlyAmount(month: 8, amount: 0),
+            MonthlyAmount(month: 9, amount: 0),
+            MonthlyAmount(month: 10, amount: 0),
+            MonthlyAmount(month: 11, amount: 0),
+            MonthlyAmount(month: 12, amount: 0)
         ]
     }
     //MARK: server
@@ -246,9 +246,9 @@ class SettingBookViewModel : ObservableObject {
     // 예산 date
     func setBudgetDate(month: Int) {
         if month < 10 {
-            self.budgetDate = "\(selectedYear)-\(month)-01"
-        } else {
             self.budgetDate = "\(selectedYear)-0\(month)-01"
+        } else if month >= 10 {
+            self.budgetDate = "\(selectedYear)-\(month)-01"
         }
     }
     
@@ -464,7 +464,7 @@ class SettingBookViewModel : ObservableObject {
                 switch errorCode {
                     // 토큰 재발급
                 case "U006" :
-                    AuthenticationService.shared.logoutDueToTokenExpiration()
+                    tokenViewModel.tokenReissue()
                     // 아예 틀린 토큰이므로 재로그인해서 다시 발급받아야 함.
                 case "U007" :
                     AuthenticationService.shared.logoutDueToTokenExpiration()

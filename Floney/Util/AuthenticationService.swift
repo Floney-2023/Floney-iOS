@@ -11,12 +11,15 @@ class AuthenticationService: ObservableObject {
     
     static let shared = AuthenticationService()  // Singleton instance
     
-    @Published var isUserLoggedIn: Bool = false
+    @Published var isUserLoggedIn: Bool = UserDefaults.standard.bool(forKey: "isLoggedIn")
+    
     @Published var tokenExpired: Bool = false
     @Published var bookStatus: Bool = false
  
     init() {
-
+        if UserDefaults.standard.bool(forKey: "isLoggedIn") {
+            BookExistenceViewModel.shared.getBookExistence() // 유효 가계부 체크
+        }
     }
     func logoutDueToTokenExpiration() {
         // 로그아웃 처리

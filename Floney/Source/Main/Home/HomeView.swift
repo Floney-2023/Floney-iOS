@@ -12,13 +12,13 @@ struct HomeView: View {
     //var encryptionManager = CryptManager()
     var profileManager = ProfileManager.shared
     @Binding var showingTabbar : Bool
+    @Binding var mainAddViewStatus : Bool
     @State var isOnSettingBook = false
     @State var isShowingMonthPicker = false
     @State var isShowingBottomSheet = false
     @State var isShowingAddView = false
     
     var lineModel = LineModel()
-    
     var body: some View {
         // ScrollView {
         ZStack {
@@ -83,12 +83,17 @@ struct HomeView: View {
             
         }.fullScreenCover(isPresented: $isShowingAddView) {
             NavigationView {
-                
                 AddView.init(isPresented: $isShowingAddView, lineModel: lineModel, date: viewModel.selectedDateStr)
             }
         }
         .onAppear {
             self.showingTabbar = true
+        }
+        .onChange(of: mainAddViewStatus) { newValue in
+            viewModel.getCalendar()
+        }
+        .onChange(of: isShowingAddView) { newValue in
+            viewModel.getCalendar()
         }
     }
 }

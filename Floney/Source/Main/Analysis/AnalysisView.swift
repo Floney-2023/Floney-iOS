@@ -84,7 +84,7 @@ struct AnalysisView: View {
                     case 1:
                         IncomeView(viewModel: viewModel)
                     case 2:
-                        BudgetView(viewModel: viewModel)
+                        BudgetView(showingTabbar : $showingTabbar,viewModel: viewModel)
                     case 3:
                         AssetView(viewModel: viewModel)
                     default:
@@ -97,6 +97,9 @@ struct AnalysisView: View {
             }.padding(.top, 26)
                 .onChange(of: LoadingManager.shared.showLoading) { newValue in
                     LoadingManager.shared.showLoading = newValue
+                }
+                .onAppear {
+                    showingTabbar = true
                 }
 
             

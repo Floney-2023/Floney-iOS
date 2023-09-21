@@ -158,6 +158,19 @@ struct SubscriptionView: View {
                     }
                     .background(Color.primary4)
                     
+                    HStack {
+                        Text("- 현재 이용 중인 플랜이 종료되기 24시간 전이라면 언제든지 해약이 가능합니다.\n- 현재 이용 중인 플랜이 종료되기 24시간 전까지 해약하지 않으면  자동으로 구독이 갱신되며 이에 따른 요금이 청구됩니다.\n- 앱을 삭제 혹은 탈퇴하는 것만으로는 인앱결제 구독 플랜이 해약되지 않으니 주의해 주시기 바랍니다.")
+                            .font(.pretendardFont(.regular, size:12))
+                            .foregroundColor(.greyScale2)
+                            .frame(maxWidth:.infinity)
+                            .padding(.bottom, 120)
+                        Spacer()
+                    }
+                    .padding(.top, 24)
+                    .padding(.horizontal, 24)
+                    .frame(maxWidth:.infinity)
+                    
+                    
                 }
                 
             }

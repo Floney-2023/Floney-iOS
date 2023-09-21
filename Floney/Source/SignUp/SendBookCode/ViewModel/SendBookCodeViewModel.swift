@@ -8,6 +8,7 @@
 import Foundation
 import Combine
 class BookCodeViewModel: ObservableObject {
+    var tokenViewModel = TokenReissueViewModel()
     @Published var result : BookCodeResponse = BookCodeResponse(bookKey: "", code: "")
     @Published var bookCodeLoadingError: String = ""
     @Published var showAlert: Bool = false
@@ -19,7 +20,6 @@ class BookCodeViewModel: ObservableObject {
     
     init( dataManager: BookCodeProtocol = BookCode.shared) {
         self.dataManager = dataManager
-        //postSignIn()
     }
     
     func postBookCode() {
@@ -61,7 +61,7 @@ class BookCodeViewModel: ObservableObject {
                 switch errorCode {
                     // 토큰 재발급
                 case "U006" :
-                    AuthenticationService.shared.logoutDueToTokenExpiration()
+                    tokenViewModel.tokenReissue()
                 // 아예 틀린 토큰이므로 재로그인해서 다시 발급받아야 함.
                 case "U007" :
                     AuthenticationService.shared.logoutDueToTokenExpiration()

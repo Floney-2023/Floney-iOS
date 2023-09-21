@@ -76,6 +76,7 @@ struct CalculateView: View {
             }.padding(.top, 26)
                 .onAppear{
                     viewModel.getPassedDays()
+                    showingTabbar = true
                 }
             
         }

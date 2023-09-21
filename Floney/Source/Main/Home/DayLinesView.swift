@@ -26,6 +26,9 @@ struct DayLinesView: View {
             viewModel.dayLinesDate = viewModel.selectedDateStr
             viewModel.getDayLines()
         }
+        .onChange(of: isShowingAddView) { newValue in
+            viewModel.getDayLines()
+        }
     }
 }
 

@@ -13,6 +13,8 @@ import Combine
 class AppLinkManager: ObservableObject {
     static let shared = AppLinkManager() // 싱글톤
     private var cancellableSet: Set<AnyCancellable> = []
+    
+    var tokenViewModel = TokenReissueViewModel()
     @Published var showingShareSheet = false
     @Published var hasDeepLink = false
     @Published var inviteStatus = false
@@ -108,7 +110,7 @@ class AppLinkManager: ObservableObject {
                 switch errorCode {
                     // 토큰 재발급
                 case "U006" :
-                    AuthenticationService.shared.logoutDueToTokenExpiration()
+                    tokenViewModel.tokenReissue()
                 // 아예 틀린 토큰이므로 재로그인해서 다시 발급받아야 함.
                 case "U007" :
                     AuthenticationService.shared.logoutDueToTokenExpiration()

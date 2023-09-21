@@ -378,8 +378,8 @@ extension SettingBookService: SettingBookProtocol {
         let url = "\(Constant.BASE_URL)/books/info/budget"
         
         let token = Keychain.getKeychainValue(forKey: .accessToken) ?? ""
-        print("change budget : \n\(parameters.budget)")
-        
+        print(url)
+        print("change budget : \(parameters)")
         return AF.request(url,
                           method: .post,
                           parameters: parameters,

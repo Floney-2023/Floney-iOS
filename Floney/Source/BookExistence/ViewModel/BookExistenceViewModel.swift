@@ -41,8 +41,7 @@ class BookExistenceViewModel: ObservableObject {
                     if let book = self.result.bookKey {
                         print("가계부 있음")
                         self.bookKey = book
-                        //let bookKey = "C9C30C52"
-                        Keychain.setKeychain(self.bookKey, forKey: .bookKey) 
+                        Keychain.setKeychain(self.bookKey, forKey: .bookKey)
                         self.bookExistence = true
                         if let email = Keychain.getKeychainValue(forKey: .email), let fcmToken = Keychain.getKeychainValue(forKey: .fcmToken) {
                             self.fcmManager.saveToken(for: email, bookKey: book, token: fcmToken)
@@ -78,7 +77,7 @@ class BookExistenceViewModel: ObservableObject {
                 switch errorCode {
                     // 토큰 재발급
                 case "U006" :
-                    AuthenticationService.shared.logoutDueToTokenExpiration()
+                    tokenViewModel.tokenReissue()
                 // 아예 틀린 토큰이므로 재로그인해서 다시 발급받아야 함.
                 case "U007" :
                     AuthenticationService.shared.logoutDueToTokenExpiration()

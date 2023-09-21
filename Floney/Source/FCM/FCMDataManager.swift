@@ -11,6 +11,7 @@ import Alamofire
 import Combine
 
 class FCMDataManager: ObservableObject {
+    var tokenViewModel = TokenReissueViewModel()
     @Published var fcmAccessToken = ""
     private var cancellableSet: Set<AnyCancellable> = []
     init() {
@@ -140,7 +141,7 @@ class FCMDataManager: ObservableObject {
                 switch errorCode {
                     // 토큰 재발급
                 case "U006" :
-                    AuthenticationService.shared.logoutDueToTokenExpiration()
+                    tokenViewModel.tokenReissue()
                 // 아예 틀린 토큰이므로 재로그인해서 다시 발급받아야 함.
                 case "U007" :
                     AuthenticationService.shared.logoutDueToTokenExpiration()

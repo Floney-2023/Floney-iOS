@@ -47,8 +47,7 @@ struct MainTabView: View {
                     switch selection {
                     case 0:
                         NavigationView {
-                           
-                            HomeView(showingTabbar: $showingTabbar)
+                            HomeView(showingTabbar: $showingTabbar, mainAddViewStatus: $showingAddView)
                         }
                     case 1:
                         NavigationView {
@@ -57,8 +56,7 @@ struct MainTabView: View {
                         }
                     case 2:
                         NavigationView {
-                            
-                            AddView(isPresented: $showingAddView,lineModel: lineModel, date:currentDate)
+                            AddView(isPresented: $showingAddView, lineModel: lineModel, date:currentDate)
                                 .transition(.moveAndFade)
                         }
                     case 3:

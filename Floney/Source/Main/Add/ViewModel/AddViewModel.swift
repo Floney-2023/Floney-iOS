@@ -133,7 +133,6 @@ class AddViewModel: ObservableObject {
                     self.fcmManager.sendNotification(to: self.bookKey, title: "정산하기", body: "가계부를 정산해보세요")
                     self.alertManager.update(showAlert: true, message: "저장이 완료되었습니다.", buttonType: .green)
                     self.successAdd = true
-                    
                 }
             }.store(in: &cancellableSet)
     }
@@ -149,6 +148,7 @@ class AddViewModel: ObservableObject {
                 } else {
                     print("--카테고리 추가 성공--")
                     print(dataResponse.value)
+                    self.getCategory()
                     
                 }
             }.store(in: &cancellableSet)
@@ -238,7 +238,7 @@ class AddViewModel: ObservableObject {
                 switch errorCode {
                     // 토큰 재발급
                 case "U006" :
-                    AuthenticationService.shared.logoutDueToTokenExpiration()
+                    tokenViewModel.tokenReissue()
                     // 아예 틀린 토큰이므로 재로그인해서 다시 발급받아야 함.
                 case "U007" :
                     AuthenticationService.shared.logoutDueToTokenExpiration()

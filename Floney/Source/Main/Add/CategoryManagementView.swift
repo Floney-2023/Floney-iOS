@@ -101,11 +101,12 @@ struct CategoryManagementView: View {
                             }
                             
                         }.padding(.horizontal,22)
+                            .padding(.bottom, 64)
                     }
                 } // VStack
             } // VStack
             .fullScreenCover(isPresented: $isShowingAdd) {
-                AddCategoryView(isShowingAdd: $isShowingAdd)
+                AddCategoryView(isShowingAdd: $isShowingAdd, viewModel: viewModel)
             }
             .edgesIgnoringSafeArea(.bottom)
             .onAppear{

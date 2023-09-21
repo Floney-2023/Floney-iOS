@@ -12,6 +12,7 @@ import SwiftUI
 class MyPageViewModel: ObservableObject {
     var alertManager = AlertManager.shared
     var recentBookManager = RecentBookKeyManager()
+    var tokenViewModel = TokenReissueViewModel()
 
     @Published var result : MyPageResponse = MyPageResponse(nickname: "", email: "", profileImg: "", provider: "", subscribe: false, lastAdTime: nil, myBooks: [])
     @Published var myPageLoadingError: String = ""
@@ -325,7 +326,7 @@ class MyPageViewModel: ObservableObject {
                 switch errorCode {
                     // 토큰 재발급
                 case "U006" :
-                    AuthenticationService.shared.logoutDueToTokenExpiration()
+                    tokenViewModel.tokenReissue()
                     // 아예 틀린 토큰이므로 재로그인해서 다시 발급받아야 함.
                 case "U007" :
                     AuthenticationService.shared.logoutDueToTokenExpiration()

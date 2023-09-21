@@ -29,6 +29,7 @@ enum ServerError: String, CustomError {
     case INVALID_OAUTH_RESPONSE = "U015"
     case INVALID_OAUTH_TOKEN = "U016"
     case SAME_PASSWORD = "U017"
+    case CODE_INVALID = "U018"
     case NOT_FOUND_BOOK = "B001"
     case MAX_MEMBER = "B002"
     case NOT_FOUND_CATEGORY = "B003"
@@ -49,7 +50,6 @@ enum ServerError: String, CustomError {
             return "이미 등록된 이메일 입니다."
         case .NOT_AUTHENTICATED: // 로그인 필요
             return "로그인이 필요합니다"
-        
         case .INVALID_MAIL_ADDRESS: // 이메일이 존재하지 않음
             return "유효한 이메일을 입력해주세요."
         case .FAIL_TO_SEND_MAIL: // 메일 서버 에러
@@ -106,6 +106,8 @@ enum ServerError: String, CustomError {
             return "알 수 없는 오류입니다. 다시 시도해 주세요."
         case .SERVER_ERROR: // 서버 에러
             return "알 수 없는 오류입니다. 다시 시도해 주세요."
+        case .CODE_INVALID: // 인증 코드 만료
+            return "유효 시간이 초과되었습니다. 다시 시도해 주세요."
         }
     }
 }
