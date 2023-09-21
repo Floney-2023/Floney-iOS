@@ -30,13 +30,12 @@ struct EnterBookCodeView: View {
             Spacer()
             
             VStack(spacing: 12) {
-                NavigationLink(destination: EnterBookView(), isActive: $isActive){
+                NavigationLink(destination: EnterBookView(), isActive: $viewModel.isNextToEnterBook){
                     Text("추가하기")
                         .padding()
                         .modifier(NextButtonModifier(backgroundColor: .primary1))
                         .onTapGesture {
                             if viewModel.isValidBookCode() {
-                                isActive = true
                                 viewModel.joinBook()
                             }
                         }

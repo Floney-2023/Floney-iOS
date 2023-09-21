@@ -37,7 +37,7 @@ struct EnterBookView: View {
                     }
 
             }
-            .padding(EdgeInsets(top: 32, leading: 24, bottom: 40, trailing: 24))
+            .padding(EdgeInsets(top: 78, leading: 24, bottom: 40, trailing: 24))
             .navigationBarBackButtonHidden(true)
 
         }

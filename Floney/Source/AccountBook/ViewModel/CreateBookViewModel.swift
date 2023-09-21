@@ -13,6 +13,7 @@ enum createBookType {
     case add
 }
 class CreateBookViewModel: ObservableObject {
+    var tokenViewModel = TokenReissueViewModel()
     @Published var result : CreateBookResponse = CreateBookResponse(bookKey: "", code: "")
     @Published var bookInfo = BookInfoByCodeResponse(bookName: "", startDay: "", memberCount: 0)
     @Published var bookName = "" {
@@ -33,6 +34,7 @@ class CreateBookViewModel: ObservableObject {
     @Published var profileImg : String?
     @Published var isNextToCreateBook : Bool = false
     @Published var bookCode = ""
+    @Published var isNextToEnterBook = false
     
     private var cancellableSet: Set<AnyCancellable> = []
     var dataManager: CreateBookProtocol
@@ -99,11 +101,10 @@ class CreateBookViewModel: ObservableObject {
                     print(dataResponse.error)
                 } else {
                     self.result = dataResponse.value!
-                    
                     print(self.result) 
                     print(self.result.code)
                     self.setBookCode()
-                   
+                    self.isNextToEnterBook = true
                 }
             }.store(in: &cancellableSet)
     }
@@ -124,7 +125,6 @@ class CreateBookViewModel: ObservableObject {
                         print(dataResponse.error)
                     } else {
                         self.result = dataResponse.value!
-                        
                         print(self.result) // bookkey & code
                         // bookKey는 request할 때 사용, code는 초대할 때 사용
                         print(self.result.code)
@@ -132,7 +132,7 @@ class CreateBookViewModel: ObservableObject {
                         AppLinkManager.shared.inviteStatus = false
                         AppLinkManager.shared.hasDeepLink = false
                         Keychain.setKeychain(self.bookName, forKey: .bookName)
-                        
+                        BookExistenceViewModel.shared.getBookExistence()
                     }
                 }.store(in: &cancellableSet)
         }
@@ -150,11 +150,11 @@ class CreateBookViewModel: ObservableObject {
                         self.bookName = self.bookInfo.bookName
                         
                         let inputFormatter = DateFormatter()
+                        
                         inputFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS" // 입력 문자열의 형식
                         if let date = inputFormatter.date(from: self.bookInfo.startDay) {
                             let outputFormatter = DateFormatter()
                             outputFormatter.dateFormat = "yyyy.MM.dd" // 원하는 출력 형식
-                            
                             let resultString = outputFormatter.string(from: date)
                             self.startDay = resultString
                             print(resultString) // 출력: 2023.07.17
@@ -190,7 +190,7 @@ class CreateBookViewModel: ObservableObject {
                 switch errorCode {
                     // 토큰 재발급
                 case "U006" :
-                    AuthenticationService.shared.logoutDueToTokenExpiration()
+                    tokenViewModel.tokenReissue()
                     // 아예 틀린 토큰이므로 재로그인해서 다시 발급받아야 함.
                 case "U007" :
                     AuthenticationService.shared.logoutDueToTokenExpiration()
