@@ -24,6 +24,7 @@ protocol SettingBookProtocol {
     func setCarryOver(parameters: SetCarryOver) -> AnyPublisher<Void, NetworkError>
     func downloadExcelFile(bookKey : String) -> AnyPublisher<URL, Error>
     func setCurrency(_ parameters:SetCurrencyRequest) -> AnyPublisher<DataResponse<SetCurrencyResponse, NetworkError>, Never>
+    func getBudget(_ parameters:GetBudgetRequest) -> AnyPublisher<DataResponse<GetBudgetResponse, NetworkError>, Never>
 }
 
 class SettingBookService {
@@ -32,6 +33,26 @@ class SettingBookService {
 }
 
 extension SettingBookService: SettingBookProtocol {
+    func getBudget(_ parameters: GetBudgetRequest) -> AnyPublisher<Alamofire.DataResponse<GetBudgetResponse, NetworkError>, Never> {
+        let url = "\(Constant.BASE_URL)/books/budget?bookKey=\(parameters.bookKey)&startYear=\(parameters.date)"
+        let token = Keychain.getKeychainValue(forKey: .accessToken) ?? ""
+        return AF.request(url,
+                          method: .get,
+                          parameters: nil,
+                          encoding: JSONEncoding.default,
+                          headers: ["Authorization":"Bearer \(token)"])
+        .validate()
+        .publishDecodable(type: GetBudgetResponse.self)
+        .map { response in
+            response.mapError { error in
+                let backendError = response.data.flatMap { try? JSONDecoder().decode(BackendError.self, from: $0)}
+                return NetworkError(initialError: error, backendError: backendError)
+            }
+        }
+        .receive(on: DispatchQueue.main)
+        .eraseToAnyPublisher()
+    }
+    
     func downloadExcelFile(bookKey: String) -> AnyPublisher<URL, Error> {
         let url = "\(Constant.BASE_URL)/books/excel?bookKey=\(bookKey)"
         let token = Keychain.getKeychainValue(forKey: .accessToken) ?? ""

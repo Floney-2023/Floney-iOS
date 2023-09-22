@@ -28,3 +28,4 @@ struct ShareCodeResponse: Decodable {
 struct SetCurrencyResponse : Decodable {
     var myBookCurrency : String
 }
+

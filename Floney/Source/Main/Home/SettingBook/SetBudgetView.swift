@@ -49,7 +49,6 @@ struct SetBudgetView: View {
                                 Text("\(monthlyAmount.month)월")
                                 Spacer()
                                 Text("\(monthlyAmount.amount.formattedString)원")
-                                
                             }
                             .padding(20)
                             .frame(height: UIScreen.main.bounds.height * 0.069)
@@ -72,6 +71,9 @@ struct SetBudgetView: View {
                             .font(.pretendardFont(.semiBold, size: 16))
                         .foregroundColor(.greyScale1)}
                     )
+                .onAppear {
+                    viewModel.getBudget()
+                }
             }
             YearBottomSheet(selectedYear: $viewModel.selectedYear, isShowing: $showingSheet)
             SetBudgetBottomSheet(isShowing: $setBudgetBottonSheet, month: $month, viewModel: viewModel)

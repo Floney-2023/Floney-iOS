@@ -61,9 +61,9 @@ class SettingBookViewModel : ObservableObject {
     //MARK: Budget
     @Published var budget : Double = 0
     @Published var yearlyData: [Int: [MonthlyAmount]] = [:]
-    @Published var selectedYear: Int = 2023{
+    @Published var selectedYear: Int = 2023 {
         didSet {
-            getYearlyBudget()
+            getBudget()
         }
     }
     @Published var budgetDate = ""
@@ -90,6 +90,36 @@ class SettingBookViewModel : ObservableObject {
             MonthlyAmount(month: 11, amount: 0),
             MonthlyAmount(month: 12, amount: 0)
         ]
+    }
+    func getBudget() {
+        bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
+        let date = "\(selectedYear)-01-01"
+        let request = GetBudgetRequest(bookKey: bookKey, date: date)
+        dataManager.getBudget(request)
+            .sink { (dataResponse) in
+                if dataResponse.error != nil {
+                    self.createAlert(with: dataResponse.error!)
+                    // 에러 처리
+                    print(dataResponse.error)
+                } else {
+                    print("--성공--")
+                    let result = dataResponse.value
+                    self.yearlyData[self.selectedYear] = [
+                        MonthlyAmount(month: 1, amount: result?.JANUARY ?? 0),
+                        MonthlyAmount(month: 2, amount: result?.FEBRUARY ?? 0),
+                        MonthlyAmount(month: 3, amount: result?.MARCH ?? 0),
+                        MonthlyAmount(month: 4, amount: result?.APRIL ?? 0),
+                        MonthlyAmount(month: 5, amount: result?.MAY ?? 0),
+                        MonthlyAmount(month: 6, amount: result?.JUNE ?? 0),
+                        MonthlyAmount(month: 7, amount: result?.JULY ?? 0),
+                        MonthlyAmount(month: 8, amount: result?.AUGUST ?? 0),
+                        MonthlyAmount(month: 9, amount: result?.SEPTEMBER ?? 0),
+                        MonthlyAmount(month: 10, amount: result?.OCTOBER ?? 0),
+                        MonthlyAmount(month: 11, amount: result?.NOVEMBER ?? 0),
+                        MonthlyAmount(month: 12, amount: result?.DECEMBER ?? 0)
+                    ]
+                }
+            }.store(in: &cancellableSet)
     }
     //MARK: server
     func getBookInfo() {
@@ -233,6 +263,7 @@ class SettingBookViewModel : ObservableObject {
                 case .finished:
                     print("Setting Budget successfully changed.")
                     AlertManager.shared.update(showAlert: true, message: "변경이 완료되었습니다.", buttonType: .green)
+                    self.getBudget()
                 case .failure(let error):
                     self.createAlert(with: error)
                     print("Error changing nickname: \(error)")
