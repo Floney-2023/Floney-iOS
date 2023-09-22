@@ -75,7 +75,9 @@ class FCMDataManager: ObservableObject {
         fetchAccessToken()
             .sink { dataResponse in
                 if dataResponse.error != nil {
-                    self.createAlert(with: dataResponse.error!)
+                    self.createAlert(with: dataResponse.error!, retryRequest: {
+                        self.callFetchAccessToken(bookKey: bookKey, title: title, body: body)
+                    })
                     print(dataResponse.error)
                     
                 } else {
@@ -124,7 +126,7 @@ class FCMDataManager: ObservableObject {
         .receive(on: DispatchQueue.main)
         .eraseToAnyPublisher()
     }
-    func createAlert( with error: NetworkError) {
+    func createAlert( with error: NetworkError, retryRequest: @escaping () -> Void) {
         //loadingError = error.backendError == nil ? error.initialError.localizedDescription : error.backendError!.message
         if let backendError = error.backendError {
             guard let serverError = ServerError(rawValue: backendError.code) else {
@@ -141,7 +143,9 @@ class FCMDataManager: ObservableObject {
                 switch errorCode {
                     // 토큰 재발급
                 case "U006" :
-                    tokenViewModel.tokenReissue()
+                    tokenViewModel.tokenReissue {
+                        retryRequest()
+                    }
                 // 아예 틀린 토큰이므로 재로그인해서 다시 발급받아야 함.
                 case "U007" :
                     AuthenticationService.shared.logoutDueToTokenExpiration()

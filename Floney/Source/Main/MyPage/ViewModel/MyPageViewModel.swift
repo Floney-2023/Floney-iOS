@@ -63,7 +63,9 @@ class MyPageViewModel: ObservableObject {
         dataManager.getMyPage()
             .sink { (dataResponse) in
                 if dataResponse.error != nil {
-                    self.createAlert(with: dataResponse.error!)
+                    self.createAlert(with: dataResponse.error!, retryRequest: {
+                        self.getMyPage()
+                    })
                     print(dataResponse.error)
                 } else {
                     self.result = dataResponse.value!
@@ -133,7 +135,9 @@ class MyPageViewModel: ObservableObject {
                         ProfileManager.shared.setUserImageStateToCustom(urlString: self.encryptedImageUrl) // 싱글톤으로 관리되는 profile manager에 저장
                     }
                 case .failure(let error):
-                    self.createAlert(with: error)
+                    self.createAlert(with: error, retryRequest: {
+                        self.changeProfile(imageStatus: imageStatus)
+                    })
                     LoadingManager.shared.update(showLoading: false, loadingType: .dimmedLoading)
                     print("Error changing profile: \(error)")
                 }
@@ -151,7 +155,9 @@ class MyPageViewModel: ObservableObject {
                     Keychain.setKeychain(self.changedNickname, forKey: .userNickname)
                     self.alertManager.update(showAlert: true, message: "변경이 완료되었습니다.", buttonType: .green)
                 case .failure(let error):
-                    self.createAlert(with: error)
+                    self.createAlert(with: error, retryRequest: {
+                        self.changeNickname()
+                    })
                     print("Error changing nickname: \(error)")
                 }
             } receiveValue: { data in
@@ -174,7 +180,9 @@ class MyPageViewModel: ObservableObject {
                     print("Password successfully changed.")
                     
                 case .failure(let error):
-                    self.createAlert(with: error)
+                    self.createAlert(with: error, retryRequest: {
+                        self.changePassword()
+                    })
                     print("Error changing password: \(error)")
                 }
             } receiveValue: { data in
@@ -243,9 +251,13 @@ class MyPageViewModel: ObservableObject {
                 switch completion {
                 case .finished:
                     print("logout success.")
-                    AuthenticationService.shared.logoutDueToTokenExpiration()
+                    DispatchQueue.main.async {
+                        AuthenticationService.shared.logoutDueToTokenExpiration()
+                    }
                 case .failure(let error):
-                    self.createAlert(with: error)
+                    self.createAlert(with: error, retryRequest: {
+                        self.logout()
+                    })
                     print("Error changing nickname: \(error)")
                 }
             } receiveValue: { data in
@@ -309,7 +321,7 @@ class MyPageViewModel: ObservableObject {
             randomNumStr = "random0"
         }
     }
-    func createAlert( with error: NetworkError) {
+    func createAlert( with error: NetworkError, retryRequest: @escaping () -> Void) {
         //loadingError = error.backendError == nil ? error.initialError.localizedDescription : error.backendError!.message
         if let backendError = error.backendError {
             guard let serverError = ServerError(rawValue: backendError.code) else {
@@ -326,8 +338,11 @@ class MyPageViewModel: ObservableObject {
                 switch errorCode {
                     // 토큰 재발급
                 case "U006" :
-                    tokenViewModel.tokenReissue()
-                    // 아예 틀린 토큰이므로 재로그인해서 다시 발급받아야 함.
+                    tokenViewModel.tokenReissue {
+                        // 토큰 재발급 성공 시, 원래의 요청 재시도
+                        retryRequest()
+                    }
+                // 아예 틀린 토큰이므로 재로그인해서 다시 발급받아야 함.
                 case "U007" :
                     AuthenticationService.shared.logoutDueToTokenExpiration()
                 default:

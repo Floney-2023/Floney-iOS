@@ -29,13 +29,12 @@ struct SendBookCodeView: View {
             Spacer()
             
             VStack(spacing: 12) {
-                NavigationLink(destination: EnterBookView(), isActive: $isActive){
+                NavigationLink(destination: EnterBookView(), isActive: $viewModel.isNext){
                     Text("입력 완료하기")
                         .padding()
                         .modifier(NextButtonModifier(backgroundColor: .primary1))
                         .onTapGesture {
                             if viewModel.isVaildBookCode() {
-                                isActive = true
                                 viewModel.postBookCode()
                             }
                         }

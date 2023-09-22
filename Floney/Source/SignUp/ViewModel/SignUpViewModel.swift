@@ -55,7 +55,9 @@ class SignUpViewModel: ObservableObject {
         dataManager.postSignUp(request)
             .sink { (dataResponse) in
                 if dataResponse.error != nil {
-                    self.createAlert(with: dataResponse.error!)
+                    self.createAlert(with: dataResponse.error!, retryRequest: {
+                        self.postSignUp()
+                    })
                     print(dataResponse.error)
                 } else {
                     self.result = dataResponse.value!
@@ -78,7 +80,9 @@ class SignUpViewModel: ObservableObject {
         dataManager.kakaoSignUp(request, authToken)
             .sink { (dataResponse) in
                 if dataResponse.error != nil {
-                    self.createAlert(with: dataResponse.error!)
+                    self.createAlert(with: dataResponse.error!, retryRequest: {
+                        self.kakaoSignUp()
+                    })
                     print(dataResponse.error)
                 } else {
                     self.result = dataResponse.value!
@@ -101,7 +105,9 @@ class SignUpViewModel: ObservableObject {
         dataManager.googleSignUp(request, authToken)
             .sink { (dataResponse) in
                 if dataResponse.error != nil {
-                    self.createAlert(with: dataResponse.error!)
+                    self.createAlert(with: dataResponse.error!, retryRequest: {
+                        self.googleSignUp()
+                    })
                     print(dataResponse.error)
                 } else {
                     self.result = dataResponse.value!
@@ -124,7 +130,9 @@ class SignUpViewModel: ObservableObject {
         dataManager.appleSignUp(request, authToken)
             .sink { (dataResponse) in
                 if dataResponse.error != nil {
-                    self.createAlert(with: dataResponse.error!)
+                    self.createAlert(with: dataResponse.error!, retryRequest: {
+                        self.appleSignUp()
+                    })
                     print(dataResponse.error)
                 } else {
                     self.result = dataResponse.value!
@@ -178,7 +186,9 @@ class SignUpViewModel: ObservableObject {
                     }
                     self.isNextToAuthCode = true
                 case .failure(let error):
-                    self.createAlert(with: error)
+                    self.createAlert(with: error, retryRequest: {
+                        self.authEmail()
+                    })
                     DispatchQueue.main.async {
                         LoadingManager.shared.update(showLoading: false, loadingType: .dimmedLoading)
                     }
@@ -201,8 +211,10 @@ class SignUpViewModel: ObservableObject {
                     self.isNextToUserInfo = true
                     
                 case .failure(let error):
-                    self.createAlert(with: error)
-                    print("Error checking code: \(error)")
+                    self.createAlert(with: error,
+                                     retryRequest: {
+                        self.checkCode()
+                    })
                 }
             } receiveValue: { data in
                 // TODO: Handle the received data if necessary.
@@ -279,7 +291,7 @@ class SignUpViewModel: ObservableObject {
         return emailPredicate.evaluate(with: email)
     }
     
-    func createAlert( with error: NetworkError) {
+    func createAlert( with error: NetworkError, retryRequest: @escaping () -> Void) {
         //loadingError = error.backendError == nil ? error.initialError.localizedDescription : error.backendError!.message
         if let backendError = error.backendError {
             guard let serverError = ServerError(rawValue: backendError.code) else {
@@ -296,7 +308,10 @@ class SignUpViewModel: ObservableObject {
                 switch errorCode {
                     // 토큰 재발급
                 case "U006" :
-                    tokenViewModel.tokenReissue()
+                    tokenViewModel.tokenReissue {
+                        // 토큰 재발급 성공 시, 원래의 요청 재시도
+                        retryRequest()
+                    }
                 // 아예 틀린 토큰이므로 재로그인해서 다시 발급받아야 함.
                 case "U007" :
                     AuthenticationService.shared.logoutDueToTokenExpiration()

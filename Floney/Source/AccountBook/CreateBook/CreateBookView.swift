@@ -42,7 +42,9 @@ struct CreateBookView: View {
                         .padding()
                         .withNextButtonFormmating(.primary1)
                         .onTapGesture {
-                            BookExistenceViewModel.shared.getBookExistence()
+                            DispatchQueue.main.async {
+                                BookExistenceViewModel.shared.getBookExistence()
+                            }
                         }
                     
                     Text("친구 초대하기")

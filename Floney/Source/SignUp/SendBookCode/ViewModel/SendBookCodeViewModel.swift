@@ -27,7 +27,9 @@ class BookCodeViewModel: ObservableObject {
         dataManager.postBookCode(request)
             .sink { (dataResponse) in
                 if dataResponse.error != nil {
-                    self.createAlert(with: dataResponse.error!)
+                    self.createAlert(with: dataResponse.error!, retryRequest: {
+                        self.postBookCode()
+                    })
                     print(dataResponse.error)
                 } else {
                     self.result = dataResponse.value!
@@ -44,7 +46,7 @@ class BookCodeViewModel: ObservableObject {
         }
         return true
     }
-    func createAlert( with error: NetworkError) {
+    func createAlert( with error: NetworkError, retryRequest: @escaping () -> Void) {
         //loadingError = error.backendError == nil ? error.initialError.localizedDescription : error.backendError!.message
         if let backendError = error.backendError {
             guard let serverError = ServerError(rawValue: backendError.code) else {
@@ -61,7 +63,10 @@ class BookCodeViewModel: ObservableObject {
                 switch errorCode {
                     // 토큰 재발급
                 case "U006" :
-                    tokenViewModel.tokenReissue()
+                    tokenViewModel.tokenReissue {
+                        // 토큰 재발급 성공 시, 원래의 요청 재시도
+                        retryRequest()
+                    }
                 // 아예 틀린 토큰이므로 재로그인해서 다시 발급받아야 함.
                 case "U007" :
                     AuthenticationService.shared.logoutDueToTokenExpiration()
@@ -74,5 +79,4 @@ class BookCodeViewModel: ObservableObject {
             //showAlert(message: "네트워크 오류가 발생했습니다.")
             
         }
-    }
-}
+    }}

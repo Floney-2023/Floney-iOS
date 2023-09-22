@@ -82,7 +82,9 @@ class AddViewModel: ObservableObject {
         dataManager.getCategory(request)
             .sink { (dataResponse) in
                 if dataResponse.error != nil {
-                    self.createAlert(with: dataResponse.error!)
+                    self.createAlert(with: dataResponse.error!, retryRequest: {
+                        self.getCategory()
+                    })
                     // 에러 처리
                     print(dataResponse.error)
                 } else {
@@ -123,7 +125,9 @@ class AddViewModel: ObservableObject {
         dataManager.postLines(request)
             .sink { (dataResponse) in
                 if dataResponse.error != nil {
-                    self.createAlert(with: dataResponse.error!)
+                    self.createAlert(with: dataResponse.error!, retryRequest: {
+                        self.postLines()
+                    })
                     // 에러 처리
                     print(dataResponse.error)
                 } else {
@@ -142,7 +146,9 @@ class AddViewModel: ObservableObject {
         dataManager.postCategory(request)
             .sink { (dataResponse) in
                 if dataResponse.error != nil {
-                    self.createAlert(with: dataResponse.error!)
+                    self.createAlert(with: dataResponse.error!, retryRequest: {
+                        self.postCategory()
+                    })
                     // 에러 처리
                     print(dataResponse.error)
                 } else {
@@ -164,7 +170,9 @@ class AddViewModel: ObservableObject {
                     print(" successfully category delete.")
                     self.getCategory()
                 case .failure(let error):
-                    self.createAlert(with: error)
+                    self.createAlert(with: error, retryRequest: {
+                        self.deleteCategory()
+                    })
                     print("Error deleting category: \(error)")
                 }
             } receiveValue: { data in
@@ -181,7 +189,9 @@ class AddViewModel: ObservableObject {
                     print(" successfully line delete.")
                     self.getCategory()
                 case .failure(let error):
-                    self.createAlert(with: error)
+                    self.createAlert(with: error, retryRequest: {
+                        self.deleteLine()
+                    })
                     print("Error deleting line: \(error)")
                 }
             } receiveValue: { data in
@@ -206,7 +216,9 @@ class AddViewModel: ObservableObject {
         dataManager.changeLine(parameters: request)
             .sink { (dataResponse) in
                 if dataResponse.error != nil {
-                    self.createAlert(with: dataResponse.error!)
+                    self.createAlert(with: dataResponse.error!, retryRequest: {
+                        self.changeLine()
+                    })
                     // 에러 처리
                     print(dataResponse.error)
                 } else {
@@ -221,7 +233,7 @@ class AddViewModel: ObservableObject {
         
     }
     
-    func createAlert( with error: NetworkError) {
+    func createAlert( with error: NetworkError, retryRequest: @escaping () -> Void) {
         //loadingError = error.backendError == nil ? error.initialError.localizedDescription : error.backendError!.message
         if let backendError = error.backendError {
             guard let serverError = ServerError(rawValue: backendError.code) else {
@@ -238,8 +250,11 @@ class AddViewModel: ObservableObject {
                 switch errorCode {
                     // 토큰 재발급
                 case "U006" :
-                    tokenViewModel.tokenReissue()
-                    // 아예 틀린 토큰이므로 재로그인해서 다시 발급받아야 함.
+                    tokenViewModel.tokenReissue {
+                        // 토큰 재발급 성공 시, 원래의 요청 재시도
+                        retryRequest()
+                    }
+                // 아예 틀린 토큰이므로 재로그인해서 다시 발급받아야 함.
                 case "U007" :
                     AuthenticationService.shared.logoutDueToTokenExpiration()
                 default:
@@ -251,6 +266,5 @@ class AddViewModel: ObservableObject {
             //showAlert(message: "네트워크 오류가 발생했습니다.")
             
         }
-        
     }
 }

@@ -55,7 +55,9 @@ class CreateBookViewModel: ObservableObject {
         dataManager.createBook(request)
             .sink { (dataResponse) in
                 if dataResponse.error != nil {
-                    self.createAlert(with: dataResponse.error!)
+                    self.createAlert(with: dataResponse.error!, retryRequest: {
+                        self.createBook()
+                    })
                     print(dataResponse.error)
                     LoadingManager.shared.update(showLoading: false, loadingType: .dimmedLoading)
                 } else {
@@ -76,7 +78,9 @@ class CreateBookViewModel: ObservableObject {
         dataManager.createBook(request)
             .sink { (dataResponse) in
                 if dataResponse.error != nil {
-                    self.createAlert(with: dataResponse.error!)
+                    self.createAlert(with: dataResponse.error!, retryRequest: {
+                        self.addBook()
+                    })
                     print(dataResponse.error)
                     LoadingManager.shared.update(showLoading: false, loadingType: .dimmedLoading)
                 } else {
@@ -97,7 +101,9 @@ class CreateBookViewModel: ObservableObject {
         dataManager.inviteBook(request)
             .sink { (dataResponse) in
                 if dataResponse.error != nil {
-                    self.createAlert(with: dataResponse.error!)
+                    self.createAlert(with: dataResponse.error!, retryRequest: {
+                        self.joinBook()
+                    })
                     print(dataResponse.error)
                 } else {
                     self.result = dataResponse.value!
@@ -121,7 +127,9 @@ class CreateBookViewModel: ObservableObject {
             dataManager.inviteBook(request)
                 .sink { (dataResponse) in
                     if dataResponse.error != nil {
-                        self.createAlert(with: dataResponse.error!)
+                        self.createAlert(with: dataResponse.error!, retryRequest: {
+                            self.inviteBookCode()
+                        })
                         print(dataResponse.error)
                     } else {
                         self.result = dataResponse.value!
@@ -142,7 +150,9 @@ class CreateBookViewModel: ObservableObject {
             dataManager.bookInfoByCodeBook(bookCode: inviteCode)
                 .sink { (dataResponse) in
                     if dataResponse.error != nil {
-                        self.createAlert(with: dataResponse.error!)
+                        self.createAlert(with: dataResponse.error!, retryRequest: {
+                            self.bookInfoByCode()
+                        })
                         print(dataResponse.error)
                     } else {
                         self.bookInfo = dataResponse.value!
@@ -173,7 +183,7 @@ class CreateBookViewModel: ObservableObject {
         Keychain.setKeychain(self.result.bookKey, forKey: .bookKey)
         Keychain.setKeychain(self.result.code, forKey: .bookCode)
     }
-    func createAlert( with error: NetworkError) {
+    func createAlert( with error: NetworkError, retryRequest: @escaping () -> Void) {
         //loadingError = error.backendError == nil ? error.initialError.localizedDescription : error.backendError!.message
         if let backendError = error.backendError {
             guard let serverError = ServerError(rawValue: backendError.code) else {
@@ -190,8 +200,11 @@ class CreateBookViewModel: ObservableObject {
                 switch errorCode {
                     // 토큰 재발급
                 case "U006" :
-                    tokenViewModel.tokenReissue()
-                    // 아예 틀린 토큰이므로 재로그인해서 다시 발급받아야 함.
+                    tokenViewModel.tokenReissue {
+                        // 토큰 재발급 성공 시, 원래의 요청 재시도
+                        retryRequest()
+                    }
+                // 아예 틀린 토큰이므로 재로그인해서 다시 발급받아야 함.
                 case "U007" :
                     AuthenticationService.shared.logoutDueToTokenExpiration()
                 default:
@@ -203,7 +216,5 @@ class CreateBookViewModel: ObservableObject {
             //showAlert(message: "네트워크 오류가 발생했습니다.")
             
         }
-        
-        
     }
 }

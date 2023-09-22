@@ -19,7 +19,7 @@ class TokenReissueViewModel: ObservableObject {
         self.dataManager = dataManager
     }
     
-    func tokenReissue() {
+    func tokenReissue(completion: @escaping () -> Void) {
         if let accessToken = Keychain.getKeychainValue(forKey: .accessToken) ,let refreshToken = Keychain.getKeychainValue(forKey: .refreshToken) {
             print("token reissue----------------")
             let request = TokenReissueRequest(accessToken: accessToken, refreshToken: refreshToken)
@@ -32,6 +32,7 @@ class TokenReissueViewModel: ObservableObject {
                         self.result = dataResponse.value!
                         print("reissue token : \(self.result)")
                         self.setToken()
+                        completion()
                     }
                 }.store(in: &cancellableSet)
         }
@@ -66,7 +67,6 @@ class TokenReissueViewModel: ObservableObject {
         } else {
             // BackendError 없이 NetworkError만 발생한 경우
             //showAlert(message: "네트워크 오류가 발생했습니다.")
-            
         }
     }
 }

@@ -12,7 +12,6 @@ struct SettingBookView: View {
     @Binding var showingTabbar : Bool
     @Binding var isOnSettingBook : Bool
     @StateObject var viewModel = SettingBookViewModel()
-    //var encryptionManager = CryptManager()
     var profileManager = ProfileManager.shared
     
     @State var nickname = "team"
@@ -25,8 +24,6 @@ struct SettingBookView: View {
     @State var initialAsset = ""
     @State var onOff = false
     @State var onShareSheet = false
-    //@State var bookCode = "A9BC7ACE"
-    //@State var shareUrl: String? = nil
     
     @State var resetAlert = false
     @State var resetTitle = "가계부 초기화"

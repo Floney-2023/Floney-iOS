@@ -10,7 +10,6 @@ import Kingfisher
 
 struct MyPageView: View {
     @Binding var showingTabbar : Bool
-    //var encryptionManager = CryptManager()
     var profileManager = ProfileManager.shared
     
     @Binding var isShowingAccountBottomSheet : Bool

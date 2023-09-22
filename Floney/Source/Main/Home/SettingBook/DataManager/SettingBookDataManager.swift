@@ -228,9 +228,6 @@ extension SettingBookService: SettingBookProtocol {
         }
         .eraseToAnyPublisher()
     }
-    
-    
-    
     func getShareCode(_ parameters: BookInfoRequest) -> AnyPublisher<DataResponse<ShareCodeResponse, NetworkError>, Never> {
         let bookKey = parameters.bookKey
         let url = "\(Constant.BASE_URL)/books/code?bookKey=\(bookKey)"
@@ -251,9 +248,7 @@ extension SettingBookService: SettingBookProtocol {
         .receive(on: DispatchQueue.main)
         .eraseToAnyPublisher()
     }
-    
     func getBookInfo(_ parameters:BookInfoRequest) -> AnyPublisher<DataResponse<BookInfoResponse, NetworkError>, Never> {
-        
         let bookKey = parameters.bookKey
         let url = "\(Constant.BASE_URL)/books/info?bookKey=\(bookKey)"
         print(url)

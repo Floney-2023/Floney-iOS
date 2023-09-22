@@ -125,6 +125,7 @@ extension IAPManager  {
                         break
                     case .failure(let error):
                         print(error)
+                    
                     }
                 }, receiveValue: { [weak self] response in
                     switch response.result {
@@ -133,6 +134,9 @@ extension IAPManager  {
                         LoadingManager.shared.showLoadingForSubscribe = false
                     case .failure(let error):
                         print(error)
+                        self?.createAlert(with: error, retryRequest: {
+                            self?.sendToServer()
+                        })
                         LoadingManager.shared.showLoadingForSubscribe = false
                     }
                 })
@@ -178,7 +182,9 @@ extension IAPManager  {
         iapHelper.getSubscriptionStatus()
             .sink { (dataResponse) in
                 if dataResponse.error != nil {
-                    self.createAlert(with: dataResponse.error!)
+                    self.createAlert(with: dataResponse.error!, retryRequest: {
+                        self.getSubscriptionStatus()
+                    })
                     print(dataResponse.error)
                 } else {
                     self.subscriptionStatus = dataResponse.value!.subscribe
@@ -190,7 +196,7 @@ extension IAPManager  {
                 }
             }.store(in: &cancellableSet)
     }
-    func createAlert( with error: NetworkError) {
+    func createAlert( with error: NetworkError, retryRequest: @escaping () -> Void) {
         //loadingError = error.backendError == nil ? error.initialError.localizedDescription : error.backendError!.message
         if let backendError = error.backendError {
             guard let serverError = ServerError(rawValue: backendError.code) else {
@@ -207,7 +213,10 @@ extension IAPManager  {
                 switch errorCode {
                     // 토큰 재발급
                 case "U006" :
-                    tokenViewModel.tokenReissue()
+                    tokenViewModel.tokenReissue {
+                        // 토큰 재발급 성공 시, 원래의 요청 재시도
+                        retryRequest()
+                    }
                 // 아예 틀린 토큰이므로 재로그인해서 다시 발급받아야 함.
                 case "U007" :
                     AuthenticationService.shared.logoutDueToTokenExpiration()
@@ -221,7 +230,6 @@ extension IAPManager  {
             
         }
     }
-    
 }
 
 extension IAPManager: IAPHelperDelegate {

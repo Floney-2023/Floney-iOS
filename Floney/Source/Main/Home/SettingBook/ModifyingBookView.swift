@@ -70,7 +70,6 @@ struct ModifyingBookView: View {
                 
             }
             if viewModel.role == "방장" {
-                
                 HStack {
                     VStack {
                         Text("가계부 삭제")

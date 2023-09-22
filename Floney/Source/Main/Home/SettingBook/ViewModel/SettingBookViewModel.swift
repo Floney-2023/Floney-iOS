@@ -73,7 +73,7 @@ class SettingBookViewModel : ObservableObject {
     
     init( dataManager: SettingBookProtocol = SettingBookService.shared) {
         self.dataManager = dataManager
-        getYearlyBudget()
+        getBudget()
     }
     func getYearlyBudget() {
         yearlyData[selectedYear] = [
@@ -98,7 +98,9 @@ class SettingBookViewModel : ObservableObject {
         dataManager.getBudget(request)
             .sink { (dataResponse) in
                 if dataResponse.error != nil {
-                    self.createAlert(with: dataResponse.error!)
+                    self.createAlert(with: dataResponse.error!, retryRequest: {
+                        self.getBudget()
+                    })
                     // 에러 처리
                     print(dataResponse.error)
                 } else {
@@ -128,7 +130,9 @@ class SettingBookViewModel : ObservableObject {
         dataManager.getBookInfo(request)
             .sink { (dataResponse) in
                 if dataResponse.error != nil {
-                    self.createAlert(with: dataResponse.error!)
+                    self.createAlert(with: dataResponse.error!, retryRequest: {
+                        self.getBookInfo()
+                    })
                     // 에러 처리
                     print(dataResponse.error)
                 } else {
@@ -199,7 +203,9 @@ class SettingBookViewModel : ObservableObject {
                     
                 case .failure(let error):
                     print("Error changing profile: \(error)")
-                    self.createAlert(with: error)
+                    self.createAlert(with: error, retryRequest: {
+                        self.changeProfile(inputStatus: inputStatus)
+                    })
                     DispatchQueue.main.async {
                         LoadingManager.shared.update(showLoading: false, loadingType: .dimmedLoading)
                     }
@@ -221,7 +227,9 @@ class SettingBookViewModel : ObservableObject {
                     print("Changing nickname successfully changed.")
                     AlertManager.shared.update(showAlert: true, message: "변경이 완료되었습니다.", buttonType: .green)
                 case .failure(let error):
-                    self.createAlert(with: error)
+                    self.createAlert(with: error, retryRequest: {
+                        self.changeNickname()
+                    })
                     print("Error changing nickname: \(error)")
                 }
             } receiveValue: { data in
@@ -246,6 +254,9 @@ class SettingBookViewModel : ObservableObject {
                     print("Changing Profile Status successfully changed.")
                 case .failure(let error):
                     print("Error changing profile status: \(error)")
+                    self.createAlert(with: error, retryRequest: {
+                        self.changeProfileStatus()
+                    })
                 }
             } receiveValue: { data in
                 // TODO: Handle the received data if necessary.
@@ -265,7 +276,9 @@ class SettingBookViewModel : ObservableObject {
                     AlertManager.shared.update(showAlert: true, message: "변경이 완료되었습니다.", buttonType: .green)
                     self.getBudget()
                 case .failure(let error):
-                    self.createAlert(with: error)
+                    self.createAlert(with: error, retryRequest: {
+                        self.setBudget()
+                    })
                     print("Error changing nickname: \(error)")
                 }
             } receiveValue: { data in
@@ -315,7 +328,9 @@ class SettingBookViewModel : ObservableObject {
                     print("Setting Asset successfully changed.")
                     AlertManager.shared.update(showAlert: true, message: "변경이 완료되었습니다.", buttonType: .green)
                 case .failure(let error):
-                    self.createAlert(with: error)
+                    self.createAlert(with: error, retryRequest: {
+                        self.setAsset()
+                    })
                     print("Error changing nickname: \(error)")
                 }
             } receiveValue: { data in
@@ -334,7 +349,9 @@ class SettingBookViewModel : ObservableObject {
                     print("Setting Carry Over successfully changed.")
                     self.getBookInfo()
                 case .failure(let error):
-                    self.createAlert(with: error)
+                    self.createAlert(with: error, retryRequest: {
+                        self.setCarryOver(status: status)
+                    })
                     print("Error Settig Carry Over: \(error)")
                     
                 }
@@ -352,8 +369,15 @@ class SettingBookViewModel : ObservableObject {
                 switch completion {
                 case .finished:
                     print("Exit Book successfully changed.")
+                    DispatchQueue.main.async {
+                        Keychain.setKeychain("", forKey: .bookKey)
+                        BookExistenceViewModel.shared.bookExistence = false
+                        BookExistenceViewModel.shared.getBookExistence()
+                    }
                 case .failure(let error):
-                    self.createAlert(with: error)
+                    self.createAlert(with: error, retryRequest: {
+                        self.exitBook()
+                    })
                     print("Error Exiting Book : \(error)")
                 }
             } receiveValue: { data in
@@ -370,8 +394,16 @@ class SettingBookViewModel : ObservableObject {
                 switch completion {
                 case .finished:
                     print("Exit Book successfully changed.")
+                    DispatchQueue.main.async {
+                        Keychain.setKeychain("", forKey: .bookKey)
+                        BookExistenceViewModel.shared.bookExistence = false
+                        BookExistenceViewModel.shared.getBookExistence()
+                        
+                    }
                 case .failure(let error):
-                    self.createAlert(with: error)
+                    self.createAlert(with: error, retryRequest: {
+                        self.deleteBook()
+                    })
                     print("Error Exiting Book : \(error)")
                 }
             } receiveValue: { data in
@@ -388,7 +420,9 @@ class SettingBookViewModel : ObservableObject {
                 case .finished:
                     print("Reset Book successfully changed.")
                 case .failure(let error):
-                    self.createAlert(with: error)
+                    self.createAlert(with: error, retryRequest: {
+                        self.resetBook()
+                    })
                     print("Reset Exiting Book : \(error)")
                 }
             } receiveValue: { data in
@@ -403,7 +437,9 @@ class SettingBookViewModel : ObservableObject {
         dataManager.getShareCode(request)
             .sink { (dataResponse) in
                 if dataResponse.error != nil {
-                    self.createAlert(with: dataResponse.error!)
+                    self.createAlert(with: dataResponse.error!, retryRequest: {
+                        self.getShareCode()
+                    })
                     // 에러 처리
                     print(dataResponse.error)
                 } else {
@@ -419,7 +455,9 @@ class SettingBookViewModel : ObservableObject {
         dataManager.setCurrency(request)
             .sink { (dataResponse) in
                 if dataResponse.error != nil {
-                    self.createAlert(with: dataResponse.error!)
+                    self.createAlert(with: dataResponse.error!, retryRequest: {
+                        self.setCurrency(currency: currency)
+                    })
                     // 에러 처리
                     print(dataResponse.error)
                 } else {
@@ -446,6 +484,9 @@ class SettingBookViewModel : ObservableObject {
                 case .failure(let error):
                    //x self.createAlert(with: error)
                     print("Error downloading Excel file:", error.localizedDescription)
+                    self.createAlert(with: error as! NetworkError, retryRequest: {
+                        self.downloadExcelFile()
+                    })
                 }
             }, receiveValue: { localFileURL in
                 print("Excel file saved to:", localFileURL)
@@ -478,7 +519,7 @@ class SettingBookViewModel : ObservableObject {
         self.bookPreviewImage34 = ProfileManager.shared.bookPreviewImage34
     }
     
-    func createAlert( with error: NetworkError) {
+    func createAlert( with error: NetworkError, retryRequest: @escaping () -> Void) {
         //loadingError = error.backendError == nil ? error.initialError.localizedDescription : error.backendError!.message
         if let backendError = error.backendError {
             guard let serverError = ServerError(rawValue: backendError.code) else {
@@ -495,8 +536,11 @@ class SettingBookViewModel : ObservableObject {
                 switch errorCode {
                     // 토큰 재발급
                 case "U006" :
-                    tokenViewModel.tokenReissue()
-                    // 아예 틀린 토큰이므로 재로그인해서 다시 발급받아야 함.
+                    tokenViewModel.tokenReissue {
+                        // 토큰 재발급 성공 시, 원래의 요청 재시도
+                        retryRequest()
+                    }
+                // 아예 틀린 토큰이므로 재로그인해서 다시 발급받아야 함.
                 case "U007" :
                     AuthenticationService.shared.logoutDueToTokenExpiration()
                 default:
@@ -508,5 +552,4 @@ class SettingBookViewModel : ObservableObject {
             //showAlert(message: "네트워크 오류가 발생했습니다.")
             
         }
-    }
-}
+    }}

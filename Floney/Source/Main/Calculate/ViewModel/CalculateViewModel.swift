@@ -87,7 +87,9 @@ class CalculateViewModel : ObservableObject {
         dataManager.getSettlements(request)
             .sink { (dataResponse) in
                 if dataResponse.error != nil {
-                    self.createAlert(with: dataResponse.error!)
+                    self.createAlert(with: dataResponse.error!, retryRequest: {
+                        self.getSettlements()
+                    })
                     // 에러 처리
                     print(dataResponse.error)
                 } else {
@@ -111,7 +113,9 @@ class CalculateViewModel : ObservableObject {
         dataManager.postSettlements(request)
             .sink { (dataResponse) in
                 if dataResponse.error != nil {
-                    self.createAlert(with: dataResponse.error!)
+                    self.createAlert(with: dataResponse.error!, retryRequest: {
+                        self.postSettlements()
+                    })
                     // 에러 처리
                     print(dataResponse.error)
                     
@@ -136,7 +140,9 @@ class CalculateViewModel : ObservableObject {
         dataManager.getSettlementList()
             .sink { (dataResponse) in
                 if dataResponse.error != nil {
-                    self.createAlert(with: dataResponse.error!)
+                    self.createAlert(with: dataResponse.error!, retryRequest: {
+                        self.getSettlementList()
+                    })
                     // 에러 처리
                     print(dataResponse.error)
                     
@@ -155,7 +161,9 @@ class CalculateViewModel : ObservableObject {
         dataManager.getSettlementDetail(id: id)
             .sink { (dataResponse) in
                 if dataResponse.error != nil {
-                    self.createAlert(with: dataResponse.error!)
+                    self.createAlert(with: dataResponse.error!, retryRequest: {
+                        self.getSettlementDetail(id: id)
+                    })
                     // 에러 처리
                     print(dataResponse.error)
                     
@@ -178,7 +186,9 @@ class CalculateViewModel : ObservableObject {
         dataManager.getBookUsers()
             .sink { (dataResponse) in
                 if dataResponse.error != nil {
-                    self.createAlert(with: dataResponse.error!)
+                    self.createAlert(with: dataResponse.error!, retryRequest: {
+                        self.getBookUsers()
+                    })
                     // 에러 처리
                     print(dataResponse.error)
                     
@@ -198,7 +208,9 @@ class CalculateViewModel : ObservableObject {
         dataManager.getPassedDays()
             .sink { (dataResponse) in
                 if dataResponse.error != nil {
-                    self.createAlert(with: dataResponse.error!)
+                    self.createAlert(with: dataResponse.error!, retryRequest: {
+                        self.getPassedDays()
+                    })
                     // 에러 처리
                     print(dataResponse.error)
                     
@@ -306,7 +318,7 @@ class CalculateViewModel : ObservableObject {
             self.selectedStartDateStr = newStartDate
         }
     }
-    func createAlert( with error: NetworkError) {
+    func createAlert( with error: NetworkError, retryRequest: @escaping () -> Void) {
         //loadingError = error.backendError == nil ? error.initialError.localizedDescription : error.backendError!.message
         if let backendError = error.backendError {
             guard let serverError = ServerError(rawValue: backendError.code) else {
@@ -323,8 +335,11 @@ class CalculateViewModel : ObservableObject {
                 switch errorCode {
                     // 토큰 재발급
                 case "U006" :
-                    tokenViewModel.tokenReissue()
-                    // 아예 틀린 토큰이므로 재로그인해서 다시 발급받아야 함.
+                    tokenViewModel.tokenReissue {
+                        // 토큰 재발급 성공 시, 원래의 요청 재시도
+                        retryRequest()
+                    }
+                // 아예 틀린 토큰이므로 재로그인해서 다시 발급받아야 함.
                 case "U007" :
                     AuthenticationService.shared.logoutDueToTokenExpiration()
                 default:
@@ -336,5 +351,4 @@ class CalculateViewModel : ObservableObject {
             //showAlert(message: "네트워크 오류가 발생했습니다.")
             
         }
-    }
-}
+    }}

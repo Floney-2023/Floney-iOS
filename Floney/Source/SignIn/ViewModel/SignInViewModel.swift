@@ -57,7 +57,9 @@ class SignInViewModel: ObservableObject {
         dataManager.postSignIn(request)
             .sink { (dataResponse) in
                 if dataResponse.error != nil {
-                    self.createAlert(with: dataResponse.error!)
+                    self.createAlert(with: dataResponse.error!, retryRequest: {
+                        self.postSignIn()
+                    })
                     // 에러 처리
                     print(dataResponse.error)
                 } else {
@@ -81,8 +83,10 @@ class SignInViewModel: ObservableObject {
             .sink { [weak self] completion in
                 switch completion {
                 case .failure(let error):
-                    self?.errorMessage = (self?.getErrorMessage(from: error as! NetworkError))!
-                    print(self?.errorMessage)
+                    //self?.errorMessage = (self?.getErrorMessage(from: error as! NetworkError))!
+                    self?.createAlert(with: error as! NetworkError, retryRequest: {
+                        self?.checkKakao()
+                    })
                 case .finished:
                     break
                 }
@@ -109,8 +113,11 @@ class SignInViewModel: ObservableObject {
             .sink { [weak self] completion in
                 switch completion {
                 case .failure(let error):
-                    self?.errorMessage = (self?.getErrorMessage(from: error as! NetworkError))!
-                    print(self?.errorMessage)
+                    //self?.errorMessage = (self?.getErrorMessage(from: error as! NetworkError))!
+                    //print(self?.errorMessage)
+                    self?.createAlert(with: error as! NetworkError, retryRequest: {
+                        self?.checkgoogle()
+                    })
                 case .finished:
                     break
                 }
@@ -135,8 +142,11 @@ class SignInViewModel: ObservableObject {
             .sink { [weak self] completion in
                 switch completion {
                 case .failure(let error):
-                    self?.errorMessage = (self?.getErrorMessage(from: error as! NetworkError))!
-                    print(self?.errorMessage)
+                    //self?.errorMessage = (self?.getErrorMessage(from: error as! NetworkError))!
+                    //print(self?.errorMessage)
+                    self?.createAlert(with: error as! NetworkError, retryRequest: {
+                        self?.checkApple()
+                    })
                 case .finished:
                     break
                 }
@@ -160,7 +170,9 @@ class SignInViewModel: ObservableObject {
         dataManager.kakaoSignIn(authToken)
             .sink { (dataResponse) in
                 if dataResponse.error != nil {
-                    self.createAlert(with: dataResponse.error!)
+                    self.createAlert(with: dataResponse.error!, retryRequest: {
+                        self.kakaoSignIn()
+                    })
                     // 에러 처리
                     print(dataResponse.error)
                 } else {
@@ -184,7 +196,9 @@ class SignInViewModel: ObservableObject {
         dataManager.googleSignIn(authToken)
             .sink { (dataResponse) in
                 if dataResponse.error != nil {
-                    self.createAlert(with: dataResponse.error!)
+                    self.createAlert(with: dataResponse.error!, retryRequest: {
+                        self.googleSignIn()
+                    })
                     // 에러 처리
                     print(dataResponse.error)
                 } else {
@@ -213,7 +227,9 @@ class SignInViewModel: ObservableObject {
         dataManager.appleSignIn(authToken)
             .sink { (dataResponse) in
                 if dataResponse.error != nil {
-                    self.createAlert(with: dataResponse.error!)
+                    self.createAlert(with: dataResponse.error!, retryRequest: {
+                        self.appleSignIn()
+                    })
                     // 에러 처리
                     print(dataResponse.error)
                 } else {
@@ -449,7 +465,9 @@ class SignInViewModel: ObservableObject {
                     self.isShowingBottomSheet = true
                     
                 case .failure(let error):
-                    self.createAlert(with: error)
+                    self.createAlert(with: error, retryRequest: {
+                        self.findPassword(email: email)
+                    })
                     LoadingManager.shared.update(showLoading: false, loadingType: .floneyLoading)
                     print("Error finding password: \(error)")
                 }
@@ -475,7 +493,7 @@ class SignInViewModel: ObservableObject {
     }
 
     
-    func createAlert( with error: NetworkError) {
+    func createAlert( with error: NetworkError, retryRequest: @escaping () -> Void) {
         //loadingError = error.backendError == nil ? error.initialError.localizedDescription : error.backendError!.message
         if let backendError = error.backendError {
             guard let serverError = ServerError(rawValue: backendError.code) else {
@@ -492,7 +510,10 @@ class SignInViewModel: ObservableObject {
                 switch errorCode {
                     // 토큰 재발급
                 case "U006" :
-                    tokenViewModel.tokenReissue()
+                    tokenViewModel.tokenReissue {
+                        // 토큰 재발급 성공 시, 원래의 요청 재시도
+                        retryRequest()
+                    }
                 // 아예 틀린 토큰이므로 재로그인해서 다시 발급받아야 함.
                 case "U007" :
                     AuthenticationService.shared.logoutDueToTokenExpiration()
@@ -506,7 +527,7 @@ class SignInViewModel: ObservableObject {
             
         }
     }
-    
+    /*
     private func getErrorMessage(from error: NetworkError) -> String {
         // Format the error message based on the NetworkError
         // This is just a simple example. You should adjust this to suit your needs.
@@ -516,5 +537,5 @@ class SignInViewModel: ObservableObject {
         } else {
             return error.initialError.errorDescription ?? "Unknown Error"
         }
-    }
+    }*/
 }
