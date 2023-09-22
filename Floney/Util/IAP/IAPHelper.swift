@@ -129,7 +129,6 @@ extension IAPHelper: SKPaymentTransactionObserver {
             NotificationCenter.default.post(
                 name: .IAPServicePurchaseNotification,
                 object: (true, identifier)
-            
             )
         } else {
             // 실패 노티 전송

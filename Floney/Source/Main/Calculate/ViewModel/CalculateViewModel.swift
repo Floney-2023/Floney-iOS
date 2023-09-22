@@ -34,7 +34,6 @@ class CalculateViewModel : ObservableObject {
     @Published var selectedDatesStr = ""
     
     @Published var daysOfTheWeek = ["일","월","화","수","목","금","토"]
-    
     @Published var passedDays = 0
     
     // 메인으로 선택된 날짜 -> 이 날짜에 의해 좌우됨.
@@ -78,9 +77,8 @@ class CalculateViewModel : ObservableObject {
         self.dataManager = dataManager
         extractDate()
     }
-    //MARK: server
+    //MARK: 지출 내역
     func getSettlements() {
-        userList = ["rudalswhdk12@naver.com","rudalswhdk12@gmail.com"]
         let bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
         let request = SettlementRequest(bookKey: bookKey, usersEmails: userList, duration: SettlementDate(startDate: startDateStr, endDate: endDateStr))
         
@@ -96,6 +94,9 @@ class CalculateViewModel : ObservableObject {
                     self.lines = dataResponse.value!
                     print("--성공--")
                     print(self.lines)
+                    if self.lines.isEmpty {
+                        AlertManager.shared.update(showAlert: true, message: "내역이 없습니다. 기간을 다시 설정해주세요.", buttonType: .red)
+                    }
                     self.lines = self.lines.map { item in
                         var item = item
                         item.isSelected = false
@@ -105,6 +106,7 @@ class CalculateViewModel : ObservableObject {
                 
             }.store(in: &cancellableSet)
     }
+    //MARK: 정산하기
     func postSettlements() {
         let bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
         let bookName = Keychain.getKeychainValue(forKey: .bookName) ?? ""
@@ -118,7 +120,6 @@ class CalculateViewModel : ObservableObject {
                     })
                     // 에러 처리
                     print(dataResponse.error)
-                    
                     LoadingManager.shared.update(showLoading: false, loadingType: .floneyLoading)
                 } else {
                     print("--정산 요청 성공--")
@@ -135,7 +136,7 @@ class CalculateViewModel : ObservableObject {
                 }
             }.store(in: &cancellableSet)
     }
-    
+    //MARK: 정산 내역 리스트
     func getSettlementList() {
         dataManager.getSettlementList()
             .sink { (dataResponse) in
@@ -182,6 +183,7 @@ class CalculateViewModel : ObservableObject {
                 }
             }.store(in: &cancellableSet)
     }
+    
     func getBookUsers() {
         dataManager.getBookUsers()
             .sink { (dataResponse) in
@@ -266,14 +268,12 @@ class CalculateViewModel : ObservableObject {
                 }
             }
         }
-        
         while dates.count % 7 != 0 {
             if let date = calendar.date(byAdding: .day, value: 1, to: dates.last!) {
                 dates.append(date)
                 print(date)
             }
         }
-        
         return dates
     }
     // 이차원 배열 달력

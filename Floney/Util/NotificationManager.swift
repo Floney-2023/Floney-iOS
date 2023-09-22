@@ -9,6 +9,7 @@ import Foundation
 
 class NotificationManager: ObservableObject {
     @Published var message: String = "Waiting for notification..."
+    @Published var dismissStatus = false
     
     var notificationObserver: Any?
 
@@ -39,10 +40,11 @@ class NotificationManager: ObservableObject {
         let isSuccess = result.0
         if isSuccess {
             switch result.1 {
-            case IAPProducts.FloneyPlusYearly.rawValue:
-                message = "구독이 완료되었습니다."
+            //case IAPProducts.FloneyPlusYearly.rawValue:
+            //    message = "구독이 완료되었습니다."
             case IAPProducts.FloneyPlusMonthly.rawValue :
                 message = "구독이 완료되었습니다."
+                dismissStatus = true
             default :
                 break
                 

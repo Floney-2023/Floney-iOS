@@ -57,7 +57,7 @@ enum ServerError: String, CustomError {
         case .INVALID_AUTHENTICATION: // 인증 잘못됨
             return "다시 로그인 해주세요."
         case .EXPIRED_JWT_TOKEN:
-            return "다시 로그인 해주세요."
+            return "알 수 없는 오류입니다. 다시 시도해 주세요."
         case .INVALID_JWT_TOKEN:
             return "다시 로그인 해주세요."
         case .USER_NOT_FOUND:
@@ -167,6 +167,7 @@ enum InputValidationError: CustomError {
         case .onlyNumberValid:
             return "숫자만 입력해주세요."
         }
+        
     }
 }
 

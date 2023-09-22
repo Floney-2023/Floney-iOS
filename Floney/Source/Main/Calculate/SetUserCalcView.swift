@@ -96,8 +96,13 @@ struct SetUserCalcView: View {
                     .frame(height:UIScreen.main.bounds.height * 0.085)
                     .background(Color.primary1)
                     .onTapGesture {
-                        pageCount = 2
+                        //pageCount = 2
                         viewModel.checkUser()
+                        if viewModel.userList.isEmpty {
+                            AlertManager.shared.update(showAlert: true, message: "멤버를 선택해주세요.", buttonType: .red)
+                        } else {
+                            pageCount = 2
+                        }
                     }
                     //.frame(maxHeight: .infinity)
                     

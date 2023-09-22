@@ -134,7 +134,6 @@ class AddViewModel: ObservableObject {
                     self.lineResult = dataResponse.value!
                     print("--성공--")
                     print(self.lineResult)
-                    self.fcmManager.sendNotification(to: self.bookKey, title: "정산하기", body: "가계부를 정산해보세요")
                     self.alertManager.update(showAlert: true, message: "저장이 완료되었습니다.", buttonType: .green)
                     self.successAdd = true
                 }

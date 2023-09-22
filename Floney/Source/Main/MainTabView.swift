@@ -35,93 +35,94 @@ struct MainTabView: View {
     var body: some View {
         @State var currentDate = dateFormatter.string(from: Date())
         ZStack {
-            VStack {
-                ZStack {
-                    Spacer().fullScreenCover(isPresented: $showingAddView) {
-               
-                        NavigationView {
-                            AddView(isPresented: $showingAddView,lineModel: lineModel,date:currentDate)
-                                .transition(.moveAndFade)
+            NavigationView {
+                VStack {
+                    ZStack {
+                        Spacer().fullScreenCover(isPresented: $showingAddView) {
+                            
+                            NavigationView {
+                                AddView(isPresented: $showingAddView,lineModel: lineModel,date:currentDate)
+                                    .transition(.moveAndFade)
+                            }
+                        }
+                        switch selection {
+                        case 0:
+                            NavigationView {
+                                HomeView(showingTabbar: $showingTabbar, mainAddViewStatus: $showingAddView)
+                            }
+                        case 1:
+                            NavigationView {
+                                
+                                AnalysisView(showingTabbar: $showingTabbar)
+                            }
+                        case 2:
+                            NavigationView {
+                                AddView(isPresented: $showingAddView, lineModel: lineModel, date:currentDate)
+                                    .transition(.moveAndFade)
+                            }
+                        case 3:
+                            NavigationView {
+                                CalculateView(settlementId: $settlementId, isShowingSettlement: $showingSettlementList, showingTabbar: $showingTabbar, showingDetail: $showingSettlementDetail)
+                            }
+                        default :
+                            NavigationView {
+                                MyPageView(showingTabbar: $showingTabbar, isShowingAccountBottomSheet: $isShowingAccountBottomSheet, isNextToCreateBook: $isNextToCreateBook, isNextToEnterCode: $isNextToEnterCode)
+                            }
                         }
                     }
-                    switch selection {
-                    case 0:
-                        NavigationView {
-                            HomeView(showingTabbar: $showingTabbar, mainAddViewStatus: $showingAddView)
-                        }
-                    case 1:
-                        NavigationView {
-                           
-                            AnalysisView(showingTabbar: $showingTabbar)
-                        }
-                    case 2:
-                        NavigationView {
-                            AddView(isPresented: $showingAddView, lineModel: lineModel, date:currentDate)
-                                .transition(.moveAndFade)
-                        }
-                    case 3:
-                        NavigationView {
-                            CalculateView(settlementId: $settlementId, isShowingSettlement: $showingSettlementList, showingTabbar: $showingTabbar, showingDetail: $showingSettlementDetail)
-                        }
-                    default :
-                        NavigationView {
-                            MyPageView(showingTabbar: $showingTabbar, isShowingAccountBottomSheet: $isShowingAccountBottomSheet, isNextToCreateBook: $isNextToCreateBook, isNextToEnterCode: $isNextToEnterCode)
-                        }
-                    }
-                }
-   
-                //MARK: Tab Bar
-                if showingTabbar {
-                    VStack(spacing:0) {
-                        Rectangle()
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 1)
-                            .foregroundColor(.greyScale10)
-                            .background(Color.greyScale10)
-                        HStack() {
-                            ForEach(0..<5, id: \.self) { number in
-                                Spacer()
-                                Button {
-                                    if number == 2 {
-                                        let dateFormatter = DateFormatter()
-                                        dateFormatter.dateFormat = "yyyy-MM-dd"
-                                        currentDate = dateFormatter.string(from: Date())
-                                        self.showingAddView = true
-                                    } else {
-                                        self.selection = number
-                                    }
-                                } label: {
-                                    VStack {
+                    
+                    //MARK: Tab Bar
+                    if showingTabbar {
+                        VStack(spacing:0) {
+                            Rectangle()
+                                .frame(maxWidth: .infinity)
+                                .frame(height: 1)
+                                .foregroundColor(.greyScale10)
+                                .background(Color.greyScale10)
+                            HStack() {
+                                ForEach(0..<5, id: \.self) { number in
+                                    Spacer()
+                                    Button {
                                         if number == 2 {
-                                            // add button
-                                            Image(icons[number])
+                                            let dateFormatter = DateFormatter()
+                                            dateFormatter.dateFormat = "yyyy-MM-dd"
+                                            currentDate = dateFormatter.string(from: Date())
+                                            self.showingAddView = true
                                         } else {
-                                            Image(selection == number ? selectedIcons[number] : icons[number])
+                                            self.selection = number
                                         }
-                                        if number != 2 {  // Add button에는 텍스트가 필요 없습니다.
-                                            Text(labels[number])
-                                                .font(.pretendardFont(.regular, size: 10))
+                                    } label: {
+                                        VStack {
+                                            if number == 2 {
+                                                // add button
+                                                Image(icons[number])
+                                            } else {
+                                                Image(selection == number ? selectedIcons[number] : icons[number])
+                                            }
+                                            if number != 2 {  // Add button에는 텍스트가 필요 없습니다.
+                                                Text(labels[number])
+                                                    .font(.pretendardFont(.regular, size: 10))
+                                            }
                                         }
+                                        .foregroundColor(selection == number ? .greyScale2 : .greyScale7)
                                     }
-                                    .foregroundColor(selection == number ? .greyScale2 : .greyScale7)
+                                    .padding(.bottom, 18)
+                                    Spacer()
+                                    
                                 }
-                                .padding(.bottom, 18)
-                                Spacer()
+                                //.frame(maxHeight: .infinity)
+                                .frame(height:UIScreen.main.bounds.height * 0.098)
                                 
                             }
-                            //.frame(maxHeight: .infinity)
-                            .frame(height:UIScreen.main.bounds.height * 0.098)
-                            
+                            .padding(.bottom, 18)
                         }
-                        .padding(.bottom, 18)
+                        .background(Color.white)
+                        .frame(height:UIScreen.main.bounds.height * 0.098)
                     }
-                    .background(Color.white)
-                    .frame(height:UIScreen.main.bounds.height * 0.098)
                 }
-                
+                .edgesIgnoringSafeArea(.bottom)
             }
-           
-            .edgesIgnoringSafeArea(.bottom)
+            
             // Loading view overlay
             if loadingManager.showLoading {
                 if loadingManager.loadingType == .floneyLoading {

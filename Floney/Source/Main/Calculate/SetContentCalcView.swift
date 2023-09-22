@@ -130,8 +130,12 @@ struct SetContentCalcView: View {
                         .background(Color.primary1)
                         .onTapGesture {
                             viewModel.CheckOutcome()
-                            viewModel.postSettlements()
-                            pageCount = 4 
+                            if viewModel.outcomeRequest.isEmpty {
+                                AlertManager.shared.update(showAlert: true, message: "정산할 내역을 선택해주세요.", buttonType: .red)
+                            } else {
+                                viewModel.postSettlements()
+                                pageCount = 4
+                            }
                         }
                 }
                 .frame(height: UIScreen.main.bounds.height * 0.085)

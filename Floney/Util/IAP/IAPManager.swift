@@ -16,6 +16,7 @@ protocol IAPHelperDelegate: AnyObject {
 
 class IAPManager : ObservableObject{
     var tokenViewModel = TokenReissueViewModel()
+    
     // 서버에서 가져온 구독 정보
     @Published var subscriptionInfo: IAPInfoResponse?
     @Published var receiptData: [String: Any]?

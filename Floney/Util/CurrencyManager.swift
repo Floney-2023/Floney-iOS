@@ -10,7 +10,7 @@ import Alamofire
 import Combine
 class CurrencyManager: ObservableObject {
     static let shared = CurrencyManager()
-    @Published var currentCurrencyUnit: String = "KRW"
+    @Published var currentCurrencyUnit: String = "KRW" 
     @Published var currentCurrency : String = "원"
     
     func getCurrency() {

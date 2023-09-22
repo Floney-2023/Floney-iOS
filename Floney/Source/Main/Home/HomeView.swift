@@ -86,6 +86,7 @@ struct HomeView: View {
                 AddView.init(isPresented: $isShowingAddView, lineModel: lineModel, date: viewModel.selectedDateStr)
             }
         }
+
         .onAppear {
             self.showingTabbar = true
         }

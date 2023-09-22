@@ -19,7 +19,6 @@ struct MySubscriptionView: View {
                 HStack {
                     Spacer()
                     Image("icon_close")
-                        .padding(.trailing, 20)
                         .onTapGesture {
                             showingTabbar = true
                             isShowing = false

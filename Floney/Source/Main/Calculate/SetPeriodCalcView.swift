@@ -96,7 +96,6 @@ struct SetPeriodCalcView: View {
                         .frame(maxHeight: .infinity)
                         .background(Color.greyScale2)
                         .onTapGesture {
-                            //self.isShowingPeriod = false
                             pageCount = 1
                         }
                     Text("다음으로")
@@ -108,9 +107,12 @@ struct SetPeriodCalcView: View {
                         .frame(maxHeight: .infinity)
                         .background(Color.primary1)
                         .onTapGesture {
-                            //self.isShowingContent = true
-                            pageCount = 3
-                            viewModel.getSettlements()
+                            if viewModel.selectedDates.count == 2 {
+                                viewModel.getSettlements()
+                                pageCount = 3
+                            } else {
+                                AlertManager.shared.update(showAlert: true, message: "기간을 설정해주세요.", buttonType: .red)
+                            }
                         }
                 }
                 .frame(height:UIScreen.main.bounds.height * 0.084)

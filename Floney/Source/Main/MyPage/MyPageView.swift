@@ -11,7 +11,6 @@ import Kingfisher
 struct MyPageView: View {
     @Binding var showingTabbar : Bool
     var profileManager = ProfileManager.shared
-    
     @Binding var isShowingAccountBottomSheet : Bool
     @Binding var isNextToCreateBook : Bool
     @Binding var isNextToEnterCode : Bool
@@ -22,7 +21,17 @@ struct MyPageView: View {
     @State var isNextToMySubscription = false
     @State var isNextToUnSubscription = false
     @State var isNextToSubscription = false
+    
+    @State var productPrice = IAPManager.shared.productList[0].price
+
+    private var priceFormatter : NumberFormatter {
+        let priceFormatter = NumberFormatter()
+        priceFormatter.numberStyle = .currency
+        priceFormatter.locale = IAPManager.shared.productList[0].priceLocale
+        return priceFormatter
+    }
     var body: some View {
+        @State var formattedPrice = priceFormatter.string(from: productPrice)
         ZStack {
             VStack(spacing:26) {
                 HStack {
@@ -144,14 +153,19 @@ struct MyPageView: View {
                                 .frame(height: 150)
                                 .background(Color.greyScale12)
                                 .cornerRadius(12)
-                                NavigationLink(destination: SubscriptionView(showingTabbar: $showingTabbar), isActive: $isNextToSubscription) {
+                                NavigationLink(destination: SubscriptionView(mypageViewModel:viewModel,isActive : $isNextToSubscription,showingTabbar: $showingTabbar), isActive: $isNextToSubscription) {
                                     VStack {
                                         HStack {
-                                            Text("월 3,800\(currency)으로\n더 많은 혜택을\n누려보세요!")
-                                                .font(.pretendardFont(.bold, size: 14))
-                                                .foregroundColor(.white)
+                                            VStack(alignment:.leading) {
+                                                Text("월 \(formattedPrice!)으로")
+                                                Text("더 많은 혜택을")
+                                                Text("누려보세요!")
+                                            }
+                                            .font(.pretendardFont(.bold, size: 14))
+                                            .foregroundColor(.white)
                                             Spacer()
                                         }
+                                        
                                         Spacer()
                                         Text("플랜보기")
                                             .font(.pretendardFont(.medium, size: 12))
@@ -346,17 +360,18 @@ struct MyPageView: View {
             .fullScreenCover(isPresented: $isNextToUnSubscription) {
                 UnsubscribeView(showingTabbar: $showingTabbar, isShowing: $isNextToUnSubscription)
             }
+            .onAppear{
+                if IAPManager.shared.subscriptionStatus {
+                    IAPManager.shared.verifyReceipt()
+                }
+                viewModel.getMyPage()
+                showingTabbar = true
+            }
             
             
         } // ZStack
         .padding(.top, 26)
-        .onAppear{
-            if IAPManager.shared.subscriptionStatus {
-                IAPManager.shared.verifyReceipt()
-            }
-            viewModel.getMyPage()
-            showingTabbar = true
-        }
+        
     }
 }
 

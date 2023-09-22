@@ -8,7 +8,10 @@
 import SwiftUI
 
 struct SubscriptionView: View {
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @ObservedObject var notificationManager = NotificationManager()
+    @ObservedObject var mypageViewModel : MyPageViewModel
+    @Binding var isActive : Bool
     @Binding var showingTabbar : Bool
     @State var productID = IAPProducts.FloneyPlusMonthly.rawValue
     @State var productPrice = IAPManager.shared.productList[0].price
@@ -179,7 +182,6 @@ struct SubscriptionView: View {
                 Spacer()
                 Button {
                     IAPManager.shared.buyProduct(productID)
-                    
                 } label: {
                     Text("floney Plus+ 구독하기")
                         .font(.pretendardFont(.bold, size: 14))
@@ -192,6 +194,7 @@ struct SubscriptionView: View {
             }
             .padding(20)
 
+
         }// ZStack
         .customNavigationBar(
             leftView: { BackButtonBlack() } ,
@@ -199,14 +202,19 @@ struct SubscriptionView: View {
                     .font(.pretendardFont(.semiBold, size: 16))
                     .foregroundColor(.greyScale1)
             })
-    }
+        .onChange(of: notificationManager.dismissStatus) { newValue in
+            if newValue {
+                presentationMode.wrappedValue.dismiss()
+            }
+        }
 
-    
+    }
+   
 }
 
 struct SubscriptionView_Previews: PreviewProvider {
     static var previews: some View {
-        SubscriptionView(showingTabbar: .constant(false))
+        SubscriptionView(mypageViewModel : MyPageViewModel(), isActive: .constant(true),showingTabbar: .constant(false))
     }
 }
 

@@ -105,6 +105,8 @@ struct AnalysisView: View {
             
             PickerBottomSheet(availableChangeTabbarStatus : true, showingTab: $showingTabbar, isShowing: $isShowingPicker, yearMonth: $viewModel.yearMonth)
             
+  
+            
         }
     }
    

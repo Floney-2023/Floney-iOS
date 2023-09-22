@@ -9,6 +9,7 @@ import SwiftUI
 import Kingfisher
 
 struct SettingBookView: View {
+    @GestureState private var dragOffset: CGSize = .zero
     @Binding var showingTabbar : Bool
     @Binding var isOnSettingBook : Bool
     @StateObject var viewModel = SettingBookViewModel()
@@ -369,8 +370,7 @@ struct SettingBookView: View {
             
             ShareBookBottomSheet(viewModel: viewModel, isShowing: $isShowingShareBook, onShareSheet: $onShareSheet)
         }
-        
-        
+ 
     }
     
     
