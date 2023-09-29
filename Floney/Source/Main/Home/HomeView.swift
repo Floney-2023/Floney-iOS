@@ -329,16 +329,16 @@ struct MonthCalendar: View {
                                                     .padding()
                                                     .font(.pretendardFont(.regular, size: 12))
                                                     .frame(maxWidth: .infinity)
-                                                    .background(isSelected ? .primary1 : (date == viewModel.totalToday ? Color.primary1 : Color.clear))
-                                                    .foregroundColor(isSelected ? .white : .greyScale2)
+                                                    .background(date == viewModel.totalToday ? Color.primary1 : Color.clear)
+                                                    .foregroundColor(date == viewModel.totalToday ? .white : .greyScale2)
                                                     .clipShape(Circle())
                                             } else {
                                                 Text("\(Int(day)!)") // 1,2,...,31
                                                     .padding(7)
                                                     .font(.pretendardFont(.regular, size: 12))
                                                     .frame(maxWidth: .infinity)
-                                                    .background(isSelected ? .primary1 : (date == viewModel.totalToday ? Color.primary1 : Color.clear))
-                                                    .foregroundColor(isSelected ? .white : (date == viewModel.totalToday ? .white : .greyScale2))
+                                                    .background(date == viewModel.totalToday ? Color.primary1 : Color.clear)
+                                                    .foregroundColor(date == viewModel.totalToday ? .white : .greyScale2)
                                                     .clipShape(Circle())
                                                     .onTapGesture { // 해당 날짜 터치할 경우
                                                         viewModel.selectedDateStr = date // 0000-00-00

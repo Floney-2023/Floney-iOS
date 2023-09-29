@@ -22,7 +22,7 @@ class CalendarViewModel: ObservableObject {
     @Published var todayYear: Int = 0
     @Published var todayMonth: Int = 0
     @Published var todayDay: Int = 0
-    var totalToday = ""
+    @Published var totalToday = ""
     
     //MARK: Selected Date
     // 연,월을 바꿀 경우에는 해당 연도 해당 달의 1일로 selected 변화

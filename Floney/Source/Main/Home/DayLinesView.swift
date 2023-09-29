@@ -12,14 +12,12 @@ struct DayLinesView: View {
     @Binding var date: String
     @Binding var isShowingAddView : Bool
     @ObservedObject var viewModel : CalendarViewModel
-    
-    
     var body: some View {
         VStack {
             DayTotalView(viewModel: viewModel)
             DayLinesDetailView(viewModel: viewModel, isShowingAddView: $isShowingAddView)
             Spacer()
-        }//.padding(20)
+        }
         .background(Color.clear)
         .onAppear{
             print("date : \(date)")
@@ -283,7 +281,6 @@ struct DayLinesDetailView : View {
 
 struct DateCalendarView_Previews: PreviewProvider {
     static var previews: some View {
-        //DayLinesView(date : .constant("2023-06-20"), isShowingAddView: .constant(false), viewModel: CalendarViewModel())
         DayTotalView(viewModel: CalendarViewModel())
     }
 }
