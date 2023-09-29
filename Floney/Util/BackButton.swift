@@ -39,9 +39,15 @@ struct BackButtonBlack : View {
 
 struct BackButtonBlackWithAlert : View {
     @Binding var showAlert : Bool
+    @Binding var changedStatus : Bool
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     var body: some View {
         Button(action: {
-            showAlert = true
+            if changedStatus {
+                showAlert = true
+            } else {
+                self.presentationMode.wrappedValue.dismiss()
+            }
         }) {
             HStack {
                 Image("back_button_black") // set image here

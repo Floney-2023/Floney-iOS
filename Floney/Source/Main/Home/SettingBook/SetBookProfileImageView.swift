@@ -11,6 +11,7 @@ import FirebaseStorage
 
 struct SetBookProfileImageView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    @State var changedStatus = false
     @State var showAlert = false
     @State var title = "잠깐!"
     @State var message = "수정된 내용이 저장되지 않았습니다.\n그대로 나가시겠습니까?"
@@ -27,7 +28,11 @@ struct SetBookProfileImageView: View {
     @State private var onPhotoLibrary = false
     // 프로필 이미지 변화 확정 여부
     @State private var profileChanged = false
-    @State private var selectedUIImage: UIImage? = nil
+    @State private var selectedUIImage: UIImage? = nil {
+        didSet {
+            self.changedStatus = true
+        }
+    }
     
     var body: some View {
         ZStack {
@@ -101,7 +106,7 @@ struct SetBookProfileImageView: View {
             }
             .padding(EdgeInsets(top: 68, leading: 20, bottom: 0, trailing: 20))
             .customNavigationBar(
-                leftView: { BackButtonBlackWithAlert(showAlert: $showAlert) },
+                leftView: { BackButtonBlackWithAlert(showAlert: $showAlert, changedStatus : $changedStatus) },
                 centerView: { Text("프로필 이미지 변경")
                         .font(.pretendardFont(.semiBold, size: 16))
                     .foregroundColor(.greyScale1)}
