@@ -9,6 +9,11 @@ import SwiftUI
 import Combine
 struct AddView: View {
     @StateObject var viewModel = AddViewModel()
+    @State var changedStatus = false
+    @State var showAlert = false
+    @State var title = "잠깐!"
+    @State var message = "수정된 내용이 저장되지 않았습니다.\n그대로 나가시겠습니까?"
+    
     @State var currency = CurrencyManager.shared.currentCurrency
     
     @Binding var isPresented: Bool
@@ -26,16 +31,40 @@ struct AddView: View {
     @ObservedObject var alertManager = AlertManager.shared
 
     @State var date : String = "2023-06-20"
-    @State var money : String = ""
+    @State var money : String = "" {
+        didSet {
+            self.changedStatus = true
+        }
+    }
+
     let numberFormatter: NumberFormatter = {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
         return formatter
     }()
-    @State var assetType = "자산을 선택하세요"
-    @State var category = "분류를 선택하세요"
-    @State var content = ""
-    @State var toggleOnOff = false
+    @State var assetType = "자산을 선택하세요" {
+        didSet {
+            self.changedStatus = true
+        }
+    }
+    @State var category = "분류를 선택하세요" {
+        didSet {
+            self.changedStatus = true
+        }
+    }
+
+    @State var content = "" {
+        didSet {
+            self.changedStatus = true
+        }
+    }
+
+    @State var toggleOnOff = false {
+        didSet {
+            self.changedStatus = true
+        }
+    }
+
     @State var writer = ""
 
     var formattedValue: Double? {
@@ -50,7 +79,11 @@ struct AddView: View {
                 HStack {
                     Image("icon_close")
                         .onTapGesture {
-                            self.isPresented.toggle()
+                            if changedStatus {
+                                self.showAlert = true
+                            } else {
+                                self.isPresented.toggle()
+                            }
                         }
                     Spacer()
                 }
@@ -65,18 +98,7 @@ struct AddView: View {
                                 .foregroundColor(.greyScale6)
                             Spacer()
                         }
-                        /*
-                        MoneyTextField(text: $money, placeholder: "금액을 입력하세요")
-                            .frame(height: UIScreen.main.bounds.height * 0.0487)
-                            .onReceive(Just(money)) { value in
-                                let digits = value.filter { "0"..."9" ~= $0 }
-                                if let doubleValue = Double(digits), doubleValue <= 100_000_000_000 {
-                                    money = formatNumber(Int(doubleValue))
-                                } else {
-                                    money = String(digits.dropLast())
-                                }
-                            }*/
-                        
+   
                         MoneyTextField(text: $money, placeholder: "금액을 입력하세요")
                             .frame(height: UIScreen.main.bounds.height * 0.0487)
                             .onReceive(Just(money)) { value in
@@ -133,8 +155,6 @@ struct AddView: View {
                     .frame(maxWidth: .infinity)
                     .frame(height: 38)
                     .cornerRadius(10)
-                  
-              
                     
                     //MARK: 날짜/자산/분류/내용/제외여부
                     VStack(spacing:44) {
@@ -325,9 +345,7 @@ struct AddView: View {
                     }
                     .frame(maxWidth: .infinity)
                     .frame(height:UIScreen.main.bounds.height * 0.085)
-                }
-
-                
+                }  
             } // VStack
             .edgesIgnoringSafeArea(.bottom)
             .onAppear(perform : UIApplication.shared.hideKeyboard)
@@ -349,6 +367,13 @@ struct AddView: View {
             CustomAlertView(message: AlertManager.shared.message, type: $alertManager.buttontType, isPresented: $alertManager.showAlert)
             CategoryBottomSheet(root: $root, categories: $viewModel.categories, isShowing: $isShowingBottomSheet, isSelectedAssetTypeIndex: $isSelectedAssetTypeIndex, isSelectedAssetType: $assetType, isSelectedCategoryIndex: $isSelectedCategoryIndex, isSelectedCategory: $category, isShowingEditCategory: $isShowingEditCategory)
             
+            //MARK: alert
+            if showAlert {
+                AlertView(isPresented: $showAlert, title: $title, message: $message) {
+                    self.isPresented = false
+                }
+            }
+
             NavigationLink(destination: CategoryManagementView(isShowingEditCategory: $isShowingEditCategory), isActive: $isShowingEditCategory) {
                 EmptyView()
             }
@@ -359,7 +384,6 @@ struct AddView: View {
         formatter.numberStyle = .decimal
         return formatter.string(from: NSNumber(value: n)) ?? ""
     }
- 
 }
 
 class KeyboardResponder: ObservableObject {

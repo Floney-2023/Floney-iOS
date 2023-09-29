@@ -154,7 +154,7 @@ class AddViewModel: ObservableObject {
                     print("--카테고리 추가 성공--")
                     print(dataResponse.value)
                     self.getCategory()
-                    
+                    self.successAdd = true
                 }
             }.store(in: &cancellableSet)
     }
@@ -187,6 +187,8 @@ class AddViewModel: ObservableObject {
                 case .finished:
                     print(" successfully line delete.")
                     self.getCategory()
+                    self.successAdd = true
+
                 case .failure(let error):
                     self.createAlert(with: error, retryRequest: {
                         self.deleteLine()
