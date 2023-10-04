@@ -111,7 +111,7 @@ class CalculateViewModel : ObservableObject {
         let bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
         let bookName = Keychain.getKeychainValue(forKey: .bookName) ?? ""
         let request = AddSettlementRequest(bookKey: bookKey, userEmails: userList, startDate: startDateStr, endDate: endDateStr, outcomes: outcomeRequest)
-        
+
         dataManager.postSettlements(request)
             .sink { (dataResponse) in
                 if dataResponse.error != nil {
@@ -123,7 +123,8 @@ class CalculateViewModel : ObservableObject {
                     LoadingManager.shared.update(showLoading: false, loadingType: .floneyLoading)
                 } else {
                     print("--정산 요청 성공--")
-                    self.fcmManager.sendNotification(to: bookKey, title: "플로니", body: "\(bookName)의 가계부를 정산해보세요!")   
+                    self.fcmManager.sendNotification(to: bookKey, title: "플로니", body: "\(bookName)의 가계부를 정산해보세요!")
+                    self.postNoti(title: "플로니", body: "\(bookName)의 가계부를 정산해보세요!", imgUrl: "noti_settlement")
                     LoadingManager.shared.update(showLoading: false, loadingType: .floneyLoading)
                     self.settlementResult = dataResponse.value!
                     print(self.settlementResult)
@@ -136,6 +137,23 @@ class CalculateViewModel : ObservableObject {
                 }
             }.store(in: &cancellableSet)
     }
+    // 가계부 user의 알림을 저장한다.
+    func postNoti(title :String, body: String, imgUrl : String) {
+        let currentDate = Date()
+        let formatter = ISO8601DateFormatter()
+        let formattedDate = formatter.string(from: currentDate)
+        let userEmails = self.userList
+        var viewModel = NotiViewModel()
+        if let currentUser = Keychain.getKeychainValue(forKey: .email) {
+           
+            let filtered = userEmails.filter { $0 != currentUser }
+            
+            for user in filtered {
+                viewModel.postNoti(title: title, body: body, imgUrl: imgUrl, userEmail: user, date: formattedDate)
+            }
+        }
+    }
+    
     //MARK: 정산 내역 리스트
     func getSettlementList() {
         dataManager.getSettlementList()

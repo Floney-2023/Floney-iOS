@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct NotificationView: View {
+    @StateObject var viewModel = NotiViewModel()
     @Binding var showingTabbar : Bool
     //@State var title = "가계부 알림"
     @State private var selectedTab = 0
@@ -102,6 +103,7 @@ struct NotificationView: View {
             )
         .onAppear{
             showingTabbar = false
+            viewModel.getNoti()
         }
     }
         

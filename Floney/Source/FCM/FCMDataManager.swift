@@ -71,6 +71,7 @@ class FCMDataManager: ObservableObject {
             }
         }
     }
+    
     func callFetchAccessToken(bookKey : String, title : String, body : String) {
         fetchAccessToken()
             .sink { dataResponse in
