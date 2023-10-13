@@ -150,6 +150,7 @@ struct BudgetView: View {
                     .frame(maxWidth: .infinity)
                     Spacer()
                 }
+                // 예산 설정을 하지 않음
             } else {
                 VStack {
                     ZStack {
@@ -239,7 +240,7 @@ struct BudgetView: View {
                         }
                         NavigationLink(destination: SetBudgetView(), isActive : $isActive) {
                             Button {
-                                //isActive = true
+                                isActive = true
                             } label: {
                                 Text("이번달 예산 설정하기")
                                     .font(.pretendardFont(.bold, size: 14))
@@ -251,8 +252,6 @@ struct BudgetView: View {
                             .background(Color.primary1)
                             .cornerRadius(12)
                         }
-                    
-                    
                     Spacer()
                 }
             }

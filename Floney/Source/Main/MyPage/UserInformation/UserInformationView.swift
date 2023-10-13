@@ -10,7 +10,6 @@ import SwiftUI
 struct UserInformationView: View {
     @StateObject var alertManager = AlertManager.shared
     @StateObject var viewModel = MyPageViewModel()
-
     @State  var provider : String = Keychain.getKeychainValue(forKey: .provider) ?? ""
     @State var showingLogoutAlert = false
     @State var title = "로그아웃"
@@ -75,8 +74,7 @@ struct UserInformationView: View {
                 }
                 
             }
-            
-            NavigationLink(destination: WithdrawalView()){
+            //NavigationLink(destination: WithdrawalView()){
                 HStack {
                     VStack {
                         Text("회원탈퇴")
@@ -86,13 +84,12 @@ struct UserInformationView: View {
                             .padding(EdgeInsets(top: -10, leading: 0, bottom: 0, trailing: 0))
                             .frame(width: 50,height: 1.0)
                             .foregroundColor(.greyScale6)
-                        
                     }
                     Spacer()
                 }
-            }
-            Spacer()
+            //}
             
+            Spacer()
         }
         .padding(EdgeInsets(top: 35, leading: 20, bottom: 0, trailing: 20))
         .customNavigationBar(
@@ -100,14 +97,16 @@ struct UserInformationView: View {
             centerView: { Text("회원 정보")
                     .font(.pretendardFont(.semiBold, size: 16))
                 .foregroundColor(.greyScale1)}
-            
             )
         .overlay(
             ZStack {
                 if showingLogoutAlert {
-                    AlertView(isPresented: $showingLogoutAlert, title: $title, message: $message, onOKAction: {viewModel.logout()})
+                    AlertView(isPresented: $showingLogoutAlert, title: $title, message: $message, onOKAction: {
+                        DispatchQueue.main.async {
+                            viewModel.logout()
+                        }
+                    })
                 }
-               
             }
         )
         .onAppear(perform : UIApplication.shared.hideKeyboard)

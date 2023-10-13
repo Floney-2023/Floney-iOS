@@ -104,7 +104,10 @@ struct ModifyingBookView: View {
             ZStack {
                 if deleteAlert {
                     AlertView(isPresented: $deleteAlert, title: $deleteTitle, message: $deleteMessage, okColor: .alertRed, onOKAction: {
-                        viewModel.deleteBook()
+                        DispatchQueue.main.async {
+                            viewModel.deleteBook()
+                        }
+                        
                     })
                 }
                 

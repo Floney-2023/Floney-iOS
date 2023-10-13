@@ -11,10 +11,18 @@ import Foundation
 import Combine
 import SwiftUI
 
-class NotiViewModel: ObservableObject {
+final class NotiViewModel: ObservableObject {
     var tokenViewModel = TokenReissueViewModel()
-    
-    @Published var notiList : [NotiResponse] = []
+    @Published var bookNotiList : [BookNoti] = [
+        BookNoti(bookKey: "4B7719E8",bookName: "냐냐",notiList: [
+            NotiResponse(id: 6, title: "플로니", body: "냐냐의 가계부를 정산해보세요!", imgUrl: "noti_settlement", date: "2023-10-03T08:03:26", received: false),
+            NotiResponse(id: 7, title: "플로니", body: "냐냐의 가계부를 정산해보세요!", imgUrl: "noti_settlement", date: "2023-09-03T08:03:26", received: false)
+        ]),
+        BookNoti(bookKey: "4B7719E8",bookName: "뇨뇨",notiList: [
+            NotiResponse(id: 6, title: "플로니", body: "냐냐의 가계부를 정산해보세요!", imgUrl: "noti_settlement", date: "2023-10-03T08:03:26", received: false),
+            NotiResponse(id: 7, title: "플로니", body: "냐냐의 가계부를 정산해보세요!", imgUrl: "noti_settlement", date: "2023-09-03T08:03:26", received: false)
+        ])
+    ]
     
     private var cancellableSet: Set<AnyCancellable> = []
     var dataManager: NotiProtocol
@@ -41,18 +49,18 @@ class NotiViewModel: ObservableObject {
             }
             .store(in: &cancellableSet)
     }
-    func getNoti() {
-        let bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
+    func getNoti(bookKey : String, bookName: String) {
         dataManager.getNoti(bookKey: bookKey)
             .sink { (dataResponse) in
                 if dataResponse.error != nil {
                     self.createAlert(with: dataResponse.error!, retryRequest: {
-                        self.getNoti()
+                        self.getNoti(bookKey: bookKey, bookName: bookName)
                     })
                     print(dataResponse.error)
                 } else {
-                    self.notiList = dataResponse.value!
-                    print(self.notiList)
+                    self.bookNotiList.append(
+                        BookNoti(bookKey: bookKey, bookName: bookName, notiList: dataResponse.value!)
+                    )
                 }
             }.store(in: &cancellableSet)
     }

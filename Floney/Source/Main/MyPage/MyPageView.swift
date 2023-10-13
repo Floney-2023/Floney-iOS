@@ -41,7 +41,7 @@ struct MyPageView: View {
                         .foregroundColor(.greyScale1)
                     
                     Spacer()
-                    NavigationLink(destination: NotificationView(showingTabbar: $showingTabbar), isActive: $isShowingNotiView) {
+                    NavigationLink(destination: NotificationView(viewModel: viewModel.notiviewModel,showingTabbar: $showingTabbar), isActive: $isShowingNotiView) {
                         Image("icon_notification")
                             .onTapGesture {
                                 showingTabbar = false
@@ -361,7 +361,7 @@ struct MyPageView: View {
                 UnsubscribeView(showingTabbar: $showingTabbar, isShowing: $isNextToUnSubscription)
             }
             .onAppear{
-                if IAPManager.shared.subscriptionStatus {
+                if viewModel.subscribe {
                     IAPManager.shared.verifyReceipt()
                 }
                 viewModel.getMyPage()

@@ -15,6 +15,8 @@ protocol MyPageProtocol {
     func changeNickname(nickname: String) -> AnyPublisher<Void, NetworkError>
     func changePassword(password: String) -> AnyPublisher<Void, NetworkError>
     func logout() -> AnyPublisher<Void, NetworkError>
+    func signout(_ parameters : SignOutRequest) -> AnyPublisher<Void, NetworkError>
+
 }
 
 
@@ -24,8 +26,6 @@ class MyPage {
 }
 
 extension MyPage: MyPageProtocol {
-    
-    
     func getMyPage() -> AnyPublisher<DataResponse<MyPageResponse, NetworkError>, Never> {
         let url = "\(Constant.BASE_URL)/users/mypage"
         
@@ -48,14 +48,13 @@ extension MyPage: MyPageProtocol {
         .receive(on: DispatchQueue.main)
         .eraseToAnyPublisher()
     }
-    
     func changeProfile(img: String) -> AnyPublisher<Void, NetworkError> {
         var url = "\(Constant.BASE_URL)/users/profileimg/update?profileImg=\(img)"
-
+        
         print("My Page DataManager Change User Image \(url)")
         
         //var parameters = [String: String]()
-      
+        
         //parameters["profileImg"] = img
         
         //print("parameters : \(parameters)")
@@ -79,7 +78,7 @@ extension MyPage: MyPageProtocol {
                 } else {
                     // Handle error based on status code
                     let backendError = result.data.flatMap { try? JSONDecoder().decode(BackendError.self, from: $0)}
-
+                    
                     
                     if let backendError = backendError {
                         throw NetworkError(initialError: result.error!, backendError: backendError)
@@ -96,7 +95,7 @@ extension MyPage: MyPageProtocol {
         }
         .eraseToAnyPublisher()
     }
-
+    
     func changeNickname(nickname: String) -> AnyPublisher<Void, NetworkError> {
         let urlString = "\(Constant.BASE_URL)/users/nickname/update?nickname=\(nickname)"
         print("\(urlString)")
@@ -121,7 +120,7 @@ extension MyPage: MyPageProtocol {
                 } else {
                     // Handle error based on status code
                     let backendError = result.data.flatMap { try? JSONDecoder().decode(BackendError.self, from: $0)}
-
+                    
                     
                     if let backendError = backendError {
                         throw NetworkError(initialError: result.error!, backendError: backendError)
@@ -159,7 +158,7 @@ extension MyPage: MyPageProtocol {
                 } else {
                     // Handle error based on status code
                     let backendError = result.data.flatMap { try? JSONDecoder().decode(BackendError.self, from: $0)}
-
+                    
                     
                     if let backendError = backendError {
                         throw NetworkError(initialError: result.error!, backendError: backendError)
@@ -177,7 +176,7 @@ extension MyPage: MyPageProtocol {
         .eraseToAnyPublisher()
     }
     func logout() -> AnyPublisher<Void, NetworkError> {
-
+        
         let token = Keychain.getKeychainValue(forKey: .accessToken) ?? ""
         let url = "\(Constant.BASE_URL)/users/logout?accessToken=\(token)"
         print("change nickname : \n\(token)")
@@ -186,7 +185,7 @@ extension MyPage: MyPageProtocol {
                           method: .get,
                           parameters: nil,
                           encoding: JSONEncoding.default
-                          )
+        )
         .validate()
         .publishData()
         .tryMap { result in
@@ -198,7 +197,7 @@ extension MyPage: MyPageProtocol {
                 } else {
                     // Handle error based on status code
                     let backendError = result.data.flatMap { try? JSONDecoder().decode(BackendError.self, from: $0)}
-
+                    
                     
                     if let backendError = backendError {
                         throw NetworkError(initialError: result.error!, backendError: backendError)
@@ -214,7 +213,45 @@ extension MyPage: MyPageProtocol {
             return error as! NetworkError
         }
         .eraseToAnyPublisher()
+    }
+    func signout(_ parameters : SignOutRequest) -> AnyPublisher<Void, NetworkError> {
+        let token = Keychain.getKeychainValue(forKey: .accessToken) ?? ""
+        let url = "\(Constant.BASE_URL)/users/signout?accessToken=\(token)"
+        print("sign out : \n\(token)")
         
+        return AF.request(url,
+                          method: .post,
+                          parameters: parameters,
+                          encoder: JSONParameterEncoder()
+        )
+        .validate()
+        .publishData()
+        .tryMap { result in
+            // Check the status code
+            if let statusCode = result.response?.statusCode {
+                print("Status Code: \(statusCode)")
+                if statusCode == 200 {
+                    return // Success, return
+                } else {
+                    // Handle error based on status code
+                    let backendError = result.data.flatMap { try? JSONDecoder().decode(BackendError.self, from: $0)}
+                    
+                    
+                    if let backendError = backendError {
+                        throw NetworkError(initialError: result.error!, backendError: backendError)
+                    } else {
+                        throw NetworkError(initialError: result.error!, backendError: nil)
+                    }
+                }
+            } else {
+                throw NetworkError(initialError: result.error!, backendError: nil)
+            }
+        }
+        .mapError { error in
+            return error as! NetworkError
+        }
+        .eraseToAnyPublisher()
+
     }
 
 }

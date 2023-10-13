@@ -11,3 +11,7 @@ struct MyPageRequest: Encodable {
     var profileImg : String
 }
 
+struct SignOutRequest : Encodable {
+    var type : String
+    var reason : String?
+}

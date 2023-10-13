@@ -297,7 +297,6 @@ extension IAPHelper {
     }
     func getSubscriptionStatus() -> AnyPublisher<DataResponse<MyPageResponse, NetworkError>, Never> {
         let url = "\(Constant.BASE_URL)/users/mypage"
-        
         let token = Keychain.getKeychainValue(forKey: .accessToken) ?? ""
         print("My Page : \n\(token)")
         

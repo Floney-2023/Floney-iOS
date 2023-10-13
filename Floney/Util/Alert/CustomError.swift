@@ -130,6 +130,8 @@ enum InputValidationError: CustomError {
     case categoryTypeEmpty
     case bookCodeEmpty
     case onlyNumberValid
+    case notSelectSignoutReason
+    case noInputSignoutOtherReason
     var errorMessage: String {
         switch self {
         case .emailInvalid:
@@ -166,6 +168,10 @@ enum InputValidationError: CustomError {
             return "코드를 입력하세요."
         case .onlyNumberValid:
             return "숫자만 입력해주세요."
+        case .notSelectSignoutReason:
+            return "탈퇴 이유를 선택해주세요."
+        case .noInputSignoutOtherReason:
+            return "탈퇴 이유를 작성해주세요."
         }
         
     }

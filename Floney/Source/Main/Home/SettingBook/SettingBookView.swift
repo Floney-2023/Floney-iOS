@@ -347,7 +347,9 @@ struct SettingBookView: View {
                 ZStack {
                     if exitAlert {
                         AlertView(isPresented: $exitAlert, title: $exitTitle, message: $exitMessage, okColor: .alertRed, onOKAction: {
-                            viewModel.exitBook()
+                            DispatchQueue.main.async {
+                                viewModel.exitBook()
+                            }
                         })
                     }
                 }
@@ -356,7 +358,9 @@ struct SettingBookView: View {
                 ZStack {
                     if resetAlert {
                         AlertView(isPresented: $resetAlert,title: $resetTitle, message: $resetMessage, okColor: .alertRed, onOKAction: {
-                            viewModel.resetBook()
+                            DispatchQueue.main.async {
+                                viewModel.resetBook()
+                            }
                         })
                     }
                 }

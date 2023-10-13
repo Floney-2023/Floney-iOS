@@ -9,7 +9,7 @@ import Foundation
 import Combine
 import SwiftUI
 
-class MyPageViewModel: ObservableObject {
+final class MyPageViewModel: ObservableObject {
     var alertManager = AlertManager.shared
     var recentBookManager = RecentBookKeyManager()
     var tokenViewModel = TokenReissueViewModel()
@@ -52,6 +52,11 @@ class MyPageViewModel: ObservableObject {
     @Published var newPassword : String = ""
     @Published var newPasswordCheck : String = ""
     
+    //MARK: signout
+    @Published var selectedReason : SignOutType?
+    @Published var otherReason = ""
+    @Published var notiviewModel = NotiViewModel()
+    
     private var cancellableSet: Set<AnyCancellable> = []
     var dataManager: MyPageProtocol
     
@@ -78,6 +83,11 @@ class MyPageViewModel: ObservableObject {
                     self.provider = self.result.provider
                     Keychain.setKeychain(self.provider, forKey: .provider)
                     self.subscribe = self.result.subscribe
+                    //self.notiviewModel.bookList = self.myBooks
+                    self.notiviewModel.bookNotiList = []
+                    for book in self.myBooks {
+                        self.notiviewModel.getNoti(bookKey: book.bookKey, bookName: book.name)
+                    }
                     
                     if let img = self.userImg {
                         if img == "user_default" { // 디폴트라면
@@ -131,7 +141,6 @@ class MyPageViewModel: ObservableObject {
                     } else if imageStatus == "random" {
                         ProfileManager.shared.setRandomProfileImage(randomNumStr: self.randomNumStr!)
                     } else {
-                        //let decryptedUrl = self.cryptionManager.decrypt(self.encryptedImageUrl, using: self.cryptionManager.key!) // 복호화된 url
                         ProfileManager.shared.setUserImageStateToCustom(urlString: self.encryptedImageUrl) // 싱글톤으로 관리되는 profile manager에 저장
                     }
                 case .failure(let error):
@@ -244,7 +253,6 @@ class MyPageViewModel: ObservableObject {
         return newPassword == newPasswordCheck
     }
     
-    
     func logout() {
         dataManager.logout()
             .sink { completion in
@@ -265,6 +273,51 @@ class MyPageViewModel: ObservableObject {
             }
             .store(in: &cancellableSet)
     }
+    func signout() {
+        if let selectedReason = selectedReason {
+            var request = SignOutRequest(type: selectedReason.rawValue)
+            if selectedReason == .OTHER {
+                request = SignOutRequest(type: selectedReason.rawValue, reason: otherReason)
+            } else {
+                request = SignOutRequest(type: selectedReason.rawValue)
+            }
+            dataManager.signout(request)
+                .sink { completion in
+                    switch completion {
+                    case .finished:
+                        print("logout success.")
+                        DispatchQueue.main.async {
+                            AuthenticationService.shared.logoutDueToTokenExpiration()
+                        }
+                    case .failure(let error):
+                        self.createAlert(with: error, retryRequest: {
+                            self.logout()
+                        })
+                        print("Error changing nickname: \(error)")
+                    }
+                } receiveValue: { data in
+                    // TODO: Handle the received data if necessary.
+                }
+                .store(in: &cancellableSet)
+        }
+    }
+    // 회원탈퇴 검증
+    func isValidSignout() -> Bool {
+        if selectedReason == nil {
+            AlertManager.shared.handleError(InputValidationError.notSelectSignoutReason)
+            return false
+            
+        } else {
+            if selectedReason == .OTHER {
+                if otherReason.isEmpty  {
+                    AlertManager.shared.handleError(InputValidationError.noInputSignoutOtherReason)
+                    return false
+                }
+            }
+        }
+        return true
+    }
+
     func changeBook(bookKey : String, bookStatus : String) {
         Keychain.setKeychain(bookKey, forKey: .bookKey)
         Keychain.setKeychain(bookStatus, forKey: .bookStatus)
