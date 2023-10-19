@@ -236,6 +236,7 @@ class CalendarViewModel: ObservableObject {
             }
         }
         dayLinesDate = selectedDateStr
+        getDayLines()
         print("selectedDate : \(selectedDateStr)")
         print("requestDate : \(requestDate)")
     }

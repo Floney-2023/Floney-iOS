@@ -681,6 +681,7 @@ struct CategoryFlowLayout: View {
 }
 
 struct DayLinesBottomSheet: View {
+    let scaler = Scaler.shared
     let buttonHeight: CGFloat = 38
     @StateObject var viewModel : CalendarViewModel
     @Binding var isShowing: Bool
@@ -703,224 +704,242 @@ struct DayLinesBottomSheet: View {
                         isShowing.toggle()
                     }
                 //MARK: content
-                
-                VStack() {
+                VStack(spacing:0) {
                     HStack {
-                        VStack(alignment: .leading, spacing: 5) {
+                        VStack(alignment: .leading, spacing: scaler.scaleHeight(8)) {
                             Text("\(year)년")
-                                .font(.pretendardFont(.semiBold, size: 14))
+                                .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(14)))
                                 .foregroundColor(.greyScale6)
                             Text("\(viewModel.selectedMonth)월 \(viewModel.selectedDay)일")
-                                .font(.pretendardFont(.semiBold, size: 16))
+                                .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(16)))
                                 .foregroundColor(.greyScale1)
                             
                         }
+                        .padding(.top, scaler.scaleHeight(20))
+                        .padding(.bottom, scaler.scaleHeight(12))
                         Spacer()
                         VStack {
                             Text("내역 추가")
-                                .font(.pretendardFont(.semiBold, size: 12))
+                                .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(12)))
                                 .foregroundColor(.primary2)
+                                .padding(.top, scaler.scaleHeight(33))
+                                .padding(.bottom, scaler.scaleHeight(25))
                                 .onTapGesture {
                                     isShowing.toggle()
                                     self.isShowingAddView.toggle()
                                 }
                         }
                     }
-                    .padding(.top, 24)
-                    .padding(.bottom, 30)
                     
-                    ScrollView(showsIndicators: false) {
-                        VStack (spacing:28) {
-                            // 1일인데 이월 금액이 존재한다면 이월금액 보여주기.
-                            if Calendar.current.component(.day, from: viewModel.selectedDate) == 1 {
-                                if viewModel.dayLineCarryOver.carryOverStatus {
-                                    HStack {
-                                        if viewModel.seeProfileImg {
-                                            Image("book_profile_32")
-                                                .clipShape(Circle())
-                                                .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
-                                        }
-                                        VStack(alignment: .leading, spacing: 3){
-                                            Text("이월")
-                                                .font(.pretendardFont(.semiBold, size: 14))
+                    VStack(spacing:0) {
+                        ScrollView(showsIndicators: false) {
+                            VStack(spacing:scaler.scaleHeight(38)) {
+                                if Calendar.current.component(.day, from: viewModel.selectedDate) == 1 {
+                                    if viewModel.dayLineCarryOver.carryOverStatus {
+                                        HStack(spacing:scaler.scaleWidth(16)) {
+                                            if viewModel.seeProfileImg {
+                                                Image("book_profile_32")
+                                                    .resizable()
+                                                    .frame(width: scaler.scaleWidth(32), height: scaler.scaleWidth(32))
+                                                    .clipShape(Circle())
+                                                    .overlay(Circle().stroke(Color.greyScale10, lineWidth: scaler.scaleWidth(1)))
+                                                
+                                            }
+                                            VStack(alignment: .leading, spacing: scaler.scaleHeight(8)){
+                                                Text("이월")
+                                                    .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(14)))
+                                                    .foregroundColor(.greyScale2)
+                                                Text("-")
+                                                    .font(.pretendardFont(.medium, size: scaler.scaleWidth(12)))
+                                                    .foregroundColor(.greyScale6)
+                                            }
+                                            Spacer()
+                                            Text("\(Int(viewModel.dayLineCarryOver.carryOverMoney))")
+                                                .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(16)))
                                                 .foregroundColor(.greyScale2)
-                                            Text("-")
-                                                .font(.pretendardFont(.medium, size: 12))
-                                                .foregroundColor(.greyScale6)
                                         }
+                                        .frame(height: scaler.scaleHeight(34))
+                                        
+                                    }
+                                }
+                                if viewModel.dayLines.count == 0 {
+                                    // 1일이고, 이월금액이 존재한다면
+                                    if Calendar.current.component(.day, from: viewModel.selectedDate) == 1 && viewModel.dayLineCarryOver.carryOverStatus {
+                                        
+                                    } else {
                                         Spacer()
-                                        Text("\(Int(viewModel.dayLineCarryOver.carryOverMoney))")
-                                            .font(.pretendardFont(.semiBold, size: 16))
-                                            .foregroundColor(.greyScale2)
+                                        VStack(spacing:scaler.scaleHeight(10)) {
+                                            Image("no_line")
+                                                .resizable()
+                                                .frame(width: scaler.scaleWidth(38), height: scaler.scaleWidth(64))
+                                            Text("내역이 없습니다.")
+                                                .font(.pretendardFont(.medium, size: scaler.scaleWidth(12)))
+                                                .foregroundColor(.greyScale6)
+                                            
+                                        }
+                                        .frame(maxHeight: .infinity)
+                                        Spacer()
+                                        
                                     }
-                                }
-                            }
-                            if viewModel.dayLines.count == 0 {
-                                // 1일이고, 이월금액이 존재한다면
-                                if Calendar.current.component(.day, from: viewModel.selectedDate) == 1 && viewModel.dayLineCarryOver.carryOverStatus {
                                 } else {
-                                    Spacer()
-                                    VStack(spacing:5) {
-                                        Image("no_line")
-                                        Text("내역이 없습니다.")
-                                            .font(.pretendardFont(.medium, size: 12))
-                                            .foregroundColor(.greyScale6)
-                                    }
-                                    Spacer()
-                                }
-                            } else {
-                                ForEach(viewModel.dayLines.indices, id: \.self) { index in
-                                    HStack {
-                                        if viewModel.seeProfileImg {
-                                            if let userImg = viewModel.userImages {
-                                                if let img = userImg[index] {
-                                                    if img == "user_default" {
+                                    ForEach(viewModel.dayLines.indices, id: \.self) { index in
+                                        HStack(spacing:scaler.scaleWidth(16)) {
+                                            if viewModel.seeProfileImg {
+                                                if let userImg = viewModel.userImages {
+                                                    if let img = userImg[index] {
+                                                        if img == "user_default" {
+                                                            Image("user_profile_32")
+                                                                .resizable()
+                                                                .frame(width: scaler.scaleWidth(32), height: scaler.scaleWidth(32))
+                                                                .clipShape(Circle())
+                                                                .overlay(Circle().stroke(Color.greyScale10, lineWidth: scaler.scaleWidth(1)))
+                                                            
+                                                        } else if img.hasPrefix("random"){
+                                                            let components = img.components(separatedBy: CharacterSet.decimalDigits.inverted)
+                                                            let random = components.first!  // "random"
+                                                            let number = components.last!   // "5"
+                                                            Image("img_user_random_profile_0\(number)_32")
+                                                                .resizable()
+                                                                .frame(width: scaler.scaleWidth(32), height: scaler.scaleWidth(32))
+                                                                .clipShape(Circle())
+                                                                .overlay(Circle().stroke(Color.greyScale10, lineWidth: scaler.scaleWidth(1)))
+                                                        }
+                                                        else  {
+                                                            
+                                                            let url = URL(string : img)
+                                                            KFImage(url)
+                                                                .placeholder { //플레이스 홀더 설정
+                                                                    Image("user_profile_32")
+                                                                }.retry(maxCount: 3, interval: .seconds(5)) //재시도
+                                                                .onSuccess { success in //성공
+                                                                    print("succes: \(success)")
+                                                                }
+                                                                .onFailure { error in //실패
+                                                                    print("failure: \(error)")
+                                                                }
+                                                                .resizable()
+                                                                .aspectRatio(contentMode: .fill)
+                                                                .frame(width: scaler.scaleWidth(32), height: scaler.scaleWidth(32))
+                                                                .clipShape(Circle())
+                                                                .overlay(Circle().stroke(Color.greyScale10, lineWidth: scaler.scaleWidth(1)))
+                                                            
+                                                        }
+                                                    } else { //null
                                                         Image("user_profile_32")
-                                                            .clipShape(Circle())
-                                                            .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
-                                                        
-                                                    } else if img.hasPrefix("random"){
-                                                        let components = img.components(separatedBy: CharacterSet.decimalDigits.inverted)
-                                                        let random = components.first!  // "random"
-                                                        let number = components.last!   // "5"
-                                                        Image("img_user_random_profile_0\(number)_32")
-                                                            .clipShape(Circle())
-                                                            .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
-                                                    }
-                                                    else  {
-                                                        
-                                                        let url = URL(string : img)
-                                                        KFImage(url)
-                                                            .placeholder { //플레이스 홀더 설정
-                                                                Image("user_profile_32")
-                                                            }.retry(maxCount: 3, interval: .seconds(5)) //재시도
-                                                            .onSuccess { success in //성공
-                                                                print("succes: \(success)")
-                                                            }
-                                                            .onFailure { error in //실패
-                                                                print("failure: \(error)")
-                                                            }
                                                             .resizable()
-                                                            .aspectRatio(contentMode: .fill)
-                                                            .clipShape(Circle()) // 프로필 이미지를 원형으로 자르기
-                                                            .frame(width: 32, height: 32) //resize
-                                                            .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
-                                                        
-                                                        
+                                                            .frame(width: scaler.scaleWidth(32), height: scaler.scaleWidth(32))
+                                                            .clipShape(Circle())
+                                                            .overlay(Circle().stroke(Color.greyScale10, lineWidth: scaler.scaleWidth(1)))
                                                     }
                                                 } else {
-                                                    Image("book_profile_32")
+                                                    Image("user_profile_32")
+                                                        .resizable()
+                                                        .frame(width: scaler.scaleWidth(32), height: scaler.scaleWidth(32))
                                                         .clipShape(Circle())
-                                                        .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
+                                                        .overlay(Circle().stroke(Color.greyScale10, lineWidth: scaler.scaleWidth(1)))
+                                                    
                                                 }
-                                            } else {
-                                                Image("user_profile_32")
-                                                    .clipShape(Circle())
-                                                    .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
-                                                
                                             }
-                                        }
-                                        if let line = viewModel.dayLines[index] {
-                                            VStack(alignment: .leading, spacing: 3) {
-                                                Text("\(line.content)")
-                                                    .font(.pretendardFont(.semiBold, size: 14))
-                                                    .foregroundColor(.greyScale2)
-                                                HStack {
-                                                    ForEach(line.category, id: \.self) { category in
-                                                        Text("\(category)‧")
-                                                            .font(.pretendardFont(.medium, size: 12))
-                                                            .foregroundColor(.greyScale6)
+                                            if let line = viewModel.dayLines[index] {
+                                                VStack(alignment: .leading, spacing:scaler.scaleHeight(8)) {
+                                                    Text("\(line.content)")
+                                                        .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(14)))
+                                                        .foregroundColor(.greyScale2)
+                                                    HStack {
+                                                        ForEach(line.category, id: \.self) { category in
+                                                            Text("\(category)‧")
+                                                                .font(.pretendardFont(.medium, size: scaler.scaleWidth(12)))
+                                                                .foregroundColor(.greyScale6)
+                                                        }
+                                                        
                                                     }
                                                 }
-                                            }
-                                            
-                                            Spacer()
-                                            if line.assetType == "INCOME" {
-                                                Text("+\(line.money)")
-                                                    .font(.pretendardFont(.semiBold, size: 16))
-                                                    .foregroundColor(.greyScale2)
-                                            } else if line.assetType == "OUTCOME" {
-                                                Text("-\(line.money)")
-                                                    .font(.pretendardFont(.semiBold, size: 16))
-                                                    .foregroundColor(.greyScale2)
                                                 
-                                            }
-                                            else if line.assetType == "BANK" {
-                                                Text("-\(line.money)")
-                                                    .font(.pretendardFont(.semiBold, size: 16))
-                                                    .foregroundColor(.greyScale2)
+                                                Spacer()
                                                 
+                                                if line.assetType == "INCOME" {
+                                                    Text("+\(line.money)")
+                                                        .font(.pretendardFont(.semiBold, size:scaler.scaleWidth(16)))
+                                                        .foregroundColor(.greyScale2)
+                                                } else if line.assetType == "OUTCOME" {
+                                                    Text("-\(line.money)")
+                                                        .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(16)))
+                                                        .foregroundColor(.greyScale2)
+                                                    
+                                                } else if line.assetType == "BANK" {
+                                                    Text("-\(line.money)")
+                                                        .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(16)))
+                                                        .foregroundColor(.greyScale2)
+                                                    
+                                                }
                                             }
                                         }
-                                    }
-                                    .onTapGesture {
-                                        self.selectedIndex = index
-                                        
-                                        if let line = viewModel.dayLines[selectedIndex] {
-                                            if viewModel.dayLines[index]?.assetType == "OUTCOME" {
-                                                lineModel.selectedOptions = 0
-                                                lineModel.toggleType = "지출"
-                                            } else if viewModel.dayLines[index]?.assetType == "INCOME" {
-                                                lineModel.selectedOptions = 1
-                                                lineModel.toggleType = "수입"
-                                            } else if viewModel.dayLines[index]?.assetType == "BANK" {
-                                                lineModel.selectedOptions = 2
-                                                lineModel.toggleType = "이체"
-                                            }
-                                            lineModel.mode = "check"
-                                            lineModel.lineId = line.id
-                                            print("지출 수입 이체 인덱스 : \(self.selectedToggleTypeIndex)")
-                                            print("지출 수입 이체 : \(self.selectedToggleType)")
-                                            print("금액 : \(self.viewModel.dayLines[index]?.money)")
-                                            print("제외 여부 : \(self.viewModel.dayLines[index]?.exceptStatus)")
-                                            print("PK : \(self.viewModel.dayLines[index]?.id)")
-                                        }
-                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                                            self.showingDetail = true
-                                        }
-                                    }
-                                    .fullScreenCover(isPresented: $showingDetail) {
-                                        if let line = viewModel.dayLines[selectedIndex] {
+                                        .onTapGesture {
+                                            LoadingManager.shared.update(showLoading: true, loadingType: .progressLoading)
+                                            self.selectedIndex = index
                                             
-                                            NavigationView {
-                                                AddView(
-                                                    isPresented: $showingDetail,
-                                                    lineModel : lineModel,
-                                                    date : viewModel.selectedDateStr,
-                                                    money: String(line.money),
-                                                    assetType : line.category[0],
-                                                    category: line.category[1],
-                                                    content : line.content,
-                                                    toggleOnOff: line.exceptStatus,
-                                                    writer: line.userNickName
-                                                )
-                                                .transition(.moveAndFade)
+                                            if let line = viewModel.dayLines[selectedIndex] {
+                                                if viewModel.dayLines[index]?.assetType == "OUTCOME" {
+                                                    lineModel.selectedOptions = 0
+                                                    lineModel.toggleType = "지출"
+                                                } else if viewModel.dayLines[index]?.assetType == "INCOME" {
+                                                    lineModel.selectedOptions = 1
+                                                    lineModel.toggleType = "수입"
+                                                } else if viewModel.dayLines[index]?.assetType == "BANK" {
+                                                    lineModel.selectedOptions = 2
+                                                    lineModel.toggleType = "이체"
+                                                }
+                                                lineModel.mode = "check"
+                                                lineModel.lineId = line.id
+                                                print("지출 수입 이체 인덱스 : \(self.selectedToggleTypeIndex)")
+                                                print("지출 수입 이체 : \(self.selectedToggleType)")
+                                                print("금액 : \(self.viewModel.dayLines[index]?.money)")
+                                                print("제외 여부 : \(self.viewModel.dayLines[index]?.exceptStatus)")
+                                                print("PK : \(self.viewModel.dayLines[index]?.id)")
+                                            }
+                                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                                LoadingManager.shared.update(showLoading: false, loadingType: .progressLoading)
+                                                self.showingDetail = true
                                             }
                                         }
-                                    }
-                                } //ForEach
-                            }
-                        } // Scroll View
+                                        .frame(height: scaler.scaleHeight(34))
+                                        .fullScreenCover(isPresented: $showingDetail) {
+                                            if let line = viewModel.dayLines[selectedIndex] {
+                                                NavigationView {
+                                                    AddView(
+                                                        isPresented: $showingDetail,
+                                                        lineModel : lineModel,
+                                                        date : viewModel.selectedDateStr,
+                                                        money: String(line.money),
+                                                        assetType : line.category[0],
+                                                        category: line.category[1],
+                                                        content : line.content,
+                                                        toggleOnOff: line.exceptStatus,
+                                                        writer: line.userNickName
+                                                    )
+                                                    .transition(.moveAndFade)
+                                                }
+                                            }
+                                        }
+                                    } //ForEach
+                                } // else
+                            }.padding(.top, scaler.scaleHeight(18))
+                            .padding(.bottom, scaler.scaleHeight(94))
+                        } //ScrollView
                         
-                    } //VStack
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    //.frame(height: 200)
-                    .onAppear {
-                        viewModel.dayLinesDate = viewModel.selectedDateStr
-                        viewModel.getDayLines()
                     }
-                    
-                } // VStack
-                .padding(.horizontal, 20)
-                .padding(.bottom, 44)
-                .padding(.top, 0)
+                }
+                .padding(.horizontal, scaler.scaleWidth(20))
                 .transition(.move(edge: .bottom))
                 .background(
                     Color(.white)
                 )
                 .cornerRadius(12, corners: [.topLeft, .topRight])
-                .frame(height: UIScreen.main.bounds.height / 2) // Screen height is divided by 2
-                
+                .frame(height: scaler.scaleHeight(384)) // Screen height is divided by 2
+                .onAppear {
+                    viewModel.dayLinesDate = viewModel.selectedDateStr
+                    viewModel.getDayLines()
+                }
             } // if
         } //ZStack
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)

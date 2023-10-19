@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct MainTabView: View {
+    let scaler = Scaler.shared
     @State var selection = 0
     @State var settlementId = 0
     @State var showingSettlementList = false
@@ -35,93 +36,148 @@ struct MainTabView: View {
     var body: some View {
         @State var currentDate = dateFormatter.string(from: Date())
         ZStack {
-            NavigationView {
-                VStack {
-                    ZStack {
-                        Spacer().fullScreenCover(isPresented: $showingAddView) {
-                            
-                            NavigationView {
-                                AddView(isPresented: $showingAddView,lineModel: lineModel,date:currentDate)
-                                    .transition(.moveAndFade)
-                            }
-                        }
-                        switch selection {
-                        case 0:
-                            NavigationView {
-                                HomeView(showingTabbar: $showingTabbar, mainAddViewStatus: $showingAddView)
-                            }
-                        case 1:
-                            NavigationView {
-                                
-                                AnalysisView(showingTabbar: $showingTabbar)
-                            }
-                        case 2:
-                            NavigationView {
-                                AddView(isPresented: $showingAddView, lineModel: lineModel, date:currentDate)
-                                    .transition(.moveAndFade)
-                            }
-                        case 3:
-                            NavigationView {
-                                CalculateView(settlementId: $settlementId, isShowingSettlement: $showingSettlementList, showingTabbar: $showingTabbar, showingDetail: $showingSettlementDetail)
-                            }
-                        default :
-                            NavigationView {
-                                MyPageView(showingTabbar: $showingTabbar, isShowingAccountBottomSheet: $isShowingAccountBottomSheet, isNextToCreateBook: $isNextToCreateBook, isNextToEnterCode: $isNextToEnterCode)
-                            }
-                        }
-                    }
-                    
-                    //MARK: Tab Bar
-                    if showingTabbar {
-                        VStack(spacing:0) {
-                            Rectangle()
-                                .frame(maxWidth: .infinity)
-                                .frame(height: 1)
-                                .foregroundColor(.greyScale10)
-                                .background(Color.greyScale10)
-                            HStack() {
-                                ForEach(0..<5, id: \.self) { number in
-                                    Spacer()
-                                    Button {
-                                        if number == 2 {
-                                            let dateFormatter = DateFormatter()
-                                            dateFormatter.dateFormat = "yyyy-MM-dd"
-                                            currentDate = dateFormatter.string(from: Date())
-                                            self.showingAddView = true
-                                        } else {
-                                            self.selection = number
-                                        }
-                                    } label: {
-                                        VStack {
-                                            if number == 2 {
-                                                // add button
-                                                Image(icons[number])
-                                            } else {
-                                                Image(selection == number ? selectedIcons[number] : icons[number])
-                                            }
-                                            if number != 2 {  // Add button에는 텍스트가 필요 없습니다.
-                                                Text(labels[number])
-                                                    .font(.pretendardFont(.regular, size: 10))
-                                            }
-                                        }
-                                        .foregroundColor(selection == number ? .greyScale2 : .greyScale7)
-                                    }
-                                    .padding(.bottom, 18)
-                                    Spacer()
-                                    
-                                }
-                                //.frame(maxHeight: .infinity)
-                                .frame(height:UIScreen.main.bounds.height * 0.098)
-                                
-                            }
-                            .padding(.bottom, 18)
-                        }
-                        .background(Color.white)
-                        .frame(height:UIScreen.main.bounds.height * 0.098)
+            VStack {
+                //ZStack {
+                Spacer().fullScreenCover(isPresented: $showingAddView) {
+                    NavigationView {
+                        AddView(isPresented: $showingAddView,lineModel: lineModel,date:currentDate)
+                            .transition(.moveAndFade)
                     }
                 }
-                .edgesIgnoringSafeArea(.bottom)
+                switch selection {
+                case 0:
+                    NavigationView {
+                        HomeView(showingTabbar: $showingTabbar, mainAddViewStatus: $showingAddView)
+                    }
+                case 1:
+                    NavigationView {
+                        
+                        AnalysisView(showingTabbar: $showingTabbar)
+                    }
+                case 2:
+                    NavigationView {
+                        AddView(isPresented: $showingAddView, lineModel: lineModel, date:currentDate)
+                            .transition(.moveAndFade)
+                    }
+                case 3:
+                    NavigationView {
+                        CalculateView(settlementId: $settlementId, isShowingSettlement: $showingSettlementList, showingTabbar: $showingTabbar, showingDetail: $showingSettlementDetail)
+                    }
+                default :
+                    NavigationView {
+                        MyPageView(showingTabbar: $showingTabbar, isShowingAccountBottomSheet: $isShowingAccountBottomSheet, isNextToCreateBook: $isNextToCreateBook, isNextToEnterCode: $isNextToEnterCode)
+                    }
+                }
+                //}
             }
+            //MARK: Tab Bar
+            if showingTabbar {
+                VStack {
+                    Spacer()
+                    VStack(spacing:0) {
+                        
+                        Rectangle()
+                            .frame(maxWidth: .infinity)
+                            .frame(height: scaler.scaleHeight(1))
+                            .foregroundColor(.greyScale10)
+                            .background(Color.greyScale10)
+                        HStack(spacing:0) {
+                            Button {
+                                self.selection = 0
+                            } label: {
+                                VStack(spacing: scaler.scaleHeight(4)) {
+                                    Image(selection == 0 ? selectedIcons[0] : icons[0])
+                                        .resizable()
+                                        .frame(width:scaler.scaleWidth(24), height: scaler.scaleWidth(24))
+                                    
+                                    Text(labels[0])
+                                        .font(.pretendardFont(.regular, size: scaler.scaleWidth(10)))
+                                }
+                                .foregroundColor(selection == 0 ? .greyScale2 : .greyScale7)
+                                
+                            }
+                            .padding(.top, scaler.scaleHeight(5))
+                            .padding(.bottom, scaler.scaleHeight(12))
+                            .padding(.leading, scaler.scaleWidth(36))
+                            Button {
+                                self.selection = 1
+                            } label: {
+                                VStack(spacing: scaler.scaleHeight(4)) {
+                                    Image(selection == 1 ? selectedIcons[1] : icons[1])
+                                        .resizable()
+                                        .frame(width:scaler.scaleWidth(24), height: scaler.scaleWidth(24))
+                                    
+                                    Text(labels[1])
+                                        .font(.pretendardFont(.regular, size: scaler.scaleWidth(10)))
+                                }
+                                .foregroundColor(selection == 1 ? .greyScale2 : .greyScale7)
+                                
+                            }
+                            .padding(.top, scaler.scaleHeight(5))
+                            .padding(.bottom, scaler.scaleHeight(12))
+                            .padding(.leading, scaler.scaleWidth(44))
+                            
+                            Button {
+                                let dateFormatter = DateFormatter()
+                                dateFormatter.dateFormat = "yyyy-MM-dd"
+                                currentDate = dateFormatter.string(from: Date())
+                                self.showingAddView = true
+                            } label: {
+                                VStack {
+                                    Image(icons[2])
+                                        .resizable()
+                                        .frame(width:scaler.scaleWidth(56), height: scaler.scaleWidth(56))
+                                }
+                                
+                            }
+                            .padding(.leading, scaler.scaleWidth(24))
+                            
+                            
+                            Button {
+                                self.selection = 3
+                            } label: {
+                                VStack(spacing: scaler.scaleHeight(4)) {
+                                    Image(selection == 3 ? selectedIcons[3] : icons[3])
+                                        .resizable()
+                                        .frame(width:scaler.scaleWidth(24), height: scaler.scaleWidth(24))
+                                    
+                                    Text(labels[3])
+                                        .font(.pretendardFont(.regular, size: scaler.scaleWidth(10)))
+                                }
+                                .foregroundColor(selection == 3 ? .greyScale2 : .greyScale7)
+                                
+                            }
+                            .padding(.top, scaler.scaleHeight(5))
+                            .padding(.bottom, scaler.scaleHeight(12))
+                            .padding(.leading, scaler.scaleWidth(24))
+                            
+                            Button {
+                                self.selection = 4
+                            } label: {
+                                VStack(spacing: scaler.scaleHeight(4)) {
+                                    Image(selection == 4 ? selectedIcons[4] : icons[4])
+                                        .resizable()
+                                        .frame(width:scaler.scaleWidth(24), height: scaler.scaleWidth(24))
+                                    
+                                    Text(labels[4])
+                                        .font(.pretendardFont(.regular, size: scaler.scaleWidth(10)))
+                                }
+                                .foregroundColor(selection == 4 ? .greyScale2 : .greyScale7)
+                                
+                            }
+                            .padding(.top, scaler.scaleHeight(5))
+                            .padding(.bottom, scaler.scaleHeight(12))
+                            .padding(.leading, scaler.scaleWidth(44))
+                            .padding(.trailing, scaler.scaleWidth(36))
+                        }
+                        .padding(.top, scaler.scaleHeight(2))
+                        .padding(.bottom, scaler.scaleHeight(18))
+                    }
+                    .background(Color.white)
+                    .frame(height:scaler.scaleHeight(76))
+                }
+            } // showing tab
+            
             
             // Loading view overlay
             if loadingManager.showLoading {
@@ -137,10 +193,14 @@ struct MainTabView: View {
             AccountBookBottomSheet(isShowing: $isShowingAccountBottomSheet, showingTabbar: $showingTabbar, isNextToCreateBook: $isNextToCreateBook, isNextToEnterCode: $isNextToEnterCode)
             CustomAlertView(message: AlertManager.shared.message, type : $alertManager.buttontType, isPresented: $alertManager.showAlert)
             
+            
         }
+        .ignoresSafeArea()
+
     }
+    
 }
- 
+
 
 struct MainTabView_Previews: PreviewProvider {
     static var previews: some View {
