@@ -9,15 +9,15 @@ import SwiftUI
 
 struct BackButton : View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
-    
+    let scaler = Scaler.shared
     var body: some View {
         Button(action: {
             self.presentationMode.wrappedValue.dismiss()
         }) {
             HStack {
-                Image("back_button") // set image here
+                Image("icon_back") // set image here
                     .aspectRatio(contentMode: .fit)
-            }
+            }.padding(.top, scaler.scaleHeight(22))
         }
     }
 }
@@ -30,7 +30,7 @@ struct BackButtonBlack : View {
             self.presentationMode.wrappedValue.dismiss()
         }) {
             HStack {
-                Image("back_button_black") // set image here
+                Image("icon_back_black") // set image here
                     .aspectRatio(contentMode: .fit)
             }
         }

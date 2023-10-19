@@ -9,6 +9,7 @@ import SwiftUI
 
 @available(iOS 15.0, *)
 struct AuthCodeView: View {
+    let scaler = Scaler.shared
     @State private var remainingTime: Double = 5 * 60 // 초 단위로 5분
     @State private var startTime = Date.now
     @Environment(\.scenePhase) var scenePhase
@@ -21,31 +22,33 @@ struct AuthCodeView: View {
     var pageCount = 3
     var pageCountAll = 4
     var body: some View {
-        VStack(spacing: 24) {
-            
+        VStack(spacing: scaler.scaleHeight(24)) {
             HStack {
-                VStack(alignment: .leading, spacing: 16) {
+                VStack(alignment: .leading, spacing: scaler.scaleHeight(16)) {
                     Text("\(pageCount)")
                         .foregroundColor(.greyScale2)
+                        .font(.pretendardFont(.medium, size:scaler.scaleWidth(12)))
                     + Text(" / \(pageCountAll)")
                         .foregroundColor(.greyScale6)
+                        .font(.pretendardFont(.medium, size:scaler.scaleWidth(12)))
                     
                     Text("인증 코드 입력")
-                        .font(.pretendardFont(.bold, size: 24))
+                        .font(.pretendardFont(.bold, size: scaler.scaleWidth(24)))
                         .foregroundColor(.greyScale1)
                     
                     Text("이메일로 전송된 코드를\n하단에 입력해주세요.")
-                        .font(.pretendardFont(.medium, size: 13))
+                        .font(.pretendardFont(.medium, size: scaler.scaleWidth(13)))
                         .foregroundColor(.greyScale6)
                 }
                 Spacer()
-            }.padding(.bottom, 40)
+            }
+            .padding(.bottom, scaler.scaleHeight(40))
             
             OTPField()
             
             Text(getTimeString(time:remainingTime))
-                .padding(6)
-                .font(.pretendardFont(.medium,size:20))
+                .padding(scaler.scaleWidth(6))
+                .font(.pretendardFont(.medium,size:scaler.scaleWidth(20)))
                 .foregroundColor(.primary2)
                 .background(Color.primary10)
                 .cornerRadius(8)
@@ -74,21 +77,20 @@ struct AuthCodeView: View {
                         print("scenePhase err")
                     }
                 }
-                .padding(.bottom, 24)
+                .padding(.bottom, scaler.scaleHeight(24))
             HStack {
-                VStack(alignment: .leading, spacing:5) {
+                VStack(alignment: .leading, spacing:scaler.scaleHeight(5)) {
                     Text("-유효 시간이 지났을 경우 인증 메일을 다시 보내주세요.")
-                        .font(.pretendardFont(.regular,size: 12))
-                        .foregroundColor(.greyScale6)
+                        
                     Text("-하루동안 5번까지 새로운 인증 코드를 받을 수 있습니다.")
-                        .font(.pretendardFont(.regular,size: 12))
-                        .foregroundColor(.greyScale6)
+                        
                     Text("-5번 연속 코드 입력에 실패했다면 24시간 이후 시도해주세요.")
-                        .font(.pretendardFont(.regular,size: 12))
-                        .foregroundColor(.greyScale6)
+                        
                 }
                 Spacer()
             }
+            .font(.pretendardFont(.regular,size: scaler.scaleWidth(12)))
+            .foregroundColor(.greyScale6)
             Spacer()
             NavigationLink(destination: UserInfoView(viewModel: viewModel), isActive: $viewModel.isNextToUserInfo){
                 Text("다음으로")
@@ -103,7 +105,7 @@ struct AuthCodeView: View {
                     }
             }
         }
-        .padding(EdgeInsets(top: 32, leading: 24, bottom: 0, trailing: 24))
+        .padding(EdgeInsets(top:scaler.scaleHeight(32), leading: scaler.scaleWidth(24), bottom: scaler.scaleHeight(38), trailing: scaler.scaleWidth(24)))
         .customNavigationBar(
             leftView: { BackButton() }
             )
@@ -111,6 +113,7 @@ struct AuthCodeView: View {
             OTPCondition(value: newValue)
         }
         .onAppear(perform : UIApplication.shared.hideKeyboard)
+        .edgesIgnoringSafeArea(.bottom)
     }
     
     // MARK: Conditions For Custom OTP Field & Limiting Only one Text
@@ -155,11 +158,11 @@ struct AuthCodeView: View {
     // MARK: Custom OTP TextField
     @ViewBuilder
     func OTPField()->some View {
-        HStack(spacing:14) {
+        HStack(spacing:scaler.scaleWidth(16) ) {
             ForEach(0..<6, id: \.self){ index in
-                VStack(spacing:16) {
+                VStack(spacing:scaler.scaleHeight(8)) {
                     TextField("", text: $otpModel.otpFields[index])
-                        .font(.pretendardFont(.semiBold, size: 28))
+                        .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(28)))
                         .foregroundColor(.greyScale2)
                         .keyboardType(.numberPad)
                         .textContentType(.oneTimeCode)
@@ -168,9 +171,9 @@ struct AuthCodeView: View {
                     
                     Rectangle()
                         .fill(activeField == activeStateForIndex(index: index) ? Color.primary3 : Color.greyScale9)
-                        .frame(height: 2)
+                        .frame(height: scaler.scaleHeight(2))
                 }
-                .frame(width: 34)
+                .frame(width: scaler.scaleWidth(34))
             }
             
         }

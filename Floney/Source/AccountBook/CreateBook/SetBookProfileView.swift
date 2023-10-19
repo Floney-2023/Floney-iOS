@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct SetBookProfileView: View {
+    let scaler = Scaler.shared
     var pageCount = 2
     var pageCountAll = 3
     @Binding var createBookType : createBookType
@@ -25,32 +26,39 @@ struct SetBookProfileView: View {
     @State private var selectedUIImage: UIImage? = UIImage(named: "book_profile_124")
     
     var body: some View {
-        VStack(spacing: 20) {
+        VStack(spacing: scaler.scaleHeight(20)) {
             HStack {
-                VStack(alignment: .leading, spacing: 16) {
+                VStack(alignment: .leading, spacing: scaler.scaleHeight(16)) {
                     Text("\(pageCount)")
                         .foregroundColor(.greyScale2)
+                        .font(.pretendardFont(.medium, size:scaler.scaleWidth(12)))
                     + Text(" / \(pageCountAll)")
                         .foregroundColor(.greyScale6)
+                        .font(.pretendardFont(.medium, size:scaler.scaleWidth(12)))
                     
                     Text("가계부 프로필 설정하기")
-                        .font(.pretendardFont(.bold, size: 24))
+                        .font(.pretendardFont(.bold, size: scaler.scaleWidth(24)))
                         .foregroundColor(.greyScale1)
                     
                     Text("사진을 설정하여 나만의 가계부를\n만들어 보세요.")
-                        .font(.pretendardFont(.medium, size: 13))
+                        .font(.pretendardFont(.medium, size: scaler.scaleWidth(13)))
                         .foregroundColor(.greyScale6)
                     
                     Image(uiImage: selectedUIImage!)
                         .resizable()
                         .aspectRatio(contentMode: .fill)
                         .clipShape(Circle()) // 프로필 이미지를 원형으로 자르기
-                        .frame(width: 124, height: 124)
+                        .frame(width: scaler.scaleWidth(124), height: scaler.scaleWidth(124))
                         .overlay(
                             Image("btn_photo_camera")
-                                .offset(x:45,y:45)
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .clipShape(Circle()) 
+                                .frame(width: scaler.scaleWidth(32), height: scaler.scaleWidth(32))
+                                .offset(x:scaler.scaleWidth(45),y:scaler.scaleWidth(45))
+                                
                         )
-                        .padding(.top, 32)
+                        .padding(.top, scaler.scaleHeight(32))
                         .onTapGesture {
                             presentsImagePicker = true
                         }
@@ -62,7 +70,7 @@ struct SetBookProfileView: View {
             
             NavigationLink(destination: CreateBookView(), isActive: $viewModel.isNextToCreateBook){
                 Text("다음으로")
-                    .padding()
+                    .padding(scaler.scaleHeight(16))
                     .withNextButtonFormmating(.primary1)
                     .onTapGesture {
                         LoadingManager.shared.update(showLoading: true, loadingType: .dimmedLoading)
@@ -104,9 +112,10 @@ struct SetBookProfileView: View {
             permissionManager.requestCameraPermission()
             permissionManager.requestAlbumPermission()
         }
-        .padding(EdgeInsets(top: 32, leading: 24, bottom: 0, trailing: 24))
-        .navigationBarBackButtonHidden(true)
-        .navigationBarItems(leading: BackButtonBlack())
+        .padding(EdgeInsets(top:scaler.scaleHeight(32), leading: scaler.scaleWidth(24), bottom: scaler.scaleHeight(66), trailing: scaler.scaleWidth(24)))
+        .customNavigationBar(
+            leftView: { BackButton() }
+        )
         //MARK: action sheet
         .actionSheet(isPresented: $presentsImagePicker) {
             ActionSheet(
@@ -145,6 +154,7 @@ struct SetBookProfileView: View {
                 self.onPhotoLibrary = false
             }
         }
+        .edgesIgnoringSafeArea(.bottom)
 
     }
 }

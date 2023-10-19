@@ -9,6 +9,8 @@ import Foundation
 import SwiftUI
 
 struct Scaler {
+    static let shared = Scaler()
+    
     let designWidth: CGFloat = 360
     let designHeight: CGFloat = 780
 
@@ -18,11 +20,11 @@ struct Scaler {
     let widthScale: CGFloat
     let heightScale: CGFloat
 
-    init() {
-        deviceWidth = UIScreen.main.bounds.size.width
-        deviceHeight = UIScreen.main.bounds.size.height
-        widthScale = deviceWidth / designWidth
-        heightScale = deviceHeight / designHeight
+    private init() {
+        self.deviceWidth = UIScreen.main.bounds.size.width
+        self.deviceHeight = UIScreen.main.bounds.size.height
+        self.widthScale = deviceWidth / designWidth
+        self.heightScale = deviceHeight / designHeight
     }
 
     func scaleWidth(_ value: CGFloat) -> CGFloat {

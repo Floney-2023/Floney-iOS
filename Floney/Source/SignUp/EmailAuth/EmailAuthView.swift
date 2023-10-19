@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct EmailAuthView: View {
+    let scaler = Scaler.shared
     @State var email = ""
     var pageCount = 2
     var pageCountAll = 4
@@ -18,28 +19,32 @@ struct EmailAuthView: View {
    
     var body: some View {
         ZStack {
-            VStack(spacing: 32) {
+            VStack(spacing: scaler.scaleHeight(20)) {
                 HStack {
-                    VStack(alignment: .leading, spacing: 16) {
+                    VStack(alignment: .leading, spacing: scaler.scaleHeight(16)) {
                         Text("\(pageCount)")
                             .foregroundColor(.greyScale2)
+                            .font(.pretendardFont(.medium, size:scaler.scaleWidth(12)))
                         + Text(" / \(pageCountAll)")
                             .foregroundColor(.greyScale6)
+                            .font(.pretendardFont(.medium, size:scaler.scaleWidth(12)))
                         
                         Text("이메일 인증")
-                            .font(.pretendardFont(.bold, size: 24))
+                            .font(.pretendardFont(.bold, size:scaler.scaleWidth(24)))
                             .foregroundColor(.greyScale1)
                         
                         Text("이메일 인증을 위해 사용 가능한\n이메일을 입력해주세요.")
-                            .font(.pretendardFont(.medium, size: 13))
+                            .font(.pretendardFont(.medium, size: scaler.scaleWidth(13)))
                             .foregroundColor(.greyScale6)
                     }
                     
                     Spacer()
                     
                 }
+                .padding(.horizontal, scaler.scaleWidth(4))
+                
                 CustomTextField(text: $viewModel.email, placeholder: "이메일을 입력하세요",keyboardType: .emailAddress, placeholderColor: .greyScale6)
-                    .frame(height: UIScreen.main.bounds.height * 0.06)
+                    .frame(height: scaler.scaleHeight(46))
                
                 Spacer()
                 
@@ -60,7 +65,7 @@ struct EmailAuthView: View {
                 }
                 
             }
-            .padding(EdgeInsets(top: 32, leading: 24, bottom: 0, trailing: 24))
+            .padding(EdgeInsets(top:scaler.scaleHeight(32), leading: scaler.scaleWidth(20), bottom: scaler.scaleHeight(38), trailing: scaler.scaleWidth(20)))
             .onAppear(perform : UIApplication.shared.hideKeyboard)
             .customNavigationBar(
                 leftView: { BackButton() }
@@ -79,6 +84,7 @@ struct EmailAuthView: View {
                 }
             }
         }
+        .edgesIgnoringSafeArea(.bottom)
     }
 }
 

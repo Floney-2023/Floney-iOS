@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 import SwiftUI
 struct CustomTextField: UIViewRepresentable {
-    
+    let scaler = Scaler.shared
     @Binding var text: String
     var placeholder: String
     
@@ -17,17 +17,23 @@ struct CustomTextField: UIViewRepresentable {
     var keyboardType: UIKeyboardType = .default
     var alignment: NSTextAlignment = .left  // 새로운 정렬 속성 추가
     
-    var textFont: UIFont = .pretendardFont(.regular, size: 14)
+    var textFont: UIFont {
+        .pretendardFont(.regular, size: scaler.scaleWidth(14))
+    }
     var textColor: UIColor = .greyScale2
     
-    var placeholderFont: UIFont = .pretendardFont(.regular, size: 14)
+    var placeholderFont: UIFont {
+        .pretendardFont(.regular, size: scaler.scaleWidth(14))
+    }
     var placeholderColor: UIColor
     
     var backgroundColor: UIColor = .greyScale12
     var strokeColor: UIColor = .greyScale10
     var cornerRadius: CGFloat = 12
     
-    var placeholderPadding: CGFloat = 20
+    var placeholderPadding: CGFloat {
+        scaler.scaleWidth(20)
+    }
     
     func makeUIView(context: Context) -> UITextField {
         let textField = UITextField()
@@ -47,6 +53,7 @@ struct CustomTextField: UIViewRepresentable {
         // 텍스트 정렬 설정
         textField.textAlignment = alignment  // 정렬 속성 적용
         // alignment가 center가 아닐 때만 leftView를 설정
+       
         if alignment != .center {
             let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: placeholderPadding, height: textField.frame.height))
             textField.leftView = paddingView
@@ -64,6 +71,7 @@ struct CustomTextField: UIViewRepresentable {
         uiView.layer.borderColor = strokeColor.cgColor
         uiView.layer.borderWidth = 1.0
         uiView.layer.cornerRadius = cornerRadius
+      
     }
     
     func makeCoordinator() -> Coordinator {

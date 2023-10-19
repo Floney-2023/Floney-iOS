@@ -8,38 +8,48 @@
 import SwiftUI
 
 struct CreateBookView: View {
+    let scaler = Scaler.shared
     var pageCount = 3
     var pageCountAll = 3
-    @State var bookTitle = ""
+   
     @State var isShowingBottomSheet = false
     @State var onShareSheet = false
     @StateObject var viewModel = SettingBookViewModel()
+    
     var body: some View {
         ZStack {
-            VStack(spacing: 32) {
+            VStack {
                 HStack {
-                    VStack(alignment: .leading, spacing: 16) {
+                    VStack(alignment: .leading, spacing: scaler.scaleHeight(16)) {
                         Text("\(pageCount)")
                             .foregroundColor(.greyScale2)
+                            .font(.pretendardFont(.medium, size:scaler.scaleWidth(12)))
                         + Text(" / \(pageCountAll)")
                             .foregroundColor(.greyScale6)
+                            .font(.pretendardFont(.medium, size:scaler.scaleWidth(12)))
+                        
                         Text("가계부가 생성되었어요!")
-                            .font(.pretendardFont(.bold, size: 24))
+                            .font(.pretendardFont(.bold, size: scaler.scaleWidth(24)))
                             .foregroundColor(.greyScale1)
                         Text("간편하고 쉬운 가계부, 플로니와 함께 해요")
-                            .font(.pretendardFont(.medium, size: 13))
+                            .font(.pretendardFont(.medium, size: scaler.scaleWidth(13)))
                             .foregroundColor(.greyScale6)
                         
                     }
                     Spacer()
                 }
+                .padding(.leading, scaler.scaleWidth(24))
+                Spacer()
                 Image("book_illust")
+                    .resizable()
+                    .frame(width:scaler.scaleWidth(360), height: scaler.scaleWidth(360))
+                    
                 Spacer()
                 
-                VStack(spacing: 12) {
+                VStack(spacing: scaler.scaleHeight(12)) {
                     
                     Text("작성하러 가기")
-                        .padding()
+                        .padding(scaler.scaleHeight(16))
                         .withNextButtonFormmating(.primary1)
                         .onTapGesture {
                             DispatchQueue.main.async {
@@ -48,7 +58,7 @@ struct CreateBookView: View {
                         }
                     
                     Text("친구 초대하기")
-                        .padding()
+                        .padding(scaler.scaleHeight(16))
                         .foregroundColor(.primary1)
                         .withNextButtonFormmating(.primary9)
                         .onTapGesture {
@@ -56,14 +66,16 @@ struct CreateBookView: View {
                         }
                 }
             }
-            .navigationBarBackButtonHidden(true)
-            .padding(EdgeInsets(top: 78, leading: 24, bottom: 40, trailing: 24))
             .sheet(isPresented: $onShareSheet) {
                 if let url = viewModel.shareUrl {
                     ActivityView(activityItems: [url])
                 }
                
             }
+            .navigationBarBackButtonHidden(true)
+            .padding(EdgeInsets(top:scaler.scaleHeight(78), leading: scaler.scaleWidth(24), bottom: scaler.scaleHeight(40), trailing: scaler.scaleWidth(24)))
+            .edgesIgnoringSafeArea(.bottom)
+            
             ShareBookBottomSheet(viewModel: viewModel, isShowing: $isShowingBottomSheet, onShareSheet: $onShareSheet)
         }
     }

@@ -156,8 +156,11 @@ struct AccountBookBottomSheet: View{
 
 //MARK: 친구 초대하기 bottom sheet
 struct ShareBookBottomSheet: View{
+    let scaler = Scaler.shared
     var appLinkManager = AppLinkManager()
-    let buttonHeight: CGFloat = 46
+    var buttonHeight: CGFloat {
+        scaler.scaleHeight(46)
+    }
     @ObservedObject var viewModel : SettingBookViewModel
     @Binding var isShowing : Bool
     @Binding var onShareSheet : Bool
@@ -171,20 +174,20 @@ struct ShareBookBottomSheet: View{
                     .onTapGesture {
                         isShowing.toggle()
                     }
-                VStack(spacing: 24) {
+                VStack(spacing:scaler.scaleHeight(24)) {
                     HStack {
                         Text("친구들을 초대해서\n함께 가계부를 적어보세요🍀")
                             .foregroundColor(.greyScale1)
-                            .font(.pretendardFont(.bold,size: 18))
+                            .font(.pretendardFont(.bold,size:scaler.scaleWidth(18)))
                         Spacer()
                     }
-                    .padding(.top, 24)
+                    .padding(.top, scaler.scaleHeight(24))
                     
-                    VStack(spacing : 28) {
-                        VStack(spacing:6) {
+                    VStack(spacing : scaler.scaleHeight(28)) {
+                        VStack(spacing:scaler.scaleHeight(6)) {
                             HStack {
                                 Text("초대 코드")
-                                    .font(.pretendardFont(.medium, size: 12))
+                                    .font(.pretendardFont(.medium, size: scaler.scaleWidth(12)))
                                     .foregroundColor(.greyScale8)
                                 Spacer()
                             }
@@ -197,10 +200,7 @@ struct ShareBookBottomSheet: View{
                         ButtonLarge(label: "공유하기",background: .primary1, textColor: .white, strokeColor: .primary1,  fontWeight: .bold, action: {
                             DispatchQueue.main.async {
                                 let url = appLinkManager.generateDeepLink(inviteCode: viewModel.bookCode)
-                                print("share url : \(url)")
-                                print("공유하기")
                                 viewModel.shareUrl = url
-                                print("share url : \(viewModel.shareUrl)")
                                 onShareSheet = true
                                 isShowing = false
                             }
@@ -208,26 +208,29 @@ struct ShareBookBottomSheet: View{
                         })
                         .frame(height: buttonHeight)
                         .onTapGesture {
-                            
                         }
                         
                     }
-                    VStack {
+                    VStack(spacing:0) {
                         Text("나중에 하기")
-                            .font(.pretendardFont(.regular, size: 12))
+                            .font(.pretendardFont(.regular, size: scaler.scaleWidth(12)))
                             .foregroundColor(.greyScale6)
-                        Divider()
-                            .frame(width: 70,height: 1.0)
-                            .padding(EdgeInsets(top: -10, leading: 0, bottom: 0, trailing: 0))
-                            .foregroundColor(.greyScale6)
+                        Rectangle()
+                            .foregroundColor(.clear)
+                            .frame(width: scaler.scaleWidth(55), height: scaler.scaleWidth(0.5))
+                            .background(Color.greyScale6)
+                    }
+                    .onTapGesture {
+                        isShowing = false
                     }
                 }
-                .padding(.horizontal, 20)
-                .padding(.bottom, 44)
+                .padding(.horizontal, scaler.scaleWidth(20))
+                .padding(.bottom, scaler.scaleHeight(34))
                 .transition(.move(edge: .bottom))
                 .background(
                     Color(.white)
                 )
+                .frame(width: scaler.scaleWidth(360))
                 .cornerRadius(12, corners: [.topLeft, .topRight])
                 .onAppear {
                     viewModel.getShareCode()
@@ -929,7 +932,10 @@ struct DayLinesBottomSheet: View {
 
 //MARK: 임시 비밀번호 완료 bottom sheet
 struct PasswordBottomSheet: View{
-    let buttonHeight: CGFloat = 46
+    let scaler = Scaler.shared
+    var buttonHeight: CGFloat {
+        scaler.scaleHeight(46)
+    }
     @Binding var isShowing : Bool
     @Binding var isShowingLogin : Bool
     var body: some View{
@@ -941,44 +947,42 @@ struct PasswordBottomSheet: View{
                     .onTapGesture {
                         isShowing.toggle()
                     }
-                VStack(spacing: 24) {
+                VStack(spacing: scaler.scaleHeight(16)) {
                     HStack {
                         Text("임시 비밀번호가\n발송되었습니다.")
                             .foregroundColor(.greyScale1)
-                            .font(.pretendardFont(.bold,size: 18))
+                            .font(.pretendardFont(.bold,size: scaler.scaleWidth(18)))
                         Spacer()
                     }
-                    .padding(.top, 24)
+                    .padding(.horizontal,  scaler.scaleWidth(24))
+                    .padding(.top, scaler.scaleHeight(24))
                     
-                    VStack(spacing : 28) {
+                    VStack(spacing : scaler.scaleHeight(32)) {
+                        
                         HStack {
                             Text("임시 비밀번호로 로그인 후\n새로운 비밀번호로 변경해 주세요.")
-                                .font(.pretendardFont(.medium, size: 13))
+                                .font(.pretendardFont(.medium, size: scaler.scaleWidth(13)))
                                 .foregroundColor(.greyScale6)
                             Spacer()
-                        }
+                        }.padding(.horizontal,  scaler.scaleWidth(4))
+                        
+                        
                         ButtonLarge(label: "다시 로그인하기",background: .primary1, textColor: .white, strokeColor: .primary1,  fontWeight: .bold, action: {
-                            //let url = firebaseManager.createDynamicLink(for: "A9BC7ACE")!
-                            print("다시 로그인 하기")
-                            //shareUrl = url
                             isShowing = false
                             isShowingLogin = true
                         })
+                        .frame(width: scaler.scaleWidth(320))
                         .frame(height: buttonHeight)
-                        
-                        
                     }
-                    
+                    .padding(.horizontal,  scaler.scaleWidth(20))
                 }
-                .padding(.horizontal, 20)
-                .padding(.bottom, 44)
+                .ignoresSafeArea()
+                .frame(width: scaler.scaleWidth(360))
+                //.frame(height: scaler.scaleHeight(248))
+                .padding(.bottom, scaler.scaleHeight(44))
                 .transition(.move(edge: .bottom))
-                .background(
-                    Color(.white)
-                )
+                .background(Color.white)
                 .cornerRadius(12, corners: [.topLeft, .topRight])
-                
-                
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)

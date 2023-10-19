@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct ButtonLarge: View {
-    
+    let scaler = Scaler.shared
     var label: String
     var background: Color = .white
     var textColor: Color
@@ -25,8 +25,10 @@ struct ButtonLarge: View {
         } label: {
             HStack {
                 Text(label)
+                    .frame(maxWidth: .infinity)
+                    .padding(scaler.scaleHeight(16))
                     .foregroundColor(textColor)
-                    .font(.pretendardFont(fontWeight, size: 14))
+                    .font(.pretendardFont(fontWeight, size: scaler.scaleWidth(14)))
                     .lineLimit(1)
             }
             .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)

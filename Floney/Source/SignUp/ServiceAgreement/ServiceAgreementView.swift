@@ -9,6 +9,7 @@ import SwiftUI
 
 
 struct ServiceAgreementView: View {
+    let scaler = Scaler.shared
     var pageCount = 1
     var pageCountAll = 4
     @StateObject private var viewModel = ServiceAgreementViewModel()
@@ -16,24 +17,25 @@ struct ServiceAgreementView: View {
     @State var isActive = false
     var body: some View {
         ZStack {
-            VStack(spacing: 32) {
+            VStack(spacing: scaler.scaleHeight(32)) {
                 HStack {
-                    VStack(alignment: .leading, spacing: 16) {
+                    VStack(alignment: .leading, spacing: scaler.scaleHeight(16)) {
+                        
                         Text("\(pageCount)")
                             .foregroundColor(.greyScale2)
+                            .font(.pretendardFont(.medium, size:scaler.scaleWidth(12)))
                         + Text(" / \(pageCountAll)")
                             .foregroundColor(.greyScale6)
+                            .font(.pretendardFont(.medium, size:scaler.scaleWidth(12)))
                         
                         Text("약관 동의")
-                            .font(.pretendardFont(.bold, size: 24))
+                            .font(.pretendardFont(.bold, size:scaler.scaleWidth(24)))
                             .foregroundColor(.greyScale1)
                     }
                     Spacer()
                 }
-                VStack(spacing: 20) {
-                    
-                    ServiceAgreementButton(isAgreed: $viewModel.isAllAgreed, checkboxType: "all", forwardButton: false,
-                                           title: "전체 동의")
+                VStack(spacing: 0) {
+                    ServiceAgreementButton(isAgreed: $viewModel.isAllAgreed, checkboxType: "all", forwardButton: false, title: "전체 동의")
                     
                     Divider()
                         .foregroundColor(.greyScale10)
@@ -42,6 +44,7 @@ struct ServiceAgreementView: View {
                     
                     ServiceAgreementButton(isAgreed: $viewModel.isTerm1Agreed, title: "서비스 이용 약관 (필수)")
                     ServiceAgreementButton(isAgreed: $viewModel.isTerm2Agreed, title: "개인정보 수집 및 이용 동의 (필수)")
+                    ServiceAgreementButton(isAgreed: $viewModel.isMarketingAgreed, title: "마케팅 정보 수신 동의 (선택)")
                     ServiceAgreementButton(isAgreed: $viewModel.isTerm3Agreed, forwardButton: false, title: "만 14세 이상 확인 (필수)")
                     
                 }
@@ -69,7 +72,7 @@ struct ServiceAgreementView: View {
                             .padding()
                             .withNextButtonFormmating(.primary1)
                             .onTapGesture {
-                                if self.viewModel.isTerm1Agreed && self.viewModel.isTerm2Agreed && self.viewModel.isTerm3Agreed && self.viewModel.isAllAgreed {
+                                if self.viewModel.isTerm1Agreed && self.viewModel.isTerm2Agreed && self.viewModel.isTerm3Agreed  {
                                     // Navigate to the next screen
                                     signupViewModel.isNextToEmailAuth = true
                                 } else {
@@ -80,17 +83,19 @@ struct ServiceAgreementView: View {
                     }
                 }
             }
-            .padding(EdgeInsets(top: 32, leading: 24, bottom: 0, trailing: 24))
+            .padding(EdgeInsets(top:scaler.scaleHeight(32), leading: scaler.scaleWidth(24), bottom: scaler.scaleHeight(38), trailing: scaler.scaleWidth(24)))
             .customNavigationBar(
                 leftView: { BackButton() }
                 )
             
             CustomAlertView(message: ErrorMessage.signup01.value, type: $viewModel.buttonType, isPresented: $viewModel.showAlert)
         } //ZStack
+        .edgesIgnoringSafeArea(.bottom)
     }
 }
 
 struct ServiceAgreementButton: View {
+    let scaler = Scaler.shared
     @Binding var isAgreed: Bool
     @State var checkboxType: String = "term"
     @State var forwardButton : Bool = true
@@ -100,7 +105,7 @@ struct ServiceAgreementButton: View {
         Button(action: {
             isAgreed.toggle()
         }) {
-            HStack(spacing: 14) {
+            HStack(spacing: scaler.scaleWidth(14)) {
                 if checkboxType == "term" {
                     Image(isAgreed ? "check_primary" : "checkbox_grey")
                 } else if checkboxType == "all" {
@@ -108,7 +113,7 @@ struct ServiceAgreementButton: View {
                 }
                     
                 Text(title)
-                    .font(.pretendardFont(.regular, size: 14))
+                    .font(.pretendardFont(.regular, size: scaler.scaleWidth(14)))
                     .foregroundColor(.greyScale2)
                 Spacer()
                 if forwardButton {
@@ -116,6 +121,8 @@ struct ServiceAgreementButton: View {
                 }
             }
         }
+        .frame(height: scaler.scaleHeight(50))
+        .frame(maxWidth: .infinity)
     }
 }
 

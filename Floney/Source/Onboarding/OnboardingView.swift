@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct OnboardingView: View {
-    let scaler = Scaler()
+    let scaler = Scaler.shared
     @Binding var hasSeenOnboarding: Bool
     @State private var selectedPageIndex = 0
 
@@ -47,7 +47,6 @@ struct OnboardingView: View {
                             Text("한눈에 볼 수 있어요")
                         }
                         .padding(.leading, scaler.scaleWidth(24))
-                        
                         Spacer()
                     }
                     Image("onboarding_2")
@@ -125,7 +124,7 @@ struct OnboardingView: View {
     }
 }
 struct PageDotsView: View {
-    let scaler = Scaler()
+    let scaler = Scaler.shared
     var numberOfPages: Int
     @Binding var currentPage: Int
 
@@ -135,7 +134,7 @@ struct PageDotsView: View {
                 ForEach(0..<numberOfPages, id: \.self) { index in
                     Circle()
                         .fill(currentPage == index ? Color.primary5 : Color.greyScale8)
-                        .frame(width: scaler.scaleWidth(8), height: scaler.scaleHeight(8))
+                        .frame(width: scaler.scaleWidth(8), height: scaler.scaleWidth(8))
                 }
             }
             Spacer()

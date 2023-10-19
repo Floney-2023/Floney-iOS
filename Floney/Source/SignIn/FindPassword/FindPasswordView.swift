@@ -8,29 +8,30 @@
 import SwiftUI
 
 struct FindPasswordView: View {
+    let scaler = Scaler.shared
     @State var email = ""
     @StateObject var viewModel = SignInViewModel()
     @StateObject var alertManager = AlertManager.shared
     @ObservedObject var loadingManager = LoadingManager.shared
     var body: some View {
         ZStack {
-            VStack(spacing: 32) {
+            VStack(spacing: scaler.scaleHeight(32)) {
                 HStack {
-                    VStack(alignment: .leading, spacing: 16) {
+                    VStack(alignment: .leading, spacing: scaler.scaleHeight(16)) {
                         Text("비밀번호 찾기")
-                            .font(.pretendardFont(.bold, size: 24))
+                            .font(.pretendardFont(.bold, size: scaler.scaleWidth(24)))
                             .foregroundColor(.greyScale1)
                         Text("비밀번호를 찾으려면\n가입한 이메일 주소를 입력하세요.")
-                            .font(.pretendardFont(.medium, size: 13))
+                            .font(.pretendardFont(.medium, size: scaler.scaleWidth(13)))
                             .foregroundColor(.greyScale6)
                     }
                     Spacer()
                 }
-                VStack(spacing: 20) {
+                VStack(spacing: scaler.scaleHeight(20)) {
                     CustomTextField(text: $email, placeholder: "이메일을 입력하세요.", keyboardType: .emailAddress,placeholderColor: .greyScale6)
-                        .frame(height: UIScreen.main.bounds.height * 0.06)
+                        .frame(height: scaler.scaleHeight(46))
                     
-                    Text("인증 메일 보내기")
+                    Text("임시 비밀번호 보내기")
                         .padding()
                         .withNextButtonFormmating(.primary1)
                         .onTapGesture {
@@ -42,16 +43,18 @@ struct FindPasswordView: View {
                 }
                 Spacer()
             }
-            .padding(EdgeInsets(top: 52, leading: 24, bottom: 0, trailing: 24))
+            .padding(EdgeInsets(top: scaler.scaleHeight(52), leading: scaler.scaleWidth(24), bottom: 0, trailing: scaler.scaleWidth(24)))
             .customNavigationBar(
                 leftView: { BackButton() }
                 )
             .onAppear(perform : UIApplication.shared.hideKeyboard)
+            
             if AlertManager.shared.showAlert {
                 CustomAlertView(message: AlertManager.shared.message, type: $alertManager.buttontType, isPresented: $alertManager.showAlert)
             }
             
             PasswordBottomSheet(isShowing: $viewModel.isShowingBottomSheet, isShowingLogin: $viewModel.isShowingLogin)
+            
             // Loading view overlay
             if loadingManager.showLoading {
                 if loadingManager.loadingType == .floneyLoading {

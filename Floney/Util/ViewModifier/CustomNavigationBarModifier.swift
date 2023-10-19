@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 
 struct CustomNavigationBarModifier<C, L, R> : ViewModifier where C : View, L : View, R : View {
+    let scaler = Scaler.shared
     let centerView: (() -> C)?
     let leftView: (() -> L)?
     let rightView: (() -> R)?
@@ -26,10 +27,10 @@ struct CustomNavigationBarModifier<C, L, R> : ViewModifier where C : View, L : V
                     Spacer()
                     self.rightView?()
                 }
-                .frame(height: 44.0)
+                .frame(height: scaler.scaleHeight(46.0))
                 .frame(maxWidth: .infinity)
-                .padding(.horizontal, 16.0)
-                
+                .padding(.horizontal, scaler.scaleWidth(20))
+                        
                 HStack {
                     Spacer()
                     
@@ -41,8 +42,7 @@ struct CustomNavigationBarModifier<C, L, R> : ViewModifier where C : View, L : V
             .background(Color.clear)//.ignoresSafeArea(.all, edges: .top)
             
            content
-            
-            
+
             Spacer()
         }
         .navigationBarBackButtonHidden(true)

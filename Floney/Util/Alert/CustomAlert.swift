@@ -85,6 +85,7 @@ enum ErrorMessage {
 }
 
 struct CustomAlertView: View {
+    let scaler = Scaler.shared
     var message: String
     @Binding var type : ButtonType
     @Binding var isPresented: Bool
@@ -99,20 +100,24 @@ struct CustomAlertView: View {
                         }) {
                             if type == .red {
                                 Image("icon_cancel_circle_white")
+                                    .resizable()
+                                    .frame(width:scaler.scaleWidth(18), height: scaler.scaleWidth(18))
                             } else if type == .green {
                                 Image("icon_varification_circle_white_vector")
+                                    .resizable()
+                                    .frame(width:scaler.scaleWidth(18), height: scaler.scaleWidth(18))
                             }
                         }
                         Text(message)
                             .foregroundColor(Color.white)
-                            .font(.pretendardFont(.medium,size: 14))
+                            .font(.pretendardFont(.medium,size: scaler.scaleWidth(14)))
                         Spacer()
-                    }.padding(.leading)
+                    }.padding(.leading, scaler.scaleWidth(12))
                 }
-                .frame(width: 360, height: 46)
+                .frame(width: scaler.scaleWidth(330), height: scaler.scaleHeight(46))
                 .background(Color.black.opacity(0.8))
                 .cornerRadius(10)
-                .shadow(radius: 10)
+                .shadow(color: .black.opacity(0.1), radius: 2.5, x: 0, y: 2)
                 .animation(.easeInOut, value: isPresented)
                 .transition(.move(edge: .bottom))
                 .onAppear {
@@ -120,14 +125,15 @@ struct CustomAlertView: View {
                         isPresented = false
                     }
                 }
-            }
+                .padding(.bottom, scaler.scaleHeight(32))
+            }.edgesIgnoringSafeArea(.bottom)
+                
         }
     }
 }
 
 struct CustomAlertView_Previews: PreviewProvider {
     static var previews: some View {
-        
         CustomAlertView(message:"error message", type: .constant(.green), isPresented: .constant(true))
    
     }

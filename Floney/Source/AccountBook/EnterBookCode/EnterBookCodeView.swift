@@ -8,47 +8,50 @@
 import SwiftUI
 
 struct EnterBookCodeView: View {
-    @State var isActive = false
+    let scaler = Scaler.shared
     @StateObject var viewModel = CreateBookViewModel()
     
     var body: some View {
-        VStack(spacing: 30) {
+        VStack(spacing: scaler.scaleHeight(20)) {
             HStack {
-                VStack(alignment: .leading, spacing: 16) {
+                VStack(alignment: .leading, spacing: scaler.scaleHeight(16)) {
                     Text("가계부 코드 입력")
-                        .font(.pretendardFont(.bold, size: 24))
+                        .font(.pretendardFont(.bold, size: scaler.scaleWidth(24)))
                         .foregroundColor(.greyScale1)
+                    
                     Text("가계부에 입장하기 위해\n초대받은 가계부의 코드를 입력하세요.")
-                        .font(.pretendardFont(.medium, size: 13))
+                        .font(.pretendardFont(.medium, size: scaler.scaleWidth(13)))
                         .foregroundColor(.greyScale6)
                 }
                 Spacer()
             }
+            .padding(.leading, scaler.scaleWidth(4))
+            
             CustomTextField(text: $viewModel.bookCode, placeholder: "코드를 입력하세요.", placeholderColor: .greyScale6)
-                .frame(height: UIScreen.main.bounds.height * 0.06)
+                .frame(height: scaler.scaleHeight(46))
   
             Spacer()
             
-            VStack(spacing: 12) {
-                NavigationLink(destination: EnterBookView(), isActive: $viewModel.isNextToEnterBook){
-                    Text("추가하기")
-                        .padding()
-                        .modifier(NextButtonModifier(backgroundColor: .primary1))
-                        .onTapGesture {
-                            if viewModel.isValidBookCode() {
-                                viewModel.joinBook()
-                            }
+        
+            NavigationLink(destination: EnterBookView(), isActive: $viewModel.isNextToEnterBook){
+                Text("추가하기")
+                    .padding()
+                    .modifier(NextButtonModifier(backgroundColor: .primary1))
+                    .onTapGesture {
+                        if viewModel.isValidBookCode() {
+                            viewModel.joinBook()
                         }
-                }
-               
+                    }
             }
-
+            
+            
         }
-        .padding(EdgeInsets(top: 32, leading: 24, bottom: 0, trailing: 24))
+        .padding(EdgeInsets(top:scaler.scaleHeight(60), leading: scaler.scaleWidth(20), bottom: scaler.scaleHeight(66), trailing: scaler.scaleWidth(20)))
         .customNavigationBar(
             leftView: { BackButton() }
             )
         .onAppear(perform : UIApplication.shared.hideKeyboard)
+        .edgesIgnoringSafeArea(.bottom)
         
         
     }
