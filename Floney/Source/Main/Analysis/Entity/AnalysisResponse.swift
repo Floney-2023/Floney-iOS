@@ -33,5 +33,6 @@ struct AssetResponse: Decodable {
     var initAsset : Double
     var currentAsset : Double
     var month : Int?
+    var year : Int?
 }
 

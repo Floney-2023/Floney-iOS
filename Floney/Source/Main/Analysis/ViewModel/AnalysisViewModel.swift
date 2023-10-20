@@ -222,7 +222,7 @@ class AnalysisViewModel : ObservableObject {
         let lastDayOfMonth = range?.count ?? 30  // 기본값으로 30일을 사용합니다.
         
         // 남은 날짜 계산
-        let remainingDays = lastDayOfMonth - dayOfMonth
+        let remainingDays = lastDayOfMonth - dayOfMonth + 1
         
         // 하루에 사용할 수 있는 금액 계산
         let dailyAvailableMoney = self.leftBudget / Double(remainingDays)
@@ -234,12 +234,16 @@ class AnalysisViewModel : ObservableObject {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
         var assetMonth = 0
+        var assetYear = 0
         if let date = dateFormatter.date(from: date) {
             let calendar = Calendar.current
-            let components = calendar.dateComponents([.month], from: date)
+            let components = calendar.dateComponents([.year,.month], from: date)
             if let month = components.month {
                 print(month) // 출력: 2
                 assetMonth = month
+            }
+            if let year = components.year {
+                assetYear = year
             }
         }
         
@@ -263,8 +267,18 @@ class AnalysisViewModel : ObservableObject {
                     LoadingManager.shared.update(showLoading: false, loadingType: .progressLoading)
                     var asset = dataResponse.value ?? AssetResponse(difference: 0, initAsset: 0, currentAsset: 0)
                     asset.month = assetMonth  // 해당 월을 AssetResponse에 저장합니다.
+                    asset.year = assetYear
                     self.assetList.append(asset)
-                    self.assetList = self.assetList.sorted { $0.month! < $1.month! }
+                    self.assetList = self.assetList.sorted {
+                        guard let year0 = $0.year, let year1 = $1.year,
+                              let month0 = $0.month, let month1 = $1.month else {
+                            return false
+                        }
+                        if year0 == year1 {
+                            return month0 < month1
+                        }
+                        return year0 < year1
+                    }
                     if date == self.selectedDateStr {
                         self.difference = dataResponse.value?.difference ?? 0
                         self.currentAsset = dataResponse.value?.currentAsset ?? 0

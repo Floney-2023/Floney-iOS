@@ -14,6 +14,7 @@ enum ButtonOptions: String, CaseIterable {
 }
 
 struct AnalysisView: View {
+    let scaler = Scaler.shared
     @Binding var showingTabbar : Bool
 
     var options = ["지출", "수입", "예산", "자산"]
@@ -24,31 +25,31 @@ struct AnalysisView: View {
     
     var body: some View {
         ZStack{
-            VStack(spacing:24){
+            VStack(spacing:scaler.scaleHeight(20)){
                 HStack {
                     Text("분석")
-                        .font(.pretendardFont(.bold, size: 22))
+                        .font(.pretendardFont(.bold, size: scaler.scaleWidth(22)))
                         .foregroundColor(.greyScale1)
-                    
                     Spacer()
-                    Image("leftSide")
+                    Image("icon_arrow_left")
                         .onTapGesture {
                             viewModel.moveBackward()
                         }
                     Text("\(viewModel.selectedMonth)월")
-                        .font(.pretendardFont(.semiBold, size: 20))
+                        .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(20)))
                         .foregroundColor(.greyScale1)
                         .onTapGesture {
                             showingTabbar = false
                             isShowingPicker = true
                         }
-                    Image("rightSide")
+                    Image("icon_arrow_right")
                         .onTapGesture {
                             viewModel.moveForward()
                         }
                 }
-                .padding(.horizontal, 20)
-                .padding(.bottom, 8)
+                .background(Color.red)
+                .padding(.horizontal, scaler.scaleWidth(20))
+                .padding(.bottom, scaler.scaleHeight(10))
                 
                 HStack(spacing: 0) {
                     ForEach(options.indices, id:\.self) { index in
@@ -58,7 +59,7 @@ struct AnalysisView: View {
                             Rectangle()
                                 .fill(Color.white)
                                 .cornerRadius(6)
-                                .padding(4)
+                                .padding(scaler.scaleWidth(4))
                                 .opacity(selectedOptions == index ? 1 : 0.01)
                                 .onTapGesture {
                                     withAnimation(.interactiveSpring()) {
@@ -68,14 +69,14 @@ struct AnalysisView: View {
                         }
                         .overlay(
                             Text(options[index])
-                                .font(.pretendardFont(.semiBold, size: 14))
+                                .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(14)))
                                 .foregroundColor(selectedOptions == index ? .greyScale2: .greyScale8)
                         )
                     }
                 }
-                .frame(height: 38)
+                .frame(height: scaler.scaleHeight(38))
                 .cornerRadius(8)
-                .padding(.horizontal, 16)
+                .padding(.horizontal, scaler.scaleWidth(20))
                 
                 VStack {
                     switch selectedOptions {
@@ -90,23 +91,23 @@ struct AnalysisView: View {
                     default:
                         ExpenseView(viewModel: viewModel)
                     }
-                }.padding(.horizontal, 20)
+                }
+                .padding(.horizontal, scaler.scaleWidth(20))
                 
                 Spacer()
                 
-            }.padding(.top, 26)
-                .onChange(of: LoadingManager.shared.showLoading) { newValue in
+            }
+            .padding(.top,scaler.scaleHeight(26))
+            .onChange(of: LoadingManager.shared.showLoading) { newValue in
                     LoadingManager.shared.showLoading = newValue
                 }
-                .onAppear {
+            .onAppear {
                     showingTabbar = true
-                }
+            }
 
             
             PickerBottomSheet(availableChangeTabbarStatus : true, showingTab: $showingTabbar, isShowing: $isShowingPicker, yearMonth: $viewModel.yearMonth)
-            
-  
-            
+
         }
     }
    
