@@ -8,6 +8,7 @@
 import SwiftUI
 import Combine
 struct AddView: View {
+    let scaler = Scaler.shared
     @StateObject var viewModel = AddViewModel()
     @State var changedStatus = false
     @State var showAlert = false
@@ -75,9 +76,12 @@ struct AddView: View {
     var body: some View {
         let nickname = lineModel.mode == "add" ? Keychain.getKeychainValue(forKey: .userNickname) ?? "" : writer
         ZStack {
-            VStack {
+            VStack(spacing:0) {
+                //MARK: Top
                 HStack {
                     Image("icon_close")
+                        .resizable()
+                        .frame(width: scaler.scaleWidth(24), height : scaler.scaleWidth(24))
                         .onTapGesture {
                             if changedStatus {
                                 self.showAlert = true
@@ -87,20 +91,23 @@ struct AddView: View {
                         }
                     Spacer()
                 }
-                .padding(.leading,20)
+                .padding(.top, scaler.scaleHeight(22))
+                .padding(.bottom, scaler.scaleHeight(52))
+                .padding(.leading, scaler.scaleWidth(20))
 
-                VStack(spacing: 32){
+                VStack(spacing:scaler.scaleHeight(16)){
                     //MARK: 금액
-                    VStack {
+                    VStack(spacing:scaler.scaleHeight(16)) {
                         HStack {
                             Text("금액")
-                                .font(.pretendardFont(.medium, size: 14))
+                                .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
                                 .foregroundColor(.greyScale6)
                             Spacer()
                         }
    
                         MoneyTextField(text: $money, placeholder: "금액을 입력하세요")
-                            .frame(height: UIScreen.main.bounds.height * 0.0487)
+                            .frame(height: scaler.scaleHeight(38))
+                            /*
                             .onReceive(Just(money)) { value in
                                 let trimmedValue = value.filter { "0"..."9" ~= $0 || $0 == "." }
                                 let components = trimmedValue.split(separator: ".")
@@ -121,8 +128,38 @@ struct AddView: View {
                                 else {
                                     money = String(components.dropLast().joined(separator: "."))
                                 }
-                            }
-                    } // 금액 VStack
+                            }*/
+                            .onReceive(Just(money)) { value in
+                                let trimmedValue = value.filter { "0"..."9" ~= $0 || $0 == "." }
+                                let components = trimmedValue.split(separator: ".")
+                                
+                                // 소수점이 없는 경우
+                                if components.count == 1 {
+                                    if let doubleValue = Double(trimmedValue), doubleValue <= 100_000_000_000 {
+                                        money = formatNumber(trimmedValue)  // 콤마로 구분하여 형식화
+                                    } else if trimmedValue.last == "." {
+                                        money = formatNumber(String(trimmedValue.dropLast())) + "."  // Allow values like "123."
+                                    } else if Double(trimmedValue) != nil {
+                                        money = formatNumber(String(trimmedValue.dropLast()))
+                                    }
+                                }
+                                // 소수점이 하나만 있고 둘째 자리까지 입력된 경우
+                                else if components.count == 2 && components[1].count <= 2 {
+                                    let rawValue = String(components[0]) + "." + components[1]
+                                    money = formatNumber(rawValue)
+                                }
+                                // 소수점이 둘째 자리 이후로 입력된 경우
+                                else if components.count == 2 && components[1].count > 2 {
+                                    let rawValue = String(components[0]) + "." + components[1].prefix(2)
+                                    money = formatNumber(rawValue)
+                                }
+                                // 두 개 이상의 소수점이 포함된 경우
+                                else {
+                                    let rawValue = String(components.dropLast().joined(separator: "."))
+                                    money = formatNumber(rawValue)
+                                }
+                            }                    } // 금액 VStack
+                    .padding(.bottom, scaler.scaleHeight(16))
                     
                     //MARK: 지출/수입/이체 선택 토글 버튼
                     HStack(spacing: 0) {
@@ -134,7 +171,7 @@ struct AddView: View {
                                 Rectangle()
                                     .fill(Color.white)
                                     .cornerRadius(8)
-                                    .padding(4)
+                                    .padding(scaler.scaleWidth(4))
                                     .opacity(lineModel.selectedOptions == index ? 1 : 0.01)
                                     .onTapGesture {
                                         withAnimation(.interactiveSpring()) {
@@ -147,38 +184,42 @@ struct AddView: View {
                             }
                             .overlay(
                                 Text(options[index])
-                                    .font(.pretendardFont(.semiBold, size: 11))
+                                    .font(.pretendardFont(.semiBold, size:scaler.scaleWidth(11)))
                                     .foregroundColor(lineModel.selectedOptions == index ? .greyScale2: .greyScale8)
                             )
                         }
                     }
                     .frame(maxWidth: .infinity)
-                    .frame(height: 38)
+                    .frame(height:scaler.scaleHeight(38))
                     .cornerRadius(10)
                     
+                    
+                    
                     //MARK: 날짜/자산/분류/내용/제외여부
-                    VStack(spacing:44) {
+                    VStack(spacing:0) {
                         if !keyboardResponder.isKeyboardVisible {
                             HStack {
                                 Text("날짜")
-                                    .font(.pretendardFont(.medium, size: 14))
+                                    .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
                                     .foregroundColor(.greyScale4)
                                 Spacer()
                                 Text("\(date)")
-                                    .font(.pretendardFont(.medium, size: 14))
+                                    .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
                                     .foregroundColor(.greyScale2)
-                            }
+                            }.frame(height: scaler.scaleHeight(58))
+                            
                             
                             HStack {
                                 Text("자산")
-                                    .font(.pretendardFont(.medium, size: 14))
+                                    .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
                                     .foregroundColor(.greyScale4)
                                 Spacer()
                                 //MARK: 눌렀을 때 bottom sheet
                                 Text("\(assetType)")
-                                    .font(.pretendardFont(.medium, size: 14))
+                                    .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
                                     .foregroundColor(.greyScale6)
                             }
+                            .frame(height: scaler.scaleHeight(58))
                             .onTapGesture {
                                 self.root = "자산"
                                 viewModel.root = self.root
@@ -187,20 +228,20 @@ struct AddView: View {
                                 print("\(self.categories)")
                                 self.isShowingBottomSheet.toggle()
                             }
-                    
                         }
                   
                         
                         HStack {
                             Text("분류")
-                                .font(.pretendardFont(.medium, size: 14))
+                                .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
                                 .foregroundColor(.greyScale4)
                             Spacer()
                             
                             Text("\(category)")
-                                .font(.pretendardFont(.medium, size: 14))
+                                .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
                                 .foregroundColor(.greyScale6)
                         }
+                        .frame(height: scaler.scaleHeight(58))
                         .onTapGesture {
                             self.root = lineModel.toggleType
                             viewModel.root = self.root
@@ -212,43 +253,44 @@ struct AddView: View {
                         
                         HStack {
                             Text("내용")
-                                .font(.pretendardFont(.medium, size: 14))
+                                .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
                                 .foregroundColor(.greyScale4)
                             
                             ContentTextField(text: $content, placeholder: "내용을 입력하세요")
-                                .frame(height: UIScreen.main.bounds.height * 0.018)
+                                .frame(height: scaler.scaleHeight(22))
                                 .onChange(of: content) { newValue in
                                     if newValue.count > maxLength {
                                         content = String(newValue.prefix(maxLength))
                                     }
                                 }
-                        }
+                        }.frame(height: scaler.scaleHeight(58))
 
                         
                         if lineModel.selectedOptions != 2 {
                             HStack {
                                 Text(lineModel.selectedOptions == 0 ? "예산에서 제외" : "자산에서 제외")
-                                    .font(.pretendardFont(.medium, size: 14))
+                                    .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
                                     .foregroundColor(.greyScale4)
                                 Spacer()
                                 Toggle(isOn: $toggleOnOff) {
                                     
-                                }.padding(.trailing, 6)
+                                }.padding(.trailing, scaler.scaleWidth(6))
                             }
+                            .frame(height: scaler.scaleHeight(58))
                          
                         }
                         
-                    }.padding(.leading, 10)
-                    .padding(.trailing, 6)
+                    }.padding(.leading, scaler.scaleWidth(10))
+                    .padding(.trailing, scaler.scaleWidth(10))
                     
                 } //VStack
-                .padding(20)
+                .padding(.horizontal,scaler.scaleWidth(20))
                 
                 Spacer()
                 Text("작성자 : \(nickname)")
-                    .font(.pretendardFont(.medium, size:12))
+                    .font(.pretendardFont(.medium, size: scaler.scaleWidth(12)))
                     .foregroundColor(.greyScale8)
-                    .padding(.bottom, 32)
+                    .padding(.bottom, scaler.scaleHeight(32))
                 
                 if lineModel.mode == "add" {
                     HStack {
@@ -279,16 +321,17 @@ struct AddView: View {
                             
                         } label: {
                             Text("저장하기")
-                                .font(.pretendardFont(.bold, size:14))
+                                .frame(height:scaler.scaleHeight(66))
+                                .font(.pretendardFont(.bold, size:scaler.scaleWidth(14)))
                                 .foregroundColor(.white)
+                                .padding(.bottom, scaler.scaleHeight(32))
                         }
                         .frame(maxWidth: .infinity)
                         .frame(maxHeight: .infinity)
-                        .padding(.bottom, 10)
                         .background(Color.primary1)
                     }
                     .frame(maxWidth: .infinity)
-                    .frame(height:UIScreen.main.bounds.height * 0.085)
+                    .frame(height:scaler.scaleHeight(66))
                     
                 } else if lineModel.mode == "check" {
                     //MARK: 삭제/저장하기 버튼
@@ -298,12 +341,14 @@ struct AddView: View {
                             viewModel.deleteLine()
                         } label: {
                             Text("삭제")
-                                .font(.pretendardFont(.bold, size:14))
+                                .frame(width: scaler.scaleWidth(118))
+                                .frame(height:scaler.scaleHeight(66))
+                                .font(.pretendardFont(.bold, size:scaler.scaleWidth(14)))
                                 .foregroundColor(.white)
+                                .padding(.bottom, scaler.scaleHeight(32))
                         }
-                        .frame(maxWidth: .infinity)
+                        .frame(width: scaler.scaleWidth(118))
                         .frame(maxHeight: .infinity)
-                        .padding(.bottom, 10)
                         .background(Color.greyScale2)
                         Button {
                             if viewModel.isVaildAdd(money: money, asset: assetType, category: category) {
@@ -334,17 +379,17 @@ struct AddView: View {
                             
                         } label: {
                             Text("저장하기")
-                                .font(.pretendardFont(.bold, size:14))
+                                .frame(width: scaler.scaleWidth(242))
+                                .frame(height:scaler.scaleHeight(66))
+                                .font(.pretendardFont(.bold, size:scaler.scaleWidth(14)))
                                 .foregroundColor(.white)
+                                .padding(.bottom, scaler.scaleHeight(32))
                         }
-                        .frame(maxWidth: .infinity)
-                        .frame(maxHeight: .infinity)
-                        .frame(width: UIScreen.main.bounds.width * 2/3)
-                        .padding(.bottom, 10)
+                        .frame(width: scaler.scaleWidth(242))
                         .background(Color.primary1)
                     }
                     .frame(maxWidth: .infinity)
-                    .frame(height:UIScreen.main.bounds.height * 0.085)
+                    .frame(height:scaler.scaleHeight(66))
                 }  
             } // VStack
             .edgesIgnoringSafeArea(.bottom)
@@ -379,10 +424,48 @@ struct AddView: View {
             }
         } // ZStack
     }
+    /*
     func formatNumber(_ n: Int) -> String {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
         return formatter.string(from: NSNumber(value: n)) ?? ""
+    }
+    // 숫자를 콤마로 구분하여 형식화하는 함수
+    func formatNumber(_ string: String) -> String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        if let number = formatter.number(from: string) {
+            return formatter.string(from: number) ?? ""
+        }
+        return string
+    }*/
+    // 숫자를 콤마로 구분하여 형식화하는 함수
+    func formatNumber(_ string: String) -> String {
+        if string.contains(".") {
+            let parts = string.split(separator: ".")
+            let integerPart = parts[0]
+            
+            // .이 문자열의 마지막에 있을 때
+            if parts.count == 1 {
+                let formattedInteger = formatInteger(String(integerPart))
+                return "\(formattedInteger)."
+            }
+            
+            let decimalPart = parts[1]
+            let formattedInteger = formatInteger(String(integerPart))
+            return "\(formattedInteger).\(decimalPart)"
+        } else {
+            return formatInteger(string)
+        }
+    }
+    // 정수만 콤마로 구분하여 형식화하는 함수
+    func formatInteger(_ string: String) -> String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        if let number = formatter.number(from: string) {
+            return formatter.string(from: number) ?? ""
+        }
+        return string
     }
 }
 

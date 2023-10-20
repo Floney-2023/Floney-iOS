@@ -9,17 +9,21 @@ import Foundation
 import UIKit
 import SwiftUI
 struct ContentTextField: UIViewRepresentable {
-    
+    let scaler = Scaler.shared
     @Binding var text: String
     var placeholder: String
     
     var keyboardType: UIKeyboardType = .default
     var alignment: NSTextAlignment = .right  // 새로운 정렬 속성 추가
     
-    var textFont: UIFont = .pretendardFont(.medium, size: 14)
+    var textFont: UIFont {
+        .pretendardFont(.medium, size:scaler.scaleWidth(14))
+    }
     var textColor: UIColor = .greyScale2
     
-    var placeholderFont: UIFont = .pretendardFont(.medium, size: 14)
+    var placeholderFont: UIFont {
+        .pretendardFont(.medium, size:scaler.scaleWidth(14))
+    }
     var placeholderColor: UIColor = .greyScale6
     
     var backgroundColor: UIColor = .clear

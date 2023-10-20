@@ -47,7 +47,6 @@ struct AnalysisView: View {
                             viewModel.moveForward()
                         }
                 }
-                .background(Color.red)
                 .padding(.horizontal, scaler.scaleWidth(20))
                 .padding(.bottom, scaler.scaleHeight(10))
                 

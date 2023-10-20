@@ -683,7 +683,7 @@ struct CategoryFlowLayout: View {
 struct DayLinesBottomSheet: View {
     let scaler = Scaler.shared
     let buttonHeight: CGFloat = 38
-    @StateObject var viewModel : CalendarViewModel
+    @ObservedObject var viewModel : CalendarViewModel
     @Binding var isShowing: Bool
     @Binding var isShowingAddView : Bool
     @State var showingDetail = false
@@ -889,17 +889,22 @@ struct DayLinesBottomSheet: View {
                                                     lineModel.selectedOptions = 2
                                                     lineModel.toggleType = "이체"
                                                 }
+                                                
                                                 lineModel.mode = "check"
                                                 lineModel.lineId = line.id
+                                                print("mode : \(lineModel.mode)")
+                                                print("id : \(lineModel.lineId)")
                                                 print("지출 수입 이체 인덱스 : \(self.selectedToggleTypeIndex)")
                                                 print("지출 수입 이체 : \(self.selectedToggleType)")
                                                 print("금액 : \(self.viewModel.dayLines[index]?.money)")
                                                 print("제외 여부 : \(self.viewModel.dayLines[index]?.exceptStatus)")
                                                 print("PK : \(self.viewModel.dayLines[index]?.id)")
                                             }
-                                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                                                LoadingManager.shared.update(showLoading: false, loadingType: .progressLoading)
-                                                self.showingDetail = true
+                                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                                if lineModel.mode == "check" {
+                                                    LoadingManager.shared.update(showLoading: false, loadingType: .progressLoading)
+                                                    self.showingDetail = true
+                                                }
                                             }
                                         }
                                         .frame(height: scaler.scaleHeight(34))

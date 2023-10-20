@@ -9,16 +9,21 @@ import Foundation
 import UIKit
 import SwiftUI
 struct MoneyTextField: UIViewRepresentable {
+    let scaler = Scaler.shared
     @Binding var text: String
     var placeholder: String
     
     var keyboardType: UIKeyboardType = .decimalPad
     var alignment: NSTextAlignment = .left  // 새로운 정렬 속성 추가
     
-    var textFont: UIFont = .pretendardFont(.bold, size: 38)
+    var textFont: UIFont {
+        .pretendardFont(.bold, size: scaler.scaleWidth(38))
+    }
     var textColor: UIColor = .primary2
     
-    var placeholderFont: UIFont = .pretendardFont(.bold, size: 36)
+    var placeholderFont: UIFont {
+        .pretendardFont(.bold, size:scaler.scaleWidth(36))
+    }
     var placeholderColor: UIColor = .greyScale9
     
     var backgroundColor: UIColor = .clear
@@ -65,7 +70,7 @@ struct MoneyTextField: UIViewRepresentable {
                 uiView.rightViewMode = .never
             }
         }
-   
+        
     }
     
     func makeCoordinator() -> Coordinator {
