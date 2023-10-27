@@ -266,7 +266,7 @@ final class MyPageViewModel: ObservableObject {
                     self.createAlert(with: error, retryRequest: {
                         self.logout()
                     })
-                    print("Error changing nickname: \(error)")
+                    print("Error logout: \(error)")
                 }
             } receiveValue: { data in
                 // TODO: Handle the received data if necessary.

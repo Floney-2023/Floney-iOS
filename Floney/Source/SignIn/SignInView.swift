@@ -31,6 +31,7 @@ struct SignInView: View {
                             
                         CustomTextField(text: $signInViewModel.password, placeholder: "비밀번호", isSecure: true,placeholderColor: .greyScale7)
                             .frame(height: scaler.scaleHeight(46))
+                            .frame(width : scaler.scaleWidth(320))
                        
                         Text("로그인하기")
                             .padding(scaler.scaleHeight(16))

@@ -8,10 +8,12 @@
 import SwiftUI
 
 struct NotificationView: View {
+    let scaler = Scaler.shared
     @ObservedObject var viewModel : NotiViewModel
     @Binding var showingTabbar : Bool
     @State private var selectedTab = 0
     @GestureState private var translation: CGFloat = 0
+    
     var body: some View {
         VStack {
             HStack {
@@ -26,18 +28,18 @@ struct NotificationView: View {
                                 Text(viewModel.bookNotiList.isEmpty ? "가계부" : "\(viewModel.bookNotiList[index].bookName)")
                                 Rectangle()
                                     .fill(selectedTab == index ? Color.primary1 : Color.background2)
-                                    .frame(height: 4)
+                                    .frame(height:scaler.scaleHeight(4))
                                     .cornerRadius(20)
                             }
                         }
-                        .font(.pretendardFont(.medium,size: 14))
+                        .font(.pretendardFont(.medium,size:scaler.scaleWidth(14)))
                         .foregroundColor(selectedTab == index ? .greyScale2 : .greyScale8)
                     }
                 }
             }
-            .padding(.top,32)
-            .padding(.horizontal,20)
-            .padding(.bottom,14)
+            .padding(.top,scaler.scaleHeight(32))
+            .padding(.horizontal,scaler.scaleWidth(20))
+            .padding(.bottom,scaler.scaleHeight(14))
             
             // 스와이프 가능한 알림 목록
             GeometryReader { geometry in
@@ -48,14 +50,14 @@ struct NotificationView: View {
                                 ForEach(viewModel.bookNotiList[index].notiList.indices) { notiIndex in
                                     HStack {
                                         Image(viewModel.bookNotiList[index].notiList[notiIndex].imgUrl)
-                                            .padding(.leading, 20)
-                                            .padding(.vertical, 20)
-                                        VStack(alignment: .leading, spacing: 5) {
+                                            .padding(.leading, scaler.scaleWidth(20))
+                                            .padding(.vertical, scaler.scaleHeight(20))
+                                        VStack(alignment: .leading, spacing: scaler.scaleHeight(10)) {
                                             Text(viewModel.bookNotiList[index].notiList[notiIndex].body)
-                                                .font(.pretendardFont(.regular, size: 14))
+                                                .font(.pretendardFont(.regular, size: scaler.scaleWidth(14)))
                                                 .foregroundColor(.greyScale2)
                                             Text(timeAgoSinceDate(dateString: viewModel.bookNotiList[index].notiList[notiIndex].date, numericDates: true))
-                                                .font(.pretendardFont(.regular, size: 12))
+                                                .font(.pretendardFont(.regular, size: scaler.scaleWidth(12)))
                                                 .foregroundColor(.greyScale8)
                                         }
                                         Spacer()
@@ -65,10 +67,11 @@ struct NotificationView: View {
                                 }
                             }
                         }
-                        .padding(.horizontal,20)
+                        .padding(.horizontal,scaler.scaleWidth(20))
                         .frame(width: geometry.size.width)
                     }
                 }
+                .frame(maxWidth:.infinity, maxHeight:.infinity)
                 .offset(x: -CGFloat(self.selectedTab) * geometry.size.width)
                 .offset(x: self.translation)
                 .animation(.spring())
@@ -89,7 +92,7 @@ struct NotificationView: View {
             leftView: { BackButtonBlack() },
             centerView: {
                 Text("가계부 알림")
-                    .font(.pretendardFont(.semiBold, size: 16))
+                    .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(16)))
                 .foregroundColor(.greyScale1) }
         )
         .onAppear{

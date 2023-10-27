@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct CalculateView: View {
+    let scaler = Scaler.shared
     var date = 11
     @State var isShowingCalc = false
     @Binding var settlementId : Int
@@ -20,51 +21,61 @@ struct CalculateView: View {
         ZStack {
             VStack {
                 HStack {
-                    VStack(alignment: .leading) {
-                        Text("정산")
-                            .font(.pretendardFont(.bold, size: 22))
-                            .foregroundColor(.greyScale1)
-                            .padding(.bottom, 34)
-                        
+                    Text("정산")
+                        .font(.pretendardFont(.bold, size: scaler.scaleWidth(22)))
+                        .foregroundColor(.greyScale1)
+                    Spacer()
+                }
+                .padding(.horizontal, scaler.scaleWidth(20))
+                .padding(.bottom, scaler.scaleHeight(34))
+                
+                HStack {
+                    VStack(alignment: .leading, spacing: scaler.scaleHeight(12)) {
                         Text("마지막 정산일로부터\n\(viewModel.passedDays)일 지났어요")
-                            .font(.pretendardFont(.bold, size: 22))
+                            .font(.pretendardFont(.bold, size: scaler.scaleWidth(22)))
                             .foregroundColor(.greyScale1)
-                            .padding(.bottom, 10)
-                        
+
                         Text("복잡하고 어려운 정산, 저희가 대신 해드릴게요")
-                            .font(.pretendardFont(.medium, size: 13))
+                            .font(.pretendardFont(.medium, size: scaler.scaleWidth(13)))
                             .foregroundColor(.greyScale6)
                     }
                     Spacer()
                 }
-                .padding(.horizontal, 20)
-                
+                .padding(.horizontal, scaler.scaleWidth(20))
+
                 Image("calculate")
-                    .padding(.bottom, 36)
-                
+                    .resizable()
+                    .frame(width: scaler.scaleWidth(360))
+                    .frame(height: scaler.scaleHeight(320))
+                    .padding(.bottom, scaler.scaleHeight(26))
+
+
                 Button {
                     self.isShowingCalc = true
                 } label: {
                     Text("정산하기")
+                        .frame(maxWidth: .infinity)
                 }
-                .frame(height: 46)
+                .padding(.horizontal, scaler.scaleWidth(20))
+                .frame(height: scaler.scaleHeight(46))
                 .modifier(NextButtonModifier(backgroundColor: .primary1))
-                .padding()
-                .padding(.bottom, 5)
+                .padding(.bottom, scaler.scaleHeight(18))
                 
                 
-                VStack {
+                VStack(spacing:0) {
                     Text("정산 내역 보기")
-                        .font(.pretendardFont(.regular, size: 12))
+                        .font(.pretendardFont(.regular, size: scaler.scaleWidth(12)))
                         .foregroundColor(.greyScale6)
-                    Divider()
-                        .frame(width: 70,height: 1.0)
-                        .padding(EdgeInsets(top: -10, leading: 0, bottom: 0, trailing: 0))
-                        .foregroundColor(.greyScale6)
+                    Rectangle()
+                      .foregroundColor(.clear)
+                      .frame(width: scaler.scaleWidth(70), height: scaler.scaleWidth(0.5))
+                      .background(Color.greyScale6)
+                    
                 }
                 .onTapGesture {
                     self.isShowingSettlement = true
                 }
+                
                 Spacer()
                 
                 NavigationLink(destination : CalculateMainView(isShowingTabbar: $showingTabbar, isShowingCalc: $isShowingCalc), isActive: $isShowingCalc){
@@ -73,11 +84,13 @@ struct CalculateView: View {
                 NavigationLink(destination : SettlementListView(isShowing: $isShowingSettlement, showingTabbar: $showingTabbar, settlementId: $settlementId, showingDetail: $showingDetail), isActive: $isShowingSettlement){
                     EmptyView()
                 }
-            }.padding(.top, 26)
-                .onAppear{
+            }
+            .padding(.top,scaler.scaleHeight(26))
+            
+            .onAppear{
                     viewModel.getPassedDays()
                     showingTabbar = true
-                }
+            }
             
         }
     }

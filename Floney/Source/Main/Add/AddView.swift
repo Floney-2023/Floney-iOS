@@ -184,7 +184,7 @@ struct AddView: View {
                             }
                             .overlay(
                                 Text(options[index])
-                                    .font(.pretendardFont(.semiBold, size:scaler.scaleWidth(11)))
+                                    .font(.pretendardFont(.semiBold, size:scaler.scaleWidth(14)))
                                     .foregroundColor(lineModel.selectedOptions == index ? .greyScale2: .greyScale8)
                             )
                         }
@@ -224,8 +224,7 @@ struct AddView: View {
                                 self.root = "자산"
                                 viewModel.root = self.root
                                 viewModel.getCategory()
-                                
-                                print("\(self.categories)")
+
                                 self.isShowingBottomSheet.toggle()
                             }
                         }

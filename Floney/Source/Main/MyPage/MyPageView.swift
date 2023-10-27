@@ -9,6 +9,7 @@ import SwiftUI
 import Kingfisher
 
 struct MyPageView: View {
+    let scaler = Scaler.shared
     @Binding var showingTabbar : Bool
     var profileManager = ProfileManager.shared
     @Binding var isShowingAccountBottomSheet : Bool
@@ -33,44 +34,54 @@ struct MyPageView: View {
     var body: some View {
         @State var formattedPrice = priceFormatter.string(from: productPrice)
         ZStack {
-            VStack(spacing:26) {
-                HStack {
+            VStack(spacing:scaler.scaleHeight(26)) {
+                HStack(spacing:scaler.scaleWidth(8)) {
                     Text("마이페이지")
-                        .padding(.horizontal, 4)
-                        .font(.pretendardFont(.bold, size: 22))
+                        //.padding(.horizontal, scaler.scaleWidth(4))
+                        .font(.pretendardFont(.bold, size:scaler.scaleWidth(22)))
                         .foregroundColor(.greyScale1)
-                    
                     Spacer()
                     NavigationLink(destination: NotificationView(viewModel: viewModel.notiviewModel,showingTabbar: $showingTabbar), isActive: $isShowingNotiView) {
                         Image("icon_notification")
+                            .resizable()
+                            .frame(width: scaler.scaleWidth(32),height: scaler.scaleWidth(32))
                             .onTapGesture {
                                 showingTabbar = false
                                 isShowingNotiView = true
                             }
                     }
                     Image("icon_settings")
+                        .resizable()
+                        .frame(width: scaler.scaleWidth(32),height: scaler.scaleWidth(32))
                     
-                }.padding(.horizontal, 20)
+                }
+                .padding(.horizontal, scaler.scaleWidth(20))
                 
                 ScrollView(showsIndicators: false) {
-                    VStack(spacing:16) {
+                    VStack(spacing:scaler.scaleHeight(16)) {
                         NavigationLink(destination: UserInformationView(), isActive: $isShowingUserInfoView) {
-                            HStack {
+                            HStack(spacing:scaler.scaleWidth(16)) {
                                 if let img = viewModel.userImg {
                                     if img == "user_default" {
                                         Image("user_profile_36")
+                                            .resizable()
+                                            .frame(width: scaler.scaleWidth(36), height: scaler.scaleWidth(36))
                                             .clipShape(Circle())
-                                            .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
-                                            .padding(20)
+                                            .overlay(Circle().stroke(Color.greyScale10, lineWidth: scaler.scaleWidth(1)))
+                                            .padding(.leading, scaler.scaleWidth(20))
+                                            .padding(.vertical, scaler.scaleWidth(20))
                                         
                                     } else if img.hasPrefix("random"){
                                         let components = img.components(separatedBy: CharacterSet.decimalDigits.inverted)
                                         let random = components.first!  // "random"
                                         let number = components.last!   // "5"
                                         Image("img_user_random_profile_0\(number)_36")
+                                            .resizable()
+                                            .frame(width: scaler.scaleWidth(36), height: scaler.scaleWidth(36))
                                             .clipShape(Circle())
-                                            .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
-                                            .padding(20)
+                                            .overlay(Circle().stroke(Color.greyScale10, lineWidth: scaler.scaleWidth(1)))
+                                            .padding(.leading, scaler.scaleWidth(20))
+                                            .padding(.vertical, scaler.scaleWidth(20))
                                     }
                                     else {
                                         let url = URL(string : img)
@@ -86,31 +97,40 @@ struct MyPageView: View {
                                             }
                                             .resizable()
                                             .aspectRatio(contentMode: .fill)
-                                            .clipShape(Circle()) // 프로필 이미지를 원형으로 자르기
-                                            .frame(width: 36, height: 36) //resize
-                                            .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
-                                            .padding(20)
+                
+                                            .frame(width: scaler.scaleWidth(36), height: scaler.scaleWidth(36))
+                                            .clipShape(Circle())
+                                            .overlay(Circle().stroke(Color.greyScale10, lineWidth: scaler.scaleWidth(1)))
+                                            .padding(.leading, scaler.scaleWidth(20))
+                                            .padding(.vertical, scaler.scaleWidth(20))
                                     }
                                 } else {
                                     Image("user_profile_36")
-                                        .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
-                                        .padding(20)
+                                        .resizable()
+                                        .frame(width: scaler.scaleWidth(36), height: scaler.scaleWidth(36))
+                                        .clipShape(Circle())
+                                        .overlay(Circle().stroke(Color.greyScale10, lineWidth: scaler.scaleWidth(1)))
+                                        .padding(.leading, scaler.scaleWidth(20))
+                                        .padding(.vertical, scaler.scaleWidth(20))
                                 }
 
-                                VStack(alignment: .leading, spacing:5){
+                                VStack(alignment: .leading, spacing:scaler.scaleHeight(8)){
                                     Text("\(viewModel.nickname)")
-                                        .font(.pretendardFont(.bold, size: 14))
+                                        .font(.pretendardFont(.bold, size: scaler.scaleWidth(14)))
                                         .foregroundColor(.greyScale2)
                                     
                                     Text("\(viewModel.email)")
-                                        .font(.pretendardFont(.medium, size: 12))
+                                        .font(.pretendardFont(.medium, size: scaler.scaleWidth(12)))
                                         .foregroundColor(.greyScale3)
                                 }
                                 Spacer()
                                 Image("forward_button")
-                                    .padding(20)
+                                    .resizable()
+                                    .frame(width: scaler.scaleWidth(24), height: scaler.scaleWidth(24))
+                                    .padding(scaler.scaleWidth(20))
                             }
                             .background(Color.primary10)
+                            .frame(height: scaler.scaleHeight(76))
                             .cornerRadius(12)
                             .onTapGesture {
                                 self.showingTabbar = false
@@ -122,35 +142,37 @@ struct MyPageView: View {
                             Button {
                                 self.isNextToMySubscription = true
                             } label: {
-                                Text("구독 내역 보기")
+                                Text("구독 정보 보기")
+                                    .frame(height: scaler.scaleHeight(46))
                                     .frame(maxWidth: .infinity)
                                     .padding()
-                                    .font(.pretendardFont(.semiBold, size: 13))
+                                    .font(.pretendardFont(.semiBold, size:scaler.scaleWidth(13)))
                                     .foregroundColor(.greyScale12)
                                 
                             }
+                            .frame(height: scaler.scaleHeight(46))
                             .frame(maxWidth: .infinity)
                             .foregroundColor(.greyScale12)
                             .background(Color.greyScale2)
                             .cornerRadius(12)
                             
                         } else {
-                            HStack(spacing:12){
+                            HStack(spacing:scaler.scaleWidth(12)){
                                 VStack {
                                     HStack {
                                         Text("앱스토어에서\n별점을 남겨주세요")
-                                            .font(.pretendardFont(.bold, size: 14))
+                                            .font(.pretendardFont(.bold, size: scaler.scaleWidth(14)))
                                             .foregroundColor(.greyScale2)
                                         Spacer()
                                     }
                                     Spacer()
                                     Text("리뷰쓰기")
-                                        .font(.pretendardFont(.regular, size: 12))
+                                        .font(.pretendardFont(.regular, size: scaler.scaleWidth(12)))
                                         .foregroundColor(.greyScale3)
                                 }
-                                .padding(20)
+                                .padding(scaler.scaleWidth(20))
                                 .frame(maxWidth: .infinity)
-                                .frame(height: 150)
+                                .frame(height: scaler.scaleHeight(150))
                                 .background(Color.greyScale12)
                                 .cornerRadius(12)
                                 NavigationLink(destination: SubscriptionView(mypageViewModel:viewModel,isActive : $isNextToSubscription,showingTabbar: $showingTabbar), isActive: $isNextToSubscription) {
@@ -161,20 +183,20 @@ struct MyPageView: View {
                                                 Text("더 많은 혜택을")
                                                 Text("누려보세요!")
                                             }
-                                            .font(.pretendardFont(.bold, size: 14))
+                                            .font(.pretendardFont(.bold, size: scaler.scaleWidth(14)))
                                             .foregroundColor(.white)
                                             Spacer()
                                         }
                                         
                                         Spacer()
                                         Text("플랜보기")
-                                            .font(.pretendardFont(.medium, size: 12))
+                                            .font(.pretendardFont(.medium, size: scaler.scaleWidth(12)))
                                             .foregroundColor(.background3)
                                         
                                     }
-                                    .padding(20)
+                                    .padding(scaler.scaleWidth(20))
                                     .frame(maxWidth: .infinity)
-                                    .frame(height: 150)
+                                    .frame(height: scaler.scaleHeight(150))
                                     .background(
                                         LinearGradient(
                                             stops: [
@@ -196,24 +218,24 @@ struct MyPageView: View {
                         }
                     }
                     
-                    VStack(spacing:22) {
+                    VStack(spacing:scaler.scaleHeight(22)) {
                         HStack {
                             Text("내 가계부")
-                                .font(.pretendardFont(.bold, size: 16))
+                                .font(.pretendardFont(.bold, size: scaler.scaleWidth(16)))
                                 .foregroundColor(.greyScale1)
                             Spacer()
                         }
+                        .padding(.leading, scaler.scaleWidth(4))
                         
-                        VStack(spacing:16) {
+                        VStack(spacing:scaler.scaleHeight(16)) {
                             ForEach(viewModel.sortedBooks(), id:\.self) { book in
                                 HStack {
-                                    
                                     if let bookUrl = book.bookImg {
                                         //let url = encryptionManager.decrypt(bookUrl, using: encryptionManager.key!)
                                         let url = URL(string : bookUrl)
                                         KFImage(url)
                                             .placeholder { //플레이스 홀더 설정
-                                                Image("")
+                                                Image("book_profile_36")
                                             }.retry(maxCount: 3, interval: .seconds(5)) //재시도
                                             .onSuccess { success in //성공
                                                 print("succes: \(success)")
@@ -224,33 +246,34 @@ struct MyPageView: View {
                                             .resizable()
                                             .aspectRatio(contentMode: .fill)
                                             .clipShape(Circle()) // 프로필 이미지를 원형으로 자르기
-                                            .frame(width: 36, height: 36) //resize
+                                            .frame(width: scaler.scaleWidth(36), height: scaler.scaleWidth(36))
                                             .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
-                                            .padding(20)
+                                            .padding(scaler.scaleWidth(20))
                                      
                                     } else {
                                         Image("book_profile_36")
+                                            .resizable()
                                             .clipShape(Circle())
                                             .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
-                                            .padding(20)
+                                            .frame(width: scaler.scaleWidth(36), height: scaler.scaleWidth(36))
+                                            .padding(scaler.scaleWidth(20))
                                     }
 
-                                    VStack(alignment: .leading, spacing:5){
+                                    VStack(alignment: .leading, spacing:scaler.scaleHeight(8)){
                                         Text("\(book.name)")
-                                            .font(.pretendardFont(.bold, size: 14))
+                                            .font(.pretendardFont(.bold, size: scaler.scaleWidth(14)))
                                             .foregroundColor(.greyScale2)
-                                        
                                         Text("\(book.memberCount)명")
-                                            .font(.pretendardFont(.medium, size: 12))
+                                            .font(.pretendardFont(.medium, size: scaler.scaleWidth(12)))
                                             .foregroundColor(.greyScale6)
                                     }
                                     Spacer()
                                     if book.bookKey == Keychain.getKeychainValue(forKey: .bookKey) ?? "" {
                                         Image("icon_check_circle_activated")
-                                            .padding(20)
+                                            .padding(scaler.scaleWidth(20))
                                     } else {
                                         Image("icon_check_circle_disabled")
-                                            .padding(20)
+                                            .padding(scaler.scaleWidth(20))
                                             
                                     }
                                 }
@@ -270,64 +293,73 @@ struct MyPageView: View {
                             }) {
                                 Image("icon_plus")
                             }
-                            .padding(20)
+                            .padding(scaler.scaleWidth(20))
                             .frame(maxWidth: .infinity)
                             .overlay(
                                 RoundedRectangle(cornerRadius: 12)
                                     .stroke(Color.greyScale9, style:StrokeStyle(lineWidth: 1, dash: [6]))
                             )
                         }
-                    }.padding(.top, 32)
-                    VStack(spacing:42) {
+                    }.padding(.top, scaler.scaleHeight(32))
+                    VStack(spacing:scaler.scaleHeight(16)) {
                         HStack {
                             Text("고객지원")
-                                .font(.pretendardFont(.bold, size: 16))
+                                .font(.pretendardFont(.bold, size: scaler.scaleWidth(16)))
                                 .foregroundColor(.greyScale1)
                             Spacer()
                         }
-                        HStack {
-                            Text("문의하기")
-                                .font(.pretendardFont(.medium, size: 14))
-                                .foregroundColor(.greyScale2)
-                            Spacer()
-                            Image("forward_button")
+                        VStack(spacing:0) {
+                            HStack {
+                                Text("문의하기")
+                                    .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
+                                    .foregroundColor(.greyScale2)
+                                Spacer()
+                                Image("forward_button")
+                            }
+                            .frame(height: scaler.scaleHeight(56))
+                            
+                            HStack {
+                                Text("공지사항")
+                                    .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
+                                    .foregroundColor(.greyScale2)
+                                Spacer()
+                                Image("forward_button")
+                            }
+                            .frame(height: scaler.scaleHeight(56))
+                            HStack {
+                                Text("리뷰 작성하기")
+                                    .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
+                                    .foregroundColor(.greyScale2)
+                                Spacer()
+                                Image("forward_button")
+                            }
+                            .frame(height: scaler.scaleHeight(56))
+                            HStack {
+                                Text("개인정보 처리방침")
+                                    .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
+                                    .foregroundColor(.greyScale2)
+                                Spacer()
+                                Image("forward_button")
+                            }
+                            .frame(height: scaler.scaleHeight(56))
+                            HStack {
+                                Text("이용 약관")
+                                    .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
+                                    .foregroundColor(.greyScale2)
+                                Spacer()
+                                Image("forward_button")
+                            }
+                            .frame(height: scaler.scaleHeight(56))
                         }
-                        HStack {
-                            Text("공지사항")
-                                .font(.pretendardFont(.medium, size: 14))
-                                .foregroundColor(.greyScale2)
-                            Spacer()
-                            Image("forward_button")
-                        }
-                        HStack {
-                            Text("리뷰 작성하기")
-                                .font(.pretendardFont(.medium, size: 14))
-                                .foregroundColor(.greyScale2)
-                            Spacer()
-                            Image("forward_button")
-                        }
-                        HStack {
-                            Text("개인정보 처리방침")
-                                .font(.pretendardFont(.medium, size: 14))
-                                .foregroundColor(.greyScale2)
-                            Spacer()
-                            Image("forward_button")
-                        }
-                        HStack {
-                            Text("이용 약관")
-                                .font(.pretendardFont(.medium, size: 14))
-                                .foregroundColor(.greyScale2)
-                            Spacer()
-                            Image("forward_button")
-                        }
-                    }.padding(.top, 40)
+                    }
+                    .padding(.top, scaler.scaleHeight(40))
+                    .padding(.leading, scaler.scaleWidth(4))
                     
                     if viewModel.subscribe {
-                        
                         HStack {
                             VStack {
                                 Text("구독 해지")
-                                    .font(.pretendardFont(.regular, size: 12))
+                                    .font(.pretendardFont(.regular, size: scaler.scaleWidth(12)))
                                     .foregroundColor(.greyScale6)
                                 Divider()
                                     .padding(EdgeInsets(top: -10, leading: 0, bottom: 0, trailing: 0))
@@ -337,7 +369,8 @@ struct MyPageView: View {
                             }
                             Spacer()
                         }
-                        .padding(.top, 44)
+                        .padding(.leading, scaler.scaleWidth(4))
+                        .padding(.top, scaler.scaleHeight(24))
                         .onTapGesture {
                             self.showingTabbar = false
                             self.isNextToUnSubscription = true
@@ -345,7 +378,8 @@ struct MyPageView: View {
                     }
                     
                 } // scroll view
-                .padding(.horizontal,20)
+                .padding(.horizontal,scaler.scaleWidth(20))
+                
                 
                 NavigationLink(destination : SetBookNameView(createBookType: .add), isActive: $isNextToCreateBook) {
                     EmptyView()
@@ -353,7 +387,10 @@ struct MyPageView: View {
                 NavigationLink(destination : EnterBookCodeView(), isActive: $isNextToEnterCode) {
                     EmptyView()
                 }
+                
+                Spacer()
             } // vstack
+            .padding(.top,scaler.scaleHeight(26))
             .fullScreenCover(isPresented: $isNextToMySubscription) {
                 MySubscriptionView(showingTabbar: $showingTabbar, isShowing: $isNextToMySubscription, isShowingUnScribe: $isNextToUnSubscription)
             }
@@ -367,11 +404,7 @@ struct MyPageView: View {
                 viewModel.getMyPage()
                 showingTabbar = true
             }
-            
-            
         } // ZStack
-        .padding(.top, 26)
-        
     }
 }
 
