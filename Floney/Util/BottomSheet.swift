@@ -38,7 +38,10 @@ struct BottomSheet: View {
 
 //MARK: 가계부 생성, 코드 입력, 추가하기 bottom sheet
 struct AccountBookBottomSheet: View{
-    let buttonHeight: CGFloat = 46
+    let scaler = Scaler.shared
+    var buttonHeight: CGFloat {
+        scaler.scaleHeight(46)
+    }
     @Binding var isShowing: Bool
     @Binding var showingTabbar : Bool
     @Binding var isNextToCreateBook : Bool
@@ -56,17 +59,24 @@ struct AccountBookBottomSheet: View{
                         isShowing.toggle()
                     }
                 
-                VStack(alignment: .leading, spacing: 20) {
-                    
+                VStack(alignment: .leading, spacing: scaler.scaleHeight(12)) {
                     HStack {
                         Text("가계부 추가")
                             .foregroundColor(.greyScale1)
-                            .font(.pretendardFont(.bold,size: 18))
+                            .font(.pretendardFont(.bold,size: scaler.scaleWidth(18)))
                         Spacer()
                     }
-                    .padding(.top, 24)
+                    .padding(.top, scaler.scaleHeight(24))
                     
-                    VStack(spacing : 18) {
+                    VStack(alignment: .leading,spacing:scaler.scaleHeight(3)) {
+                        Text("새로운 가계부를 추가할 방법을")
+                        Text("선택해 주세요.")
+                    }
+                    .foregroundColor(.greyScale6)
+                    .font(.pretendardFont(.medium,size: scaler.scaleWidth(13)))
+                    .padding(.bottom, scaler.scaleHeight(8))
+                    
+                    VStack(spacing : scaler.scaleHeight(18)) {
                         Button {
                             isSelected = 0
                         } label: {
@@ -75,7 +85,7 @@ struct AccountBookBottomSheet: View{
                                     Text("가계부 생성하기")
                                         .frame(alignment: .center)
                                         .foregroundColor(isSelected == 0 ? .greyScale1 : .greyScale8)
-                                        .font(.pretendardFont(.regular, size: 14))
+                                        .font(.pretendardFont(.regular, size: scaler.scaleWidth(14)))
                                         .lineLimit(1)
                                     HStack {
                                         Spacer()
@@ -101,7 +111,7 @@ struct AccountBookBottomSheet: View{
                                 ZStack {
                                     Text("코드 입력하기")
                                         .foregroundColor(isSelected == 1 ? .greyScale1 : .greyScale8)
-                                        .font(.pretendardFont(.regular, size: 14))
+                                        .font(.pretendardFont(.regular, size: scaler.scaleWidth(14)))
                                         .lineLimit(1)
                                     HStack {
                                         Spacer()
@@ -135,8 +145,8 @@ struct AccountBookBottomSheet: View{
                         
                     }
                 }
-                .padding(.horizontal, 20)
-                .padding(.bottom, 44)
+                .padding(.horizontal, scaler.scaleWidth(20))
+                .padding(.bottom, scaler.scaleHeight(44))
                 .transition(.move(edge: .bottom))
                 .background(
                     Color(.white)
@@ -246,8 +256,11 @@ struct ShareBookBottomSheet: View{
 
 //MARK: 예산 설정 bottom sheet
 struct SetBudgetBottomSheet: View {
+    let scaler = Scaler.shared
     @State private var keyboardHeight: CGFloat = 0
-    let buttonHeight: CGFloat = 46
+    var buttonHeight: CGFloat {
+        scaler.scaleHeight(46)
+    }
     @State var label = "예산을 입력하세요."
     @Binding var isShowing: Bool
     @Binding var month : Int
@@ -263,28 +276,30 @@ struct SetBudgetBottomSheet: View {
                         budget = ""
                         isShowing.toggle()
                     }
-                VStack(spacing: 24) {
+                VStack(spacing: scaler.scaleHeight(20)) {
                     HStack(alignment:.center) {
                         Text("\(month)월 예산")
                             .foregroundColor(.greyScale1)
-                            .font(.pretendardFont(.bold,size: 16))
+                            .font(.pretendardFont(.bold,size:scaler.scaleWidth(16)))
                         Spacer()
-                        VStack {
+                        VStack(spacing:0) {
                             Text("초기화하기")
-                                .font(.pretendardFont(.regular, size: 12))
+                                .font(.pretendardFont(.regular, size: scaler.scaleWidth(12)))
                                 .foregroundColor(.greyScale6)
-                            Divider()
-                                .frame(width: 70,height: 1.0)
-                                .padding(EdgeInsets(top: -10, leading: 0, bottom: 0, trailing: 0))
-                                .foregroundColor(.greyScale6)
+                            Rectangle()
+                              .foregroundColor(.clear)
+                              .frame(width: scaler.scaleWidth(52), height: scaler.scaleWidth(0.5))
+                              .background(Color.greyScale6)
                             
                         }
                         .onTapGesture {
                             budget = "0"
                         }
                     }
-                    .padding(.top, 24)
-                    VStack(spacing : 28) {
+                    .padding(.horizontal,scaler.scaleWidth(4))
+                    .padding(.top, scaler.scaleHeight(24))
+                    
+                    VStack(spacing : scaler.scaleHeight(20)) {
                         TextFieldLarge(label: $label, content: $budget)
                             .frame(height: buttonHeight)
                         ButtonLarge(label: "저장하기", background: .primary1, textColor: .white, strokeColor: .primary1,  fontWeight: .bold, action: {
@@ -295,8 +310,8 @@ struct SetBudgetBottomSheet: View {
                         .frame(height: buttonHeight)
                     }
                 }
-                .padding(.horizontal, 20)
-                .padding(.bottom, 44)
+                .padding(.horizontal, scaler.scaleWidth(20))
+                .padding(.bottom, scaler.scaleHeight(30))
                 .transition(.move(edge: .bottom))
                 .background(
                     Color(.white)
