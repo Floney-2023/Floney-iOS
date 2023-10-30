@@ -43,7 +43,6 @@ struct FloneyApp: App {
                     }
                     
                 }
-          
         }
     }
 }

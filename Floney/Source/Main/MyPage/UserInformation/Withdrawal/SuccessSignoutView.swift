@@ -8,32 +8,56 @@
 import SwiftUI
 
 struct SuccessSignoutView: View {
-     var body: some View {
-         VStack(spacing: 30) {
+    let scaler = Scaler.shared
+    
+    var body: some View {
+        VStack(spacing:scaler.scaleHeight(40)) {
              HStack {
-                 VStack(alignment: .leading, spacing: 16) {
-                     
-                     Text("회원탈퇴가\n무사히 완료되었어요")
-                         .font(.pretendardFont(.bold, size: 24))
-                         .foregroundColor(.greyScale1)
-                     Text("이용해 주셔서 감사합니다.\n언제든 다시 돌아오세요!")
-                         .font(.pretendardFont(.medium, size: 13))
-                         .foregroundColor(.greyScale6)
+                 VStack(alignment: .leading, spacing: scaler.scaleHeight(16)) {
+                     VStack(alignment: .leading, spacing: scaler.scaleHeight(5)) {
+                         Text("회원탈퇴가")
+                         Text("무사히 완료되었어요")
+                     }
+                     .font(.pretendardFont(.bold, size:scaler.scaleWidth(24)))
+                     .foregroundColor(.greyScale1)
+                     VStack(alignment: .leading, spacing: scaler.scaleHeight(3)) {
+                         Text("이용해 주셔서 감사합니다.")
+                         
+                         Text("언제든 다시 돌아오세요!")
+                             
+                     }
+                     .font(.pretendardFont(.medium, size: scaler.scaleWidth(13)))
+                     .foregroundColor(.greyScale6)
                  }
                  Spacer()
              }
-             Spacer()
-             Image("illust_signout")
-             Spacer()
-             Text("닫기")
-                 .padding()
-                 .withNextButtonFormmating(.primary1)
-                 .onTapGesture {
-                     
-                 }
+             .padding(.horizontal,scaler.scaleWidth(4))
+             
+             
+             Rectangle()
+                 .foregroundColor(.clear)
+                 .frame(width:scaler.scaleWidth(360), height: scaler.scaleWidth(360))
+                 .background(
+                    Image("illust_signout")
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width:scaler.scaleWidth(360), height: scaler.scaleWidth(360))
+                        .clipped()
+                 )
+
+            Spacer()
+            
+            Text("닫기")
+                .padding()
+                .withNextButtonFormmating(.primary1)
+                .onTapGesture {
+                    
+                }
+             
          }
          .navigationBarBackButtonHidden()
-         .padding(EdgeInsets(top: 76, leading: 24, bottom: 0, trailing: 24))
+         .padding(EdgeInsets(top: scaler.scaleHeight(76), leading:scaler.scaleWidth(20), bottom: scaler.scaleHeight(38), trailing: scaler.scaleWidth(20)))
+         .edgesIgnoringSafeArea(.bottom)
      }
 }
 
