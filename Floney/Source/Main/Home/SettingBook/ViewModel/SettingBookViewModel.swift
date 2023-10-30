@@ -39,7 +39,11 @@ class SettingBookViewModel : ObservableObject {
     
     @Published var changedName = ""
     @Published var encryptedImageUrl : String = ""
-    @Published var profileStatus = true
+    @Published var profileStatus = true {
+        didSet {
+            self.changeProfileStatus()
+        }
+    }
 
     @Published var asset : Double = 0
     
@@ -171,7 +175,6 @@ class SettingBookViewModel : ObservableObject {
     }
     
     func changeProfile(inputStatus: String) {
-        
         bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
         var request : BookProfileRequest
         if inputStatus == "default" {
@@ -216,7 +219,6 @@ class SettingBookViewModel : ObservableObject {
             }
             .store(in: &cancellableSet)
     }
-    
     func changeNickname() {
         bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
         let request = BookNameRequest(name: changedName, bookKey: bookKey)

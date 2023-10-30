@@ -51,7 +51,7 @@ struct SettingBookView: View {
                         }
                         
                         //MARK: 가계부 정보
-                        NavigationLink(destination: ModifyingBookView()) {
+                        NavigationLink(destination: ModifyingBookView(viewModel: viewModel)) {
                             HStack(spacing:scaler.scaleWidth(16)) {
                                 if let bookUrl = viewModel.bookImg {
                                     let url = URL(string : bookUrl)

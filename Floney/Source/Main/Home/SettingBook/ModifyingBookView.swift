@@ -8,24 +8,25 @@
 import SwiftUI
 
 struct ModifyingBookView: View {
-    @StateObject var viewModel = SettingBookViewModel()
-    //@State var nickname = ""
+    let scaler = Scaler.shared
+    @ObservedObject var viewModel : SettingBookViewModel
     @State var toggleOnOff = true
     @State var deleteAlert = false
     @State var deleteTitle = "가계부 삭제"
     @State var deleteMessage = "가계부를 삭제할 시 모든 내역이 삭제됩니다. 삭제하시겠습니까?"
     var body: some View {
-        VStack(spacing:36) {
-            VStack(spacing:12) {
+        VStack(spacing:scaler.scaleHeight(16)) {
+            VStack(spacing:scaler.scaleHeight(12)) {
                 HStack{
                     Text("가계부 이름")
-                        .font(.pretendardFont(.medium, size: 14))
+                        .font(.pretendardFont(.medium, size:scaler.scaleWidth(14)))
                         .foregroundColor(.greyScale2)
                     Spacer()
                 }
-                HStack(spacing: 8) {
+                .padding(.leading, scaler.scaleWidth(4))
+                HStack(spacing: scaler.scaleWidth(8)) {
                     CustomTextField(text: $viewModel.changedName, placeholder: "이름을 입력하세요.", placeholderColor: .greyScale7)
-                        .frame(height: UIScreen.main.bounds.height * 0.06)
+                        .frame(height: scaler.scaleHeight(46))
                     
                     Button("변경하기"){
                         if viewModel.isValidChangedName() {
@@ -34,55 +35,61 @@ struct ModifyingBookView: View {
                         
                     }
                     .padding()
-                    .font(.pretendardFont(.bold, size: 14))
+                    .font(.pretendardFont(.bold, size: scaler.scaleWidth(12)))
                     .foregroundColor(.white)
-                    .frame(maxWidth: 86)
+                    .frame(width: scaler.scaleWidth(86))
+                    .frame(height: scaler.scaleHeight(46))
                     .background(Color.primary1)
                     .cornerRadius(12)
                 }
             }
             
-            VStack(spacing:30) {
+            VStack(spacing:scaler.scaleHeight(24)) {
                 NavigationLink(destination: SetBookProfileImageView()){
                     HStack {
                         Text("프로필 이미지 변경")
-                            .font(.pretendardFont(.medium, size: 14))
+                            .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
                             .foregroundColor(.greyScale2)
                         Spacer()
                         Image("forward_button")
                     }
+                    .padding(.leading, scaler.scaleWidth(4))
+                    .frame(height: scaler.scaleHeight(46))
                 }
-                
+
                 HStack {
                     Text("내역 프로필 보기")
-                        .font(.pretendardFont(.medium, size: 14))
+                        .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
                         .foregroundColor(.greyScale2)
                     Spacer()
                     Toggle(isOn: $viewModel.profileStatus) {
                         
-                    }.padding(.trailing, 6)
+                    }
+                    .padding(.trailing, scaler.scaleWidth(6))
                         
                 }
+                .padding(.leading, scaler.scaleWidth(4))
                 .onReceive(viewModel.$profileStatus) { profileStatus in
                     print("see profile status : \(viewModel.profileStatus)")
-                        viewModel.changeProfileStatus()
                 }
-                
             }
+            
             if viewModel.role == "방장" {
                 HStack {
-                    VStack {
+                    VStack(spacing:0) {
                         Text("가계부 삭제")
-                            .font(.pretendardFont(.regular, size: 12))
+                            .font(.pretendardFont(.regular, size: scaler.scaleWidth(12)))
                             .foregroundColor(.greyScale6)
-                        Divider()
-                            .padding(EdgeInsets(top: -10, leading: 0, bottom: 0, trailing: 0))
-                            .frame(width: 50,height: 1.0)
-                            .foregroundColor(.greyScale6)
+                        Rectangle()
+                          .foregroundColor(.clear)
+                          .frame(width: scaler.scaleWidth(55), height: scaler.scaleWidth(0.5))
+                          .background(Color.greyScale6)
                         
                     }
                     Spacer()
                 }
+                .padding(.top, scaler.scaleHeight(24))
+                .padding(.leading, scaler.scaleWidth(4))
                 .onTapGesture {
                     self.deleteAlert = true
                 }
@@ -91,12 +98,12 @@ struct ModifyingBookView: View {
             Spacer()
             
         }
-        .padding(EdgeInsets(top: 35, leading: 20, bottom: 0, trailing: 20))
+        .padding(EdgeInsets(top: scaler.scaleHeight(32), leading: scaler.scaleWidth(20), bottom: 0, trailing: scaler.scaleWidth(20)))
         .customNavigationBar(
             leftView: { BackButtonBlack() },
             centerView: {
                 Text("가계부 편집")
-                    .font(.pretendardFont(.semiBold, size: 16))
+                    .font(.pretendardFont(.semiBold, size:scaler.scaleWidth(16)))
                     .foregroundColor(.greyScale1)
             }
         )
@@ -114,12 +121,11 @@ struct ModifyingBookView: View {
             }
         )
         .onAppear(perform : UIApplication.shared.hideKeyboard)
-        
     }
 }
 
 struct ModifyingBookView_Previews: PreviewProvider {
     static var previews: some View {
-        ModifyingBookView()
+        ModifyingBookView(viewModel: SettingBookViewModel())
     }
 }
