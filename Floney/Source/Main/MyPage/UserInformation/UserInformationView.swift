@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct UserInformationView: View {
+    let scaler = Scaler.shared
     @StateObject var alertManager = AlertManager.shared
     @StateObject var viewModel = MyPageViewModel()
     @State  var provider : String = Keychain.getKeychainValue(forKey: .provider) ?? ""
@@ -15,17 +16,18 @@ struct UserInformationView: View {
     @State var title = "로그아웃"
     @State var message = "로그아웃 하시겠습니끼?"
     var body: some View {
-        VStack(spacing:36) {
-            VStack(spacing:12) {
+        VStack(spacing:scaler.scaleHeight(32)) {
+            VStack(spacing:scaler.scaleHeight(12)) {
                 HStack{
                     Text("닉네임")
-                        .font(.pretendardFont(.medium, size: 14))
+                        .font(.pretendardFont(.medium, size:scaler.scaleWidth(14)))
                         .foregroundColor(.greyScale2)
                     Spacer()
                 }
-                HStack(spacing: 8) {
+                .padding(.leading, scaler.scaleWidth(4))
+                HStack(spacing: scaler.scaleHeight(8)) {
                     CustomTextField(text: $viewModel.changedNickname, placeholder: "닉네임을 입력하세요",placeholderColor: .greyScale7)
-                        .frame(height: UIScreen.main.bounds.height * 0.06)
+                        .frame(height: scaler.scaleHeight(46))
                    
                     Button("변경하기"){
                         if viewModel.isValidChangedName() {
@@ -33,69 +35,75 @@ struct UserInformationView: View {
                         }
                     }
                     .padding()
-                    .font(.pretendardFont(.bold, size: 14))
+                    .font(.pretendardFont(.bold, size: scaler.scaleWidth(12)))
+                    .frame(height: scaler.scaleHeight(46))
                     .foregroundColor(.white)
-                    .frame(maxWidth: 86)
+                    .frame(maxWidth:scaler.scaleWidth(86))
                     .background(Color.primary1)
                     .cornerRadius(12)
                 }
             }
             
-            VStack(spacing:30) {
+            VStack(spacing:scaler.scaleHeight(32)) {
                 NavigationLink(destination: SetProfileImageView()){
                     HStack {
                         Text("프로필 이미지 변경")
-                            .font(.pretendardFont(.medium, size: 14))
+                            .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
                             .foregroundColor(.greyScale2)
                         Spacer()
                         Image("forward_button")
                     }
+                    .padding(.leading, scaler.scaleWidth(4))
                     
                 }
                 if self.provider == "EMAIL" {
                     NavigationLink(destination: ChangePasswordView()){
                         HStack {
                             Text("비밀번호 변경")
-                                .font(.pretendardFont(.medium, size: 14))
+                                .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
                                 .foregroundColor(.greyScale2)
                             Spacer()
                             Image("forward_button")
                         }
+                        .padding(.leading, scaler.scaleWidth(4))
                     }
                 }
                 HStack {
                     Text("로그아웃")
-                        .font(.pretendardFont(.medium, size: 14))
+                        .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
                         .foregroundColor(.greyScale2)
                         .onTapGesture {
                             self.showingLogoutAlert = true
                         }
                     Spacer()
                 }
+                .padding(.leading, scaler.scaleWidth(4))
                 
             }
-            //NavigationLink(destination: WithdrawalView()){
+            NavigationLink(destination: WithdrawalView()){
                 HStack {
-                    VStack {
+                    VStack(spacing:0) {
                         Text("회원탈퇴")
-                            .font(.pretendardFont(.regular, size: 12))
+                            .font(.pretendardFont(.regular, size: scaler.scaleWidth(12)))
                             .foregroundColor(.greyScale6)
-                        Divider()
-                            .padding(EdgeInsets(top: -10, leading: 0, bottom: 0, trailing: 0))
-                            .frame(width: 50,height: 1.0)
-                            .foregroundColor(.greyScale6)
+                        Rectangle()
+                          .foregroundColor(.clear)
+                          .frame(width: scaler.scaleWidth(42), height: scaler.scaleWidth(0.5))
+                          .background(Color.greyScale6)
                     }
                     Spacer()
                 }
-            //}
+                .padding(.leading, scaler.scaleWidth(4))
+                .padding(.top, scaler.scaleHeight(2))
+            }
             
             Spacer()
         }
-        .padding(EdgeInsets(top: 35, leading: 20, bottom: 0, trailing: 20))
+        .padding(EdgeInsets(top:scaler.scaleHeight(34), leading: scaler.scaleWidth(20), bottom: 0, trailing: scaler.scaleWidth(20)))
         .customNavigationBar(
             leftView: { BackButtonBlack() },
             centerView: { Text("회원 정보")
-                    .font(.pretendardFont(.semiBold, size: 16))
+                    .font(.pretendardFont(.semiBold, size:scaler.scaleWidth(16)))
                 .foregroundColor(.greyScale1)}
             )
         .overlay(

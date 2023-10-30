@@ -54,7 +54,13 @@ final class MyPageViewModel: ObservableObject {
     
     //MARK: signout
     @Published var selectedReason : SignOutType?
-    @Published var otherReason = ""
+    @Published var otherReason = "" {
+        didSet {
+            if otherReason.count > 100 {
+                otherReason = String(otherReason.prefix(100))
+            }
+        }
+    }
     @Published var notiviewModel = NotiViewModel()
     
     private var cancellableSet: Set<AnyCancellable> = []

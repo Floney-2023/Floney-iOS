@@ -32,6 +32,7 @@ enum SignOutType : String, CaseIterable {
 }
 
 struct WithdrawalView: View {
+    let scaler = Scaler.shared
     @StateObject var viewModel = MyPageViewModel()
     @State var signoutAlert = false
     @State var title = "탈퇴하기"
@@ -41,23 +42,34 @@ struct WithdrawalView: View {
     }
     var body: some View {
         ZStack {
-            VStack(spacing: 30) {
+            VStack(spacing: scaler.scaleHeight(20)) {
                 HStack {
-                    VStack(alignment: .leading, spacing: 16) {
-                        Text("회원탈퇴 전\n이유를 선택해주세요 😢")
-                            .font(.pretendardFont(.bold, size: 24))
-                            .foregroundColor(.greyScale1)
-                        Text("잠깐! 탈퇴 시 가계부 기록이\n모두 삭제 됩니다.")
-                            .font(.pretendardFont(.medium, size: 13))
-                            .foregroundColor(.greyScale6)
+                    VStack(alignment: .leading, spacing: scaler.scaleHeight(16)) {
+                        VStack(alignment: .leading, spacing: scaler.scaleHeight(5)) {
+                            Text("회원탈퇴 전")
+                            Text("이유를 선택해주세요 😢")
+                        }
+                        .font(.pretendardFont(.bold, size:scaler.scaleWidth(24)))
+                        .foregroundColor(.greyScale1)
+                        VStack(alignment: .leading, spacing: scaler.scaleHeight(3)) {
+                            Text("잠깐! 탈퇴 시 가계부 기록이")
+                            
+                            Text("모두 삭제 됩니다.")
+                                
+                        }
+                        .font(.pretendardFont(.medium, size: scaler.scaleWidth(13)))
+                        .foregroundColor(.greyScale6)
                     }
                     Spacer()
                 }
-                VStack(spacing:40) {
+                .padding(.horizontal,scaler.scaleWidth(4))
+                .padding(.bottom, scaler.scaleHeight(18))
+                
+                VStack(spacing: scaler.scaleHeight(40)) {
                     ForEach(SignOutType.allCases, id: \.self) { reason in
                         HStack {
                             Text(reason.reason)
-                                .font(.pretendardFont(.medium, size: 14))
+                                .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
                                 .foregroundColor(.greyScale2)
                             Spacer()
                             Image(viewModel.selectedReason == reason ? "check_primary" : "checkbox_grey")
@@ -72,20 +84,18 @@ struct WithdrawalView: View {
                         }
                     }
                 }
+                .padding(.horizontal,scaler.scaleWidth(4))
                 
                 TextField("이유를 작성해 주세요 (100자 이내)", text: $viewModel.otherReason)
                     .padding()
-                    .font(.pretendardFont(.regular, size: 14))
+                    .font(.pretendardFont(.regular, size: scaler.scaleWidth(14)))
                     .foregroundColor(.greyScale2)
-                    .frame(height: 140)
+                    .frame(height:scaler.scaleHeight(140))
                     .background(Color.background3)
                     .cornerRadius(12)
                     .multilineTextAlignment(.leading)
                     .lineLimit(4)
-                    .onReceive(viewModel.otherReason.publisher.collect()) {
-                        // 100자 제한
-                        viewModel.otherReason = String($0.prefix(100))
-                    }
+  
                 Spacer()
                 Text("탈퇴하기")
                     .padding()
@@ -96,10 +106,11 @@ struct WithdrawalView: View {
                         }
                     }
             }
-            .padding(EdgeInsets(top: 30, leading: 24, bottom: 0, trailing: 24))
+            .padding(EdgeInsets(top:scaler.scaleHeight(30), leading:scaler.scaleWidth(20), bottom: scaler.scaleHeight(38), trailing:scaler.scaleWidth(20)))
             .customNavigationBar(
                 leftView: { BackButton() }
             )
+            .edgesIgnoringSafeArea(.bottom)
             
             if signoutAlert {
                 AlertView(isPresented: $signoutAlert,title: $title, message: $message, okColor: .alertBlue, onOKAction: {
