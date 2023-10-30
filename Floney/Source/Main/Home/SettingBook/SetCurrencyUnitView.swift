@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct SetCurrencyUnitView: View {
+    let scaler = Scaler.shared
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @ObservedObject var viewModel = SettingBookViewModel()
     @State var showingAlert = false
@@ -20,20 +21,30 @@ struct SetCurrencyUnitView: View {
 
     var body: some View {
         ZStack{
-            VStack(spacing: 32){
+            VStack(spacing:scaler.scaleHeight(32)){
                 HStack {
-                    VStack(alignment: .leading, spacing: 16) {
+                    VStack(alignment: .leading, spacing: scaler.scaleHeight(16)) {
                         Text("화폐 설정")
-                            .font(.pretendardFont(.bold,size:24))
+                            .font(.pretendardFont(.bold,size:scaler.scaleWidth(24)))
                             .foregroundColor(.greyScale1)
                         Text("찾으시는 화폐 단위가 없나요?\n원하시는 화폐를 플로니에게 알려주세요.")
-                            .font(.pretendardFont(.medium,size:13))
+                            .font(.pretendardFont(.medium,size:scaler.scaleWidth(13)))
                             .foregroundColor(.greyScale6)
                     }
                     Spacer()
-                    Image("illust_currency_unit")
+                    
+                    Rectangle()
+                        .foregroundColor(.clear)
+                        .frame(width:scaler.scaleWidth(86), height:scaler.scaleHeight(76))
+                        .background(
+                            Image("illust_monetary_unit")
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width:scaler.scaleWidth(86), height:scaler.scaleHeight(76))
+                                .clipped()
+                        )
                 }
-                .padding(.horizontal, 24)
+                .padding(.horizontal, scaler.scaleWidth(24))
                 
                 ScrollView(showsIndicators: false) {
                     VStack{
@@ -42,18 +53,23 @@ struct SetCurrencyUnitView: View {
                             HStack {
                                 
                                 Text("\(currencyUnits[index])")
-                                    .font(.pretendardFont(.medium,size:12))
+                                    .font(.pretendardFont(.medium,size:scaler.scaleWidth(12)))
                                     .foregroundColor(parsedCurrency == viewModel.currency ? .primary2 : .greyScale6)
                                 Spacer()
                                 
                                 if parsedCurrency == viewModel.currency {
                                     Image("icon_check_circle_activated")
-                                        .padding(.trailing, 22)
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fill)
+                                        .frame(width: scaler.scaleWidth(24), height: scaler.scaleWidth(24))
+                                        .clipped()
+                                        .padding(.trailing, scaler.scaleWidth(16))
                                 }
                             }
-                            .padding(.leading, 22)
-                            .padding(.vertical, 20)
+                            .padding(.leading, scaler.scaleWidth(22))
+                            //.padding(.vertical, scaler.scaleHeight(21))
                             .frame(maxWidth: .infinity)
+                            .frame(height:scaler.scaleHeight(54))
                             .background(parsedCurrency == viewModel.currency ? Color.primary10 : Color.greyScale12)
                             .cornerRadius(12)
                             .onTapGesture {
@@ -67,9 +83,9 @@ struct SetCurrencyUnitView: View {
                         }
                     }
                 }
-                .padding(.horizontal, 20)
+                .padding(.horizontal, scaler.scaleWidth(20))
             }
-            .padding(.top, 52)
+            .padding(.top,scaler.scaleHeight(52))
             .customNavigationBar(
                 leftView: { BackButton() }
                 )

@@ -68,8 +68,10 @@ struct SetBudgetView: View {
                                 
                             }
                         }.padding(.horizontal, scaler.scaleWidth(20))
+                            .padding(.bottom, scaler.scaleHeight(76))
                     } 
                 }
+                
             }
             
             .customNavigationBar(

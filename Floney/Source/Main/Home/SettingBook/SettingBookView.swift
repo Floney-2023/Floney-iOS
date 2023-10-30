@@ -222,7 +222,7 @@ struct SettingBookView: View {
                         if viewModel.role == "방장" {
                             HStack {
                                 VStack(spacing:0) {
-                                    Text("가계부 초기화")
+                                    Text("가계부 초기화하기")
                                         .font(.pretendardFont(.regular, size: scaler.scaleWidth(12)))
                                         .foregroundColor(.greyScale6)
                                     

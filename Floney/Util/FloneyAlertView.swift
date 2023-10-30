@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct FloneyAlertView: View {
+    let scaler = Scaler.shared
     @Binding var isPresented: Bool
     @Binding var title : String
     @Binding var message : String
@@ -22,24 +23,24 @@ struct FloneyAlertView: View {
         GeometryReader { geometry in
             VStack(spacing:0) {
                 Image("illust_warning")
-                VStack(spacing:14) {
+                VStack(spacing:scaler.scaleHeight(14)) {
                     Text("\(title)")
-                        .font(.pretendardFont(.bold, size: 16))
+                        .font(.pretendardFont(.bold, size:scaler.scaleWidth(16)))
                     
                     Text("\(message)")
-                        .font(.pretendardFont(.regular, size: 13))
+                        .font(.pretendardFont(.regular, size: scaler.scaleWidth(13)))
                         .multilineTextAlignment(.center)
-                }.padding(.vertical, 20)
+                }.padding(.vertical, scaler.scaleHeight(20))
                     .foregroundColor(.greyScale1)
        
-                HStack(alignment: .center,spacing: 12) {
+                HStack(alignment: .center,spacing: scaler.scaleWidth(12)) {
                     Button("\(leftButtonText)") {
                         isPresented = false
                         onOKAction()
                     }
-                    .padding(.vertical,16)
+                    .padding(.vertical,scaler.scaleHeight(16))
                     .frame(width: geometry.size.width * 0.34)
-                    .font(.pretendardFont(.medium, size: 12))
+                    .font(.pretendardFont(.medium, size: scaler.scaleWidth(12)))
                     .foregroundColor(leftColor)
                     .background(Color.background2)
                     .cornerRadius(10)
@@ -47,9 +48,9 @@ struct FloneyAlertView: View {
                     Button("\(rightButtonText)") {
                         isPresented = false
                     }
-                    .padding(.vertical,16)
+                    .padding(.vertical,scaler.scaleHeight(16))
                     .frame(width: geometry.size.width * 0.34)
-                    .font(.pretendardFont(.semiBold, size: 12))
+                    .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(12)))
                     .foregroundColor(rightColor)
                     .background(Color.primary1)
                     .cornerRadius(10)

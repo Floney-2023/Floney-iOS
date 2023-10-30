@@ -50,7 +50,7 @@ struct BackButtonBlackWithAlert : View {
             }
         }) {
             HStack {
-                Image("back_button_black") // set image here
+                Image("icon_back_black") // set image here
                     .aspectRatio(contentMode: .fit)
             }
         }
