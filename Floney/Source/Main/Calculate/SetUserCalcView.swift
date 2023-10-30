@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct SetUserCalcView: View {
     let scaler = Scaler.shared
@@ -53,16 +54,51 @@ struct SetUserCalcView: View {
                     VStack(spacing: scaler.scaleHeight(12)) {
                         ForEach(viewModel.bookUsers.indices, id: \.self) { index in
                             HStack(spacing:scaler.scaleWidth(12)) {
-                                Image("user_profile_32")
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fill)
-                                    .clipShape(Circle())
-                                    .frame(width: scaler.scaleWidth(32),height: scaler.scaleWidth(32))
-                                    .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
-                                    .padding(.vertical,scaler.scaleWidth(20))
-                                    .padding(.leading, scaler.scaleWidth(20))
-                                
-                                
+                                if viewModel.bookUsers[index].profileImg == "user_default" {
+                                    Image("user_profile_32")
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fill)
+                                        .clipShape(Circle())
+                                        .frame(width: scaler.scaleWidth(32), height: scaler.scaleWidth(32)) //resize
+                                        .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
+                                        .padding(.vertical,scaler.scaleWidth(20))
+                                        .padding(.leading, scaler.scaleWidth(20))
+                                    
+                                } else if viewModel.bookUsers[index].profileImg.hasPrefix("random"){
+                                    let components = viewModel.bookUsers[index].profileImg.components(separatedBy: CharacterSet.decimalDigits.inverted)
+                                    let random = components.first!  // "random"
+                                    let number = components.last!   // "5"
+                                    Image("img_user_random_profile_0\(number)_32")
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fill)
+                                        .clipShape(Circle())
+                                        .frame(width: scaler.scaleWidth(32), height: scaler.scaleWidth(32)) //resize
+                                        .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
+                                        .padding(.vertical,scaler.scaleWidth(20))
+                                        .padding(.leading, scaler.scaleWidth(20))
+                                }
+                                else {
+                                    let url = URL(string : viewModel.bookUsers[index].profileImg)
+                                    KFImage(url)
+                                        .placeholder { //플레이스 홀더 설정
+                                            Image("user_profile_32")
+                                        }.retry(maxCount: 3, interval: .seconds(5)) //재시도
+                                        .onSuccess { success in //성공
+                                            print("succes: \(success)")
+                                        }
+                                        .onFailure { error in //실패
+                                            print("failure: \(error)")
+                                        }
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fill)
+                                        .clipShape(Circle()) // 프로필 이미지를 원형으로 자르기
+                                        .frame(width: scaler.scaleWidth(32), height: scaler.scaleWidth(32)) //resize
+                                        .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
+                                        .padding(.vertical,scaler.scaleWidth(20))
+                                        .padding(.leading, scaler.scaleWidth(20))
+                                        
+                                }
+
                                 Text("\(viewModel.bookUsers[index].nickname)")
                                     .font(.pretendardFont(.semiBold, size:scaler.scaleWidth(14)))
                                     .foregroundColor(.greyScale2)

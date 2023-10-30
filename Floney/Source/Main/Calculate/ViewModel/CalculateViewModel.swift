@@ -59,11 +59,16 @@ class CalculateViewModel : ObservableObject {
     @Published var outcomeRequest : [OutComes] = []
     
     //MARK: 정산 요청 완료
-    @Published var settlementResult : AddSettlementResponse = AddSettlementResponse(id: 0, userCount: 0, startDate: "", endDate: "", totalOutcome: 0, outcome: 0, details: [])
-    @Published var userCount = 0
-    @Published var totalOutcome : Float = 0
-    @Published var outcomePerUser : Float = 0
-    @Published var details : [AddSettlementResponseDetails] = []
+    @Published var settlementResult : AddSettlementResponse = AddSettlementResponse(id: 0, userCount: 3, startDate: "2023-10-23", endDate: "2023-10-24", totalOutcome: 30000, outcome: 10000, details: [])
+    //AddSettlementResponse(id: 0, userCount: 0, startDate: "", endDate: "", totalOutcome: 0, outcome: 0, details: [])
+    @Published var userCount = 3//0
+    @Published var totalOutcome : Float = 30000//0
+    @Published var outcomePerUser : Float = 10000//0
+    @Published var details : [AddSettlementResponseDetails] = [
+        AddSettlementResponseDetails(money: 0, userNickname: "test"),
+        AddSettlementResponseDetails(money: -10000, userNickname: "test2"),
+        AddSettlementResponseDetails(money: 10000, userNickname: "test3")
+    ]
     @Published var id = 0
     
     //MARK: 정산 내역 조회 리스트
