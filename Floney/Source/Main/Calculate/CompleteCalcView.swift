@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct CompleteCalcView: View {
+    let scaler = Scaler.shared
     @State var currency = CurrencyManager.shared.currentCurrency
     @StateObject var applinkManager = AppLinkManager.shared
     @Binding var isShowingTabbar : Bool
@@ -22,7 +23,8 @@ struct CompleteCalcView: View {
             HStack {
                 Spacer()
                 Image("icon_close")
-                    .padding(.trailing, 24)
+                    .padding(.trailing,scaler.scaleWidth(20))
+                    .padding(.top,scaler.scaleHeight(22))
                     .onTapGesture {
                         self.isShowingTabbar = true
                         self.isShowingCalc = false

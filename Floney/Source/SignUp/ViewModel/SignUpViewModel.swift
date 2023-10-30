@@ -157,8 +157,8 @@ class SignUpViewModel: ObservableObject {
     //MARK: 자동로그인을 위한 email, password 저장하기
     func setEmailPassword(provider : ProviderType) {
         Keychain.setKeychain(email, forKey: .email)
+        Keychain.setKeychain(nickname, forKey: .userNickname)
         if provider == .email {
-            Keychain.setKeychain(password, forKey: .password)
             Keychain.setKeychain("EMAIL", forKey: .provider)
         } else if provider == .kakao {
             Keychain.setKeychain("KAKAO", forKey: .provider)

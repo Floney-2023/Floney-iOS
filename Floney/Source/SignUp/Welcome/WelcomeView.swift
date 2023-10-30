@@ -27,6 +27,7 @@ struct WelcomeView: View {
                 Spacer()
                 Image("icon_welcome")
                     .resizable()
+                    .aspectRatio(contentMode: .fill)
                     .frame(width:scaler.scaleWidth(360), height: scaler.scaleWidth(360))
                 Spacer()
                 NavigationLink(destination: SendBookCodeView()){

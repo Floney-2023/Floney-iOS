@@ -10,10 +10,9 @@ import SwiftUI
 
 
 struct SetPeriodCalcView: View {
+    let scaler = Scaler.shared
     @Binding var isShowingTabbar : Bool
     @Binding var isShowingCalc : Bool
-    //@Binding var isShowingPeriod : Bool
-    //@State var isShowingContent = false
     @State var isShowingCalendar = false
     @ObservedObject var viewModel : CalculateViewModel
    
@@ -29,49 +28,53 @@ struct SetPeriodCalcView: View {
                 HStack {
                     Spacer()
                     Image("icon_close")
-                        .padding(.trailing, 24)
+                        .padding(.trailing,scaler.scaleWidth(20))
+                        .padding(.top,scaler.scaleHeight(22))
                         .onTapGesture {
                             self.isShowingTabbar = true
                             self.isShowingCalc = false
                         }
                 }
                 
-                VStack(spacing: 32) {
+                VStack(spacing:scaler.scaleHeight(24)) {
                     HStack {
-                        VStack(alignment: .leading, spacing: 5) {
+                        VStack(alignment: .leading, spacing: scaler.scaleHeight(5)) {
                             Text("\(pageCount)")
                                 .foregroundColor(.greyScale2)
-                                .font(.pretendardFont(.medium, size: 12))
+                                .font(.pretendardFont(.medium, size:scaler.scaleWidth(12)))
                             + Text(" / \(pageCountAll)")
                                 .foregroundColor(.greyScale6)
-                                .font(.pretendardFont(.medium, size: 12))
+                                .font(.pretendardFont(.medium, size: scaler.scaleWidth(12)))
                             
                             
                             Text("정산할 기간을")
-                                .font(.pretendardFont(.bold, size: 22))
+                                .font(.pretendardFont(.bold, size: scaler.scaleWidth(22)))
                                 .foregroundColor(.greyScale1)
-                                .padding(.top, 11)
+                                .padding(.top, scaler.scaleHeight(11))
                             Text("설정해주세요")
-                                .font(.pretendardFont(.bold, size: 22))
+                                .font(.pretendardFont(.bold, size: scaler.scaleWidth(22)))
                                 .foregroundColor(.greyScale1)
                         }
                         Spacer()
                     }
-                    HStack(spacing: 12) {
+                    .padding(.leading, scaler.scaleWidth(4))
+                    
+                    
+                    HStack(spacing: scaler.scaleWidth(12)) {
                         Image("icon_calendar")
                         if viewModel.selectedDates.count == 2 {
                             if viewModel.startDateStr == viewModel.endDateStr {
                                 Text("\(viewModel.selectedStartDateStr)")
-                                .font(.pretendardFont(.medium, size: 16))
+                                .font(.pretendardFont(.medium, size: scaler.scaleWidth(16)))
                                 .foregroundColor(.greyScale2)
                             } else  {
                                 Text("\(viewModel.selectedDatesStr)")
-                                .font(.pretendardFont(.medium, size: 16))
+                                .font(.pretendardFont(.medium, size: scaler.scaleWidth(16)))
                                 .foregroundColor(.greyScale2)
                                 }
                         } else {
                             Text("\(text)")
-                                .font(.pretendardFont(.medium, size: 14))
+                                .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
                                 .foregroundColor(.greyScale7)
                         }
                         
@@ -85,12 +88,12 @@ struct SetPeriodCalcView: View {
                     
                     Spacer()
                 }
-                .padding(EdgeInsets(top: 32, leading: 24, bottom: 0, trailing: 24))
+                .padding(EdgeInsets(top:scaler.scaleHeight(22), leading: scaler.scaleWidth(20), bottom: 0, trailing: scaler.scaleWidth(20)))
+                
                 HStack(spacing:0){
-                    
                     Text("이전으로")
-                        .padding(.bottom,10)
-                        .font(.pretendardFont(.bold, size: 14))
+                        .padding(.bottom, scaler.scaleHeight(10))
+                        .font(.pretendardFont(.bold, size: scaler.scaleWidth(14)))
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
                         .frame(maxHeight: .infinity)
@@ -99,8 +102,8 @@ struct SetPeriodCalcView: View {
                             pageCount = 1
                         }
                     Text("다음으로")
-                        .padding(.bottom,10)
-                        .font(.pretendardFont(.bold, size: 14))
+                        .padding(.bottom, scaler.scaleHeight(10))
+                        .font(.pretendardFont(.bold, size: scaler.scaleWidth(14)))
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
                         .frame(width: UIScreen.main.bounds.width * 2/3)
@@ -115,7 +118,7 @@ struct SetPeriodCalcView: View {
                             }
                         }
                 }
-                .frame(height:UIScreen.main.bounds.height * 0.084)
+                .frame(height:scaler.scaleHeight(66))
                 
             }
             .edgesIgnoringSafeArea(.bottom)
@@ -123,7 +126,7 @@ struct SetPeriodCalcView: View {
             if isShowingCalendar {
                 CalendarBottomSheet(isShowing: $isShowingCalendar, showingTab: $isShowingTabbar, viewModel: viewModel)
             }
-        }
+        } //ZStack
     }
 }
 

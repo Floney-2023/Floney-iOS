@@ -108,6 +108,7 @@ class CalculateViewModel : ObservableObject {
     }
     //MARK: 정산하기
     func postSettlements() {
+        LoadingManager.shared.update(showLoading: true, loadingType: .floneyLoading)
         let bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
         let bookName = Keychain.getKeychainValue(forKey: .bookName) ?? ""
         let request = AddSettlementRequest(bookKey: bookKey, userEmails: userList, startDate: startDateStr, endDate: endDateStr, outcomes: outcomeRequest)

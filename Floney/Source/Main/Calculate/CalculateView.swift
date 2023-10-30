@@ -45,6 +45,7 @@ struct CalculateView: View {
 
                 Image("calculate")
                     .resizable()
+                    .aspectRatio(contentMode: .fill)
                     .frame(width: scaler.scaleWidth(360))
                     .frame(height: scaler.scaleHeight(320))
                     .padding(.bottom, scaler.scaleHeight(26))
