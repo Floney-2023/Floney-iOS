@@ -260,6 +260,7 @@ struct SetBudgetBottomSheet: View {
                     .opacity(0.7)
                     .ignoresSafeArea()
                     .onTapGesture {
+                        budget = ""
                         isShowing.toggle()
                     }
                 VStack(spacing: 24) {
@@ -286,7 +287,6 @@ struct SetBudgetBottomSheet: View {
                     VStack(spacing : 28) {
                         TextFieldLarge(label: $label, content: $budget)
                             .frame(height: buttonHeight)
-                        
                         ButtonLarge(label: "저장하기", background: .primary1, textColor: .white, strokeColor: .primary1,  fontWeight: .bold, action: {
                             if viewModel.onlyNumberValid(input: budget, budgetAssetType: .budget) {
                                 isShowing = false
@@ -309,6 +309,7 @@ struct SetBudgetBottomSheet: View {
         .ignoresSafeArea()
         .animation(.easeInOut, value: isShowing)
         .onAppear {
+            budget = ""
             NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: .main) { (notification) in
                 let value = notification.userInfo![UIResponder.keyboardFrameEndUserInfoKey] as! CGRect
                 let height = value.height

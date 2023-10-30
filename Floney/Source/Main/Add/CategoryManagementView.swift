@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct CategoryManagementView: View {
+    let scaler = Scaler.shared
     @Environment(\.presentationMode) var presentationMode
-    
     var options = ["자산", "지출", "수입", "이체"]
     @State private var selectedOptions = 0
     @State var list = ["현금", "체크카드", "신용카드", "은행"]
@@ -21,26 +21,39 @@ struct CategoryManagementView: View {
     @State var deleteAlert = false
     @State var title = "분류항목 삭제"
     @State var message = "삭제하시겠습니까?"
+    
+    @State var showAddButton = true
     var body: some View {
         ZStack {
             VStack {
-                VStack{
+                VStack(spacing:scaler.scaleHeight(16)) {
                     VStack(alignment:.leading, spacing: 0){
                         HStack{
-                            VStack(alignment:.leading, spacing: 10) {
+                            VStack(alignment:.leading, spacing: scaler.scaleHeight(16)) {
                                 Text("분류 항목 관리")
-                                    .font(.pretendardFont(.bold,size: 24))
+                                    .font(.pretendardFont(.bold,size:scaler.scaleWidth(24)))
                                     .foregroundColor(.greyScale1)
                                 Text("가계부를 적을 때 선택하는 항목들을\n추가, 삭제 할 수 있어요")
-                                    .font(.pretendardFont(.medium,size: 13))
+                                    .font(.pretendardFont(.medium,size: scaler.scaleWidth(13)))
                                     .foregroundColor(.greyScale6)
                             }
                             Spacer()
-                            Image("category_management")
+                            
+                            Rectangle()
+                                .foregroundColor(.clear)
+                                .frame(width:scaler.scaleWidth(86), height:scaler.scaleHeight(76))
+                                .background(
+                                    Image("category_management")
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fill)
+                                        .frame(width:scaler.scaleWidth(86), height:scaler.scaleHeight(76))
+                                        .clipped()
+                                )
                             
                         }
                     }
-                    .padding(.horizontal, 24)
+                    .padding(.horizontal,scaler.scaleWidth(24))
+                    .padding(.bottom, scaler.scaleHeight(16))
                     
                     HStack(spacing: 0) {
                         ForEach(options.indices, id:\.self) { index in
@@ -51,7 +64,7 @@ struct CategoryManagementView: View {
                                 Rectangle()
                                     .fill(Color.white)
                                     .cornerRadius(6)
-                                    .padding(4)
+                                    .padding(scaler.scaleWidth(4))
                                     .opacity(selectedOptions == index ? 1 : 0.01)
                                     .onTapGesture {
                                         withAnimation(.interactiveSpring()) {
@@ -61,24 +74,22 @@ struct CategoryManagementView: View {
                             }
                             .overlay(
                                 Text(options[index])
-                                
-                                    .font(.pretendardFont(.semiBold, size: 14))
+                                    .font(.pretendardFont(.semiBold, size:scaler.scaleWidth(14)))
                                     .foregroundColor(selectedOptions == index ? .greyScale2: .greyScale8)
                             )
                         }
                     }
                     .frame(maxWidth: .infinity)
-                    .frame(height: 38)
+                    .frame(height:scaler.scaleHeight(38))
                     .cornerRadius(8)
-                    .padding(.horizontal,20)
+                    .padding(.horizontal,scaler.scaleWidth(20))
 
                     ScrollView(showsIndicators: false) {
                         VStack(alignment: .leading) {
                             ForEach(viewModel.categories.indices, id: \.self) { i in
                                 VStack(alignment: .leading) {
-                                    Spacer()
-                                    HStack(spacing:0) {
-                                        
+                                    //Spacer()
+                                    HStack(spacing:scaler.scaleWidth(12)) {
                                         if editState {
                                             if !(viewModel.categoryStates[i]) {
                                                 Image("icon_delete")
@@ -89,21 +100,24 @@ struct CategoryManagementView: View {
                                             }
                                         }
                                         Text("\(viewModel.categories[i])")
-                                            .padding(.leading,12)
-                                            .font(.pretendardFont(.medium, size: 14))
+                                            .padding(.leading,scaler.scaleWidth(12))
+                                            .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
                                             .foregroundColor(.greyScale2)
                                     }
-                                    Spacer()
+                                    .frame(height: scaler.scaleHeight(58))
+                                    //Spacer()
                                     Divider()
                                         .foregroundColor(.greyScale11)
-                                }.frame(height: 58)
-                                
+                                }
+                      
                             }
                             
-                        }.padding(.horizontal,22)
-                            .padding(.bottom, 64)
+                        }
+                        .padding(.horizontal,scaler.scaleWidth(22))
+                        .padding(.bottom,  scaler.scaleHeight(64))
                     }
                 } // VStack
+                .padding(.top, scaler.scaleHeight(52))
             } // VStack
             .fullScreenCover(isPresented: $isShowingAdd) {
                 AddCategoryView(isShowingAdd: $isShowingAdd, viewModel: viewModel)
@@ -122,7 +136,7 @@ struct CategoryManagementView: View {
             }
             .customNavigationBar(
                 leftView: {
-                Image("back_button")
+                Image("icon_back")
                     .onTapGesture {
                         isShowingEditCategory = false
                         self.presentationMode.wrappedValue.dismiss()
@@ -133,35 +147,45 @@ struct CategoryManagementView: View {
                         if editState {
                             Button {
                                 self.editState = false
+                                self.showAddButton = true
                             } label: {
                                 Text("완료")
-                                    .font(.pretendardFont(.regular,size: 14))
+                                    .font(.pretendardFont(.regular,size:scaler.scaleWidth(14)))
                                     .foregroundColor(.greyScale2)
                             }
                             
                         } else {
-                            Image("icon_edit")
-                                .onTapGesture {
-                                    self.editState = true
-                                }
+                            Button {
+                                self.editState = true
+                                self.showAddButton = false
+                            } label: {
+                                Text("편집")
+                                    .font(.pretendardFont(.regular,size:scaler.scaleWidth(14)))
+                                    .foregroundColor(.greyScale2)
+                            }
                         }
                     }
                 }
             )
-            VStack {
-                Spacer()
-                Button {
-                    isShowingAdd = true
-                } label: {
-                    Text("추가하기")
-                        .font(.pretendardFont(.bold, size: 14))
-                        .foregroundColor(.white)
-                        .padding(.bottom, 10)
-                    
-                }.frame(maxWidth: .infinity)
-                    .frame(height:UIScreen.main.bounds.height * 0.085)
-                    .background(Color.primary1)
-            }.edgesIgnoringSafeArea(.bottom)
+            if showAddButton {
+                VStack {
+                    Spacer()
+                    Button {
+                        isShowingAdd = true
+                    } label: {
+                        Text("추가하기")
+                            .frame(maxWidth: .infinity)
+                            .frame(height:scaler.scaleHeight(66))
+                            .font(.pretendardFont(.bold, size:scaler.scaleWidth(14)))
+                            .foregroundColor(.white)
+                            .padding(.bottom, scaler.scaleHeight(10))
+                    }
+                        .frame(maxWidth: .infinity)
+                        .frame(height:scaler.scaleHeight(66))
+                        .background(Color.primary1)
+                }
+                .edgesIgnoringSafeArea(.bottom)
+            }
             
             if deleteAlert {
                 AlertView(isPresented: $deleteAlert, title: $title, message: $message, onOKAction: {

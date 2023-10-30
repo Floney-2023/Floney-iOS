@@ -256,6 +256,7 @@ struct BudgetView: View {
                     NavigationLink(destination: SetBudgetView(), isActive : $isActive) {
                         Button {
                             isActive = true
+                            showingTabbar = false
                         } label: {
                             Text("이번달 예산 설정하기")
                                 .padding(scaler.scaleHeight(16))
@@ -273,6 +274,7 @@ struct BudgetView: View {
             }
         }
         .onAppear{
+            showingTabbar = true
             viewModel.analysisBudget()
         }
         .onChange(of: viewModel.selectedDate) { newValue in
