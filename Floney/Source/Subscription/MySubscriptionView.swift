@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct MySubscriptionView: View {
+    let scaler = Scaler.shared
     @Binding var showingTabbar : Bool
     @Binding var isShowing : Bool
     @Binding var isShowingUnScribe : Bool
@@ -26,24 +27,24 @@ struct MySubscriptionView: View {
                     
                 }
                 Text("구독 정보")
-                    .font(.pretendardFont(.semiBold, size: 16))
+                    .font(.pretendardFont(.semiBold, size:scaler.scaleWidth(16)))
                     .foregroundColor(.greyScale1)
                 
-            }.padding(.top, 18)
-            .padding(.bottom,38)
+            }.padding(.top,scaler.scaleHeight(18))
+            .padding(.bottom,scaler.scaleHeight(38))
             
             
             VStack {
                 HStack {
                     Text("floney plus+")
-                        .font(.pretendardFont(.semiBold, size: 18))
+                        .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(18)))
                         .foregroundColor(.greyScale1)
                         
                     Spacer()
                     ZStack {
                         Rectangle()
                             .foregroundColor(.clear)
-                            .frame(width: 51, height: 24)
+                            .frame(width: scaler.scaleWidth(51), height:scaler.scaleHeight(24))
                             .background(
                                 LinearGradient(
                                     stops: [
@@ -58,33 +59,34 @@ struct MySubscriptionView: View {
                             .cornerRadius(50)
                         
                         Text("D - \(viewModel.remainingPeriod)")
-                            .font(.pretendardFont(.semiBold, size: 12))
+                            .font(.pretendardFont(.semiBold, size:scaler.scaleWidth(12)))
                             .foregroundColor(.white)
                         
                     }
-                }.padding(.horizontal, 20)
-                    .padding(.top, 20)
+                }
+                .padding(.horizontal, scaler.scaleWidth(20))
+                .padding(.top,scaler.scaleHeight(20))
                 Spacer()
                 
                 HStack {
                     Text("\(viewModel.expiresDate) 갱신 예정")
-                        .font(.pretendardFont(.regular, size: 12))
+                        .font(.pretendardFont(.regular, size: scaler.scaleWidth(12)))
                         .foregroundColor(.greyScale5)
                     Spacer()
                     
                     Text("\(viewModel.formattedPrice)")
-                        .font(.pretendardFont(.semiBold, size: 18))
+                        .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(18)))
                         .foregroundColor(.greyScale1)
                     + Text(" / 월")
-                        .font(.pretendardFont(.regular, size: 14))
+                        .font(.pretendardFont(.regular, size: scaler.scaleWidth(14)))
                         .foregroundColor(.greyScale3)
                     
-                }.padding(.horizontal, 20)
+                }.padding(.horizontal, scaler.scaleWidth(20))
                 
                 
             }
             .frame(height: UIScreen.main.bounds.height * 0.17)
-            .padding(.bottom,20)
+            .padding(.bottom,scaler.scaleHeight(20))
             .overlay(
                 RoundedRectangle(cornerRadius: 12)
                     .inset(by: 0.5)
@@ -94,17 +96,17 @@ struct MySubscriptionView: View {
             if viewModel.renewalStatus {
                 Spacer()
 
-                VStack {
-                    Text("구독 해지")
-                        .font(.pretendardFont(.regular, size: 12))
+                VStack(spacing:0) {
+                    Text("구독 해지하기")
+                        .font(.pretendardFont(.regular, size: scaler.scaleWidth(12)))
                         .foregroundColor(.greyScale6)
-                    Divider()
-                        .padding(EdgeInsets(top: -10, leading: 0, bottom: 0, trailing: 0))
-                        .frame(width: 50,height: 1.0)
-                        .foregroundColor(.greyScale6)
+                    Rectangle()
+                      .foregroundColor(.clear)
+                      .frame(width: scaler.scaleWidth(66), height: scaler.scaleWidth(0.5))
+                      .background(Color.greyScale6)
                     
                 }
-                .padding(.bottom, 38)
+                .padding(.bottom, scaler.scaleHeight(38))
                 .onTapGesture {
                     isShowingUnScribe = true
                     isShowing = false
@@ -114,7 +116,7 @@ struct MySubscriptionView: View {
                     IAPManager.shared.buyProduct(productID)
                 } label: {
                     Text("다시 시작하기")
-                        .font(.pretendardFont(.semiBold, size: 13))
+                        .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(13)))
                         .foregroundColor(.white)
                         .padding()
                         .frame(maxWidth: .infinity)
@@ -126,7 +128,7 @@ struct MySubscriptionView: View {
             }
 
         }
-        .padding(.horizontal, 20)
+        .padding(.horizontal, scaler.scaleWidth(20))
         .onAppear{
             viewModel.getSubscriptionInfo()
         }

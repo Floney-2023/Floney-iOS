@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct UnsubscribeView: View {
+    let scaler = Scaler.shared
     @Binding var showingTabbar : Bool
     @Binding var isShowing : Bool
     
@@ -30,31 +31,46 @@ struct UnsubscribeView: View {
         HStack {
             Spacer()
             Image("icon_close")
-                .padding(.trailing, 20)
+                .padding(.trailing,scaler.scaleWidth(20))
                 .onTapGesture {
                     showingTabbar = true
                     isShowing = false
                 }
             
         }
-        .padding(.top, 18)
-        .padding(.bottom,38)
+        .padding(.top,scaler.scaleHeight(18))
+        .padding(.bottom,scaler.scaleHeight(38))
+        
         VStack {
             HStack {
                 Text("구독을\n해지하시겠어요?")
-                    .font(.pretendardFont(.bold, size: 24))
+                    .font(.pretendardFont(.bold, size: scaler.scaleWidth(24)))
+                    .lineSpacing(5)
                     .foregroundColor(.greyScale1)
                 Spacer()
-                Image("illust_unscribe")
+
+                
+                Rectangle()
+                    .foregroundColor(.clear)
+                    .frame(width: scaler.scaleWidth(78), height: scaler.scaleHeight(58))
+                    .background(
+                        Image("illust_unscribe")
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: scaler.scaleWidth(78), height: scaler.scaleHeight(58))
+                            .clipped()
+                    )
             }
             HStack {
                 Text("다음 달 결제일부터 자동결제가 취소되며\n이후 모든 Plus 혜택을 이용하실 수 없습니다.")
-                    .font(.pretendardFont(.medium, size: 13))
+                    .lineSpacing(5)
+                    .font(.pretendardFont(.medium, size: scaler.scaleWidth(13)))
                     .foregroundColor(.greyScale7)
                 Spacer()
             }
-            .padding(.top, 16)
-            .padding(.bottom, 40)
+            .padding(.top,  scaler.scaleHeight(16))
+            .padding(.bottom,  scaler.scaleHeight(40))
+            
             LazyVGrid(columns: columns, alignment: .center, spacing: 0) {
                 ForEach(0..<6, id: \.self) { row in
                     ForEach(0..<3, id: \.self) { column in
@@ -67,9 +83,9 @@ struct UnsubscribeView: View {
                         } else {
                             if column == 0 {
                                 Text(cellData)
+                                    .frame(alignment: .leading)
                                     .font(fontFor(row: row, column: column))
                                     .foregroundColor(colorFor(row: row, column: column))
-                                    .frame(alignment: .leading)
                                     .frame(minWidth: 0, maxWidth: .infinity,minHeight: 50, maxHeight: 50)
                                     .background(cellBackgroundColor(column: column))
                                     .border(Color.tableGrey, width: 0.5)
@@ -85,32 +101,34 @@ struct UnsubscribeView: View {
                     }
                 }
             }
-            .background(Color.white) // 배경색 지정
-            .cornerRadius(12)       // 원하는 cornerradius 값
+            .background(Color.white)
+            .cornerRadius(12)
             .overlay(
                 RoundedRectangle(cornerRadius: 12)
                     .stroke(Color.tableGrey, lineWidth: 1)
             )
-            .padding(5)              // 적당한 padding을 추가해서 더 좋은 모양을 만듭니다.
+            .padding(5)
             
             Spacer()
-            VStack(spacing:10) {
+            
+            VStack(spacing: scaler.scaleHeight(10)){
                 Button {
                     //self.isNextToMySubscription = true
-                    isShowing = false
+                    showingTabbar = true
+                    isShowing = false   
                 } label: {
                     Text("구독 유지하기")
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .font(.pretendardFont(.bold, size: 14))
+                        .font(.pretendardFont(.bold, size:scaler.scaleWidth(14)))
                         .foregroundColor(.white)
                     
                 }
                 .frame(maxWidth: .infinity)
                 .background(Color.greyScale2)
                 .cornerRadius(12)
+                
                 Button {
-                    //self.isNextToMySubscription = true
                     if let url = URL(string: "https://apps.apple.com/account/subscriptions") {
                         UIApplication.shared.open(url, options: [:], completionHandler: nil)
                     }
@@ -118,7 +136,7 @@ struct UnsubscribeView: View {
                     Text("해지하기")
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .font(.pretendardFont(.medium, size: 14))
+                        .font(.pretendardFont(.bold, size:scaler.scaleWidth(14)))
                         .foregroundColor(.greyScale7)
                     
                 }
@@ -127,7 +145,9 @@ struct UnsubscribeView: View {
                 .cornerRadius(12)
 
             }
-        }.padding(.horizontal, 24)
+        }.padding(.horizontal, scaler.scaleWidth(24))
+            .padding(.bottom, scaler.scaleHeight(40))
+            .edgesIgnoringSafeArea(.bottom)
     }
     
     func cellBackgroundColor(column: Int) -> Color {
@@ -144,15 +164,15 @@ struct UnsubscribeView: View {
     }
     func fontFor(row: Int, column: Int) -> Font {
         if row == 0 {
-            return .pretendardFont(.bold, size: 12)
+            return .pretendardFont(.bold, size: scaler.scaleWidth(12))
             
         } else if column == 0 {
-            return .pretendardFont(.semiBold, size: 12)
+            return .pretendardFont(.semiBold, size: scaler.scaleWidth(12))
             
         } else if (row == 3 || row == 4) && (column == 1 || column == 2) {
-            return .pretendardFont(.semiBold, size: 14)
+            return .pretendardFont(.semiBold, size: scaler.scaleWidth(14))
         } else {
-            return .pretendardFont(.bold, size: 12)
+            return .pretendardFont(.bold, size: scaler.scaleWidth(12))
         }
     }
     
