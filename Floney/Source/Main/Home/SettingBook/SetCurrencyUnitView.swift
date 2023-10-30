@@ -53,7 +53,7 @@ struct SetCurrencyUnitView: View {
                             HStack {
                                 
                                 Text("\(currencyUnits[index])")
-                                    .font(.pretendardFont(.medium,size:scaler.scaleWidth(12)))
+                                    .font(parsedCurrency == viewModel.currency ? .pretendardFont(.bold,size:scaler.scaleWidth(12)) : .pretendardFont(.medium,size:scaler.scaleWidth(12)))
                                     .foregroundColor(parsedCurrency == viewModel.currency ? .primary2 : .greyScale6)
                                 Spacer()
                                 

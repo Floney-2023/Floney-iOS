@@ -155,7 +155,9 @@ struct AddView: View {
                                         withAnimation(.interactiveSpring()) {
                                             lineModel.selectedOptions = index
                                             assetType = "자산을 선택하세요"
+                                            isSelectedAssetTypeIndex = 0
                                             category = "분류를 선택하세요"
+                                            isSelectedCategoryIndex = 0
                                             lineModel.toggleType = options[lineModel.selectedOptions]
                                         }
                                     }
@@ -195,7 +197,7 @@ struct AddView: View {
                                 //MARK: 눌렀을 때 bottom sheet
                                 Text("\(assetType)")
                                     .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
-                                    .foregroundColor(.greyScale6)
+                                    .foregroundColor(assetType.count > 6 ? .greyScale6 : .greyScale2)
                             }
                             .frame(height: scaler.scaleHeight(58))
                             .onTapGesture {
@@ -216,7 +218,7 @@ struct AddView: View {
                             
                             Text("\(category)")
                                 .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
-                                .foregroundColor(.greyScale6)
+                                .foregroundColor(category.count > 6 ? .greyScale6 : .greyScale2)
                         }
                         .frame(height: scaler.scaleHeight(58))
                         .onTapGesture {

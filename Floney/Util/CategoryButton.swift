@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 
 struct CategoryButton: View {
+    let scaler = Scaler.shared
     let label: String
     var isSelected: Bool
     let action: () -> Void
@@ -16,10 +17,11 @@ struct CategoryButton: View {
     var body: some View {
         Button(action: action) {
             Text(label)
-                //.frame(minWidth: 0, maxWidth: .infinity)
-                .font(.pretendardFont(.medium, size: 14))
+                .font(.pretendardFont(.medium, size:scaler.scaleWidth(14)))
                 .foregroundColor(isSelected ? .primary2 : .greyScale6)
-                .padding()
+                .padding(.horizontal, scaler.scaleWidth(16))
+                .padding(.vertical,scaler.scaleHeight(12))
+                .frame(height:scaler.scaleHeight(38))
                 .background(isSelected ? Color.clear : Color.background2) // 배경색 변경
                 .cornerRadius(49)
                 .overlay(

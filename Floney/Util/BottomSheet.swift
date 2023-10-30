@@ -343,8 +343,11 @@ struct SetBudgetBottomSheet: View {
 
 //MARK: 초기 자산 설정 bottom sheet
 struct SetInitialAssetBottomSheet: View {
+    let scaler = Scaler.shared
     @State private var keyboardHeight: CGFloat = 0
-    let buttonHeight: CGFloat = 46
+    var buttonHeight: CGFloat  {
+        scaler.scaleHeight(46)
+    }
     @State var label = "초기 자산을 입력하세요."
     @Binding var isShowing: Bool
     @ObservedObject var viewModel : SettingBookViewModel
@@ -356,41 +359,44 @@ struct SetInitialAssetBottomSheet: View {
                     .opacity(0.7)
                     .ignoresSafeArea()
                     .onTapGesture {
+                        initialAsset = ""
                         isShowing.toggle()
                     }
-                VStack(spacing: 24) {
+                VStack(spacing:scaler.scaleHeight(12)) {
                     HStack {
                         VStack(alignment: .leading) {
                             Text("초기 자산 설정")
                                 .foregroundColor(.greyScale1)
-                                .font(.pretendardFont(.bold,size: 18))
+                                .font(.pretendardFont(.bold,size:scaler.scaleWidth(18)))
                         }
                         Spacer()
                         // 초기화
-                        VStack {
+                        VStack(spacing:0) {
                             Text("초기화하기")
-                                .font(.pretendardFont(.regular, size: 12))
+                                .font(.pretendardFont(.regular, size: scaler.scaleWidth(12)))
                                 .foregroundColor(.greyScale6)
-                            Divider()
-                                .frame(width: 70,height: 1.0)
-                                .padding(EdgeInsets(top: -10, leading: 0, bottom: 0, trailing: 0))
-                                .foregroundColor(.greyScale6)
+                            Rectangle()
+                              .foregroundColor(.clear)
+                              .frame(width: scaler.scaleWidth(52), height: scaler.scaleWidth(0.5))
+                              .background(Color.greyScale6)
                         }
                         .onTapGesture {
                             initialAsset = "0"
                         }
                     }
-                    .padding(.top, 24)
+                    .padding(.top,scaler.scaleHeight(24))
+                    .padding(.horizontal,scaler.scaleWidth(4))
                     HStack {
                         Text("현재 모아놓은 자산을 입력해 주세요.\n플로니가 앞으로의 자산 흐름을 보여드릴게요.")
+                            .lineSpacing(3)
                             .frame(alignment: .leading)
                             .foregroundColor(.greyScale6)
-                            .font(.pretendardFont(.medium,size: 13))
+                            .font(.pretendardFont(.medium,size:scaler.scaleWidth(13)))
                         Spacer()
-                    }
+                    }.padding(.bottom, scaler.scaleHeight(8))
+                        .padding(.horizontal,scaler.scaleWidth(4))
                     
-                    VStack(spacing : 28) {
-                        
+                    VStack(spacing : scaler.scaleHeight(20)) {
                         TextFieldLarge(label: $label, content: $initialAsset)
                             .frame(height: buttonHeight)
                         
@@ -402,8 +408,8 @@ struct SetInitialAssetBottomSheet: View {
                         .frame(height: buttonHeight)
                     }
                 }
-                .padding(.horizontal, 20)
-                .padding(.bottom, 44)
+                .padding(.horizontal, scaler.scaleWidth(20))
+                .padding(.bottom,scaler.scaleHeight(30))
                 .transition(.move(edge: .bottom))
                 .background(
                     Color(.white)
@@ -435,13 +441,15 @@ struct SetInitialAssetBottomSheet: View {
 
 //MARK: 이월 설정 bottom sheet
 struct CarriedOverBottomSheet: View {
-    let buttonHeight: CGFloat = 46
+    let scaler = Scaler.shared
+    var buttonHeight: CGFloat {
+        scaler.scaleHeight(46)
+    }
     @Binding var isShowing: Bool
     @ObservedObject var viewModel :SettingBookViewModel
     var body: some View{
         ZStack(alignment: .bottom) {
             if (isShowing) {
-                
                 //MARK: Background
                 Color.black
                     .opacity(0.7)
@@ -450,20 +458,21 @@ struct CarriedOverBottomSheet: View {
                         isShowing.toggle()
                     }
                 //MARK: content
-                VStack(spacing: 24) {
+                VStack(spacing:scaler.scaleHeight(24)) {
                     HStack {
                         Text("이월 설정")
                             .foregroundColor(.greyScale1)
-                            .font(.pretendardFont(.bold,size: 18))
+                            .font(.pretendardFont(.bold,size:scaler.scaleWidth(18)))
                         Spacer()
                     }
-                    .padding(.top, 24)
+                    .padding(.top, scaler.scaleHeight(24))
+                    .padding(.horizontal, scaler.scaleWidth(4))
                     
                     HStack {
                         Text("지날달 총수입")
                             .frame(maxWidth: .infinity)
                             .padding(10)
-                            .font(.pretendardFont(.medium, size: 11))
+                            .font(.pretendardFont(.medium, size: scaler.scaleWidth(11)))
                             .foregroundColor(.greyScale2)
                             .background(Color.background2)
                             .cornerRadius(10)
@@ -471,7 +480,7 @@ struct CarriedOverBottomSheet: View {
                         Text("지날달 총지출")
                             .frame(maxWidth: .infinity)
                             .padding(10)
-                            .font(.pretendardFont(.medium, size: 11))
+                            .font(.pretendardFont(.medium, size: scaler.scaleWidth(11)))
                             .foregroundColor(.greyScale2)
                             .background(Color.background2)
                             .cornerRadius(10)
@@ -479,36 +488,38 @@ struct CarriedOverBottomSheet: View {
                         Text("다음달 시작금액")
                             .frame(maxWidth: .infinity)
                             .padding(10)
-                            .font(.pretendardFont(.medium, size: 11))
+                            .font(.pretendardFont(.medium, size: scaler.scaleWidth(11)))
                             .foregroundColor(.white)
                             .background(Color.primary5)
                             .cornerRadius(10)
                     }
                     HStack{
                         Text("이월 설정은 지난 달에 기록된 수입에서 지출을 차감한 금액을\n다음 달로 넘기는 기능입니다.")
-                            .font(.pretendardFont(.regular, size: 12))
+                            .font(.pretendardFont(.regular, size: scaler.scaleWidth(12)))
                             .foregroundColor(.greyScale2)
                         Spacer()
                     }
+                    .padding(.horizontal, scaler.scaleWidth(4))
                     HStack {
                         Text("남은 금액이 마이너스 인 경우 지출로 기록되며\n플러스인 경우는 수입으로 기록됩니다.")
-                            .font(.pretendardFont(.regular, size: 12))
+                            .font(.pretendardFont(.regular, size: scaler.scaleWidth(12)))
                             .foregroundColor(.greyScale2)
                         Spacer()
                     }
                     .frame(maxWidth: .infinity)
+                    .padding(.horizontal, scaler.scaleWidth(4))
                     HStack {
                         Button {
                             //self.onOff = false
                             viewModel.setCarryOver(status: false)
                         } label: {
                             Text("OFF")
-                                .font(.pretendardFont(.medium, size: 14))
+                                .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
                                 .foregroundColor(viewModel.carryOver ? .greyScale8 : .primary2)
                                 .frame(alignment: .center)
                         }
                         .frame(maxWidth: .infinity)
-                        .padding(.vertical, 16)
+                        .padding(.vertical, scaler.scaleHeight(16))
                         .overlay(
                             RoundedRectangle(cornerRadius: 12)
                                 .stroke(viewModel.carryOver ? Color.greyScale8 : Color.primary2, lineWidth: 1) // Set the border
@@ -520,12 +531,12 @@ struct CarriedOverBottomSheet: View {
                             viewModel.setCarryOver(status: true)
                         } label: {
                             Text("ON")
-                                .font(.pretendardFont(.medium, size: 14))
+                                .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
                                 .foregroundColor(viewModel.carryOver ? .primary2 : .greyScale8)
                                 .frame(alignment: .center)
                         }
                         .frame(maxWidth: .infinity)
-                        .padding(.vertical, 16)
+                        .padding(.vertical, scaler.scaleHeight(16))
                         .overlay(
                             RoundedRectangle(cornerRadius: 12)
                                 .stroke(viewModel.carryOver ? Color.primary2 : Color.greyScale8, lineWidth: 1) // Set the border
@@ -533,11 +544,11 @@ struct CarriedOverBottomSheet: View {
                         .frame(height: buttonHeight)
                         
                     }.frame(maxWidth: .infinity)
+                        .padding(.top, scaler.scaleHeight(12))
                     
                 } //VStack
-                .padding(.horizontal, 20)
-                .padding(.bottom, 44)
-                .padding(.top, 12)
+                .padding(.horizontal, scaler.scaleWidth(20))
+                .padding(.bottom, scaler.scaleHeight(30))
                 .transition(.move(edge: .bottom))
                 .background(
                     Color(.white)
@@ -556,7 +567,10 @@ struct CarriedOverBottomSheet: View {
 
 
 struct CategoryBottomSheet: View {
-    let buttonHeight: CGFloat = 38
+    let scaler = Scaler.shared
+    var buttonHeight: CGFloat {
+        scaler.scaleHeight(46)
+    }
     @Binding var root : String
     @Binding var categories : [String]
     @Binding var isShowing: Bool
@@ -565,6 +579,8 @@ struct CategoryBottomSheet: View {
     @Binding var isSelectedCategoryIndex : Int
     @Binding var isSelectedCategory : String
     @Binding var isShowingEditCategory : Bool
+    @State var selectedAssetIndex = 0
+    @State var selectedCategoryIndex = 0
     var body: some View{
         ZStack(alignment: .bottom) {
             if (isShowing) {
@@ -576,28 +592,24 @@ struct CategoryBottomSheet: View {
                         isShowing.toggle()
                     }
                 //MARK: content
-                VStack(spacing: 12) {
+                VStack(spacing:scaler.scaleHeight(18)) {
                     HStack {
                         Text(root == "자산" ? "자산" : "분류")
                             .foregroundColor(.greyScale1)
-                            .font(.pretendardFont(.bold,size: 18))
+                            .font(.pretendardFont(.bold,size:scaler.scaleWidth(18)))
                         Spacer()
                         
                         Button  {
-                            
-                            print("category 편집 토글")
                             isShowingEditCategory = true
-                            
-                            
+ 
                         } label: {
                             Text("편집")
                                 .foregroundColor(.greyScale4)
-                                .font(.pretendardFont(.regular,size: 14))
-                            
+                                .font(.pretendardFont(.regular,size: scaler.scaleWidth(14)))
                         }
                         
                     }
-                    .padding(.top, 24)
+                    .padding(.top,scaler.scaleHeight(24))
                     
                     CategoryFlowLayout(root: $root,
                                        categories: $categories,
@@ -605,21 +617,33 @@ struct CategoryBottomSheet: View {
                                        isSelectedAssetType: $isSelectedAssetType,
                                        isSelectedCategoryIndex: $isSelectedCategoryIndex,
                                        isSelectedCategory: $isSelectedCategory,
-                                       isShowing: $isShowing)
-                    
-                    
+                                       isShowing: $isShowing,
+                                       selectedAssetIndex: $selectedAssetIndex,
+                                       selectedCategoryIndex: $selectedCategoryIndex
+                                       )
+                    Spacer()
+                    ButtonLarge(label: "저장하기",background: .primary1, textColor: .white, strokeColor: .primary1,  fontWeight: .bold, action: {
+                        if root == "자산" {
+                            self.isSelectedAssetTypeIndex = selectedAssetIndex
+                            isSelectedAssetType = categories[selectedAssetIndex]
+                        } else {
+                            self.isSelectedCategoryIndex = selectedCategoryIndex
+                            isSelectedCategory = categories[selectedCategoryIndex]
+                        }
+                        isShowing.toggle()
+                    })
+                    .frame(height: buttonHeight)
+  
                 }
-                .padding(.horizontal, 20)
-                .padding(.bottom, 44)
-                .padding(.top, 12)
+                .padding(.horizontal, scaler.scaleWidth(20))
+                .padding(.bottom, scaler.scaleHeight(30))
                 .transition(.move(edge: .bottom))
                 .background(
                     Color(.white)
                 )
                 .cornerRadius(12, corners: [.topLeft, .topRight])
                 .frame(height: UIScreen.main.bounds.height / 2) // Screen height is divided by 2
-                
-                
+
             } // if
             
             
@@ -631,6 +655,8 @@ struct CategoryBottomSheet: View {
 }
 
 struct CategoryFlowLayout: View {
+    let scaler = Scaler.shared
+    
     @Binding var root : String
     @State private var totalWidth = CGFloat.zero
     @Binding var categories: [String]
@@ -639,6 +665,9 @@ struct CategoryFlowLayout: View {
     @Binding var isSelectedCategoryIndex : Int
     @Binding var isSelectedCategory : String
     @Binding var isShowing: Bool
+    
+    @Binding var selectedAssetIndex : Int
+    @Binding var selectedCategoryIndex : Int
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -650,25 +679,25 @@ struct CategoryFlowLayout: View {
     private func generateContent(in g: GeometryProxy) -> some View {
         var width = CGFloat.zero
         var height = CGFloat.zero
-        let verticalSpacing: CGFloat = 12
+        var verticalSpacing: CGFloat {
+            scaler.scaleHeight(12)
+        }
         
         return ZStack(alignment: .topLeading) {
             ForEach(self.categories.indices, id: \.self) { index in
                 CategoryButton(
                     label: self.categories[index],
-                    isSelected: root == "자산" ? self.isSelectedAssetTypeIndex == index : self.isSelectedCategoryIndex == index,
+                    isSelected: root == "자산" ? selectedAssetIndex == index : selectedCategoryIndex == index,
                     action: {
+        
                         if root == "자산" {
-                            self.isSelectedAssetTypeIndex = index
-                            isSelectedAssetType = categories[index]
+                            selectedAssetIndex = index
                         } else {
-                            self.isSelectedCategoryIndex = index
-                            isSelectedCategory = categories[index]
+                            selectedCategoryIndex = index
                         }
-                        isShowing.toggle()
                     }
                 )
-                .padding([.horizontal], 4)
+                .padding([.horizontal],scaler.scaleWidth(4))
                 .alignmentGuide(.leading, computeValue: { d in
                     if (abs(width - d.width) > g.size.width)
                     {
