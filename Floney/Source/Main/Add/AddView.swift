@@ -107,28 +107,6 @@ struct AddView: View {
    
                         MoneyTextField(text: $money, placeholder: "금액을 입력하세요")
                             .frame(height: scaler.scaleHeight(38))
-                            /*
-                            .onReceive(Just(money)) { value in
-                                let trimmedValue = value.filter { "0"..."9" ~= $0 || $0 == "." }
-                                let components = trimmedValue.split(separator: ".")
-                                
-                                // 소수점이 없거나 하나만 있는 경우
-                                if components.count <= 1 || (components.count == 2 && components[1].count <= 2) {
-                                    if let doubleValue = Double(trimmedValue), doubleValue <= 100_000_000_000 {
-                                        money = trimmedValue
-                                    } else if let doubleValue = Double(trimmedValue) {
-                                        money = String(trimmedValue.dropLast())
-                                    }
-                                }
-                                // 소수점이 둘째 자리 이후로 입력된 경우
-                                else if components.count == 2 && components[1].count > 2 {
-                                    money = String(components[0]) + "." + components[1].prefix(2)
-                                }
-                                // 두 개 이상의 소수점이 포함된 경우
-                                else {
-                                    money = String(components.dropLast().joined(separator: "."))
-                                }
-                            }*/
                             .onReceive(Just(money)) { value in
                                 let trimmedValue = value.filter { "0"..."9" ~= $0 || $0 == "." }
                                 let components = trimmedValue.split(separator: ".")
@@ -289,7 +267,7 @@ struct AddView: View {
                 Text("작성자 : \(nickname)")
                     .font(.pretendardFont(.medium, size: scaler.scaleWidth(12)))
                     .foregroundColor(.greyScale8)
-                    .padding(.bottom, scaler.scaleHeight(32))
+                    .padding(.bottom, scaler.scaleHeight(36))
                 
                 if lineModel.mode == "add" {
                     HStack {
@@ -323,7 +301,7 @@ struct AddView: View {
                                 .frame(height:scaler.scaleHeight(66))
                                 .font(.pretendardFont(.bold, size:scaler.scaleWidth(14)))
                                 .foregroundColor(.white)
-                                .padding(.bottom, scaler.scaleHeight(32))
+                                .padding(.bottom, scaler.scaleHeight(10))
                         }
                         .frame(maxWidth: .infinity)
                         .frame(maxHeight: .infinity)
@@ -344,7 +322,7 @@ struct AddView: View {
                                 .frame(height:scaler.scaleHeight(66))
                                 .font(.pretendardFont(.bold, size:scaler.scaleWidth(14)))
                                 .foregroundColor(.white)
-                                .padding(.bottom, scaler.scaleHeight(32))
+                                .padding(.bottom, scaler.scaleHeight(10))
                         }
                         .frame(width: scaler.scaleWidth(118))
                         .frame(maxHeight: .infinity)
@@ -382,7 +360,7 @@ struct AddView: View {
                                 .frame(height:scaler.scaleHeight(66))
                                 .font(.pretendardFont(.bold, size:scaler.scaleWidth(14)))
                                 .foregroundColor(.white)
-                                .padding(.bottom, scaler.scaleHeight(32))
+                                .padding(.bottom, scaler.scaleHeight(10))
                         }
                         .frame(width: scaler.scaleWidth(242))
                         .background(Color.primary1)
@@ -423,21 +401,6 @@ struct AddView: View {
             }
         } // ZStack
     }
-    /*
-    func formatNumber(_ n: Int) -> String {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        return formatter.string(from: NSNumber(value: n)) ?? ""
-    }
-    // 숫자를 콤마로 구분하여 형식화하는 함수
-    func formatNumber(_ string: String) -> String {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        if let number = formatter.number(from: string) {
-            return formatter.string(from: number) ?? ""
-        }
-        return string
-    }*/
     // 숫자를 콤마로 구분하여 형식화하는 함수
     func formatNumber(_ string: String) -> String {
         if string.contains(".") {

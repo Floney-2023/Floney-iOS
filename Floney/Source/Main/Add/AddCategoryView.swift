@@ -38,8 +38,12 @@ struct AddCategoryView: View {
                                         .foregroundColor(selectedIndex == 0 ? .white : .greyScale7)
                                         .padding()
                                 }.frame(maxWidth: .infinity)
-                                    .background(selectedIndex == 0 ? Color.black : Color.background1)
+                                    .background(selectedIndex == 0 ? Color.black : Color.white)
                                     .cornerRadius(12)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 12)
+                                            .stroke(selectedIndex == 0 ? Color.clear : Color.greyScale9, lineWidth: 1)
+                                    )
                                 
                                 Button {
                                     selectedIndex = 1
@@ -49,9 +53,15 @@ struct AddCategoryView: View {
                                         .font(.pretendardFont(selectedIndex == 1 ? .bold : .regular, size: scaler.scaleWidth(14)))
                                         .foregroundColor(selectedIndex == 1 ? .white : .greyScale7)
                                         .padding()
-                                }.frame(maxWidth: .infinity)
-                                    .background(selectedIndex == 1 ? Color.black : Color.background1)
-                                    .cornerRadius(12)
+                                }
+                                .frame(maxWidth: .infinity)
+                                .background(selectedIndex == 1 ? Color.black : Color.white)
+                                .cornerRadius(12)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .stroke(selectedIndex == 1 ? Color.clear : Color.greyScale9, lineWidth: 1)
+                                )
+
                             }.frame(maxWidth: .infinity)
                             HStack(spacing:8) {
                                 Button {
@@ -64,8 +74,13 @@ struct AddCategoryView: View {
                                         .padding()
                                 }
                                 .frame(maxWidth: .infinity)
-                                .background(selectedIndex == 2 ? Color.black : Color.background1)
+                                .background(selectedIndex == 2 ? Color.black : Color.white)
                                 .cornerRadius(12)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .stroke(selectedIndex == 2 ? Color.clear : Color.greyScale9, lineWidth: 1)
+                                )
+
                                 
                                 Button {
                                     selectedIndex = 3
@@ -77,8 +92,13 @@ struct AddCategoryView: View {
                                         .padding()
                                 }
                                 .frame(maxWidth: .infinity)
-                                .background(selectedIndex == 3 ? Color.black : Color.background1)
+                                .background(selectedIndex == 3 ? Color.black : Color.white)
                                 .cornerRadius(12)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .stroke(selectedIndex == 3 ? Color.clear : Color.greyScale9, lineWidth: 1)
+                                )
+
                             }
                         }.frame(maxWidth: .infinity)
                     }
