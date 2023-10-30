@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct SubscriptionView: View {
+    let scaler = Scaler.shared
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @ObservedObject var notificationManager = NotificationManager()
     @ObservedObject var mypageViewModel : MyPageViewModel
@@ -40,36 +41,36 @@ struct SubscriptionView: View {
             ScrollView(showsIndicators: false) {
                 VStack {
                     Image("illust_floney_plus")
-                    VStack(spacing:10) {
+                    VStack(spacing:scaler.scaleHeight(10)) {
                         Text("floney Plus+ 구독으로")
                         Text("편리하고 다양한 기능을 즐겨보세요")
                     }
-                    .font(.pretendardFont(.bold, size: 22))
+                    .font(.pretendardFont(.bold, size:scaler.scaleWidth(22)))
                     .foregroundColor(.greyScale2)
                     .padding(.bottom,20)
-                    VStack(spacing:3) {
+                    VStack(spacing:scaler.scaleHeight(3)) {
                         Text("광고를 제거하고 초대할 수 있는 인원이 늘어나요!")
                         Text("가계부를 하나 더 쓸 수 있는 혜택을 누려보세요.")
                     }
-                    .font(.pretendardFont(.medium, size: 14))
+                    .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
                     .foregroundColor(.greyScale6)
-                    .padding(.bottom,54)
+                    .padding(.bottom,scaler.scaleHeight(54))
                     VStack {
                         HStack{
                             Text("")
                                 .frame(maxWidth: .infinity)
                             Text("floney Basic")
                                 .frame(maxWidth: .infinity)
-                                .font(.pretendardFont(.medium, size: 12))
+                                .font(.pretendardFont(.medium, size: scaler.scaleWidth(12)))
                                 .foregroundColor(.greyScale8)
                             Text("floney Plus+")
                                 .frame(maxWidth: .infinity)
-                                .font(.pretendardFont(.semiBold, size: 14))
+                                .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(14)))
                                 .foregroundColor(.greyScale2)
                         }
                         
-                        HStack(spacing:18) {
-                            VStack(alignment: .leading, spacing:53) {
+                        HStack(spacing:scaler.scaleWidth(18)) {
+                            VStack(alignment: .leading, spacing:scaler.scaleHeight(53)) {
                                 Text("모든 가계부 기능")
                                 Text("광고 제거")
                                 Text("사용 가능 인원")
@@ -77,35 +78,46 @@ struct SubscriptionView: View {
                                 Text("엑셀 내보내기")
                             }
                             .frame(maxWidth: .infinity)
-                            .padding(.vertical,20)
-                            .font(.pretendardFont(.semiBold, size: 12))
+                            .padding(.vertical,scaler.scaleHeight(20))
+                            .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(12)))
                             .foregroundColor(.greyScale3)
-                            VStack(spacing:46) {
+                            
+                            VStack(spacing:0) {
                                 Image("icon_check_circle_disabled")
+                                    .padding(.bottom,scaler.scaleHeight(41))
                                 Image("icon_check_circle_disabled")
+                                    .padding(.bottom,scaler.scaleHeight(46))
                                 Text("2명")
+                                    .padding(.bottom,scaler.scaleHeight(51))
                                 Text("1개")
+                                    .padding(.bottom,scaler.scaleHeight(46))
                                 Image("icon_check_circle_disabled")
                             }
                             .frame(maxWidth: .infinity)
-                            .padding(.vertical,20)
-                            .font(.pretendardFont(.semiBold, size: 14))
+                            .padding(.vertical,scaler.scaleHeight(20))
+                            .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(14)))
                             .foregroundColor(.greyScale7)
                             .background(Color.background3)
                             .cornerRadius(12)
-                            VStack(spacing:46) {
+                            
+                            VStack(spacing:0) {
                                 Image("icon_check_circle_activated")
+                                    .padding(.bottom,scaler.scaleHeight(41))
                                 Image("icon_check_circle_activated")
+                                    .padding(.bottom,scaler.scaleHeight(46))
                                 Text("4명")
+                                    .padding(.bottom,scaler.scaleHeight(51))
                                 Text("2개")
+                                    .padding(.bottom,scaler.scaleHeight(46))
                                 Image("icon_check_circle_activated")
                             }
                             .frame(maxWidth: .infinity)
-                            .padding(.vertical,20)
-                            .font(.pretendardFont(.semiBold, size: 14))
+                            .padding(.vertical,scaler.scaleHeight(20))
+                            .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(14)))
                             .foregroundColor(.primary1)
                             .background(Color.primary10)
                             .cornerRadius(12)
+                            
                             .overlay(
                                 RoundedRectangle(cornerRadius: 12)
                                     .inset(by: 0.5)
@@ -114,63 +126,67 @@ struct SubscriptionView: View {
                             
                             
                         }
-                    }.padding(.horizontal,26)
-                    
-                        .padding(.bottom, 16)
+                    }.padding(.horizontal,scaler.scaleWidth(26))
+                    .padding(.bottom, scaler.scaleHeight(16))
                     HStack {
                         Spacer()
                         Text("\(formattedPrice!)")
-                            .font(.pretendardFont(.semiBold, size: 18))
+                            .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(18)))
                             .foregroundColor(.greyScale1)
                         + Text(" / 월")
-                            .font(.pretendardFont(.regular, size: 14))
+                            .font(.pretendardFont(.regular, size: scaler.scaleWidth(14)))
                             .foregroundColor(.greyScale3)
-                    }.padding(.trailing, 26)
-                        .padding(.bottom, 52)
+                    }.padding(.trailing, scaler.scaleWidth(26))
+                    .padding(.bottom, scaler.scaleHeight(52))
          
                     VStack {
                         Text("자주 묻는 질문")
-                            .padding(.top, 34)
-                            .padding(.bottom, 24)
-                            .font(.pretendardFont(.bold, size: 16))
+                            .padding(.top, scaler.scaleHeight(34))
+                            .padding(.bottom, scaler.scaleHeight(24))
+                            .font(.pretendardFont(.bold, size: scaler.scaleWidth(16)))
                             .foregroundColor(.white)
-                        VStack(spacing:16) {
+                        VStack(spacing:scaler.scaleHeight(16)) {
                             ForEach(qaList) { qa in
-                                VStack(spacing:12) {
+                                VStack(spacing:scaler.scaleHeight(12)) {
                                     HStack{
                                         Text("Q. \(qa.question)")
-                                            .font(.pretendardFont(.medium, size: 14))
+                                            .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
                                             .foregroundColor(.greyScale4)
+                                            .lineSpacing(5)
+                                            .frame(width:scaler.scaleWidth(272), alignment: .topLeading)
                                         Spacer()
                                     }
                                     HStack {
                                         Text("A. \(qa.answer)")
-                                            .font(.pretendardFont(.semiBold, size: 14))
+                                            .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(14)))
                                             .foregroundColor(.greyScale3)
+                                            .lineSpacing(5)
+                                            .frame(width:scaler.scaleWidth(272), alignment: .topLeading)
                                         Spacer()
                                     }
                                     
                                 }
-                                .padding(20)
+                                .padding(scaler.scaleWidth(20))
                                 .background(Color.background3)
                                 .cornerRadius(12)
                             }
                         }
-                        .padding(.horizontal, 24)
-                        .padding(.bottom, 100)
+                        .padding(.horizontal, scaler.scaleWidth(24))
+                        .padding(.bottom, scaler.scaleHeight(100))
                     }
                     .background(Color.primary4)
                     
                     HStack {
                         Text("- 현재 이용 중인 플랜이 종료되기 24시간 전이라면 언제든지 해약이 가능합니다.\n- 현재 이용 중인 플랜이 종료되기 24시간 전까지 해약하지 않으면  자동으로 구독이 갱신되며 이에 따른 요금이 청구됩니다.\n- 앱을 삭제 혹은 탈퇴하는 것만으로는 인앱결제 구독 플랜이 해약되지 않으니 주의해 주시기 바랍니다.")
-                            .font(.pretendardFont(.regular, size:12))
+                            .font(.pretendardFont(.regular, size:scaler.scaleWidth(12)))
                             .foregroundColor(.greyScale2)
-                            .frame(maxWidth:.infinity)
-                            .padding(.bottom, 120)
+                            .lineSpacing(5)
+                            .frame(width:scaler.scaleWidth(312), alignment: .topLeading)
+                            .padding(.bottom, scaler.scaleHeight(120))
                         Spacer()
                     }
-                    .padding(.top, 24)
-                    .padding(.horizontal, 24)
+                    .padding(.top, scaler.scaleHeight(24))
+                    .padding(.horizontal, scaler.scaleWidth(24))
                     .frame(maxWidth:.infinity)
                     
                     
@@ -180,26 +196,37 @@ struct SubscriptionView: View {
             
             VStack {
                 Spacer()
-                Button {
-                    IAPManager.shared.buyProduct(productID)
-                } label: {
-                    Text("floney Plus+ 구독하기")
-                        .font(.pretendardFont(.bold, size: 14))
-                        .foregroundColor(.white)
+                VStack {
+                    Button {
+                        IAPManager.shared.buyProduct(productID)
+                    } label: {
+                        Text("floney Plus+ 구독하기")
+                            .font(.pretendardFont(.bold, size: scaler.scaleWidth(14)))
+                            .foregroundColor(.white)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(scaler.scaleWidth(16))
+                    .background(Color.primary1)
+                    .cornerRadius(12)
+                    
                 }
-                .frame(maxWidth: .infinity)
-                .padding(16)
-                .background(Color.primary1)
-                .cornerRadius(12)
+                .padding(.horizontal,scaler.scaleWidth(20))
+                .padding(.top, scaler.scaleHeight(16))
+                .padding(.bottom, scaler.scaleHeight(22))
+                .frame(width: scaler.scaleWidth(360),height:  scaler.scaleHeight(84))
+                .background(Color.white)
+  
             }
-            .padding(20)
+            .edgesIgnoringSafeArea(.bottom)
+            //.padding(scaler.scaleWidth(20))
+            //.background(Color.white)
 
 
         }// ZStack
         .customNavigationBar(
             leftView: { BackButtonBlack() } ,
             centerView: { Text("구독 플랜")
-                    .font(.pretendardFont(.semiBold, size: 16))
+                    .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(16)))
                     .foregroundColor(.greyScale1)
             })
         .onChange(of: notificationManager.dismissStatus) { newValue in
@@ -207,6 +234,7 @@ struct SubscriptionView: View {
                 presentationMode.wrappedValue.dismiss()
             }
         }
+        .edgesIgnoringSafeArea(.bottom)
 
     }
    
@@ -217,92 +245,3 @@ struct SubscriptionView_Previews: PreviewProvider {
         SubscriptionView(mypageViewModel : MyPageViewModel(), isActive: .constant(true),showingTabbar: .constant(false))
     }
 }
-
-
-/*
- // 연간 구독 포함
-    VStack(spacing: 11) {
-        VStack(spacing:5) {
-            Text("연간 구독으로")
-            Text("15%를 할인 받을 수 있어요!")
-        }
-        .padding(.bottom, 13)
-        .font(.pretendardFont(.bold, size: 18))
-        .foregroundColor(.white)
-        Button {
-            isSelected = 1
-            productID = IAPProducts.FloneyPlusMonthly.rawValue
-        } label: {
-            HStack{
-                Text("월간 구독")
-                    .font(.pretendardFont(.medium, size: 14))
-                    .foregroundColor(.greyScale3)
-                Spacer()
-                Text("월")
-                    .font(.pretendardFont(.medium, size: 12))
-                    .foregroundColor(.greyScale5)
-                Text("3,800\(currency)")
-                    .font(.pretendardFont(.bold, size: 20))
-                    .foregroundColor(.greyScale3)
-                Image(isSelected == 1 ? "icon_check_circle_activated" : "icon_check_circle_disabled")
-            }
-            .padding(20)
-            .frame(height: 60)
-            .background(isSelected == 1 ? Color.white : Color.background3)
-            
-            .cornerRadius(12)
-            .overlay(
-                Group {
-                    if isSelected == 1 {
-                        RoundedRectangle(cornerRadius: 12)
-                            .inset(by: 0.5)
-                            .stroke(Color.primary5, lineWidth: 1)
-                    } else {
-                        EmptyView()
-                    }
-                }
-            )
-        }
-        Button {
-            isSelected = 2
-            productID = IAPProducts.FloneyPlusYearly.rawValue
-        } label: {
-            HStack{
-                Text("연간 구독")
-                    .font(.pretendardFont(.medium, size: 14))
-                    .foregroundColor(.greyScale3)
-                Spacer()
-                Text("연")
-                    .font(.pretendardFont(.medium, size: 12))
-                    .foregroundColor(.greyScale5)
-                Text("38,000\(currency)")
-                    .font(.pretendardFont(.bold, size: 20))
-                    .foregroundColor(.greyScale3)
-                Image(isSelected == 2 ? "icon_check_circle_activated" : "icon_check_circle_disabled")
-            }
-            .padding(20)
-            .frame(height: 60)
-            .background(isSelected == 2 ? Color.white : Color.background3)
-            
-            .cornerRadius(12)
-            .overlay(
-                Group {
-                    if isSelected == 2 {
-                        RoundedRectangle(cornerRadius: 12)
-                            .inset(by: 0.5)
-                            .stroke(Color.primary5, lineWidth: 1)
-                    } else {
-                        EmptyView()
-                    }
-                }
-            )
-            
-        }
-
-    }
-    .padding(.vertical,32)
-    .padding(.horizontal,20)
-    .padding(.bottom, 19)
-    .frame(maxWidth: .infinity)
-    .background(Color.primary4)
-    */
