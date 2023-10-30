@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct SetProfileImageView: View {
+    let scaler = Scaler.shared
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State var changedStatus = false
     @State var showAlert = false
@@ -36,16 +37,20 @@ struct SetProfileImageView: View {
 
     var body: some View {
         ZStack {
-            VStack(spacing:20) {
+            VStack(spacing:scaler.scaleHeight(20)) {
                 if let preview = viewModel.userPreviewImage124 {
                     Image(uiImage: preview)
                         .resizable()
                         .aspectRatio(contentMode: .fill)
                         .clipShape(Circle()) // 프로필 이미지를 원형으로 자르기
-                        .frame(width: 124, height: 124)
+                        .frame(width:scaler.scaleWidth(124), height: scaler.scaleWidth(124))
                         .overlay(
                             Image("btn_photo_camera")
-                                .offset(x:45,y:45)
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .clipShape(Circle())
+                                .frame(width: scaler.scaleWidth(32), height: scaler.scaleWidth(32))
+                                .offset(x:scaler.scaleWidth(45),y:scaler.scaleWidth(45))
                         )
                         .onTapGesture {
                             presentsImagePicker = true
@@ -55,17 +60,21 @@ struct SetProfileImageView: View {
                         .resizable()
                         .aspectRatio(contentMode: .fill)
                         .clipShape(Circle()) // 프로필 이미지를 원형으로 자르기
-                        .frame(width: 124, height: 124)
+                        .frame(width:scaler.scaleWidth(124), height: scaler.scaleWidth(124))
                         .overlay(
                             Image("btn_photo_camera")
-                                .offset(x:45,y:45)
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .clipShape(Circle())
+                                .frame(width: scaler.scaleWidth(32), height: scaler.scaleWidth(32))
+                                .offset(x:scaler.scaleWidth(45),y:scaler.scaleWidth(45))
                         )
                         .onTapGesture {
                             presentsImagePicker = true
                         }
                 }
                 Text("기본 프로필로 변경")
-                    .font(.pretendardFont(.regular, size: 12))
+                    .font(.pretendardFont(.regular, size:scaler.scaleWidth(12)))
                     .foregroundColor(.greyScale6)
                     .onTapGesture {
                         viewModel.randomNumStr = nil
@@ -74,7 +83,6 @@ struct SetProfileImageView: View {
                 Spacer()
                 
                 Button("변경하기") {
-                   
                     LoadingManager.shared.update(showLoading: true, loadingType: .dimmedLoading)
                     if let image = selectedUIImage {
                         print("selected:\(image)")
@@ -97,18 +105,18 @@ struct SetProfileImageView: View {
                         }
                     }
                 }
-                .padding(20)
-                .font(.pretendardFont(.bold, size: 14))
+                .padding(scaler.scaleWidth(20))
+                .font(.pretendardFont(.bold, size:scaler.scaleWidth(14)))
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity)
                 .background(Color.greyScale2)
                 .cornerRadius(12)
             }
-            .padding(EdgeInsets(top: 68, leading: 20, bottom: 0, trailing: 20))
+            .padding(EdgeInsets(top:scaler.scaleHeight(68), leading: scaler.scaleWidth(20), bottom: 0, trailing: scaler.scaleWidth(20)))
             .customNavigationBar(
                 leftView: { BackButtonBlackWithAlert(showAlert: $showAlert, changedStatus : $changedStatus) },
                 centerView: { Text("프로필 이미지 변경")
-                        .font(.pretendardFont(.semiBold, size: 16))
+                        .font(.pretendardFont(.semiBold, size:scaler.scaleWidth(16)))
                     .foregroundColor(.greyScale1)}
                 
                 )
