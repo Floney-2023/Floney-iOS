@@ -979,13 +979,15 @@ struct DayLinesBottomSheet: View {
                         
                     }
                 }
+                
                 .padding(.horizontal, scaler.scaleWidth(20))
                 .transition(.move(edge: .bottom))
+                .frame(height: scaler.scaleHeight(460))
                 .background(
                     Color(.white)
                 )
                 .cornerRadius(12, corners: [.topLeft, .topRight])
-                .frame(height: scaler.scaleHeight(384)) // Screen height is divided by 2
+                
                 .onAppear {
                     viewModel.dayLinesDate = viewModel.selectedDateStr
                     viewModel.getDayLines()

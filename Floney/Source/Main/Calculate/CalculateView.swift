@@ -32,6 +32,7 @@ struct CalculateView: View {
                 HStack {
                     VStack(alignment: .leading, spacing: scaler.scaleHeight(12)) {
                         Text("마지막 정산일로부터\n\(viewModel.passedDays)일 지났어요")
+                            .lineSpacing(5)
                             .font(.pretendardFont(.bold, size: scaler.scaleWidth(22)))
                             .foregroundColor(.greyScale1)
 

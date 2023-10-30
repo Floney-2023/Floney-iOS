@@ -14,24 +14,31 @@ struct ExpenseView: View {
     
     var body: some View {
         VStack(spacing:0){
-            HStack{
+            HStack(spacing:0){
                 VStack(alignment:.leading, spacing: scaler.scaleHeight(8)){
-                    Text("총 \(Int(viewModel.expenseResponse.total))\(currency)을\n소비했어요")
-                        .font(.pretendardFont(.bold,size:scaler.scaleWidth(22)))
-                        .lineSpacing(10)
-                        .foregroundColor(.greyScale1)
-                    
-                    Text("저번 달 대비 \(Int(viewModel.expenseResponse.differance))\(currency)을\n더 사용했어요")
-                        .font(.pretendardFont(.medium,size: scaler.scaleWidth(13)))
-                        .foregroundColor(.greyScale6)
-                    
+                        Text("총 \(Int(viewModel.expenseResponse.total))\(currency)을\n소비했어요")
+                            .font(.pretendardFont(.bold,size:scaler.scaleWidth(22)))
+                            .lineSpacing(10)
+                            .foregroundColor(.greyScale1)
+                            .frame(width: scaler.scaleWidth(236),alignment: .leading)
+                            .lineLimit(2)
+
+                        Text("저번 달 대비 \(Int(viewModel.expenseResponse.differance))\(currency)을\n더 사용했어요")
+                            .font(.pretendardFont(.medium,size: scaler.scaleWidth(13)))
+                            .foregroundColor(.greyScale6)
+                            .frame(width: scaler.scaleWidth(236),alignment: .leading)
+                            .lineLimit(2)
+            
+
                 }
-                Spacer()
+           
                 VStack {
                     Spacer()
                     Image("expense")
                         .resizable()
+                        .aspectRatio(contentMode: .fill)
                         .frame(width: scaler.scaleWidth(76),height: scaler.scaleHeight(80))
+                        .clipped()
                 }
                 
             }

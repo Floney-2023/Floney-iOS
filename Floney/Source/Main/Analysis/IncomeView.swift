@@ -14,24 +14,29 @@ struct IncomeView: View {
     
     var body: some View {
         VStack(spacing:0){
-            HStack{
+            HStack(spacing:0){
                 VStack(alignment:.leading, spacing: scaler.scaleHeight(8)){
                     Text("총 \(Int(viewModel.incomeResponse.total))\(currency)을\n벌었어요")
                         .font(.pretendardFont(.bold,size:scaler.scaleWidth(22)))
                         .lineSpacing(10)
                         .foregroundColor(.greyScale1)
+                        .frame(width: scaler.scaleWidth(236),alignment: .leading)
+                        .lineLimit(2)
                     
                     Text("저번 달 대비 \(Int(viewModel.incomeResponse.differance))\(currency)을\n더 벌었어요")
                         .font(.pretendardFont(.medium,size: scaler.scaleWidth(13)))
                         .foregroundColor(.greyScale6)
+                        .frame(width: scaler.scaleWidth(236),alignment: .leading)
+                        .lineLimit(2)
                     
                 }
-                Spacer()
                 VStack {
                     Spacer()
                     Image("income")
                         .resizable()
+                        .aspectRatio(contentMode: .fill)
                         .frame(width: scaler.scaleWidth(76),height: scaler.scaleWidth(76))
+                        .clipped()
                 }
                    
             }

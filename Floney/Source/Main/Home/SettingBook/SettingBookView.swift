@@ -102,6 +102,7 @@ struct SettingBookView: View {
                     VStack(spacing:scaler.scaleHeight(20)) {
                         HStack {
                             Text("사용자")
+                                .padding(.horizontal, scaler.scaleWidth(4))
                                 .font(.pretendardFont(.bold, size: scaler.scaleWidth(16)))
                                 .foregroundColor(.greyScale1)
                             Spacer()
@@ -233,12 +234,14 @@ struct SettingBookView: View {
                                 }
                                 Spacer()
                             }
+                            .padding(.horizontal, scaler.scaleWidth(4))
                             .padding(.top, scaler.scaleHeight(2))
                             .onTapGesture {
                                 self.resetAlert = true
                             }
                         }
                     }
+                    .padding(.horizontal, scaler.scaleWidth(4))
                     .padding(.bottom, scaler.scaleHeight(14))
                     
                     //MARK: 예산 자산
@@ -275,6 +278,7 @@ struct SettingBookView: View {
                         }
                         
                     }
+                    .padding(.horizontal, scaler.scaleWidth(4))
                     
                     VStack(spacing:scaler.scaleHeight(18)) {
                         NavigationLink(destination: CategoryManagementView(isShowingEditCategory: $isShowingEditCategory)) {
@@ -327,6 +331,7 @@ struct SettingBookView: View {
                         }
 
                     }
+                    .padding(.horizontal, scaler.scaleWidth(4))
                     
                     if viewModel.role == "팀원" {
                         //MARK: 가계부 나가기
@@ -342,6 +347,7 @@ struct SettingBookView: View {
                             }
                             Spacer()
                         }
+                        .padding(.horizontal, scaler.scaleWidth(4))
                         .onTapGesture {
                             self.exitAlert = true
                             
