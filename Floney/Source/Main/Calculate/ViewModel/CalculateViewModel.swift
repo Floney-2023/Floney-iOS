@@ -28,8 +28,8 @@ class CalculateViewModel : ObservableObject {
     @Published var startDate : Date? = Date()
     @Published var endDate : Date? = Date()
     @Published var selectedStartDateStr = ""
-    @Published var startDateStr : String = ""
-    @Published var endDateStr : String = ""
+    @Published var startDateStr : String = "2023-10-12"
+    @Published var endDateStr : String = "2023-10-13"
     @Published var selectedDates: [Date] = []
     @Published var selectedDatesStr = ""
     
@@ -59,12 +59,11 @@ class CalculateViewModel : ObservableObject {
     @Published var outcomeRequest : [OutComes] = []
     
     //MARK: 정산 요청 완료
-    @Published var settlementResult : AddSettlementResponse = AddSettlementResponse(id: 0, userCount: 3, startDate: "2023-10-23", endDate: "2023-10-24", totalOutcome: 30000, outcome: 10000, details: [])
-    //AddSettlementResponse(id: 0, userCount: 0, startDate: "", endDate: "", totalOutcome: 0, outcome: 0, details: [])
+    @Published var settlementResult : AddSettlementResponse = AddSettlementResponse(id: 0, userCount: 3, startDate: "2023-10-23", endDate: "2023-10-24", totalOutcome: 30000, outcome: 10000, details: []) //AddSettlementResponse(id: 0, userCount: 0, startDate: "", endDate: "", totalOutcome: 0, outcome: 0, details: [])
     @Published var userCount = 3//0
     @Published var totalOutcome : Float = 30000//0
     @Published var outcomePerUser : Float = 10000//0
-    @Published var details : [AddSettlementResponseDetails] = [
+    @Published var details : [AddSettlementResponseDetails] = [ //[]
         AddSettlementResponseDetails(money: 0, userNickname: "test"),
         AddSettlementResponseDetails(money: -10000, userNickname: "test2"),
         AddSettlementResponseDetails(money: 10000, userNickname: "test3")
@@ -72,8 +71,12 @@ class CalculateViewModel : ObservableObject {
     @Published var id = 0
     
     //MARK: 정산 내역 조회 리스트
-    @Published var settlementList : [SettlementListResponse] = []
-    
+    @Published var settlementList : [SettlementListResponse] = [] //[]
+//        SettlementListResponse(id: 0, userCount: 3, startDate: "2023-10-12", endDate: "2012-10-13", totalOutcome: 30000, outcome: 10000),
+//        SettlementListResponse(id: 1, userCount: 3, startDate: "2023-10-12", endDate: "2012-10-13", totalOutcome: 30000, outcome: 10000),
+//        SettlementListResponse(id: 2, userCount: 3, startDate: "2023-10-12", endDate: "2012-10-13", totalOutcome: 30000, outcome: 10000),
+//        SettlementListResponse(id: 3, userCount: 3, startDate: "2023-10-12", endDate: "2012-10-13", totalOutcome: 30000, outcome: 10000),
+//    ]
     private var cancellableSet: Set<AnyCancellable> = []
     var dataManager: CalculateProtocol
     
@@ -178,9 +181,28 @@ class CalculateViewModel : ObservableObject {
                     LoadingManager.shared.update(showLoading: false, loadingType: .floneyLoading)
                     self.settlementList = dataResponse.value!
                     print(self.settlementList)
+                    // 날짜 형식 업데이트 호출
+                    self.updateDateFormats()
                     
                 }
             }.store(in: &cancellableSet)
+    }
+    // 날짜 형식을 변환하는 함수
+    func formatDateString(_ dateString: String, fromFormat: String, toFormat: String) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = fromFormat
+        guard let date = dateFormatter.date(from: dateString) else { return dateString }
+
+        dateFormatter.dateFormat = toFormat
+        return dateFormatter.string(from: date)
+    }
+
+    // SettlementListResponse 배열을 업데이트하는 함수
+    func updateDateFormats() {
+        for i in 0..<settlementList.count {
+            settlementList[i].startDate = formatDateString(settlementList[i].startDate, fromFormat: "yyyy-MM-dd", toFormat: "yyyy.MM.dd")
+            settlementList[i].endDate = formatDateString(settlementList[i].endDate, fromFormat: "yyyy-MM-dd", toFormat: "yyyy.MM.dd")
+        }
     }
     func getSettlementDetail(id : Int) {
         dataManager.getSettlementDetail(id: id)

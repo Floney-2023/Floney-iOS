@@ -97,7 +97,7 @@ struct CompleteCalcView: View {
                                 .foregroundColor(.greyScale6)
                             Spacer()
                             Text("\(Int((detail.money + viewModel.outcomePerUser)))\(currency)")
-                                .font(.pretendardFont(.bold, size: scaler.scaleWidth(14)))
+                                .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
                                 .foregroundColor(.greyScale2)
                         }
                     }
