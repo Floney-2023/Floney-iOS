@@ -26,6 +26,7 @@ struct InviteBookView: View {
                 
                 Image("book_profile_110")
                     .resizable()
+                    .aspectRatio(contentMode: .fill)
                     .frame(width:scaler.scaleWidth(110),height: scaler.scaleWidth(110))
                     .padding(.bottom, scaler.scaleHeight(12))
                 

@@ -42,7 +42,7 @@ struct WithdrawalView: View {
     }
     var body: some View {
         ZStack {
-            VStack(spacing: scaler.scaleHeight(20)) {
+            VStack(spacing: 0) {
                 HStack {
                     VStack(alignment: .leading, spacing: scaler.scaleHeight(16)) {
                         VStack(alignment: .leading, spacing: scaler.scaleHeight(5)) {
@@ -65,15 +65,17 @@ struct WithdrawalView: View {
                 .padding(.horizontal,scaler.scaleWidth(4))
                 .padding(.bottom, scaler.scaleHeight(18))
                 
-                VStack(spacing: scaler.scaleHeight(40)) {
+                VStack(spacing: 0) {
                     ForEach(SignOutType.allCases, id: \.self) { reason in
                         HStack {
                             Text(reason.reason)
+                                .padding(.leading,scaler.scaleWidth(4))
                                 .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
                                 .foregroundColor(.greyScale2)
                             Spacer()
                             Image(viewModel.selectedReason == reason ? "check_primary" : "checkbox_grey")
                         }
+                        .frame(height:scaler.scaleHeight(54))
                         .onTapGesture {
                             if reason == .OTHER {
                                 // Do Nothing, text input will handle this case
@@ -83,19 +85,19 @@ struct WithdrawalView: View {
                             }
                         }
                     }
+                    
+                    TextField("이유를 작성해 주세요 (100자 이내)", text: $viewModel.otherReason)
+                        .padding()
+                        .font(.pretendardFont(.regular, size: scaler.scaleWidth(14)))
+                        .foregroundColor(.greyScale2)
+                        .frame(height:scaler.scaleHeight(140))
+                        .background(Color.background3)
+                        .cornerRadius(12)
+                        .multilineTextAlignment(.leading)
+                        .lineLimit(4)
+
                 }
-                .padding(.horizontal,scaler.scaleWidth(4))
-                
-                TextField("이유를 작성해 주세요 (100자 이내)", text: $viewModel.otherReason)
-                    .padding()
-                    .font(.pretendardFont(.regular, size: scaler.scaleWidth(14)))
-                    .foregroundColor(.greyScale2)
-                    .frame(height:scaler.scaleHeight(140))
-                    .background(Color.background3)
-                    .cornerRadius(12)
-                    .multilineTextAlignment(.leading)
-                    .lineLimit(4)
-  
+                  
                 Spacer()
                 Text("탈퇴하기")
                     .padding()
@@ -105,11 +107,13 @@ struct WithdrawalView: View {
                             signoutAlert = true
                         }
                     }
+                    .padding(.bottom, scaler.scaleHeight(38))
             }
-            .padding(EdgeInsets(top:scaler.scaleHeight(30), leading:scaler.scaleWidth(20), bottom: scaler.scaleHeight(38), trailing:scaler.scaleWidth(20)))
+            .padding(EdgeInsets(top:scaler.scaleHeight(30), leading:scaler.scaleWidth(20), bottom: 0, trailing:scaler.scaleWidth(20)))
             .customNavigationBar(
                 leftView: { BackButton() }
             )
+            
             .edgesIgnoringSafeArea(.bottom)
             
             if signoutAlert {

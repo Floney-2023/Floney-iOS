@@ -44,7 +44,9 @@ struct MyPageView: View {
                     NavigationLink(destination: NotificationView(viewModel: viewModel.notiviewModel,showingTabbar: $showingTabbar), isActive: $isShowingNotiView) {
                         Image("icon_notification")
                             .resizable()
+                            .aspectRatio(contentMode: .fill)
                             .frame(width: scaler.scaleWidth(32),height: scaler.scaleWidth(32))
+                            .clipped()
                             .onTapGesture {
                                 showingTabbar = false
                                 isShowingNotiView = true

@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct AlertView: View {
+    let scaler = Scaler.shared
     @Binding var isPresented: Bool
     @Binding var title : String
     @Binding var message : String
@@ -18,15 +19,15 @@ struct AlertView: View {
     var body: some View {
         GeometryReader { geometry in
             VStack(spacing:0) {
-                VStack(spacing:5) {
+                VStack(spacing:scaler.scaleHeight(5)) {
                     Text("\(title)")
-                        .font(.pretendardFont(.semiBold, size: 17))
+                        .font(.pretendardFont(.semiBold, size:scaler.scaleWidth(17)))
                     
                     
                     Text("\(message)")
-                        .font(.pretendardFont(.regular, size: 13))
+                        .font(.pretendardFont(.regular, size: scaler.scaleWidth(13)))
                         .multilineTextAlignment(.center)
-                }.padding(.vertical, 20)
+                }.padding(.vertical,scaler.scaleHeight(20))
                 
                 Divider()
                     .foregroundColor(.alertGrey2)
@@ -37,7 +38,7 @@ struct AlertView: View {
                         onOKAction()
                     }
                     .frame(width: geometry.size.width * 0.35)
-                    .font(.pretendardFont(.regular, size: 17))
+                    .font(.pretendardFont(.regular, size: scaler.scaleWidth(17)))
                     .foregroundColor(okColor)
                  
                     Divider()
@@ -46,9 +47,9 @@ struct AlertView: View {
                         isPresented = false
                     }
                     .frame(width: geometry.size.width * 0.35)
-                    .font(.pretendardFont(.regular, size: 17))
+                    .font(.pretendardFont(.regular, size:scaler.scaleWidth(17)))
                     .foregroundColor(.alertBlue)
-                }.frame(height: 44)
+                }.frame(height: scaler.scaleHeight(44))
           
             }
             .frame(width: geometry.size.width * 0.75)
@@ -61,7 +62,6 @@ struct AlertView: View {
             .edgesIgnoringSafeArea(.all)
             .transition(.opacity)
         }
-
     }
 }
 

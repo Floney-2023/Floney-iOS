@@ -22,7 +22,9 @@ struct SignInView: View {
                 VStack(spacing:scaler.scaleWidth(44)) {
                     Image("logo_floney_signin")
                         .resizable()
+                        .aspectRatio(contentMode: .fill)
                         .frame(width:scaler.scaleWidth(106), height: scaler.scaleHeight(26))
+                        .clipped()
                         .padding(EdgeInsets(top: scaler.scaleHeight(86), leading: 0, bottom: 0, trailing: 0))
                     
                     VStack(spacing: scaler.scaleHeight(20)) {
@@ -80,13 +82,17 @@ struct SignInView: View {
                         HStack(spacing:scaler.scaleWidth(34)) {
                             Image("btn_kakao")
                                 .resizable()
+                                .aspectRatio(contentMode: .fill)
                                 .frame(width:scaler.scaleWidth(48), height: scaler.scaleWidth(48))
+                                .clipped()
                                 .onTapGesture {
                                     signInViewModel.performKakaoSignIn()
                                 }
                             Image("btn_google")
                                 .resizable()
+                                .aspectRatio(contentMode: .fill)
                                 .frame(width:scaler.scaleWidth(48), height: scaler.scaleWidth(48))
+                                .clipped()
                                 .onTapGesture {
                                     Task {
                                         do {
@@ -98,7 +104,9 @@ struct SignInView: View {
                                 }
                             Image("btn_apple")
                                 .resizable()
+                                .aspectRatio(contentMode: .fill)
                                 .frame(width:scaler.scaleWidth(48), height: scaler.scaleWidth(48))
+                                .clipped()
                                 .onTapGesture {
                                     signInViewModel.performAppleSignIn()
                                 }

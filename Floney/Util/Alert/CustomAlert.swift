@@ -101,10 +101,12 @@ struct CustomAlertView: View {
                             if type == .red {
                                 Image("icon_cancel_circle_white")
                                     .resizable()
+                                    .aspectRatio(contentMode: .fill)
                                     .frame(width:scaler.scaleWidth(18), height: scaler.scaleWidth(18))
                             } else if type == .green {
                                 Image("icon_varification_circle_white_vector")
                                     .resizable()
+                                    .aspectRatio(contentMode: .fill)
                                     .frame(width:scaler.scaleWidth(18), height: scaler.scaleWidth(18))
                             }
                         }

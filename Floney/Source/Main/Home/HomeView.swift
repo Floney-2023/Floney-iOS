@@ -48,6 +48,7 @@ struct HomeView: View {
                                     print("failure: \(error)")
                                 }
                                 .resizable()
+                                .aspectRatio(contentMode: .fill)
                                 .frame(width: scaler.scaleWidth(34), height: scaler.scaleWidth(34))
                                 .clipShape(Circle())
                                 .overlay(Circle().stroke(Color.greyScale10, lineWidth: scaler.scaleWidth(1)))
@@ -59,6 +60,7 @@ struct HomeView: View {
                         } else {
                             Image("book_profile_34")
                                 .resizable()
+                                .aspectRatio(contentMode: .fill)
                                 .frame(width: scaler.scaleWidth(34), height: scaler.scaleWidth(34))
                                 .clipShape(Circle())
                                 .overlay(Circle().stroke(Color.greyScale10, lineWidth: scaler.scaleWidth(1)))
@@ -169,7 +171,9 @@ struct CustomCalendarView: View {
             HStack {
                 Image("icon_arrow_left")
                     .resizable()
+                    .aspectRatio(contentMode: .fill)
                     .frame(width: scaler.scaleWidth(24), height: scaler.scaleWidth(24))
+                    .clipped()
                     .onTapGesture {
                         if viewModel.selectedView == 0 {
                             viewModel.moveOneMonthBackward()
@@ -192,7 +196,9 @@ struct CustomCalendarView: View {
                 
                 Image("icon_arrow_right")
                     .resizable()
+                    .aspectRatio(contentMode: .fill)
                     .frame(width: scaler.scaleWidth(24), height: scaler.scaleWidth(24))
+                    .clipped()
                     .onTapGesture {
                         if viewModel.selectedView == 0 {
                             viewModel.moveOneMonthForward()

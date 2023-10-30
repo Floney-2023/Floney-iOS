@@ -114,6 +114,7 @@ struct DayLinesDetailView : View {
                                     if viewModel.seeProfileImg {
                                         Image("book_profile_32")
                                             .resizable()
+                                            .aspectRatio(contentMode: .fill)
                                             .frame(width: scaler.scaleWidth(32), height: scaler.scaleWidth(32))
                                             .clipShape(Circle())
                                             .overlay(Circle().stroke(Color.greyScale10, lineWidth: scaler.scaleWidth(1)))
@@ -145,7 +146,9 @@ struct DayLinesDetailView : View {
                                 VStack(spacing:scaler.scaleHeight(10)) {
                                     Image("no_line")
                                         .resizable()
+                                        .aspectRatio(contentMode: .fill)
                                         .frame(width: scaler.scaleWidth(38), height: scaler.scaleWidth(64))
+                                        .clipped()
                                     Text("내역이 없습니다.")
                                         .font(.pretendardFont(.medium, size: scaler.scaleWidth(12)))
                                         .foregroundColor(.greyScale6)
@@ -164,6 +167,7 @@ struct DayLinesDetailView : View {
                                                 if img == "user_default" {
                                                     Image("user_profile_32")
                                                         .resizable()
+                                                        .aspectRatio(contentMode: .fill)
                                                         .frame(width: scaler.scaleWidth(32), height: scaler.scaleWidth(32))
                                                         .clipShape(Circle())
                                                         .overlay(Circle().stroke(Color.greyScale10, lineWidth: scaler.scaleWidth(1)))
@@ -174,6 +178,7 @@ struct DayLinesDetailView : View {
                                                     let number = components.last!   // "5"
                                                     Image("img_user_random_profile_0\(number)_32")
                                                         .resizable()
+                                                        .aspectRatio(contentMode: .fill)
                                                         .frame(width: scaler.scaleWidth(32), height: scaler.scaleWidth(32))
                                                         .clipShape(Circle())
                                                         .overlay(Circle().stroke(Color.greyScale10, lineWidth: scaler.scaleWidth(1)))
@@ -193,6 +198,7 @@ struct DayLinesDetailView : View {
                                                         }
                                                         .resizable()
                                                         .aspectRatio(contentMode: .fill)
+                                                        .aspectRatio(contentMode: .fill)
                                                         .frame(width: scaler.scaleWidth(32), height: scaler.scaleWidth(32))
                                                         .clipShape(Circle())
                                                         .overlay(Circle().stroke(Color.greyScale10, lineWidth: scaler.scaleWidth(1)))
@@ -201,6 +207,7 @@ struct DayLinesDetailView : View {
                                             } else { //null
                                                 Image("user_profile_32")
                                                     .resizable()
+                                                    .aspectRatio(contentMode: .fill)
                                                     .frame(width: scaler.scaleWidth(32), height: scaler.scaleWidth(32))
                                                     .clipShape(Circle())
                                                     .overlay(Circle().stroke(Color.greyScale10, lineWidth: scaler.scaleWidth(1)))

@@ -49,7 +49,9 @@ struct CalculateView: View {
                     .aspectRatio(contentMode: .fill)
                     .frame(width: scaler.scaleWidth(360))
                     .frame(height: scaler.scaleHeight(320))
+                    .clipped()
                     .padding(.bottom, scaler.scaleHeight(26))
+                    
 
 
                 Button {

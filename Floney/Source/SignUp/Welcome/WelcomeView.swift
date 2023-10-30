@@ -29,6 +29,7 @@ struct WelcomeView: View {
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .frame(width:scaler.scaleWidth(360), height: scaler.scaleWidth(360))
+                    .clipped()
                 Spacer()
                 NavigationLink(destination: SendBookCodeView()){
                     Text("플로니 시작하기")
