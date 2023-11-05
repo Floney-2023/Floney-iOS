@@ -103,9 +103,9 @@ class AppLinkManager: ObservableObject {
                 //showAlert(message: "알 수 없는 서버 에러가 발생했습니다.")
                 return
             }
-            AlertManager.shared.handleError(serverError)
-            // 에러 메시지 처리
-            //showAlert(message: serverError.errorMessage)
+            if error.backendError?.code != "U006" {
+                AlertManager.shared.handleError(serverError)
+            }
             
             // 에러코드에 따른 추가 로직
             if let errorCode = error.backendError?.code {
