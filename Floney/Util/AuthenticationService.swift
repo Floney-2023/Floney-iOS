@@ -36,4 +36,5 @@ class AuthenticationService: ObservableObject {
             self.isUserLoggedIn = true
         }
     }
+    
 }

@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct InactivieAlertView: View {
+struct InactiveAlertView: View {
     let scaler = Scaler.shared
     let title: String = "구독 후 다시 이용해 보세요"
     let message: String = "현재 가계부에 구독 혜택이 적용되어 있습니다.\n지금은 마이페이지, 가계부 설정만 사용할 수 있어요."
@@ -53,8 +53,8 @@ struct InactivieAlertView: View {
     }
 }
 
-struct InactivieAlertView_Previews: PreviewProvider {
+struct InactiveAlertView_Previews: PreviewProvider {
     static var previews: some View {
-        InactivieAlertView(isPresented: .constant(true))
+        InactiveAlertView(isPresented: .constant(true))
     }
 }

@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct CalculateView: View {
+    var bookService = BookExistenceViewModel.shared
     let scaler = Scaler.shared
     var date = 11
     @State var isShowingCalc = false
@@ -96,6 +97,7 @@ struct CalculateView: View {
             }
             
         }
+        .disabled(bookService.bookDisabled)
     }
 }
 

@@ -14,6 +14,7 @@ enum ButtonOptions: String, CaseIterable {
 }
 
 struct AnalysisView: View {
+    var bookService = BookExistenceViewModel.shared
     let scaler = Scaler.shared
     @Binding var showingTabbar : Bool
 
@@ -108,6 +109,7 @@ struct AnalysisView: View {
             PickerBottomSheet(availableChangeTabbarStatus : true, showingTab: $showingTabbar, isShowing: $isShowingPicker, yearMonth: $viewModel.yearMonth)
 
         }
+        .disabled(bookService.bookDisabled)
     }
    
 }

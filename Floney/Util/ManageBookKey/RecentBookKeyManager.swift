@@ -31,6 +31,11 @@ class RecentBookKeyManager {
                 
                 if statusCode == 200 {
                     print("change recent book Success")
+                    if Keychain.getKeychainValue(forKey: .bookStatus) == "ACTIVE" {
+                        BookExistenceViewModel.shared.bookDisabled = false
+                    } else {
+                        BookExistenceViewModel.shared.bookDisabled = true
+                    }
                 } else {
                     // Optionally, handle other status codes or decode error from the response
                     let backendError = response.data.flatMap { try? JSONDecoder().decode(BackendError.self, from: $0) }
