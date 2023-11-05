@@ -94,7 +94,7 @@ struct HomeView: View {
         }.fullScreenCover(isPresented: $isShowingAddView) {
             NavigationView {
                 AddView.init(isPresented: $isShowingAddView, lineModel: lineModel, date: viewModel.selectedDateStr)
-            }
+            }.navigationViewStyle(.stack)
         }
 
         .onAppear {
@@ -173,7 +173,7 @@ struct CustomCalendarView: View {
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .frame(width: scaler.scaleWidth(24), height: scaler.scaleWidth(24))
-                    .clipped()
+       
                     .onTapGesture {
                         if viewModel.selectedView == 0 {
                             viewModel.moveOneMonthBackward()
@@ -198,7 +198,7 @@ struct CustomCalendarView: View {
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .frame(width: scaler.scaleWidth(24), height: scaler.scaleWidth(24))
-                    .clipped()
+      
                     .onTapGesture {
                         if viewModel.selectedView == 0 {
                             viewModel.moveOneMonthForward()

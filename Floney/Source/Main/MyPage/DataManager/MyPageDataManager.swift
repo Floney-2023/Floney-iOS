@@ -22,15 +22,18 @@ protocol MyPageProtocol {
 
 class MyPage {
     static let shared: MyPageProtocol = MyPage()
+    
     private init() { }
 }
 
 extension MyPage: MyPageProtocol {
+    
     func getMyPage() -> AnyPublisher<DataResponse<MyPageResponse, NetworkError>, Never> {
         let url = "\(Constant.BASE_URL)/users/mypage"
         
         let token = Keychain.getKeychainValue(forKey: .accessToken) ?? ""
         print("My Page : \n\(token)")
+        print("My Page DataManager get my page \(url)")
         
         return AF.request(url,
                           method: .get,
@@ -47,19 +50,15 @@ extension MyPage: MyPageProtocol {
         }
         .receive(on: DispatchQueue.main)
         .eraseToAnyPublisher()
+        
     }
+    
     func changeProfile(img: String) -> AnyPublisher<Void, NetworkError> {
         var url = "\(Constant.BASE_URL)/users/profileimg/update?profileImg=\(img)"
         
         print("My Page DataManager Change User Image \(url)")
         
-        //var parameters = [String: String]()
-        
-        //parameters["profileImg"] = img
-        
-        //print("parameters : \(parameters)")
         let token = Keychain.getKeychainValue(forKey: .accessToken) ?? ""
-        //print("My Page : \n\(token)")
         
         let encodedURL = url.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
         return AF.request(encodedURL!,

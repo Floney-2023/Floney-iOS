@@ -21,7 +21,7 @@ struct ChangePasswordView: View {
                             .padding(.leading, scaler.scaleWidth(4))
                         Spacer()
                     }
-                    CustomTextField(text: $viewModel.currentPassword, placeholder: "현재 비밀번호를 입력하세요.",placeholderColor: .greyScale7)
+                    CustomTextField(text: $viewModel.currentPassword, placeholder: "현재 비밀번호를 입력하세요.", isSecure: true, placeholderColor: .greyScale7)
                         .frame(height: scaler.scaleHeight(46))
                 }
                 
@@ -34,7 +34,7 @@ struct ChangePasswordView: View {
                                 .padding(.leading, scaler.scaleWidth(4))
                             Spacer()
                         }
-                        CustomTextField(text: $viewModel.newPassword, placeholder: "영문 대소문자, 숫자 포함 8자 이상",placeholderColor: .greyScale7)
+                        CustomTextField(text: $viewModel.newPassword, placeholder: "영문 대소문자, 숫자 포함 8자 이상", isSecure: true, placeholderColor: .greyScale7)
                             .frame(height: scaler.scaleHeight(46))
                     }
                     VStack(spacing: scaler.scaleHeight(12)) {
@@ -45,7 +45,7 @@ struct ChangePasswordView: View {
                                 .foregroundColor(.greyScale2)
                             Spacer()
                         }
-                        CustomTextField(text: $viewModel.newPasswordCheck, placeholder: "영문 대소문자, 숫자 포함 8자 이상",placeholderColor: .greyScale7)
+                        CustomTextField(text: $viewModel.newPasswordCheck, placeholder: "영문 대소문자, 숫자 포함 8자 이상", isSecure: true, placeholderColor: .greyScale7)
                             .frame(height: scaler.scaleHeight(46))
                     }
                 }
@@ -59,7 +59,6 @@ struct ChangePasswordView: View {
                         }
                     }
                 Spacer()
-                
             }
             .padding(EdgeInsets(top: scaler.scaleHeight(35), leading: scaler.scaleWidth(20), bottom: 0, trailing: scaler.scaleWidth(20)))
             .customNavigationBar(

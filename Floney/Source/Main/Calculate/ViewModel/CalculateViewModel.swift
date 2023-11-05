@@ -91,7 +91,8 @@ class CalculateViewModel : ObservableObject {
         let request = SettlementRequest(bookKey: bookKey, usersEmails: userList, duration: SettlementDate(startDate: startDateStr, endDate: endDateStr))
         
         dataManager.getSettlements(request)
-            .sink { (dataResponse) in
+            .sink {  (dataResponse) in
+                
                 if dataResponse.error != nil {
                     self.createAlert(with: dataResponse.error!, retryRequest: {
                         self.getSettlements()
@@ -123,6 +124,7 @@ class CalculateViewModel : ObservableObject {
 
         dataManager.postSettlements(request)
             .sink { (dataResponse) in
+                
                 if dataResponse.error != nil {
                     self.createAlert(with: dataResponse.error!, retryRequest: {
                         self.postSettlements()
@@ -177,11 +179,10 @@ class CalculateViewModel : ObservableObject {
                     LoadingManager.shared.update(showLoading: false, loadingType: .floneyLoading)
                 } else {
                     print("--정산 내역 요청 성공--")
-                    
                     LoadingManager.shared.update(showLoading: false, loadingType: .floneyLoading)
                     self.settlementList = dataResponse.value!
                     print(self.settlementList)
-                    // 날짜 형식 업데이트 호출
+
                     self.updateDateFormats()
                     
                 }
@@ -206,7 +207,8 @@ class CalculateViewModel : ObservableObject {
     }
     func getSettlementDetail(id : Int) {
         dataManager.getSettlementDetail(id: id)
-            .sink { (dataResponse) in
+            .sink {  (dataResponse) in
+                
                 if dataResponse.error != nil {
                     self.createAlert(with: dataResponse.error!, retryRequest: {
                         self.getSettlementDetail(id: id)
@@ -233,6 +235,8 @@ class CalculateViewModel : ObservableObject {
     func getBookUsers() {
         dataManager.getBookUsers()
             .sink { (dataResponse) in
+       
+                
                 if dataResponse.error != nil {
                     self.createAlert(with: dataResponse.error!, retryRequest: {
                         self.getBookUsers()
@@ -254,7 +258,9 @@ class CalculateViewModel : ObservableObject {
     }
     func getPassedDays() {
         dataManager.getPassedDays()
-            .sink { (dataResponse) in
+            .sink {  (dataResponse) in
+
+                
                 if dataResponse.error != nil {
                     self.createAlert(with: dataResponse.error!, retryRequest: {
                         self.getPassedDays()

@@ -41,7 +41,7 @@ struct SetCurrencyUnitView: View {
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
                                 .frame(width:scaler.scaleWidth(86), height:scaler.scaleHeight(76))
-                                .clipped()
+                      
                         )
                 }
                 .padding(.horizontal, scaler.scaleWidth(24))
@@ -62,7 +62,7 @@ struct SetCurrencyUnitView: View {
                                         .resizable()
                                         .aspectRatio(contentMode: .fill)
                                         .frame(width: scaler.scaleWidth(24), height: scaler.scaleWidth(24))
-                                        .clipped()
+                                 
                                         .padding(.trailing, scaler.scaleWidth(16))
                                 }
                             }

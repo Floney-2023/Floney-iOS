@@ -61,7 +61,7 @@ struct CompleteCalcView: View {
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
                                 .frame(width:scaler.scaleWidth(74), height: scaler.scaleWidth(74))
-                                .clipped()
+                      
                         )
                 }
                 .padding(.horizontal, scaler.scaleWidth(24))

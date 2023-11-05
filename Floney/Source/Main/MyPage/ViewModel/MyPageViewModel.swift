@@ -61,14 +61,17 @@ final class MyPageViewModel: ObservableObject {
             }
         }
     }
-    @Published var notiviewModel = NotiViewModel()
     
     private var cancellableSet: Set<AnyCancellable> = []
-    var dataManager: MyPageProtocol
+    lazy var dataManager: MyPageProtocol = MyPage.shared
     
-    init( dataManager: MyPageProtocol = MyPage.shared) {
+    init() { //dataManager: MyPageProtocol = MyPage.shared
         self.dataManager = dataManager
     }
+    deinit {
+        
+    }
+    
     
     func getMyPage() {
         dataManager.getMyPage()
@@ -89,11 +92,6 @@ final class MyPageViewModel: ObservableObject {
                     self.provider = self.result.provider
                     Keychain.setKeychain(self.provider, forKey: .provider)
                     self.subscribe = self.result.subscribe
-                    //self.notiviewModel.bookList = self.myBooks
-                    self.notiviewModel.bookNotiList = []
-                    for book in self.myBooks {
-                        self.notiviewModel.getNoti(bookKey: book.bookKey, bookName: book.name)
-                    }
                     
                     if let img = self.userImg {
                         if img == "user_default" { // 디폴트라면
@@ -136,6 +134,7 @@ final class MyPageViewModel: ObservableObject {
         
         dataManager.changeProfile(img: requestImage)
             .sink { completion in
+
                 switch completion {
                 case .finished:
                     LoadingManager.shared.update(showLoading: false, loadingType: .dimmedLoading)
@@ -156,7 +155,8 @@ final class MyPageViewModel: ObservableObject {
                     LoadingManager.shared.update(showLoading: false, loadingType: .dimmedLoading)
                     print("Error changing profile: \(error)")
                 }
-            } receiveValue: { data in
+            } receiveValue: { [weak self] data in
+            
                 // TODO: Handle the received data if necessary.
             }
             .store(in: &cancellableSet)
@@ -190,6 +190,7 @@ final class MyPageViewModel: ObservableObject {
     func changePassword() {
         dataManager.changePassword(password: newPassword)
             .sink { completion in
+
                 switch completion {
                 case .finished:
                     print("Password successfully changed.")
@@ -262,6 +263,7 @@ final class MyPageViewModel: ObservableObject {
     func logout() {
         dataManager.logout()
             .sink { completion in
+                
                 switch completion {
                 case .finished:
                     print("logout success.")
@@ -288,7 +290,9 @@ final class MyPageViewModel: ObservableObject {
                 request = SignOutRequest(type: selectedReason.rawValue)
             }
             dataManager.signout(request)
-                .sink { completion in
+                .sink { [weak self] completion in
+                    guard let self = self else {return}
+                    
                     switch completion {
                     case .finished:
                         print("logout success.")
@@ -312,7 +316,6 @@ final class MyPageViewModel: ObservableObject {
         if selectedReason == nil {
             AlertManager.shared.handleError(InputValidationError.notSelectSignoutReason)
             return false
-            
         } else {
             if selectedReason == .OTHER {
                 if otherReason.isEmpty  {

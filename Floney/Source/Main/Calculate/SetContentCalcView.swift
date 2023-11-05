@@ -13,7 +13,7 @@ struct SetContentCalcView: View {
     @Binding var isShowingCalc : Bool
     @State var currency = CurrencyManager.shared.currentCurrency
     @ObservedObject var viewModel : CalculateViewModel
-    
+    /*
     @State var list : [SettlementResponse] = [
         SettlementResponse(money: 6000, category: ["체크카드","카페/간식"], assetType: "OUTCOME", content: "Cake", userEmail: "", img: nil, isSelected: true),
         SettlementResponse(money: 4500, category: ["체크카드","카페/간식"], assetType: "OUTCOME", content: "커피",userEmail: "", img: nil, isSelected: false),
@@ -26,7 +26,7 @@ struct SetContentCalcView: View {
         SettlementResponse(money: 6000, category: ["체크카드","카페/간식"], assetType: "OUTCOME", content: "Cake", userEmail: "", img: nil, isSelected: true),
         SettlementResponse(money: 4500, category: ["체크카드","카페/간식"], assetType: "OUTCOME", content: "커피",userEmail: "", img: nil, isSelected: false)
         
-    ]
+    ]*/
     @Binding var pageCount : Int
     var pageCountAll = 4
     
@@ -79,9 +79,9 @@ struct SetContentCalcView: View {
                     VStack {
                         ScrollView(showsIndicators: false) {
                             VStack(spacing: 0) {
-                                ForEach(list.indices, id: \.self) { index in
+                                ForEach(viewModel.lines.indices, id: \.self) { index in
                                     HStack(spacing: scaler.scaleWidth(12)) {
-                                        if list[index].isSelected! {
+                                        if viewModel.lines[index].isSelected! {
                                             Image("icon_check_circle_activated")
                                                // .padding(.bottom, scaler.scaleHeight(15))
                                         }
@@ -92,15 +92,15 @@ struct SetContentCalcView: View {
                                         VStack(spacing:0) {
                                             HStack {
                                                 VStack(alignment: .leading, spacing: scaler.scaleHeight(10)) {
-                                                    Text("\(list[index].content)")
+                                                    Text("\(viewModel.lines[index].content)")
                                                         .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
                                                         .foregroundColor(.greyScale2)
-                                                    Text("\(list[index].category[0]) ‧ \(list[index].category[1])")
+                                                    Text("\(viewModel.lines[index].category[0]) ‧ \(viewModel.lines[index].category[1])")
                                                         .font(.pretendardFont(.medium, size: scaler.scaleWidth(12)))
                                                         .foregroundColor(.greyScale6)
                                                 }
                                                 Spacer()
-                                                Text("\(Int(list[index].money))\(currency)")
+                                                Text("\(Int(viewModel.lines[index].money))\(currency)")
                                                     .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
                                                     .foregroundColor(.greyScale2)
                                             }
@@ -111,52 +111,12 @@ struct SetContentCalcView: View {
                                     //.frame(height:scaler.scaleHeight(53))
                                     //.background(Color.red)
                                     .onTapGesture {
-                                        list[index].isSelected?.toggle()
+                                        viewModel.lines[index].isSelected?.toggle()
                                     }
                                 }
                             }
                         }
                     }
-                    /*
-                     VStack {
-                     ScrollView(showsIndicators: false) {
-                     ForEach(viewModel.lines.indices, id: \.self) { index in
-                     HStack {
-                     if viewModel.lines[index].isSelected! {
-                     Image("icon_check_circle_activated")
-                     .padding(.bottom, 15)
-                     }
-                     else {
-                     Image("icon_check_circle_disabled")
-                     .padding(.bottom, 15)
-                     }
-                     VStack {
-                     
-                     HStack {
-                     VStack(alignment: .leading) {
-                     Text("\(viewModel.lines[index].content)")
-                     .font(.pretendardFont(.medium, size: 14))
-                     .foregroundColor(.greyScale2)
-                     Text("\(viewModel.lines[index].category[0]) ‧ \(viewModel.lines[index].category[1])")
-                     .font(.pretendardFont(.medium, size: 12))
-                     .foregroundColor(.greyScale6)
-                     }
-                     Spacer()
-                     Text("\(Int(viewModel.lines[index].money))\(currency)")
-                     .font(.pretendardFont(.medium, size: 14))
-                     .foregroundColor(.greyScale2)
-                     }.padding(.bottom, 8)
-                     
-                     Divider()
-                     
-                     }
-                     }.frame(height: 55)
-                     .onTapGesture {
-                     viewModel.lines[index].isSelected?.toggle()
-                     }
-                     }
-                     }
-                     }*/
                 }
                 .padding(EdgeInsets(top:scaler.scaleHeight(22), leading: scaler.scaleWidth(20), bottom: 0, trailing: scaler.scaleWidth(20)))
                 
@@ -201,9 +161,10 @@ struct SetContentCalcView: View {
         }
         
     }
+    
     func selectAllItems() {
-        for index in list.indices {
-            list[index].isSelected = true
+        for index in viewModel.lines.indices {
+            viewModel.lines[index].isSelected = true
         }
     }
     

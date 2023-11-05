@@ -9,6 +9,7 @@ import Alamofire
 import Combine
 
 protocol NotiProtocol {
+    func getMyPage() -> AnyPublisher<DataResponse<MyPageResponse, NetworkError>, Never>
     func getNoti(bookKey : String) -> AnyPublisher<DataResponse<[NotiResponse], NetworkError>, Never>
     func postNoti(_ parameters:NotiRequest) -> AnyPublisher<Void, NetworkError>
     
@@ -20,9 +21,31 @@ class NotiService {
 }
 
 extension NotiService: NotiProtocol {
+    func getMyPage() -> AnyPublisher<DataResponse<MyPageResponse, NetworkError>, Never> {
+        let url = "\(Constant.BASE_URL)/users/mypage"
+        
+        let token = Keychain.getKeychainValue(forKey: .accessToken) ?? ""
+        
+        return AF.request(url,
+                          method: .get,
+                          parameters: nil,
+                          encoding: JSONEncoding.default,
+                          headers: ["Authorization":"Bearer \(token)"])
+        .validate()
+        .publishDecodable(type: MyPageResponse.self)
+        .map { response in
+            response.mapError { error in
+                let backendError = response.data.flatMap { try? JSONDecoder().decode(BackendError.self, from: $0)}
+                return NetworkError(initialError: error, backendError: backendError)
+            }
+        }
+        .receive(on: DispatchQueue.main)
+        .eraseToAnyPublisher()
+        
+    }
     func getNoti(bookKey : String) -> AnyPublisher<DataResponse<[NotiResponse], NetworkError>, Never> {
         
-        let url = "\(Constant.BASE_URL)/books/alarm?bookKey=\(bookKey)"
+        let url = "\(Constant.BASE_URL)/alarm?bookKey=\(bookKey)"
         let token = Keychain.getKeychainValue(forKey: .accessToken) ?? ""
 
         return  AF.request(url,
@@ -41,11 +64,13 @@ extension NotiService: NotiProtocol {
         .receive(on: DispatchQueue.main)
         .eraseToAnyPublisher()
     }
+    
     func postNoti(_ parameters:NotiRequest) -> AnyPublisher<Void, NetworkError>{
-        
-        let url = "\(Constant.BASE_URL)/books/alarm"
+        let url = "\(Constant.BASE_URL)/alarm"
         let token = Keychain.getKeychainValue(forKey: .accessToken) ?? ""
         print("알람 요청 : \(parameters)")
+        print("알람 요청 \(url)")
+        
         return  AF.request(url,
                            method: .post,
                            parameters: parameters,

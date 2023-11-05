@@ -9,23 +9,25 @@ import SwiftUI
 
 struct NotificationView: View {
     let scaler = Scaler.shared
-    @ObservedObject var viewModel : NotiViewModel
+    @StateObject var viewModel = NotiViewModel()
     @Binding var showingTabbar : Bool
-    @State private var selectedTab = 0
+    @State private var selectedTab : Int = 0
     @GestureState private var translation: CGFloat = 0
     
     var body: some View {
+        
         VStack {
             HStack {
-                if !viewModel.bookNotiList.isEmpty {
-                    ForEach(viewModel.bookNotiList.indices) { index in
+               // if !viewModel.bookNotiList.isEmpty {
+                
+                ForEach(Array(viewModel.bookNotiList.enumerated()), id: \.element) { index, book in
                         Button(action: {
                             withAnimation {
                                 selectedTab = index
                             }
                         }) {
                             VStack {
-                                Text(viewModel.bookNotiList.isEmpty ? "가계부" : "\(viewModel.bookNotiList[index].bookName)")
+                                Text(viewModel.bookNotiList.isEmpty ? "가계부" : "\(book.bookName)")
                                 Rectangle()
                                     .fill(selectedTab == index ? Color.primary1 : Color.background2)
                                     .frame(height:scaler.scaleHeight(4))
@@ -35,7 +37,7 @@ struct NotificationView: View {
                         .font(.pretendardFont(.medium,size:scaler.scaleWidth(14)))
                         .foregroundColor(selectedTab == index ? .greyScale2 : .greyScale8)
                     }
-                }
+                //}
             }
             .padding(.top,scaler.scaleHeight(32))
             .padding(.horizontal,scaler.scaleWidth(20))
@@ -44,27 +46,29 @@ struct NotificationView: View {
             // 스와이프 가능한 알림 목록
             GeometryReader { geometry in
                 HStack(spacing: 0) {
-                    ForEach(viewModel.bookNotiList.indices) { index in
+                    ForEach(viewModel.bookNotiList, id:\.self) { book in
                         ScrollView {
-                            if !viewModel.bookNotiList.isEmpty {
-                                ForEach(viewModel.bookNotiList[index].notiList.indices) { notiIndex in
-                                    HStack {
-                                        Image(viewModel.bookNotiList[index].notiList[notiIndex].imgUrl)
-                                            .padding(.leading, scaler.scaleWidth(20))
-                                            .padding(.vertical, scaler.scaleHeight(20))
-                                        VStack(alignment: .leading, spacing: scaler.scaleHeight(10)) {
-                                            Text(viewModel.bookNotiList[index].notiList[notiIndex].body)
-                                                .font(.pretendardFont(.regular, size: scaler.scaleWidth(14)))
-                                                .foregroundColor(.greyScale2)
-                                            Text(timeAgoSinceDate(dateString: viewModel.bookNotiList[index].notiList[notiIndex].date, numericDates: true))
-                                                .font(.pretendardFont(.regular, size: scaler.scaleWidth(12)))
-                                                .foregroundColor(.greyScale8)
+                          //  if !viewModel.bookNotiList.isEmpty {
+                                if let bookNoti = book.notiList {
+                            ForEach(bookNoti, id:\.self) { noti in
+                                        HStack {
+                                            Image(noti.imgUrl)
+                                                .padding(.leading, scaler.scaleWidth(20))
+                                                .padding(.vertical, scaler.scaleHeight(20))
+                                            VStack(alignment: .leading, spacing: scaler.scaleHeight(10)) {
+                                                Text(noti.body)
+                                                    .font(.pretendardFont(.regular, size: scaler.scaleWidth(14)))
+                                                    .foregroundColor(.greyScale2)
+                                                Text(timeAgoSinceDate(dateString: noti.date, numericDates: true))
+                                                    .font(.pretendardFont(.regular, size: scaler.scaleWidth(12)))
+                                                    .foregroundColor(.greyScale8)
+                                            }
+                                            Spacer()
                                         }
-                                        Spacer()
+                                        .background(Color.primary10)
+                                        .cornerRadius(12)
                                     }
-                                    .background(Color.primary10)
-                                    .cornerRadius(12)
-                                }
+                              //  }
                             }
                         }
                         .padding(.horizontal,scaler.scaleWidth(20))
@@ -73,6 +77,7 @@ struct NotificationView: View {
                 }
                 .frame(maxWidth:.infinity, maxHeight:.infinity)
                 .offset(x: -CGFloat(self.selectedTab) * geometry.size.width)
+     
                 .offset(x: self.translation)
                 .animation(.spring())
                 .gesture(
@@ -80,11 +85,13 @@ struct NotificationView: View {
                         .updating($translation) { value, state, _ in
                             state = value.translation.width
                         }
+                    
                         .onEnded { value in
                             let offset = value.translation.width / geometry.size.width
                             let newIndex = (CGFloat(self.selectedTab) - offset).rounded()
                             self.selectedTab = min(max(Int(newIndex), 0), viewModel.bookNotiList.count - 1)
                         }
+                      
                 )
             }
         }
@@ -97,6 +104,7 @@ struct NotificationView: View {
         )
         .onAppear{
             showingTabbar = false
+            viewModel.getMyPage()
         }
     }
     
@@ -167,6 +175,7 @@ struct NotificationView: View {
         }
         return "방금"
     }
+
     
 }
 

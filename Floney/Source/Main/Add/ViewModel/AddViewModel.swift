@@ -80,7 +80,8 @@ class AddViewModel: ObservableObject {
         bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
         let request = CategoryRequest(bookKey: bookKey, root: root)
         dataManager.getCategory(request)
-            .sink { (dataResponse) in
+            .sink {(dataResponse) in
+                
                 if dataResponse.error != nil {
                     self.createAlert(with: dataResponse.error!, retryRequest: {
                         self.getCategory()
@@ -124,6 +125,7 @@ class AddViewModel: ObservableObject {
         print("내역 추가 request : \(request)")
         dataManager.postLines(request)
             .sink { (dataResponse) in
+                
                 if dataResponse.error != nil {
                     self.createAlert(with: dataResponse.error!, retryRequest: {
                         self.postLines()
@@ -144,6 +146,7 @@ class AddViewModel: ObservableObject {
         let request = AddCategoryRequest(bookKey: bookKey, parent: root, name: newCategoryName)
         dataManager.postCategory(request)
             .sink { (dataResponse) in
+                
                 if dataResponse.error != nil {
                     self.createAlert(with: dataResponse.error!, retryRequest: {
                         self.postCategory()
@@ -163,7 +166,8 @@ class AddViewModel: ObservableObject {
         bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
         let request = DeleteCategoryRequest(bookKey: bookKey, root: root, name: deleteCategoryName)
         dataManager.deleteCategory(parameters: request)
-            .sink { completion in
+            .sink { [weak self] completion in
+                guard let self = self else {return}
                 switch completion {
                 case .finished:
                     print(" successfully category delete.")
@@ -183,6 +187,7 @@ class AddViewModel: ObservableObject {
         let request = DeleteLineRequest(bookLineKey: bookLineKey)
         dataManager.deleteLine(parameters: request)
             .sink { completion in
+
                 switch completion {
                 case .finished:
                     print(" successfully line delete.")
@@ -215,7 +220,8 @@ class AddViewModel: ObservableObject {
         let request = ChangeLineRequest(lineId: bookLineKey, bookKey: bookKey, money: moneyDouble, lineDate: lineDate, flow: flow, asset: asset, line: line, description: description, except: except, nickname: nickname)
         print("내역 수정 request : \(request)")
         dataManager.changeLine(parameters: request)
-            .sink { (dataResponse) in
+            .sink {(dataResponse) in
+                
                 if dataResponse.error != nil {
                     self.createAlert(with: dataResponse.error!, retryRequest: {
                         self.changeLine()

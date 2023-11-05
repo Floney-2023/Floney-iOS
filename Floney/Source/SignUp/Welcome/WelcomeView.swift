@@ -29,7 +29,7 @@ struct WelcomeView: View {
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .frame(width:scaler.scaleWidth(360), height: scaler.scaleWidth(360))
-                    .clipped()
+             
                 Spacer()
                 NavigationLink(destination: SendBookCodeView()){
                     Text("플로니 시작하기")
@@ -40,6 +40,7 @@ struct WelcomeView: View {
             .padding(EdgeInsets(top:scaler.scaleHeight(78), leading: scaler.scaleWidth(24), bottom: scaler.scaleHeight(38), trailing: scaler.scaleWidth(24)))
             .navigationBarBackButtonHidden(true)
             .edgesIgnoringSafeArea(.bottom)
+            .navigationViewStyle(.stack)
         }
     }
 }

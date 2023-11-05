@@ -22,12 +22,14 @@ struct ExpenseView: View {
                             .foregroundColor(.greyScale1)
                             .frame(width: scaler.scaleWidth(236),alignment: .leading)
                             .lineLimit(2)
+                            .minimumScaleFactor(0.001)
 
                         Text("저번 달 대비 \(Int(viewModel.expenseResponse.differance))\(currency)을\n더 사용했어요")
                             .font(.pretendardFont(.medium,size: scaler.scaleWidth(13)))
                             .foregroundColor(.greyScale6)
                             .frame(width: scaler.scaleWidth(236),alignment: .leading)
                             .lineLimit(2)
+                            .minimumScaleFactor(0.001)
             
 
                 }
@@ -38,7 +40,7 @@ struct ExpenseView: View {
                         .resizable()
                         .aspectRatio(contentMode: .fill)
                         .frame(width: scaler.scaleWidth(76),height: scaler.scaleHeight(80))
-                        .clipped()
+             
                 }
                 
             }
@@ -106,7 +108,7 @@ struct ExpenseView: View {
                         .resizable()
                         .aspectRatio(contentMode: .fill)
                         .frame(width:scaler.scaleWidth(50),height:scaler.scaleHeight(84))
-                        .clipped()
+                 
                     Text("내역이 없습니다.")
                         .font(.pretendardFont(.medium, size: scaler.scaleWidth(12)))
                         .foregroundColor(.greyScale6)

@@ -44,7 +44,7 @@ struct SubscriptionView: View {
                         .resizable()
                         .aspectRatio(contentMode: .fill)
                         .frame(width:scaler.scaleWidth(360), height: scaler.scaleHeight(264))
-                        .clipped()
+                     
                     VStack(spacing:scaler.scaleHeight(10)) {
                         Text("floney Plus+ 구독으로")
                         Text("편리하고 다양한 기능을 즐겨보세요")

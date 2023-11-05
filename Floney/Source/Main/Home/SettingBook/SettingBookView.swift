@@ -234,7 +234,6 @@ struct SettingBookView: View {
                                 }
                                 Spacer()
                             }
-                            .padding(.horizontal, scaler.scaleWidth(4))
                             .padding(.top, scaler.scaleHeight(2))
                             .onTapGesture {
                                 self.resetAlert = true

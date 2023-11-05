@@ -10,12 +10,12 @@ struct SignUpRequest: Encodable {
     var email: String
     var password: String
     var nickname: String
-    //var marketingAgree : Int
-    //var provider : String
+    var receiveMarketing : Bool
 }
 struct SNSSignUpRequest : Encodable {
     var email : String
     var nickname: String
+    var receiveMarketing : Bool
 }
 
 struct AuthEmailRequest: Encodable {

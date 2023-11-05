@@ -148,7 +148,7 @@ struct DayLinesDetailView : View {
                                         .resizable()
                                         .aspectRatio(contentMode: .fill)
                                         .frame(width: scaler.scaleWidth(38), height: scaler.scaleWidth(64))
-                                        .clipped()
+                                    
                                     Text("내역이 없습니다.")
                                         .font(.pretendardFont(.medium, size: scaler.scaleWidth(12)))
                                         .foregroundColor(.greyScale6)
@@ -227,10 +227,16 @@ struct DayLinesDetailView : View {
                                                 .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(14)))
                                                 .foregroundColor(.greyScale2)
                                             HStack {
-                                                ForEach(line.category, id: \.self) { category in
-                                                    Text("\(category)‧")
+                                                ForEach(Array(line.category.enumerated()), id: \.element) { categoryIndex, category in
+                                                    Text("\(category)")
                                                         .font(.pretendardFont(.medium, size: scaler.scaleWidth(12)))
                                                         .foregroundColor(.greyScale6)
+                                                    // 마지막 요소가 아닐 경우에만 점을 추가
+                                                    if categoryIndex < line.category.count - 1 {
+                                                        Text("‧")
+                                                            .font(.pretendardFont(.medium, size: scaler.scaleWidth(12)))
+                                                            .foregroundColor(.greyScale6)
+                                                    }
                                                 }
                                                 
                                             }
@@ -256,6 +262,7 @@ struct DayLinesDetailView : View {
                                     }
                                 }
                                 .onTapGesture {
+                                    
                                     LoadingManager.shared.update(showLoading: true, loadingType: .progressLoading)
                                     self.selectedIndex = index
                                     
@@ -282,6 +289,7 @@ struct DayLinesDetailView : View {
                                         LoadingManager.shared.update(showLoading: false, loadingType: .progressLoading)
                                         self.showingDetail = true
                                     }
+                                    
                                 }
                                 .frame(height: scaler.scaleHeight(34))
                                 .fullScreenCover(isPresented: $showingDetail) {
@@ -298,14 +306,16 @@ struct DayLinesDetailView : View {
                                                 toggleOnOff: line.exceptStatus,
                                                 writer: line.userNickName
                                             )
-                                            .transition(.moveAndFade)
                                         }
+                                        .transition(.moveAndFade)
+                                        .navigationViewStyle(.stack)
                                     }
                                 }
                             } //ForEach
+                            
                         } // else
                     }.padding(.top, scaler.scaleHeight(18))
-                    .padding(.bottom, scaler.scaleHeight(18))
+                        .padding(.bottom, scaler.scaleHeight(18))
                 } //ScrollView
                 
             }

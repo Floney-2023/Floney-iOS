@@ -114,7 +114,6 @@ class AnalysisViewModel : ObservableObject {
         }
     }
     func analysisExpenseIncome(root: String) {
-        
         let bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
         let request = ExpenseIncomeRequest(bookKey: bookKey, root: root, date: selectedDateStr)
         print(request)
@@ -122,6 +121,7 @@ class AnalysisViewModel : ObservableObject {
         LoadingManager.shared.update(showLoading: true, loadingType: .progressLoading)
         dataManager.analysisExpenseIncome(request)
             .sink { (dataResponse) in
+                
                 if dataResponse.error != nil {
                     self.createAlert(with: dataResponse.error!, retryRequest: {
                         self.analysisExpenseIncome(root: root)
@@ -173,6 +173,7 @@ class AnalysisViewModel : ObservableObject {
         LoadingManager.shared.update(showLoading: true, loadingType: .progressLoading)
         dataManager.analysisBudget(request)
             .sink { (dataResponse) in
+                
                 if dataResponse.error != nil {
                     self.createAlert(with: dataResponse.error!, retryRequest: {
                         self.analysisBudget()
@@ -254,6 +255,7 @@ class AnalysisViewModel : ObservableObject {
         LoadingManager.shared.update(showLoading: true, loadingType: .progressLoading)
         dataManager.analysisAsset(request)
             .sink { (dataResponse) in
+                
                 if dataResponse.error != nil {
                     self.createAlert(with: dataResponse.error!, retryRequest: {
                         self.analysisAsset(date: date)

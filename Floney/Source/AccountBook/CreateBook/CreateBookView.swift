@@ -44,7 +44,7 @@ struct CreateBookView: View {
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .frame(width:scaler.scaleWidth(360), height: scaler.scaleWidth(360))
-                    .clipped()
+             
                     
                 Spacer()
                 

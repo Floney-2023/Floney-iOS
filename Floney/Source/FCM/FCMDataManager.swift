@@ -106,7 +106,7 @@ class FCMDataManager: ObservableObject {
     
     func fetchAccessToken() -> AnyPublisher<DataResponse<FCMAccessToken, NetworkError>,Never> {
         let bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
-            let url = "\(Constant.BASE_URL)/alarm/tokens"
+        let url = "\(Constant.BASE_URL)/google/alarm/tokens"
         
         let token = Keychain.getKeychainValue(forKey: .accessToken) ?? ""
         print(url)

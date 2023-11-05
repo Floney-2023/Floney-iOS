@@ -30,6 +30,8 @@ class BookExistenceViewModel: ObservableObject {
     func getBookExistence() {
         dataManager.getBookExistence()
             .sink { (dataResponse) in
+
+                
                 if dataResponse.error != nil {
                     self.createAlert(with: dataResponse.error!, retryRequest: {
                         print("토큰 재발급 성공")

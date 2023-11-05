@@ -20,14 +20,12 @@ struct ServiceAgreementView: View {
             VStack(spacing: scaler.scaleHeight(32)) {
                 HStack {
                     VStack(alignment: .leading, spacing: scaler.scaleHeight(16)) {
-                        
-                        Text("\(pageCount)")
+                    Text("\(pageCount)")
                             .foregroundColor(.greyScale2)
                             .font(.pretendardFont(.medium, size:scaler.scaleWidth(12)))
                         + Text(" / \(pageCountAll)")
                             .foregroundColor(.greyScale6)
                             .font(.pretendardFont(.medium, size:scaler.scaleWidth(12)))
-                        
                         Text("약관 동의")
                             .font(.pretendardFont(.bold, size:scaler.scaleWidth(24)))
                             .foregroundColor(.greyScale1)
@@ -36,19 +34,14 @@ struct ServiceAgreementView: View {
                 }
                 VStack(spacing: 0) {
                     ServiceAgreementButton(isAgreed: $viewModel.isAllAgreed, checkboxType: "all", forwardButton: false, title: "전체 동의")
-                    
                     Divider()
                         .foregroundColor(.greyScale10)
                         .padding(0)
-                    
-                    
                     ServiceAgreementButton(isAgreed: $viewModel.isTerm1Agreed, title: "서비스 이용 약관 (필수)")
                     ServiceAgreementButton(isAgreed: $viewModel.isTerm2Agreed, title: "개인정보 수집 및 이용 동의 (필수)")
                     ServiceAgreementButton(isAgreed: $viewModel.isMarketingAgreed, title: "마케팅 정보 수신 동의 (선택)")
                     ServiceAgreementButton(isAgreed: $viewModel.isTerm3Agreed, forwardButton: false, title: "만 14세 이상 확인 (필수)")
-                    
                 }
-                
                 Spacer()
                 
                 if signupViewModel.providerStatus != .email {
@@ -57,9 +50,10 @@ struct ServiceAgreementView: View {
                             .padding()
                             .withNextButtonFormmating(.primary1)
                             .onTapGesture {
-                                if self.viewModel.isTerm1Agreed && self.viewModel.isTerm2Agreed && self.viewModel.isTerm3Agreed && self.viewModel.isAllAgreed {
+                                if self.viewModel.isTerm1Agreed && self.viewModel.isTerm2Agreed && self.viewModel.isTerm3Agreed {
                                     // Navigate to the next screen
                                     signupViewModel.isNextToEmailAuth = true
+                                    signupViewModel.marketingAgree = self.viewModel.isMarketingAgreed
                                 } else {
                                     self.viewModel.showAlert = true
                                 }
@@ -75,11 +69,11 @@ struct ServiceAgreementView: View {
                                 if self.viewModel.isTerm1Agreed && self.viewModel.isTerm2Agreed && self.viewModel.isTerm3Agreed  {
                                     // Navigate to the next screen
                                     signupViewModel.isNextToEmailAuth = true
+                                    signupViewModel.marketingAgree = self.viewModel.isMarketingAgreed
                                 } else {
                                     self.viewModel.showAlert = true
                                 }
                             }
-                        
                     }
                 }
             }

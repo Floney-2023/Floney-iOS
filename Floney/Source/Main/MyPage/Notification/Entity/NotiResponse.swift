@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct NotiResponse : Decodable, Identifiable{
+struct NotiResponse : Decodable, Hashable{
     var id : Int
     var title : String
     var body : String
@@ -16,9 +16,9 @@ struct NotiResponse : Decodable, Identifiable{
     var received : Bool
 }
 
-struct BookNoti : Identifiable {
-    let id : UUID = UUID()
+struct BookNoti : Hashable {
+    //let id : UUID = UUID()
     var bookKey : String
     var bookName : String
-    var notiList : [NotiResponse]
+    var notiList : [NotiResponse]?
 }

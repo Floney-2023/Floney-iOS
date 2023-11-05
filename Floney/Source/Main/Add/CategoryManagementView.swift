@@ -47,7 +47,7 @@ struct CategoryManagementView: View {
                                         .resizable()
                                         .aspectRatio(contentMode: .fill)
                                         .frame(width:scaler.scaleWidth(86), height:scaler.scaleHeight(76))
-                                        .clipped()
+                      
                                 )
                             
                         }

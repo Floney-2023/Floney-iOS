@@ -43,30 +43,32 @@ struct MainTabView: View {
                         AddView(isPresented: $showingAddView,lineModel: lineModel,date:currentDate)
                             .transition(.moveAndFade)
                     }
+                    .navigationViewStyle(.stack)
                 }
                 switch selection {
                 case 0:
                     NavigationView {
                         HomeView(showingTabbar: $showingTabbar, mainAddViewStatus: $showingAddView)
                     }
+                    .navigationViewStyle(.stack)
                 case 1:
                     NavigationView {
                         
                         AnalysisView(showingTabbar: $showingTabbar)
-                    }
+                    }.navigationViewStyle(.stack)
                 case 2:
                     NavigationView {
                         AddView(isPresented: $showingAddView, lineModel: lineModel, date:currentDate)
                             .transition(.moveAndFade)
-                    }
+                    }.navigationViewStyle(.stack)
                 case 3:
                     NavigationView {
                         CalculateView(settlementId: $settlementId, isShowingSettlement: $showingSettlementList, showingTabbar: $showingTabbar, showingDetail: $showingSettlementDetail)
-                    }
+                    }.navigationViewStyle(.stack)
                 default :
                     NavigationView {
                         MyPageView(showingTabbar: $showingTabbar, isShowingAccountBottomSheet: $isShowingAccountBottomSheet, isNextToCreateBook: $isNextToCreateBook, isNextToEnterCode: $isNextToEnterCode)
-                    }
+                    }.navigationViewStyle(.stack)
                 }
                 //}
             }

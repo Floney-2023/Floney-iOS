@@ -28,6 +28,8 @@ class SignUpViewModel: ObservableObject {
             }
         }
     }
+    
+    @Published var marketingAgree = false
     @Published var isNextToServiceAgreement = false
     @Published var isNextToEmailAuth = false
     @Published var isNextToAuthCode = false
@@ -51,9 +53,11 @@ class SignUpViewModel: ObservableObject {
     }
     
     func postSignUp() {
-        let request = SignUpRequest(email: email, password: password, nickname: nickname)
+        let request = SignUpRequest(email: email, password: password, nickname: nickname, receiveMarketing: marketingAgree)
         dataManager.postSignUp(request)
             .sink { (dataResponse) in
+    
+                
                 if dataResponse.error != nil {
                     self.createAlert(with: dataResponse.error!, retryRequest: {
                         self.postSignUp()
@@ -76,9 +80,11 @@ class SignUpViewModel: ObservableObject {
     }
     //MARK: 카카오로 가입하기
     func kakaoSignUp() {
-        let request = SNSSignUpRequest(email: email,nickname: nickname)
+        let request = SNSSignUpRequest(email: email,nickname: nickname, receiveMarketing: marketingAgree)
         dataManager.kakaoSignUp(request, authToken)
-            .sink { (dataResponse) in
+            .sink {  (dataResponse) in
+                
+                
                 if dataResponse.error != nil {
                     self.createAlert(with: dataResponse.error!, retryRequest: {
                         self.kakaoSignUp()
@@ -101,9 +107,10 @@ class SignUpViewModel: ObservableObject {
     }
     //MARK: 구글로 가입하기
     func googleSignUp() {
-        let request = SNSSignUpRequest(email: email, nickname: nickname)
+        let request = SNSSignUpRequest(email: email, nickname: nickname, receiveMarketing: marketingAgree)
         dataManager.googleSignUp(request, authToken)
             .sink { (dataResponse) in
+                                
                 if dataResponse.error != nil {
                     self.createAlert(with: dataResponse.error!, retryRequest: {
                         self.googleSignUp()
@@ -126,9 +133,11 @@ class SignUpViewModel: ObservableObject {
     }
     //MARK: 애플로 가입하기
     func appleSignUp() {
-        let request = SNSSignUpRequest(email: email, nickname: nickname)
+        let request = SNSSignUpRequest(email: email, nickname: nickname, receiveMarketing: marketingAgree)
         dataManager.appleSignUp(request, authToken)
-            .sink { (dataResponse) in
+            .sink {  (dataResponse) in
+
+                
                 if dataResponse.error != nil {
                     self.createAlert(with: dataResponse.error!, retryRequest: {
                         self.appleSignUp()
@@ -178,6 +187,7 @@ class SignUpViewModel: ObservableObject {
         let request = AuthEmailRequest(email: email)
         dataManager.authEmail(request)
             .sink { completion in
+                
                 switch completion {
                 case .finished:
                     print("call auth email successfully changed.")
@@ -194,7 +204,8 @@ class SignUpViewModel: ObservableObject {
                     }
                     print("Error calling auth email : \(error)")
                 }
-            } receiveValue: { data in
+            } receiveValue: { [weak self] data in
+                guard let self = self else {return}
                 // TODO: Handle the received data if necessary.
                 print(data)
             }
@@ -205,6 +216,7 @@ class SignUpViewModel: ObservableObject {
         print(request)
         dataManager.checkCode(request)
             .sink { completion in
+                
                 switch completion {
                 case .finished:
                     print("call code successfully checked")
@@ -216,7 +228,8 @@ class SignUpViewModel: ObservableObject {
                         self.checkCode()
                     })
                 }
-            } receiveValue: { data in
+            } receiveValue: { [weak self] data in
+                guard let self = self else {return}
                 // TODO: Handle the received data if necessary.
                 print(data)
             }

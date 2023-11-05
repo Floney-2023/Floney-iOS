@@ -10,13 +10,14 @@ import SwiftUI
 struct SplashScreenView: View {
     @State private var hasSeenOnboarding: Bool = UserDefaults.standard.bool(forKey: "HasSeenOnboarding")
     @State private var isActive = false
-    @StateObject var userSession = AuthenticationService.shared // 로그인 매니저
-    @StateObject var bookManager = BookExistenceViewModel.shared // 유효 가계부 체크
-    @StateObject var applinkManager = AppLinkManager.shared // 링크 매니저
+    @ObservedObject var userSession = AuthenticationService.shared // 로그인 매니저
+    @ObservedObject var bookManager = BookExistenceViewModel.shared // 유효 가계부 체크
+    @ObservedObject var applinkManager = AppLinkManager.shared // 링크 매니저
     @ObservedObject var loadingManager = LoadingManager.shared // 로딩 매니저
     @ObservedObject var alertManager = AlertManager.shared // 알러트 매니저
     
     var body: some View {
+        
         if isActive {
             ZStack {
                 Group {
@@ -34,7 +35,7 @@ struct SplashScreenView: View {
                                     if let settlementId = applinkManager.settlementId {
                                         //MARK: 정산 영수증 화면
                                         MainTabView(selection : 3, settlementId:
-                                                        settlementId,showingSettlementList: true, showingSettlementDetail: true)
+                                                        settlementId, showingSettlementList: true, showingSettlementDetail: true)
                                     }
                                 }
                             } else {
@@ -61,7 +62,6 @@ struct SplashScreenView: View {
                         Image("splash_bg")
                             .resizable(capInsets: EdgeInsets(top: 0.0, leading: 0.0, bottom: 0.0, trailing: 0.0))
                             .ignoresSafeArea()
-                        //Image("splash_logo")
                         
                         ProgressView()
                             .progressViewStyle(CircularProgressViewStyle(tint: Color.white))

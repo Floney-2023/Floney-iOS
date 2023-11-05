@@ -819,7 +819,7 @@ struct DayLinesBottomSheet: View {
                                                 .resizable()
                                                 .aspectRatio(contentMode: .fill)
                                                 .frame(width: scaler.scaleWidth(38), height: scaler.scaleWidth(64))
-                                                .clipped()
+                                           
                                             Text("내역이 없습니다.")
                                                 .font(.pretendardFont(.medium, size: scaler.scaleWidth(12)))
                                                 .foregroundColor(.greyScale6)
@@ -901,11 +901,18 @@ struct DayLinesBottomSheet: View {
                                                         .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(14)))
                                                         .foregroundColor(.greyScale2)
                                                     HStack {
-                                                        ForEach(line.category, id: \.self) { category in
-                                                            Text("\(category)‧")
+                                                        ForEach(Array(line.category.enumerated()), id: \.element) { categoryIndex, category in
+                                                            Text("\(category)")
                                                                 .font(.pretendardFont(.medium, size: scaler.scaleWidth(12)))
                                                                 .foregroundColor(.greyScale6)
+                                                            // 마지막 요소가 아닐 경우에만 점을 추가
+                                                            if categoryIndex < line.category.count - 1 {
+                                                                Text("‧")
+                                                                    .font(.pretendardFont(.medium, size: scaler.scaleWidth(12)))
+                                                                    .foregroundColor(.greyScale6)
+                                                            }
                                                         }
+                                                        
                                                         
                                                     }
                                                 }
@@ -977,8 +984,10 @@ struct DayLinesBottomSheet: View {
                                                         toggleOnOff: line.exceptStatus,
                                                         writer: line.userNickName
                                                     )
-                                                    .transition(.moveAndFade)
+                                                                                                        
                                                 }
+                                                .transition(.moveAndFade)
+                                                .navigationViewStyle(.stack)
                                             }
                                         }
                                     } //ForEach

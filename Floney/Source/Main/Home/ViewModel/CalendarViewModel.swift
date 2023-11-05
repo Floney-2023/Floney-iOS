@@ -74,6 +74,7 @@ class CalendarViewModel: ObservableObject {
         let request = CalendarRequest(bookKey: bookKey, date: requestDate)
         dataManager.getCalendar(request)
             .sink { (dataResponse) in
+                
                 if dataResponse.error != nil {
                     self.createAlert(with: dataResponse.error!, retryRequest: {
                         self.getCalendar()
@@ -128,6 +129,7 @@ class CalendarViewModel: ObservableObject {
         print(request)
         dataManager.getDayLines(request)
             .sink { (dataResponse) in
+                
                 if dataResponse.error != nil {
                     self.createAlert(with: dataResponse.error!, retryRequest: {
                         self.getDayLines()
@@ -170,6 +172,7 @@ class CalendarViewModel: ObservableObject {
         let request = BookInfoRequest(bookKey: bookKey)
         dataManager.getBookInfo(request)
             .sink { (dataResponse) in
+                
                 if dataResponse.error != nil {
                     self.createAlert(with: dataResponse.error!, retryRequest: {
                         self.getBookInfo()
@@ -188,6 +191,7 @@ class CalendarViewModel: ObservableObject {
     func getMyInfo() {
         dataManager.getMyInfo()
             .sink { (dataResponse) in
+
                 if dataResponse.error != nil {
                     self.createAlert(with: dataResponse.error!, retryRequest: {
                         self.getMyInfo()

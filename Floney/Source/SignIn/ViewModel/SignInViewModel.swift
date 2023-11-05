@@ -56,6 +56,7 @@ class SignInViewModel: ObservableObject {
         let request = SignInRequest(email: email, password: password)
         dataManager.postSignIn(request)
             .sink { (dataResponse) in
+                
                 if dataResponse.error != nil {
                     self.createAlert(with: dataResponse.error!, retryRequest: {
                         self.postSignIn()
@@ -169,6 +170,7 @@ class SignInViewModel: ObservableObject {
     func kakaoSignIn() {
         dataManager.kakaoSignIn(authToken)
             .sink { (dataResponse) in
+                
                 if dataResponse.error != nil {
                     self.createAlert(with: dataResponse.error!, retryRequest: {
                         self.kakaoSignIn()
@@ -195,6 +197,7 @@ class SignInViewModel: ObservableObject {
     func googleSignIn() {
         dataManager.googleSignIn(authToken)
             .sink { (dataResponse) in
+                
                 if dataResponse.error != nil {
                     self.createAlert(with: dataResponse.error!, retryRequest: {
                         self.googleSignIn()
@@ -226,6 +229,7 @@ class SignInViewModel: ObservableObject {
     func appleSignIn() {
         dataManager.appleSignIn(authToken)
             .sink { (dataResponse) in
+                
                 if dataResponse.error != nil {
                     self.createAlert(with: dataResponse.error!, retryRequest: {
                         self.appleSignIn()
@@ -254,7 +258,7 @@ class SignInViewModel: ObservableObject {
                 }
             }.store(in: &cancellableSet)
     }
-
+    
     
     //MARK: 토큰 저장하기
     func setToken() {
@@ -457,7 +461,8 @@ class SignInViewModel: ObservableObject {
     //MARK: 비밀번호 재설정
     func findPassword(email: String) {
         dataManager.findPassword(email: email)
-            .sink { completion in
+            .sink { [weak self] completion in
+                guard let self = self else {return}
                 switch completion {
                 case .finished:
                     print("Profile successfully changed.")
@@ -471,7 +476,8 @@ class SignInViewModel: ObservableObject {
                     LoadingManager.shared.update(showLoading: false, loadingType: .floneyLoading)
                     print("Error finding password: \(error)")
                 }
-            } receiveValue: { data in
+            } receiveValue: { [weak self] data in
+                guard let self = self else {return}
                 // TODO: Handle the received data if necessary.
             }
             .store(in: &cancellableSet)

@@ -28,7 +28,7 @@ struct SettlementListView: View {
                                     .resizable()
                                     .aspectRatio(contentMode: .fill)
                                     .frame(width:scaler.scaleWidth(50), height:scaler.scaleHeight(84))
-                                    .clipped()
+                      
                             )
                         Text("정산 내역이 없습니다.")
                             .font(.pretendardFont(.medium,size: scaler.scaleWidth(12)))

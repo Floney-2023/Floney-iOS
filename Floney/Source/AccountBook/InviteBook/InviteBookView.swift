@@ -108,6 +108,7 @@ struct InviteBookView: View {
             )
             .edgesIgnoringSafeArea(.bottom)
         }
+        .navigationViewStyle(.stack)
     }
 }
 

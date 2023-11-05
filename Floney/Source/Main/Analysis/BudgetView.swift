@@ -49,7 +49,7 @@ struct BudgetView: View {
                             .resizable()
                             .aspectRatio(contentMode: .fill)
                             .frame(width: scaler.scaleWidth(80),height: scaler.scaleWidth(52))
-                            .clipped()
+             
                         
                         
                     }
@@ -78,7 +78,7 @@ struct BudgetView: View {
                                     .resizable()
                                     .aspectRatio(contentMode: .fill)
                                     .frame(width: scaler.scaleWidth(50), height: scaler.scaleWidth(84))
-                                    .clipped()
+                        
                                     .offset(y: scaler.scaleHeight(-20)) // Move the image up
                                 VStack {
                                     Text("쓸 수 있는 예산이")
@@ -91,7 +91,7 @@ struct BudgetView: View {
                                     .resizable()
                                     .aspectRatio(contentMode: .fill)
                                     .frame(width: scaler.scaleWidth(50), height: scaler.scaleWidth(84))
-                                    .clipped()
+                         
                                     .offset(y: scaler.scaleHeight(-20))
                                 VStack {
                                     Text("조금씩 지출을")
@@ -103,7 +103,7 @@ struct BudgetView: View {
                                     .resizable()
                                     .aspectRatio(contentMode: .fill)
                                     .frame(width: scaler.scaleWidth(50), height: scaler.scaleWidth(84))
-                                    .clipped()
+                          
                                     .offset(y: scaler.scaleHeight(-20))
                                 VStack {
                                     Text("예산을 넘기지 않게")
@@ -115,7 +115,7 @@ struct BudgetView: View {
                                     .resizable()
                                     .aspectRatio(contentMode: .fill)
                                     .frame(width: scaler.scaleWidth(50), height: scaler.scaleWidth(84))
-                                    .clipped()
+                          
                                     .offset(y: scaler.scaleHeight(-20))
                                 VStack {
                                     Text("예산을")
@@ -191,7 +191,7 @@ struct BudgetView: View {
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
                                 .frame(width: scaler.scaleWidth(80),height: scaler.scaleWidth(52))
-                                .clipped()
+                       
                         }
                         Color.white
                             .opacity(0.9)
@@ -220,7 +220,7 @@ struct BudgetView: View {
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
                                 .frame(width: scaler.scaleWidth(50), height: scaler.scaleWidth(84))
-                                .clipped()
+                   
                                 .offset(y: scaler.scaleHeight(-20)) // Move the image up
                             VStack {
                                 Text("예산을")

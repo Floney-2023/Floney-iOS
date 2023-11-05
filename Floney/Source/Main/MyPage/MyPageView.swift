@@ -16,6 +16,7 @@ struct MyPageView: View {
     @Binding var isNextToCreateBook : Bool
     @Binding var isNextToEnterCode : Bool
     @StateObject var viewModel = MyPageViewModel()
+    
     @State var isShowingNotiView = false
     @State var isShowingUserInfoView = false
     @State var currency = CurrencyManager.shared.currentCurrency
@@ -41,21 +42,23 @@ struct MyPageView: View {
                         .font(.pretendardFont(.bold, size:scaler.scaleWidth(22)))
                         .foregroundColor(.greyScale1)
                     Spacer()
-                    NavigationLink(destination: NotificationView(viewModel: viewModel.notiviewModel,showingTabbar: $showingTabbar), isActive: $isShowingNotiView) {
+                    
+                    NavigationLink(destination: NotificationView(showingTabbar: $showingTabbar), isActive: $isShowingNotiView) {
                         Image("icon_notification")
                             .resizable()
                             .aspectRatio(contentMode: .fill)
                             .frame(width: scaler.scaleWidth(32),height: scaler.scaleWidth(32))
-                            .clipped()
+                   
                             .onTapGesture {
                                 showingTabbar = false
                                 isShowingNotiView = true
                             }
                     }
-                    Image("icon_settings")
-                        .resizable()
-                        .frame(width: scaler.scaleWidth(32),height: scaler.scaleWidth(32))
-                    
+                    NavigationLink(destination: SettingView()) {
+                        Image("icon_settings")
+                            .resizable()
+                            .frame(width: scaler.scaleWidth(32),height: scaler.scaleWidth(32))
+                    }
                 }
                 .padding(.horizontal, scaler.scaleWidth(20))
                 
@@ -129,10 +132,10 @@ struct MyPageView: View {
                                 Image("forward_button")
                                     .resizable()
                                     .frame(width: scaler.scaleWidth(24), height: scaler.scaleWidth(24))
-                                    .padding(scaler.scaleWidth(20))
+                                    .padding(.trailing ,scaler.scaleWidth(16))
                             }
                             .background(Color.primary10)
-                            .frame(height: scaler.scaleHeight(76))
+                            //.frame(height: scaler.scaleHeight(76))
                             .cornerRadius(12)
                             .onTapGesture {
                                 self.showingTabbar = false
@@ -285,24 +288,26 @@ struct MyPageView: View {
                                     viewModel.changeBook(bookKey: book.bookKey, bookStatus: book.bookStatus)
                                 }
                             }
-                            
-                            
-                            // MARK: Bottom Sheet Toggle
-                            Button(action: {
-                                withAnimation{
-                                    isShowingAccountBottomSheet = true
+                            if viewModel.myBooks.count < 2 {
+                                // MARK: Bottom Sheet Toggle
+                                Button(action: {
+                                    withAnimation{
+                                        isShowingAccountBottomSheet = true
+                                    }
+                                }) {
+                                    Image("icon_plus")
                                 }
-                            }) {
-                                Image("icon_plus")
+                                .padding(scaler.scaleWidth(20))
+                                .frame(maxWidth: .infinity)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .stroke(Color.greyScale9, style:StrokeStyle(lineWidth: 1, dash: [6]))
+                                )
                             }
-                            .padding(scaler.scaleWidth(20))
-                            .frame(maxWidth: .infinity)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 12)
-                                    .stroke(Color.greyScale9, style:StrokeStyle(lineWidth: 1, dash: [6]))
-                            )
+                                
                         }
                     }.padding(.top, scaler.scaleHeight(32))
+                    
                     VStack(spacing:scaler.scaleHeight(16)) {
                         HStack {
                             Text("고객지원")
@@ -311,23 +316,26 @@ struct MyPageView: View {
                             Spacer()
                         }
                         VStack(spacing:0) {
-                            HStack {
-                                Text("문의하기")
-                                    .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
-                                    .foregroundColor(.greyScale2)
-                                Spacer()
-                                Image("forward_button")
+                            NavigationLink(destination : SendMailView(showingTabbar: $showingTabbar)) {
+                                HStack {
+                                    Text("문의하기")
+                                        .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
+                                        .foregroundColor(.greyScale2)
+                                    Spacer()
+                                    Image("forward_button")
+                                }
+                                .frame(height: scaler.scaleHeight(56))
                             }
-                            .frame(height: scaler.scaleHeight(56))
-                            
-                            HStack {
-                                Text("공지사항")
-                                    .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
-                                    .foregroundColor(.greyScale2)
-                                Spacer()
-                                Image("forward_button")
+                            NavigationLink(destination : AnnouncementView(showingTabbar: $showingTabbar)) {
+                                HStack {
+                                    Text("공지사항")
+                                        .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
+                                        .foregroundColor(.greyScale2)
+                                    Spacer()
+                                    Image("forward_button")
+                                }
+                                .frame(height: scaler.scaleHeight(56))
                             }
-                            .frame(height: scaler.scaleHeight(56))
                             HStack {
                                 Text("리뷰 작성하기")
                                     .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))

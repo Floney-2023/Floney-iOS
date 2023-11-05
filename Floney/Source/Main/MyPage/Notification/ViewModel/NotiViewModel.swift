@@ -13,28 +13,42 @@ import SwiftUI
 
 final class NotiViewModel: ObservableObject {
     var tokenViewModel = TokenReissueViewModel()
-    @Published var bookNotiList : [BookNoti] = [
-        BookNoti(bookKey: "4B7719E8",bookName: "냐냐",notiList: [
-            NotiResponse(id: 6, title: "플로니", body: "냐냐의 가계부를 정산해보세요!", imgUrl: "noti_settlement", date: "2023-10-03T08:03:26", received: false),
-            NotiResponse(id: 7, title: "플로니", body: "냐냐의 가계부를 정산해보세요!", imgUrl: "noti_settlement", date: "2023-09-03T08:03:26", received: false)
-        ]),
-        BookNoti(bookKey: "4B7719E8",bookName: "뇨뇨",notiList: [
-            NotiResponse(id: 6, title: "플로니", body: "냐냐의 가계부를 정산해보세요!", imgUrl: "noti_settlement", date: "2023-10-03T08:03:26", received: false),
-            NotiResponse(id: 7, title: "플로니", body: "냐냐의 가계부를 정산해보세요!", imgUrl: "noti_settlement", date: "2023-09-03T08:03:26", received: false)
-        ])
-    ]
-    
+    @Published var result : MyPageResponse = MyPageResponse(nickname: "", email: "", profileImg: "", provider: "", subscribe: false, lastAdTime: nil, myBooks: [])
+    @Published var bookNotiList : [BookNoti] = []
+    @Published var myBooks : [MyBookResult] = []
     private var cancellableSet: Set<AnyCancellable> = []
     var dataManager: NotiProtocol
     
     init( dataManager: NotiProtocol = NotiService.shared) {
         self.dataManager = dataManager
     }
+    
+    func getMyPage() {
+        dataManager.getMyPage()
+            .sink { (dataResponse) in
+                if dataResponse.error != nil {
+                    self.createAlert(with: dataResponse.error!, retryRequest: {
+                        self.getMyPage()
+                    })
+                    print(dataResponse.error)
+                } else {
+                    self.result = dataResponse.value!
+                    self.myBooks = self.result.myBooks!
+                    self.bookNotiList = []
+                    for book in self.myBooks {
+                        self.getNoti(bookKey: book.bookKey, bookName: book.name)
+                    }
+                    print("get my page in : \(self.bookNotiList)")
+                }
+            }.store(in: &cancellableSet)
+    }
+    
     func postNoti(title :String, body: String, imgUrl : String, userEmail : String, date : String) {
         let bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
         let request = NotiRequest(bookKey: bookKey, title: title, body: body, imgUrl: imgUrl, userEmail: userEmail, date: date)
         dataManager.postNoti(request)
             .sink { completion in
+
                 switch completion {
                 case .finished:
                     print("postNoti success.")
@@ -52,6 +66,7 @@ final class NotiViewModel: ObservableObject {
     func getNoti(bookKey : String, bookName: String) {
         dataManager.getNoti(bookKey: bookKey)
             .sink { (dataResponse) in
+                
                 if dataResponse.error != nil {
                     self.createAlert(with: dataResponse.error!, retryRequest: {
                         self.getNoti(bookKey: bookKey, bookName: bookName)
@@ -61,11 +76,10 @@ final class NotiViewModel: ObservableObject {
                     self.bookNotiList.append(
                         BookNoti(bookKey: bookKey, bookName: bookName, notiList: dataResponse.value!)
                     )
+                    print(self.bookNotiList)
                 }
             }.store(in: &cancellableSet)
     }
-    
-
     
     func createAlert( with error: NetworkError, retryRequest: @escaping () -> Void) {
         //loadingError = error.backendError == nil ? error.initialError.localizedDescription : error.backendError!.message

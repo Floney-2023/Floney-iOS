@@ -133,6 +133,7 @@ class SettingBookViewModel : ObservableObject {
         let request = BookInfoRequest(bookKey: bookKey)
         dataManager.getBookInfo(request)
             .sink { (dataResponse) in
+                
                 if dataResponse.error != nil {
                     self.createAlert(with: dataResponse.error!, retryRequest: {
                         self.getBookInfo()
@@ -186,6 +187,7 @@ class SettingBookViewModel : ObservableObject {
         print("book profile parameter : \(request)")
         dataManager.changeProfile(parameters: request)
             .sink { completion in
+
                 switch completion {
                 case .finished:
                     print("Profile successfully changed.")
@@ -214,7 +216,8 @@ class SettingBookViewModel : ObservableObject {
                     }
                     
                 }
-            } receiveValue: { data in
+            } receiveValue: { [weak self] data in
+                guard let self = self else {return}
                 // TODO: Handle the received data if necessary.
             }
             .store(in: &cancellableSet)
@@ -223,7 +226,9 @@ class SettingBookViewModel : ObservableObject {
         bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
         let request = BookNameRequest(name: changedName, bookKey: bookKey)
         dataManager.changeNickname(parameters: request)
-            .sink { completion in
+            .sink { [weak self] completion in
+                guard let self = self else {return}
+                
                 switch completion {
                 case .finished:
                     print("Changing nickname successfully changed.")
@@ -250,7 +255,8 @@ class SettingBookViewModel : ObservableObject {
         bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
         let request = SeeProfileRequest(bookKey: bookKey, seeProfileStatus: profileStatus)
         dataManager.changeProfileStatus(parameters: request)
-            .sink { completion in
+            .sink { [weak self] completion in
+                guard let self = self else {return}
                 switch completion {
                 case .finished:
                     print("Changing Profile Status successfully changed.")
@@ -271,7 +277,9 @@ class SettingBookViewModel : ObservableObject {
         
         let request = SetBudgetRequest(bookKey: bookKey, budget: budget, date: budgetDate)
         dataManager.setBudget(parameters: request)
-            .sink { completion in
+            .sink { [weak self] completion in
+                guard let self = self else {return}
+                
                 switch completion {
                 case .finished:
                     print("Setting Budget successfully changed.")
@@ -324,7 +332,8 @@ class SettingBookViewModel : ObservableObject {
         bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
         let request = SetAssetRequest(bookKey: bookKey, asset: asset)
         dataManager.setAsset(parameters: request)
-            .sink { completion in
+            .sink { [weak self] completion in
+                guard let self = self else {return}
                 switch completion {
                 case .finished:
                     print("Setting Asset successfully changed.")
@@ -345,7 +354,9 @@ class SettingBookViewModel : ObservableObject {
         bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
         let request = SetCarryOver(bookKey: bookKey, status: status)
         dataManager.setCarryOver(parameters: request)
-            .sink { completion in
+            .sink { [weak self] completion in
+                guard let self = self else {return}
+                
                 switch completion {
                 case .finished:
                     print("Setting Carry Over successfully changed.")
@@ -367,7 +378,8 @@ class SettingBookViewModel : ObservableObject {
         bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
         let request = BookInfoRequest(bookKey: bookKey)
         dataManager.exitBook(parameters: request)
-            .sink { completion in
+            .sink { [weak self] completion in
+                guard let self = self else {return}
                 switch completion {
                 case .finished:
                     print("Exit Book successfully changed.")
@@ -392,7 +404,8 @@ class SettingBookViewModel : ObservableObject {
         bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
         let request = BookInfoRequest(bookKey: bookKey)
         dataManager.deleteBook(parameters: request)
-            .sink { completion in
+            .sink { [weak self] completion in
+                guard let self = self else {return}
                 switch completion {
                 case .finished:
                     print("Exit Book successfully changed.")
@@ -417,7 +430,8 @@ class SettingBookViewModel : ObservableObject {
         bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
         let request = BookInfoRequest(bookKey: bookKey)
         dataManager.resetBook(parameters: request)
-            .sink { completion in
+            .sink { [weak self] completion in
+                guard let self = self else {return}
                 switch completion {
                 case .finished:
                     print("Reset Book successfully changed.")
@@ -438,6 +452,7 @@ class SettingBookViewModel : ObservableObject {
         let request = BookInfoRequest(bookKey: bookKey)
         dataManager.getShareCode(request)
             .sink { (dataResponse) in
+                
                 if dataResponse.error != nil {
                     self.createAlert(with: dataResponse.error!, retryRequest: {
                         self.getShareCode()
@@ -456,6 +471,7 @@ class SettingBookViewModel : ObservableObject {
         let request = SetCurrencyRequest(requestCurrency: currency, bookKey: bookKey)
         dataManager.setCurrency(request)
             .sink { (dataResponse) in
+                
                 if dataResponse.error != nil {
                     self.createAlert(with: dataResponse.error!, retryRequest: {
                         self.setCurrency(currency: currency)
@@ -491,6 +507,7 @@ class SettingBookViewModel : ObservableObject {
                     })
                 }
             }, receiveValue: { localFileURL in
+
                 print("Excel file saved to:", localFileURL)
                 self.excelURL = localFileURL
                 self.shareExcelStatus = true

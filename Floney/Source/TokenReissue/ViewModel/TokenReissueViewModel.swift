@@ -24,7 +24,9 @@ class TokenReissueViewModel: ObservableObject {
             print("token reissue----------------")
             let request = TokenReissueRequest(accessToken: accessToken, refreshToken: refreshToken)
             dataManager.tokenReissue(request)
-                .sink { (dataResponse) in
+                .sink {(dataResponse) in
+ 
+                    
                     if dataResponse.error != nil {
                         self.createAlert(with: dataResponse.error!)
                         print(dataResponse.error)

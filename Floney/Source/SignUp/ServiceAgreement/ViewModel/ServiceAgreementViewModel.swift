@@ -66,19 +66,4 @@ class ServiceAgreementViewModel: ObservableObject {
         }
     }
 
-    /*
-    @Published var isAllAgreed: Bool = false {
-        willSet {
-            if newValue == false && newValue != isAllAgreed {
-                isTerm1Agreed = newValue
-                isTerm2Agreed = newValue
-                isTerm3Agreed = newValue
-            } else if newValue == true {
-                isTerm1Agreed = newValue
-                isTerm2Agreed = newValue
-                isTerm3Agreed = newValue
-            }
-        }
-    }
-     */
 }

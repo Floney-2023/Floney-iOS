@@ -54,19 +54,19 @@ struct AssetView: View {
                             .resizable()
                             .aspectRatio(contentMode: .fill)
                             .frame(width: scaler.scaleWidth(80),height: scaler.scaleWidth(90))
-                            .clipped()
+                 
                     } else if viewModel.difference < 0 {
                         Image("asset_decreased")
                             .resizable()
                             .aspectRatio(contentMode: .fill)
                             .frame(width: scaler.scaleWidth(80),height: scaler.scaleWidth(70))
-                            .clipped()
+                 
                     } else {
                         Image("asset")
                             .resizable()
                             .aspectRatio(contentMode: .fill)
                             .frame(width: scaler.scaleWidth(80),height: scaler.scaleWidth(90))
-                            .clipped()
+                   
                     }
                 }
                 

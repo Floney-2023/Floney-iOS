@@ -24,7 +24,6 @@ struct SignInView: View {
                         .resizable()
                         .aspectRatio(contentMode: .fill)
                         .frame(width:scaler.scaleWidth(106), height: scaler.scaleHeight(26))
-                        .clipped()
                         .padding(EdgeInsets(top: scaler.scaleHeight(86), leading: 0, bottom: 0, trailing: 0))
                     
                     VStack(spacing: scaler.scaleHeight(20)) {
@@ -84,7 +83,7 @@ struct SignInView: View {
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
                                 .frame(width:scaler.scaleWidth(48), height: scaler.scaleWidth(48))
-                                .clipped()
+                         
                                 .onTapGesture {
                                     signInViewModel.performKakaoSignIn()
                                 }
@@ -92,7 +91,7 @@ struct SignInView: View {
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
                                 .frame(width:scaler.scaleWidth(48), height: scaler.scaleWidth(48))
-                                .clipped()
+                            
                                 .onTapGesture {
                                     Task {
                                         do {
@@ -106,7 +105,7 @@ struct SignInView: View {
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
                                 .frame(width:scaler.scaleWidth(48), height: scaler.scaleWidth(48))
-                                .clipped()
+                           
                                 .onTapGesture {
                                     signInViewModel.performAppleSignIn()
                                 }
@@ -118,6 +117,7 @@ struct SignInView: View {
             }
             .onAppear(perform : UIApplication.shared.hideKeyboard)
         }
+        .navigationViewStyle(.stack)
     }
 }
 

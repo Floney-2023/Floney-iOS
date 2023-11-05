@@ -58,7 +58,7 @@ struct UnsubscribeView: View {
                             .resizable()
                             .aspectRatio(contentMode: .fill)
                             .frame(width: scaler.scaleWidth(78), height: scaler.scaleHeight(58))
-                            .clipped()
+                     
                     )
             }
             HStack {

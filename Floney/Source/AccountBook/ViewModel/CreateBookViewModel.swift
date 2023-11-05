@@ -54,6 +54,7 @@ class CreateBookViewModel: ObservableObject {
         print(request)
         dataManager.createBook(request)
             .sink { (dataResponse) in
+                
                 if dataResponse.error != nil {
                     self.createAlert(with: dataResponse.error!, retryRequest: {
                         self.createBook()
@@ -77,6 +78,7 @@ class CreateBookViewModel: ObservableObject {
         print(request)
         dataManager.createBook(request)
             .sink { (dataResponse) in
+                
                 if dataResponse.error != nil {
                     self.createAlert(with: dataResponse.error!, retryRequest: {
                         self.addBook()
@@ -100,6 +102,7 @@ class CreateBookViewModel: ObservableObject {
         let request = InviteBookRequest(code: bookCode)
         dataManager.inviteBook(request)
             .sink { (dataResponse) in
+                
                 if dataResponse.error != nil {
                     self.createAlert(with: dataResponse.error!, retryRequest: {
                         self.joinBook()
@@ -126,6 +129,7 @@ class CreateBookViewModel: ObservableObject {
             let request = InviteBookRequest(code: inviteCode)
             dataManager.inviteBook(request)
                 .sink { (dataResponse) in
+                    
                     if dataResponse.error != nil {
                         self.createAlert(with: dataResponse.error!, retryRequest: {
                             self.inviteBookCode()
@@ -149,6 +153,7 @@ class CreateBookViewModel: ObservableObject {
         if let inviteCode = AppLinkManager.shared.inviteCode {
             dataManager.bookInfoByCodeBook(bookCode: inviteCode)
                 .sink { (dataResponse) in
+                    
                     if dataResponse.error != nil {
                         self.createAlert(with: dataResponse.error!, retryRequest: {
                             self.bookInfoByCode()

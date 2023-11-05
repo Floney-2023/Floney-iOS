@@ -7,21 +7,18 @@
 
 import SwiftUI
 
-
-
 struct SetPeriodCalcView: View {
     let scaler = Scaler.shared
     @Binding var isShowingTabbar : Bool
     @Binding var isShowingCalc : Bool
     @State var isShowingCalendar = false
     @ObservedObject var viewModel : CalculateViewModel
-   
     @State var text = "기간을 설정해주세요."
-    
     @Binding var pageCount : Int
+    
     var pageCountAll = 4
     var nickname = "user1"
-    
+
     var body: some View {
         ZStack{
             VStack {
