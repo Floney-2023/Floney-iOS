@@ -11,7 +11,7 @@ struct CreateBookView: View {
     let scaler = Scaler.shared
     var pageCount = 3
     var pageCountAll = 3
-   
+    @Binding var createBookType : createBookType
     @State var isShowingBottomSheet = false
     @State var onShareSheet = false
     @StateObject var viewModel = SettingBookViewModel()
@@ -55,6 +55,9 @@ struct CreateBookView: View {
                         .withNextButtonFormmating(.primary1)
                         .onTapGesture {
                             DispatchQueue.main.async {
+                                if createBookType == .add {
+                                    BookExistenceViewModel.shared.bookExistence = false
+                                }
                                 BookExistenceViewModel.shared.getBookExistence()
                             }
                         }
@@ -85,6 +88,6 @@ struct CreateBookView: View {
 
 struct CreateBookView_Previews: PreviewProvider {
     static var previews: some View {
-        CreateBookView()
+        CreateBookView(createBookType:.constant(createBookType.add))
     }
 }

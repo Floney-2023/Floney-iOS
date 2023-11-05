@@ -78,7 +78,6 @@ class CreateBookViewModel: ObservableObject {
         print(request)
         dataManager.createBook(request)
             .sink { (dataResponse) in
-                
                 if dataResponse.error != nil {
                     self.createAlert(with: dataResponse.error!, retryRequest: {
                         self.addBook()

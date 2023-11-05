@@ -68,7 +68,7 @@ struct SetBookProfileView: View {
             
             Spacer()
             
-            NavigationLink(destination: CreateBookView(), isActive: $viewModel.isNextToCreateBook){
+            NavigationLink(destination: CreateBookView(createBookType: $createBookType), isActive: $viewModel.isNextToCreateBook){
                 Text("다음으로")
                     .padding(scaler.scaleHeight(16))
                     .withNextButtonFormmating(.primary1)
