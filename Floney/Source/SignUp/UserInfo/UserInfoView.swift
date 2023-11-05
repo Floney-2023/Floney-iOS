@@ -11,6 +11,7 @@ struct UserInfoView: View {
     let scaler = Scaler.shared
     var pageCount = 4
     var pageCountAll = 4
+    var email = "rrrrrkkkkrr@naver.com"
    
     @ObservedObject var viewModel : SignUpViewModel
     var body: some View {
@@ -33,7 +34,7 @@ struct UserInfoView: View {
                     Spacer()
                 }
                 VStack(spacing: scaler.scaleWidth(20)) {
-                    VStack(spacing: scaler.scaleHeight(12)) {
+                    VStack(alignment:.leading, spacing: scaler.scaleHeight(12)) {
                         HStack {
                             Text("이메일 주소")
                                 .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(14)))
@@ -41,17 +42,25 @@ struct UserInfoView: View {
                             Spacer()
                         }
                        
-                        Text("\(viewModel.email)")
-                            .padding()
+                        Rectangle()
+                            .foregroundColor(.clear)
                             .frame(height: scaler.scaleHeight(46))
                             .frame(width: scaler.scaleWidth(320))
-                            .font(.pretendardFont(.regular, size: scaler.scaleWidth(14)))
-                            .foregroundColor(.greyScale2)
                             .background(Color.greyScale12)
                             .cornerRadius(12)
                             .overlay(
                                 RoundedRectangle(cornerRadius: 12)
-                                    .stroke(Color.greyScale10, lineWidth: 1) // Set the border
+                                    .stroke(Color.greyScale10, lineWidth: 1)
+                            )
+                            .overlay(
+                                HStack {
+                                    Text("\(email)")
+                                        .font(.pretendardFont(.regular, size: scaler.scaleWidth(14)))
+                                        .foregroundColor(.greyScale2)
+                                        .padding(.leading, scaler.scaleWidth(20))
+                                    Spacer()
+                                }
+                                
                             )
                         
                         
