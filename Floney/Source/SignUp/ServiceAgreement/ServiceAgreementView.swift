@@ -20,7 +20,7 @@ struct ServiceAgreementView: View {
             VStack(spacing: scaler.scaleHeight(32)) {
                 HStack {
                     VStack(alignment: .leading, spacing: scaler.scaleHeight(16)) {
-                    Text("\(pageCount)")
+                        Text("\(pageCount)")
                             .foregroundColor(.greyScale2)
                             .font(.pretendardFont(.medium, size:scaler.scaleWidth(12)))
                         + Text(" / \(pageCountAll)")
@@ -42,6 +42,7 @@ struct ServiceAgreementView: View {
                     ServiceAgreementButton(isAgreed: $viewModel.isMarketingAgreed, title: "마케팅 정보 수신 동의 (선택)")
                     ServiceAgreementButton(isAgreed: $viewModel.isTerm3Agreed, forwardButton: false, title: "만 14세 이상 확인 (필수)")
                 }
+
                 Spacer()
                 
                 if signupViewModel.providerStatus != .email {
@@ -50,13 +51,16 @@ struct ServiceAgreementView: View {
                             .padding()
                             .withNextButtonFormmating(.primary1)
                             .onTapGesture {
-                                if self.viewModel.isTerm1Agreed && self.viewModel.isTerm2Agreed && self.viewModel.isTerm3Agreed {
-                                    // Navigate to the next screen
-                                    signupViewModel.isNextToEmailAuth = true
-                                    signupViewModel.marketingAgree = self.viewModel.isMarketingAgreed
-                                } else {
-                                    self.viewModel.showAlert = true
-                                }
+                                
+                                 if self.viewModel.isTerm1Agreed && self.viewModel.isTerm2Agreed && self.viewModel.isTerm3Agreed {
+                                 // Navigate to the next screen
+                                 signupViewModel.isNextToEmailAuth = true
+                                 signupViewModel.marketingAgree = self.viewModel.isMarketingAgreed
+                                 } else {
+                                 self.viewModel.showAlert = true
+                                 }
+                                 
+                               
                             }
                         
                     }
@@ -66,13 +70,15 @@ struct ServiceAgreementView: View {
                             .padding()
                             .withNextButtonFormmating(.primary1)
                             .onTapGesture {
-                                if self.viewModel.isTerm1Agreed && self.viewModel.isTerm2Agreed && self.viewModel.isTerm3Agreed  {
-                                    // Navigate to the next screen
-                                    signupViewModel.isNextToEmailAuth = true
-                                    signupViewModel.marketingAgree = self.viewModel.isMarketingAgreed
-                                } else {
-                                    self.viewModel.showAlert = true
-                                }
+                                
+                                 if self.viewModel.isTerm1Agreed && self.viewModel.isTerm2Agreed && self.viewModel.isTerm3Agreed  {
+                                 // Navigate to the next screen
+                                 signupViewModel.isNextToEmailAuth = true
+                                 signupViewModel.marketingAgree = self.viewModel.isMarketingAgreed
+                                 } else {
+                                 self.viewModel.showAlert = true
+                                 }
+                               
                             }
                     }
                 }
@@ -80,7 +86,7 @@ struct ServiceAgreementView: View {
             .padding(EdgeInsets(top:scaler.scaleHeight(32), leading: scaler.scaleWidth(24), bottom: scaler.scaleHeight(38), trailing: scaler.scaleWidth(24)))
             .customNavigationBar(
                 leftView: { BackButton() }
-                )
+            )
             
             CustomAlertView(message: ErrorMessage.signup01.value, type: $viewModel.buttonType, isPresented: $viewModel.showAlert)
         } //ZStack
@@ -94,10 +100,11 @@ struct ServiceAgreementButton: View {
     @State var checkboxType: String = "term"
     @State var forwardButton : Bool = true
     let title: String
-
+    
     var body: some View {
         Button(action: {
             isAgreed.toggle()
+            
         }) {
             HStack(spacing: scaler.scaleWidth(14)) {
                 if checkboxType == "term" {
@@ -105,7 +112,7 @@ struct ServiceAgreementButton: View {
                 } else if checkboxType == "all" {
                     Image(isAgreed ? "check_primary" : "checkbox_primary")
                 }
-                    
+                
                 Text(title)
                     .font(.pretendardFont(.regular, size: scaler.scaleWidth(14)))
                     .foregroundColor(.greyScale2)

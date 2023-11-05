@@ -232,12 +232,14 @@ struct CustomCalendarView: View {
                                         viewModel.selectedView = index
                                     }
                                 }
+                                .overlay(
+                                    Text(viewModel.options[index])
+                                        .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(11)))
+                                        .foregroundColor(viewModel.selectedView == index ? .greyScale2: .greyScale8)
+                                        .padding(index == 0 ? .leading:.trailing , scaler.scaleWidth(4))
+                                )
+                            
                         }
-                        .overlay(
-                            Text(viewModel.options[index])
-                                .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(11)))
-                                .foregroundColor(viewModel.selectedView == index ? .greyScale2: .greyScale8)
-                        )
                     }
                 }
                 .frame(width: scaler.scaleWidth(116))
