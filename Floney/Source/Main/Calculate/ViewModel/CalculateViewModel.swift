@@ -66,9 +66,9 @@ class CalculateViewModel : ObservableObject {
     @Published var totalOutcome : Float = 30000//0
     @Published var outcomePerUser : Float = 10000//0
     @Published var details : [AddSettlementResponseDetails] = [ //[]
-        AddSettlementResponseDetails(money: 0, userNickname: "test"),
-        AddSettlementResponseDetails(money: -10000, userNickname: "test2"),
-        AddSettlementResponseDetails(money: 10000, userNickname: "test3")
+        AddSettlementResponseDetails(money: 0, userNickname: "test", userProfileImg: "user_default"),
+        AddSettlementResponseDetails(money: -10000, userNickname: "test2", userProfileImg: "user_default"),
+        AddSettlementResponseDetails(money: 10000, userNickname: "test3", userProfileImg: "user_default")
     ]
     @Published var id = 0
     
@@ -104,13 +104,14 @@ class CalculateViewModel : ObservableObject {
                         self.isActiveLines = false
                         AlertManager.shared.update(showAlert: true, message: "내역이 없습니다. 기간을 다시 설정해주세요.", buttonType: .red)
                         
-                    }
-                    self.lines = self.lines.map { item in
-                        var item = item
-                        item.isSelected = false
-                        return item
-                    }
-                    self.isActiveLines = true
+                    } else {
+                        self.isActiveLines = true
+                        self.lines = self.lines.map { item in
+                            var item = item
+                            item.isSelected = false
+                            return item
+                        }
+                    } 
                 }
                 
             }.store(in: &cancellableSet)

@@ -30,6 +30,7 @@ struct AddSettlementResponse : Decodable, Hashable {
 struct AddSettlementResponseDetails : Decodable, Hashable {
     var money : Float
     var userNickname : String
+    var userProfileImg : String
 }
 
 struct SettlementListResponse : Decodable, Hashable {

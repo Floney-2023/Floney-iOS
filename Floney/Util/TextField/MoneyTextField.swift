@@ -27,10 +27,10 @@ struct MoneyTextField: UIViewRepresentable {
     var placeholderColor: UIColor = .greyScale9
     
     var backgroundColor: UIColor = .clear
-    
+
     
     func makeUIView(context: Context) -> UITextField {
-        let textField = UITextField()
+        let textField = MoneyFixedSizeTextField()//UITextField()
         textField.delegate = context.coordinator
         
         // '원' 레이블 생성
@@ -83,8 +83,40 @@ struct MoneyTextField: UIViewRepresentable {
         init(_ parent: MoneyTextField) {
             self.parent = parent
         }
-        func textFieldDidChangeSelection(_ textField: UITextField) {
+        
+        func textFieldDidEndEditing(_ textField: UITextField) {
+            // 문자열에서 숫자만 추출하고, 자릿수 확인
+            let digits = textField.text?.components(separatedBy: CharacterSet.decimalDigits.inverted).joined() ?? ""
+            if digits.count >= 11 { // 100억 이상일 때 (11자리 이상)
+                // 36pt와 자간 -1%
+                let fontSize: CGFloat = 36
+                let kernValue: CGFloat = -0.01 * fontSize
+                applyFontAttributes(to: textField, fontSize: fontSize, kernValue: kernValue)
+            } else { // 10억 이하일 때
+                // 38pt와 자간 0
+                let fontSize: CGFloat = 38
+                applyFontAttributes(to: textField, fontSize: fontSize, kernValue: 0)
+            }
             parent.text = textField.text ?? ""
+        }
+
+        func textFieldDidChangeSelection(_ textField: UITextField) {
+            // 문자열에서 숫자만 추출하고, 자릿수 확인
+            let digits = textField.text?.components(separatedBy: CharacterSet.decimalDigits.inverted).joined() ?? ""
+            if digits.count >= 11 { // 100억 이상일 때 (11자리 이상)
+                // 36pt와 자간 -1%
+                let fontSize: CGFloat = 36
+                let kernValue: CGFloat = fontSize * -0.01
+                applyFontAttributes(to: textField, fontSize: fontSize, kernValue: kernValue)
+            } else { // 10억 이하일 때
+                // 38pt와 자간 0
+                let fontSize: CGFloat = 38
+                applyFontAttributes(to: textField, fontSize: fontSize, kernValue: 0)
+            }
+    
+            
+            parent.text = textField.text ?? ""
+            
             // '원' 레이블의 위치 업데이트
             if let rightView = textField.rightView as? UILabel {
                 rightView.sizeToFit()
@@ -96,6 +128,25 @@ struct MoneyTextField: UIViewRepresentable {
                 var xPosition = contentRect.width
                 rightView.frame = CGRect(x: xPosition, y: 0, width: rightView.frame.width, height: rightView.frame.height)
             }
+            
         }
+        private func applyFontAttributes(to textField: UITextField, fontSize: CGFloat, kernValue: CGFloat) {
+            guard let currentText = textField.text else { return }
+            
+            let font = UIFont.pretendardFont(.bold, size: fontSize)
+            let attributedString = NSMutableAttributedString(string: currentText)
+            
+            attributedString.addAttribute(.font, value: font, range: NSRange(location: 0, length: attributedString.length))
+            attributedString.addAttribute(.kern, value: kernValue, range: NSRange(location: 0, length: attributedString.length))
+            
+            textField.attributedText = attributedString
+        }
+    }
+}
+
+class MoneyFixedSizeTextField: UITextField {
+    let scaler = Scaler.shared
+    override var intrinsicContentSize: CGSize {
+        return CGSize(width: scaler.scaleWidth(312), height: scaler.scaleHeight(38))
     }
 }
