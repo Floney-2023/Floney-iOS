@@ -11,8 +11,6 @@ struct UserInfoView: View {
     let scaler = Scaler.shared
     var pageCount = 4
     var pageCountAll = 4
-    var email = "rrrrrkkkkrr@naver.com"
-   
     @ObservedObject var viewModel : SignUpViewModel
     var body: some View {
         ZStack {
@@ -54,7 +52,7 @@ struct UserInfoView: View {
                             )
                             .overlay(
                                 HStack {
-                                    Text("\(email)")
+                                    Text("\(viewModel.email)")
                                         .font(.pretendardFont(.regular, size: scaler.scaleWidth(14)))
                                         .foregroundColor(.greyScale2)
                                         .padding(.leading, scaler.scaleWidth(20))
@@ -62,8 +60,6 @@ struct UserInfoView: View {
                                 }
                                 
                             )
-                        
-                        
                     }
                     if viewModel.providerStatus == .email {
                         VStack(spacing: scaler.scaleHeight(12)) {
@@ -144,7 +140,6 @@ struct UserInfoView: View {
                 leftView: { BackButton() }
                 )
             .edgesIgnoringSafeArea(.bottom)
-            
         }
         .onAppear(perform : UIApplication.shared.hideKeyboard)
         

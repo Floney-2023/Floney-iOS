@@ -109,7 +109,10 @@ struct SetPeriodCalcView: View {
                         .onTapGesture {
                             if viewModel.selectedDates.count == 2 {
                                 viewModel.getSettlements()
-                                pageCount = 3
+                                if viewModel.isActiveLines {
+                                    pageCount = 3
+                                }
+                                
                             } else {
                                 AlertManager.shared.update(showAlert: true, message: "기간을 설정해주세요.", buttonType: .red)
                             }

@@ -36,6 +36,8 @@ class CalculateViewModel : ObservableObject {
     @Published var daysOfTheWeek = ["일","월","화","수","목","금","토"]
     @Published var passedDays = 0
     
+    @Published var isActiveLines = false
+    
     // 메인으로 선택된 날짜 -> 이 날짜에 의해 좌우됨.
     @Published var selectedDate: Date = Date() {
         didSet {
@@ -71,12 +73,7 @@ class CalculateViewModel : ObservableObject {
     @Published var id = 0
     
     //MARK: 정산 내역 조회 리스트
-    @Published var settlementList : [SettlementListResponse] = [] //[]
-//        SettlementListResponse(id: 0, userCount: 3, startDate: "2023-10-12", endDate: "2012-10-13", totalOutcome: 30000, outcome: 10000),
-//        SettlementListResponse(id: 1, userCount: 3, startDate: "2023-10-12", endDate: "2012-10-13", totalOutcome: 30000, outcome: 10000),
-//        SettlementListResponse(id: 2, userCount: 3, startDate: "2023-10-12", endDate: "2012-10-13", totalOutcome: 30000, outcome: 10000),
-//        SettlementListResponse(id: 3, userCount: 3, startDate: "2023-10-12", endDate: "2012-10-13", totalOutcome: 30000, outcome: 10000),
-//    ]
+    @Published var settlementList : [SettlementListResponse] = []
     private var cancellableSet: Set<AnyCancellable> = []
     var dataManager: CalculateProtocol
     
@@ -104,13 +101,16 @@ class CalculateViewModel : ObservableObject {
                     print("--성공--")
                     print(self.lines)
                     if self.lines.isEmpty {
+                        self.isActiveLines = false
                         AlertManager.shared.update(showAlert: true, message: "내역이 없습니다. 기간을 다시 설정해주세요.", buttonType: .red)
+                        
                     }
                     self.lines = self.lines.map { item in
                         var item = item
                         item.isSelected = false
                         return item
                     }
+                    self.isActiveLines = true
                 }
                 
             }.store(in: &cancellableSet)

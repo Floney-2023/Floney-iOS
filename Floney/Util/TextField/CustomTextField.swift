@@ -34,16 +34,18 @@ struct CustomTextField: UIViewRepresentable {
     var placeholderPadding: CGFloat {
         scaler.scaleWidth(20)
     }
-    
+
     func makeUIView(context: Context) -> UITextField {
-        let textField = UITextField()
+        let textField = FixedSizeTextField()//UITextField()
+        textField.translatesAutoresizingMaskIntoConstraints = false // Auto Layout 사용 설정
         textField.delegate = context.coordinator
         
         let attributes = [
             NSAttributedString.Key.foregroundColor: placeholderColor,
             NSAttributedString.Key.font: placeholderFont
         ]
-        
+
+
         textField.attributedPlaceholder = NSAttributedString(string: placeholder, attributes: attributes)
         textField.font = textFont
         textField.textColor = textColor
@@ -71,7 +73,7 @@ struct CustomTextField: UIViewRepresentable {
         uiView.layer.borderColor = strokeColor.cgColor
         uiView.layer.borderWidth = 1.0
         uiView.layer.cornerRadius = cornerRadius
-      
+
     }
     
     func makeCoordinator() -> Coordinator {
@@ -84,9 +86,20 @@ struct CustomTextField: UIViewRepresentable {
         init(_ parent: CustomTextField) {
             self.parent = parent
         }
-        
+        /*
         func textFieldDidChangeSelection(_ textField: UITextField) {
             parent.text = textField.text ?? ""
+        }*/
+        func textFieldDidEndEditing(_ textField: UITextField) {
+            parent.text = textField.text ?? ""
         }
+        
+    }
+}
+
+class FixedSizeTextField: UITextField {
+    let scaler = Scaler.shared
+    override var intrinsicContentSize: CGSize {
+        return CGSize(width: scaler.scaleWidth(320), height: scaler.scaleHeight(46))
     }
 }

@@ -28,12 +28,13 @@ struct SignInView: View {
                     
                     VStack(spacing: scaler.scaleHeight(20)) {
                         CustomTextField(text: $signInViewModel.email, placeholder: "이메일", keyboardType: .emailAddress,placeholderColor: .greyScale7)
-                            .frame(height: scaler.scaleHeight(46))
-                            
+                            .frame(width: scaler.scaleWidth(320), height: scaler.scaleHeight(46))
+                            .frame(maxWidth: scaler.scaleWidth(320))
+                        
                         CustomTextField(text: $signInViewModel.password, placeholder: "비밀번호", isSecure: true,placeholderColor: .greyScale7)
-                            .frame(height: scaler.scaleHeight(46))
-                            .frame(width : scaler.scaleWidth(320))
-                       
+                            .frame(width: scaler.scaleWidth(320), height: scaler.scaleHeight(46))
+                            .frame(maxWidth: scaler.scaleWidth(320))
+                        
                         Text("로그인하기")
                             .padding(scaler.scaleHeight(16))
                             .withNextButtonFormmating(.primary1)
