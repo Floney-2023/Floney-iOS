@@ -12,8 +12,8 @@ struct TextFieldLarge: View {
     @Binding var content : String
 
     var body: some View {
+        
         CustomTextField(text: $content, placeholder: label, keyboardType: .decimalPad, alignment: .center, placeholderColor: .greyScale6)
             .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
-  
     }
 }

@@ -28,7 +28,7 @@ struct AddView: View {
     @State var categories: [String] = ["현금", "체크카드", "신용카드", "은행","추가", "추가추가","추가/추가"]
     @State var options = ["지출", "수입", "이체"]
     
-    @StateObject var lineModel : LineModel
+    @ObservedObject var lineModel : LineModel
     @ObservedObject var alertManager = AlertManager.shared
 
     @State var date : String = "2023-06-20"

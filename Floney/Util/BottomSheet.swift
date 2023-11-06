@@ -735,7 +735,7 @@ struct DayLinesBottomSheet: View {
     @State private var selectedIndex = 0
     @State var selectedToggleTypeIndex = 0
     @State var selectedToggleType = ""
-    var lineModel = LineModel()
+    @StateObject var lineModel = LineModel()
     
     var body: some View{
         let year = String(describing: viewModel.selectedYear)

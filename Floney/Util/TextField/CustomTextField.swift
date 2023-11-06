@@ -91,7 +91,9 @@ struct CustomTextField: UIViewRepresentable {
         func textFieldDidEndEditing(_ textField: UITextField) {
             parent.text = textField.text ?? ""
         }
-        
+        func textFieldDidChangeSelection(_ textField: UITextField) {
+            parent.text = textField.text ?? ""
+        }
     }
 }
 
