@@ -127,6 +127,7 @@ struct MyPageView: View {
                                     Text("\(viewModel.email)")
                                         .font(.pretendardFont(.medium, size: scaler.scaleWidth(12)))
                                         .foregroundColor(.greyScale3)
+                                        .multilineTextAlignment(.leading)
                                 }
                                 Spacer()
                                 Image("forward_button")

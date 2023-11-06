@@ -26,8 +26,9 @@ struct UserInformationView: View {
                 }
                 .padding(.leading, scaler.scaleWidth(4))
                 HStack(spacing: scaler.scaleHeight(8)) {
-                    CustomTextField(text: $viewModel.changedNickname, placeholder: "닉네임을 입력하세요",placeholderColor: .greyScale7)
+                    CustomTextField(width:226,text: $viewModel.changedNickname, placeholder: "닉네임을 입력하세요",placeholderColor: .greyScale7)
                         .frame(height: scaler.scaleHeight(46))
+                        .frame(width: scaler.scaleWidth(226))
                    
                     Button("변경하기"){
                         if viewModel.isValidChangedName() {

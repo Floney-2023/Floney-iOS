@@ -11,6 +11,7 @@ struct UserInfoView: View {
     let scaler = Scaler.shared
     var pageCount = 4
     var pageCountAll = 4
+
     @ObservedObject var viewModel : SignUpViewModel
     var body: some View {
         ZStack {

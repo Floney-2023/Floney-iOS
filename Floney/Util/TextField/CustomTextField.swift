@@ -10,6 +10,7 @@ import UIKit
 import SwiftUI
 struct CustomTextField: UIViewRepresentable {
     let scaler = Scaler.shared
+    @State var width : CGFloat = 320
     @Binding var text: String
     var placeholder: String
     
@@ -36,7 +37,7 @@ struct CustomTextField: UIViewRepresentable {
     }
 
     func makeUIView(context: Context) -> UITextField {
-        let textField = FixedSizeTextField()//UITextField()
+        let textField = FixedSizeTextField(width: self.width)//UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false // Auto Layout 사용 설정
         textField.delegate = context.coordinator
         
@@ -96,7 +97,25 @@ struct CustomTextField: UIViewRepresentable {
 
 class FixedSizeTextField: UITextField {
     let scaler = Scaler.shared
+    var fixedWidth: CGFloat
+
+    // Designated initializer with a width parameter
+    init(width: CGFloat) {
+        self.fixedWidth = width
+        super.init(frame: .zero) // Call to designated initializer of the superclass
+        commonInit()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    // Common initializer code which can be extracted to avoid duplication
+    private func commonInit() {
+        // Additional common setup can be done here if needed
+    }
+
     override var intrinsicContentSize: CGSize {
-        return CGSize(width: scaler.scaleWidth(320), height: scaler.scaleHeight(46))
+        return CGSize(width: scaler.scaleWidth(fixedWidth), height: scaler.scaleHeight(46))
     }
 }
