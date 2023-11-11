@@ -331,7 +331,6 @@ struct MonthCalendar: View {
     @Binding var isShowingBottomSheet : Bool
     
     let calendar = Calendar.current
-    
     var body: some View {
             VStack(spacing: scaler.scaleHeight(16)) {
                 // MARK: 날짜 가져오기
@@ -372,16 +371,14 @@ struct MonthCalendar: View {
                                                     .foregroundColor(date == viewModel.totalToday ? .white : .greyScale2)
                                                     .clipShape(Circle())
                                             } else {
-                                                Text("\(Int(day)!)") // 1,2,...,31
-                                                    .padding(.horizontal,scaler.scaleWidth(5))
-                                                    .padding(.vertical,scaler.scaleHeight(6))
+                                                Text("\(Int(day)!)")
+                                                    .padding(.horizontal, scaler.scaleWidth(5))
+                                                    .padding(.vertical, scaler.scaleHeight(6))
                                                     .font(.pretendardFont(.regular, size: scaler.scaleWidth(12)))
                                                     .frame(maxWidth: .infinity)
-                                                    
                                                     .background(date == viewModel.totalToday ? Color.primary1 : Color.clear)
                                                     .foregroundColor(date == viewModel.totalToday ? .white : .greyScale2)
                                                     .clipShape(Circle())
-                                                    
                                                 VStack {
                                                     ForEach(viewModel.expenses, id: \.self) { (expense: CalendarExpenses) in
                                                         if viewModel.extractYearMonth(from: viewModel.selectedDateStr) {
@@ -431,23 +428,19 @@ struct MonthCalendar: View {
                                                 isShowingBottomSheet.toggle()}
                                         }
                                     }
-
                                 } else {
                                     Text("")
                                         .padding()
                                         .font(.pretendardFont(.regular, size: 12))
                                         .frame(maxWidth: .infinity)
                                 }
-                                
                             }
-                            
                         }
                         .frame(height:scaler.scaleHeight(62))
                         .padding(.horizontal, scaler.scaleWidth(3))
                     }
                    // Spacer()
                 }
-                
                 .background(Color.white)
                 .cornerRadius(12)
                 .onAppear {

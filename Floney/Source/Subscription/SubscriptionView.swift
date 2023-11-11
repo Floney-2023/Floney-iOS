@@ -197,7 +197,6 @@ struct SubscriptionView: View {
                 }
                 
             }
-            
             VStack {
                 Spacer()
                 VStack {

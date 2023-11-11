@@ -14,7 +14,7 @@ struct UserInformationView: View {
     @State  var provider : String = Keychain.getKeychainValue(forKey: .provider) ?? ""
     @State var showingLogoutAlert = false
     @State var title = "로그아웃"
-    @State var message = "로그아웃 하시겠습니끼?"
+    @State var message = "로그아웃 하시겠습니까?"
     var body: some View {
         VStack(spacing:scaler.scaleHeight(32)) {
             VStack(spacing:scaler.scaleHeight(12)) {

@@ -409,9 +409,9 @@ struct MyPageView: View {
                 UnsubscribeView(showingTabbar: $showingTabbar, isShowing: $isNextToUnSubscription)
             }
             .onAppear{
-                if viewModel.subscribe {
-                    IAPManager.shared.verifyReceipt()
-                }
+                //if viewModel.subscribe {
+                //    IAPManager.shared.verifyReceipt()
+                //}
                 viewModel.getMyPage()
                 showingTabbar = true
             }

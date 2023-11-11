@@ -153,6 +153,7 @@ class CalculateViewModel : ObservableObject {
     func postNoti(title :String, body: String, imgUrl : String) {
         let currentDate = Date()
         let formatter = ISO8601DateFormatter()
+
         let formattedDate = formatter.string(from: currentDate)
         let userEmails = self.userList
         var viewModel = NotiViewModel()

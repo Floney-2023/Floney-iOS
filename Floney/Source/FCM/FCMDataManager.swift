@@ -91,9 +91,10 @@ class FCMDataManager: ObservableObject {
                         
                         // 2. 현재 사용자의 토큰을 제거합니다.
                         let filteredTokens = tokens.filter { $0 != currentUserToken }
-                        
+                        print("필터링된 토큰들 \(filteredTokens)")
                         // 3. 필터링된 토큰 목록을 사용하여 FCM 알림을 보냅니다.
                         for token in filteredTokens {
+                            
                             self.sendFCMNotification(to: token, title: title, body: body)
                         }
                     }
@@ -103,11 +104,9 @@ class FCMDataManager: ObservableObject {
     }
     
     // server에 요청하기
-    
     func fetchAccessToken() -> AnyPublisher<DataResponse<FCMAccessToken, NetworkError>,Never> {
         let bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
         let url = "\(Constant.BASE_URL)/google/alarm/tokens"
-        
         let token = Keychain.getKeychainValue(forKey: .accessToken) ?? ""
         print(url)
         print(token)
@@ -127,6 +126,7 @@ class FCMDataManager: ObservableObject {
         .receive(on: DispatchQueue.main)
         .eraseToAnyPublisher()
     }
+    
     func createAlert( with error: NetworkError, retryRequest: @escaping () -> Void) {
         //loadingError = error.backendError == nil ? error.initialError.localizedDescription : error.backendError!.message
         if let backendError = error.backendError {

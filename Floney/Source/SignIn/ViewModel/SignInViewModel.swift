@@ -66,7 +66,7 @@ class SignInViewModel: ObservableObject {
                 } else {
                     self.result = dataResponse.value!
                     self.setToken()
-                    IAPManager.shared.getSubscriptionStatus()
+                    //IAPManager.shared.getSubscriptionStatus()
                     if (AuthenticationService.shared.isUserLoggedIn == false){
                         self.setEmailPassword(provider: .email)
                         AuthenticationService.shared.logIn()
@@ -181,7 +181,7 @@ class SignInViewModel: ObservableObject {
                     self.result = dataResponse.value!
                     self.setToken()
                     // 자동로그인을 한 경우는 isLoggedIn이 true이므로 email과 password를 다시 저장하지 않아도 괜찮다.
-                    IAPManager.shared.getSubscriptionStatus()
+                    //IAPManager.shared.getSubscriptionStatus()
                     if (AuthenticationService.shared.isUserLoggedIn == false) {
                         self.setEmailPassword(provider: .kakao)
                         AuthenticationService.shared.logIn()
@@ -212,7 +212,7 @@ class SignInViewModel: ObservableObject {
                     print("set token 호출 전")
                     self.setToken()
                     print("set token 호출 후")
-                    IAPManager.shared.getSubscriptionStatus()
+                    //IAPManager.shared.getSubscriptionStatus()
                     if (AuthenticationService.shared.isUserLoggedIn == false) {
                         self.setEmailPassword(provider: .google)
                         AuthenticationService.shared.logIn()
@@ -246,7 +246,7 @@ class SignInViewModel: ObservableObject {
                     print("set token 호출 후")
                     // 자동로그인을 한 경우는 isLoggedIn이 true이므로 email과 password를 다시 저장하지 않아도 괜찮다.
                     // 자동로그인을 한 경우는 isLoggedIn이 true이므로 email과 password를 다시 저장하지 않아도 괜찮다.
-                    IAPManager.shared.getSubscriptionStatus()
+                    //IAPManager.shared.getSubscriptionStatus()
                     if (AuthenticationService.shared.isUserLoggedIn == false) {
                         self.setEmailPassword(provider: .apple)
                         AuthenticationService.shared.logIn()

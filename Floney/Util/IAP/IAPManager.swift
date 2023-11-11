@@ -73,6 +73,7 @@ extension IAPManager  {
             })
             .store(in: &cancellableSet)
     }
+    
     func sendToServer() {
         if let latestReceiptInfo = (receiptData?["latest_receipt_info"] as? [[String: Any]])?.first,
            let pendingRenewalInfo = (receiptData?["pending_renewal_info"] as? [[String: Any]])?.first {

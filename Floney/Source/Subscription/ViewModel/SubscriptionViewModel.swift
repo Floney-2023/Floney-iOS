@@ -123,6 +123,7 @@ class SubscriptionViewModel: ObservableObject {
 extension Date {
     init?(fromISO8601 string: String) {
         let formatter = ISO8601DateFormatter()
+        
         if let date = formatter.date(from: string) {
             self = date
         } else {
