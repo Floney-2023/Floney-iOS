@@ -11,6 +11,7 @@ struct AssetView: View {
     let scaler = Scaler.shared
     @ObservedObject var viewModel : AnalysisViewModel
     @State var currency = CurrencyManager.shared.currentCurrency
+    
     var body: some View {
         VStack(spacing: 42) {
             HStack{
@@ -42,9 +43,7 @@ struct AssetView: View {
                         Text("지난달 대비 0\(currency)\n증가했어요")
                             .font(.pretendardFont(.medium,size: scaler.scaleWidth(13)))
                             .foregroundColor(.greyScale6)
-                        
                     }
-                    
                 }
                 Spacer()
                 VStack {
@@ -66,10 +65,8 @@ struct AssetView: View {
                             .resizable()
                             .aspectRatio(contentMode: .fill)
                             .frame(width: scaler.scaleWidth(80),height: scaler.scaleWidth(90))
-                   
                     }
                 }
-                
             }
             .frame(height: scaler.scaleHeight(110))
             .padding(.horizontal, scaler.scaleWidth(4))
@@ -78,21 +75,21 @@ struct AssetView: View {
             HStack(alignment: .bottom, spacing: scaler.scaleWidth(30)) {
                 if viewModel.assetList.count == 6 {
                     // assetList를 month 기준으로 정렬합니다.
-                    let maxAsset = viewModel.assetList.map { $0.currentAsset }.max() ?? 1.0
+                    let maxAsset = viewModel.assetList.map { $0.assetMoney }.max() ?? 1.0
                     let minHeight: CGFloat = scaler.scaleHeight(4.0)
                     let maxHeight: CGFloat = scaler.scaleHeight(146.0)
                     
                     ForEach(viewModel.assetList.indices) { index in
                         VStack {
                             Spacer()
-                            let assetValue = viewModel.assetList[index].currentAsset
+                            let assetValue = viewModel.assetList[index].assetMoney
                             let barHeight: CGFloat = assetValue <= 0 ? minHeight : (maxHeight - minHeight) * CGFloat(assetValue / maxAsset) + minHeight
                             Rectangle()
                                 .fill(index == viewModel.assetList.count - 1 ? Color.primary1 : Color.greyScale10)
                                 .frame(width: scaler.scaleWidth(20), height: barHeight)
                                 .cornerRadius(4)
                             //index == viewModel.assetList.count - 1 ? "이번달" :
-                            Text("\(viewModel.assetList[index].month!)")
+                            Text("\(viewModel.assetList[index].date)")
                                 .font(.pretendardFont(.medium, size: scaler.scaleWidth(12)))
                                 .foregroundColor(.greyScale6)
                         }
@@ -114,7 +111,6 @@ struct AssetView: View {
                     }
                     Spacer()
                 }
-                
                 VStack(alignment: .leading, spacing: scaler.scaleHeight(12)) {
                     Text("초기자산")
                         .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
@@ -123,20 +119,21 @@ struct AssetView: View {
                         .font(.pretendardFont(.bold, size: scaler.scaleWidth(20)))
                         .foregroundColor(.greyScale2)
                 }
+                
             }.padding(.horizontal, scaler.scaleWidth(4))
             
             Spacer()
         }
         .onAppear{
             print("in asset view selectedDate : \(viewModel.selectedDate)")
-            
-            viewModel.calculateAssetMonth()
+            viewModel.analysisAsset(date: viewModel.selectedDateStr)
+            //viewModel.calculateAssetMonth()
             
         }
         .onChange(of: viewModel.selectedDate) { newValue in
             print("in asset view selectedDate : \(viewModel.selectedDate)")
-            
-            viewModel.calculateAssetMonth()
+            viewModel.analysisAsset(date: viewModel.selectedDateStr)
+            //viewModel.calculateAssetMonth()
             
         }
     }

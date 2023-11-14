@@ -37,8 +37,8 @@ class CalendarViewModel: ObservableObject {
     @Published var selectedYearMonth = "" // year.month
     @Published var selectedDateStr = "" // String type 0000-00-00
     
-    @Published var totalIncome: Int = 0
-    @Published var totalOutcome: Int = 0
+    @Published var totalIncome: Double = 0
+    @Published var totalOutcome: Double = 0
     
     @Published var selectedView: Int = 0
     @Published var daysOfTheWeek = ["일","월","화","수","목","금","토"]
@@ -46,8 +46,8 @@ class CalendarViewModel: ObservableObject {
     //MARK: Day Lines
     @Published var dayLinesDate: String = ""
     @Published var dayLinesResult : DayLinesResponse = DayLinesResponse(dayLinesResponse: [], totalExpense: [], carryOverInfo: CarryOverInfo(carryOverStatus: false, carryOverMoney: 0), seeProfileImg: true)
-    @Published var dayLinesTotalIncome : Int = 0
-    @Published var dayLinesTotalOutcome : Int = 0
+    @Published var dayLinesTotalIncome : Double = 0
+    @Published var dayLinesTotalOutcome : Double = 0
     @Published var dayLines : [DayLinesResults?] = []
     @Published var seeProfileImg : Bool = true
     @Published var userImages : [String?]?
@@ -92,7 +92,7 @@ class CalendarViewModel: ObservableObject {
                     // 이월 내역이 있음
                     if self.result.carryOverInfo.carryOverStatus {
                         if self.result.carryOverInfo.carryOverMoney > 0 {
-                            self.totalIncome += Int(self.result.carryOverInfo.carryOverMoney)
+                            self.totalIncome += Double(self.result.carryOverInfo.carryOverMoney)
                             let calendar = Calendar.current
                             let components = calendar.dateComponents([.year, .month], from: self.selectedDate)
                             
@@ -100,12 +100,12 @@ class CalendarViewModel: ObservableObject {
                                 let firstDayOfMonthString = "\(year)-\(String(format: "%02d", month))-01"
                                 
                                 if let index = self.expenses.firstIndex(where: { $0.date == firstDayOfMonthString && $0.assetType == "INCOME" }) {
-                                    self.expenses[index].money += Int(self.result.carryOverInfo.carryOverMoney)
+                                    self.expenses[index].money += Double(self.result.carryOverInfo.carryOverMoney)
                                 }
                             }
                             
                         } else if self.result.carryOverInfo.carryOverMoney < 0 {
-                            self.totalOutcome += Int(self.result.carryOverInfo.carryOverMoney)
+                            self.totalOutcome += Double(self.result.carryOverInfo.carryOverMoney)
                             let calendar = Calendar.current
                             let components = calendar.dateComponents([.year, .month], from: self.selectedDate)
                             
@@ -113,7 +113,7 @@ class CalendarViewModel: ObservableObject {
                                 let firstDayOfMonthString = "\(year)-\(String(format: "%02d", month))-01"
                                 
                                 if let index = self.expenses.firstIndex(where: { $0.date == firstDayOfMonthString && $0.assetType == "OUTCOME" }) {
-                                    self.expenses[index].money += Int(abs(self.result.carryOverInfo.carryOverMoney))
+                                    self.expenses[index].money += Double(abs(self.result.carryOverInfo.carryOverMoney))
                                 }
                             }
                         }
@@ -156,9 +156,9 @@ class CalendarViewModel: ObservableObject {
                     self.dayLineCarryOver = self.dayLinesResult.carryOverInfo
                     if self.dayLineCarryOver.carryOverStatus {
                         if self.dayLineCarryOver.carryOverMoney > 0 {
-                            self.dayLinesTotalIncome += Int(self.dayLineCarryOver.carryOverMoney)
+                            self.dayLinesTotalIncome += Double(self.dayLineCarryOver.carryOverMoney)
                         } else if self.dayLineCarryOver.carryOverMoney < 0 {
-                            self.dayLinesTotalOutcome += Int(self.dayLineCarryOver.carryOverMoney)
+                            self.dayLinesTotalOutcome += Double(self.dayLineCarryOver.carryOverMoney)
                         }
                     }
                     

@@ -50,6 +50,7 @@ extension CalendarService: CalendarProtocol {
         let bookKey = parameters.bookKey
         let date = parameters.date
         let url = "\(Constant.BASE_URL)/books/days?bookKey=\(bookKey)&date=\(date)"
+        print("daylines : \(url)")
         
         let token = Keychain.getKeychainValue(forKey: .accessToken) ?? ""
         return AF.request(url,

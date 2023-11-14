@@ -33,7 +33,6 @@ struct SubscriptionView: View {
         QA(id: 3,question: "가계부를 초대받아 사용하고 있습니다.\n광고 제거를 하고 싶어요.", answer: "광고 제거를 원하시는 경우 플로니 플러스+ 플랜을 구독하거나, 30초 광고보기를 통해 없앨 수 있습니다."),
         QA(id: 4,question: "방장을 포함하여 여러명이 구독중인 경우, 특정한 사람에게 방장을 위임할 수 있나요?", answer: "아니오. \n현재 방장 변경은 방장의 가계부 나가기로 인한 자동 위임만 가능합니다."),
         QA(id: 5,question: "구독을 해지하게 되면 기존 가계부들은 어떻게 되나요?", answer: " 해당 가계부에 구독 혜택이 적용되어 있는 경우에는 마이페이지, 가계부 설정 페이지만 접근이 가능합니다.\n다시 사용을 원한다면 다시 floney Plus+를 구독하시거나 구독 혜택에 해당되는 서비스를 수정 및 삭제 하시면 floney Basic으로 다시 사용이 가능합니다."),
-        
     ]
     var body: some View {
         @State var formattedPrice = priceFormatter.string(from: productPrice)
@@ -180,20 +179,36 @@ struct SubscriptionView: View {
                     }
                     .background(Color.primary4)
                     
-                    HStack {
-                        Text("- 현재 이용 중인 플랜이 종료되기 24시간 전이라면 언제든지 해약이 가능합니다.\n- 현재 이용 중인 플랜이 종료되기 24시간 전까지 해약하지 않으면  자동으로 구독이 갱신되며 이에 따른 요금이 청구됩니다.\n- 앱을 삭제 혹은 탈퇴하는 것만으로는 인앱결제 구독 플랜이 해약되지 않으니 주의해 주시기 바랍니다.")
-                            .font(.pretendardFont(.regular, size:scaler.scaleWidth(12)))
-                            .foregroundColor(.greyScale2)
-                            .lineSpacing(5)
-                            .frame(width:scaler.scaleWidth(312), alignment: .topLeading)
-                            .padding(.bottom, scaler.scaleHeight(120))
-                        Spacer()
+                    VStack(spacing:5) {
+                        HStack {
+                            Text("- 현재 이용 중인 플랜이 종료되기 24시간 전이라면 언제든지 해약이 가능합니다.\n- 현재 이용 중인 플랜이 종료되기 24시간 전까지 해약하지 않으면  자동으로 구독이 갱신되며 이에 따른 요금이 청구됩니다.\n- 앱을 삭제 혹은 탈퇴하는 것만으로는 인앱결제 구독 플랜이 해약되지 않으니 주의해 주시기 바랍니다.")
+                                .font(.pretendardFont(.regular, size:scaler.scaleWidth(12)))
+                                .foregroundColor(.greyScale2)
+                                .lineSpacing(5)
+                                .frame(width:scaler.scaleWidth(312), alignment: .topLeading)
+                                
+                            Spacer()
+                        }
+                        HStack{
+                            Text("- 이미 구독을 하셨나요?")
+                            VStack(spacing:0) {
+                                Text("App Store 구매내역 복원하기")
+                                    .font(.pretendardFont(.regular, size: scaler.scaleWidth(12)))
+                                    .foregroundColor(.greyScale2)
+                                Rectangle()
+                                  .foregroundColor(.clear)
+                                  .frame(width: scaler.scaleWidth(143), height: scaler.scaleWidth(0.5))
+                                  .background(Color.greyScale2)
+                            }
+                        }
+                        .font(.pretendardFont(.regular, size:scaler.scaleWidth(12)))
+                        .foregroundColor(.greyScale2)
+                        .frame(width:scaler.scaleWidth(312), alignment: .topLeading)
                     }
+                    .padding(.bottom, scaler.scaleHeight(120))
                     .padding(.top, scaler.scaleHeight(24))
                     .padding(.horizontal, scaler.scaleWidth(24))
                     .frame(maxWidth:.infinity)
-                    
-                    
                 }
                 
             }
@@ -221,9 +236,6 @@ struct SubscriptionView: View {
   
             }
             .edgesIgnoringSafeArea(.bottom)
-            //.padding(scaler.scaleWidth(20))
-            //.background(Color.white)
-
 
         }// ZStack
         .customNavigationBar(

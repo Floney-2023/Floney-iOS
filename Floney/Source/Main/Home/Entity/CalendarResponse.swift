@@ -9,15 +9,15 @@ import Foundation
 
 //MARK: 캘린더 월별 조회
 struct CalendarResponse: Decodable {
-    var totalIncome: Int
-    var totalOutcome: Int
+    var totalIncome: Double
+    var totalOutcome: Double
     var expenses: [CalendarExpenses]
     var carryOverInfo : CarryOverInfo
 }
 
 struct CalendarExpenses: Decodable, Hashable {
     var date: String
-    var money: Int
+    var money: Double
     var assetType: String
 }
 
@@ -31,7 +31,7 @@ struct DayLinesResponse: Decodable{
 
 struct DayLinesResults: Decodable, Hashable {
     var id : Int
-    var money : Int
+    var money : Double
     var img : String? // null일 수 있음
     var category : [String]
     var assetType : String
@@ -41,7 +41,7 @@ struct DayLinesResults: Decodable, Hashable {
 }
 
 struct DayTotalExpenses: Decodable {
-    var money : Int
+    var money : Double
     var assetType : String
 }
 

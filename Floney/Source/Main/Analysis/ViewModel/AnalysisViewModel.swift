@@ -42,7 +42,7 @@ class AnalysisViewModel : ObservableObject {
     
     //MARK: 자산 분석
     @Published var monthList : [String] = []
-    @Published var assetList : [AssetResponse] = []
+    @Published var assetList : [AssetInfo] = []
     @Published var difference : Double = 0
     @Published var currentAsset : Double = 0
     @Published var initAsset : Double = 0
@@ -231,26 +231,32 @@ class AnalysisViewModel : ObservableObject {
         print("하루에 사용할 수 있는 금액은 \(dailyAvailableMoney) 입니다.")
         self.dailyAvailableMoney = dailyAvailableMoney
     }
+    
     func analysisAsset(date: String) {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
-        var assetMonth = 0
-        var assetYear = 0
-        if let date = dateFormatter.date(from: date) {
-            let calendar = Calendar.current
-            let components = calendar.dateComponents([.year,.month], from: date)
-            if let month = components.month {
-                print(month) // 출력: 2
-                assetMonth = month
-            }
-            if let year = components.year {
-                assetYear = year
-            }
+        //var assetMonth = 0
+        //var assetYear = 0
+        //let date = dateFormatter.date(from: date) //{
+            //let calendar = Calendar.current
+           // let components = calendar.dateComponents([.year,.month], from: date)
+           // if let month = components.month {
+           //     print(month) // 출력: 2
+           //     assetMonth = month
+           // }
+           // if let year = components.year {
+           //     assetYear = year
+           // }
+        //}
+        var date = ""
+
+        let dateString = dateFormatter.string(from: selectedDate)
+        let components = Calendar.current.dateComponents([.year, .month], from: selectedDate)
+        if let year = components.year, let month = components.month {
+            date = "\(year)-\(String(format: "%02d", month))-01"
         }
-        
         let bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
         let request = BudgetAssetRequest(bookKey: bookKey, date: date)
-        
         
         LoadingManager.shared.update(showLoading: true, loadingType: .progressLoading)
         dataManager.analysisAsset(request)
@@ -265,27 +271,27 @@ class AnalysisViewModel : ObservableObject {
                     
                     LoadingManager.shared.update(showLoading: false, loadingType: .progressLoading)
                 } else {
-                    
                     LoadingManager.shared.update(showLoading: false, loadingType: .progressLoading)
-                    var asset = dataResponse.value ?? AssetResponse(difference: 0, initAsset: 0, currentAsset: 0)
-                    asset.month = assetMonth  // 해당 월을 AssetResponse에 저장합니다.
-                    asset.year = assetYear
-                    self.assetList.append(asset)
+                    var asset = dataResponse.value ?? AssetResponse(difference: 0, initAsset: 0, currentAsset: 0, assetInfo: [])
+                    //asset.month = assetMonth  // 해당 월을 AssetResponse에 저장합니다.
+                    //asset.year = assetYear
+                    self.assetList = asset.assetInfo
                     self.assetList = self.assetList.sorted {
-                        guard let year0 = $0.year, let year1 = $1.year,
-                              let month0 = $0.month, let month1 = $1.month else {
-                            return false
-                        }
-                        if year0 == year1 {
-                            return month0 < month1
-                        }
-                        return year0 < year1
+                        return $0.date < $1.date
+                        //guard let year0 = $0.year, let year1 = $1.year,
+                        //      let month0 = $0.month, let month1 = $1.month else {
+                        //    return false
+                        //}
+                        //if year0 == year1 {
+                        //    return month0 < month1
+                       // }
+                        //return year0 < year1
                     }
-                    if date == self.selectedDateStr {
-                        self.difference = dataResponse.value?.difference ?? 0
-                        self.currentAsset = dataResponse.value?.currentAsset ?? 0
-                        self.initAsset = dataResponse.value?.initAsset ?? 0
-                    }
+                    //if date == self.selectedDateStr {
+                    self.difference = dataResponse.value?.difference ?? 0
+                    self.currentAsset = dataResponse.value?.currentAsset ?? 0
+                    self.initAsset = dataResponse.value?.initAsset ?? 0
+                   // }
                 }
             }.store(in: &cancellableSet)
     }
@@ -314,6 +320,7 @@ class AnalysisViewModel : ObservableObject {
         selectedDate = newDate ?? selectedDate
     }
     
+    /*
     // asset의 달을 계산하는 함수
     func calculateAssetMonth() {
         DispatchQueue.main.async {
@@ -331,12 +338,11 @@ class AnalysisViewModel : ObservableObject {
                 }
             }
             self.monthList = dates
-            
             for date in self.monthList {
                 self.analysisAsset(date: date)
             }
         }
-    }
+    }*/
     
     func createAlert( with error: NetworkError, retryRequest: @escaping () -> Void) {
         //loadingError = error.backendError == nil ? error.initialError.localizedDescription : error.backendError!.message
@@ -368,7 +374,6 @@ class AnalysisViewModel : ObservableObject {
         } else {
             // BackendError 없이 NetworkError만 발생한 경우
             //showAlert(message: "네트워크 오류가 발생했습니다.")
-            
         }
     }
 }

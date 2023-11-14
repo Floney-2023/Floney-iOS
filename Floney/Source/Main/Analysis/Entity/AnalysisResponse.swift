@@ -32,7 +32,12 @@ struct AssetResponse: Decodable {
     var difference : Double
     var initAsset : Double
     var currentAsset : Double
-    var month : Int?
-    var year : Int?
+    var assetInfo : [AssetInfo]
+    //var month : Int?
+    //var year : Int?
 }
 
+struct AssetInfo : Decodable, Hashable {
+    var assetMoney : Double
+    var date : String
+}

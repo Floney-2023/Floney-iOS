@@ -81,7 +81,6 @@ class AddViewModel: ObservableObject {
         let request = CategoryRequest(bookKey: bookKey, root: root)
         dataManager.getCategory(request)
             .sink {(dataResponse) in
-                
                 if dataResponse.error != nil {
                     self.createAlert(with: dataResponse.error!, retryRequest: {
                         self.getCategory()
@@ -110,8 +109,6 @@ class AddViewModel: ObservableObject {
     func postLines() {
         bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
         nickname = Keychain.getKeychainValue(forKey: .userNickname) ?? ""
-        //let moneyInt = Double(money)
-        //print("money : \(moneyInt)")
         var moneyDouble : Double = 0
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
