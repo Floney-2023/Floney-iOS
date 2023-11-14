@@ -191,7 +191,6 @@ class AddViewModel: ObservableObject {
                 switch completion {
                 case .finished:
                     print(" successfully line delete.")
-                    self.getCategory()
                     self.successAdd = true
 
                 case .failure(let error):
