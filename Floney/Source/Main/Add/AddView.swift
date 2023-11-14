@@ -113,7 +113,7 @@ struct AddView: View {
                                 
                                 // 소수점이 없는 경우
                                 if components.count == 1 {
-                                    if let doubleValue = Double(trimmedValue), doubleValue <= 100_000_000_000 {
+                                    if let doubleValue = Double(trimmedValue), doubleValue < 100_000_000_000 {
                                         money = formatNumber(trimmedValue)  // 콤마로 구분하여 형식화
                                     } else if trimmedValue.last == "." {
                                         money = formatNumber(String(trimmedValue.dropLast())) + "."  // Allow values like "123."
