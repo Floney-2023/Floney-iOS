@@ -93,7 +93,6 @@ extension IAPHelper: SKPaymentTransactionObserver {
         delegate?.didPurchaseProductSuccessfully(productID: transaction.payment.productIdentifier)
         SKPaymentQueue.default().finishTransaction(transaction)
     }
-    
     // 복원 성공
     private func restore(transaction: SKPaymentTransaction) {
         guard let productIdentifier = transaction.original?.payment.productIdentifier else { return }
@@ -104,7 +103,6 @@ extension IAPHelper: SKPaymentTransactionObserver {
         deliverPurchaseNotificationFor(identifier: productIdentifier)
         SKPaymentQueue.default().finishTransaction(transaction)
     }
-    
     // 구매 실패
     private func fail(transaction: SKPaymentTransaction) {
         if let transactionError = transaction.error as NSError?,
@@ -117,7 +115,6 @@ extension IAPHelper: SKPaymentTransactionObserver {
         deliverPurchaseNotificationFor(identifier: nil)
         SKPaymentQueue.default().finishTransaction(transaction)
     }
-    
     // 구매한 인앱 상품 키를 UserDefaults로 로컬에 저장
     // 구매 완료 후 조치
     private func deliverPurchaseNotificationFor(identifier: String?) {
@@ -317,7 +314,6 @@ extension IAPHelper {
         .eraseToAnyPublisher()
     }
 }
-
 //MARK: 구매
 extension IAPHelper {
     // 인앱결제 상품을 구입할 때
@@ -331,9 +327,6 @@ extension IAPHelper {
         return self.purchasedProductIDList.contains(productID)
     }
 }
-
-
-
 struct ReceiptRequest: Encodable {
     var receiptData: String
     var password: String

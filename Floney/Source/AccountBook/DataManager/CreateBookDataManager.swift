@@ -47,6 +47,8 @@ extension CreateBook: CreateBookProtocol {
         let url = "\(Constant.BASE_URL)/books"
      
         let token = Keychain.getKeychainValue(forKey: .accessToken) ?? ""
+        print("가계부 생성 토큰 access: \(token)")
+        print("가계부 생성 토큰 refresh: \(Keychain.getKeychainValue(forKey: .refreshToken))")
         print("가계부 생성 : \(parameters)")
         return AF.request(url,
                           method: .post,

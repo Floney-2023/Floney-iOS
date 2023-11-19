@@ -149,7 +149,7 @@ class CalculateViewModel : ObservableObject {
                 }
             }.store(in: &cancellableSet)
     }
-    // 가계부 user의 알림을 저장한다.
+    // 가계부 user의 알림을 서버에 저장한다.
     func postNoti(title :String, body: String, imgUrl : String) {
         let currentDate = Date()
         let formatter = ISO8601DateFormatter()

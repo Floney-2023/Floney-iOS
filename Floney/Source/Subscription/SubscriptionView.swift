@@ -186,7 +186,6 @@ struct SubscriptionView: View {
                                 .foregroundColor(.greyScale2)
                                 .lineSpacing(5)
                                 .frame(width:scaler.scaleWidth(312), alignment: .topLeading)
-                                
                             Spacer()
                         }
                         HStack{

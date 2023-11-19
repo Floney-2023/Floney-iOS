@@ -26,7 +26,6 @@ class BookExistenceViewModel: ObservableObject {
         self.dataManager = dataManager
         
     }
-    
     //MARK: server
     func getBookExistence() {
         dataManager.getBookExistence()
@@ -68,8 +67,6 @@ class BookExistenceViewModel: ObservableObject {
                 }
             }.store(in: &cancellableSet)
     }
-    
-
     func createAlert( with error: NetworkError, retryRequest: @escaping () -> Void) {
         //loadingError = error.backendError == nil ? error.initialError.localizedDescription : error.backendError!.message
         if let backendError = error.backendError {
@@ -100,7 +97,6 @@ class BookExistenceViewModel: ObservableObject {
         } else {
             // BackendError 없이 NetworkError만 발생한 경우
             //showAlert(message: "네트워크 오류가 발생했습니다.")
-            
         }
     }
     

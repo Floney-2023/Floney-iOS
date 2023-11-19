@@ -169,6 +169,7 @@ struct AddView: View {
                             )
                         }
                     }
+                    .disabled(lineModel.mode == "check" ? true : false)
                     .frame(maxWidth: .infinity)
                     .frame(height:scaler.scaleHeight(38))
                     .cornerRadius(10)
