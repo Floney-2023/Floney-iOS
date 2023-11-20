@@ -23,7 +23,7 @@ class Keychain {
         case appleEmail
         case appleName
         case provider
-        case bookStatus
+        //case bookStatus
     }
     
     /**

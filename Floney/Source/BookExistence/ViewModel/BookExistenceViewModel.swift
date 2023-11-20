@@ -18,7 +18,7 @@ class BookExistenceViewModel: ObservableObject {
     @Published var showAlert: Bool = false
     @Published var bookKey : String = ""
     @Published var bookExistence = false
-    @Published var bookDisabled = false
+    //@Published var bookDisabled = false
     private var cancellableSet: Set<AnyCancellable> = []
     var dataManager: BookExistenceProtocol
     
@@ -47,11 +47,12 @@ class BookExistenceViewModel: ObservableObject {
                         Keychain.setKeychain(self.bookKey, forKey: .bookKey)
                         //Keychain.setKeychain(self.result.bookStatus!, forKey: .bookStatus)
                         self.bookExistence = true
+                        /*
                         if self.result.bookStatus == "ACTIVE" {
                             self.bookDisabled = false
                         } else {
                             self.bookDisabled = true
-                        }
+                        }*/
                         if let email = Keychain.getKeychainValue(forKey: .email), let fcmToken = Keychain.getKeychainValue(forKey: .fcmToken) {
                             self.fcmManager.saveToken(for: email, bookKey: book, token: fcmToken)
                         }

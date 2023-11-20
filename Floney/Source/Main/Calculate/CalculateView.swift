@@ -97,7 +97,7 @@ struct CalculateView: View {
             }
             
         }
-        .disabled(bookService.bookDisabled)
+        //.disabled(bookService.bookDisabled)
     }
 }
 

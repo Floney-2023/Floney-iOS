@@ -12,6 +12,7 @@ class CurrencyManager: ObservableObject {
     static let shared = CurrencyManager()
     @Published var currentCurrencyUnit: String = "KRW" 
     @Published var currentCurrency : String = "원"
+   // @Published var 
     
     func getCurrency() {
         let bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
@@ -63,4 +64,5 @@ class CurrencyManager: ObservableObject {
             currentCurrency = "원"  // 혹은 기본값으로 다른 문자열을 반환
         }
     }
+    
 }

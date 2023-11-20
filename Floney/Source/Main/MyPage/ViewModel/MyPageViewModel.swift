@@ -14,7 +14,7 @@ final class MyPageViewModel: ObservableObject {
     var recentBookManager = RecentBookKeyManager()
     var tokenViewModel = TokenReissueViewModel()
 
-    @Published var result : MyPageResponse = MyPageResponse(nickname: "", email: "", profileImg: "", provider: "", subscribe: false, lastAdTime: nil, myBooks: [])
+    @Published var result : MyPageResponse = MyPageResponse(nickname: "", email: "", profileImg: "", provider: "", lastAdTime: nil, myBooks: [])
     @Published var myPageLoadingError: String = ""
     @Published var errorMessage : String = ""
     @Published var showAlert: Bool = false
@@ -27,7 +27,6 @@ final class MyPageViewModel: ObservableObject {
     }
     @Published var email : String = ""
     @Published var provider : String = ""
-    @Published var subscribe : Bool = false
     @Published var userImg : String?
     @Published var profileUrl : String?
     @Published var myBooks : [MyBookResult] = []
@@ -91,7 +90,6 @@ final class MyPageViewModel: ObservableObject {
                     self.userImg = self.result.profileImg
                     self.provider = self.result.provider
                     Keychain.setKeychain(self.provider, forKey: .provider)
-                    self.subscribe = self.result.subscribe
                     
                     if let img = self.userImg {
                         if img == "user_default" { // 디폴트라면
@@ -327,9 +325,9 @@ final class MyPageViewModel: ObservableObject {
         return true
     }
 
-    func changeBook(bookKey : String, bookStatus : String) {
+    func changeBook(bookKey : String) { //bookStatus : String) {
         Keychain.setKeychain(bookKey, forKey: .bookKey)
-        Keychain.setKeychain(bookStatus, forKey: .bookStatus)
+        //Keychain.setKeychain(bookStatus, forKey: .bookStatus)
         let recentBookKeyManager = RecentBookKeyManager()
         recentBookKeyManager.saveRecentBookKey(bookKey: bookKey)
         CurrencyManager.shared.getCurrency()

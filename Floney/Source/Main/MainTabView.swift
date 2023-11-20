@@ -88,9 +88,10 @@ struct MainTabView: View {
                         HStack(spacing:0) {
                             Button {
                                 self.selection = 0
+                                /*
                                 if bookService.bookDisabled {
                                     showingInactiveAlert = true
-                                }
+                                }*/
                             } label: {
                                 VStack(spacing: scaler.scaleHeight(4)) {
                                     Image(selection == 0 ? selectedIcons[0] : icons[0])
@@ -108,9 +109,10 @@ struct MainTabView: View {
                             .padding(.leading, scaler.scaleWidth(36))
                             Button {
                                 self.selection = 1
+                                /*
                                 if bookService.bookDisabled {
                                     showingInactiveAlert = true
-                                }
+                                }*/
                             } label: {
                                 VStack(spacing: scaler.scaleHeight(4)) {
                                     Image(selection == 1 ? selectedIcons[1] : icons[1])
@@ -131,13 +133,13 @@ struct MainTabView: View {
                                 let dateFormatter = DateFormatter()
                                 dateFormatter.dateFormat = "yyyy-MM-dd"
                                 currentDate = dateFormatter.string(from: Date())
-                               
-                                
+                                self.showingAddView = true
+                                /*
                                 if bookService.bookDisabled {
                                     showingInactiveAlert = true
                                 } else {
                                     self.showingAddView = true
-                                }
+                                }*/
                             } label: {
                                 VStack {
                                     Image(icons[2])
@@ -151,9 +153,10 @@ struct MainTabView: View {
                             
                             Button {
                                 self.selection = 3
+                                /*
                                 if bookService.bookDisabled {
                                     showingInactiveAlert = true
-                                }
+                                }*/
                             } label: {
                                 VStack(spacing: scaler.scaleHeight(4)) {
                                     Image(selection == 3 ? selectedIcons[3] : icons[3])

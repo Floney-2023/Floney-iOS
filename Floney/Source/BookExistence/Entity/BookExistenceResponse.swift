@@ -9,5 +9,5 @@ import Foundation
 
 struct BookExistenceResponse : Decodable {
     var bookKey : String?
-    var bookStatus : String?
+    //var bookStatus : String?
 }

@@ -24,16 +24,16 @@ struct MyPageView: View {
     @State var isNextToUnSubscription = false
     @State var isNextToSubscription = false
     
-    @State var productPrice = IAPManager.shared.productList[0].price
-
+    //@State var productPrice = IAPManager.shared.productList[0].price
+    /*
     private var priceFormatter : NumberFormatter {
         let priceFormatter = NumberFormatter()
         priceFormatter.numberStyle = .currency
         priceFormatter.locale = IAPManager.shared.productList[0].priceLocale
         return priceFormatter
-    }
+    }*/
     var body: some View {
-        @State var formattedPrice = priceFormatter.string(from: productPrice)
+        //@State var formattedPrice = priceFormatter.string(from: productPrice)
         ZStack {
             VStack(spacing:scaler.scaleHeight(26)) {
                 HStack(spacing:scaler.scaleWidth(8)) {
@@ -143,7 +143,7 @@ struct MyPageView: View {
                                 self.isShowingUserInfoView = true
                             }
                         }
-                        
+                        /*
                         if viewModel.subscribe {
                             Button {
                                 self.isNextToMySubscription = true
@@ -162,7 +162,7 @@ struct MyPageView: View {
                             .background(Color.greyScale2)
                             .cornerRadius(12)
                             
-                        } else {
+                        } else {*/
                             HStack(spacing:scaler.scaleWidth(12)){
                                 VStack {
                                     HStack {
@@ -181,8 +181,9 @@ struct MyPageView: View {
                                 .frame(height: scaler.scaleHeight(150))
                                 .background(Color.greyScale12)
                                 .cornerRadius(12)
-                                NavigationLink(destination: SubscriptionView(mypageViewModel:viewModel,isActive : $isNextToSubscription,showingTabbar: $showingTabbar), isActive: $isNextToSubscription) {
+                                //NavigationLink(destination: SubscriptionView(mypageViewModel:viewModel,isActive : $isNextToSubscription,showingTabbar: $showingTabbar), isActive: $isNextToSubscription) {
                                     VStack {
+                                        /*
                                         HStack {
                                             VStack(alignment:.leading) {
                                                 Text("월 \(formattedPrice!)으로")
@@ -197,7 +198,7 @@ struct MyPageView: View {
                                         Spacer()
                                         Text("플랜보기")
                                             .font(.pretendardFont(.medium, size: scaler.scaleWidth(12)))
-                                            .foregroundColor(.background3)
+                                            .foregroundColor(.background3)*/
                                         
                                     }
                                     .padding(scaler.scaleWidth(20))
@@ -219,9 +220,9 @@ struct MyPageView: View {
                                         showingTabbar = false
                                     }
                                     
-                                }
+                                //}
                             }
-                        }
+                       // }
                     }
                     
                     VStack(spacing:scaler.scaleHeight(22)) {
@@ -284,9 +285,9 @@ struct MyPageView: View {
                                     }
                                 }
                                 .background(Color.greyScale12)
-                                .cornerRadius(12)
+                            .cornerRadius(12)
                                 .onTapGesture {
-                                    viewModel.changeBook(bookKey: book.bookKey, bookStatus: book.bookStatus)
+                                    viewModel.changeBook(bookKey: book.bookKey) //bookStatus: book.bookStatus)
                                 }
                             }
                             if viewModel.myBooks.count < 2 {
@@ -365,7 +366,7 @@ struct MyPageView: View {
                     }
                     .padding(.top, scaler.scaleHeight(40))
                     .padding(.leading, scaler.scaleWidth(4))
-                    
+                    /*
                     if viewModel.subscribe {
                         HStack {
                             VStack {
@@ -386,7 +387,7 @@ struct MyPageView: View {
                             self.showingTabbar = false
                             self.isNextToUnSubscription = true
                         }
-                    }
+                    }*/
                     
                 } // scroll view
                 .padding(.horizontal,scaler.scaleWidth(20))
@@ -402,12 +403,6 @@ struct MyPageView: View {
                 Spacer()
             } // vstack
             .padding(.top,scaler.scaleHeight(26))
-            .fullScreenCover(isPresented: $isNextToMySubscription) {
-                MySubscriptionView(showingTabbar: $showingTabbar, isShowing: $isNextToMySubscription, isShowingUnScribe: $isNextToUnSubscription)
-            }
-            .fullScreenCover(isPresented: $isNextToUnSubscription) {
-                UnsubscribeView(showingTabbar: $showingTabbar, isShowing: $isNextToUnSubscription)
-            }
             .onAppear{
                 //if viewModel.subscribe {
                 //    IAPManager.shared.verifyReceipt()
@@ -415,6 +410,13 @@ struct MyPageView: View {
                 viewModel.getMyPage()
                 showingTabbar = true
             }
+            //.fullScreenCover(isPresented: $isNextToMySubscription) {
+            //    MySubscriptionView(showingTabbar: $showingTabbar, isShowing: $isNextToMySubscription, isShowingUnScribe: $isNextToUnSubscription)
+            //}
+            //.fullScreenCover(isPresented: $isNextToUnSubscription) {
+            //    UnsubscribeView(showingTabbar: $showingTabbar, isShowing: $isNextToUnSubscription)
+            //}
+
         } // ZStack
     }
 }

@@ -189,7 +189,7 @@ extension IAPManager  {
                     })
                     print(dataResponse.error)
                 } else {
-                    self.subscriptionStatus = dataResponse.value!.subscribe
+                    //self.subscriptionStatus = dataResponse.value!.subscribe
                     if self.subscriptionStatus {
                         self.verifyReceipt()
                     } else {

@@ -79,7 +79,7 @@ struct HomeView: View {
                 // {
                 // MARK: 캘린더 뷰 - viewModel로 상태 추적
                 CustomCalendarView(viewModel: viewModel, isShowingMonthPicker: $isShowingMonthPicker, isShowingBottomSheet: $isShowingBottomSheet,isShowingAddView: $isShowingAddView)
-                    .disabled(bookService.bookDisabled)
+                    //.disabled(bookService.bookDisabled)
                 // }
                 
             }

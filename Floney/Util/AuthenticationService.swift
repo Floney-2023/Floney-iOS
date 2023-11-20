@@ -14,7 +14,7 @@ class AuthenticationService: ObservableObject {
     @Published var isUserLoggedIn: Bool = UserDefaults.standard.bool(forKey: "isLoggedIn")
     
     @Published var tokenExpired: Bool = false
-    @Published var bookStatus: Bool = false
+    //@Published var bookStatus: Bool = false
  
     init() {
         if UserDefaults.standard.bool(forKey: "isLoggedIn") {

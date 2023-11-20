@@ -15,7 +15,7 @@ struct AddView: View {
     @State var title = "잠깐!"
     @State var message = "수정된 내용이 저장되지 않았습니다.\n그대로 나가시겠습니까?"
     
-    @State var currency = CurrencyManager.shared.currentCurrency
+    @State var currency = CurrencyManager.shared.currentCurrencyUnit
     
     @Binding var isPresented: Bool
     @State var isShowingBottomSheet = false
@@ -136,7 +136,8 @@ struct AddView: View {
                                     let rawValue = String(components.dropLast().joined(separator: "."))
                                     money = formatNumber(rawValue)
                                 }
-                            }                    } // 금액 VStack
+                            }
+                    } // 금액 VStack
                     .padding(.bottom, scaler.scaleHeight(16))
                     
                     //MARK: 지출/수입/이체 선택 토글 버튼

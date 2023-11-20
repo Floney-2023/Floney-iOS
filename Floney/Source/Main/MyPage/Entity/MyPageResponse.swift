@@ -11,7 +11,6 @@ struct MyPageResponse: Decodable {
     var email : String
     var profileImg : String
     var provider : String
-    var subscribe : Bool
     var lastAdTime : String? // null 일 수 있음
     var myBooks : [MyBookResult]?
 }
@@ -21,5 +20,5 @@ struct MyBookResult : Decodable, Hashable {
     var bookKey : String
     var name : String
     var memberCount : Int
-    var bookStatus : String
+    //var bookStatus : String
 }
