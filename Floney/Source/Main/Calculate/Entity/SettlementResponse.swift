@@ -8,7 +8,7 @@
 import Foundation
 
 struct SettlementResponse : Decodable, Hashable {
-    var money : Float
+    var money : Double
     var category : [String]
     var assetType : String
     var content : String
@@ -22,13 +22,13 @@ struct AddSettlementResponse : Decodable, Hashable {
     var userCount : Int
     var startDate : String
     var endDate : String
-    var totalOutcome : Float
-    var outcome : Float
+    var totalOutcome : Double
+    var outcome : Double
     var details : [AddSettlementResponseDetails]
 }
 
 struct AddSettlementResponseDetails : Decodable, Hashable {
-    var money : Float
+    var money : Double
     var userNickname : String
     var userProfileImg : String
 }
@@ -38,8 +38,8 @@ struct SettlementListResponse : Decodable, Hashable {
     var userCount : Int
     var startDate : String
     var endDate : String
-    var totalOutcome : Float
-    var outcome : Float
+    var totalOutcome : Double
+    var outcome : Double
 }
 
 struct BookUsersResponse : Decodable, Hashable {

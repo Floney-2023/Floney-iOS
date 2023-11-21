@@ -16,7 +16,7 @@ struct ExpenseView: View {
         VStack(spacing:0){
             HStack(spacing:0){
                 VStack(alignment:.leading, spacing: scaler.scaleHeight(8)){
-                        Text("총 \(Int(viewModel.expenseResponse.total))\(currency)을\n소비했어요")
+                        Text("총 \(viewModel.expenseResponse.total.formattedString)\(currency)을\n소비했어요")
                             .font(.pretendardFont(.bold,size:scaler.scaleWidth(22)))
                             .lineSpacing(10)
                             .foregroundColor(.greyScale1)
@@ -24,7 +24,7 @@ struct ExpenseView: View {
                             .lineLimit(2)
                             .minimumScaleFactor(0.001)
 
-                        Text("저번 달 대비 \(Int(viewModel.expenseResponse.differance))\(currency)을\n더 사용했어요")
+                        Text("저번 달 대비 \(viewModel.expenseResponse.differance.formattedString)\(currency)을\n더 사용했어요")
                             .font(.pretendardFont(.medium,size: scaler.scaleWidth(13)))
                             .foregroundColor(.greyScale6)
                             .frame(width: scaler.scaleWidth(236),alignment: .leading)
@@ -87,7 +87,7 @@ struct ExpenseView: View {
                                             .foregroundColor(.greyScale5)
                                     }
                                     Spacer()
-                                    Text("\(Int(viewModel.expenseResponse.analyzeResult[i].money))\(currency)")
+                                    Text("\(viewModel.expenseResponse.analyzeResult[i].money.formattedString)\(currency)")
                                         .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(16)))
                                         .foregroundColor(.greyScale2)
                                 }

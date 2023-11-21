@@ -13,6 +13,7 @@ struct SetBudgetView: View {
     @StateObject var viewModel = SettingBookViewModel()
     @State var setBudgetBottonSheet = false
     @State var month = 0
+    
     var body: some View {
         ZStack {
             VStack{
@@ -51,7 +52,7 @@ struct SetBudgetView: View {
                                 HStack {
                                     Text("\(monthlyAmount.month)월")
                                     Spacer()
-                                    Text("\(monthlyAmount.amount.formattedString)원")
+                                    Text("\(monthlyAmount.amount.formattedString)\(CurrencyManager.shared.currentCurrency)")
                                 }
                                 .padding(scaler.scaleWidth(20))
                                 .padding(.horizontal,scaler.scaleWidth(2))

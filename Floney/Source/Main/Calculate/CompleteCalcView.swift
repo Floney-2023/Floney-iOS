@@ -73,7 +73,7 @@ struct CompleteCalcView: View {
                             .font(.pretendardFont(.medium, size: scaler.scaleWidth(16)))
                             .foregroundColor(.greyScale2)
                         Spacer()
-                        Text("\(Int(viewModel.totalOutcome))\(currency)")
+                        Text("\(viewModel.totalOutcome.formattedString)\(currency)")
                             .font(.pretendardFont(.bold, size: scaler.scaleWidth(16)))
                             .foregroundColor(.greyScale2)
                     }.padding(.horizontal, scaler.scaleWidth(4))
@@ -97,7 +97,7 @@ struct CompleteCalcView: View {
                                 .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
                                 .foregroundColor(.greyScale6)
                             Spacer()
-                            Text("\(Int((detail.money + viewModel.outcomePerUser)))\(currency)")
+                            Text("\((detail.money+viewModel.outcomePerUser).formattedString)\(currency)")
                                 .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
                                 .foregroundColor(.greyScale2)
                         }
@@ -125,7 +125,7 @@ struct CompleteCalcView: View {
                         Text("1인")
                             .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(10)))
                             .foregroundColor(.greyScale6)
-                        Text("\(Int(viewModel.outcomePerUser))\(currency)")
+                        Text("\(viewModel.outcomePerUser.formattedString)\(currency)")
                             .font(.pretendardFont(.bold, size: scaler.scaleWidth(16)))
                             .foregroundColor(.primary2)
                     }
@@ -191,7 +191,7 @@ struct CompleteCalcView: View {
                                             .font(.pretendardFont(.medium, size: scaler.scaleWidth(12)))
                                             .foregroundColor(.greyScale2)
                                         if detail.money != 0 {
-                                            Text("\(Int(abs(detail.money)))")
+                                            Text("\(abs(detail.money).formattedString)")
                                                 .font(.pretendardFont(.bold, size: scaler.scaleWidth(16)))
                                                 .foregroundColor(.greyScale2)
                                             +

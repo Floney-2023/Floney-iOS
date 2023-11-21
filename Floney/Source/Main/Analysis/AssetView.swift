@@ -22,7 +22,7 @@ struct AssetView: View {
                             .lineSpacing(10)
                             .foregroundColor(.greyScale1)
                         
-                        Text("지난달 대비 \(Int(viewModel.difference))\(currency)\n증가했어요")
+                        Text("지난달 대비 \(viewModel.difference.formattedString)\(currency)\n증가했어요")
                             .font(.pretendardFont(.medium,size: scaler.scaleWidth(13)))
                             .foregroundColor(.greyScale6)
                     } else if viewModel.difference < 0 {
@@ -31,7 +31,7 @@ struct AssetView: View {
                             .lineSpacing(10)
                             .foregroundColor(.greyScale1)
                         
-                        Text("지난달 대비 \(Int(abs(viewModel.difference)))\(currency)\n감소했어요")
+                        Text("지난달 대비 \(abs(viewModel.difference).formattedString)\(currency)\n감소했어요")
                             .font(.pretendardFont(.medium,size: scaler.scaleWidth(13)))
                             .foregroundColor(.greyScale6)
                     } else {
@@ -105,7 +105,7 @@ struct AssetView: View {
                         Text("현재자산")
                             .font(.pretendardFont(.medium, size:scaler.scaleWidth(14)))
                             .foregroundColor(.greyScale6)
-                        Text("\(Int(viewModel.currentAsset))\(currency)")
+                        Text("\(viewModel.currentAsset.formattedString)\(currency)")
                             .font(.pretendardFont(.bold, size: scaler.scaleWidth(20)))
                             .foregroundColor(.greyScale2)
                     }
@@ -115,7 +115,7 @@ struct AssetView: View {
                     Text("초기자산")
                         .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
                         .foregroundColor(.greyScale6)
-                    Text("\(Int(viewModel.initAsset))\(currency)")
+                    Text("\(viewModel.initAsset.formattedString)\(currency)")
                         .font(.pretendardFont(.bold, size: scaler.scaleWidth(20)))
                         .foregroundColor(.greyScale2)
                 }

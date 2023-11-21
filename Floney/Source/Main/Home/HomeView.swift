@@ -123,7 +123,7 @@ struct TotalView: View {
                         .font(.pretendardFont(.medium, size:scaler.scaleWidth(12)))
                         .foregroundColor(.white)
                     
-                    Text("\(viewModel.totalOutcome)\(currency)")
+                    Text("\(viewModel.totalOutcome.formattedString)\(currency)")
                         .foregroundColor(.white)
                         .font(viewModel.totalOutcome < 1000000000 ? Font.pretendardFont(.semiBold, size:scaler.scaleWidth(18)) : Font.pretendardFont(.semiBold, size:scaler.scaleWidth(15)))
                 }
@@ -138,7 +138,7 @@ struct TotalView: View {
                     Text("총수입")
                         .font(.pretendardFont(.medium, size: scaler.scaleWidth(12)))
                         .foregroundColor(.white)
-                    Text("\(viewModel.totalIncome)\(currency)")
+                    Text("\(viewModel.totalIncome.formattedString)\(currency)")
                         .foregroundColor(.white)
                         .font(viewModel.totalIncome < 1000000000 ? Font.pretendardFont(.semiBold, size:scaler.scaleWidth(18)) : Font.pretendardFont(.semiBold, size:scaler.scaleWidth(15)))
                 }
@@ -387,7 +387,7 @@ struct MonthCalendar: View {
                                                             let money = expense.money
                                                             
                                                             if extractedDay == day && assetType == "OUTCOME" && money > 0 {
-                                                                Text("-\(money)")
+                                                                Text("-\(money.formattedString)")
                                                                     .lineLimit(1)
                                                             
                                                                     .font(money < 1000000 ? Font.pretendardFont(.medium, size:scaler.scaleWidth(9)) : Font.pretendardFont(.medium, size:scaler.scaleWidth(8)))
@@ -395,7 +395,7 @@ struct MonthCalendar: View {
                                                             }
                                                            
                                                             if extractedDay == day && assetType == "INCOME" && money > 0 {
-                                                                Text("+\(money)")
+                                                                Text("+\(money.formattedString)")
                                                                     .lineLimit(1)
                                                               
                                                                     .font(money < 1000000 ? Font.pretendardFont(.medium, size:scaler.scaleWidth(9)) : Font.pretendardFont(.medium, size:scaler.scaleWidth(8)))

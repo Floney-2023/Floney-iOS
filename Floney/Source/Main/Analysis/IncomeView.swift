@@ -16,7 +16,7 @@ struct IncomeView: View {
         VStack(spacing:0){
             HStack(spacing:0){
                 VStack(alignment:.leading, spacing: scaler.scaleHeight(8)){
-                    Text("총 \(Int(viewModel.incomeResponse.total))\(currency)을\n벌었어요")
+                    Text("총 \(viewModel.incomeResponse.total.formattedString)\(currency)을\n벌었어요")
                         .font(.pretendardFont(.bold,size:scaler.scaleWidth(22)))
                         .lineSpacing(10)
                         .foregroundColor(.greyScale1)
@@ -24,7 +24,7 @@ struct IncomeView: View {
                         .lineLimit(2)
                         .minimumScaleFactor(0.001)
                     
-                    Text("저번 달 대비 \(Int(viewModel.incomeResponse.differance))\(currency)을\n더 벌었어요")
+                    Text("저번 달 대비 \(viewModel.incomeResponse.differance.formattedString)\(currency)을\n더 벌었어요")
                         .font(.pretendardFont(.medium,size: scaler.scaleWidth(13)))
                         .foregroundColor(.greyScale6)
                         .frame(width: scaler.scaleWidth(236),alignment: .leading)
@@ -88,7 +88,7 @@ struct IncomeView: View {
                                             .foregroundColor(.greyScale5)
                                     }
                                     Spacer()
-                                    Text("\(Int(viewModel.incomeResponse.analyzeResult[i].money))\(currency)")
+                                    Text("\(viewModel.incomeResponse.analyzeResult[i].money.formattedString)\(currency)")
                                         .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(16)))
                                         .foregroundColor(.greyScale2)
                                 }

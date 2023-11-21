@@ -100,7 +100,7 @@ struct SetContentCalcView: View {
                                                         .foregroundColor(.greyScale6)
                                                 }
                                                 Spacer()
-                                                Text("\(Int(viewModel.lines[index].money))\(currency)")
+                                                Text("\(viewModel.lines[index].money.formattedString)\(currency)")
                                                     .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
                                                     .foregroundColor(.greyScale2)
                                             }

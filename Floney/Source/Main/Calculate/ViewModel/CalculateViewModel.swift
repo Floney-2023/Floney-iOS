@@ -63,8 +63,8 @@ class CalculateViewModel : ObservableObject {
     //MARK: 정산 요청 완료
     @Published var settlementResult : AddSettlementResponse = AddSettlementResponse(id: 0, userCount: 3, startDate: "2023-10-23", endDate: "2023-10-24", totalOutcome: 30000, outcome: 10000, details: []) //AddSettlementResponse(id: 0, userCount: 0, startDate: "", endDate: "", totalOutcome: 0, outcome: 0, details: [])
     @Published var userCount = 3//0
-    @Published var totalOutcome : Float = 30000//0
-    @Published var outcomePerUser : Float = 10000//0
+    @Published var totalOutcome : Double = 30000//0
+    @Published var outcomePerUser : Double = 10000//0
     @Published var details : [AddSettlementResponseDetails] = [ //[]
         AddSettlementResponseDetails(money: 0, userNickname: "test", userProfileImg: "user_default"),
         AddSettlementResponseDetails(money: -10000, userNickname: "test2", userProfileImg: "user_default"),
