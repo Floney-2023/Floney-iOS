@@ -54,7 +54,6 @@ class CreateBookViewModel: ObservableObject {
         print(request)
         dataManager.createBook(request)
             .sink { (dataResponse) in
-                
                 if dataResponse.error != nil {
                     self.createAlert(with: dataResponse.error!, retryRequest: {
                         self.createBook()
@@ -101,7 +100,6 @@ class CreateBookViewModel: ObservableObject {
         let request = InviteBookRequest(code: bookCode)
         dataManager.inviteBook(request)
             .sink { (dataResponse) in
-                
                 if dataResponse.error != nil {
                     self.createAlert(with: dataResponse.error!, retryRequest: {
                         self.joinBook()
