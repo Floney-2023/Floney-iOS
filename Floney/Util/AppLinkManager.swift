@@ -45,10 +45,8 @@ class AppLinkManager: ObservableObject {
     }
     // 원래 링크로 복호화
 
-    
     func setBookKeyandSettlementId(_ url: URL)  {
         print("호출됨 get original url")
-        
         if let components = URLComponents(url: url, resolvingAgainstBaseURL: true) {
             for queryItem in components.queryItems ?? [] {
                 if queryItem.name == "bookKey" {
