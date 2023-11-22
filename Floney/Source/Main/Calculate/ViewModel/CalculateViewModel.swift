@@ -111,7 +111,7 @@ class CalculateViewModel : ObservableObject {
                             item.isSelected = false
                             return item
                         }
-                    } 
+                    }
                 }
                 
             }.store(in: &cancellableSet)
@@ -122,7 +122,7 @@ class CalculateViewModel : ObservableObject {
         let bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
         let bookName = Keychain.getKeychainValue(forKey: .bookName) ?? ""
         let request = AddSettlementRequest(bookKey: bookKey, userEmails: userList, startDate: startDateStr, endDate: endDateStr, outcomes: outcomeRequest)
-
+        
         dataManager.postSettlements(request)
             .sink { (dataResponse) in
                 if dataResponse.error != nil {
@@ -152,12 +152,12 @@ class CalculateViewModel : ObservableObject {
     func postNoti(title :String, body: String, imgUrl : String) {
         let currentDate = Date()
         let formatter = ISO8601DateFormatter()
-
+        
         let formattedDate = formatter.string(from: currentDate)
         let userEmails = self.userList
         var viewModel = NotiViewModel()
         if let currentUser = Keychain.getKeychainValue(forKey: .email) {
-           
+            
             let filtered = userEmails.filter { $0 != currentUser }
             
             for user in filtered {
@@ -183,7 +183,7 @@ class CalculateViewModel : ObservableObject {
                     LoadingManager.shared.update(showLoading: false, loadingType: .floneyLoading)
                     self.settlementList = dataResponse.value!
                     print(self.settlementList)
-
+                    
                     self.updateDateFormats()
                     
                 }
@@ -194,11 +194,11 @@ class CalculateViewModel : ObservableObject {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = fromFormat
         guard let date = dateFormatter.date(from: dateString) else { return dateString }
-
+        
         dateFormatter.dateFormat = toFormat
         return dateFormatter.string(from: date)
     }
-
+    
     // SettlementListResponse 배열을 업데이트하는 함수
     func updateDateFormats() {
         for i in 0..<settlementList.count {
@@ -224,6 +224,8 @@ class CalculateViewModel : ObservableObject {
                     self.settlementResult = dataResponse.value!
                     self.startDateStr = self.settlementResult.startDate
                     self.endDateStr = self.settlementResult.endDate
+                    self.startDateStr = self.formatDateString(self.startDateStr, fromFormat: "yyyy-MM-dd", toFormat: "yyyy.MM.dd")
+                    self.endDateStr = self.formatDateString(self.endDateStr, fromFormat: "yyyy-MM-dd", toFormat: "yyyy.MM.dd")
                     
                     self.userCount = self.settlementResult.userCount
                     self.totalOutcome = self.settlementResult.totalOutcome
@@ -237,7 +239,7 @@ class CalculateViewModel : ObservableObject {
     func getBookUsers() {
         dataManager.getBookUsers()
             .sink { (dataResponse) in
-       
+                
                 
                 if dataResponse.error != nil {
                     self.createAlert(with: dataResponse.error!, retryRequest: {
@@ -261,7 +263,7 @@ class CalculateViewModel : ObservableObject {
     func getPassedDays() {
         dataManager.getPassedDays()
             .sink {  (dataResponse) in
-
+                
                 
                 if dataResponse.error != nil {
                     self.createAlert(with: dataResponse.error!, retryRequest: {
@@ -392,7 +394,7 @@ class CalculateViewModel : ObservableObject {
                         // 토큰 재발급 성공 시, 원래의 요청 재시도
                         retryRequest()
                     }
-                // 아예 틀린 토큰이므로 재로그인해서 다시 발급받아야 함.
+                    // 아예 틀린 토큰이므로 재로그인해서 다시 발급받아야 함.
                 case "U007" :
                     AuthenticationService.shared.logoutDueToTokenExpiration()
                 default:
@@ -404,4 +406,5 @@ class CalculateViewModel : ObservableObject {
             //showAlert(message: "네트워크 오류가 발생했습니다.")
             
         }
-    }}
+    }
+}

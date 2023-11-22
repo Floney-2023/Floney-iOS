@@ -42,68 +42,71 @@ struct SettlementListView: View {
                     ScrollView(showsIndicators: false) {
                         VStack(spacing:scaler.scaleHeight(28)) {
                             ForEach(viewModel.settlementList, id:\.self) { list in
-                                VStack(spacing: scaler.scaleHeight(12)) {
-                                    VStack(spacing:scaler.scaleHeight(22)) {
+                                NavigationLink(destination: SettlementDetailView(isShowingTabbar: $showingTabbar, settlementId: list.id, viewModel: viewModel)) {
+                                    VStack(spacing: scaler.scaleHeight(12)) {
+                                        VStack(spacing:scaler.scaleHeight(22)) {
+                                            HStack {
+                                                Text("기간")
+                                                    .font(.pretendardFont(.medium,size: scaler.scaleWidth(13)))
+                                                    .foregroundColor(.greyScale6)
+                                                Spacer()
+                                                Text("\(list.startDate) - \(list.endDate)")
+                                                    .font(.pretendardFont(.medium,size: scaler.scaleWidth(13)))
+                                                    .foregroundColor(.greyScale2)
+                                                
+                                            }
+                                            HStack {
+                                                Text("총 금액")
+                                                    .font(.pretendardFont(.medium,size: scaler.scaleWidth(13)))
+                                                    .foregroundColor(.greyScale6)
+                                                Spacer()
+                                                Text("\(list.totalOutcome.formattedString)\(currency)")
+                                                    .font(.pretendardFont(.medium,size: scaler.scaleWidth(13)))
+                                                    .foregroundColor(.greyScale2)
+                                                
+                                            }
+                                            HStack {
+                                                Text("인원")
+                                                    .font(.pretendardFont(.medium,size: scaler.scaleWidth(13)))
+                                                    .foregroundColor(.greyScale6)
+                                                Spacer()
+                                                Text("\(list.userCount)명")
+                                                    .font(.pretendardFont(.medium,size: scaler.scaleWidth(13)))
+                                                    .foregroundColor(.greyScale2)
+                                                
+                                            }
+                                        }
+                                        .padding(scaler.scaleWidth(20))
+                                        .background(Color.greyScale12)
+                                        .cornerRadius(12)
                                         HStack {
-                                            Text("기간")
-                                                .font(.pretendardFont(.medium,size: scaler.scaleWidth(13)))
-                                                .foregroundColor(.greyScale6)
-                                            Spacer()
-                                            Text("\(list.startDate) - \(list.endDate)")
-                                                .font(.pretendardFont(.medium,size: scaler.scaleWidth(13)))
+                                            Text("정산 금액")
+                                                .font(.pretendardFont(.semiBold,size: scaler.scaleWidth(13)))
                                                 .foregroundColor(.greyScale2)
+                                            Spacer()
+                                            Text("1인")
+                                                .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(10)))
+                                                .foregroundColor(.greyScale6)
+                                            Text("\(list.outcome.formattedString)\(currency)")
+                                                .font(.pretendardFont(.bold, size: scaler.scaleWidth(16)))
+                                                .foregroundColor(.primary2)
+                                            Image("forward_button")
+                                                .padding(.leading, scaler.scaleWidth(8))
                                             
                                         }
-                                        HStack {
-                                            Text("총 금액")
-                                                .font(.pretendardFont(.medium,size: scaler.scaleWidth(13)))
-                                                .foregroundColor(.greyScale6)
-                                            Spacer()
-                                            Text("\(list.totalOutcome.formattedString)\(currency)")
-                                                .font(.pretendardFont(.medium,size: scaler.scaleWidth(13)))
-                                                .foregroundColor(.greyScale2)
-                                            
-                                        }
-                                        HStack {
-                                            Text("인원")
-                                                .font(.pretendardFont(.medium,size: scaler.scaleWidth(13)))
-                                                .foregroundColor(.greyScale6)
-                                            Spacer()
-                                            Text("\(list.userCount)명")
-                                                .font(.pretendardFont(.medium,size: scaler.scaleWidth(13)))
-                                                .foregroundColor(.greyScale2)
-                                            
-                                        }
-                                    }
-                                    .padding(scaler.scaleWidth(20))
-                                    .background(Color.greyScale12)
-                                    .cornerRadius(12)
-                                    HStack {
-                                        Text("정산 금액")
-                                            .font(.pretendardFont(.semiBold,size: scaler.scaleWidth(13)))
-                                            .foregroundColor(.greyScale2)
-                                        Spacer()
-                                        Text("1인")
-                                            .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(10)))
-                                            .foregroundColor(.greyScale6)
-                                        Text("\(list.outcome.formattedString)\(currency)")
-                                            .font(.pretendardFont(.bold, size: scaler.scaleWidth(16)))
-                                            .foregroundColor(.primary2)
-                                        Image("forward_button")
-                                            .padding(.leading, scaler.scaleWidth(8))
-                                        
-                                    }
-                                    .padding(.leading,scaler.scaleWidth(20))
-                                    .padding(.vertical,scaler.scaleWidth(21))
-                                    .padding(.trailing,scaler.scaleWidth(8))
-                                    .background(Color.primary10)
-                                    .cornerRadius(12)
-                                } // VStack
-                                .onTapGesture {
-                                    settlementId = list.id
-                                    viewModel.id = settlementId
-                                    showingDetail = true
+                                        .padding(.leading,scaler.scaleWidth(20))
+                                        .padding(.vertical,scaler.scaleWidth(21))
+                                        .padding(.trailing,scaler.scaleWidth(8))
+                                        .background(Color.primary10)
+                                        .cornerRadius(12)
+                                    } // VStack
+                                   // .onTapGesture {
+                                   //     settlementId = list.id
+                                   //     viewModel.id = settlementId
+                                   //     showingDetail = true
+                                   // }
                                 }
+                                    
                             } //Foreach
                         }
                     } // Scroll
@@ -131,7 +134,10 @@ struct SettlementListView: View {
                     }
             }
         )
-        NavigationLink(destination: SettlementDetailView(isShowingTabbar: $showingTabbar, showingDetail: $showingDetail, settlementId: $settlementId, viewModel: viewModel), isActive: $showingDetail) {
+        .onChange(of: showingDetail) { newValue in
+            print("Settlement List에서 status가 갑자기 \(newValue)로 바뀌었습니다.")
+        }
+        NavigationLink(destination: SettlementDetailView(isShowingTabbar: $showingTabbar, settlementId: settlementId, viewModel: viewModel), isActive: $showingDetail) {
             EmptyView()
         }
     }

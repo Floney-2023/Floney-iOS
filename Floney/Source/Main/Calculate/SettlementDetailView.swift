@@ -12,8 +12,10 @@ struct SettlementDetailView: View {
     let scaler = Scaler.shared
     @StateObject var applinkManager = AppLinkManager.shared
     @Binding var isShowingTabbar : Bool
-    @Binding var showingDetail : Bool
-    @Binding var settlementId : Int
+    //@Binding var showingDetail : Bool
+    @State var showingDetail = true
+    //@Binding var settlementId : Int
+    @State var settlementId : Int = 0
     @State var currency = CurrencyManager.shared.currentCurrency
     @ObservedObject var viewModel : CalculateViewModel
     var body: some View {
@@ -203,6 +205,9 @@ struct SettlementDetailView: View {
             .onAppear{
                 viewModel.getSettlementDetail(id: settlementId)
             }
+            .onChange(of: showingDetail) { newValue in
+                print("Settlement Detail에서 status가 갑자기 \(newValue)로 바뀌었습니다.")
+            }
             .sheet(isPresented: $applinkManager.showingShareSheet) {
                 if let url = applinkManager.shortenedUrl {
                     ActivityView(activityItems: [url])
@@ -220,6 +225,6 @@ struct SettlementDetailView: View {
 
 struct SettlementDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        SettlementDetailView(isShowingTabbar: .constant(false), showingDetail: .constant(true), settlementId: .constant(0), viewModel: CalculateViewModel())
+        SettlementDetailView(isShowingTabbar: .constant(false), viewModel: CalculateViewModel())
     }
 }
