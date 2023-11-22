@@ -7,7 +7,6 @@
 
 import Foundation
 import FirebaseStorage
-import FirebaseDynamicLinks
 
 class FirebaseManager {
     //var encryptionManager = CryptManager()
