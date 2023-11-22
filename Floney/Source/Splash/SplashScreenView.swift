@@ -34,6 +34,7 @@ struct SplashScreenView: View {
                                 } else {
                                     if let settlementId = applinkManager.settlementId {
                                         //MARK: 정산 영수증 화면
+                                        
                                         MainTabView(selection : 3, settlementId:
                                                         settlementId, showingSettlementList: true, showingSettlementDetail: true)
                                     }
