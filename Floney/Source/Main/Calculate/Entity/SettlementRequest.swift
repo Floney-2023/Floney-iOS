@@ -27,7 +27,7 @@ struct AddSettlementRequest : Encodable {
 
 }
 struct OutComes : Encodable {
-    var outcome : Float
+    var outcome : Double
     var userEmail : String
 }
 

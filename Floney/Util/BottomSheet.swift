@@ -800,7 +800,7 @@ struct DayLinesBottomSheet: View {
                                                     .foregroundColor(.greyScale6)
                                             }
                                             Spacer()
-                                            Text("\(Int(viewModel.dayLineCarryOver.carryOverMoney))")
+                                            Text("\(viewModel.dayLineCarryOver.carryOverMoney.formattedString)")
                                                 .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(16)))
                                                 .foregroundColor(.greyScale2)
                                         }
@@ -920,16 +920,16 @@ struct DayLinesBottomSheet: View {
                                                 Spacer()
                                                 
                                                 if line.assetType == "INCOME" {
-                                                    Text("+\(line.money)")
+                                                    Text("+\(line.money.formattedString)")
                                                         .font(.pretendardFont(.semiBold, size:scaler.scaleWidth(16)))
                                                         .foregroundColor(.greyScale2)
                                                 } else if line.assetType == "OUTCOME" {
-                                                    Text("-\(line.money)")
+                                                    Text("-\(line.money.formattedString)")
                                                         .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(16)))
                                                         .foregroundColor(.greyScale2)
                                                     
                                                 } else if line.assetType == "BANK" {
-                                                    Text("-\(line.money)")
+                                                    Text("-\(line.money.formattedString)")
                                                         .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(16)))
                                                         .foregroundColor(.greyScale2)
                                                     

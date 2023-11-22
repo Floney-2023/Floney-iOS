@@ -93,7 +93,7 @@ enum ServerError: String, CustomError {
         case .NOT_FOUND_BOOK_USER: //가계부 멤버를 찾을 수 없습니다
             return "알 수 없는 오류입니다. 다시 시도해 주세요."
         case .NOT_FOUND_BOOK_LINE:// 가계부 내역을 찾을 수 없습니다
-            return "알 수 없는 오류입니다. 다시 시도해 주세요."
+            return "가계부 내역을 찾을 수 없습니다"
         case .ALREADY_JOIN: //이미 존재하는 가계부 유저입니다
             return "이미 가계부 멤버 입니다."
         case .NOT_SUBSCRIBE: //멤버쉽 전용 기능입니다

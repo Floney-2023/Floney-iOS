@@ -24,7 +24,7 @@ class SignUp {
 
 extension SignUp: SignUpProtocol {
     func postSignUp(_ parameters:SignUpRequest) -> AnyPublisher<DataResponse<SignUpResponse, NetworkError>, Never> {
-        let url = "\(Constant.BASE_URL)/users/signup"
+        let url = "\(Constant.BASE_URL)/users"
         return AF.request(url,
                           method: .post,
                           parameters: parameters,

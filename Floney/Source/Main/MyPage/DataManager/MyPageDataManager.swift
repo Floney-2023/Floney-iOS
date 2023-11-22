@@ -215,11 +215,11 @@ extension MyPage: MyPageProtocol {
     }
     func signout(_ parameters : SignOutRequest) -> AnyPublisher<Void, NetworkError> {
         let token = Keychain.getKeychainValue(forKey: .accessToken) ?? ""
-        let url = "\(Constant.BASE_URL)/users/signout?accessToken=\(token)"
+        let url = "\(Constant.BASE_URL)/users?accessToken=\(token)"
         print("sign out : \n\(token)")
         
         return AF.request(url,
-                          method: .post,
+                          method: .delete,
                           parameters: parameters,
                           encoder: JSONParameterEncoder()
         )

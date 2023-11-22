@@ -89,7 +89,7 @@ struct AssetView: View {
                                 .frame(width: scaler.scaleWidth(20), height: barHeight)
                                 .cornerRadius(4)
                             //index == viewModel.assetList.count - 1 ? "이번달" :
-                            Text("\(viewModel.assetList[index].date)")
+                            Text("\(Int(viewModel.assetList[index].month)!)")
                                 .font(.pretendardFont(.medium, size: scaler.scaleWidth(12)))
                                 .foregroundColor(.greyScale6)
                         }

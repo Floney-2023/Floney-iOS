@@ -42,7 +42,7 @@ class AnalysisViewModel : ObservableObject {
     
     //MARK: 자산 분석
     @Published var monthList : [String] = []
-    @Published var assetList : [AssetInfo] = []
+    @Published var assetList : [Asset] = []
     @Published var difference : Double = 0
     @Published var currentAsset : Double = 0
     @Published var initAsset : Double = 0
@@ -272,22 +272,51 @@ class AnalysisViewModel : ObservableObject {
                     LoadingManager.shared.update(showLoading: false, loadingType: .progressLoading)
                 } else {
                     LoadingManager.shared.update(showLoading: false, loadingType: .progressLoading)
-                    var asset = dataResponse.value ?? AssetResponse(difference: 0, initAsset: 0, currentAsset: 0, assetInfo: [])
+                    var asset = dataResponse.value ?? AssetResponse(difference: 0, initAsset: 0, currentAsset: 0, assetInfo: [:])
                     //asset.month = assetMonth  // 해당 월을 AssetResponse에 저장합니다.
                     //asset.year = assetYear
-                    self.assetList = asset.assetInfo
-                    self.assetList = self.assetList.sorted {
-                        return $0.date < $1.date
-                        //guard let year0 = $0.year, let year1 = $1.year,
-                        //      let month0 = $0.month, let month1 = $1.month else {
-                        //    return false
-                        //}
-                        //if year0 == year1 {
-                        //    return month0 < month1
-                       // }
-                        //return year0 < year1
-                    }
                     //if date == self.selectedDateStr {
+                    let assetInfoDictionary = asset.assetInfo  // 예: [String: AssetInfo] 타입의 딕셔너리
+
+                    self.assetList = assetInfoDictionary.compactMap { key, value in
+                        let dateFormatter = DateFormatter()
+                        dateFormatter.dateFormat = "yyyy-MM-dd"
+
+                        guard let date = dateFormatter.date(from: key) else { return nil }
+                        let monthFormatter = DateFormatter()
+                        monthFormatter.dateFormat = "yyyy-MM"
+
+                        let monthString = monthFormatter.string(from: date)
+                        return Asset(assetMoney: value.assetMoney,month: monthString)
+                    }
+                    // assetList 정렬
+                    self.assetList.sort { first, second in
+                        let firstComponents = first.month.split(separator: "-").map { Int($0) }
+                        let secondComponents = second.month.split(separator: "-").map { Int($0) }
+
+                        if let firstYear = firstComponents.first, let firstMonth = firstComponents.last,
+                           let secondYear = secondComponents.first, let secondMonth = secondComponents.last {
+                            if firstYear != secondYear {
+                                return firstYear! < secondYear!
+                            } else {
+                                return firstMonth! < secondMonth!
+                            }
+                        }
+
+                        return false
+                    }
+
+                    // 월만 추출하여 다시 할당
+                    self.assetList = self.assetList.map { assetMonthInfo in
+                        var modifiedInfo = assetMonthInfo
+                        let monthComponents = assetMonthInfo.month.split(separator: "-")
+                        if monthComponents.count == 2 {
+                            modifiedInfo.month = String(monthComponents[1])
+                        }
+                        return modifiedInfo
+                    }
+
+                    print(self.assetList)
                     self.difference = dataResponse.value?.difference ?? 0
                     self.currentAsset = dataResponse.value?.currentAsset ?? 0
                     self.initAsset = dataResponse.value?.initAsset ?? 0
