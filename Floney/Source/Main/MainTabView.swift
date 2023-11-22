@@ -67,6 +67,11 @@ struct MainTabView: View {
                     NavigationView {
                         CalculateView(settlementId: $settlementId, isShowingSettlement: $showingSettlementList, showingTabbar: $showingTabbar, showingDetail: $showingSettlementDetail)
                     }.navigationViewStyle(.stack)
+                        .onAppear{
+                                print("Main Tab View : 정산 리스트 보여주나요 ? :\(showingSettlementList)")
+                                print("Main Tab View : 정산 디테일도 보여주나요 ? :\(showingSettlementDetail)")
+                            
+                        }
                 default :
                     NavigationView {
                         MyPageView(showingTabbar: $showingTabbar, isShowingAccountBottomSheet: $isShowingAccountBottomSheet, isNextToCreateBook: $isNextToCreateBook, isNextToEnterCode: $isNextToEnterCode)
