@@ -94,6 +94,8 @@ struct CalculateView: View {
             .onAppear{
                     viewModel.getPassedDays()
                     showingTabbar = true
+                print("Calculate view : 정산 리스트 보여주나요 ? :\(isShowingSettlement)")
+                print("Calculate view : 정산 디테일도 보여주나요 ? :\(showingDetail)")
             }
             
         }

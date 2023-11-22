@@ -125,7 +125,6 @@ class CalculateViewModel : ObservableObject {
 
         dataManager.postSettlements(request)
             .sink { (dataResponse) in
-                
                 if dataResponse.error != nil {
                     self.createAlert(with: dataResponse.error!, retryRequest: {
                         self.postSettlements()
@@ -135,7 +134,7 @@ class CalculateViewModel : ObservableObject {
                     LoadingManager.shared.update(showLoading: false, loadingType: .floneyLoading)
                 } else {
                     print("--정산 요청 성공--")
-                    self.fcmManager.sendNotification(to: bookKey, title: "플로니", body: "\(bookName)의 가계부를 정산해보세요!")
+                    self.fcmManager.fetchTokensFromDatabase(bookKey: bookKey, title: "플로니", body: "\(bookName)의 가계부를 정산해보세요!")
                     self.postNoti(title: "플로니", body: "\(bookName)의 가계부를 정산해보세요!", imgUrl: "noti_settlement")
                     LoadingManager.shared.update(showLoading: false, loadingType: .floneyLoading)
                     self.settlementResult = dataResponse.value!
@@ -217,10 +216,10 @@ class CalculateViewModel : ObservableObject {
                     })
                     // 에러 처리
                     print(dataResponse.error)
-                    
                     LoadingManager.shared.update(showLoading: false, loadingType: .floneyLoading)
                 } else {
                     print("--정산 내역 디테일 요청 성공--")
+                    
                     LoadingManager.shared.update(showLoading: false, loadingType: .floneyLoading)
                     self.settlementResult = dataResponse.value!
                     self.startDateStr = self.settlementResult.startDate
@@ -230,6 +229,7 @@ class CalculateViewModel : ObservableObject {
                     self.totalOutcome = self.settlementResult.totalOutcome
                     self.outcomePerUser = self.settlementResult.outcome
                     self.details = self.settlementResult.details
+                    print(self.settlementResult)
                 }
             }.store(in: &cancellableSet)
     }

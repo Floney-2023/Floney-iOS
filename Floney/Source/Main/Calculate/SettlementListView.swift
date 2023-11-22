@@ -114,6 +114,8 @@ struct SettlementListView: View {
         .onAppear{
             showingTabbar = false
             viewModel.getSettlementList()
+            print("Settlement List View : 정산 리스트 보여주나요 ? :\(isShowing)")
+            print("Settlement List View : 정산 디테일도 보여주나요 ? :\(showingDetail)")
         }
         .customNavigationBar(
             centerView: {
@@ -129,7 +131,6 @@ struct SettlementListView: View {
                     }
             }
         )
-        
         NavigationLink(destination: SettlementDetailView(isShowingTabbar: $showingTabbar, showingDetail: $showingDetail, settlementId: $settlementId, viewModel: viewModel), isActive: $showingDetail) {
             EmptyView()
         }
