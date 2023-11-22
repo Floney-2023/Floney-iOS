@@ -17,39 +17,61 @@ class FCMDataManager: ObservableObject {
     init() {
         // 객체 생성 시 바로 관리자 accessToken 받아오기
     }
+    // 사용자 입장 시 save token
     func saveToken(for userId: String, bookKey: String, token: String) {
         let db = Firestore.firestore()
         let bookRef = db.collection("books").document(bookKey)
         let userRef = bookRef.collection("users").document(userId)
-        
         userRef.setData(["fcmToken": token], merge: true)
     }
+    /*
     func sendNotification(to bookKey: String, title: String, body: String) {
-        callFetchAccessToken(bookKey: bookKey, title: title, body: body)
+        //callFetchAccessToken(bookKey: bookKey, title: title, body: body)
+        fetchTokensFromDatabase(bookKey: bookKey, title: title, body: body)
         print("send noti")
-    }
+    }*/
     
-    func fetchTokensFromDatabase(bookKey : String) -> [String]{
-        let db = Firestore.firestore()
-        let bookRef = db.collection("books").document(bookKey)
-        let usersCollection = bookRef.collection("users")
-        var fcmTokens : [String] = []
-        
-        usersCollection.getDocuments { (snapshot, error) in
-            guard let documents = snapshot?.documents else {
-                print("Error fetching users: \(error?.localizedDescription ?? "Unknown error")")
-                return
-            }
-            
-            for document in documents {
-                if let fcmToken = document.data()["fcmToken"] as? String {
-                    fcmTokens.append(fcmToken)
+    // fetchTokens : 해당 가계부의 멤버의 토큰들 가져오기
+    func fetchTokensFromDatabase(bookKey : String, title : String, body : String){
+        fetchAccessToken()
+            .sink { dataResponse in
+                if dataResponse.error != nil {
+                    self.createAlert(with: dataResponse.error!, retryRequest: {
+                        self.fetchTokensFromDatabase(bookKey: bookKey, title: title, body: body)
+                    })
+                    print(dataResponse.error)
+                    
+                } else {
+                    print("fcm access token 요청 성공")
+                    self.fcmAccessToken = dataResponse.value!.token
+                    
+                    let db = Firestore.firestore()
+                    let bookRef = db.collection("books").document(bookKey)
+                    let usersCollection = bookRef.collection("users")
+                    print("In Fetch Tokens From DB book:\(bookRef)")
+                    print("In Fetch Tokens From DB user collection:\(usersCollection)")
+                    
+                    usersCollection.getDocuments { (snapshot, error) in
+                        guard let documents = snapshot?.documents else {
+                            print("Error fetching users: \(error?.localizedDescription ?? "Unknown error")")
+                            return
+                        }
+                
+                        for document in documents {
+                            if let fcmToken = document.data()["fcmToken"] as? String {
+                                let myToken = Keychain.getKeychainValue(forKey: .fcmToken) ?? ""
+                                if fcmToken == myToken { continue }
+                                print("In Fetch Tokens From DB token:\(fcmToken)")
+                                self.sendFCMNotification(to: fcmToken, title: title, body: body)
+                            }
+                        }
+                    }
                 }
-            }
-        }
-        return fcmTokens
+            }.store(in: &cancellableSet)
+        
     }
 
+    // firebase에 노티 요청
     func sendFCMNotification(to token: String, title: String, body: String) {
         let url = "https://fcm.googleapis.com/v1/projects/floney/messages:send"
         let headers: HTTPHeaders = [
@@ -71,7 +93,7 @@ class FCMDataManager: ObservableObject {
             }
         }
     }
-    
+    /*
     func callFetchAccessToken(bookKey : String, title : String, body : String) {
         fetchAccessToken()
             .sink { dataResponse in
@@ -88,20 +110,18 @@ class FCMDataManager: ObservableObject {
                     if let currentUserToken = Keychain.getKeychainValue(forKey: .fcmToken) {
                         // 1. 데이터베이스에서 모든 사용자의 FCM 토큰을 가져옵니다.
                         let tokens = self.fetchTokensFromDatabase(bookKey: bookKey)
-                        
                         // 2. 현재 사용자의 토큰을 제거합니다.
                         let filteredTokens = tokens.filter { $0 != currentUserToken }
                         print("필터링된 토큰들 \(filteredTokens)")
                         // 3. 필터링된 토큰 목록을 사용하여 FCM 알림을 보냅니다.
                         for token in filteredTokens {
-                            
                             self.sendFCMNotification(to: token, title: title, body: body)
                         }
                     }
 
                 }
             }.store(in: &cancellableSet)
-    }
+    }*/
     
     // server에 요청하기
     func fetchAccessToken() -> AnyPublisher<DataResponse<FCMAccessToken, NetworkError>,Never> {
