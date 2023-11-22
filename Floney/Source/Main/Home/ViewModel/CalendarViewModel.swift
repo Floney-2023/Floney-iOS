@@ -184,6 +184,7 @@ class CalendarViewModel: ObservableObject {
                     print("--성공--")
                     print(self.bookInfoResult)
                     self.bookProfileImage = self.bookInfoResult.bookImg
+                    Keychain.setKeychain(self.bookInfoResult.bookName, forKey: .bookName)
                     
                 }
             }.store(in: &cancellableSet)
