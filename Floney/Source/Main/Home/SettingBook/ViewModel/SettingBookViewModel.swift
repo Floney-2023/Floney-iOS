@@ -160,6 +160,7 @@ class SettingBookViewModel : ObservableObject {
                     self.startDay = self.result.startDay
                     self.carryOver = self.result.carryOver
                     self.profileStatus = self.result.seeProfileStatus
+                    Keychain.setKeychain(self.bookName, forKey: .bookName)
                     self.hostFilter()
                     
                     self.userImages = self.bookUsers.compactMap { $0.profileImg }
