@@ -86,7 +86,6 @@ struct DayLinesDetailView : View {
     @State private var selectedIndex = 0
     @State var selectedToggleTypeIndex = 0
     @State var selectedToggleType = ""
-    var lineModel = LineModel()
     var body: some View {
         VStack(spacing:0) {
             HStack {
@@ -261,34 +260,28 @@ struct DayLinesDetailView : View {
                                         }
                                     }
                                 }
+                                .background(Color.white)
                                 .onTapGesture {
-                                    
                                     LoadingManager.shared.update(showLoading: true, loadingType: .progressLoading)
                                     self.selectedIndex = index
                                     
                                     if let line = viewModel.dayLines[selectedIndex] {
                                         if viewModel.dayLines[index]?.assetType == "OUTCOME" {
-                                            lineModel.selectedOptions = 0
-                                            lineModel.toggleType = "지출"
+                                            selectedToggleTypeIndex = 0
+                                            selectedToggleType = "지출"
                                         } else if viewModel.dayLines[index]?.assetType == "INCOME" {
-                                            lineModel.selectedOptions = 1
-                                            lineModel.toggleType = "수입"
+                                            selectedToggleTypeIndex = 1
+                                            selectedToggleType = "수입"
                                         } else if viewModel.dayLines[index]?.assetType == "BANK" {
-                                            lineModel.selectedOptions = 2
-                                            lineModel.toggleType = "이체"
+                                            selectedToggleTypeIndex = 2
+                                            selectedToggleType = "이체"
                                         }
-                                        lineModel.mode = "check"
-                                        lineModel.lineId = line.id
-                                        print("지출 수입 이체 인덱스 : \(self.selectedToggleTypeIndex)")
-                                        print("지출 수입 이체 : \(self.selectedToggleType)")
-                                        print("금액 : \(self.viewModel.dayLines[index]?.money)")
-                                        print("제외 여부 : \(self.viewModel.dayLines[index]?.exceptStatus)")
-                                        print("PK : \(self.viewModel.dayLines[index]?.id)")
+                                        
                                     }
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                                        LoadingManager.shared.update(showLoading: false, loadingType: .progressLoading)
-                                        self.showingDetail = true
-                                    }
+                                    //DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                    LoadingManager.shared.update(showLoading: false, loadingType: .progressLoading)
+                                    self.showingDetail = true
+                                   // }
                                     
                                 }
                                 .frame(height: scaler.scaleHeight(34))
@@ -297,7 +290,10 @@ struct DayLinesDetailView : View {
                                         NavigationView {
                                             AddView(
                                                 isPresented: $showingDetail,
-                                                lineModel : lineModel,
+                                                mode : "check",
+                                                lineId : line.id,
+                                                toggleType : selectedToggleType, // 지출, 수입, 이체
+                                                selectedOptions : selectedToggleTypeIndex,
                                                 date : viewModel.selectedDateStr,
                                                 money: String(line.money),
                                                 assetType : line.category[0],
@@ -324,6 +320,14 @@ struct DayLinesDetailView : View {
         .frame(height: scaler.scaleHeight(366))
         .background(Color.white)
         .cornerRadius(12)
+        .onChange(of : isShowingAddView) { newValue in
+            viewModel.getDayLines()
+            viewModel.getCalendar()
+        }
+        .onChange(of : showingDetail) { newValue in
+            viewModel.getDayLines()
+            viewModel.getCalendar()
+        }
         
     }
 }

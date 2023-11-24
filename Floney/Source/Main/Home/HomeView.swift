@@ -95,7 +95,7 @@ struct HomeView: View {
             
         }.fullScreenCover(isPresented: $isShowingAddView) {
             NavigationView {
-                AddView.init(isPresented: $isShowingAddView, lineModel: lineModel, date: viewModel.selectedDateStr)
+                AddView.init(isPresented: $isShowingAddView, date: viewModel.selectedDateStr)
             }.navigationViewStyle(.stack)
         }
 
@@ -104,9 +104,11 @@ struct HomeView: View {
         }
         .onChange(of: mainAddViewStatus) { newValue in
             viewModel.getCalendar()
+            viewModel.getDayLines()
         }
         .onChange(of: isShowingAddView) { newValue in
             viewModel.getCalendar()
+            viewModel.getDayLines()
         }
     }
 }

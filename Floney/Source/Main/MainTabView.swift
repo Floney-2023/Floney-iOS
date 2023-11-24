@@ -42,7 +42,7 @@ struct MainTabView: View {
                 //ZStack {
                 Spacer().fullScreenCover(isPresented: $showingAddView) {
                     NavigationView {
-                        AddView(isPresented: $showingAddView,lineModel: lineModel,date:currentDate)
+                        AddView(isPresented: $showingAddView,date:currentDate)
                             .transition(.moveAndFade)
                     }
                     .navigationViewStyle(.stack)
@@ -60,7 +60,7 @@ struct MainTabView: View {
                     }.navigationViewStyle(.stack)
                 case 2:
                     NavigationView {
-                        AddView(isPresented: $showingAddView, lineModel: lineModel, date:currentDate)
+                        AddView(isPresented: $showingAddView, date:currentDate)
                             .transition(.moveAndFade)
                     }.navigationViewStyle(.stack)
                 case 3:

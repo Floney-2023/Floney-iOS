@@ -385,6 +385,7 @@ class SettingBookViewModel : ObservableObject {
                 switch completion {
                 case .finished:
                     print("Exit Book successfully changed.")
+                    AlertManager.shared.update(showAlert: true, message: "가계부에서 나갔습니다.", buttonType: .green)
                     DispatchQueue.main.async {
                         Keychain.setKeychain("", forKey: .bookKey)
                         BookExistenceViewModel.shared.bookExistence = false
@@ -410,12 +411,12 @@ class SettingBookViewModel : ObservableObject {
                 guard let self = self else {return}
                 switch completion {
                 case .finished:
-                    print("Exit Book successfully changed.")
+                    print("delete Book successfully changed.")
+                    AlertManager.shared.update(showAlert: true, message: "가계부가 성공적으로 삭제되었습니다.", buttonType: .green)
                     DispatchQueue.main.async {
                         Keychain.setKeychain("", forKey: .bookKey)
                         BookExistenceViewModel.shared.bookExistence = false
                         BookExistenceViewModel.shared.getBookExistence()
-                        
                     }
                 case .failure(let error):
                     self.createAlert(with: error, retryRequest: {
@@ -437,6 +438,7 @@ class SettingBookViewModel : ObservableObject {
                 switch completion {
                 case .finished:
                     print("Reset Book successfully changed.")
+                    AlertManager.shared.update(showAlert: true, message: "가계부가 초기화 되었습니다.", buttonType: .green)
                 case .failure(let error):
                     self.createAlert(with: error, retryRequest: {
                         self.resetBook()
