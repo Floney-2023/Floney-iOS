@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ChangePasswordView: View {
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     let scaler = Scaler.shared
     @StateObject var viewModel = MyPageViewModel()
     var body: some View {
@@ -69,6 +70,9 @@ struct ChangePasswordView: View {
                 
                 )
             .onAppear(perform : UIApplication.shared.hideKeyboard)
+            .onChange(of : viewModel.successChangePassword) { newValue in
+                presentationMode.wrappedValue.dismiss()
+            }
             
         }
     }

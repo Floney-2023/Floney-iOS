@@ -50,6 +50,7 @@ final class MyPageViewModel: ObservableObject {
     @Published var currentPassword: String = ""
     @Published var newPassword : String = ""
     @Published var newPasswordCheck : String = ""
+    @Published var successChangePassword = false
     
     //MARK: signout
     @Published var selectedReason : SignOutType?
@@ -193,7 +194,8 @@ final class MyPageViewModel: ObservableObject {
                 switch completion {
                 case .finished:
                     print("Password successfully changed.")
-                    
+                    AlertManager.shared.update(showAlert: true, message: "비밀번호 변경이 완료되었습니다", buttonType: .green)
+                    self.successChangePassword = true
                 case .failure(let error):
                     self.createAlert(with: error, retryRequest: {
                         self.changePassword()
@@ -208,7 +210,6 @@ final class MyPageViewModel: ObservableObject {
     
     // 비밀번호 검증
     func isValidInputs() -> Bool {
-        
         let currentPasswordEntered = isCurrentPasswordEntered()
         let newPasswordEntered = isNewPasswordEntered()
         let newPasswordCheckEntered = isNewPasswordCheckEntered()
@@ -266,6 +267,8 @@ final class MyPageViewModel: ObservableObject {
                 switch completion {
                 case .finished:
                     print("logout success.")
+                    AppLinkManager.shared.hasDeepLink = false
+                    AppLinkManager.shared.settlementStatus = false
                     DispatchQueue.main.async {
                         AuthenticationService.shared.logoutDueToTokenExpiration()
                     }
@@ -281,6 +284,7 @@ final class MyPageViewModel: ObservableObject {
             .store(in: &cancellableSet)
     }
     func signout() {
+        print("signout 시도")
         if let selectedReason = selectedReason {
             var request = SignOutRequest(type: selectedReason.rawValue)
             if selectedReason == .OTHER {
@@ -289,19 +293,19 @@ final class MyPageViewModel: ObservableObject {
                 request = SignOutRequest(type: selectedReason.rawValue)
             }
             dataManager.signout(request)
-                .sink { [weak self] completion in
-                    guard let self = self else {return}
-                    
+                .sink { completion in
                     switch completion {
                     case .finished:
+                        print("signout 성공")
                         print("signout success.")
-                        
+                        AppLinkManager.shared.hasDeepLink = false
+                        AppLinkManager.shared.settlementStatus = false
                         self.isNextToSuccessSignout = true
                     case .failure(let error):
                         self.createAlert(with: error, retryRequest: {
                             self.signout()
                         })
-                        print("Error changing nickname: \(error)")
+                        print("signout 실패")
                     }
                 } receiveValue: { data in
                     // TODO: Handle the received data if necessary.

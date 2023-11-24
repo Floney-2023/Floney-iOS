@@ -15,3 +15,6 @@ struct SignOutRequest : Encodable {
     var type : String
     var reason : String?
 }
+struct ChangePasswordRequest:Encodable {
+    var newPassword:String
+}

@@ -10,7 +10,7 @@ import SwiftUI
 struct InputPasswordInSignOutView: View {
     let scaler = Scaler.shared
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
-    @StateObject var viewModel = MyPageViewModel()
+    @ObservedObject var viewModel : MyPageViewModel
     @State var signoutAlert = false
     @State var title = "탈퇴 전에 꼭 확인해 주세요"
     @State var message = "-가계부 방장일 경우 팀원에게\n방장이 자동으로 위임되며 가계부를 나가게 됩니다.\n\n-가계부 팀원일 경우 즉시 가계부를 나가게 됩니다.\n\n-모든 사용자는 회원탈퇴 시 모든 가계부 및\n데이터, 개인정보가 즉시 파기됩니다.\n\n그래도 탈퇴하시겠습니까?"
@@ -54,7 +54,6 @@ struct InputPasswordInSignOutView: View {
             if signoutAlert {
                 SignoutAlertView(isPresented: $signoutAlert, title: $title, message: $message, onOKAction: {
                     viewModel.signout()
-                    self.presentationMode.wrappedValue.dismiss()
                 })
             }
             NavigationLink(destination: SuccessSignoutView(),isActive: $viewModel.isNextToSuccessSignout){
@@ -65,7 +64,7 @@ struct InputPasswordInSignOutView: View {
 }
 
 #Preview {
-    InputPasswordInSignOutView()
+    InputPasswordInSignOutView(viewModel: MyPageViewModel())
 }
 
 struct SignoutAlertView: View {
@@ -95,8 +94,8 @@ struct SignoutAlertView: View {
        
                 HStack(alignment: .center,spacing: scaler.scaleWidth(12)) {
                     Button("\(leftButtonText)") {
-                        isPresented = false
                         onOKAction()
+                        isPresented = false
                     }
                     .padding(.vertical,scaler.scaleHeight(16))
                     .frame(width: geometry.size.width * 0.34)

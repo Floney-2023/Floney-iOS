@@ -23,6 +23,7 @@ struct MyPageView: View {
     @State var isNextToMySubscription = false
     @State var isNextToUnSubscription = false
     @State var isNextToSubscription = false
+    @State var isNextToServiceTerm = false
     
     //@State var productPrice = IAPManager.shared.productList[0].price
     /*
@@ -346,22 +347,37 @@ struct MyPageView: View {
                                 Image("forward_button")
                             }
                             .frame(height: scaler.scaleHeight(56))
-                            HStack {
-                                Text("개인정보 처리방침")
-                                    .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
-                                    .foregroundColor(.greyScale2)
-                                Spacer()
-                                Image("forward_button")
+                            NavigationLink(destination: WebView(urlString: "https://cafe.naver.com/floney").customNavigationBar(
+                                leftView: { BackButtonBlack() },
+                                centerView: { Text("개인정보 처리방침")
+                                        .font(.pretendardFont(.semiBold, size:scaler.scaleWidth(16)))
+                                    .foregroundColor(.greyScale1)}
+                                )) {
+                                HStack {
+                                    Text("개인정보 처리방침")
+                                        .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
+                                        .foregroundColor(.greyScale2)
+                                    Spacer()
+                                    Image("forward_button")
+                                }
+                                .frame(height: scaler.scaleHeight(56))
                             }
-                            .frame(height: scaler.scaleHeight(56))
-                            HStack {
-                                Text("이용 약관")
-                                    .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
-                                    .foregroundColor(.greyScale2)
-                                Spacer()
-                                Image("forward_button")
+                            NavigationLink(destination: WebView(urlString: "https://cafe.naver.com/floney").customNavigationBar(
+                                leftView: { BackButtonBlack() },
+                                centerView: { Text("이용 약관")
+                                        .font(.pretendardFont(.semiBold, size:scaler.scaleWidth(16)))
+                                    .foregroundColor(.greyScale1)}
+                                )) {
+                                HStack {
+                                    Text("이용 약관")
+                                        .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
+                                        .foregroundColor(.greyScale2)
+                                    Spacer()
+                                    Image("forward_button")
+                                }
+                                .frame(height: scaler.scaleHeight(56))
                             }
-                            .frame(height: scaler.scaleHeight(56))
+                            
                         }
                     }
                     .padding(.top, scaler.scaleHeight(40))
@@ -399,6 +415,7 @@ struct MyPageView: View {
                 NavigationLink(destination : EnterBookCodeView(), isActive: $isNextToEnterCode) {
                     EmptyView()
                 }
+               
                 
                 Spacer()
             } // vstack

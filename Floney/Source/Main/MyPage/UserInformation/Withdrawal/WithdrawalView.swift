@@ -117,7 +117,7 @@ struct WithdrawalView: View {
             
             .edgesIgnoringSafeArea(.bottom)
             
-            NavigationLink(destination:InputPasswordInSignOutView(), isActive: $isNextToInputPassword){
+            NavigationLink(destination:InputPasswordInSignOutView(viewModel: viewModel), isActive: $isNextToInputPassword){
                 EmptyView()
             }
         }

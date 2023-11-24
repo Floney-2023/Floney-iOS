@@ -138,13 +138,14 @@ extension MyPage: MyPageProtocol {
         
     }
     func changePassword(password: String) -> AnyPublisher<Void, NetworkError> {
-        let url = "\(Constant.BASE_URL)/users/password/update?password=\(password)"
+        let url = "\(Constant.BASE_URL)/users/password"
         let token = Keychain.getKeychainValue(forKey: .accessToken) ?? ""
+        let parameters = ChangePasswordRequest(newPassword: password)
         print("change password : \n\(token)\n url: \(url)")
         return AF.request(url,
-                          method: .get,
-                          parameters: nil,
-                          encoding: JSONEncoding.default,
+                          method: .put,
+                          parameters: parameters,
+                          encoder: JSONParameterEncoder(),
                           headers: ["Authorization":"Bearer \(token)"])
         .validate()
         .publishData()
