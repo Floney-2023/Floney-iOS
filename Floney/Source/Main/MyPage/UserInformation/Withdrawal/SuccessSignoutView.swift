@@ -51,7 +51,7 @@ struct SuccessSignoutView: View {
                 .padding()
                 .withNextButtonFormmating(.primary1)
                 .onTapGesture {
-                    
+                    AuthenticationService.shared.logoutDueToTokenExpiration()
                 }
              
          }

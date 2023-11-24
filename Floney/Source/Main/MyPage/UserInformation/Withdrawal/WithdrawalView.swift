@@ -34,9 +34,8 @@ enum SignOutType : String, CaseIterable {
 struct WithdrawalView: View {
     let scaler = Scaler.shared
     @StateObject var viewModel = MyPageViewModel()
-    @State var signoutAlert = false
-    @State var title = "탈퇴하기"
-    @State var message = "정말 탈퇴하시겠습니까?"
+    @State var isNextToInputPassword = false
+    
     init() {
         print("회원탈퇴 뷰 로딩 완료")
     }
@@ -99,12 +98,13 @@ struct WithdrawalView: View {
                 }
                   
                 Spacer()
-                Text("탈퇴하기")
+                Text("다음으로")
                     .padding()
                     .withNextButtonFormmating(.primary1)
                     .onTapGesture {
                         if viewModel.isValidSignout() {
-                            signoutAlert = true
+                           // signoutAlert = true
+                            isNextToInputPassword = true
                         }
                     }
                     .padding(.bottom, scaler.scaleHeight(38))
@@ -114,12 +114,11 @@ struct WithdrawalView: View {
                 leftView: { BackButton() }
             )
             
+            
             .edgesIgnoringSafeArea(.bottom)
             
-            if signoutAlert {
-                AlertView(isPresented: $signoutAlert,title: $title, message: $message, okColor: .alertBlue, onOKAction: {
-                    viewModel.signout()
-                })
+            NavigationLink(destination:InputPasswordInSignOutView(), isActive: $isNextToInputPassword){
+                EmptyView()
             }
         }
     }
