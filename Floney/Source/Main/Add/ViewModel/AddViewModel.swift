@@ -188,6 +188,7 @@ class AddViewModel: ObservableObject {
                 switch completion {
                 case .finished:
                     print(" successfully line delete.")
+                    self.alertManager.update(showAlert: true, message: "삭제가 완료되었습니다.", buttonType: .green)
                     self.successAdd = true
 
                 case .failure(let error):
@@ -228,7 +229,7 @@ class AddViewModel: ObservableObject {
                     self.lineResult = dataResponse.value!
                     print("--수정 성공--")
                     print(self.lineResult)
-                    self.alertManager.update(showAlert: true, message: "저장이 완료되었습니다.", buttonType: .green)
+                    self.alertManager.update(showAlert: true, message: "수정이 완료되었습니다.", buttonType: .green)
                     self.successAdd = true
                     
                 }
