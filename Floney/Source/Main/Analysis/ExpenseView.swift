@@ -24,12 +24,21 @@ struct ExpenseView: View {
                             .lineLimit(2)
                             .minimumScaleFactor(0.001)
 
+                    if viewModel.expenseResponse.differance < 0 {
+                        Text("저번 달 대비 \(abs(viewModel.expenseResponse.differance).formattedString)\(currency)을\n덜 사용했어요")
+                            .font(.pretendardFont(.medium,size: scaler.scaleWidth(13)))
+                            .foregroundColor(.greyScale6)
+                            .frame(width: scaler.scaleWidth(236),alignment: .leading)
+                            .lineLimit(2)
+                            .minimumScaleFactor(0.001)
+                    } else {
                         Text("저번 달 대비 \(viewModel.expenseResponse.differance.formattedString)\(currency)을\n더 사용했어요")
                             .font(.pretendardFont(.medium,size: scaler.scaleWidth(13)))
                             .foregroundColor(.greyScale6)
                             .frame(width: scaler.scaleWidth(236),alignment: .leading)
                             .lineLimit(2)
                             .minimumScaleFactor(0.001)
+                    }
             
 
                 }

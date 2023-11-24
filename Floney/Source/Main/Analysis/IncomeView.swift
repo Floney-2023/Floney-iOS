@@ -23,13 +23,21 @@ struct IncomeView: View {
                         .frame(width: scaler.scaleWidth(236),alignment: .leading)
                         .lineLimit(2)
                         .minimumScaleFactor(0.001)
-                    
-                    Text("저번 달 대비 \(viewModel.incomeResponse.differance.formattedString)\(currency)을\n더 벌었어요")
-                        .font(.pretendardFont(.medium,size: scaler.scaleWidth(13)))
-                        .foregroundColor(.greyScale6)
-                        .frame(width: scaler.scaleWidth(236),alignment: .leading)
-                        .lineLimit(2)
-                        .minimumScaleFactor(0.001)
+                    if viewModel.incomeResponse.differance < 0 {
+                        Text("저번 달 대비 \(abs(viewModel.incomeResponse.differance).formattedString)\(currency)을\n덜 벌었어요")
+                            .font(.pretendardFont(.medium,size: scaler.scaleWidth(13)))
+                            .foregroundColor(.greyScale6)
+                            .frame(width: scaler.scaleWidth(236),alignment: .leading)
+                            .lineLimit(2)
+                            .minimumScaleFactor(0.001)
+                    } else {
+                        Text("저번 달 대비 \(viewModel.incomeResponse.differance.formattedString)\(currency)을\n더 벌었어요")
+                            .font(.pretendardFont(.medium,size: scaler.scaleWidth(13)))
+                            .foregroundColor(.greyScale6)
+                            .frame(width: scaler.scaleWidth(236),alignment: .leading)
+                            .lineLimit(2)
+                            .minimumScaleFactor(0.001)
+                    }
                     
                 }
                 VStack {
