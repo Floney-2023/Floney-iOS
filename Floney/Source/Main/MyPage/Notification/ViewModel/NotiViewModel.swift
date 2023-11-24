@@ -73,13 +73,35 @@ final class NotiViewModel: ObservableObject {
                     })
                     print(dataResponse.error)
                 } else {
-                    self.bookNotiList.append(
-                        BookNoti(bookKey: bookKey, bookName: bookName, notiList: dataResponse.value!)
-                    )
-                    print(self.bookNotiList)
+                    if let notiList = dataResponse.value {
+                        let updatedNotiList = notiList.map { noti -> NotiResponse in
+                            var modifiedNoti = noti
+                            modifiedNoti.date = self.convertUTCDateToLocalDate(utcDateStr: noti.date)
+                            return modifiedNoti
+                        }
+                        print("updated noti list : \(updatedNotiList)")
+                        self.bookNotiList.append(
+                            BookNoti(bookKey: bookKey, bookName: bookName, notiList: updatedNotiList)
+                        )
+                        print(self.bookNotiList)
+                    }
                 }
             }.store(in: &cancellableSet)
     }
+    func convertUTCDateToLocalDate(utcDateStr: String) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss" // UTC 날짜 형식
+        dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+
+        if let utcDate = dateFormatter.date(from: utcDateStr) {
+            dateFormatter.timeZone = TimeZone.current // 사용자의 현재 시간대로 변경
+            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss" // 변환할 날짜 형식
+            return dateFormatter.string(from: utcDate)
+        } else {
+            return utcDateStr // 변환 실패 시 원래 문자열 반환
+        }
+    }
+
     
     func createAlert( with error: NetworkError, retryRequest: @escaping () -> Void) {
         //loadingError = error.backendError == nil ? error.initialError.localizedDescription : error.backendError!.message
