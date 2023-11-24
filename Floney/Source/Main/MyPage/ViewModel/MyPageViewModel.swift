@@ -60,6 +60,7 @@ final class MyPageViewModel: ObservableObject {
             }
         }
     }
+    @Published var isNextToSuccessSignout = false
     
     private var cancellableSet: Set<AnyCancellable> = []
     lazy var dataManager: MyPageProtocol = MyPage.shared
@@ -293,13 +294,12 @@ final class MyPageViewModel: ObservableObject {
                     
                     switch completion {
                     case .finished:
-                        print("logout success.")
-                        DispatchQueue.main.async {
-                            AuthenticationService.shared.logoutDueToTokenExpiration()
-                        }
+                        print("signout success.")
+                        
+                        self.isNextToSuccessSignout = true
                     case .failure(let error):
                         self.createAlert(with: error, retryRequest: {
-                            self.logout()
+                            self.signout()
                         })
                         print("Error changing nickname: \(error)")
                     }
