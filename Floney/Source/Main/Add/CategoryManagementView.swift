@@ -20,7 +20,7 @@ struct CategoryManagementView: View {
     @StateObject var viewModel = AddViewModel()
     @State var deleteAlert = false
     @State var title = "분류항목 삭제"
-    @State var message = "삭제하시겠습니까?"
+    @State var message = ""
     
     @State var showAddButton = true
     var body: some View {
@@ -95,6 +95,8 @@ struct CategoryManagementView: View {
                                                 Image("icon_delete")
                                                     .onTapGesture {
                                                         viewModel.deleteCategoryName = viewModel.categories[i]
+                                                        
+                                                        message = "'\(viewModel.deleteCategoryName)' 항목을 삭제하시겠습니까?\n해당 항목으로 작성된 모든 내역이 삭제됩니다."
                                                         self.deleteAlert = true
                                                     }
                                             }
@@ -188,9 +190,14 @@ struct CategoryManagementView: View {
             }
             
             if deleteAlert {
+                /*
                 AlertView(isPresented: $deleteAlert, title: $title, message: $message, onOKAction: {
                     viewModel.deleteCategory()
-                })
+                })*/
+                FloneyAlertView(isPresented: $deleteAlert, title:$title, message: $message, leftButtonText:"삭제하기") {
+                    viewModel.deleteCategory()
+                }
+                
             }
         }// ZStack
       
