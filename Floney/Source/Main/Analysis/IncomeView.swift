@@ -24,7 +24,7 @@ struct IncomeView: View {
                         .lineLimit(2)
                         .minimumScaleFactor(0.001)
                     if viewModel.incomeResponse.differance < 0 {
-                        Text("저번 달 대비 \(abs(viewModel.incomeResponse.differance).formattedString)\(currency)을\n덜 벌었어요")
+                        Text("저번 달 대비 \(abs(viewModel.incomeResponse.differance).formattedString)\(currency)을\n적게 벌었어요")
                             .font(.pretendardFont(.medium,size: scaler.scaleWidth(13)))
                             .foregroundColor(.greyScale6)
                             .frame(width: scaler.scaleWidth(236),alignment: .leading)
