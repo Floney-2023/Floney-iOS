@@ -38,6 +38,7 @@ class AnalysisViewModel : ObservableObject {
     @Published var totalBudget : Double = 0
     @Published var budgetPercentage : Double = 0
     @Published var budgetRatio : Double = 0
+    @Published var remainingDays : Int = 0
     @Published var dailyAvailableMoney : Double = 0
     
     //MARK: 자산 분석
@@ -198,11 +199,9 @@ class AnalysisViewModel : ObservableObject {
                         self.budgetRatio = 1
                     }
                     
-                    if self.leftBudget > 0 {
-                        self.calcDailyAvailableMoney()
-                    } else {
-                        self.dailyAvailableMoney = 0
-                    }
+       
+                    self.calcDailyAvailableMoney()
+                    
                     print("left budget : \(self.leftBudget)")
                     print("total budget : \(self.totalBudget)")
                     print("budget percentage : \(self.budgetPercentage)")
@@ -214,19 +213,26 @@ class AnalysisViewModel : ObservableObject {
     func calcDailyAvailableMoney() {
         let calendar = Calendar.current
         let today = Date()
-        
         // 오늘의 날짜 구하기
         let dayOfMonth = calendar.component(.day, from: today)
         
         // 현재 달의 마지막 날짜 구하기
-        let range = calendar.range(of: .day, in: .month, for: today)
+        let range = calendar.range(of: .day, in: .month, for: selectedDate)
         let lastDayOfMonth = range?.count ?? 30  // 기본값으로 30일을 사용합니다.
         
+        var remainingDays = 0
         // 남은 날짜 계산
-        let remainingDays = lastDayOfMonth - dayOfMonth + 1
-        
-        // 하루에 사용할 수 있는 금액 계산
-        let dailyAvailableMoney = self.leftBudget / Double(remainingDays)
+        if calendar.isDate(today, inSameDayAs: selectedDate) {
+            remainingDays = lastDayOfMonth - dayOfMonth + 1
+        } else {
+            remainingDays = lastDayOfMonth
+        }
+        self.remainingDays = remainingDays
+        var dailyAvailableMoney :Double = 0
+        if self.leftBudget > 0 {
+            // 하루에 사용할 수 있는 금액 계산
+            dailyAvailableMoney = self.leftBudget / Double(remainingDays)
+        }
         
         print("하루에 사용할 수 있는 금액은 \(dailyAvailableMoney) 입니다.")
         self.dailyAvailableMoney = dailyAvailableMoney

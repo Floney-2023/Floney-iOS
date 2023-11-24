@@ -33,7 +33,7 @@ struct BudgetView: View {
                             let selectedYear = calendar.component(.year, from: viewModel.selectedDate)
                             let selectedMonth = calendar.component(.month, from: viewModel.selectedDate)
                             if currentYear <= selectedYear && currentMonth <= selectedMonth {
-                                Text("남은 기간동안 하루에\n\(viewModel.dailyAvailableMoney.formattedString)\(currency)을 사용할 수 있어요")
+                                Text("남은 \(viewModel.remainingDays)일 동안 하루에\n\(viewModel.dailyAvailableMoney.formattedString)\(currency)을 사용할 수 있어요")
                                     .font(.pretendardFont(.medium,size: scaler.scaleWidth(13)))
                                     .foregroundColor(.greyScale6)
                             } else {
