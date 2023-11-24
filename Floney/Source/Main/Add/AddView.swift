@@ -111,10 +111,10 @@ struct AddView: View {
    
                         MoneyTextField(text: $money, placeholder: "금액을 입력하세요")
                             .frame(height: scaler.scaleHeight(38))
+                        /*
                             .onReceive(Just(money)) { value in
                                 let trimmedValue = value.filter { "0"..."9" ~= $0 || $0 == "." }
                                 let components = trimmedValue.split(separator: ".")
-                                
                                 // 소수점이 없는 경우
                                 if components.count == 1 {
                                     if let doubleValue = Double(trimmedValue), doubleValue < 100_000_000_000 {
@@ -140,6 +140,34 @@ struct AddView: View {
                                     let rawValue = String(components.dropLast().joined(separator: "."))
                                     money = formatNumber(rawValue)
                                 }
+                            }*/
+                            .onReceive(Just(money)) { value in
+                                var processedValue = value.filter { "0"..."9" ~= $0 || $0 == "." }
+                                
+                                if CurrencyManager.shared.hasDecimalPoint {
+                                    // Only allow one decimal point and two decimal places
+                                    let components = processedValue.split(separator: ".")
+                                    if components.count > 2 {
+                                        processedValue = String(components[0]) + "." + String(components[1])
+                                    } else if components.count == 2 && components[1].count > 2 {
+                                        processedValue = String(components[0]) + "." + components[1].prefix(2)
+                                    }
+
+                                    // Check for max value
+                                    if let doubleValue = Double(processedValue), doubleValue > 999999999.99 {
+                                        processedValue = "999999999.99"
+                                    }
+                                } else {
+                                    // Remove any decimal points
+                                    processedValue = processedValue.filter { $0 != "." }
+
+                                    // Check for max value
+                                    if let intValue = Int(processedValue), intValue > 99999999999 {
+                                        processedValue = "99999999999"
+                                    }
+                                }
+
+                                money = formatNumber(processedValue)
                             }
                     } // 금액 VStack
                     .padding(.bottom, scaler.scaleHeight(16))

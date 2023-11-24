@@ -93,6 +93,7 @@ struct MainTabView: View {
                         HStack(spacing:0) {
                             Button {
                                 self.selection = 0
+                                CurrencyManager.shared.getCurrency()
                                 /*
                                 if bookService.bookDisabled {
                                     showingInactiveAlert = true
@@ -114,6 +115,7 @@ struct MainTabView: View {
                             .padding(.leading, scaler.scaleWidth(36))
                             Button {
                                 self.selection = 1
+                                CurrencyManager.shared.getCurrency()
                                 /*
                                 if bookService.bookDisabled {
                                     showingInactiveAlert = true
@@ -138,6 +140,7 @@ struct MainTabView: View {
                                 let dateFormatter = DateFormatter()
                                 dateFormatter.dateFormat = "yyyy-MM-dd"
                                 currentDate = dateFormatter.string(from: Date())
+                                CurrencyManager.shared.getCurrency()
                                 self.showingAddView = true
                                 /*
                                 if bookService.bookDisabled {
@@ -158,6 +161,7 @@ struct MainTabView: View {
                             
                             Button {
                                 self.selection = 3
+                                CurrencyManager.shared.getCurrency()
                                 /*
                                 if bookService.bookDisabled {
                                     showingInactiveAlert = true
@@ -180,6 +184,7 @@ struct MainTabView: View {
                             
                             Button {
                                 self.selection = 4
+                                CurrencyManager.shared.getCurrency()
                             } label: {
                                 VStack(spacing: scaler.scaleHeight(4)) {
                                     Image(selection == 4 ? selectedIcons[4] : icons[4])
