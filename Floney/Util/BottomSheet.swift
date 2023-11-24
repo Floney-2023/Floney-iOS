@@ -469,7 +469,7 @@ struct CarriedOverBottomSheet: View {
                     .padding(.horizontal, scaler.scaleWidth(4))
                     
                     HStack {
-                        Text("지날달 총수입")
+                        Text("지난달 총수입")
                             .frame(maxWidth: .infinity)
                             .padding(10)
                             .font(.pretendardFont(.medium, size: scaler.scaleWidth(11)))
@@ -477,7 +477,7 @@ struct CarriedOverBottomSheet: View {
                             .background(Color.background2)
                             .cornerRadius(10)
                         Image("-")
-                        Text("지날달 총지출")
+                        Text("지난달 총지출")
                             .frame(maxWidth: .infinity)
                             .padding(10)
                             .font(.pretendardFont(.medium, size: scaler.scaleWidth(11)))
@@ -936,38 +936,29 @@ struct DayLinesBottomSheet: View {
                                                 }
                                             }
                                         }
+                                        .background(Color.white)
                                         .onTapGesture {
                                             LoadingManager.shared.update(showLoading: true, loadingType: .progressLoading)
                                             self.selectedIndex = index
                                             
                                             if let line = viewModel.dayLines[selectedIndex] {
                                                 if viewModel.dayLines[index]?.assetType == "OUTCOME" {
-                                                    lineModel.selectedOptions = 0
-                                                    lineModel.toggleType = "지출"
+                                                    selectedToggleTypeIndex = 0
+                                                    selectedToggleType = "지출"
                                                 } else if viewModel.dayLines[index]?.assetType == "INCOME" {
-                                                    lineModel.selectedOptions = 1
-                                                    lineModel.toggleType = "수입"
+                                                    selectedToggleTypeIndex = 1
+                                                    selectedToggleType = "수입"
                                                 } else if viewModel.dayLines[index]?.assetType == "BANK" {
-                                                    lineModel.selectedOptions = 2
-                                                    lineModel.toggleType = "이체"
+                                                    selectedToggleTypeIndex = 2
+                                                    selectedToggleType = "이체"
                                                 }
                                                 
-                                                lineModel.mode = "check"
-                                                lineModel.lineId = line.id
-                                                print("mode : \(lineModel.mode)")
-                                                print("id : \(lineModel.lineId)")
-                                                print("지출 수입 이체 인덱스 : \(self.selectedToggleTypeIndex)")
-                                                print("지출 수입 이체 : \(self.selectedToggleType)")
-                                                print("금액 : \(self.viewModel.dayLines[index]?.money)")
-                                                print("제외 여부 : \(self.viewModel.dayLines[index]?.exceptStatus)")
-                                                print("PK : \(self.viewModel.dayLines[index]?.id)")
                                             }
-                                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                                                if lineModel.mode == "check" {
-                                                    LoadingManager.shared.update(showLoading: false, loadingType: .progressLoading)
-                                                    self.showingDetail = true
-                                                }
-                                            }
+                             
+                                            LoadingManager.shared.update(showLoading: false, loadingType: .progressLoading)
+                                            self.showingDetail = true
+                                                
+                                            
                                         }
                                         .frame(height: scaler.scaleHeight(34))
                                         .fullScreenCover(isPresented: $showingDetail) {
@@ -975,7 +966,10 @@ struct DayLinesBottomSheet: View {
                                                 NavigationView {
                                                     AddView(
                                                         isPresented: $showingDetail,
-                                                        lineModel : lineModel,
+                                                        mode : "check",
+                                                        lineId : line.id,
+                                                        toggleType : selectedToggleType, // 지출, 수입, 이체
+                                                        selectedOptions : selectedToggleTypeIndex,
                                                         date : viewModel.selectedDateStr,
                                                         money: String(line.money),
                                                         assetType : line.category[0],
@@ -998,7 +992,6 @@ struct DayLinesBottomSheet: View {
                         
                     }
                 }
-                
                 .padding(.horizontal, scaler.scaleWidth(20))
                 .transition(.move(edge: .bottom))
                 .frame(height: scaler.scaleHeight(460))
@@ -1006,10 +999,17 @@ struct DayLinesBottomSheet: View {
                     Color(.white)
                 )
                 .cornerRadius(12, corners: [.topLeft, .topRight])
-                
                 .onAppear {
                     viewModel.dayLinesDate = viewModel.selectedDateStr
                     viewModel.getDayLines()
+                }
+                .onChange(of : isShowingAddView) { newValue in
+                    viewModel.getDayLines()
+                    viewModel.getCalendar()
+                }
+                .onChange(of : showingDetail) { newValue in
+                    viewModel.getDayLines()
+                    viewModel.getCalendar()
                 }
             } // if
         } //ZStack
