@@ -8,12 +8,13 @@
 import Foundation
 import Combine
 import SwiftUI
+import FirebaseFirestore
 enum BudgetAssetType {
     case budget
     case asset
 }
 class SettingBookViewModel : ObservableObject {
-    
+    var fcmManager = FCMDataManager()
     @Published var tokenViewModel = TokenReissueViewModel()
     @Published var ChangeProfileImageSuccess = false
     @Published var bookInfoLoadingError: String = ""
@@ -391,6 +392,9 @@ class SettingBookViewModel : ObservableObject {
                         BookExistenceViewModel.shared.bookExistence = false
                         BookExistenceViewModel.shared.getBookExistence()
                     }
+                    let fcmManager = FCMDataManager()
+                    fcmManager.fetchTokensFromDatabase(bookKey: self.bookKey, title: "플로니", body: "\(Keychain.getKeychainValue(forKey: .userNickname) ?? "")님이 \(self.bookName)의 가계부를 나갔어요.")
+                    self.postNoti(title: "플로니", body: "\(Keychain.getKeychainValue(forKey: .userNickname) ?? "")님이 \(self.bookName)의 가계부를 나갔어요.", imgUrl: "icon_exit")
                 case .failure(let error):
                     self.createAlert(with: error, retryRequest: {
                         self.exitBook()
@@ -401,6 +405,32 @@ class SettingBookViewModel : ObservableObject {
                 // TODO: Handle the received data if necessary.
             }
             .store(in: &cancellableSet)
+    }
+    func postNoti(title :String, body: String, imgUrl : String) {
+        let currentDate = Date()
+        let formatter = ISO8601DateFormatter()
+        
+        let formattedDate = formatter.string(from: currentDate)
+        var viewModel = NotiViewModel()
+
+        let db = Firestore.firestore()
+        let bookRef = db.collection("books").document(self.bookKey)
+        let usersCollection = bookRef.collection("users")
+        var emails = [String]()
+        
+        usersCollection.getDocuments { (snapshot, error) in
+            if let error = error {
+                print("Error getting documents: \(error)")
+            } else {
+                for document in snapshot!.documents {
+                    emails.append(document.documentID) // 문서의 ID(이메일)을 배열에 추가
+                    viewModel.postNoti(title: title, body:body, imgUrl: imgUrl, userEmail: document.documentID, date: formattedDate)
+                }
+                // 이메일 배열을 여기서 사용합니다.
+                print(emails)
+                
+            }
+        }
     }
     
     func deleteBook() {
@@ -438,6 +468,7 @@ class SettingBookViewModel : ObservableObject {
                 switch completion {
                 case .finished:
                     print("Reset Book successfully changed.")
+                    self.fcmManager.fetchTokensFromDatabase(bookKey: bookKey, title: "플로니", body: "\(bookName) 가계부의 모든 내역이 초기화 되었습니다!")
                     AlertManager.shared.update(showAlert: true, message: "가계부가 초기화 되었습니다.", buttonType: .green)
                 case .failure(let error):
                     self.createAlert(with: error, retryRequest: {
@@ -456,7 +487,6 @@ class SettingBookViewModel : ObservableObject {
         let request = BookInfoRequest(bookKey: bookKey)
         dataManager.getShareCode(request)
             .sink { (dataResponse) in
-                
                 if dataResponse.error != nil {
                     self.createAlert(with: dataResponse.error!, retryRequest: {
                         self.getShareCode()
@@ -486,12 +516,50 @@ class SettingBookViewModel : ObservableObject {
                     self.currency = dataResponse.value!.myBookCurrency
                     print("--성공--")
                     print("변경된 화폐 단위 : \(self.currency)")
+                    let bookName = Keychain.getKeychainValue(forKey: .bookName) ?? ""
+                    self.fcmManager.fetchTokensFromDatabase(bookKey: self.bookKey, title: "플로니", body: "\(bookName) 가계부의 화폐가 \(self.currency)\(self.currencySymbol(currencyUnit: self.currency))로 변경되었습니다!")
+
                     DispatchQueue.main.async {
                         CurrencyManager.shared.getCurrency()
                     }
                     AlertManager.shared.update(showAlert: true, message: "화폐 단위가 변경 완료 되었습니다.", buttonType: .green)
                 }
             }.store(in: &cancellableSet)
+    }
+    func currencySymbol(currencyUnit : String) -> String {
+        var currentCurrency = ""
+        switch currencyUnit {
+        case "KRW":
+            currentCurrency = "원"
+            return currentCurrency
+        case "USD":
+            currentCurrency = "$"
+            return currentCurrency
+           
+        case "EUR":
+            currentCurrency = "€"
+            return currentCurrency
+           
+        case "JPY":
+            currentCurrency = "¥"
+            return currentCurrency
+          
+        case "CNY":
+            currentCurrency = "¥"
+            return currentCurrency
+          
+        case "GBP":
+            currentCurrency = "£"
+            return currentCurrency
+    
+        default:
+            currentCurrency = "원"  // 혹은 기본값으로 다른 문자열을 반환
+            return currentCurrency
+      
+        }
+        
+        print("Currency :", currentCurrency)
+        print("has decimal point :", hasDecimalPoint)
     }
     
     func downloadExcelFile() {

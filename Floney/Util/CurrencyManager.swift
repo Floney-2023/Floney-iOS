@@ -10,7 +10,8 @@ import Alamofire
 import Combine
 class CurrencyManager: ObservableObject {
     static let shared = CurrencyManager()
-    @Published var currentCurrencyUnit: String = "KRW" 
+    var fcmManager = FCMDataManager()
+    @Published var currentCurrencyUnit: String = "KRW"
     @Published var currentCurrency : String = "원"
     @Published var hasDecimalPoint : Bool = false
     
@@ -36,7 +37,7 @@ class CurrencyManager: ObservableObject {
                     
                     self.currentCurrencyUnit = currencyCode
                     self.currencySymbol()
-                    // 필요한 다른 작업 수행
+                                        // 필요한 다른 작업 수행
                 } catch {
                     print("Failed to decode:", error.localizedDescription)
                 }
