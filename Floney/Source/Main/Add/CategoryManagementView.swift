@@ -22,6 +22,11 @@ struct CategoryManagementView: View {
     @State var title = "분류항목 삭제"
     @State var message = ""
     
+    @State var modifyAlert = false
+    @State var modifyTitle = "잠깐!"
+    @State var modifyMessage = "수정된 내용이 저장되지 않았습니다.\n그대로 나가시겠습니까?"
+    
+    
     @State var showAddButton = true
     var body: some View {
         ZStack {
@@ -87,7 +92,7 @@ struct CategoryManagementView: View {
                     ScrollView(showsIndicators: false) {
                         VStack(alignment: .leading) {
                             ForEach(viewModel.categories.indices, id: \.self) { i in
-                                VStack(alignment: .leading) {
+                                VStack(alignment: .leading, spacing:0) {
                                     //Spacer()
                                     HStack(spacing:scaler.scaleWidth(12)) {
                                         if editState {
@@ -95,14 +100,13 @@ struct CategoryManagementView: View {
                                                 Image("icon_delete")
                                                     .onTapGesture {
                                                         viewModel.deleteCategoryName = viewModel.categories[i]
-                                                        
                                                         message = "'\(viewModel.deleteCategoryName)' 항목을 삭제하시겠습니까?\n해당 항목으로 작성된 모든 내역이 삭제됩니다."
                                                         self.deleteAlert = true
                                                     }
                                             }
                                         }
                                         Text("\(viewModel.categories[i])")
-                                            .padding(.leading,scaler.scaleWidth(12))
+                                            .padding(.leading, scaler.scaleWidth(12))
                                             .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
                                             .foregroundColor(.greyScale2)
                                     }
@@ -140,8 +144,12 @@ struct CategoryManagementView: View {
                 leftView: {
                 Image("icon_back")
                     .onTapGesture {
-                        isShowingEditCategory = false
-                        self.presentationMode.wrappedValue.dismiss()
+                        if editState {
+                            modifyAlert = true
+                        } else {
+                            isShowingEditCategory = false
+                            self.presentationMode.wrappedValue.dismiss()
+                        }
                     }
                 },
                 rightView: {
@@ -198,6 +206,13 @@ struct CategoryManagementView: View {
                     viewModel.deleteCategory()
                 }
                 
+            }
+            //MARK: alert
+            if modifyAlert {
+                AlertView(isPresented: $modifyAlert, title: $modifyTitle, message: $modifyMessage) {
+                    isShowingEditCategory = false
+                    self.presentationMode.wrappedValue.dismiss()
+                }
             }
         }// ZStack
       

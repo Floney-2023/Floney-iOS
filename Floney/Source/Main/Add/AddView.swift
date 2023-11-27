@@ -287,7 +287,9 @@ struct AddView: View {
                                 Spacer()
                                 Toggle(isOn: $toggleOnOff) {
                                     
-                                }.padding(.trailing, scaler.scaleWidth(6))
+                                }
+                                .toggleStyle(SwitchToggleStyle(tint: Color.primary5))
+                                .padding(.trailing, scaler.scaleWidth(6))
                             }
                             .frame(height: scaler.scaleHeight(58))
                          

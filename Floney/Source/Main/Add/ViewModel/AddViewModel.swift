@@ -30,7 +30,7 @@ class AddViewModel: ObservableObject {
     
     //MARK: category
     @Published var categoryResult : [CategoryResponse] = []
-    @Published var categories : [String] = []
+    @Published var categories : [String] = ["현금", "체크카드","신용카드","은행"]
     @Published var categoryStates : [Bool] = []
     @Published var root = ""
     @Published var newCategoryName = "" {
