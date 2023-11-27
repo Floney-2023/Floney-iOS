@@ -21,7 +21,7 @@ struct OnboardingView: View {
             TabView(selection: $selectedPageIndex) {
                 VStack(spacing: scaler.scaleHeight(32)) {
                     HStack {
-                        VStack(alignment: .leading) {
+                        VStack(alignment: .leading, spacing: 6) {
                             Text("함께, 간편하게")
                             Text("가계부를 기록해 보세요")
                         }
@@ -42,7 +42,7 @@ struct OnboardingView: View {
                 
                 VStack(spacing:scaler.scaleHeight(32)) {
                     HStack {
-                        VStack(alignment: .leading) {
+                        VStack(alignment: .leading, spacing: 6) {
                             Text("모으고 사용한 흐름을")
                             Text("한눈에 볼 수 있어요")
                         }
@@ -63,7 +63,7 @@ struct OnboardingView: View {
                 
                 VStack(spacing: scaler.scaleHeight(32)) {
                     HStack {
-                        VStack(alignment: .leading) {
+                        VStack(alignment: .leading, spacing: 6) {
                             Text("기록한 내역으로")
                             Text("손쉽게 정산할 수 있어요")
                         }
@@ -96,6 +96,7 @@ struct OnboardingView: View {
                         .foregroundColor(.white)
                         .padding()
                 }
+                .transition(.move(edge: .bottom))
                 .frame(maxWidth: .infinity)
                 .background(Color.primary1)
                 .cornerRadius(12)
@@ -104,13 +105,16 @@ struct OnboardingView: View {
                 
             } else {
                 VStack {
-                    Text("건너뛰기")
-                        .font(.pretendardFont(.regular, size: scaler.scaleWidth(12)))
-                        .foregroundColor(.greyScale6)
-                    Divider()
-                        .padding(EdgeInsets(top: -10, leading: 0, bottom: 0, trailing: 0))
-                        .frame(width: 50,height: 1.0)
-                        .foregroundColor(.greyScale6)
+                    VStack(spacing:0) {
+                        Text("건너뛰기")
+                            .font(.pretendardFont(.regular, size: scaler.scaleWidth(12)))
+                            .foregroundColor(.greyScale6)
+                        Rectangle()
+                            .foregroundColor(.clear)
+                            .frame(width: scaler.scaleWidth(42), height: scaler.scaleWidth(1))
+                            .background(Color.greyScale6)
+                    }
+                    
                 }
                 .padding(.bottom, scaler.scaleHeight(56))
                 .onTapGesture {
