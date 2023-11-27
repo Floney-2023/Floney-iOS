@@ -9,20 +9,9 @@ import SwiftUI
 
 struct SettingNotiView: View {
     let scaler = Scaler.shared
-    @State var appPush = false
     @State var marketing = false
     var body: some View {
         VStack(spacing:0) {
-            HStack {
-                Text("앱푸쉬 알림")
-                    .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
-                    .foregroundColor(.greyScale2)
-                Spacer()
-                Toggle(isOn:$appPush) {
-                    
-                }
-            }
-            .frame(height: scaler.scaleHeight(54))
             HStack {
                 Text("마케팅 정보 수신 알림")
                     .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
@@ -30,6 +19,8 @@ struct SettingNotiView: View {
                 Spacer()
                 Toggle(isOn : $marketing) {  
                 }
+                .toggleStyle(SwitchToggleStyle(tint: Color.primary5))
+
                 
             }
             .frame(height: scaler.scaleHeight(54))

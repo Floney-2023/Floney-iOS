@@ -45,11 +45,14 @@ struct AnnouncementView: View {
                         }
                         .frame(height: scaler.scaleHeight(66))
                     } expandedView: {
-                        Text("\(list[index].content)")
-                            .font(.pretendardFont(.regular, size: scaler.scaleWidth(13)))
-                            .foregroundColor(.greyScale3)
-                            .padding(.horizontal, scaler.scaleWidth(28))
-                            .padding(.vertical, scaler.scaleHeight(16))
+                        VStack {
+                            Text("\(list[index].content)")
+                                .font(.pretendardFont(.regular, size: scaler.scaleWidth(13)))
+                                .foregroundColor(.greyScale3)
+                                .padding(.horizontal, scaler.scaleWidth(28))
+                                .padding(.vertical, scaler.scaleHeight(16))
+                        }
+                        .background(Color.greyScale12)
 
                     }
                     

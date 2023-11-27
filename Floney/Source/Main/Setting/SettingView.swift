@@ -18,7 +18,7 @@ struct SettingView: View {
                         .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
                         .foregroundColor(.greyScale2)
                     Spacer()
-                    Image("forward_button")
+                    Image("icon_setting_book_forward")
                 }
                 .frame(height: scaler.scaleHeight(54))
             }
@@ -28,18 +28,10 @@ struct SettingView: View {
                         .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
                         .foregroundColor(.greyScale2)
                     Spacer()
-                    Image("forward_button")
+                    Image("icon_setting_book_forward")
                 }
                 .frame(height: scaler.scaleHeight(54))
             }
-            HStack {
-                Text("오픈소스 라이브러리")
-                    .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
-                    .foregroundColor(.greyScale2)
-                Spacer()
-                Image("forward_button")
-            }
-            .frame(height: scaler.scaleHeight(54))
             HStack {
                 Text("Version 1.1")
                     .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
