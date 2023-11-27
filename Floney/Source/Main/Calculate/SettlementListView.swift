@@ -19,12 +19,12 @@ struct SettlementListView: View {
         VStack {
             Group {
                 if viewModel.settlementList.count == 0 {
-                    VStack {
+                    VStack(spacing:scaler.scaleHeight(12)) {
                         Rectangle()
                             .foregroundColor(.clear)
                             .frame(width:scaler.scaleWidth(50), height:scaler.scaleHeight(84))
                             .background(
-                                Image("no_line")
+                                Image("no_line_2")
                                     .resizable()
                                     .aspectRatio(contentMode: .fill)
                                     .frame(width:scaler.scaleWidth(50), height:scaler.scaleHeight(84))
@@ -79,7 +79,7 @@ struct SettlementListView: View {
                                         .padding(scaler.scaleWidth(20))
                                         .background(Color.greyScale12)
                                         .cornerRadius(12)
-                                        HStack {
+                                        HStack(spacing:scaler.scaleWidth(5)) {
                                             Text("정산 금액")
                                                 .font(.pretendardFont(.semiBold,size: scaler.scaleWidth(13)))
                                                 .foregroundColor(.greyScale2)
@@ -90,8 +90,9 @@ struct SettlementListView: View {
                                             Text("\(list.outcome.formattedString)\(currency)")
                                                 .font(.pretendardFont(.bold, size: scaler.scaleWidth(16)))
                                                 .foregroundColor(.primary2)
-                                            Image("forward_button")
-                                                .padding(.leading, scaler.scaleWidth(8))
+                                            
+                                            Image("icon_setting_book_forward")
+                                                .padding(.leading, scaler.scaleWidth(3))
                                             
                                         }
                                         .padding(.leading,scaler.scaleWidth(20))

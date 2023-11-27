@@ -146,7 +146,11 @@ struct SetContentCalcView: View {
                                 AlertManager.shared.update(showAlert: true, message: "정산할 내역을 선택해주세요.", buttonType: .red)
                             } else {
                                 viewModel.postSettlements()
-                                pageCount = 4
+                                LoadingManager.shared.update(showLoading: true, loadingType: .floneyLoading)
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                    LoadingManager.shared.update(showLoading: false, loadingType: .floneyLoading)
+                                    pageCount = 4
+                                }
                             }
                         }
                 }

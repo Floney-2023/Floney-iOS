@@ -114,7 +114,7 @@ struct SetUserCalcView: View {
                                     }
                                 }
                             }
-                            .background(Color.primary10)
+                            .background(viewModel.bookUsers[index].isSelected ?? false ? Color.primary10:Color.greyScale12)
                             .cornerRadius(12)
                             .onTapGesture {
                                 viewModel.bookUsers[index].isSelected?.toggle()

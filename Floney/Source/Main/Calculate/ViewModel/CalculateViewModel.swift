@@ -35,7 +35,6 @@ class CalculateViewModel : ObservableObject {
     
     @Published var daysOfTheWeek = ["일","월","화","수","목","금","토"]
     @Published var passedDays = 0
-    
     @Published var isActiveLines = false
     
     // 메인으로 선택된 날짜 -> 이 날짜에 의해 좌우됨.
