@@ -68,7 +68,6 @@ class FCMDataManager: ObservableObject {
                     }
                 }
             }.store(in: &cancellableSet)
-        
     }
 
     // firebase에 노티 요청
