@@ -51,7 +51,7 @@ struct ModifyingBookView: View {
                             .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
                             .foregroundColor(.greyScale2)
                         Spacer()
-                        Image("forward_button")
+                        Image("icon_setting_book_forward")
                     }
                     .padding(.leading, scaler.scaleWidth(4))
                     .frame(height: scaler.scaleHeight(46))
@@ -65,6 +65,7 @@ struct ModifyingBookView: View {
                     Toggle(isOn: $viewModel.profileStatus) {
                         
                     }
+                    .toggleStyle(SwitchToggleStyle(tint: Color.primary5))
                     .padding(.trailing, scaler.scaleWidth(6))
                         
                 }
@@ -98,7 +99,7 @@ struct ModifyingBookView: View {
             Spacer()
             
         }
-        .padding(EdgeInsets(top: scaler.scaleHeight(32), leading: scaler.scaleWidth(20), bottom: 0, trailing: scaler.scaleWidth(20)))
+        .padding(EdgeInsets(top: scaler.scaleHeight(12), leading: scaler.scaleWidth(20), bottom: 0, trailing: scaler.scaleWidth(20)))
         .customNavigationBar(
             leftView: { BackButtonBlack() },
             centerView: {

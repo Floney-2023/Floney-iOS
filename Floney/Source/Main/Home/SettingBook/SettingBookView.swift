@@ -32,8 +32,7 @@ struct SettingBookView: View {
     @State var resetMessage = "가계부 내역 초기화 시 모든 내역이 삭제됩니다. 초기화 하시겠습니까?"
     @State var exitAlert = false
     @State var exitTitle = "가계부 나가기"
-    @State var exitMessage = "가계부를 나갈 시 모든 내역이 삭제됩니다. 삭제하시겠습니까?"
-    
+    @State var exitMessage = "가계부를 나갈 시 내가 참여한 모든 내역이 삭제됩니다. 정말 나가시겠습니까?"
     @State var isShowingEditCategory = false
     
     var body: some View {
@@ -89,7 +88,7 @@ struct SettingBookView: View {
                                         .foregroundColor(.greyScale3)
                                 }
                                 Spacer()
-                                Image("forward_button")
+                                Image("icon_setting_book_forward")
                             }
                             .padding(scaler.scaleWidth(20))
                             .background(Color.primary10)
@@ -202,14 +201,14 @@ struct SettingBookView: View {
                             if viewModel.carryOver {
                                 Text("이월 있음")
                                     .padding(scaler.scaleWidth(6))
-                                    .font(.pretendardFont(.medium, size: scaler.scaleWidth(10)))
+                                    .font(.pretendardFont(.bold, size: scaler.scaleWidth(10)))
                                     .foregroundColor(.primary2)
                                     .background(Color.primary10)
                                     .cornerRadius(8)
                             } else {
                                 Text("이월 없음")
                                     .padding(scaler.scaleWidth(6))
-                                    .font(.pretendardFont(.medium, size: scaler.scaleWidth(10)))
+                                    .font(.pretendardFont(.bold, size: scaler.scaleWidth(10)))
                                     .foregroundColor(.greyScale2)
                                     .background(Color.background2)
                                     .cornerRadius(8)
@@ -286,7 +285,7 @@ struct SettingBookView: View {
                                     .font(.pretendardFont(.bold,size: scaler.scaleWidth(16)))
                                     .foregroundColor(.greyScale1)
                                 Spacer()
-                                Image("forward_button")
+                                Image("icon_setting_book_forward")
                                 
                             }
                             .frame(height:scaler.scaleHeight(48))
@@ -298,7 +297,7 @@ struct SettingBookView: View {
                                         .font(.pretendardFont(.bold,size: scaler.scaleWidth(16)))
                                         .foregroundColor(.greyScale1)
                                     Spacer()
-                                    Image("forward_button")
+                                    Image("icon_setting_book_forward")
                                     
                                 }
                                 .frame(height:scaler.scaleHeight(48))
@@ -310,7 +309,7 @@ struct SettingBookView: View {
                                 .font(.pretendardFont(.bold,size: scaler.scaleWidth(16)))
                                 .foregroundColor(.greyScale1)
                             Spacer()
-                            Image("forward_button")
+                            Image("icon_setting_book_forward")
                         }
                         .frame(height:scaler.scaleHeight(48))
                         .onTapGesture {
@@ -322,7 +321,7 @@ struct SettingBookView: View {
                                 .font(.pretendardFont(.bold,size: scaler.scaleWidth(16)))
                                 .foregroundColor(.greyScale1)
                             Spacer()
-                            Image("forward_button")
+                            Image("icon_setting_book_forward")
                         }
                         .frame(height:scaler.scaleHeight(48))
                         .onTapGesture {
@@ -380,7 +379,9 @@ struct SettingBookView: View {
                 ZStack {
                     if exitAlert {
                         AlertView(isPresented: $exitAlert, title: $exitTitle, message: $exitMessage, okColor: .alertRed, onOKAction: {
-                            DispatchQueue.main.async {
+                            LoadingManager.shared.update(showLoading: true, loadingType: .floneyLoading)
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                LoadingManager.shared.update(showLoading: false, loadingType: .floneyLoading)
                                 viewModel.exitBook()
                             }
                         })
@@ -392,7 +393,11 @@ struct SettingBookView: View {
                     if resetAlert {
                         AlertView(isPresented: $resetAlert,title: $resetTitle, message: $resetMessage, okColor: .alertRed, onOKAction: {
                             DispatchQueue.main.async {
-                                viewModel.resetBook()
+                                LoadingManager.shared.update(showLoading: true, loadingType: .floneyLoading)
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                    LoadingManager.shared.update(showLoading: false, loadingType: .floneyLoading)
+                                    viewModel.resetBook()
+                                }
                             }
                         })
                     }

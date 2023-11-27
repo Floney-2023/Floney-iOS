@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import FirebaseFirestore
 
 class CalendarViewModel: ObservableObject {
     var tokenViewModel = TokenReissueViewModel()

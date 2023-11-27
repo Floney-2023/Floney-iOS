@@ -123,9 +123,9 @@ struct SetBookProfileImageView: View {
             .sheet(isPresented: $onCamera) {
                 CameraView(image: $selectedUIImage) { selectedImage in
                     if let selectedImage = selectedImage {
-                        self.selectedUIImage = selectedImage
+                        self.selectedUIImage = selectedImage.resized(to: CGSize(width: scaler.scaleWidth(124), height: scaler.scaleWidth(124)))
                         //self.bookProfileImage = Image(uiImage: selectedImage)
-                        viewModel.bookPreviewImage124 = selectedImage
+                        viewModel.bookPreviewImage124 = selectedImage.resized(to: CGSize(width: scaler.scaleWidth(124), height: scaler.scaleWidth(124)))
                     }
                     self.onCamera = false
                 }
@@ -134,9 +134,9 @@ struct SetBookProfileImageView: View {
             .sheet(isPresented: $onPhotoLibrary) {
                 PhotoPicker(image: $selectedUIImage) { selectedImage in
                     if let selectedImage = selectedImage {
-                        self.selectedUIImage = selectedImage
+                        self.selectedUIImage = selectedImage.resized(to: CGSize(width: scaler.scaleWidth(124), height: scaler.scaleWidth(124)))
                         //self.bookProfileImage = Image(uiImage: selectedImage)
-                        viewModel.bookPreviewImage124 = selectedImage
+                        viewModel.bookPreviewImage124 = selectedImage.resized(to: CGSize(width: scaler.scaleWidth(124), height: scaler.scaleWidth(124)))
                     }
                     self.onPhotoLibrary = false
                 }

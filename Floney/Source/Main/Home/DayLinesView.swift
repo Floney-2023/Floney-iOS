@@ -225,14 +225,14 @@ struct DayLinesDetailView : View {
                                             Text("\(line.content)")
                                                 .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(14)))
                                                 .foregroundColor(.greyScale2)
-                                            HStack {
+                                            HStack(spacing:0) {
                                                 ForEach(Array(line.category.enumerated()), id: \.element) { categoryIndex, category in
                                                     Text("\(category)")
                                                         .font(.pretendardFont(.medium, size: scaler.scaleWidth(12)))
                                                         .foregroundColor(.greyScale6)
                                                     // 마지막 요소가 아닐 경우에만 점을 추가
                                                     if categoryIndex < line.category.count - 1 {
-                                                        Text("‧")
+                                                        Text(" ‧ ")
                                                             .font(.pretendardFont(.medium, size: scaler.scaleWidth(12)))
                                                             .foregroundColor(.greyScale6)
                                                     }

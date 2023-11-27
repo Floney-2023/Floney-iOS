@@ -36,8 +36,6 @@ class SettingBookViewModel : ObservableObject {
     @Published var startDay = ""
     @Published var carryOver = true
     @Published var stateOfCarryOver = false
-    
-    
     @Published var changedName = ""
     @Published var encryptedImageUrl : String = ""
     @Published var profileStatus = true {
@@ -388,13 +386,13 @@ class SettingBookViewModel : ObservableObject {
                     print("Exit Book successfully changed.")
                     AlertManager.shared.update(showAlert: true, message: "가계부에서 나갔습니다.", buttonType: .green)
                     DispatchQueue.main.async {
+                        let fcmManager = FCMDataManager()
+                        fcmManager.fetchTokensFromDatabase(bookKey: self.bookKey, title: "플로니", body: "\(Keychain.getKeychainValue(forKey: .userNickname) ?? "")님이 \(self.bookName)의 가계부를 나갔어요.")
+                        self.postNoti(title: "플로니", body: "\(Keychain.getKeychainValue(forKey: .userNickname) ?? "")님이 \(self.bookName)의 가계부를 나갔어요.", imgUrl: "icon_exit")
                         Keychain.setKeychain("", forKey: .bookKey)
                         BookExistenceViewModel.shared.bookExistence = false
                         BookExistenceViewModel.shared.getBookExistence()
                     }
-                    let fcmManager = FCMDataManager()
-                    fcmManager.fetchTokensFromDatabase(bookKey: self.bookKey, title: "플로니", body: "\(Keychain.getKeychainValue(forKey: .userNickname) ?? "")님이 \(self.bookName)의 가계부를 나갔어요.")
-                    self.postNoti(title: "플로니", body: "\(Keychain.getKeychainValue(forKey: .userNickname) ?? "")님이 \(self.bookName)의 가계부를 나갔어요.", imgUrl: "icon_exit")
                 case .failure(let error):
                     self.createAlert(with: error, retryRequest: {
                         self.exitBook()
@@ -553,13 +551,10 @@ class SettingBookViewModel : ObservableObject {
             return currentCurrency
     
         default:
-            currentCurrency = "원"  // 혹은 기본값으로 다른 문자열을 반환
+            currentCurrency = "원"
             return currentCurrency
       
         }
-        
-        print("Currency :", currentCurrency)
-        print("has decimal point :", hasDecimalPoint)
     }
     
     func downloadExcelFile() {
@@ -586,8 +581,6 @@ class SettingBookViewModel : ObservableObject {
             })
             .store(in: &cancellableSet)
     }
-
-    
     //MARK: 방장 필터
     func hostFilter() {
         // role이 "방장"이고, me가 true인 요소를 필터링합니다.
