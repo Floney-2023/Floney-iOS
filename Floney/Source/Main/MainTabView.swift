@@ -113,6 +113,7 @@ struct MainTabView: View {
                             .padding(.top, scaler.scaleHeight(5))
                             .padding(.bottom, scaler.scaleHeight(12))
                             .padding(.leading, scaler.scaleWidth(36))
+                            .buttonStyle(.plain)
                             Button {
                                 self.selection = 1
                                 CurrencyManager.shared.getCurrency()
@@ -135,6 +136,7 @@ struct MainTabView: View {
                             .padding(.top, scaler.scaleHeight(5))
                             .padding(.bottom, scaler.scaleHeight(12))
                             .padding(.leading, scaler.scaleWidth(44))
+                            .buttonStyle(.plain)
                             
                             Button {
                                 let dateFormatter = DateFormatter()
@@ -181,6 +183,7 @@ struct MainTabView: View {
                             .padding(.top, scaler.scaleHeight(5))
                             .padding(.bottom, scaler.scaleHeight(12))
                             .padding(.leading, scaler.scaleWidth(24))
+                            .buttonStyle(.plain)
                             
                             Button {
                                 self.selection = 4
@@ -201,6 +204,7 @@ struct MainTabView: View {
                             .padding(.bottom, scaler.scaleHeight(12))
                             .padding(.leading, scaler.scaleWidth(44))
                             .padding(.trailing, scaler.scaleWidth(36))
+                            .buttonStyle(.plain)
                         }
                         .padding(.top, scaler.scaleHeight(2))
                         .padding(.bottom, scaler.scaleHeight(18))
