@@ -99,7 +99,7 @@ enum ServerError: String, CustomError {
         case .NOT_SUBSCRIBE: //멤버쉽 전용 기능입니다
             return "멤버쉽 전용 기능입니다"
         case .LIMIT://제공하지 않는 서비스입니다
-            return "이미 가계부를 2개 모두 생성했습니다!"
+            return "이미 가계부 2개를 사용하고 있습니다."
         case .SETTLEMENT_NOT_FOUND: //정산 내역이 존재하지 않습니다
             return "내역이 없습니다. 기간을 다시 설정해주세요."
         case .OUTCOME_USER_NOT_FOUND: //지출 내역의 유저가 유저 목록에 존재하지 않습니다
