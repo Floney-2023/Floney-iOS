@@ -37,9 +37,30 @@ struct ServiceAgreementView: View {
                     Divider()
                         .foregroundColor(.greyScale10)
                         .padding(0)
-                    ServiceAgreementButton(isAgreed: $viewModel.isTerm1Agreed, title: "서비스 이용 약관 (필수)")
-                    ServiceAgreementButton(isAgreed: $viewModel.isTerm2Agreed, title: "개인정보 수집 및 이용 동의 (필수)")
-                    ServiceAgreementButton(isAgreed: $viewModel.isMarketingAgreed, title: "마케팅 정보 수신 동의 (선택)")
+                    NavigationLink(destination: WebView(urlString: "https://cafe.naver.com/floney").customNavigationBar(
+                        leftView: { BackButtonBlack() },
+                        centerView: { Text("서비스 이용 약관")
+                                .font(.pretendardFont(.semiBold, size:scaler.scaleWidth(16)))
+                            .foregroundColor(.greyScale1)}
+                    )) {
+                        ServiceAgreementButton(isAgreed: $viewModel.isTerm1Agreed, title: "서비스 이용 약관 (필수)")
+                    }
+                    NavigationLink(destination: WebView(urlString: "https://cafe.naver.com/floney").customNavigationBar(
+                        leftView: { BackButtonBlack() },
+                        centerView: { Text("개인정보 수집 및 이용 동의")
+                                .font(.pretendardFont(.semiBold, size:scaler.scaleWidth(16)))
+                            .foregroundColor(.greyScale1)}
+                    )) {
+                        ServiceAgreementButton(isAgreed: $viewModel.isTerm2Agreed, title: "개인정보 수집 및 이용 동의 (필수)")
+                    }
+                    NavigationLink(destination: WebView(urlString: "https://cafe.naver.com/floney").customNavigationBar(
+                        leftView: { BackButtonBlack() },
+                        centerView: { Text("마케팅 정보 수신 동의")
+                                .font(.pretendardFont(.semiBold, size:scaler.scaleWidth(16)))
+                            .foregroundColor(.greyScale1)}
+                    )) {
+                        ServiceAgreementButton(isAgreed: $viewModel.isMarketingAgreed, title: "마케팅 정보 수신 동의 (선택)")
+                    }
                     ServiceAgreementButton(isAgreed: $viewModel.isTerm3Agreed, forwardButton: false, title: "만 14세 이상 확인 (필수)")
                 }
 
@@ -99,6 +120,7 @@ struct ServiceAgreementButton: View {
     @Binding var isAgreed: Bool
     @State var checkboxType: String = "term"
     @State var forwardButton : Bool = true
+  
     let title: String
     
     var body: some View {
@@ -114,11 +136,11 @@ struct ServiceAgreementButton: View {
                 }
                 
                 Text(title)
-                    .font(.pretendardFont(.regular, size: scaler.scaleWidth(14)))
+                    .font(.pretendardFont(checkboxType == "all" ? .bold : .regular, size: scaler.scaleWidth(14)))
                     .foregroundColor(.greyScale2)
                 Spacer()
                 if forwardButton {
-                    Image("forward_button")
+                    Image("icon_setting_book_forward")
                 }
             }
         }

@@ -15,7 +15,7 @@ struct UserInfoView: View {
     @ObservedObject var viewModel : SignUpViewModel
     var body: some View {
         ZStack {
-            VStack(spacing: scaler.scaleHeight(32)) {
+            VStack(spacing: scaler.scaleHeight(24)) {
                 HStack {
                     VStack(alignment: .leading, spacing: scaler.scaleHeight(16)) {
                         Text("\(pageCount)")
@@ -70,7 +70,6 @@ struct UserInfoView: View {
                                     .foregroundColor(.greyScale6)
                                 Spacer()
                             }
-                            
                             CustomTextField(text: $viewModel.password, placeholder: "비밀번호",isSecure: true, placeholderColor: .greyScale6)
                                 .frame(height: scaler.scaleHeight(46))
                                 .frame(width: scaler.scaleWidth(320))
@@ -86,7 +85,7 @@ struct UserInfoView: View {
                                 .frame(height: scaler.scaleHeight(46))
                                 .frame(width: scaler.scaleWidth(320))
                             HStack {
-                                Text("* 영문, 숫자, 특수문자 포함 8자 이상")
+                                Text("* 영문(대소문자 구분 없음), 숫자, 특수문자 포함 8자 이상")
                                     .font(.pretendardFont(.regular, size: scaler.scaleWidth(12)))
                                     .foregroundColor(.greyScale6)
                                 Spacer()
@@ -96,6 +95,7 @@ struct UserInfoView: View {
                         }
                     }
                 }
+                
                 VStack(spacing: scaler.scaleHeight(12)) {
                     HStack {
                         Text("닉네임")
@@ -107,7 +107,7 @@ struct UserInfoView: View {
                         .frame(height: scaler.scaleHeight(46))
                         .frame(width: scaler.scaleWidth(320))
                     HStack {
-                        Text("* 최대 8자까지")
+                        Text("* 최대 8자까지 입력할 수 있어요.")
                             .font(.pretendardFont(.regular, size: scaler.scaleWidth(12)))
                             .foregroundColor(.greyScale6)
                         Spacer()
@@ -135,13 +135,16 @@ struct UserInfoView: View {
                             }
                         }
                     }
+                
             }
             .padding(EdgeInsets(top:scaler.scaleHeight(32), leading: scaler.scaleWidth(24), bottom: scaler.scaleHeight(38), trailing: scaler.scaleWidth(24)))
-            .customNavigationBar(
-                leftView: { BackButton() }
-                )
-            .edgesIgnoringSafeArea(.bottom)
+            
         }
+        .edgesIgnoringSafeArea(.bottom)
+        .customNavigationBar(
+            leftView: { BackButton() }
+            )
+        .edgesIgnoringSafeArea(.bottom)
         .onAppear(perform : UIApplication.shared.hideKeyboard)
         
     }

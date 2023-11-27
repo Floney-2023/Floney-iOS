@@ -37,6 +37,7 @@ struct AuthCodeView: View {
                         .foregroundColor(.greyScale1)
                     
                     Text("이메일로 전송된 코드를\n하단에 입력해주세요.")
+                        .lineSpacing(4)
                         .font(.pretendardFont(.medium, size: scaler.scaleWidth(13)))
                         .foregroundColor(.greyScale6)
                 }

@@ -34,6 +34,7 @@ struct EmailAuthView: View {
                             .foregroundColor(.greyScale1)
                         
                         Text("이메일 인증을 위해 사용 가능한\n이메일을 입력해주세요.")
+                            .lineSpacing(4)
                             .font(.pretendardFont(.medium, size: scaler.scaleWidth(13)))
                             .foregroundColor(.greyScale6)
                     }
