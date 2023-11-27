@@ -52,7 +52,7 @@ struct UserInformationView: View {
                             .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
                             .foregroundColor(.greyScale2)
                         Spacer()
-                        Image("forward_button")
+                        Image("icon_setting_book_forward")
                     }
                     .padding(.leading, scaler.scaleWidth(4))
                     
@@ -64,7 +64,7 @@ struct UserInformationView: View {
                                 .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
                                 .foregroundColor(.greyScale2)
                             Spacer()
-                            Image("forward_button")
+                            Image("icon_setting_book_forward")
                         }
                         .padding(.leading, scaler.scaleWidth(4))
                     }
@@ -100,7 +100,7 @@ struct UserInformationView: View {
             
             Spacer()
         }
-        .padding(EdgeInsets(top:scaler.scaleHeight(34), leading: scaler.scaleWidth(20), bottom: 0, trailing: scaler.scaleWidth(20)))
+        .padding(EdgeInsets(top:scaler.scaleHeight(14), leading: scaler.scaleWidth(20), bottom: 0, trailing: scaler.scaleWidth(20)))
         .customNavigationBar(
             leftView: { BackButtonBlack() },
             centerView: { Text("회원 정보")

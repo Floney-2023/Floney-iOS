@@ -84,19 +84,20 @@ struct WithdrawalView: View {
                             }
                         }
                     }
-                    
-                    TextField("이유를 작성해 주세요 (100자 이내)", text: $viewModel.otherReason)
-                        .padding()
-                        .font(.pretendardFont(.regular, size: scaler.scaleWidth(14)))
-                        .foregroundColor(.greyScale2)
-                        .frame(height:scaler.scaleHeight(140))
-                        .background(Color.background3)
-                        .cornerRadius(12)
-                        .multilineTextAlignment(.leading)
-                        .lineLimit(4)
+                    if viewModel.selectedReason == .OTHER {
+                        TextField("이유를 작성해 주세요 (100자 이내)", text: $viewModel.otherReason)
+                            .padding()
+                            .font(.pretendardFont(.regular, size: scaler.scaleWidth(14)))
+                            .foregroundColor(.greyScale2)
+                            .frame(height:scaler.scaleHeight(140))
+                            .frame(minHeight: scaler.scaleHeight(100))
+                            .background(Color.background3)
+                            .cornerRadius(12)
+                            .multilineTextAlignment(.leading)
+                            .lineLimit(4)
+                    }
 
                 }
-                  
                 Spacer()
                 Text("다음으로")
                     .padding()
@@ -110,17 +111,17 @@ struct WithdrawalView: View {
                     .padding(.bottom, scaler.scaleHeight(38))
             }
             .padding(EdgeInsets(top:scaler.scaleHeight(30), leading:scaler.scaleWidth(20), bottom: 0, trailing:scaler.scaleWidth(20)))
-            .customNavigationBar(
-                leftView: { BackButton() }
-            )
-            
-            
+
             .edgesIgnoringSafeArea(.bottom)
             
             NavigationLink(destination:InputPasswordInSignOutView(viewModel: viewModel), isActive: $isNextToInputPassword){
                 EmptyView()
             }
         }
+        .customNavigationBar(
+            leftView: { BackButton() }
+        )
+        .edgesIgnoringSafeArea(.bottom)
     }
 }
 

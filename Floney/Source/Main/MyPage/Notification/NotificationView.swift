@@ -17,7 +17,7 @@ struct NotificationView: View {
     var body: some View {
         
         VStack {
-            HStack {
+            HStack(spacing:0) {
                // if !viewModel.bookNotiList.isEmpty {
                 
                 ForEach(Array(viewModel.bookNotiList.enumerated()), id: \.element) { index, book in
@@ -39,60 +39,83 @@ struct NotificationView: View {
                     }
                 //}
             }
-            .padding(.top,scaler.scaleHeight(32))
+            .padding(.top,scaler.scaleHeight(12))
             .padding(.horizontal,scaler.scaleWidth(20))
             .padding(.bottom,scaler.scaleHeight(14))
             
             // 스와이프 가능한 알림 목록
-            GeometryReader { geometry in
-                HStack(spacing: 0) {
-                    ForEach(viewModel.bookNotiList, id:\.self) { book in
-                        ScrollView {
-                          //  if !viewModel.bookNotiList.isEmpty {
-                                if let bookNoti = book.notiList {
-                            ForEach(bookNoti, id:\.self) { noti in
-                                        HStack {
-                                            Image(noti.imgUrl)
-                                                .padding(.leading, scaler.scaleWidth(20))
-                                                .padding(.vertical, scaler.scaleHeight(20))
-                                            VStack(alignment: .leading, spacing: scaler.scaleHeight(10)) {
-                                                Text(noti.body)
-                                                    .font(.pretendardFont(.regular, size: scaler.scaleWidth(14)))
-                                                    .foregroundColor(.greyScale2)
-                                                Text(timeAgoSinceDate(dateString: noti.date, numericDates: true))
-                                                    .font(.pretendardFont(.regular, size: scaler.scaleWidth(12)))
-                                                    .foregroundColor(.greyScale8)
-                                            }
-                                            Spacer()
-                                        }
-                                        .background(Color.primary10)
-                                        .cornerRadius(12)
-                                    }
-                              //  }
+            //GeometryReader { geometry in
+              //  HStack(spacing: 0) {
+                  //  ForEach(viewModel.bookNotiList, id:\.self) { book in
+                            //  if !viewModel.bookNotiList.isEmpty {
+            if viewModel.bookNotiList.count == viewModel.myBooks.count {
+                VStack {
+                    if let bookNoti = viewModel.bookNotiList[selectedTab].notiList {
+                        if bookNoti.isEmpty {
+                            
+                            VStack(spacing:scaler.scaleHeight(12)) {
+                                Rectangle()
+                                    .foregroundColor(.clear)
+                                    .frame(width:scaler.scaleWidth(50), height:scaler.scaleHeight(84))
+                                    .background(
+                                        Image("no_line_2")
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fill)
+                                            .frame(width:scaler.scaleWidth(50), height:scaler.scaleHeight(84))
+                                    )
+                                Text("알림 내역이 없습니다.")
+                                    .font(.pretendardFont(.medium,size: scaler.scaleWidth(12)))
+                                    .foregroundColor(.greyScale6)
                             }
+                            .padding(.bottom,scaler.scaleHeight(100))
+                            //.frame(maxWidth: .infinity)
+                            .frame(maxHeight: .infinity)
+                            
+                        } else {
+                            ScrollView {
+                                ForEach(bookNoti, id:\.self) { noti in
+                                    HStack {
+                                        Image(noti.imgUrl)
+                                            .padding(.leading, scaler.scaleWidth(20))
+                                            .padding(.vertical, scaler.scaleHeight(20))
+                                        VStack(alignment: .leading, spacing: scaler.scaleHeight(10)) {
+                                            Text(noti.body)
+                                                .font(.pretendardFont(.regular, size: scaler.scaleWidth(14)))
+                                                .foregroundColor(.greyScale2)
+                                            Text(timeAgoSinceDate(dateString: noti.date, numericDates: true))
+                                                .font(.pretendardFont(.regular, size: scaler.scaleWidth(12)))
+                                                .foregroundColor(.greyScale8)
+                                        }
+                                        Spacer()
+                                    }
+                                    .background(Color.primary10)
+                                    .cornerRadius(12)
+                                }
+                            }
+                            .padding(.horizontal,scaler.scaleWidth(20))
+                            //.frame(width: geometry.size.width)
                         }
-                        .padding(.horizontal,scaler.scaleWidth(20))
-                        .frame(width: geometry.size.width)
                     }
                 }
-                .frame(maxWidth:.infinity, maxHeight:.infinity)
-                .offset(x: -CGFloat(self.selectedTab) * geometry.size.width)
-     
-                .offset(x: self.translation)
-                .animation(.spring())
-                .gesture(
-                    DragGesture()
-                        .updating($translation) { value, state, _ in
-                            state = value.translation.width
-                        }
-                    
-                        .onEnded { value in
-                            let offset = value.translation.width / geometry.size.width
-                            let newIndex = (CGFloat(self.selectedTab) - offset).rounded()
-                            self.selectedTab = min(max(Int(newIndex), 0), viewModel.bookNotiList.count - 1)
-                        }
-                      
-                )
+                // }
+                //.frame(maxWidth:.infinity, maxHeight:.infinity)
+                // .offset(x: -CGFloat(self.selectedTab) * geometry.size.width)
+                // .offset(x: self.translation)
+                // .animation(.spring())
+                /*
+                 .gesture(
+                 DragGesture()
+                 .updating($translation) { value, state, _ in
+                 state = value.translation.width
+                 }
+                 .onEnded { value in
+                 let offset = value.translation.width / geometry.size.width
+                 let newIndex = (CGFloat(self.selectedTab) - offset).rounded()
+                 self.selectedTab = min(max(Int(newIndex), 0), viewModel.bookNotiList.count - 1)
+                 }
+                 
+                 )*/
+                //}
             }
         }
         .customNavigationBar(

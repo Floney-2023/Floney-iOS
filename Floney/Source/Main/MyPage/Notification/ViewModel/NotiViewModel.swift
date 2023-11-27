@@ -14,7 +14,7 @@ import SwiftUI
 final class NotiViewModel: ObservableObject {
     var tokenViewModel = TokenReissueViewModel()
     @Published var result : MyPageResponse = MyPageResponse(nickname: "", email: "", profileImg: "", provider: "", lastAdTime: nil, myBooks: [])
-    @Published var bookNotiList : [BookNoti] = []
+    @Published var bookNotiList : [BookNoti] = [BookNoti(bookKey: "", bookName: "", notiList: [])]
     @Published var myBooks : [MyBookResult] = []
     private var cancellableSet: Set<AnyCancellable> = []
     var dataManager: NotiProtocol

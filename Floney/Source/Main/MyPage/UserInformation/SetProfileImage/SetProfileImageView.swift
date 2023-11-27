@@ -129,8 +129,8 @@ struct SetProfileImageView: View {
             .sheet(isPresented: $onCamera) {
                 CameraView(image: $selectedUIImage) { selectedImage in
                     if let selectedImage = selectedImage {
-                        self.selectedUIImage = selectedImage
-                        viewModel.userPreviewImage124 = selectedImage
+                        self.selectedUIImage = selectedImage.resized(to: CGSize(width: scaler.scaleWidth(124), height: scaler.scaleWidth(124)))
+                        viewModel.userPreviewImage124 = selectedImage.resized(to: CGSize(width: scaler.scaleWidth(124), height: scaler.scaleWidth(124)))
                         viewModel.randomNumStr = nil
                     }
                     self.onCamera = false
@@ -140,8 +140,8 @@ struct SetProfileImageView: View {
             .sheet(isPresented: $onPhotoLibrary) {
                 PhotoPicker(image: $selectedUIImage) { selectedImage in
                     if let selectedImage = selectedImage {
-                        self.selectedUIImage = selectedImage
-                        viewModel.userPreviewImage124 = selectedImage
+                        self.selectedUIImage = selectedImage.resized(to: CGSize(width: scaler.scaleWidth(124), height: scaler.scaleWidth(124)))
+                        viewModel.userPreviewImage124 = selectedImage.resized(to: CGSize(width: scaler.scaleWidth(124), height: scaler.scaleWidth(124)))
                         viewModel.randomNumStr = nil
                     }
                     self.onPhotoLibrary = false

@@ -131,7 +131,7 @@ struct MyPageView: View {
                                         .multilineTextAlignment(.leading)
                                 }
                                 Spacer()
-                                Image("forward_button")
+                                Image("icon_setting_book_forward")
                                     .resizable()
                                     .frame(width: scaler.scaleWidth(24), height: scaler.scaleWidth(24))
                                     .padding(.trailing ,scaler.scaleWidth(16))
@@ -288,7 +288,12 @@ struct MyPageView: View {
                                 .background(Color.greyScale12)
                             .cornerRadius(12)
                                 .onTapGesture {
-                                    viewModel.changeBook(bookKey: book.bookKey) //bookStatus: book.bookStatus)
+                                    LoadingManager.shared.update(showLoading: true, loadingType: .floneyLoading)
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                        LoadingManager.shared.update(showLoading: false, loadingType: .floneyLoading)
+                                        viewModel.changeBook(bookKey: book.bookKey) //bookStatus: book.bookStatus)
+                                    }
+                                    
                                 }
                             }
                             if viewModel.myBooks.count < 2 {
@@ -325,7 +330,7 @@ struct MyPageView: View {
                                         .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
                                         .foregroundColor(.greyScale2)
                                     Spacer()
-                                    Image("forward_button")
+                                    Image("icon_setting_book_forward")
                                 }
                                 .frame(height: scaler.scaleHeight(56))
                             }
@@ -335,7 +340,7 @@ struct MyPageView: View {
                                         .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
                                         .foregroundColor(.greyScale2)
                                     Spacer()
-                                    Image("forward_button")
+                                    Image("icon_setting_book_forward")
                                 }
                                 .frame(height: scaler.scaleHeight(56))
                             }
@@ -344,7 +349,7 @@ struct MyPageView: View {
                                     .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
                                     .foregroundColor(.greyScale2)
                                 Spacer()
-                                Image("forward_button")
+                                Image("icon_setting_book_forward")
                             }
                             .frame(height: scaler.scaleHeight(56))
                             NavigationLink(destination: WebView(urlString: "https://cafe.naver.com/floney").customNavigationBar(
@@ -358,7 +363,7 @@ struct MyPageView: View {
                                         .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
                                         .foregroundColor(.greyScale2)
                                     Spacer()
-                                    Image("forward_button")
+                                    Image("icon_setting_book_forward")
                                 }
                                 .frame(height: scaler.scaleHeight(56))
                             }
@@ -373,7 +378,7 @@ struct MyPageView: View {
                                         .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
                                         .foregroundColor(.greyScale2)
                                     Spacer()
-                                    Image("forward_button")
+                                    Image("icon_setting_book_forward")
                                 }
                                 .frame(height: scaler.scaleHeight(56))
                             }
