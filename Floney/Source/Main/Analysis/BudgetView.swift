@@ -223,8 +223,8 @@ struct BudgetView: View {
                    
                                 .offset(y: scaler.scaleHeight(-20)) // Move the image up
                             VStack {
-                                Text("예산을")
-                                Text("설정하고 체계적인 소비 습관을 만들어 보세요!")
+                                Text("예산을 설정하고")
+                                Text("체계적인 소비 습관을 만들어 보세요!")
                             }
                         }
                         .font(.pretendardFont(.medium, size: scaler.scaleWidth(12)))

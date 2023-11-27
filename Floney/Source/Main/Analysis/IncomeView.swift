@@ -113,7 +113,7 @@ struct IncomeView: View {
                 Spacer()
             
                 VStack(spacing:scaler.scaleHeight(12)) {
-                    Image("no_line")
+                    Image("no_line_2")
                         .resizable()
                         .aspectRatio(contentMode: .fill)
                         .frame(width:scaler.scaleWidth(50),height:scaler.scaleHeight(84))
