@@ -39,7 +39,7 @@ struct SetBookNameView: View {
                 CustomTextField(text: $viewModel.bookName, placeholder: "가계부 이름을 입력하세요",placeholderColor: .greyScale6)
                     .frame(height: scaler.scaleHeight(46))
                 HStack {
-                    Text("* 최대 10자까지 쓸 수 있어요.")
+                    Text("* 최대 10자까지 입력할 수 있어요.")
                         .font(.pretendardFont(.regular, size: scaler.scaleWidth(12)))
                         .foregroundColor(.greyScale6)
                     Spacer()

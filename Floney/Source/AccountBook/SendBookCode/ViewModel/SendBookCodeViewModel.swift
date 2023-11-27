@@ -66,7 +66,7 @@ class BookCodeViewModel: ObservableObject {
                         // 토큰 재발급 성공 시, 원래의 요청 재시도
                         retryRequest()
                     }
-                // 아예 틀린 토큰이므로 재로그인해서 다시 발급받아야 함.
+                    // 아예 틀린 토큰이므로 재로그인해서 다시 발급받아야 함.
                 case "U007" :
                     AuthenticationService.shared.logoutDueToTokenExpiration()
                 default:
@@ -78,4 +78,5 @@ class BookCodeViewModel: ObservableObject {
             //showAlert(message: "네트워크 오류가 발생했습니다.")
             
         }
-    }}
+    }
+}

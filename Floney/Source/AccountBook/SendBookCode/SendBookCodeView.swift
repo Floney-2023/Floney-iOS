@@ -9,7 +9,7 @@ import SwiftUI
 struct SendBookCodeView: View {
     let scaler = Scaler.shared
 
-    @StateObject var viewModel = BookCodeViewModel()
+    @StateObject var viewModel = CreateBookViewModel()
 
     var body: some View {
         VStack(spacing:scaler.scaleHeight(20)) {
@@ -24,19 +24,23 @@ struct SendBookCodeView: View {
                 }
                 Spacer()
             }
-            CustomTextField(text: $viewModel.code, placeholder: "코드를 입력하세요.", placeholderColor: .greyScale6)
+            CustomTextField(text: $viewModel.bookCode, placeholder: "코드를 입력하세요.", placeholderColor: .greyScale6)
                 .frame(height: scaler.scaleHeight(46))
                 .frame(width: scaler.scaleWidth(320))
             Spacer()
             
             VStack(spacing: scaler.scaleHeight(12)) {
-                NavigationLink(destination: EnterBookView(), isActive: $viewModel.isNext){
+                NavigationLink(destination: EnterBookView(), isActive: $viewModel.isNextToEnterBook){
                     Text("입력 완료하기")
                         .padding(scaler.scaleHeight(16))
                         .modifier(NextButtonModifier(backgroundColor: .primary1))
                         .onTapGesture {
-                            if viewModel.isVaildBookCode() {
-                                viewModel.postBookCode()
+                            if viewModel.isValidBookCode() {
+                                LoadingManager.shared.update(showLoading: true, loadingType: .floneyLoading)
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                    LoadingManager.shared.update(showLoading: false, loadingType: .floneyLoading)
+                                    viewModel.joinBook()
+                                }
                             }
                         }
                 }

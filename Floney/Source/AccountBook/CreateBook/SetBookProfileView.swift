@@ -81,10 +81,14 @@ struct SetBookProfileView: View {
                                 print("book name : \(viewModel.bookName)")
                                 if !viewModel.bookName.isEmpty {
                                     print("북 생성")
-                                    if createBookType == .initial {
-                                        viewModel.createBook()
-                                    } else {
-                                        viewModel.addBook()
+                                    LoadingManager.shared.update(showLoading: true, loadingType: .floneyLoading)
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                        LoadingManager.shared.update(showLoading: false, loadingType: .floneyLoading)
+                                        if createBookType == .initial {
+                                            viewModel.createBook()
+                                        } else {
+                                            viewModel.addBook()
+                                        }
                                     }
                                 }
                             } else {
@@ -93,10 +97,14 @@ struct SetBookProfileView: View {
                                         if let url = encryptedURL {
                                             viewModel.profileImg = url
                                             if !viewModel.bookName.isEmpty {
-                                                if createBookType == .initial {
-                                                    viewModel.createBook()
-                                                } else {
-                                                    viewModel.addBook()
+                                                LoadingManager.shared.update(showLoading: true, loadingType: .floneyLoading)
+                                                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                                    LoadingManager.shared.update(showLoading: false, loadingType: .floneyLoading)
+                                                    if createBookType == .initial {
+                                                        viewModel.createBook()
+                                                    } else {
+                                                        viewModel.addBook()
+                                                    }
                                                 }
                                             }
                                         }
@@ -141,6 +149,7 @@ struct SetBookProfileView: View {
             CameraView(image: $selectedUIImage) { selectedImage in
                 if let selectedImage = selectedImage {
                     self.selectedUIImage = selectedImage
+                    self.selectedUIImage = selectedImage.resized(to: CGSize(width: scaler.scaleWidth(124), height: scaler.scaleWidth(124)))
                 }
                 self.onCamera = false
             }
@@ -149,7 +158,7 @@ struct SetBookProfileView: View {
         .sheet(isPresented: $onPhotoLibrary) {
             PhotoPicker(image: $selectedUIImage) { selectedImage in
                 if let selectedImage = selectedImage {
-                    self.selectedUIImage = selectedImage
+                    self.selectedUIImage = selectedImage.resized(to: CGSize(width: scaler.scaleWidth(124), height: scaler.scaleWidth(124)))
                 }
                 self.onPhotoLibrary = false
             }

@@ -39,7 +39,11 @@ struct EnterBookCodeView: View {
                     .modifier(NextButtonModifier(backgroundColor: .primary1))
                     .onTapGesture {
                         if viewModel.isValidBookCode() {
-                            viewModel.joinBook()
+                            LoadingManager.shared.update(showLoading: true, loadingType: .floneyLoading)
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                LoadingManager.shared.update(showLoading: false, loadingType: .floneyLoading)
+                                viewModel.joinBook()
+                            }
                         }
                     }
             }

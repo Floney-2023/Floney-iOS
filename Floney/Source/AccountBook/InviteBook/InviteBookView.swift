@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct InviteBookView: View {
     let scaler = Scaler.shared
@@ -23,12 +24,33 @@ struct InviteBookView: View {
                 }
                 .padding(.leading, scaler.scaleWidth(4))
                 .padding(.bottom, scaler.scaleHeight(48))
-                
-                Image("book_profile_110")
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width:scaler.scaleWidth(110),height: scaler.scaleWidth(110))
-                    .padding(.bottom, scaler.scaleHeight(12))
+    
+                if let bookUrl = viewModel.bookInfo.bookImg {
+                    let url = URL(string : bookUrl)
+                    KFImage(url)
+                        .placeholder {
+                            Image("book_profile_110")
+                        }.retry(maxCount: 3, interval: .seconds(5)) //재시도
+                        .onSuccess { success in //성공
+                            print("success: \(success)")
+                        }
+                        .onFailure { error in //실패
+                            print("failure: \(error)")
+                        }
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: scaler.scaleWidth(110), height: scaler.scaleWidth(110))
+                        .clipShape(Circle())
+                        .padding(.bottom, scaler.scaleHeight(12))
+                    
+                } else {
+                    Image("book_profile_110")
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: scaler.scaleWidth(110), height: scaler.scaleWidth(110))
+                        .clipShape(Circle())
+                        .padding(.bottom, scaler.scaleHeight(12))
+                }
                 
                 Text("\(viewModel.bookName)")
                     .font(.pretendardFont(.bold, size: scaler.scaleWidth(18)))
@@ -44,14 +66,24 @@ struct InviteBookView: View {
                     Text("초대코드")
                         .font(.pretendardFont(.medium, size: scaler.scaleWidth(12)))
                         .foregroundColor(.greyScale8)
+                    HStack {
+                        ZStack {
+                            Text("\(applinkManager.inviteCode!)")
+                                .padding(scaler.scaleHeight(16))
+                                .frame(maxWidth: .infinity)
+                                .font(.pretendardFont(.bold, size: scaler.scaleWidth(14)))
+                                .foregroundColor(.greyScale2)
+                                .background(Color.greyScale12)
+                                .cornerRadius(12)
+                            HStack {
+                                Spacer()
+                                Image("icon_copy")
+                                    .padding(.trailing, scaler.scaleWidth(16))
+                            }
+                        }
+                    }
+                    .frame(width: scaler.scaleWidth(320))
                     
-                    Text("\(applinkManager.inviteCode!)")
-                        .padding(scaler.scaleHeight(16))
-                        .frame(maxWidth: .infinity)
-                        .font(.pretendardFont(.bold, size: scaler.scaleWidth(14)))
-                        .foregroundColor(.greyScale2)
-                        .background(Color.greyScale12)
-                        .cornerRadius(12)
                 }
                 .padding(.horizontal, scaler.scaleWidth(4))
                 .onTapGesture {
@@ -67,7 +99,11 @@ struct InviteBookView: View {
                 
                 VStack(spacing:scaler.scaleHeight(18)) {
                     Button {
-                        viewModel.inviteBookCode()
+                        LoadingManager.shared.update(showLoading: true, loadingType: .floneyLoading)
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                            LoadingManager.shared.update(showLoading: false, loadingType: .floneyLoading)
+                            viewModel.inviteBookCode()
+                        }
                     } label: {
                         Text("입장하기")
                             .padding(scaler.scaleHeight(16))

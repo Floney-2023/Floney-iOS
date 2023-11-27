@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import FirebaseFirestore
 
 enum createBookType {
     case initial
@@ -95,24 +96,40 @@ class CreateBookViewModel: ObservableObject {
                 }
             }.store(in: &cancellableSet)
     }
-
     func joinBook() {
         let request = InviteBookRequest(code: bookCode)
-        dataManager.inviteBook(request)
+        dataManager.bookInfoByCodeBook(bookCode: bookCode)
             .sink { (dataResponse) in
                 if dataResponse.error != nil {
                     self.createAlert(with: dataResponse.error!, retryRequest: {
-                        self.joinBook()
+                        self.bookInfoByCode()
                     })
                     print(dataResponse.error)
                 } else {
-                    self.result = dataResponse.value!
-                    print(self.result) 
-                    print(self.result.code)
-                    self.setBookCode()
-                    self.isNextToEnterBook = true
+                    self.bookInfo = dataResponse.value!
+                    self.bookName = self.bookInfo.bookName
+                    self.dataManager.inviteBook(request)
+                        .sink { (dataResponse) in
+                            if dataResponse.error != nil {
+                                self.createAlert(with: dataResponse.error!, retryRequest: {
+                                    self.joinBook()
+                                })
+                                print(dataResponse.error)
+                            } else {
+                                self.result = dataResponse.value!
+                                print(self.result)
+                                print(self.result.code)
+                                self.setBookCode()
+                                Keychain.setKeychain(self.bookName, forKey: .bookName)
+                                let fcmManager = FCMDataManager()
+                                fcmManager.fetchTokensFromDatabase(bookKey: self.result.bookKey, title: "플로니", body: "\(Keychain.getKeychainValue(forKey: .userNickname) ?? "")님이 \(self.bookName)의 가계부에 들어왔어요.")
+                                self.postNoti(title: "플로니", body: "\(Keychain.getKeychainValue(forKey: .userNickname) ?? "")님이 \(self.bookName)의 가계부에 들어왔어요.", imgUrl: "icon_join")
+                                self.isNextToEnterBook = true
+                            }
+                        }.store(in: &self.cancellableSet)
                 }
             }.store(in: &cancellableSet)
+        
     }
     func isValidBookCode() -> Bool {
         if bookCode.isEmpty {
@@ -126,7 +143,6 @@ class CreateBookViewModel: ObservableObject {
             let request = InviteBookRequest(code: inviteCode)
             dataManager.inviteBook(request)
                 .sink { (dataResponse) in
-                    
                     if dataResponse.error != nil {
                         self.createAlert(with: dataResponse.error!, retryRequest: {
                             self.inviteBookCode()
@@ -141,6 +157,10 @@ class CreateBookViewModel: ObservableObject {
                         AppLinkManager.shared.inviteStatus = false
                         AppLinkManager.shared.hasDeepLink = false
                         Keychain.setKeychain(self.bookName, forKey: .bookName)
+                        let fcmManager = FCMDataManager()
+                        fcmManager.fetchTokensFromDatabase(bookKey: self.result.bookKey, title: "플로니", body: "\(Keychain.getKeychainValue(forKey: .userNickname) ?? "")님이 \(self.bookName)의 가계부에 들어왔어요.")
+                        self.postNoti(title: "플로니", body: "\(Keychain.getKeychainValue(forKey: .userNickname) ?? "")님이 \(self.bookName)의 가계부에 들어왔어요.", imgUrl: "icon_join")
+                        
                         BookExistenceViewModel.shared.getBookExistence()
                     }
                 }.store(in: &cancellableSet)
@@ -150,7 +170,6 @@ class CreateBookViewModel: ObservableObject {
         if let inviteCode = AppLinkManager.shared.inviteCode {
             dataManager.bookInfoByCodeBook(bookCode: inviteCode)
                 .sink { (dataResponse) in
-                    
                     if dataResponse.error != nil {
                         self.createAlert(with: dataResponse.error!, retryRequest: {
                             self.bookInfoByCode()
@@ -160,9 +179,7 @@ class CreateBookViewModel: ObservableObject {
                         self.bookInfo = dataResponse.value!
                         print(self.bookInfo)
                         self.bookName = self.bookInfo.bookName
-                        
                         let inputFormatter = DateFormatter()
-                        
                         inputFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS" // 입력 문자열의 형식
                         if let date = inputFormatter.date(from: self.bookInfo.startDay) {
                             let outputFormatter = DateFormatter()
@@ -184,6 +201,33 @@ class CreateBookViewModel: ObservableObject {
     func setBookCode() {
         Keychain.setKeychain(self.result.bookKey, forKey: .bookKey)
         Keychain.setKeychain(self.result.code, forKey: .bookCode)
+    }
+    
+    func postNoti(title :String, body: String, imgUrl : String) {
+        let currentDate = Date()
+        let formatter = ISO8601DateFormatter()
+        
+        let formattedDate = formatter.string(from: currentDate)
+        var viewModel = NotiViewModel()
+
+        let db = Firestore.firestore()
+        let bookRef = db.collection("books").document(self.result.bookKey)
+        let usersCollection = bookRef.collection("users")
+        var emails = [String]()
+        
+        usersCollection.getDocuments { (snapshot, error) in
+            if let error = error {
+                print("Error getting documents: \(error)")
+            } else {
+                for document in snapshot!.documents {
+                    emails.append(document.documentID) // 문서의 ID(이메일)을 배열에 추가
+                    viewModel.postNoti(title: title, body:body, imgUrl: imgUrl, userEmail: document.documentID, date: formattedDate)
+                }
+                // 이메일 배열을 여기서 사용합니다.
+                print(emails)
+                
+            }
+        }
     }
     func createAlert( with error: NetworkError, retryRequest: @escaping () -> Void) {
         //loadingError = error.backendError == nil ? error.initialError.localizedDescription : error.backendError!.message
