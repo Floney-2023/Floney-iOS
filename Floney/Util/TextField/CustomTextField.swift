@@ -63,16 +63,13 @@ struct CustomTextField: UIViewRepresentable {
             textField.leftViewMode = .always
         }
         if isSecure {
-            
             let button = UIButton(type: .custom)
             button.setImage(UIImage(named: "icon_closed_eye"), for: .normal)
+            button.imageView?.frame = CGRect(x: 0, y: 0, width: scaler.scaleWidth(24), height: scaler.scaleWidth(24))
             button.addTarget(context.coordinator, action: #selector(Coordinator.togglePasswordVisibility(_:)), for: .touchUpInside)
             button.imageEdgeInsets = UIEdgeInsets(top: 0, left: -16, bottom: 0, right: 0)
-            
             textField.rightView = button
             textField.rightViewMode = .always
-            
-            
         }
         return textField
     }
@@ -96,18 +93,15 @@ struct CustomTextField: UIViewRepresentable {
     
     class Coordinator: NSObject, UITextFieldDelegate {
         var parent: CustomTextField
-        
         init(_ parent: CustomTextField) {
             self.parent = parent
         }
-        
         func textFieldDidEndEditing(_ textField: UITextField) {
             parent.text = textField.text ?? ""
         }
         func textFieldDidChangeSelection(_ textField: UITextField) {
             parent.text = textField.text ?? ""
         }
-
         @objc func togglePasswordVisibility(_ sender: UIButton) {
             guard let textField = sender.superview as? UITextField else { return }
             textField.isSecureTextEntry.toggle()
