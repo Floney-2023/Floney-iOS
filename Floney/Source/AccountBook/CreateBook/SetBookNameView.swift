@@ -30,6 +30,7 @@ struct SetBookNameView: View {
                         .font(.pretendardFont(.bold, size: scaler.scaleWidth(24)))
                         .foregroundColor(.greyScale1)
                     Text("언제든지 멤버를 추가할 수 있는\n플로니의 가계부를 만들어 보세요.")
+                        .lineSpacing(4)
                         .font(.pretendardFont(.medium, size: scaler.scaleWidth(13)))
                         .foregroundColor(.greyScale6)
                 }

@@ -39,6 +39,7 @@ struct CategoryManagementView: View {
                                     .font(.pretendardFont(.bold,size:scaler.scaleWidth(24)))
                                     .foregroundColor(.greyScale1)
                                 Text("가계부를 적을 때 선택하는 항목들을\n추가, 삭제 할 수 있어요")
+                                    .lineSpacing(4)
                                     .font(.pretendardFont(.medium,size: scaler.scaleWidth(13)))
                                     .foregroundColor(.greyScale6)
                             }

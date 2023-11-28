@@ -81,8 +81,9 @@ struct SetProfileImageView: View {
                         viewModel.userPreviewImage124 = UIImage(named: "user_profile_124")
                     }
                 Spacer()
+
                 
-                Button("변경하기") {
+                Button {
                     LoadingManager.shared.update(showLoading: true, loadingType: .dimmedLoading)
                     if let image = selectedUIImage {
                         print("selected:\(image)")
@@ -104,10 +105,13 @@ struct SetProfileImageView: View {
                             viewModel.changeProfile(imageStatus: "default") // 서버에 전송
                         }
                     }
+                } label: {
+                    Text("변경하기")
+                        .frame(maxWidth: .infinity)
+                        .font(.pretendardFont(.bold, size:scaler.scaleWidth(14)))
+                        .foregroundColor(.white)
                 }
                 .padding(scaler.scaleWidth(20))
-                .font(.pretendardFont(.bold, size:scaler.scaleWidth(14)))
-                .foregroundColor(.white)
                 .frame(maxWidth: .infinity)
                 .background(Color.greyScale2)
                 .cornerRadius(12)

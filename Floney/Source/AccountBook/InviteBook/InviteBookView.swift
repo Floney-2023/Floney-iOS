@@ -18,6 +18,7 @@ struct InviteBookView: View {
             VStack(spacing:0) {
                 HStack {
                     Text("초대받은 가계부에\n입장하기")
+                        .lineSpacing(6)
                         .font(.pretendardFont(.bold, size:scaler.scaleWidth(24)))
                         .foregroundColor(.greyScale1)
                     Spacer()
@@ -120,7 +121,7 @@ struct InviteBookView: View {
                                 .foregroundColor(.greyScale6)
                             Rectangle()
                               .foregroundColor(.clear)
-                              .frame(width: scaler.scaleWidth(66), height: scaler.scaleWidth(0.5))
+                              .frame(width: scaler.scaleWidth(66), height: scaler.scaleWidth(0.7))
                               .background(Color.greyScale6)
                         }
                     }

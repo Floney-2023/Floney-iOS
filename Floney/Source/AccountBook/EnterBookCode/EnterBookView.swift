@@ -16,12 +16,12 @@ struct EnterBookView: View {
                     VStack(alignment: .leading, spacing: scaler.scaleHeight(16)) {
                         
                         Text("가계부에\n초대되었어요!")
+                            .lineSpacing(6)
                             .font(.pretendardFont(.bold, size: scaler.scaleWidth(24)))
                             .foregroundColor(.greyScale1)
                         Text("간편하고 쉬운 가계부, 플로니와 함께 해요")
                             .font(.pretendardFont(.medium, size: scaler.scaleWidth(13)))
-                            .foregroundColor(.greyScale6)
-                        
+                            .foregroundColor(.greyScale6) 
                     }
                     
                     Spacer()

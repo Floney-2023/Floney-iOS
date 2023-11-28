@@ -76,7 +76,7 @@ struct SetBookProfileImageView: View {
                         viewModel.bookPreviewImage124 = UIImage(named: "book_profile_124")
                     }
                 Spacer()
-                Button("변경하기") {
+                Button {
                     LoadingManager.shared.update(showLoading: true, loadingType: .dimmedLoading)
                     if let image = selectedUIImage {
                         firebaseManager.uploadImageToFirebase(image: image) { url in
@@ -96,10 +96,13 @@ struct SetBookProfileImageView: View {
                         viewModel.encryptedImageUrl = ""
                         viewModel.changeProfile(inputStatus: "default")
                     }
+                } label: {
+                    Text("변경하기")
+                        .frame(maxWidth: .infinity)
+                        .font(.pretendardFont(.bold, size:scaler.scaleWidth(14)))
+                        .foregroundColor(.white)
                 }
                 .padding(scaler.scaleWidth(20))
-                .font(.pretendardFont(.bold, size: scaler.scaleWidth(14)))
-                .foregroundColor(.white)
                 .frame(maxWidth: .infinity)
                 .background(Color.greyScale2)
                 .cornerRadius(12)

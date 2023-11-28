@@ -28,6 +28,7 @@ struct SetCurrencyUnitView: View {
                             .font(.pretendardFont(.bold,size:scaler.scaleWidth(24)))
                             .foregroundColor(.greyScale1)
                         Text("찾으시는 화폐 단위가 없나요?\n원하시는 화폐를 플로니에게 알려주세요.")
+                            .lineSpacing(4)
                             .font(.pretendardFont(.medium,size:scaler.scaleWidth(13)))
                             .foregroundColor(.greyScale6)
                     }

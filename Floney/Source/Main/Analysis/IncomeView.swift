@@ -18,13 +18,14 @@ struct IncomeView: View {
                 VStack(alignment:.leading, spacing: scaler.scaleHeight(8)){
                     Text("총 \(viewModel.incomeResponse.total.formattedString)\(currency)을\n벌었어요")
                         .font(.pretendardFont(.bold,size:scaler.scaleWidth(22)))
-                        .lineSpacing(10)
+                        .lineSpacing(6)
                         .foregroundColor(.greyScale1)
                         .frame(width: scaler.scaleWidth(236),alignment: .leading)
                         .lineLimit(2)
                         .minimumScaleFactor(0.001)
                     if viewModel.incomeResponse.differance < 0 {
                         Text("저번 달 대비 \(abs(viewModel.incomeResponse.differance).formattedString)\(currency)을\n적게 벌었어요")
+                            .lineSpacing(4)
                             .font(.pretendardFont(.medium,size: scaler.scaleWidth(13)))
                             .foregroundColor(.greyScale6)
                             .frame(width: scaler.scaleWidth(236),alignment: .leading)
@@ -32,6 +33,7 @@ struct IncomeView: View {
                             .minimumScaleFactor(0.001)
                     } else {
                         Text("저번 달 대비 \(viewModel.incomeResponse.differance.formattedString)\(currency)을\n더 벌었어요")
+                            .lineSpacing(4)
                             .font(.pretendardFont(.medium,size: scaler.scaleWidth(13)))
                             .foregroundColor(.greyScale6)
                             .frame(width: scaler.scaleWidth(236),alignment: .leading)

@@ -22,7 +22,7 @@ struct BudgetView: View {
                         VStack(alignment:.leading, spacing: scaler.scaleHeight(8)){
                             Text("현재 예산의\n\(Int(viewModel.budgetPercentage))%를 사용했어요")
                                 .font(.pretendardFont(.bold,size:scaler.scaleWidth(22)))
-                                .lineSpacing(10)
+                                .lineSpacing(6)
                                 .foregroundColor(.greyScale1)
                             
                             let calendar = Calendar.current
@@ -34,10 +34,12 @@ struct BudgetView: View {
                             let selectedMonth = calendar.component(.month, from: viewModel.selectedDate)
                             if currentYear <= selectedYear && currentMonth <= selectedMonth {
                                 Text("남은 \(viewModel.remainingDays)일 동안 하루에\n\(viewModel.dailyAvailableMoney.formattedString)\(currency)을 사용할 수 있어요")
+                                    .lineSpacing(4)
                                     .font(.pretendardFont(.medium,size: scaler.scaleWidth(13)))
                                     .foregroundColor(.greyScale6)
                             } else {
                                 Text("이미 지나간 달에는\n하루 예산이 표시되지 않아요.")
+                                    .lineSpacing(4)
                                     .font(.pretendardFont(.medium,size: scaler.scaleWidth(13)))
                                     .foregroundColor(.greyScale6)
                             }
@@ -165,7 +167,7 @@ struct BudgetView: View {
                             VStack(alignment:.leading, spacing: scaler.scaleHeight(8)){
                                 Text("현재 예산의\n0%를 사용했어요")
                                     .font(.pretendardFont(.bold,size:scaler.scaleWidth(22)))
-                                    .lineSpacing(10)
+                                    .lineSpacing(6)
                                     .foregroundColor(.greyScale1)
                                 
                                 let calendar = Calendar.current
@@ -177,10 +179,12 @@ struct BudgetView: View {
                                 let selectedMonth = calendar.component(.month, from: viewModel.selectedDate)
                                 if currentYear <= selectedYear && currentMonth <= selectedMonth {
                                     Text("남은 기간동안 하루에\n\(Int(viewModel.dailyAvailableMoney))\(currency)을 사용할 수 있어요")
+                                        .lineSpacing(4)
                                         .font(.pretendardFont(.medium,size: scaler.scaleWidth(13)))
                                         .foregroundColor(.greyScale6)
                                 } else {
                                     Text("이미 지나간 달에는\n하루 예산이 표시되지 않아요.")
+                                        .lineSpacing(4)
                                         .font(.pretendardFont(.medium,size: scaler.scaleWidth(13)))
                                         .foregroundColor(.greyScale6)
                                 }

@@ -117,7 +117,6 @@ class CalculateViewModel : ObservableObject {
     }
     //MARK: 정산하기
     func postSettlements() {
-        LoadingManager.shared.update(showLoading: true, loadingType: .floneyLoading)
         let bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
         let bookName = Keychain.getKeychainValue(forKey: .bookName) ?? ""
         let request = AddSettlementRequest(bookKey: bookKey, userEmails: userList, startDate: startDateStr, endDate: endDateStr, outcomes: outcomeRequest)
@@ -135,7 +134,6 @@ class CalculateViewModel : ObservableObject {
                     print("--정산 요청 성공--")
                     self.fcmManager.fetchTokensFromDatabase(bookKey: bookKey, title: "플로니", body: "\(bookName)의 가계부를 정산해보세요!")
                     self.postNoti(title: "플로니", body: "\(bookName)의 가계부를 정산해보세요!", imgUrl: "noti_settlement")
-                    LoadingManager.shared.update(showLoading: false, loadingType: .floneyLoading)
                     self.settlementResult = dataResponse.value!
                     print(self.settlementResult)
                     self.userCount = self.settlementResult.userCount

@@ -225,10 +225,9 @@ struct SettingBookView: View {
                                     Text("가계부 초기화하기")
                                         .font(.pretendardFont(.regular, size: scaler.scaleWidth(12)))
                                         .foregroundColor(.greyScale6)
-                                    
                                     Rectangle()
                                       .foregroundColor(.clear)
-                                      .frame(width: scaler.scaleWidth(86), height: scaler.scaleWidth(0.5))
+                                      .frame(width: scaler.scaleWidth(86), height: scaler.scaleWidth(1))
                                       .background(Color.greyScale6)
                                 }
                                 Spacer()
@@ -340,7 +339,7 @@ struct SettingBookView: View {
                                     .foregroundColor(.greyScale6)
                                 Rectangle()
                                   .foregroundColor(.clear)
-                                  .frame(width: scaler.scaleWidth(65), height: scaler.scaleWidth(0.5))
+                                  .frame(width: scaler.scaleWidth(65), height: scaler.scaleWidth(0.7))
                                   .background(Color.greyScale6)
                             }
                             Spacer()

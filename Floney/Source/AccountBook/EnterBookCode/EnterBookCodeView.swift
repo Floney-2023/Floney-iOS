@@ -20,6 +20,7 @@ struct EnterBookCodeView: View {
                         .foregroundColor(.greyScale1)
                     
                     Text("가계부에 입장하기 위해\n초대받은 가계부의 코드를 입력하세요.")
+                        .lineSpacing(4)
                         .font(.pretendardFont(.medium, size: scaler.scaleWidth(13)))
                         .foregroundColor(.greyScale6)
                 }

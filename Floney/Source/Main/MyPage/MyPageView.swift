@@ -168,6 +168,7 @@ struct MyPageView: View {
                                 VStack {
                                     HStack {
                                         Text("앱스토어에서\n별점을 남겨주세요")
+                                            .lineSpacing(4)
                                             .font(.pretendardFont(.bold, size: scaler.scaleWidth(14)))
                                             .foregroundColor(.greyScale2)
                                         Spacer()

@@ -19,28 +19,31 @@ struct AssetView: View {
                     if viewModel.difference > 0 {
                         Text("나의 자산이\n지난달보다 증가했어요")
                             .font(.pretendardFont(.bold,size:scaler.scaleWidth(22)))
-                            .lineSpacing(10)
+                            .lineSpacing(6)
                             .foregroundColor(.greyScale1)
                         
                         Text("지난달 대비 \(viewModel.difference.formattedString)\(currency)\n증가했어요")
+                            .lineSpacing(4)
                             .font(.pretendardFont(.medium,size: scaler.scaleWidth(13)))
                             .foregroundColor(.greyScale6)
                     } else if viewModel.difference < 0 {
                         Text("나의 자산이\n지난달보다 감소했어요")
                             .font(.pretendardFont(.bold,size:scaler.scaleWidth(22)))
-                            .lineSpacing(10)
+                            .lineSpacing(6)
                             .foregroundColor(.greyScale1)
                         
                         Text("지난달 대비 \(abs(viewModel.difference).formattedString)\(currency)\n감소했어요")
+                            .lineSpacing(4)
                             .font(.pretendardFont(.medium,size: scaler.scaleWidth(13)))
                             .foregroundColor(.greyScale6)
                     } else {
                         Text("나의 자산이\n지난달과 같아요")
                             .font(.pretendardFont(.bold,size:scaler.scaleWidth(22)))
-                            .lineSpacing(10)
+                            .lineSpacing(6)
                             .foregroundColor(.greyScale1)
                         
                         Text("지난달 대비 0\(currency)\n증가했어요")
+                            .lineSpacing(4)
                             .font(.pretendardFont(.medium,size: scaler.scaleWidth(13)))
                             .foregroundColor(.greyScale6)
                     }

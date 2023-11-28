@@ -16,9 +16,11 @@ struct WelcomeView: View {
                 HStack {
                     VStack(alignment: .leading, spacing: scaler.scaleHeight(16)) {
                         Text("환영합니다\n\(nickname)님!")
+                            .lineSpacing(6)
                             .font(.pretendardFont(.bold, size: scaler.scaleWidth(24) ))
                             .foregroundColor(.greyScale1)
                         Text("플로니와 함께 똑똑하고 편리한 가계부를\n작성해보세요.")
+                            .lineSpacing(4)
                             .font(.pretendardFont(.medium, size: scaler.scaleWidth(13)))
                             .foregroundColor(.greyScale6)
                     }

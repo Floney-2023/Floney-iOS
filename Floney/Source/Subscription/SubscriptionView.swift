@@ -196,7 +196,7 @@ struct SubscriptionView: View {
                                     .foregroundColor(.greyScale2)
                                 Rectangle()
                                   .foregroundColor(.clear)
-                                  .frame(width: scaler.scaleWidth(143), height: scaler.scaleWidth(0.5))
+                                  .frame(width: scaler.scaleWidth(143), height: scaler.scaleWidth(0.7))
                                   .background(Color.greyScale2)
                             }
                         }

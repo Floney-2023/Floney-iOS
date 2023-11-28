@@ -16,9 +16,11 @@ struct SendBookCodeView: View {
             HStack {
                 VStack(alignment: .leading, spacing: scaler.scaleHeight(16)) {
                     Text("초대받은\n가계부가 있나요?")
+                        .lineSpacing(6)
                         .font(.pretendardFont(.bold, size: scaler.scaleWidth(24)))
                         .foregroundColor(.greyScale1)
                     Text("친구에게 받은 코드를 입력하거나\n코드가 없다면 가계부를 새로 만들 수 있어요.")
+                        .lineSpacing(4)
                         .font(.pretendardFont(.medium, size: scaler.scaleWidth(13)))
                         .foregroundColor(.greyScale6)
                 }

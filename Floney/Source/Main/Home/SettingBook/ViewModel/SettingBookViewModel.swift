@@ -43,7 +43,7 @@ class SettingBookViewModel : ObservableObject {
             self.changeProfileStatus()
         }
     }
-
+    
     @Published var asset : Double = 0
     
     @Published var role = "방장"
@@ -187,7 +187,7 @@ class SettingBookViewModel : ObservableObject {
         print("book profile parameter : \(request)")
         dataManager.changeProfile(parameters: request)
             .sink { completion in
-
+                
                 switch completion {
                 case .finished:
                     print("Profile successfully changed.")
@@ -410,7 +410,7 @@ class SettingBookViewModel : ObservableObject {
         
         let formattedDate = formatter.string(from: currentDate)
         var viewModel = NotiViewModel()
-
+        
         let db = Firestore.firestore()
         let bookRef = db.collection("books").document(self.bookKey)
         let usersCollection = bookRef.collection("users")
@@ -466,7 +466,8 @@ class SettingBookViewModel : ObservableObject {
                 switch completion {
                 case .finished:
                     print("Reset Book successfully changed.")
-                    self.fcmManager.fetchTokensFromDatabase(bookKey: bookKey, title: "플로니", body: "\(bookName) 가계부의 모든 내역이 초기화 되었습니다!")
+                    self.fcmManager.fetchTokensFromDatabase(bookKey: bookKey, title: "플로니", body: "\(bookName) 가계부가 초기화 되었어요.")
+                    self.postNoti(title: "플로니", body: "\(bookName) 가계부가 초기화 되었어요.", imgUrl: "icon_noti_reset")
                     AlertManager.shared.update(showAlert: true, message: "가계부가 초기화 되었습니다.", buttonType: .green)
                 case .failure(let error):
                     self.createAlert(with: error, retryRequest: {
@@ -515,8 +516,8 @@ class SettingBookViewModel : ObservableObject {
                     print("--성공--")
                     print("변경된 화폐 단위 : \(self.currency)")
                     let bookName = Keychain.getKeychainValue(forKey: .bookName) ?? ""
-                    self.fcmManager.fetchTokensFromDatabase(bookKey: self.bookKey, title: "플로니", body: "\(bookName) 가계부의 화폐가 \(self.currency)\(self.currencySymbol(currencyUnit: self.currency))로 변경되었습니다!")
-
+                    self.fcmManager.fetchTokensFromDatabase(bookKey: self.bookKey, title: "플로니", body: "\(bookName) 가계부의 화폐가 \(self.currency)로 변경되었어요.")
+                    self.postNoti(title: "플로니", body: "\(bookName) 가계부의 화폐가 \(self.currency)로 변경되었어요.", imgUrl: "icon_noti_currency")
                     DispatchQueue.main.async {
                         CurrencyManager.shared.getCurrency()
                     }
@@ -524,6 +525,7 @@ class SettingBookViewModel : ObservableObject {
                 }
             }.store(in: &cancellableSet)
     }
+    
     func currencySymbol(currencyUnit : String) -> String {
         var currentCurrency = ""
         switch currencyUnit {
@@ -533,27 +535,27 @@ class SettingBookViewModel : ObservableObject {
         case "USD":
             currentCurrency = "$"
             return currentCurrency
-           
+            
         case "EUR":
             currentCurrency = "€"
             return currentCurrency
-           
+            
         case "JPY":
             currentCurrency = "¥"
             return currentCurrency
-          
+            
         case "CNY":
             currentCurrency = "¥"
             return currentCurrency
-          
+            
         case "GBP":
             currentCurrency = "£"
             return currentCurrency
-    
+            
         default:
             currentCurrency = "원"
             return currentCurrency
-      
+            
         }
     }
     
@@ -567,14 +569,14 @@ class SettingBookViewModel : ObservableObject {
                     
                     break
                 case .failure(let error):
-                   //x self.createAlert(with: error)
+                    //x self.createAlert(with: error)
                     print("Error downloading Excel file:", error.localizedDescription)
                     self.createAlert(with: error as! NetworkError, retryRequest: {
                         self.downloadExcelFile()
                     })
                 }
             }, receiveValue: { localFileURL in
-
+                
                 print("Excel file saved to:", localFileURL)
                 self.excelURL = localFileURL
                 self.shareExcelStatus = true
@@ -623,7 +625,7 @@ class SettingBookViewModel : ObservableObject {
                         // 토큰 재발급 성공 시, 원래의 요청 재시도
                         retryRequest()
                     }
-                // 아예 틀린 토큰이므로 재로그인해서 다시 발급받아야 함.
+                    // 아예 틀린 토큰이므로 재로그인해서 다시 발급받아야 함.
                 case "U007" :
                     AuthenticationService.shared.logoutDueToTokenExpiration()
                 default:
@@ -635,4 +637,5 @@ class SettingBookViewModel : ObservableObject {
             //showAlert(message: "네트워크 오류가 발생했습니다.")
             
         }
-    }}
+    }
+}

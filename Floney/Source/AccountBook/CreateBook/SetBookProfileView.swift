@@ -41,6 +41,7 @@ struct SetBookProfileView: View {
                         .foregroundColor(.greyScale1)
                     
                     Text("사진을 설정하여 나만의 가계부를\n만들어 보세요.")
+                        .lineSpacing(4)
                         .font(.pretendardFont(.medium, size: scaler.scaleWidth(13)))
                         .foregroundColor(.greyScale6)
                     

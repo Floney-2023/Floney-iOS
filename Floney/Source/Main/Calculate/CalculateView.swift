@@ -33,7 +33,7 @@ struct CalculateView: View {
                 HStack {
                     VStack(alignment: .leading, spacing: scaler.scaleHeight(12)) {
                         Text("마지막 정산일로부터\n\(viewModel.passedDays)일 지났어요")
-                            .lineSpacing(10)
+                            .lineSpacing(6)
                             .font(.pretendardFont(.bold, size: scaler.scaleWidth(22)))
                             .foregroundColor(.greyScale1)
                         Text("복잡하고 어려운 정산, 저희가 대신 해드릴게요")
@@ -72,7 +72,7 @@ struct CalculateView: View {
                         .foregroundColor(.greyScale6)
                     Rectangle()
                       .foregroundColor(.clear)
-                      .frame(width: scaler.scaleWidth(70), height: scaler.scaleWidth(0.5))
+                      .frame(width: scaler.scaleWidth(70), height: scaler.scaleWidth(0.7))
                       .background(Color.greyScale6)
                     
                 }

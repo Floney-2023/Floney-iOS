@@ -22,6 +22,7 @@ struct FindPasswordView: View {
                             .font(.pretendardFont(.bold, size: scaler.scaleWidth(24)))
                             .foregroundColor(.greyScale1)
                         Text("비밀번호를 찾으려면\n가입한 이메일 주소를 입력하세요.")
+                            .lineSpacing(4)
                             .font(.pretendardFont(.medium, size: scaler.scaleWidth(13)))
                             .foregroundColor(.greyScale6)
                     }
