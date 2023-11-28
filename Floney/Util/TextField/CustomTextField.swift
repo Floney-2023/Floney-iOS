@@ -62,8 +62,21 @@ struct CustomTextField: UIViewRepresentable {
             textField.leftView = paddingView
             textField.leftViewMode = .always
         }
+        if isSecure {
+            
+            let button = UIButton(type: .custom)
+            button.setImage(UIImage(named: "icon_closed_eye"), for: .normal)
+            button.addTarget(context.coordinator, action: #selector(Coordinator.togglePasswordVisibility(_:)), for: .touchUpInside)
+            button.imageEdgeInsets = UIEdgeInsets(top: 0, left: -16, bottom: 0, right: 0)
+            
+            textField.rightView = button
+            textField.rightViewMode = .always
+            
+            
+        }
         return textField
     }
+    
     
     func updateUIView(_ uiView: UITextField, context: Context) {
         uiView.text = text
@@ -87,12 +100,20 @@ struct CustomTextField: UIViewRepresentable {
         init(_ parent: CustomTextField) {
             self.parent = parent
         }
-
+        
         func textFieldDidEndEditing(_ textField: UITextField) {
             parent.text = textField.text ?? ""
         }
         func textFieldDidChangeSelection(_ textField: UITextField) {
             parent.text = textField.text ?? ""
+        }
+
+        @objc func togglePasswordVisibility(_ sender: UIButton) {
+            guard let textField = sender.superview as? UITextField else { return }
+            textField.isSecureTextEntry.toggle()
+            let imageName = textField.isSecureTextEntry ? "icon_closed_eye" : "icon_open_eye"
+            sender.setImage(UIImage(named: imageName), for: .normal)
+        
         }
     }
 }

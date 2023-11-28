@@ -187,6 +187,7 @@ struct ShareBookBottomSheet: View{
                 VStack(spacing:scaler.scaleHeight(24)) {
                     HStack {
                         Text("친구들을 초대해서\n함께 가계부를 적어보세요🍀")
+                            .lineSpacing(6)
                             .foregroundColor(.greyScale1)
                             .font(.pretendardFont(.bold,size:scaler.scaleWidth(18)))
                         Spacer()
@@ -227,7 +228,7 @@ struct ShareBookBottomSheet: View{
                             .foregroundColor(.greyScale6)
                         Rectangle()
                             .foregroundColor(.clear)
-                            .frame(width: scaler.scaleWidth(55), height: scaler.scaleWidth(0.5))
+                            .frame(width: scaler.scaleWidth(55), height: scaler.scaleWidth(0.7))
                             .background(Color.greyScale6)
                     }
                     .onTapGesture {
@@ -288,7 +289,7 @@ struct SetBudgetBottomSheet: View {
                                 .foregroundColor(.greyScale6)
                             Rectangle()
                               .foregroundColor(.clear)
-                              .frame(width: scaler.scaleWidth(52), height: scaler.scaleWidth(0.5))
+                              .frame(width: scaler.scaleWidth(52), height: scaler.scaleWidth(0.7))
                               .background(Color.greyScale6)
                             
                         }
@@ -377,7 +378,7 @@ struct SetInitialAssetBottomSheet: View {
                                 .foregroundColor(.greyScale6)
                             Rectangle()
                               .foregroundColor(.clear)
-                              .frame(width: scaler.scaleWidth(52), height: scaler.scaleWidth(0.5))
+                              .frame(width: scaler.scaleWidth(52), height: scaler.scaleWidth(0.7))
                               .background(Color.greyScale6)
                         }
                         .onTapGesture {
@@ -388,7 +389,7 @@ struct SetInitialAssetBottomSheet: View {
                     .padding(.horizontal,scaler.scaleWidth(4))
                     HStack {
                         Text("현재 모아놓은 자산을 입력해 주세요.\n플로니가 앞으로의 자산 흐름을 보여드릴게요.")
-                            .lineSpacing(3)
+                            .lineSpacing(4)
                             .frame(alignment: .leading)
                             .foregroundColor(.greyScale6)
                             .font(.pretendardFont(.medium,size:scaler.scaleWidth(13)))
@@ -495,6 +496,7 @@ struct CarriedOverBottomSheet: View {
                     }
                     HStack{
                         Text("이월 설정은 지난 달에 기록된 수입에서 지출을 차감한 금액을\n다음 달로 넘기는 기능입니다.")
+                            .lineSpacing(4)
                             .font(.pretendardFont(.regular, size: scaler.scaleWidth(12)))
                             .foregroundColor(.greyScale2)
                         Spacer()
@@ -502,6 +504,7 @@ struct CarriedOverBottomSheet: View {
                     .padding(.horizontal, scaler.scaleWidth(4))
                     HStack {
                         Text("남은 금액이 마이너스 인 경우 지출로 기록되며\n플러스인 경우는 수입으로 기록됩니다.")
+                            .lineSpacing(4)
                             .font(.pretendardFont(.regular, size: scaler.scaleWidth(12)))
                             .foregroundColor(.greyScale2)
                         Spacer()
