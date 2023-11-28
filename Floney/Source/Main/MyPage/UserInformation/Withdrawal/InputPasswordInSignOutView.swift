@@ -60,6 +60,7 @@ struct InputPasswordInSignOutView: View {
                 EmptyView()
             }
         }
+        
     }
 }
 

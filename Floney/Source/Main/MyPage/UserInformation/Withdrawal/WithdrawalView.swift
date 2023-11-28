@@ -119,6 +119,9 @@ struct WithdrawalView: View {
                     .padding(.bottom, scaler.scaleHeight(38))
             }
             .padding(EdgeInsets(top:scaler.scaleHeight(30), leading:scaler.scaleWidth(20), bottom: 0, trailing:scaler.scaleWidth(20)))
+            .customNavigationBar(
+                leftView: { BackButton() }
+            )
             .edgesIgnoringSafeArea(.bottom)
             
             NavigationLink(destination:InputPasswordInSignOutView(viewModel: viewModel), isActive: $isNextToInputPassword){
@@ -133,9 +136,7 @@ struct WithdrawalView: View {
                 })
             }
         }
-        .customNavigationBar(
-            leftView: { BackButton() }
-        )
+        
         .edgesIgnoringSafeArea(.bottom)
     }
 }
