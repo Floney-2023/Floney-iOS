@@ -215,17 +215,7 @@ struct MainTabView: View {
             } // showing tab
             
             
-            // Loading view overlay
-            if loadingManager.showLoading {
-                if loadingManager.loadingType == .floneyLoading {
-                    LoadingView()
-                }
-                else if loadingManager.loadingType == .progressLoading{
-                    ProgressLoadingView()
-                } else {
-                    DimmedLoadingView()
-                }
-            }
+
             AccountBookBottomSheet(isShowing: $isShowingAccountBottomSheet, showingTabbar: $showingTabbar, isNextToCreateBook: $isNextToCreateBook, isNextToEnterCode: $isNextToEnterCode)
             CustomAlertView(message: AlertManager.shared.message, type : $alertManager.buttontType, isPresented: $alertManager.showAlert)
             

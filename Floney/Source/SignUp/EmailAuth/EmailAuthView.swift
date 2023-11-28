@@ -73,17 +73,7 @@ struct EmailAuthView: View {
                 )
             
             CustomAlertView(message: viewModel.errorMessage, type: $viewModel.buttonType, isPresented: $viewModel.showAlert)
-            // Loading view overlay
-            if loadingManager.showLoading {
-                if loadingManager.loadingType == .floneyLoading {
-                    LoadingView()
-                }
-                else if loadingManager.loadingType == .progressLoading{
-                    ProgressLoadingView()
-                } else {
-                    DimmedLoadingView()
-                }
-            }
+
         }
         .edgesIgnoringSafeArea(.bottom)
     }

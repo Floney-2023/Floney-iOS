@@ -56,17 +56,7 @@ struct FindPasswordView: View {
             
             PasswordBottomSheet(isShowing: $viewModel.isShowingBottomSheet, isShowingLogin: $viewModel.isShowingLogin)
             
-            // Loading view overlay
-            if loadingManager.showLoading {
-                if loadingManager.loadingType == .floneyLoading {
-                    LoadingView()
-                }
-                else if loadingManager.loadingType == .progressLoading{
-                    ProgressLoadingView()
-                } else {
-                    DimmedLoadingView()
-                }
-            }
+
         }
         .onAppear(perform : UIApplication.shared.hideKeyboard)
     }
