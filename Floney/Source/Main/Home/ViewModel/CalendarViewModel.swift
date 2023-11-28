@@ -106,7 +106,7 @@ class CalendarViewModel: ObservableObject {
                             }
                             
                         } else if self.result.carryOverInfo.carryOverMoney < 0 {
-                            self.totalOutcome += Double(self.result.carryOverInfo.carryOverMoney)
+                            self.totalOutcome += Double(abs(self.result.carryOverInfo.carryOverMoney))
                             let calendar = Calendar.current
                             let components = calendar.dateComponents([.year, .month], from: self.selectedDate)
                             
@@ -159,7 +159,7 @@ class CalendarViewModel: ObservableObject {
                         if self.dayLineCarryOver.carryOverMoney > 0 {
                             self.dayLinesTotalIncome += Double(self.dayLineCarryOver.carryOverMoney)
                         } else if self.dayLineCarryOver.carryOverMoney < 0 {
-                            self.dayLinesTotalOutcome += Double(self.dayLineCarryOver.carryOverMoney)
+                            self.dayLinesTotalOutcome += Double(abs(self.dayLineCarryOver.carryOverMoney))
                         }
                     }
                     
