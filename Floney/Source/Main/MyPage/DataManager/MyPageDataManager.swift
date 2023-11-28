@@ -15,6 +15,7 @@ protocol MyPageProtocol {
     func changeNickname(nickname: String) -> AnyPublisher<Void, NetworkError>
     func changePassword(password: String) -> AnyPublisher<Void, NetworkError>
     func logout() -> AnyPublisher<Void, NetworkError>
+    func checkPassword(_ password: String) -> AnyPublisher<Void, NetworkError>
     func signout(_ parameters : SignOutRequest) -> AnyPublisher<Void, NetworkError>
 
 }
@@ -27,6 +28,45 @@ class MyPage {
 }
 
 extension MyPage: MyPageProtocol {
+    func checkPassword(_ password: String) -> AnyPublisher<Void, NetworkError> {
+        let url = "\(Constant.BASE_URL)/users/password"
+        
+        let token = Keychain.getKeychainValue(forKey: .accessToken) ?? ""
+        let parameters = CheckPasswordRequest(password: password)
+        return AF.request(url,
+                          method: .post,
+                          parameters: parameters,
+                          encoder: JSONParameterEncoder(),
+                          headers: ["Authorization":"Bearer \(token)"])
+        .validate()
+        .publishData()
+        .tryMap { result in
+            // Check the status code
+            if let statusCode = result.response?.statusCode {
+                print("Status Code: \(statusCode)")
+                if statusCode == 200 {
+                    return // Success, return
+                } else {
+                    // Handle error based on status code
+                    let backendError = result.data.flatMap { try? JSONDecoder().decode(BackendError.self, from: $0)}
+                    
+                    
+                    if let backendError = backendError {
+                        throw NetworkError(initialError: result.error!, backendError: backendError)
+                    } else {
+                        throw NetworkError(initialError: result.error!, backendError: nil)
+                    }
+                }
+            } else {
+                throw NetworkError(initialError: result.error!, backendError: nil)
+            }
+        }
+        .mapError { error in
+            return error as! NetworkError
+        }
+        .eraseToAnyPublisher()
+    }
+    
     
     func getMyPage() -> AnyPublisher<DataResponse<MyPageResponse, NetworkError>, Never> {
         let url = "\(Constant.BASE_URL)/users/mypage"

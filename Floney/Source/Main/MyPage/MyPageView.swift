@@ -25,6 +25,8 @@ struct MyPageView: View {
     @State var isNextToSubscription = false
     @State var isNextToServiceTerm = false
     
+    var reviewURL = "https://apps.apple.com/app/6462989500?action=write-review"
+    
     //@State var productPrice = IAPManager.shared.productList[0].price
     /*
     private var priceFormatter : NumberFormatter {
@@ -177,20 +179,27 @@ struct MyPageView: View {
                                     Text("리뷰쓰기")
                                         .font(.pretendardFont(.regular, size: scaler.scaleWidth(12)))
                                         .foregroundColor(.greyScale3)
+                                        
                                 }
                                 .padding(scaler.scaleWidth(20))
                                 .frame(maxWidth: .infinity)
                                 .frame(height: scaler.scaleHeight(150))
                                 .background(Color.greyScale12)
                                 .cornerRadius(12)
+                                .onTapGesture {
+                                    if let url = URL(string: reviewURL),
+                                           UIApplication.shared.canOpenURL(url) {
+                                            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                                        }
+                                }
                                 //NavigationLink(destination: SubscriptionView(mypageViewModel:viewModel,isActive : $isNextToSubscription,showingTabbar: $showingTabbar), isActive: $isNextToSubscription) {
                                     VStack {
-                                        /*
+                                        
                                         HStack {
-                                            VStack(alignment:.leading) {
-                                                Text("월 \(formattedPrice!)으로")
-                                                Text("더 많은 혜택을")
-                                                Text("누려보세요!")
+                                            VStack(alignment:.leading, spacing: 4) {
+                                                Text("플로니는 여러분의")
+                                                Text("다양한 의견을")
+                                                Text("기다리고 있어요")
                                             }
                                             .font(.pretendardFont(.bold, size: scaler.scaleWidth(14)))
                                             .foregroundColor(.white)
@@ -198,9 +207,9 @@ struct MyPageView: View {
                                         }
                                         
                                         Spacer()
-                                        Text("플랜보기")
+                                        Text("제안하기")
                                             .font(.pretendardFont(.medium, size: scaler.scaleWidth(12)))
-                                            .foregroundColor(.background3)*/
+                                            .foregroundColor(.background3)
                                         
                                     }
                                     .padding(scaler.scaleWidth(20))
@@ -218,8 +227,8 @@ struct MyPageView: View {
                                     )
                                     .cornerRadius(12)
                                     .onTapGesture {
-                                        isNextToSubscription = true
-                                        showingTabbar = false
+                                        //isNextToSubscription = true
+                                        //showingTabbar = false
                                     }
                                     
                                 //}
@@ -353,6 +362,12 @@ struct MyPageView: View {
                                 Image("icon_setting_book_forward")
                             }
                             .frame(height: scaler.scaleHeight(56))
+                            .onTapGesture {
+                                if let url = URL(string: reviewURL),
+                                       UIApplication.shared.canOpenURL(url) {
+                                        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                                    }
+                            }
                             NavigationLink(destination: WebView(urlString: "https://cafe.naver.com/floney").customNavigationBar(
                                 leftView: { BackButtonBlack() },
                                 centerView: { Text("개인정보 처리방침")
@@ -368,7 +383,7 @@ struct MyPageView: View {
                                 }
                                 .frame(height: scaler.scaleHeight(56))
                             }
-                            NavigationLink(destination: WebView(urlString: "https://cafe.naver.com/floney").customNavigationBar(
+                            NavigationLink(destination: WebView(urlString: "https://cafe.naver.com/floney/2").customNavigationBar(
                                 leftView: { BackButtonBlack() },
                                 centerView: { Text("이용 약관")
                                         .font(.pretendardFont(.semiBold, size:scaler.scaleWidth(16)))

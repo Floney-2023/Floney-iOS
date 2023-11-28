@@ -39,7 +39,7 @@ struct InputPasswordInSignOutView: View {
                     .withNextButtonFormmating(.primary1)
                     .onTapGesture {
                         // if viewModel.isValidSignout() {
-                        signoutAlert = true
+                        viewModel.checkPassword(password: password)
                         
                         // }
                     }
@@ -51,8 +51,8 @@ struct InputPasswordInSignOutView: View {
             )
             .edgesIgnoringSafeArea(.bottom)
             
-            if signoutAlert {
-                SignoutAlertView(isPresented: $signoutAlert, title: $title, message: $message, onOKAction: {
+            if viewModel.showSignoutAlert {
+                SignoutAlertView(isPresented: $viewModel.showSignoutAlert, title: $title, message: $message, onOKAction: {
                     viewModel.signout()
                 })
             }

@@ -132,7 +132,7 @@ class CalculateViewModel : ObservableObject {
                     LoadingManager.shared.update(showLoading: false, loadingType: .floneyLoading)
                 } else {
                     print("--정산 요청 성공--")
-                    self.fcmManager.fetchTokensFromDatabase(bookKey: bookKey, title: "플로니", body: "\(bookName)의 가계부를 정산해보세요!")
+                    self.fcmManager.fetchTokensFromDatabase(bookKey: bookKey, title: "플로니", body: "\(bookName)의 가계부를 정산해보세요!",completion: {})
                     self.postNoti(title: "플로니", body: "\(bookName)의 가계부를 정산해보세요!", imgUrl: "noti_settlement")
                     self.settlementResult = dataResponse.value!
                     print(self.settlementResult)

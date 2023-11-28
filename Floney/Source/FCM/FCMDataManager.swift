@@ -32,12 +32,12 @@ class FCMDataManager: ObservableObject {
     }*/
     
     // fetchTokens : 해당 가계부의 멤버의 토큰들 가져오기
-    func fetchTokensFromDatabase(bookKey : String, title : String, body : String){
+    func fetchTokensFromDatabase(bookKey : String, title : String, body : String, completion: @escaping () -> Void){
         fetchAccessToken()
             .sink { dataResponse in
                 if dataResponse.error != nil {
                     self.createAlert(with: dataResponse.error!, retryRequest: {
-                        self.fetchTokensFromDatabase(bookKey: bookKey, title: title, body: body)
+                        self.fetchTokensFromDatabase(bookKey: bookKey, title: title, body: body, completion: completion)
                     })
                     print(dataResponse.error)
                     
@@ -66,6 +66,7 @@ class FCMDataManager: ObservableObject {
                             }
                         }
                     }
+                    completion()
                 }
             }.store(in: &cancellableSet)
     }

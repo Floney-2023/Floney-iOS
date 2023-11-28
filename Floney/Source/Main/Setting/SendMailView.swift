@@ -138,7 +138,7 @@ struct MailView: UIViewControllerRepresentable {
         let vc = MFMailComposeViewController()
         vc.mailComposeDelegate = context.coordinator
         // 받는 사람의 이메일 주소 설정
-        vc.setToRecipients(["floney.dev@gmail.com"])
+        vc.setToRecipients(["floney.team@gmail.com"])
 
         // 기본 내용 설정
         let emailBody = "안녕하세요, 궁금한 점을 문의드립니다."

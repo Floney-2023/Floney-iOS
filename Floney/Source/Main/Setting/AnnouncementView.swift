@@ -18,8 +18,7 @@ struct AnnouncementView: View {
     let scaler = Scaler.shared
     @Binding var showingTabbar : Bool
     @State var list : [Announcement] = [
-        Announcement(title: "플로니가 출시되었어요🍀", date: "2023-10-02", content: "안녕하세요!\n공유가계부 플로니가 출시되었습니다.\n사용 중 궁금하거나 불편한 점이 있으시면 문의하기를 통해 메일로 물어봐 주시면 언제든지 친절하게 답변해 드립니다.\n\n많은 이용과 관심 부탁드립니다.\n감사합니다.", showingDetail: false),
-        Announcement(title: "플로니가 출시되었어요🍀", date: "2023-10-02", content: "안녕하세요!\n공유가계부 플로니가 출시되었습니다.\n사용 중 궁금하거나 불편한 점이 있으시면 문의하기를 통해 메일로 물어봐 주시면 언제든지 친절하게 답변해 드립니다.\n\n많은 이용과 관심 부탁드립니다.\n감사합니다.", showingDetail: false)
+        Announcement(title: "플로니가 출시되었어요🍀", date: "2023-11-30", content: "안녕하세요!\n공유가계부 플로니가 출시되었습니다.\n사용 중 궁금하거나 불편한 점이 있으시면 문의하기를 통해 메일로 물어봐 주시면 언제든지 친절하게 답변해 드립니다.\n\n많은 이용과 관심 부탁드립니다.\n감사합니다.", showingDetail: false)
     ]
     var body: some View {
         VStack(spacing:0) {

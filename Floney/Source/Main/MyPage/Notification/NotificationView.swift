@@ -73,7 +73,7 @@ struct NotificationView: View {
                             
                         } else {
                             ScrollView {
-                                ForEach(bookNoti, id:\.self) { noti in
+                                ForEach(bookNoti.reversed(), id:\.self) { noti in
                                     HStack {
                                         Image(noti.imgUrl)
                                             .padding(.leading, scaler.scaleWidth(20))

@@ -15,6 +15,9 @@ struct ServiceAgreementView: View {
     @StateObject private var viewModel = ServiceAgreementViewModel()
     @StateObject var signupViewModel = SignUpViewModel()
     @State var isActive = false
+    @State private var showWebView = false
+    @State private var webViewURL = ""
+    @State private var navigationTitle = ""
     var body: some View {
         ZStack {
             VStack(spacing: scaler.scaleHeight(32)) {
@@ -37,30 +40,26 @@ struct ServiceAgreementView: View {
                     Divider()
                         .foregroundColor(.greyScale10)
                         .padding(0)
-                    NavigationLink(destination: WebView(urlString: "https://cafe.naver.com/floney").customNavigationBar(
-                        leftView: { BackButtonBlack() },
-                        centerView: { Text("서비스 이용 약관")
-                                .font(.pretendardFont(.semiBold, size:scaler.scaleWidth(16)))
-                            .foregroundColor(.greyScale1)}
-                    )) {
-                        ServiceAgreementButton(isAgreed: $viewModel.isTerm1Agreed, title: "서비스 이용 약관 (필수)")
-                    }
-                    NavigationLink(destination: WebView(urlString: "https://cafe.naver.com/floney").customNavigationBar(
-                        leftView: { BackButtonBlack() },
-                        centerView: { Text("개인정보 수집 및 이용 동의")
-                                .font(.pretendardFont(.semiBold, size:scaler.scaleWidth(16)))
-                            .foregroundColor(.greyScale1)}
-                    )) {
-                        ServiceAgreementButton(isAgreed: $viewModel.isTerm2Agreed, title: "개인정보 수집 및 이용 동의 (필수)")
-                    }
-                    NavigationLink(destination: WebView(urlString: "https://cafe.naver.com/floney").customNavigationBar(
-                        leftView: { BackButtonBlack() },
-                        centerView: { Text("마케팅 정보 수신 동의")
-                                .font(.pretendardFont(.semiBold, size:scaler.scaleWidth(16)))
-                            .foregroundColor(.greyScale1)}
-                    )) {
-                        ServiceAgreementButton(isAgreed: $viewModel.isMarketingAgreed, title: "마케팅 정보 수신 동의 (선택)")
-                    }
+                    
+                    ServiceAgreementButton(isAgreed: $viewModel.isTerm1Agreed, forwardAction: {
+                        self.webViewURL = "https://cafe.naver.com/floney/2"
+                        self.showWebView = true
+                        self.navigationTitle = "서비스 이용 약관"
+                    }, title: "서비스 이용 약관 (필수)")
+                    
+                    ServiceAgreementButton(isAgreed: $viewModel.isTerm2Agreed, forwardAction: {
+                        self.webViewURL = "https://cafe.naver.com/floney"
+                        self.showWebView = true
+                        self.navigationTitle = "개인정보 수집 및 이용 동의"
+                    }, title: "개인정보 수집 및 이용 동의 (필수)")
+                    
+                    
+                    ServiceAgreementButton(isAgreed: $viewModel.isMarketingAgreed, forwardAction: {
+                        self.webViewURL = "https://cafe.naver.com/floney"
+                        self.showWebView = true
+                        self.navigationTitle = "마케팅 정보 수신 동의"
+                    }, title: "마케팅 정보 수신 동의 (선택)")
+                    
                     ServiceAgreementButton(isAgreed: $viewModel.isTerm3Agreed, forwardButton: false, title: "만 14세 이상 확인 (필수)")
                 }
 
@@ -110,11 +109,23 @@ struct ServiceAgreementView: View {
             )
             
             CustomAlertView(message: ErrorMessage.signup01.value, type: $viewModel.buttonType, isPresented: $viewModel.showAlert)
+            
+            
+            NavigationLink(destination : WebView(urlString: webViewURL)
+                .customNavigationBar(
+                    leftView: { BackButtonBlack() },
+                    centerView: { Text("\(navigationTitle)")
+                            .font(.pretendardFont(.semiBold, size:scaler.scaleWidth(16)))
+                        .foregroundColor(.greyScale1)}
+                ), isActive: $showWebView) {
+                    EmptyView()
+                }
+            
         } //ZStack
         .edgesIgnoringSafeArea(.bottom)
     }
 }
-
+/*
 struct ServiceAgreementButton: View {
     let scaler = Scaler.shared
     @Binding var isAgreed: Bool
@@ -141,6 +152,46 @@ struct ServiceAgreementButton: View {
                 Spacer()
                 if forwardButton {
                     Image("icon_setting_book_forward")
+                }
+            }
+        }
+        .frame(height: scaler.scaleHeight(50))
+        .frame(maxWidth: .infinity)
+    }
+}*/
+
+struct ServiceAgreementButton: View {
+    let scaler = Scaler.shared
+    @Binding var isAgreed: Bool
+    var checkboxType: String = "term"
+    var forwardButton: Bool = true
+    var forwardAction: (() -> Void)?
+
+    let title: String
+
+    var body: some View {
+        HStack(spacing: scaler.scaleWidth(14)) {
+            Button(action: {
+                isAgreed.toggle()
+            }) {
+                HStack {
+                    Image(isAgreed ? "check_primary" : "checkbox_grey")
+                        .frame(width: scaler.scaleWidth(24), height: scaler.scaleHeight(24))
+
+                    Text(title)
+                        .font(.pretendardFont(checkboxType == "all" ? .bold : .regular, size: scaler.scaleWidth(14)))
+                        .foregroundColor(.greyScale2)
+                }
+            }
+
+            Spacer()
+
+            if forwardButton {
+                Button(action: {
+                    forwardAction?()
+                }) {
+                    Image("icon_setting_book_forward")
+                        .frame(width: scaler.scaleWidth(24), height: scaler.scaleHeight(24))
                 }
             }
         }

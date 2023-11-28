@@ -374,20 +374,30 @@ class SettingBookViewModel : ObservableObject {
             }
             .store(in: &cancellableSet)
     }
-    
     func exitBook() {
         bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
         let request = BookInfoRequest(bookKey: bookKey)
+        let dispatchGroup = DispatchGroup()
+
         dataManager.exitBook(parameters: request)
             .sink { completion in
                 switch completion {
                 case .finished:
                     print("Exit Book successfully changed.")
                     AlertManager.shared.update(showAlert: true, message: "가계부에서 나갔습니다.", buttonType: .green)
-                    DispatchQueue.main.async {
-                        let fcmManager = FCMDataManager()
-                        fcmManager.fetchTokensFromDatabase(bookKey: self.bookKey, title: "플로니", body: "\(Keychain.getKeychainValue(forKey: .userNickname) ?? "")님이 \(self.bookName)의 가계부를 나갔어요.")
-                        self.postNoti(title: "플로니", body: "\(Keychain.getKeychainValue(forKey: .userNickname) ?? "")님이 \(self.bookName)의 가계부를 나갔어요.", imgUrl: "icon_exit")
+
+                    dispatchGroup.enter()
+                    let fcmManager = FCMDataManager()
+                    fcmManager.fetchTokensFromDatabase(bookKey: self.bookKey, title: "플로니", body: "\(Keychain.getKeychainValue(forKey: .userNickname) ?? "")님이 \(self.bookName)의 가계부를 나갔어요.") {
+                        dispatchGroup.leave()
+                    }
+
+                    dispatchGroup.enter()
+                    self.postNoti(title: "플로니", body: "\(Keychain.getKeychainValue(forKey: .userNickname) ?? "")님이 \(self.bookName)의 가계부를 나갔어요.", imgUrl: "icon_exit") {
+                        dispatchGroup.leave()
+                    }
+
+                    dispatchGroup.notify(queue: .main) {
                         Keychain.setKeychain("", forKey: .bookKey)
                         BookExistenceViewModel.shared.bookExistence = false
                         BookExistenceViewModel.shared.getBookExistence()
@@ -403,7 +413,8 @@ class SettingBookViewModel : ObservableObject {
             }
             .store(in: &cancellableSet)
     }
-    func postNoti(title :String, body: String, imgUrl : String) {
+
+    func postNoti(title :String, body: String, imgUrl : String,completion: @escaping () -> Void) {
         let currentDate = Date()
         let formatter = ISO8601DateFormatter()
         
@@ -428,6 +439,7 @@ class SettingBookViewModel : ObservableObject {
                 
             }
         }
+        completion()
     }
     
     func deleteBook() {
@@ -464,9 +476,10 @@ class SettingBookViewModel : ObservableObject {
                 switch completion {
                 case .finished:
                     print("Reset Book successfully changed.")
-                    self.fcmManager.fetchTokensFromDatabase(bookKey: bookKey, title: "플로니", body: "\(bookName) 가계부가 초기화 되었어요.")
-                    self.postNoti(title: "플로니", body: "\(bookName) 가계부가 초기화 되었어요.", imgUrl: "icon_noti_reset")
+                    self.fcmManager.fetchTokensFromDatabase(bookKey: bookKey, title: "플로니", body: "\(bookName) 가계부가 초기화 되었어요.", completion: {})
+                    self.postNoti(title: "플로니", body: "\(bookName) 가계부가 초기화 되었어요.", imgUrl: "icon_noti_reset", completion: {})
                     AlertManager.shared.update(showAlert: true, message: "가계부가 초기화 되었습니다.", buttonType: .green)
+                    
                 case .failure(let error):
                     self.createAlert(with: error, retryRequest: {
                         self.resetBook()
@@ -514,8 +527,8 @@ class SettingBookViewModel : ObservableObject {
                     print("--성공--")
                     print("변경된 화폐 단위 : \(self.currency)")
                     let bookName = Keychain.getKeychainValue(forKey: .bookName) ?? ""
-                    self.fcmManager.fetchTokensFromDatabase(bookKey: self.bookKey, title: "플로니", body: "\(bookName) 가계부의 화폐가 \(self.currency)로 변경되었어요.")
-                    self.postNoti(title: "플로니", body: "\(bookName) 가계부의 화폐가 \(self.currency)로 변경되었어요.", imgUrl: "icon_noti_currency")
+                    self.fcmManager.fetchTokensFromDatabase(bookKey: self.bookKey, title: "플로니", body: "\(bookName) 가계부의 화폐가 \(self.currency)로 변경되었어요.", completion: {})
+                    self.postNoti(title: "플로니", body: "\(bookName) 가계부의 화폐가 \(self.currency)로 변경되었어요.", imgUrl: "icon_noti_currency", completion: {})
                     DispatchQueue.main.async {
                         CurrencyManager.shared.getCurrency()
                     }
@@ -611,7 +624,7 @@ class SettingBookViewModel : ObservableObject {
                 //showAlert(message: "알 수 없는 서버 에러가 발생했습니다.")
                 return
             }
-            if error.backendError?.code != "U006" {
+            if error.backendError?.code != "U006" && error.backendError?.code != "B001"{
                 AlertManager.shared.handleError(serverError)
             }
             // 에러코드에 따른 추가 로직

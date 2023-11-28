@@ -55,9 +55,9 @@ struct CreateBookView: View {
                         .withNextButtonFormmating(.primary1)
                         .onTapGesture {
                             DispatchQueue.main.async {
-                                if createBookType == .add {
+                                //if createBookType == .add {
                                     BookExistenceViewModel.shared.bookExistence = false
-                                }
+                                //}
                                 BookExistenceViewModel.shared.getBookExistence()
                             }
                         }

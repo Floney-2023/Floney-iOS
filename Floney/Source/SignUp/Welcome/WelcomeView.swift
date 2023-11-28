@@ -42,8 +42,9 @@ struct WelcomeView: View {
             .padding(EdgeInsets(top:scaler.scaleHeight(78), leading: scaler.scaleWidth(24), bottom: scaler.scaleHeight(38), trailing: scaler.scaleWidth(24)))
             .navigationBarBackButtonHidden(true)
             .edgesIgnoringSafeArea(.bottom)
-            .navigationViewStyle(.stack)
+            
         }
+        .navigationViewStyle(.stack)
     }
 }
 

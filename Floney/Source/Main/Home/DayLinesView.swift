@@ -295,7 +295,7 @@ struct DayLinesDetailView : View {
                                                 toggleType : selectedToggleType, // 지출, 수입, 이체
                                                 selectedOptions : selectedToggleTypeIndex,
                                                 date : viewModel.selectedDateStr,
-                                                money: String(line.money),
+                                                money: String(line.money.formattedString),
                                                 assetType : line.category[0],
                                                 category: line.category[1],
                                                 content : line.content,

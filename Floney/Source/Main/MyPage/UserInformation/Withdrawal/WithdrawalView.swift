@@ -33,6 +33,10 @@ enum SignOutType : String, CaseIterable {
 
 struct WithdrawalView: View {
     let scaler = Scaler.shared
+    @State  var provider : String = Keychain.getKeychainValue(forKey: .provider) ?? ""
+    @State var signoutAlert = false
+    @State var title = "탈퇴 전에 꼭 확인해 주세요"
+    @State var message = "-가계부 방장일 경우 팀원에게\n방장이 자동으로 위임되며 가계부를 나가게 됩니다.\n\n-가계부 팀원일 경우 즉시 가계부를 나가게 됩니다.\n\n-모든 사용자는 회원탈퇴 시 모든 가계부 및\n데이터, 개인정보가 즉시 파기됩니다.\n\n그래도 탈퇴하시겠습니까?"
     @StateObject var viewModel = MyPageViewModel()
     @State var isNextToInputPassword = false
     
@@ -105,17 +109,28 @@ struct WithdrawalView: View {
                     .onTapGesture {
                         if viewModel.isValidSignout() {
                            // signoutAlert = true
-                            isNextToInputPassword = true
+                            if provider == "EMAIL" {
+                                isNextToInputPassword = true
+                            } else {
+                                signoutAlert = true
+                            }
                         }
                     }
                     .padding(.bottom, scaler.scaleHeight(38))
             }
             .padding(EdgeInsets(top:scaler.scaleHeight(30), leading:scaler.scaleWidth(20), bottom: 0, trailing:scaler.scaleWidth(20)))
-
             .edgesIgnoringSafeArea(.bottom)
             
             NavigationLink(destination:InputPasswordInSignOutView(viewModel: viewModel), isActive: $isNextToInputPassword){
                 EmptyView()
+            }
+            NavigationLink(destination: SuccessSignoutView(),isActive: $viewModel.isNextToSuccessSignout){
+                EmptyView()
+            }
+            if signoutAlert {
+                SignoutAlertView(isPresented: $signoutAlert, title: $title, message: $message, onOKAction: {
+                    viewModel.signout()
+                })
             }
         }
         .customNavigationBar(

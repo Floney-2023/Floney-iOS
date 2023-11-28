@@ -72,6 +72,7 @@ extension CalendarService: CalendarProtocol {
     func getBookInfo(_ parameters:BookInfoRequest) -> AnyPublisher<DataResponse<BookInfoResponse, NetworkError>, Never> {
     
         let bookKey = parameters.bookKey
+   
         let url = "\(Constant.BASE_URL)/books/info?bookKey=\(bookKey)"
         print(url)
         let token = Keychain.getKeychainValue(forKey: .accessToken) ?? ""

@@ -8,8 +8,9 @@
 import SwiftUI
 
 struct SettingNotiView: View {
+    @StateObject var viewModel = SettingViewModel()
     let scaler = Scaler.shared
-    @State var marketing = false
+
     var body: some View {
         VStack(spacing:0) {
             HStack {
@@ -17,11 +18,9 @@ struct SettingNotiView: View {
                     .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
                     .foregroundColor(.greyScale2)
                 Spacer()
-                Toggle(isOn : $marketing) {  
+                Toggle(isOn : $viewModel.marketingAgree) {
                 }
                 .toggleStyle(SwitchToggleStyle(tint: Color.primary5))
-
-                
             }
             .frame(height: scaler.scaleHeight(54))
         }
@@ -34,6 +33,12 @@ struct SettingNotiView: View {
                     .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(16)))
                 .foregroundColor(.greyScale1) }
         )
+        .onAppear {
+            viewModel.getMarketing()
+        }
+        .onChange(of : viewModel.marketingAgree) { newValue in
+            viewModel.postMarketing()   
+        }
 
     }
 }

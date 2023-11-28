@@ -61,6 +61,7 @@ final class MyPageViewModel: ObservableObject {
             }
         }
     }
+    @Published var showSignoutAlert = false
     @Published var isNextToSuccessSignout = false
     
     private var cancellableSet: Set<AnyCancellable> = []
@@ -312,6 +313,27 @@ final class MyPageViewModel: ObservableObject {
                 }
                 .store(in: &cancellableSet)
         }
+    }
+    func checkPassword(password : String) {
+        print("비밀번호 체크 시도")
+        dataManager.checkPassword(password)
+            .sink { completion in
+                switch completion {
+                case .finished:
+                    print("비밀번호 검사 성공")
+                    print("signout success.")
+                    self.showSignoutAlert = true
+                case .failure(let error):
+                    self.createAlert(with: error, retryRequest: {
+                        self.checkPassword(password: password)
+                    })
+                    print("비밀번호 검사 실패")
+                }
+            } receiveValue: { data in
+                // TODO: Handle the received data if necessary.
+            }
+            .store(in: &cancellableSet)
+        
     }
     // 회원탈퇴 검증
     func isValidSignout() -> Bool {

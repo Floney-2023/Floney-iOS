@@ -36,12 +36,31 @@ final class NotiViewModel: ObservableObject {
                     self.myBooks.sort { $0.name < $1.name }
                     print(self.myBooks)
                     self.bookNotiList = []
+                    // 모든 책에 대한 알림을 가져오고, 가져온 후에 bookNotiList 정렬
+                    let dispatchGroup = DispatchGroup()
+                    
                     for book in self.myBooks {
-                        self.getNoti(bookKey: book.bookKey, bookName: book.name)
+                        dispatchGroup.enter()
+                        self.getNoti(bookKey: book.bookKey, bookName: book.name) {
+                            dispatchGroup.leave()
+                        }
+                    }
+                    
+                    dispatchGroup.notify(queue: .main) {
+                        self.sortBookNotiListByMyBooksOrder()
                     }
                     
                 }
             }.store(in: &cancellableSet)
+    }
+    func sortBookNotiListByMyBooksOrder() {
+        self.bookNotiList.sort { (first, second) -> Bool in
+            guard let firstIndex = self.myBooks.firstIndex(where: { $0.bookKey == first.bookKey }),
+                  let secondIndex = self.myBooks.firstIndex(where: { $0.bookKey == second.bookKey }) else {
+                return false
+            }
+            return firstIndex < secondIndex
+        }
     }
     
     func postNoti(title :String, body: String, imgUrl : String, userEmail : String, date : String) {
@@ -64,16 +83,17 @@ final class NotiViewModel: ObservableObject {
             }
             .store(in: &cancellableSet)
     }
-    func getNoti(bookKey : String, bookName: String) {
+    func getNoti(bookKey : String, bookName: String, completion: @escaping () -> Void) {
         dataManager.getNoti(bookKey: bookKey)
             .sink { (dataResponse) in
                 
                 if dataResponse.error != nil {
                     self.createAlert(with: dataResponse.error!, retryRequest: {
-                        self.getNoti(bookKey: bookKey, bookName: bookName)
+                        self.getNoti(bookKey: bookKey, bookName: bookName,completion: completion)
                     })
                     print(dataResponse.error)
                 } else {
+                    
                     if let notiList = dataResponse.value {
                         let updatedNotiList = notiList.map { noti -> NotiResponse in
                             var modifiedNoti = noti
@@ -84,12 +104,15 @@ final class NotiViewModel: ObservableObject {
                         self.bookNotiList.append(
                             BookNoti(bookKey: bookKey, bookName: bookName, notiList: updatedNotiList)
                         )
-                        
+                    
                         print(self.bookNotiList)
                     }
+                    completion()
+      
                 }
             }.store(in: &cancellableSet)
     }
+
     func convertUTCDateToLocalDate(utcDateStr: String) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss" // UTC 날짜 형식
