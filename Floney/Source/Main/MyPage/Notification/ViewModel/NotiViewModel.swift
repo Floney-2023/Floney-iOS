@@ -22,7 +22,6 @@ final class NotiViewModel: ObservableObject {
     init( dataManager: NotiProtocol = NotiService.shared) {
         self.dataManager = dataManager
     }
-    
     func getMyPage() {
         dataManager.getMyPage()
             .sink { (dataResponse) in
@@ -34,11 +33,13 @@ final class NotiViewModel: ObservableObject {
                 } else {
                     self.result = dataResponse.value!
                     self.myBooks = self.result.myBooks!
+                    self.myBooks.sort { $0.name < $1.name }
+                    print(self.myBooks)
                     self.bookNotiList = []
                     for book in self.myBooks {
                         self.getNoti(bookKey: book.bookKey, bookName: book.name)
                     }
-                    print("get my page in : \(self.bookNotiList)")
+                    
                 }
             }.store(in: &cancellableSet)
     }
@@ -83,6 +84,7 @@ final class NotiViewModel: ObservableObject {
                         self.bookNotiList.append(
                             BookNoti(bookKey: bookKey, bookName: bookName, notiList: updatedNotiList)
                         )
+                        
                         print(self.bookNotiList)
                     }
                 }

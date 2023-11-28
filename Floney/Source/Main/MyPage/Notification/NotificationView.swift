@@ -20,14 +20,14 @@ struct NotificationView: View {
             HStack(spacing:0) {
                // if !viewModel.bookNotiList.isEmpty {
                 
-                ForEach(Array(viewModel.bookNotiList.enumerated()), id: \.element) { index, book in
+                ForEach(Array(viewModel.myBooks.enumerated()), id: \.element) { index, book in
                         Button(action: {
                             withAnimation {
                                 selectedTab = index
                             }
                         }) {
                             VStack {
-                                Text(viewModel.bookNotiList.isEmpty ? "가계부" : "\(book.bookName)")
+                                Text(viewModel.bookNotiList.isEmpty ? "가계부" : "\(book.name)")
                                 Rectangle()
                                     .fill(selectedTab == index ? Color.primary1 : Color.background2)
                                     .frame(height:scaler.scaleHeight(4))

@@ -379,8 +379,7 @@ class SettingBookViewModel : ObservableObject {
         bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
         let request = BookInfoRequest(bookKey: bookKey)
         dataManager.exitBook(parameters: request)
-            .sink { [weak self] completion in
-                guard let self = self else {return}
+            .sink { completion in
                 switch completion {
                 case .finished:
                     print("Exit Book successfully changed.")
@@ -435,8 +434,7 @@ class SettingBookViewModel : ObservableObject {
         bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
         let request = BookInfoRequest(bookKey: bookKey)
         dataManager.deleteBook(parameters: request)
-            .sink { [weak self] completion in
-                guard let self = self else {return}
+            .sink { completion in
                 switch completion {
                 case .finished:
                     print("delete Book successfully changed.")

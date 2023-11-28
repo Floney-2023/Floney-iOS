@@ -89,7 +89,7 @@ struct UserInformationView: View {
                             .foregroundColor(.greyScale6)
                         Rectangle()
                           .foregroundColor(.clear)
-                          .frame(width: scaler.scaleWidth(42), height: scaler.scaleWidth(0.7))
+                          .frame(width: scaler.scaleWidth(42), height: scaler.scaleWidth(1))
                           .background(Color.greyScale6)
                     }
                     Spacer()
