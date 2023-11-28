@@ -23,3 +23,21 @@ class AlertManager: ObservableObject {
         self.update(showAlert: true, message: error.errorMessage, buttonType: .red)
     }
 }
+
+class BlackAlertManager: ObservableObject {
+    var tokenViewModel = TokenReissueViewModel()
+    static let shared = BlackAlertManager()  // Singleton instance
+    @Published var showAlert = false
+    @Published var title = ""
+    @Published var message = ""
+
+    func update(showAlert: Bool, title: String, message: String) {
+        self.showAlert = showAlert
+        self.title = title
+        self.message = message
+        
+    }
+    func handleError(title : String, message : String) {
+        self.update(showAlert: true, title : title, message: message)
+    }
+}

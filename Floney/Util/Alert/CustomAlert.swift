@@ -134,6 +134,8 @@ struct CustomAlertView: View {
     }
 }
 
+
+
 struct CustomAlertView_Previews: PreviewProvider {
     static var previews: some View {
         CustomAlertView(message:"error message", type: .constant(.green), isPresented: .constant(true))

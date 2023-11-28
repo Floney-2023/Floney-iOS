@@ -289,7 +289,7 @@ struct SetBudgetBottomSheet: View {
                                 .foregroundColor(.greyScale6)
                             Rectangle()
                               .foregroundColor(.clear)
-                              .frame(width: scaler.scaleWidth(52), height: scaler.scaleWidth(0.7))
+                              .frame(width: scaler.scaleWidth(52), height: scaler.scaleWidth(1))
                               .background(Color.greyScale6)
                             
                         }
@@ -378,7 +378,7 @@ struct SetInitialAssetBottomSheet: View {
                                 .foregroundColor(.greyScale6)
                             Rectangle()
                               .foregroundColor(.clear)
-                              .frame(width: scaler.scaleWidth(52), height: scaler.scaleWidth(0.7))
+                              .frame(width: scaler.scaleWidth(52), height: scaler.scaleWidth(1))
                               .background(Color.greyScale6)
                         }
                         .onTapGesture {
@@ -974,7 +974,7 @@ struct DayLinesBottomSheet: View {
                                                         toggleType : selectedToggleType, // 지출, 수입, 이체
                                                         selectedOptions : selectedToggleTypeIndex,
                                                         date : viewModel.selectedDateStr,
-                                                        money: String(line.money),
+                                                        money: String(line.money.formattedString),
                                                         assetType : line.category[0],
                                                         category: line.category[1],
                                                         content : line.content,

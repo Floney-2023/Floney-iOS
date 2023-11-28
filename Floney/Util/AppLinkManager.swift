@@ -25,6 +25,8 @@ class AppLinkManager: ObservableObject {
     @Published var bookKey : String?
     @Published var settlementId : Int?
     
+    var dataManager: CalculateProtocol = CalculateService.shared
+    
     func generateDeepLink(inviteCode: String) -> String {
         // 대시보드에서 Onelink 생성하면 주는 Short Link이다.
         // 예시로 써놨으며, 이 링크 뒤에 OG 태그를 파라미터로 붙이면 된다.
@@ -52,18 +54,31 @@ class AppLinkManager: ObservableObject {
                 if queryItem.name == "bookKey" {
                     print("bookKey: \(queryItem.value ?? "")")
                     self.bookKey = queryItem.value
-                    Keychain.setKeychain(self.bookKey!, forKey: .bookKey)
                 }
-                
                 if queryItem.name == "settlementId" {
                     print("settlementId: \(queryItem.value ?? "")")
                     self.settlementId = Int(queryItem.value!)
+                    if let settlementId = settlementId {
+                        dataManager.getSettlementDetail(id: settlementId)
+                            .sink {  (dataResponse) in
+                                if dataResponse.error != nil {
+                                    self.createAlert(with: dataResponse.error!, retryRequest: {
+                                        
+                                    })
+                                    // 에러 처리
+                                    print(dataResponse.error)
+                                } else {
+                                    print("--정산 내역 디테일 요청 성공--")
+                                    Keychain.setKeychain(self.bookKey!, forKey: .bookKey)
+                                    self.hasDeepLink = true
+                                    self.settlementStatus = true
+                                }
+                            }.store(in: &cancellableSet)
+                    }
                 }
-                
             }
-            self.hasDeepLink = true
-            self.settlementStatus = true
         }
+        
     }
     
     // 정산하기 링크
@@ -101,7 +116,7 @@ class AppLinkManager: ObservableObject {
                 //showAlert(message: "알 수 없는 서버 에러가 발생했습니다.")
                 return
             }
-            if error.backendError?.code != "U006" {
+            if error.backendError?.code != "U006" && error.backendError?.code != "B006" {
                 AlertManager.shared.handleError(serverError)
             }
             
@@ -114,6 +129,8 @@ class AppLinkManager: ObservableObject {
                         // 토큰 재발급 성공 시, 원래의 요청 재시도
                         retryRequest()
                     }
+                case "B006" :
+                    BlackAlertManager.shared.handleError(title: "접근 권한이 없어요", message: "해당 가계부의 멤버가 아닙니다.\n소속된 가계부를 다시 확인해 주세요.")
                 // 아예 틀린 토큰이므로 재로그인해서 다시 발급받아야 함.
                 case "U007" :
                     AuthenticationService.shared.logoutDueToTokenExpiration()

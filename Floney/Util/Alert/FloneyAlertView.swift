@@ -71,9 +71,59 @@ struct FloneyAlertView: View {
 
     }
 }
+struct BlackFloneyAlertView: View {
+    let scaler = Scaler.shared
+    @Binding var isPresented: Bool
+    @Binding var title : String
+    @Binding var message : String
+
+    @State var centerButtonText = "확인"
+
+    
+    var body: some View {
+        GeometryReader { geometry in
+            VStack(spacing:0) {
+                Image("illust_black_alert")
+                VStack(spacing:scaler.scaleHeight(14)) {
+                    Text("\(title)")
+                        .font(.pretendardFont(.bold, size:scaler.scaleWidth(16)))
+                    
+                    Text("\(message)")
+                        .font(.pretendardFont(.regular, size: scaler.scaleWidth(13)))
+                        .multilineTextAlignment(.center)
+                }.padding(.vertical, scaler.scaleHeight(24))
+                    .foregroundColor(.greyScale1)
+       
+                HStack(alignment: .center,spacing: scaler.scaleWidth(12)) {
+                    Button("\(centerButtonText)") {
+                        isPresented = false
+                    }
+                    .padding(.vertical,scaler.scaleHeight(16))
+                    .frame(width: scaler.scaleWidth(124), height:scaler.scaleHeight(44))
+                    .font(.pretendardFont(.medium, size: scaler.scaleWidth(12)))
+                    .foregroundColor(.white)
+                    .background(Color.primary1)
+                    .cornerRadius(10)
+                }
+          
+            }
+            .frame(width: geometry.size.width * 0.8)
+            .frame(height: geometry.size.height * 0.38)
+            .background(Color.white)
+            .cornerRadius(20)
+            .shadow(radius: 10)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .ignoresSafeArea()
+            .background(Color.black.opacity(0.2))
+            .edgesIgnoringSafeArea(.all)
+            .transition(.opacity)
+        }
+
+    }
+}
 
 struct FloneyAlertView_Previews: PreviewProvider {
     static var previews: some View {
-        FloneyAlertView(isPresented: .constant(true), title: .constant("가계부가 초기화됩니다"), message: .constant("화폐 단위를 USD(으)로 변경하시겠습니까?\n변경 시, 가계부가 초기화됩니다."), onOKAction: {})
+        BlackFloneyAlertView(isPresented: .constant(true), title: .constant("접근 권한이 없어요"), message: .constant("해당 가계부의 멤버가 아닙니다.\n소속된 가계부를 다시 확인해 주세요."))
     }
 }
