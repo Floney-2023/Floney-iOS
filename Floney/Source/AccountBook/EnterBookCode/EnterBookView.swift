@@ -39,7 +39,12 @@ struct EnterBookView: View {
                     .padding(scaler.scaleHeight(16))
                     .withNextButtonFormmating(.primary1)
                     .onTapGesture {
-                        BookExistenceViewModel.shared.getBookExistence()
+                        DispatchQueue.main.async {
+
+                            BookExistenceViewModel.shared.bookExistence = false
+                   
+                            BookExistenceViewModel.shared.getBookExistence()
+                        }
                     }
 
             }

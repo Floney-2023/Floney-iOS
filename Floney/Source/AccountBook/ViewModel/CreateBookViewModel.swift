@@ -8,12 +8,15 @@
 import Foundation
 import Combine
 import FirebaseFirestore
+import UIKit
+import SwiftUI
 
 enum createBookType {
     case initial
     case add
 }
 class CreateBookViewModel: ObservableObject {
+    var firebaseManager = FirebaseManager()
     var tokenViewModel = TokenReissueViewModel()
     @Published var result : CreateBookResponse = CreateBookResponse(bookKey: "", code: "")
     @Published var bookInfo = BookInfoByCodeResponse(bookName: "", startDay: "", memberCount: 0)
@@ -37,8 +40,11 @@ class CreateBookViewModel: ObservableObject {
     @Published var bookCode = ""
     @Published var isNextToEnterBook = false
     
+    @Published var selectedImage : UIImage? 
+    
     private var cancellableSet: Set<AnyCancellable> = []
     var dataManager: CreateBookProtocol
+    var changeProfileManager : SettingBookProtocol = SettingBookService.shared
     
     init( dataManager: CreateBookProtocol = CreateBook.shared) {
         self.dataManager = dataManager
@@ -50,52 +56,59 @@ class CreateBookViewModel: ObservableObject {
         }
         return true
     }
-    func createBook() {
+    func createBook(lazyUploadProfile : Bool) {
         let request = CreateBookRequest(name: bookName, profileImg: profileImg)
         print(request)
         dataManager.createBook(request)
             .sink { (dataResponse) in
                 if dataResponse.error != nil {
                     self.createAlert(with: dataResponse.error!, retryRequest: {
-                        self.createBook()
+                        self.createBook(lazyUploadProfile: lazyUploadProfile)
                     })
                     print(dataResponse.error)
-                    LoadingManager.shared.update(showLoading: false, loadingType: .dimmedLoading)
+  
                 } else {
                     self.result = dataResponse.value!
-                    self.isNextToCreateBook = true
-                    print(self.result) // bookkey & code
-                    // bookKey는 request할 때 사용, code는 초대할 때 사용
-                    print(self.result.code)
-                    self.setBookCode()
-                    Keychain.setKeychain(self.bookName, forKey: .bookName)
-                    LoadingManager.shared.update(showLoading: false, loadingType: .dimmedLoading)
+                    if lazyUploadProfile {
+                        if let image = self.selectedImage {
+                            self.firebaseManager.uploadImageToFirebase(image: image, uploadPath: "books/\(self.result.bookKey)") { url in
+                                DispatchQueue.main.async {
+                                    if let url = url {
+                                        let request = BookProfileRequest(newUrl: url, bookKey: self.result.bookKey)
+                                        self.changeProfileManager.changeProfile(parameters: request)
+                                            .sink {
+                                                completion in
+                                                switch completion {
+                                                case .finished :
+                                                    ProfileManager.shared.setBookImageStateToCustom(urlString: url)
+                                                    self.setBookCode()
+                                                    Keychain.setKeychain(self.bookName, forKey: .bookName)
+                                                    LoadingManager.shared.update(showLoading: false, loadingType: .floneyLoading)
+                                                    self.isNextToCreateBook = true
+                                                case .failure(let error):
+                                                    print("Error changing profile: \(error)")
+                                                    LoadingManager.shared.update(showLoading: false, loadingType: .floneyLoading)
+                                                }
+                                                
+                                            } receiveValue: { data in
+                                                
+                                            }
+                                            .store(in: &self.cancellableSet)
+                                            
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        LoadingManager.shared.update(showLoading: false, loadingType: .floneyLoading)
+                        self.setBookCode()
+                        Keychain.setKeychain(self.bookName, forKey: .bookName)
+                        self.isNextToCreateBook = true
+                    }
                 }
             }.store(in: &cancellableSet)
     }
-    func addBook() {
-        let request = CreateBookRequest(name: bookName, profileImg: profileImg)
-        print(request)
-        dataManager.createBook(request)
-            .sink { (dataResponse) in
-                if dataResponse.error != nil {
-                    self.createAlert(with: dataResponse.error!, retryRequest: {
-                        self.addBook()
-                    })
-                    print(dataResponse.error)
-                    LoadingManager.shared.update(showLoading: false, loadingType: .dimmedLoading)
-                } else {
-                    self.result = dataResponse.value!
-                    self.isNextToCreateBook = true
-                    print(self.result) // bookkey & code
-                    // bookKey는 request할 때 사용, code는 초대할 때 사용
-                    print(self.result.code)
-                    self.setBookCode()
-                    Keychain.setKeychain(self.bookName, forKey: .bookName)
-                    LoadingManager.shared.update(showLoading: false, loadingType: .dimmedLoading)
-                }
-            }.store(in: &cancellableSet)
-    }
+
     func joinBook() {
         let request = InviteBookRequest(code: bookCode)
         dataManager.bookInfoByCodeBook(bookCode: bookCode)

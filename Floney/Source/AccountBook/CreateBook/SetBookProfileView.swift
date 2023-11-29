@@ -14,8 +14,8 @@ struct SetBookProfileView: View {
     @Binding var createBookType : createBookType
     @ObservedObject var viewModel : CreateBookViewModel
     @StateObject var permissionManager = PermissionManager()
-    var firebaseManager = FirebaseManager()
     @State var bookImg = ""
+    let email = Keychain.getKeychainValue(forKey: .email) ?? ""
     
     // 이미지선택창 선택 여부
     @State private var presentsImagePicker = false
@@ -74,45 +74,22 @@ struct SetBookProfileView: View {
                     .padding(scaler.scaleHeight(16))
                     .withNextButtonFormmating(.primary1)
                     .onTapGesture {
-                        LoadingManager.shared.update(showLoading: true, loadingType: .dimmedLoading)
                         if let image = selectedUIImage {
-                            print("selectedUIImage있음 ")
                             if image == UIImage(named: "book_profile_124") {
-                                print("기본 이미지임")
-                                print("book name : \(viewModel.bookName)")
                                 if !viewModel.bookName.isEmpty {
-                                    print("북 생성")
                                     LoadingManager.shared.update(showLoading: true, loadingType: .floneyLoading)
                                     DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                                         LoadingManager.shared.update(showLoading: false, loadingType: .floneyLoading)
-                                        if createBookType == .initial {
-                                            viewModel.createBook()
-                                        } else {
-                                            viewModel.addBook()
-                                        }
+                                        viewModel.createBook(lazyUploadProfile: false)
                                     }
                                 }
                             } else {
-                                firebaseManager.uploadImageToFirebase(image: image) { encryptedURL in
-                                    DispatchQueue.main.async {
-                                        if let url = encryptedURL {
-                                            viewModel.profileImg = url
-                                            if !viewModel.bookName.isEmpty {
-                                                LoadingManager.shared.update(showLoading: true, loadingType: .floneyLoading)
-                                                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                                                    LoadingManager.shared.update(showLoading: false, loadingType: .floneyLoading)
-                                                    if createBookType == .initial {
-                                                        viewModel.createBook()
-                                                    } else {
-                                                        viewModel.addBook()
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
+                                viewModel.selectedImage = image
+                                if !viewModel.bookName.isEmpty {
+                                    LoadingManager.shared.update(showLoading: true, loadingType: .floneyLoading)
+                                    viewModel.createBook(lazyUploadProfile: true)
                                 }
                             }
-                           
                         }
                     }
             }
@@ -149,7 +126,6 @@ struct SetBookProfileView: View {
         .sheet(isPresented: $onCamera) {
             CameraView(image: $selectedUIImage) { selectedImage in
                 if let selectedImage = selectedImage {
-                    self.selectedUIImage = selectedImage
                     self.selectedUIImage = selectedImage.resized(to: CGSize(width: scaler.scaleWidth(124), height: scaler.scaleWidth(124)))
                 }
                 self.onCamera = false
