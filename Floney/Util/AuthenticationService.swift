@@ -12,6 +12,7 @@ class AuthenticationService: ObservableObject {
     static let shared = AuthenticationService()  // Singleton instance
     
     @Published var isUserLoggedIn: Bool = UserDefaults.standard.bool(forKey: "isLoggedIn")
+    @Published var signoutStatus : Bool = false
     
     @Published var tokenExpired: Bool = false
     //@Published var bookStatus: Bool = false
