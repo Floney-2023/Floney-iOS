@@ -63,6 +63,8 @@ final class MyPageViewModel: ObservableObject {
     }
     @Published var showSignoutAlert = false
     @Published var isNextToSuccessSignout = false
+    @Published var deletedBookKeys : [String] = []
+    @Published var otherBookKeys : [String] = []
     
     private var cancellableSet: Set<AnyCancellable> = []
     lazy var dataManager: MyPageProtocol = MyPage.shared
@@ -286,6 +288,7 @@ final class MyPageViewModel: ObservableObject {
     }
     func signout() {
         print("signout 시도")
+        let dispatchGroup = DispatchGroup()
         if let selectedReason = selectedReason {
             var request = SignOutRequest(type: selectedReason.rawValue)
             if selectedReason == .OTHER {
@@ -294,24 +297,64 @@ final class MyPageViewModel: ObservableObject {
                 request = SignOutRequest(type: selectedReason.rawValue)
             }
             dataManager.signout(request)
-                .sink { completion in
-                    switch completion {
-                    case .finished:
-                        print("signout 성공")
-                        print("signout success.")
-                        AppLinkManager.shared.hasDeepLink = false
-                        AppLinkManager.shared.settlementStatus = false
-                        self.isNextToSuccessSignout = true
-                    case .failure(let error):
-                        self.createAlert(with: error, retryRequest: {
+                .sink { (dataResponse) in
+                    if dataResponse.error != nil {
+                        self.createAlert(with: dataResponse.error!, retryRequest: {
                             self.signout()
                         })
                         print("signout 실패")
+                    } else {
+                        print("signout 성공")
+                        print("signout success.")
+                        let fcmManager = FCMDataManager()
+                        self.deletedBookKeys = dataResponse.value!.deletedBookKeys
+                        for book in self.deletedBookKeys {
+                            dispatchGroup.enter()
+                            fcmManager.deleteBookTokens(bookKey: book) {
+                                dispatchGroup.leave()
+                            }
+                            dispatchGroup.enter()
+                            let firebaseManager = FirebaseManager()
+                            firebaseManager.getPreviousImageRef(in: "books/\(book)/") { reference in
+                                reference?.delete { error in
+                                    if let error = error {
+                                        print("Error deleting previous image: \(error)")
+                                    } else {
+                                        print("Previous image successfully deleted")
+                                    }
+                                }
+                                dispatchGroup.leave()
+                            }
+                        }
+                        let email = Keychain.getKeychainValue(forKey: .email) ?? ""
+                        self.otherBookKeys = dataResponse.value!.otherBookKeys
+                        for book in self.otherBookKeys {
+                            dispatchGroup.enter()
+                            fcmManager.deleteUserToken(bookKey: book, email: email) {
+                                dispatchGroup.leave()
+                            }
+                        }
+                        
+                        dispatchGroup.enter()
+                        let firebaseManager = FirebaseManager()
+                        firebaseManager.getPreviousImageRef(in: "users/\(email)/") { reference in
+                            reference?.delete { error in
+                                if let error = error {
+                                    print("Error deleting previous image: \(error)")
+                                } else {
+                                    print("Previous image successfully deleted")
+                                }
+                            }
+                            dispatchGroup.leave()
+                        }
+                        
+                        dispatchGroup.notify(queue:.main) {
+                            AppLinkManager.shared.hasDeepLink = false
+                            AppLinkManager.shared.settlementStatus = false
+                            self.isNextToSuccessSignout = true
+                        }
                     }
-                } receiveValue: { data in
-                    // TODO: Handle the received data if necessary.
-                }
-                .store(in: &cancellableSet)
+                }.store(in: &cancellableSet)
         }
     }
     func checkPassword(password : String) {

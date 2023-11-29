@@ -22,3 +22,8 @@ struct MyBookResult : Decodable, Hashable {
     var memberCount : Int
     //var bookStatus : String
 }
+
+struct SignoutResponse : Decodable {
+    var deletedBookKeys : [String]
+    var otherBookKeys : [String]
+}

@@ -34,6 +34,7 @@ struct SetProfileImageView: View {
             self.changedStatus = true
         }
     }
+    let email = Keychain.getKeychainValue(forKey: .email) ?? ""
 
     var body: some View {
         ZStack {
@@ -87,7 +88,7 @@ struct SetProfileImageView: View {
                     LoadingManager.shared.update(showLoading: true, loadingType: .dimmedLoading)
                     if let image = selectedUIImage {
                         print("selected:\(image)")
-                        firebaseManager.uploadImageToFirebase(image: image) { url in
+                        firebaseManager.uploadImageToFirebase(image: image, uploadPath: "users/\(email)") { url in
                             DispatchQueue.main.async {
                                 if let url = url {
                                     self.viewModel.encryptedImageUrl = url // url

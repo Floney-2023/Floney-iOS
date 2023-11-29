@@ -16,7 +16,7 @@ protocol MyPageProtocol {
     func changePassword(password: String) -> AnyPublisher<Void, NetworkError>
     func logout() -> AnyPublisher<Void, NetworkError>
     func checkPassword(_ password: String) -> AnyPublisher<Void, NetworkError>
-    func signout(_ parameters : SignOutRequest) -> AnyPublisher<Void, NetworkError>
+    func signout(_ parameters : SignOutRequest) -> AnyPublisher<DataResponse<SignoutResponse, NetworkError>, Never>
 
 }
 
@@ -254,7 +254,7 @@ extension MyPage: MyPageProtocol {
         }
         .eraseToAnyPublisher()
     }
-    func signout(_ parameters : SignOutRequest) -> AnyPublisher<Void, NetworkError> {
+    func signout(_ parameters : SignOutRequest) -> AnyPublisher<DataResponse<SignoutResponse, NetworkError>, Never> {
         let token = Keychain.getKeychainValue(forKey: .accessToken) ?? ""
         let url = "\(Constant.BASE_URL)/users?accessToken=\(token)"
         print("sign out : \n\(token)")
@@ -265,31 +265,14 @@ extension MyPage: MyPageProtocol {
                           encoder: JSONParameterEncoder()
         )
         .validate()
-        .publishData()
-        .tryMap { result in
-            // Check the status code
-            if let statusCode = result.response?.statusCode {
-                print("Status Code: \(statusCode)")
-                if statusCode == 200 {
-                    return // Success, return
-                } else {
-                    // Handle error based on status code
-                    let backendError = result.data.flatMap { try? JSONDecoder().decode(BackendError.self, from: $0)}
-                    
-                    
-                    if let backendError = backendError {
-                        throw NetworkError(initialError: result.error!, backendError: backendError)
-                    } else {
-                        throw NetworkError(initialError: result.error!, backendError: nil)
-                    }
-                }
-            } else {
-                throw NetworkError(initialError: result.error!, backendError: nil)
+        .publishDecodable(type: SignoutResponse.self)
+        .map { response in
+            response.mapError { error in
+                let backendError = response.data.flatMap { try? JSONDecoder().decode(BackendError.self, from: $0)}
+                return NetworkError(initialError: error, backendError: backendError)
             }
         }
-        .mapError { error in
-            return error as! NetworkError
-        }
+        .receive(on: DispatchQueue.main)
         .eraseToAnyPublisher()
 
     }
