@@ -396,6 +396,14 @@ class SettingBookViewModel : ObservableObject {
                     self.postNoti(title: "플로니", body: "\(Keychain.getKeychainValue(forKey: .userNickname) ?? "")님이 \(self.bookName)의 가계부를 나갔어요.", imgUrl: "icon_exit") {
                         dispatchGroup.leave()
                     }
+                    dispatchGroup.enter()
+                    let email = Keychain.getKeychainValue(forKey: .email) ?? ""
+                    fcmManager.deleteUserToken(bookKey: self.bookKey, email: email) {
+                        print("\(self.bookKey) 가계부 토큰 삭제 성공")
+                        print("\(email) 가계부 토큰 삭제 성공")
+                        print("유저 토큰 삭제 성공")
+                        dispatchGroup.leave()
+                    }
 
                     dispatchGroup.notify(queue: .main) {
                         Keychain.setKeychain("", forKey: .bookKey)
@@ -445,13 +453,32 @@ class SettingBookViewModel : ObservableObject {
     func deleteBook() {
         bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
         let request = BookInfoRequest(bookKey: bookKey)
+        let dispatchGroup = DispatchGroup()
         dataManager.deleteBook(parameters: request)
             .sink { completion in
                 switch completion {
                 case .finished:
                     print("delete Book successfully changed.")
                     AlertManager.shared.update(showAlert: true, message: "가계부가 성공적으로 삭제되었습니다.", buttonType: .green)
-                    DispatchQueue.main.async {
+                    dispatchGroup.enter()
+                    self.fcmManager.deleteBookTokens(bookKey: self.bookKey) {
+                        
+                        print("\(self.bookKey) 가계부 토큰 삭제 성공")
+                        dispatchGroup.leave()
+                    }
+                    dispatchGroup.enter()
+                    let firebaseManager = FirebaseManager()
+                    firebaseManager.getPreviousImageRef(in: "books/\(self.bookKey)") { reference in
+                        reference?.delete { error in
+                            if let error = error {
+                                print("Error deleting previous image: \(error)")
+                            } else {
+                                print("Previous image successfully deleted")
+                            }
+                        }
+                        dispatchGroup.leave()
+                    }
+                    dispatchGroup.notify(queue: .main) {
                         Keychain.setKeychain("", forKey: .bookKey)
                         BookExistenceViewModel.shared.bookExistence = false
                         BookExistenceViewModel.shared.getBookExistence()

@@ -34,6 +34,7 @@ struct SetBookProfileImageView: View {
             self.changedStatus = true
         }
     }
+    let bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
     
     var body: some View {
         ZStack {
@@ -79,7 +80,7 @@ struct SetBookProfileImageView: View {
                 Button {
                     LoadingManager.shared.update(showLoading: true, loadingType: .dimmedLoading)
                     if let image = selectedUIImage {
-                        firebaseManager.uploadImageToFirebase(image: image) { url in
+                        firebaseManager.uploadImageToFirebase(image: image, uploadPath: "books/\(bookKey)") { url in
                             DispatchQueue.main.async {
                                 if let url = url {
                                     viewModel.encryptedImageUrl = url

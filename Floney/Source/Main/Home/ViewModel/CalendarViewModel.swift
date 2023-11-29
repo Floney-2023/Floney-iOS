@@ -214,8 +214,19 @@ class CalendarViewModel: ObservableObject {
         todayYear = Calendar.current.component(.year, from: today)
         todayMonth = Calendar.current.component(.month, from: today)
         todayDay = Calendar.current.component(.day, from: today)
-        
-        totalToday = "\(todayYear)-\(todayMonth)-\(todayDay)"
+        if todayMonth < 10 {
+            if todayDay < 10 {
+                totalToday = "\(todayYear)-0\(todayMonth)-0\(todayDay)"
+            } else {
+                totalToday = "\(todayYear)-0\(todayMonth)-\(todayDay)"
+            }
+        } else {
+            if todayDay < 10 {
+                totalToday = "\(todayYear)-\(todayMonth)-0\(todayDay)"
+            } else {
+                totalToday = "\(todayYear)-\(todayMonth)-\(todayDay)"
+            }
+        }
     }
     
     // MARK: 선택된 날짜
