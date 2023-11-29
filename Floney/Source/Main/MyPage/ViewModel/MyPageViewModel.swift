@@ -351,7 +351,8 @@ final class MyPageViewModel: ObservableObject {
                         dispatchGroup.notify(queue:.main) {
                             AppLinkManager.shared.hasDeepLink = false
                             AppLinkManager.shared.settlementStatus = false
-                            self.isNextToSuccessSignout = true
+                            AuthenticationService.shared.signoutStatus = true
+                            AuthenticationService.shared.logoutDueToTokenExpiration()
                         }
                     }
                 }.store(in: &cancellableSet)

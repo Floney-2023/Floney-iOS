@@ -56,9 +56,9 @@ struct InputPasswordInSignOutView: View {
                     viewModel.signout()
                 })
             }
-            NavigationLink(destination: SuccessSignoutView(),isActive: $viewModel.isNextToSuccessSignout){
-                EmptyView()
-            }
+            //NavigationLink(destination: SuccessSignoutView(),isActive: $viewModel.isNextToSuccessSignout){
+            //EmptyView()
+            //}
         }
         
     }

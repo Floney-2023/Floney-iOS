@@ -127,9 +127,9 @@ struct WithdrawalView: View {
             NavigationLink(destination:InputPasswordInSignOutView(viewModel: viewModel), isActive: $isNextToInputPassword){
                 EmptyView()
             }
-            NavigationLink(destination: SuccessSignoutView(),isActive: $viewModel.isNextToSuccessSignout){
-                EmptyView()
-            }
+            //NavigationLink(destination: SuccessSignoutView(),isActive: $viewModel.isNextToSuccessSignout){
+            //    EmptyView()
+            //}
             if signoutAlert {
                 SignoutAlertView(isPresented: $signoutAlert, title: $title, message: $message, onOKAction: {
                     viewModel.signout()

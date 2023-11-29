@@ -88,6 +88,10 @@ struct SplashScreenView: View {
                 if BlackAlertManager.shared.showAlert {
                     BlackFloneyAlertView(isPresented: $blackAlertManager.showAlert, title: $blackAlertManager.title, message: $blackAlertManager.message)
                 }
+                if userSession.signoutStatus {
+                    SuccessSignoutView()
+                    
+                }
             }
         } else {
             ZStack {
