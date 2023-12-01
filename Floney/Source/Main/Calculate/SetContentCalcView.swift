@@ -147,7 +147,7 @@ struct SetContentCalcView: View {
                             } else {
                                 viewModel.postSettlements()
                                 LoadingManager.shared.update(showLoading: true, loadingType: .floneyLoading)
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                                     LoadingManager.shared.update(showLoading: false, loadingType: .floneyLoading)
                                     pageCount = 4
                                 }
