@@ -399,10 +399,14 @@ class SignInViewModel: ObservableObject {
                 self.nickname = name
                 
             } else {
-                self.email = Keychain.getKeychainValue(forKey: .appleEmail) ?? ""
-                self.nickname = Keychain.getKeychainValue(forKey: .appleName) ?? ""
-                print(self.email)
-                print(self.nickname)
+                guard let appleEmail = Keychain.getKeychainValue(forKey: .appleEmail), let appleName = Keychain.getKeychainValue(forKey: .appleName) else {
+                    AlertManager.shared.update(showAlert: true, message: "설정에서 애플 연동을 해제 후 다시 시도해주세요.", buttonType: .red)
+                    return
+                }
+                self.email = appleEmail
+                self.nickname = appleName
+                print(appleEmail)
+                print(appleName)
             }
             
             self.authToken = identityToken

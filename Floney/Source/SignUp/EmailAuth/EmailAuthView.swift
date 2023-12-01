@@ -71,9 +71,7 @@ struct EmailAuthView: View {
             .customNavigationBar(
                 leftView: { BackButton() }
                 )
-            
             CustomAlertView(message: viewModel.errorMessage, type: $viewModel.buttonType, isPresented: $viewModel.showAlert)
-
         }
         .edgesIgnoringSafeArea(.bottom)
     }

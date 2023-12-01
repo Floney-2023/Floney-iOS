@@ -48,14 +48,14 @@ struct ServiceAgreementView: View {
                     }, title: "서비스 이용 약관 (필수)")
                     
                     ServiceAgreementButton(isAgreed: $viewModel.isTerm2Agreed, forwardAction: {
-                        self.webViewURL = "https://cafe.naver.com/floney"
+                        self.webViewURL = "https://cafe.naver.com/floney/4"
                         self.showWebView = true
                         self.navigationTitle = "개인정보 수집 및 이용 동의"
                     }, title: "개인정보 수집 및 이용 동의 (필수)")
                     
                     
                     ServiceAgreementButton(isAgreed: $viewModel.isMarketingAgreed, forwardAction: {
-                        self.webViewURL = "https://cafe.naver.com/floney"
+                        self.webViewURL = "https://cafe.naver.com/floney/6"
                         self.showWebView = true
                         self.navigationTitle = "마케팅 정보 수신 동의"
                     }, title: "마케팅 정보 수신 동의 (선택)")
@@ -72,14 +72,14 @@ struct ServiceAgreementView: View {
                             .withNextButtonFormmating(.primary1)
                             .onTapGesture {
                                 
-                                 if self.viewModel.isTerm1Agreed && self.viewModel.isTerm2Agreed && self.viewModel.isTerm3Agreed {
-                                 // Navigate to the next screen
-                                 signupViewModel.isNextToEmailAuth = true
-                                 signupViewModel.marketingAgree = self.viewModel.isMarketingAgreed
-                                 } else {
-                                 self.viewModel.showAlert = true
-                                 }
-                                 
+                                if self.viewModel.isTerm1Agreed && self.viewModel.isTerm2Agreed && self.viewModel.isTerm3Agreed {
+                                    // Navigate to the next screen
+                                    signupViewModel.isNextToEmailAuth = true
+                                    signupViewModel.marketingAgree = self.viewModel.isMarketingAgreed
+                                } else {
+                                    self.viewModel.showAlert = true
+                                }
+                                
                                
                             }
                         
