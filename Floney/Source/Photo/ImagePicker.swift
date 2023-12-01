@@ -45,11 +45,13 @@ struct PhotoPicker: UIViewControllerRepresentable {
                         if let image = image as? UIImage {
                             self?.parent.image = image
                             self?.parent.onPick(image)
+                            self?.parent.presentationMode.wrappedValue.dismiss()
                         }
                     }
                 }
+            } else {
+                parent.presentationMode.wrappedValue.dismiss()
             }
-            parent.presentationMode.wrappedValue.dismiss()
         }
     }
 }
@@ -84,8 +86,9 @@ struct CameraView: UIViewControllerRepresentable {
             if let image = info[.originalImage] as? UIImage {
                 parent.image = image
                 parent.onCapture(image)
+                parent.presentationMode.wrappedValue.dismiss()
             }
-            parent.presentationMode.wrappedValue.dismiss()
+            
         }
 
         func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
