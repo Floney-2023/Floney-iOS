@@ -261,7 +261,7 @@ final class MyPageViewModel: ObservableObject {
     func isNewPasswordValid() -> Bool {
         // Checking if password is at least 8 characters long and contains at least one alphabet and one number
         //^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@#$%^&*()\\-_+={}\\[\\]|\\:;'\"<>,.?/~`])[A-Za-z\\d@#$%^&*()\\-_+={}\\[\\]|\\:;'\"<>,.?/~`]{8,}$
-        let passwordTest = NSPredicate(format: "SELF MATCHES %@", "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@#$%^&*()\\-_+={}\\[\\]|\\:;'\"<>,.?/~`])[A-Za-z\\d@#$%^&*()\\-_+={}\\[\\]|\\:;'\"<>,.?/~`]{8,}$")
+        let passwordTest = NSPredicate(format: "SELF MATCHES %@", "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@#$%^&*()\\-_+={}\\[\\]|\\:;'\"<>,.?!/~`])[A-Za-z\\d@#$%^&*()\\-_+={}\\[\\]|\\:;'\"<>,.?/~`]{8,}$")
         return passwordTest.evaluate(with: newPassword)
     }
     

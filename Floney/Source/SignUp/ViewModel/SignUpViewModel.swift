@@ -279,7 +279,7 @@ class SignUpViewModel: ObservableObject {
         //^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$
         //^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@#$%^&*()\\-_+={}\\[\\]|\\:;'\"<>,.?/~`])[A-Za-z\\d@#$%^&*()\\-_+={}\\[\\]|\\:;'\"<>,.?/~`]{8,}$
 
-        let passwordRegex = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@#$%^&*()\\-_+={}\\[\\]|\\:;'\"<>,.?/~`])[A-Za-z\\d@#$%^&*()\\-_+={}\\[\\]|\\:;'\"<>,.?/~`]{8,}$"
+        let passwordRegex = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@#$%^&*()\\-_+={}\\[\\]|\\:;'\"<>,.?!/~`])[A-Za-z\\d@#$%^&*()\\-_+={}\\[\\]|\\:;'\"<>,.?/~`]{8,}$"
         let passwordTest = NSPredicate(format: "SELF MATCHES %@", passwordRegex)
         return passwordTest.evaluate(with: password)
     }
