@@ -72,7 +72,7 @@ struct NotificationView: View {
                             .frame(maxHeight: .infinity)
                             
                         } else {
-                            ScrollView {
+                            ScrollView(showsIndicators:false) {
                                 ForEach(bookNoti.reversed(), id:\.self) { noti in
                                     HStack {
                                         Image(noti.imgUrl)

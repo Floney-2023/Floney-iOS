@@ -193,8 +193,8 @@ struct MyPageView: View {
                                         }
                                 }
                                 //NavigationLink(destination: SubscriptionView(mypageViewModel:viewModel,isActive : $isNextToSubscription,showingTabbar: $showingTabbar), isActive: $isNextToSubscription) {
+                                Link(destination: URL(string: "https://m.cafe.naver.com/ca-fe/web/cafes/31054271/menus/5")!) {
                                     VStack {
-                                        
                                         HStack {
                                             VStack(alignment:.leading, spacing: 4) {
                                                 Text("플로니는 여러분의")
@@ -226,11 +226,8 @@ struct MyPageView: View {
                                         )
                                     )
                                     .cornerRadius(12)
-                                    .onTapGesture {
-                                        //isNextToSubscription = true
-                                        //showingTabbar = false
-                                    }
-                                    
+    
+                                }
                                 //}
                             }
                        // }
@@ -299,7 +296,7 @@ struct MyPageView: View {
                             .cornerRadius(12)
                                 .onTapGesture {
                                     LoadingManager.shared.update(showLoading: true, loadingType: .floneyLoading)
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                                         LoadingManager.shared.update(showLoading: false, loadingType: .floneyLoading)
                                         viewModel.changeBook(bookKey: book.bookKey) //bookStatus: book.bookStatus)
                                     }
@@ -368,7 +365,7 @@ struct MyPageView: View {
                                         UIApplication.shared.open(url, options: [:], completionHandler: nil)
                                     }
                             }
-                            NavigationLink(destination: WebView(urlString: "https://cafe.naver.com/floney").customNavigationBar(
+                            NavigationLink(destination: WebView(urlString: "https://cafe.naver.com/floney/4").customNavigationBar(
                                 leftView: { BackButtonBlack() },
                                 centerView: { Text("개인정보 처리방침")
                                         .font(.pretendardFont(.semiBold, size:scaler.scaleWidth(16)))
@@ -403,6 +400,7 @@ struct MyPageView: View {
                     }
                     .padding(.top, scaler.scaleHeight(40))
                     .padding(.leading, scaler.scaleWidth(4))
+                    .padding(.bottom,scaler.scaleHeight(100))
                     /*
                     if viewModel.subscribe {
                         HStack {
@@ -428,17 +426,7 @@ struct MyPageView: View {
                     
                 } // scroll view
                 .padding(.horizontal,scaler.scaleWidth(20))
-                
-                
-                NavigationLink(destination : SetBookNameView(createBookType: .add), isActive: $isNextToCreateBook) {
-                    EmptyView()
-                }
-                NavigationLink(destination : EnterBookCodeView(), isActive: $isNextToEnterCode) {
-                    EmptyView()
-                }
-               
-                
-                Spacer()
+ 
             } // vstack
             .padding(.top,scaler.scaleHeight(26))
             .onAppear{
@@ -448,14 +436,26 @@ struct MyPageView: View {
                 viewModel.getMyPage()
                 showingTabbar = true
             }
+            .frame(maxHeight:.infinity)
+            .edgesIgnoringSafeArea(.bottom)
             //.fullScreenCover(isPresented: $isNextToMySubscription) {
             //    MySubscriptionView(showingTabbar: $showingTabbar, isShowing: $isNextToMySubscription, isShowingUnScribe: $isNextToUnSubscription)
             //}
             //.fullScreenCover(isPresented: $isNextToUnSubscription) {
             //    UnsubscribeView(showingTabbar: $showingTabbar, isShowing: $isNextToUnSubscription)
             //}
+            
+            NavigationLink(destination : SetBookNameView(createBookType: .add), isActive: $isNextToCreateBook) {
+                EmptyView()
+            }
+            NavigationLink(destination : EnterBookCodeView(), isActive: $isNextToEnterCode) {
+                EmptyView()
+            }
+           
 
         } // ZStack
+        .frame(maxHeight:.infinity)
+        .edgesIgnoringSafeArea(.bottom)
     }
 }
 

@@ -10,6 +10,11 @@ import Combine
 import SwiftUI
 
 final class MyPageViewModel: ObservableObject {
+#if DEBUG
+    let projectMode = "dev"
+#else
+    let projectMode = "prod"
+#endif
     var alertManager = AlertManager.shared
     var recentBookManager = RecentBookKeyManager()
     var tokenViewModel = TokenReissueViewModel()
@@ -255,7 +260,8 @@ final class MyPageViewModel: ObservableObject {
     
     func isNewPasswordValid() -> Bool {
         // Checking if password is at least 8 characters long and contains at least one alphabet and one number
-        let passwordTest = NSPredicate(format: "SELF MATCHES %@", "^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$")
+        //^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@#$%^&*()\\-_+={}\\[\\]|\\:;'\"<>,.?/~`])[A-Za-z\\d@#$%^&*()\\-_+={}\\[\\]|\\:;'\"<>,.?/~`]{8,}$
+        let passwordTest = NSPredicate(format: "SELF MATCHES %@", "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@#$%^&*()\\-_+={}\\[\\]|\\:;'\"<>,.?/~`])[A-Za-z\\d@#$%^&*()\\-_+={}\\[\\]|\\:;'\"<>,.?/~`]{8,}$")
         return passwordTest.evaluate(with: newPassword)
     }
     
@@ -315,7 +321,7 @@ final class MyPageViewModel: ObservableObject {
                             }
                             dispatchGroup.enter()
                             let firebaseManager = FirebaseManager()
-                            firebaseManager.getPreviousImageRef(in: "books/\(book)/") { reference in
+                            firebaseManager.getPreviousImageRef(in: "\(self.projectMode)/books/\(book)/") { reference in
                                 reference?.delete { error in
                                     if let error = error {
                                         print("Error deleting previous image: \(error)")
@@ -337,7 +343,7 @@ final class MyPageViewModel: ObservableObject {
                         
                         dispatchGroup.enter()
                         let firebaseManager = FirebaseManager()
-                        firebaseManager.getPreviousImageRef(in: "users/\(email)/") { reference in
+                        firebaseManager.getPreviousImageRef(in: "\(self.projectMode)/users/\(email)/") { reference in
                             reference?.delete { error in
                                 if let error = error {
                                     print("Error deleting previous image: \(error)")
