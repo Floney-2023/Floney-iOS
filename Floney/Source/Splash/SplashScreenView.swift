@@ -35,18 +35,18 @@ struct SplashScreenView: View {
                                 } else {
                                     if let settlementId = applinkManager.settlementId {
                                         //MARK: 정산 영수증 화면
-                                        
                                         MainTabView(selection : 3, settlementId:
                                                         settlementId, showingSettlementList: true, showingSettlementDetail: true)
                                     }
                                 }
                             } else {
-                                // 가계부 삭제, 가계부 나가기 실행 시 bookManager를 한 번 더 호출해야 함.
-                                // 구독 해지 시 해당 가계부의 유효성을 다시 한번 체크해야 함?
-                                
                                 if bookManager.bookExistence { // 가계부가 있을 때
                                     // MARK: 메인 화면
-                                    MainTabView()
+                                    if userSession.newMainTab {
+                                        MainTabView()
+                                    } else {
+                                        MainTabView()
+                                    }
                                 } else { // 가계부가 없을 때
                                     // MARK: Welcome View
                                     WelcomeView()

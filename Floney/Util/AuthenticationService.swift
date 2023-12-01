@@ -15,6 +15,7 @@ class AuthenticationService: ObservableObject {
     @Published var signoutStatus : Bool = false
     
     @Published var tokenExpired: Bool = false
+    @Published var newMainTab : Bool = false
     //@Published var bookStatus: Bool = false
  
     init() {

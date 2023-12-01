@@ -15,13 +15,18 @@ class FirebaseManager {
     func uploadImageToFirebase(image: UIImage, uploadPath: String, completion: @escaping (String?) -> Void) {
         // 이 부분에서 Firebase Storage에 이미지를 업로드하는 코드를 작성하고,
         // 이미지의 URL을 completion handler를 통해 반환합니다.
+        #if DEBUG
+            let projectMode = "dev"
+        #else
+            let projectMode = "prod"
+        #endif
         let timestamp = Date().timeIntervalSince1970
-        let imageName = "\(uploadPath)/image\(timestamp).jpg"
+        let imageName = "\(projectMode)/\(uploadPath)/image\(timestamp).jpg"
         let storage = Storage.storage()
         let storageRef = storage.reference().child(imageName)
         
         // 이전 이미지 참조 가져오기
-        getPreviousImageRef(in: uploadPath + "/") { previousImageRef in
+        getPreviousImageRef(in: "\(projectMode)/" + uploadPath + "/") { previousImageRef in
         
             if let imageData = image.jpegData(compressionQuality: 0.8) {
                 let metadata = StorageMetadata()
