@@ -14,19 +14,27 @@ class FCMDataManager: ObservableObject {
     var tokenViewModel = TokenReissueViewModel()
     @Published var fcmAccessToken = ""
     private var cancellableSet: Set<AnyCancellable> = []
+    #if DEBUG
+    let projectMode = "dev"
+    #else
+    let projectMode = "prod"
+    #endif
+    
     init() {
         // 객체 생성 시 바로 관리자 accessToken 받아오기
     }
     // 사용자 입장 시 save token
     func saveToken(for userId: String, bookKey: String, token: String) {
         let db = Firestore.firestore()
-        let bookRef = db.collection("books").document(bookKey)
+        let projectModeRef = db.collection(projectMode).document(projectMode)
+        let bookRef = projectModeRef.collection("books").document(bookKey)
         let userRef = bookRef.collection("users").document(userId)
         userRef.setData(["fcmToken": token], merge: true)
     }
     func deleteBookTokens(bookKey : String, completion: @escaping () -> Void) {
         let db = Firestore.firestore()
-        let bookRef = db.collection("books").document(bookKey)
+        let projectModeRef = db.collection(projectMode).document(projectMode)
+        let bookRef = projectModeRef.collection("books").document(bookKey)
         // 컬렉션의 모든 문서 가져오기
         bookRef.collection("users").getDocuments { (snapshot, error) in
             if let error = error {
@@ -52,7 +60,8 @@ class FCMDataManager: ObservableObject {
     
     func deleteUserToken(bookKey: String, email: String, completion: @escaping () -> Void) {
         let db = Firestore.firestore()
-        let bookRef = db.collection("books").document(bookKey)
+        let projectModeRef = db.collection(projectMode).document(projectMode)
+        let bookRef = projectModeRef.collection("books").document(bookKey)
         let userDocRef = bookRef.collection("users").document(email)
 
         userDocRef.delete() { error in
@@ -80,7 +89,8 @@ class FCMDataManager: ObservableObject {
                     self.fcmAccessToken = dataResponse.value!.token
                     
                     let db = Firestore.firestore()
-                    let bookRef = db.collection("books").document(bookKey)
+                    let projectModeRef = db.collection(self.projectMode).document(self.projectMode)
+                    let bookRef = projectModeRef.collection("books").document(bookKey)
                     let usersCollection = bookRef.collection("users")
                     print("In Fetch Tokens From DB book:\(bookRef)")
                     print("In Fetch Tokens From DB user collection:\(usersCollection)")
