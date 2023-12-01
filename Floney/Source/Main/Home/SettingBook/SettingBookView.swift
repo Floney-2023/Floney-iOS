@@ -379,7 +379,7 @@ struct SettingBookView: View {
                     if exitAlert {
                         AlertView(isPresented: $exitAlert, title: $exitTitle, message: $exitMessage, okColor: .alertRed, onOKAction: {
                             LoadingManager.shared.update(showLoading: true, loadingType: .floneyLoading)
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                                 LoadingManager.shared.update(showLoading: false, loadingType: .floneyLoading)
                                 viewModel.exitBook()
                             }
@@ -393,7 +393,7 @@ struct SettingBookView: View {
                         AlertView(isPresented: $resetAlert,title: $resetTitle, message: $resetMessage, okColor: .alertRed, onOKAction: {
                             DispatchQueue.main.async {
                                 LoadingManager.shared.update(showLoading: true, loadingType: .floneyLoading)
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                                     LoadingManager.shared.update(showLoading: false, loadingType: .floneyLoading)
                                     viewModel.resetBook()
                                 }

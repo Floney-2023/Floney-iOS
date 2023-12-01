@@ -94,7 +94,7 @@ struct SetCurrencyUnitView: View {
             if showingAlert {
                 FloneyAlertView(isPresented: $showingAlert, title: $title, message: $message, onOKAction: {
                     LoadingManager.shared.update(showLoading: true, loadingType: .floneyLoading)
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                         LoadingManager.shared.update(showLoading: false, loadingType: .floneyLoading)
                         viewModel.setCurrency(currency: newCurrency)
                         self.presentationMode.wrappedValue.dismiss()

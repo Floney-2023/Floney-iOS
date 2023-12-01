@@ -114,8 +114,7 @@ struct ModifyingBookView: View {
                     AlertView(isPresented: $deleteAlert, title: $deleteTitle, message: $deleteMessage, okColor: .alertRed, onOKAction: {
                         DispatchQueue.main.async {
                             viewModel.deleteBook()
-                        }
-                        
+                        }  
                     })
                 }
                 

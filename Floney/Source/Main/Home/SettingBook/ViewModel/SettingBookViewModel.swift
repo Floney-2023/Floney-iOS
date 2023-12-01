@@ -14,6 +14,11 @@ enum BudgetAssetType {
     case asset
 }
 class SettingBookViewModel : ObservableObject {
+#if DEBUG
+    let projectMode = "dev"
+#else
+    let projectMode = "prod"
+#endif
     var fcmManager = FCMDataManager()
     @Published var tokenViewModel = TokenReissueViewModel()
     @Published var ChangeProfileImageSuccess = false
@@ -70,7 +75,6 @@ class SettingBookViewModel : ObservableObject {
         }
     }
     @Published var budgetDate = ""
-    
     private var cancellableSet: Set<AnyCancellable> = []
     var dataManager: SettingBookProtocol
     
@@ -398,6 +402,7 @@ class SettingBookViewModel : ObservableObject {
                     }
                     dispatchGroup.enter()
                     let email = Keychain.getKeychainValue(forKey: .email) ?? ""
+                    
                     fcmManager.deleteUserToken(bookKey: self.bookKey, email: email) {
                         print("\(self.bookKey) 가계부 토큰 삭제 성공")
                         print("\(email) 가계부 토큰 삭제 성공")
@@ -407,7 +412,8 @@ class SettingBookViewModel : ObservableObject {
 
                     dispatchGroup.notify(queue: .main) {
                         Keychain.setKeychain("", forKey: .bookKey)
-                        BookExistenceViewModel.shared.bookExistence = false
+                        //BookExistenceViewModel.shared.bookExistence = false
+                        AuthenticationService.shared.newMainTab.toggle()
                         BookExistenceViewModel.shared.getBookExistence()
                     }
                 case .failure(let error):
@@ -430,7 +436,8 @@ class SettingBookViewModel : ObservableObject {
         var viewModel = NotiViewModel()
         
         let db = Firestore.firestore()
-        let bookRef = db.collection("books").document(self.bookKey)
+        let projectModeRef = db.collection(projectMode).document(projectMode)
+        let bookRef = projectModeRef.collection("books").document(self.bookKey)
         let usersCollection = bookRef.collection("users")
         var emails = [String]()
         
@@ -468,7 +475,7 @@ class SettingBookViewModel : ObservableObject {
                     }
                     dispatchGroup.enter()
                     let firebaseManager = FirebaseManager()
-                    firebaseManager.getPreviousImageRef(in: "books/\(self.bookKey)") { reference in
+                    firebaseManager.getPreviousImageRef(in: "\(self.projectMode)/books/\(self.bookKey)") { reference in
                         reference?.delete { error in
                             if let error = error {
                                 print("Error deleting previous image: \(error)")
@@ -480,7 +487,8 @@ class SettingBookViewModel : ObservableObject {
                     }
                     dispatchGroup.notify(queue: .main) {
                         Keychain.setKeychain("", forKey: .bookKey)
-                        BookExistenceViewModel.shared.bookExistence = false
+                        //BookExistenceViewModel.shared.bookExistence = false
+                        AuthenticationService.shared.newMainTab.toggle()
                         BookExistenceViewModel.shared.getBookExistence()
                     }
                 case .failure(let error):
