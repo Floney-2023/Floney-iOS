@@ -90,6 +90,7 @@ struct MainTabView: View {
                             .frame(height: scaler.scaleHeight(1))
                             .foregroundColor(.greyScale10)
                             .background(Color.greyScale10)
+                        
                         HStack(spacing:0) {
                             Button {
                                 self.selection = 0
