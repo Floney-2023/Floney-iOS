@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UIKit
 
 struct CreateBookView: View {
     let scaler = Scaler.shared
@@ -56,8 +57,9 @@ struct CreateBookView: View {
                         .onTapGesture {
                             DispatchQueue.main.async {
                                 //if createBookType == .add {
-                                    BookExistenceViewModel.shared.bookExistence = false
+                                //BookExistenceViewModel.shared.bookExistence = false
                                 //}
+                                AuthenticationService.shared.newMainTab.toggle()
                                 BookExistenceViewModel.shared.getBookExistence()
                             }
                         }

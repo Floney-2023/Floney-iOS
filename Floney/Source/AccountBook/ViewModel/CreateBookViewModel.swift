@@ -16,6 +16,11 @@ enum createBookType {
     case add
 }
 class CreateBookViewModel: ObservableObject {
+#if DEBUG
+    let projectMode = "dev"
+#else
+    let projectMode = "prod"
+#endif
     var firebaseManager = FirebaseManager()
     var tokenViewModel = TokenReissueViewModel()
     @Published var result : CreateBookResponse = CreateBookResponse(bookKey: "", code: "")
@@ -224,7 +229,8 @@ class CreateBookViewModel: ObservableObject {
         var viewModel = NotiViewModel()
 
         let db = Firestore.firestore()
-        let bookRef = db.collection("books").document(self.result.bookKey)
+        let projectModeRef = db.collection(projectMode).document(projectMode)
+        let bookRef = projectModeRef.collection("books").document(self.result.bookKey)
         let usersCollection = bookRef.collection("users")
         var emails = [String]()
         

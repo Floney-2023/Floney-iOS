@@ -41,8 +41,8 @@ struct EnterBookView: View {
                     .onTapGesture {
                         DispatchQueue.main.async {
 
-                            BookExistenceViewModel.shared.bookExistence = false
-                   
+                            //BookExistenceViewModel.shared.bookExistence = false
+                            AuthenticationService.shared.newMainTab.toggle()
                             BookExistenceViewModel.shared.getBookExistence()
                         }
                     }
