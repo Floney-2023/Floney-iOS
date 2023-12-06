@@ -11,6 +11,7 @@ class AddViewModel: ObservableObject {
     var fcmManager = FCMDataManager()
     var tokenViewModel = TokenReissueViewModel()
     var alertManager = AlertManager.shared
+    @Published var isApiCalling = false
     @Published var successAdd = false
     @Published var addLoadingError: String = ""
     @Published var showAlert: Bool = false
@@ -107,6 +108,9 @@ class AddViewModel: ObservableObject {
             }.store(in: &cancellableSet)
     }
     func postLines() {
+        guard !isApiCalling else { return }
+        isApiCalling = true
+        
         bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
         nickname = Keychain.getKeychainValue(forKey: .userNickname) ?? ""
         var moneyDouble : Double = 0
@@ -124,12 +128,14 @@ class AddViewModel: ObservableObject {
             .sink { (dataResponse) in
                 
                 if dataResponse.error != nil {
+                    self.isApiCalling = false
                     self.createAlert(with: dataResponse.error!, retryRequest: {
                         self.postLines()
                     })
                     // 에러 처리
                     print(dataResponse.error)
                 } else {
+                    self.isApiCalling = false
                     self.lineResult = dataResponse.value!
                     print("--성공--")
                     print(self.lineResult)
@@ -139,18 +145,22 @@ class AddViewModel: ObservableObject {
             }.store(in: &cancellableSet)
     }
     func postCategory() {
+        guard !isApiCalling else { return }
+        isApiCalling = true
         bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
         let request = AddCategoryRequest(bookKey: bookKey, parent: root, name: newCategoryName)
         dataManager.postCategory(request)
             .sink { (dataResponse) in
                 
                 if dataResponse.error != nil {
+                    self.isApiCalling = false
                     self.createAlert(with: dataResponse.error!, retryRequest: {
                         self.postCategory()
                     })
                     // 에러 처리
                     print(dataResponse.error)
                 } else {
+                    self.isApiCalling = false
                     print("--카테고리 추가 성공--")
                     print(dataResponse.value)
                     self.getCategory()
@@ -160,6 +170,7 @@ class AddViewModel: ObservableObject {
     }
     
     func deleteCategory() {
+        
         bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
         let request = DeleteCategoryRequest(bookKey: bookKey, root: root, name: deleteCategoryName)
         dataManager.deleteCategory(parameters: request)
@@ -181,17 +192,20 @@ class AddViewModel: ObservableObject {
             .store(in: &cancellableSet)
     }
     func deleteLine() {
+        guard !isApiCalling else { return }
+        isApiCalling = true
         let request = DeleteLineRequest(bookLineKey: bookLineKey)
         dataManager.deleteLine(parameters: request)
             .sink { completion in
-
                 switch completion {
                 case .finished:
+                    self.isApiCalling = false
                     print(" successfully line delete.")
                     self.alertManager.update(showAlert: true, message: "삭제가 완료되었습니다.", buttonType: .green)
                     self.successAdd = true
 
                 case .failure(let error):
+                    self.isApiCalling = false
                     self.createAlert(with: error, retryRequest: {
                         self.deleteLine()
                     })
@@ -203,6 +217,8 @@ class AddViewModel: ObservableObject {
             .store(in: &cancellableSet)
     }
     func changeLine() {
+        guard !isApiCalling else { return }
+        isApiCalling = true
         bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
         nickname = Keychain.getKeychainValue(forKey: .userNickname) ?? ""
         var moneyDouble : Double = 0
@@ -220,12 +236,14 @@ class AddViewModel: ObservableObject {
             .sink {(dataResponse) in
                 
                 if dataResponse.error != nil {
+                    self.isApiCalling = false
                     self.createAlert(with: dataResponse.error!, retryRequest: {
                         self.changeLine()
                     })
                     // 에러 처리
                     print(dataResponse.error)
                 } else {
+                    self.isApiCalling = false
                     self.lineResult = dataResponse.value!
                     print("--수정 성공--")
                     print(self.lineResult)

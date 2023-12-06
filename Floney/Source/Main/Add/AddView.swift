@@ -9,6 +9,7 @@ import SwiftUI
 import Combine
 struct AddView: View {
     let scaler = Scaler.shared
+    var buttonHandler = ButtonClickHandler()
     @StateObject var viewModel = AddViewModel()
     @State var changedStatus = false
     @State var showAlert = false
@@ -330,8 +331,12 @@ struct AddView: View {
                                 print(viewModel.line)
                                 print(viewModel.description)
                                 print(viewModel.except)
-                                
                                 viewModel.postLines()
+                               // buttonHandler.setupAction {
+                                //    viewModel.postLines()
+                                //}
+                               // buttonHandler.click()
+                     
                             }
                             
                         } label: {
@@ -345,6 +350,7 @@ struct AddView: View {
                         .frame(maxWidth: .infinity)
                         .frame(maxHeight: .infinity)
                         .background(Color.primary1)
+                      
                     }
                     .frame(maxWidth: .infinity)
                     .frame(height:scaler.scaleHeight(66))
