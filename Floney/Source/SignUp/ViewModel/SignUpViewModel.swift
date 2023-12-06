@@ -279,9 +279,41 @@ class SignUpViewModel: ObservableObject {
         //^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$
         //^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@#$%^&*()\\-_+={}\\[\\]|\\:;'\"<>,.?/~`])[A-Za-z\\d@#$%^&*()\\-_+={}\\[\\]|\\:;'\"<>,.?/~`]{8,}$
 
-        let passwordRegex = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@#$%^&*()\\-_+={}\\[\\]|\\:;'\"<>,.?!/~`])[A-Za-z\\d@#$%^&*()\\-_+={}\\[\\]|\\:;'\"<>,.?/~`]{8,}$"
-        let passwordTest = NSPredicate(format: "SELF MATCHES %@", passwordRegex)
-        return passwordTest.evaluate(with: password)
+        //let passwordRegex = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@#$%^&*()\\-_+={}\\[\\]|\\:;'\"<>,.?/~`])[A-Za-z\\d@#$%^&*()\\-_+={}\\[\\]|\\:;'\"<>,.?!/~`]{8,}$"
+        //let passwordTest = NSPredicate(format: "SELF MATCHES %@", passwordRegex)
+        //return passwordTest.evaluate(with: password)
+        
+
+            // 조건 1: 8자 이상
+            if password.count < 8 {
+                print("패스워드는 최소 8자 이상이어야 합니다.")
+                return false
+            }
+
+            // 조건 2: 영문 포함
+            let containsLetter = password.range(of: "[A-Za-z]", options: .regularExpression) != nil
+            if !containsLetter {
+                print("패스워드에는 최소 한 개의 영문자가 포함되어야 합니다.")
+                return false
+            }
+
+            // 조건 3: 숫자 포함
+            let containsDigit = password.range(of: "\\d", options: .regularExpression) != nil
+            if !containsDigit {
+                print("패스워드에는 최소 한 개의 숫자가 포함되어야 합니다.")
+                return false
+            }
+
+            // 조건 4: 특수문자 포함
+            let specialCharacterRegex = "[@#$%^&*()\\-_+={}\\[\\]|\\:;'\"<>,.?/~`!]"
+            let containsSpecialCharacter = password.range(of: specialCharacterRegex, options: .regularExpression) != nil
+            if !containsSpecialCharacter {
+                print("패스워드에는 최소 한 개의 특수문자가 포함되어야 합니다.")
+                return false
+            }
+
+            return true
+        
     }
      
     
