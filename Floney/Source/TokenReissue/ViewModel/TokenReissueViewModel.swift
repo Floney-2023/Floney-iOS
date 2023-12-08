@@ -11,6 +11,7 @@ class TokenReissueViewModel: ObservableObject {
     @Published var result : TokenReissueResponse = TokenReissueResponse(accessToken: "", refreshToken: "")
     @Published var tokenReissueLoadingError: String = ""
     @Published var showAlert: Bool = false
+    @Published var isApiCalling = false
   
     private var cancellableSet: Set<AnyCancellable> = []
     var dataManager: TokenReissueProtocol
@@ -20,19 +21,20 @@ class TokenReissueViewModel: ObservableObject {
     }
     
     func tokenReissue(completion: @escaping () -> Void) {
+        guard !isApiCalling else { return }
+        isApiCalling = true
+        
         if let accessToken = Keychain.getKeychainValue(forKey: .accessToken) ,let refreshToken = Keychain.getKeychainValue(forKey: .refreshToken) {
             print("token reissue----------------")
             let request = TokenReissueRequest(accessToken: accessToken, refreshToken: refreshToken)
             dataManager.tokenReissue(request)
                 .sink {(dataResponse) in
- 
-                    
                     if dataResponse.error != nil {
+                        self.isApiCalling = false
                         self.createAlert(with: dataResponse.error!)
-                        print(dataResponse.error)
                     } else {
+                        self.isApiCalling = false
                         self.result = dataResponse.value!
-                        print("reissue token : \(self.result)")
                         self.setToken()
                         completion()
                     }
@@ -53,7 +55,7 @@ class TokenReissueViewModel: ObservableObject {
             }
             if error.backendError?.code != "U006" {
                 AlertManager.shared.handleError(serverError)
-            }            // 에러코드에 따른 추가 로직
+            }       // 에러코드에 따른 추가 로직
             if let errorCode = error.backendError?.code {
                 switch errorCode {
                     // 토큰 재발급
