@@ -8,6 +8,11 @@
 import SwiftUI
 
 extension View {
+    
+    func hideKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
+    
     // MARK: call next button modifier
     func withNextButtonFormmating(_ backgroundColor: Color = .blue) -> some View {
         // RETURN BODY

@@ -124,7 +124,7 @@ struct CategoryManagementView: View {
                         .padding(.bottom,  scaler.scaleHeight(64))
                     }
                 } // VStack
-                .padding(.top, scaler.scaleHeight(52))
+                .padding(.top, scaler.scaleHeight(32))
             } // VStack
             .fullScreenCover(isPresented: $isShowingAdd) {
                 AddCategoryView(isShowingAdd: $isShowingAdd, viewModel: viewModel)

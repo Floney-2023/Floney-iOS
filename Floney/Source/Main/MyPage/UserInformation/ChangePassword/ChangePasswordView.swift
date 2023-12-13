@@ -61,7 +61,7 @@ struct ChangePasswordView: View {
                     }
                 Spacer()
             }
-            .padding(EdgeInsets(top: scaler.scaleHeight(35), leading: scaler.scaleWidth(20), bottom: 0, trailing: scaler.scaleWidth(20)))
+            .padding(EdgeInsets(top: scaler.scaleHeight(12), leading: scaler.scaleWidth(20), bottom: 0, trailing: scaler.scaleWidth(20)))
             .customNavigationBar(
                 leftView: { BackButtonBlack() },
                 centerView: { Text("비밀번호 변경")
