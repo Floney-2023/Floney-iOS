@@ -26,7 +26,7 @@ struct UserInformationView: View {
                 }
                 .padding(.leading, scaler.scaleWidth(4))
                 HStack(spacing: scaler.scaleHeight(8)) {
-                    CustomTextField(width:226,text: $viewModel.changedNickname, placeholder: "닉네임을 입력하세요",placeholderColor: .greyScale7)
+                    CustomTextField(width:226,text: $viewModel.changedNickname, placeholder: viewModel.nickname, placeholderColor: .greyScale7)
                         .frame(height: scaler.scaleHeight(46))
                         .frame(width: scaler.scaleWidth(226))
                    
@@ -34,6 +34,7 @@ struct UserInformationView: View {
                         if viewModel.isValidChangedName() {
                             viewModel.changeNickname()
                         }
+                        hideKeyboard()
                     }
                     .padding()
                     .font(.pretendardFont(.bold, size: scaler.scaleWidth(12)))
@@ -118,6 +119,9 @@ struct UserInformationView: View {
                 }
             }
         )
+        .onAppear{
+            viewModel.getMyPage()
+        }
         .onAppear(perform : UIApplication.shared.hideKeyboard)
 
     }

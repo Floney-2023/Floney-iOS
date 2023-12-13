@@ -25,13 +25,14 @@ struct ModifyingBookView: View {
                 }
                 .padding(.leading, scaler.scaleWidth(4))
                 HStack(spacing: scaler.scaleWidth(8)) {
-                    CustomTextField(width:226, text: $viewModel.changedName, placeholder: "이름을 입력하세요.", placeholderColor: .greyScale7)
+                    CustomTextField(width:226, text: $viewModel.changedName, placeholder: viewModel.bookName, placeholderColor: .greyScale7)
                         .frame(height: scaler.scaleHeight(46))
                     
                     Button("변경하기"){
                         if viewModel.isValidChangedName() {
                             viewModel.changeNickname()
                         }
+                        hideKeyboard()
                         
                     }
                     .padding()

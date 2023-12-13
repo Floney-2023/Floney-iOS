@@ -176,6 +176,7 @@ final class MyPageViewModel: ObservableObject {
                 case .finished:
                     print("Profile successfully changed.")
                     Keychain.setKeychain(self.changedNickname, forKey: .userNickname)
+                    self.nickname = self.changedNickname
                     self.alertManager.update(showAlert: true, message: "변경이 완료되었습니다.", buttonType: .green)
                 case .failure(let error):
                     self.createAlert(with: error, retryRequest: {

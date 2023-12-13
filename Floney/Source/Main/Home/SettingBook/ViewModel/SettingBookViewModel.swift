@@ -237,6 +237,7 @@ class SettingBookViewModel : ObservableObject {
                 case .finished:
                     print("Changing nickname successfully changed.")
                     AlertManager.shared.update(showAlert: true, message: "변경이 완료되었습니다.", buttonType: .green)
+                    bookName = changedName
                 case .failure(let error):
                     self.createAlert(with: error, retryRequest: {
                         self.changeNickname()
