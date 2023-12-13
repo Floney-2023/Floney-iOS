@@ -30,8 +30,8 @@ struct CategoryManagementView: View {
     @State var showAddButton = true
     var body: some View {
         ZStack {
-            VStack {
-                VStack(spacing:scaler.scaleHeight(16)) {
+            VStack(spacing:0) {
+                VStack(spacing:0) {
                     VStack(alignment:.leading, spacing: 0){
                         HStack{
                             VStack(alignment:.leading, spacing: scaler.scaleHeight(16)) {
@@ -59,14 +59,13 @@ struct CategoryManagementView: View {
                         }
                     }
                     .padding(.horizontal,scaler.scaleWidth(24))
-                    .padding(.bottom, scaler.scaleHeight(16))
+                    .padding(.bottom, scaler.scaleHeight(32))
                     
                     HStack(spacing: 0) {
                         ForEach(options.indices, id:\.self) { index in
                             ZStack {
                                 Rectangle()
                                     .fill(Color.greyScale12)
-                                
                                 Rectangle()
                                     .fill(Color.white)
                                     .cornerRadius(6)
@@ -89,7 +88,7 @@ struct CategoryManagementView: View {
                     .frame(height:scaler.scaleHeight(38))
                     .cornerRadius(8)
                     .padding(.horizontal,scaler.scaleWidth(20))
-
+                    
                     ScrollView(showsIndicators: false) {
                         VStack(alignment: .leading) {
                             ForEach(viewModel.categories.indices, id: \.self) { i in
@@ -120,6 +119,7 @@ struct CategoryManagementView: View {
                             }
                             
                         }
+                        .padding(.top, scaler.scaleHeight(16))
                         .padding(.horizontal,scaler.scaleWidth(22))
                         .padding(.bottom,  scaler.scaleHeight(64))
                     }
@@ -199,10 +199,6 @@ struct CategoryManagementView: View {
             }
             
             if deleteAlert {
-                /*
-                AlertView(isPresented: $deleteAlert, title: $title, message: $message, onOKAction: {
-                    viewModel.deleteCategory()
-                })*/
                 FloneyAlertView(isPresented: $deleteAlert, title:$title, message: $message, leftButtonText:"삭제하기") {
                     viewModel.deleteCategory()
                 }
