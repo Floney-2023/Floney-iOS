@@ -23,9 +23,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate {
     var deferred_deep_link_processed_flag:Bool = false
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-        print("IDFA : \(ASIdentifierManager.shared().advertisingIdentifier.uuidString)")
-        // 카카오 초기화
-        KakaoSDK.initSDK(appKey: Secret.KAKAO_NATIVE_APP_KEY, loggingEnable:false)
+                KakaoSDK.initSDK(appKey: Secret.KAKAO_NATIVE_APP_KEY, loggingEnable:false)
         
         // firebase 초기화
         FirebaseApp.configure()
@@ -46,13 +44,9 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate {
             } else if let token = token {
                 print("FCM registration token: \(token)")
                 Keychain.setKeychain(token, forKey: .fcmToken)
-                
             }
         }
-    
-   
-        
-        
+
         // google 초기화
         GoogleSignIn.GIDSignIn.sharedInstance.restorePreviousSignIn { user, error in
             if error != nil || user == nil {
@@ -61,10 +55,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate {
                 
             }
         }
-      
-
-        
-        
+       
         // apple 연동되어 있는지 검증
         if let appleId = Keychain.getKeychainValue(forKey: .appleUserId) {
             let appleIDProvider = ASAuthorizationAppleIDProvider()
@@ -87,14 +78,14 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate {
         }
         // Apps Flyer 초기화
         //  Set isDebug to true to see AppsFlyer debug logs
-        AppsFlyerLib.shared().isDebug = true
+
         AppsFlyerLib.shared().appsFlyerDevKey = Secret.APPS_FLYER_DEV_KEY
         AppsFlyerLib.shared().appleAppID = Secret.APP_ID
         AppsFlyerLib.shared().waitForATTUserAuthorization(timeoutInterval: 60)
         
         AppsFlyerLib.shared().delegate = self
         AppsFlyerLib.shared().deepLinkDelegate = self
-        //AppsFlyerLib.shared().appInviteOneLinkID = "ZpHw"
+        AppsFlyerLib.shared().appInviteOneLinkID = "ZpHw"
         
         // SDK 시작
         // Subscribe to didBecomeActiveNotification if you use SceneDelegate or just call
@@ -105,10 +96,12 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate {
                                                object: nil)
         
         // IAP 초기화
-        IAPManager.shared.initIAP()
+        //IAPManager.shared.initIAP()
+         
         return true
+
     }
-    
+        
     // 앱이 활성화 될 때마다 호출됨.
     @objc func didBecomeActiveNotification() {
         AppsFlyerLib.shared().start()
@@ -138,15 +131,12 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate {
         return true
     }
     
-    
     // Open URI-scheme for iOS 9 and above
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
-        
         // kakao
         if (AuthApi.isKakaoTalkLoginUrl(url)) {
             return AuthController.handleOpenUrl(url: url, options: options)
         }
-        
         // google
         if (GIDSignIn.sharedInstance.handle(url)) {
             return true
@@ -155,9 +145,6 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate {
         
         return false
     }
-    
-    
-    
     // User logic
     fileprivate func walkToSceneWithParams(inviteCode: String, deepLinkData: [String: Any]?) {
         
@@ -302,13 +289,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
                                 willPresent notification: UNNotification) async
     -> UNNotificationPresentationOptions {
         let userInfo = notification.request.content.userInfo
-        
-        // With swizzling disabled you must let Messaging know about the message, for Analytics
-        // Messaging.messaging().appDidReceiveMessage(userInfo)
-        
-        // ...
-        
-        // Print full message.
+
         print(userInfo)
         
         // Change this to your preferred presentation option
@@ -319,28 +300,11 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
                                 didReceive response: UNNotificationResponse) async {
         let userInfo = response.notification.request.content.userInfo
         
-        // ...
-        
-        // With swizzling disabled you must let Messaging know about the message, for Analytics
-        // Messaging.messaging().appDidReceiveMessage(userInfo)
-        
-        // Print full message.
         print(userInfo)
     }
     func application(_ application: UIApplication,
                      didReceiveRemoteNotification userInfo: [AnyHashable: Any]) async
     -> UIBackgroundFetchResult {
-        // If you are receiving a notification message while your app is in the background,
-        // this callback will not be fired till the user taps on the notification launching the application.
-        // TODO: Handle data of notification
-        
-        // With swizzling disabled you must let Messaging know about the message, for Analytics
-        // Messaging.messaging().appDidReceiveMessage(userInfo)
-        
-        // Print message ID.
-        
-        
-        // Print full message.
         print(userInfo)
         AppsFlyerLib.shared().handlePushNotification(userInfo)
         

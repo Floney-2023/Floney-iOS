@@ -20,6 +20,14 @@
 				<string>com.googleusercontent.apps.${GOOGLE_CLIENT_ID}</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>floney</string>
+			</array>
+		</dict>
 	</array>
 	<key>FirebaseAppDelegateProxyEnabled</key>
 	<string>NO</string>
@@ -31,6 +39,7 @@
 	<array>
 		<string>kakaokompassauth</string>
 		<string>kakaolink</string>
+		<string>floney</string>
 	</array>
 	<key>NSAppTransportSecurity</key>
 	<dict>
