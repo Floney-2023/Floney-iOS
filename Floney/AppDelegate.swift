@@ -26,7 +26,15 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate {
                 KakaoSDK.initSDK(appKey: Secret.KAKAO_NATIVE_APP_KEY, loggingEnable:false)
         
         // firebase 초기화
-        FirebaseApp.configure()
+        //FirebaseApp.configure()
+        var fileName = "GoogleService-Info"
+#if DEBUG
+        fileName = fileName + "-dev"
+#endif
+        let filePath = Bundle.main.path(forResource: fileName, ofType: "plist")!
+        let options: FirebaseOptions? = FirebaseOptions.init(contentsOfFile: filePath)
+        FirebaseApp.configure(options: options!)
+        
         
         // fcm delegate
         UNUserNotificationCenter.current().delegate = self

@@ -46,7 +46,6 @@ struct CustomTextField: UIViewRepresentable {
             NSAttributedString.Key.font: placeholderFont
         ]
 
-
         textField.attributedPlaceholder = NSAttributedString(string: placeholder, attributes: attributes)
         textField.font = textFont
         textField.textColor = textColor

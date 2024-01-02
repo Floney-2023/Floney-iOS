@@ -23,5 +23,4 @@ struct Secret {
     static let NAVER_CLIENT_ID = "5cFbVr8QjUhDpif_uYa9"
     static let NAVER_CLIENT_SECRET = "ApEjSKgq2x"
     static let APP_SHARE_PASSWORD = "d690a14f3c0348afa1c1c3fb9584b482"
-    
 }
