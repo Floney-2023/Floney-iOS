@@ -1,0 +1,107 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:ios)
+
+ platform :ios do
+  desc "build app and upload to testflight"
+  lane :beta do
+    get_certificates
+    get_provisioning_profile
+    increment_build_number(
+        build_number: latest_testflight_build_number + 1
+    )
+    build_app(
+	scheme: "Floney"
+	)
+    pilot(api_key_path: "fastlane/823296ZXV3.json")
+    #upload_to_testflight
+    slack(
+      message: "Testflight 배포",
+      username: "Floney",
+      icon_url: "https://firebasestorage.googleapis.com/v0/b/floney.appspot.com/o/logo%2F%5Bfloney%5D%20illust%20ver.svg?alt=media&token=c2387430-34fe-48a5-9fcb-3564813ef098",
+      slack_url: "https://hooks.slack.com/services/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"
+    )
+  end
+
+  lane :develop do
+    version = get_version_number(
+        xcodeproj: "Floney.xcodeproj",
+        target: "Floney"
+    )
+    build = get_build_number(xcodeproj: "Floney.xcodeproj")
+
+    build_app(
+        workspace: "Floney.xcworkspace",
+        scheme: "Floney-Dev",
+	export_method: "development",
+	output_name: "Floney-Dev"
+        )
+    firebase_app_distribution(
+	app: "1:918730717655:ios:c2692564a6bba76fd2b392",
+	groups: "floney-dev-tester",
+	release_notes: "Latest development build",
+      firebase_cli_path: "./firebase-tools/bin/firebase" # Firebase CLI 경로
+    )
+    slack(
+      message: "Floney-Dev 배포",
+      username: "Floney-Dev",
+      icon_url: "https://firebasestorage.googleapis.com/v0/b/floney.appspot.com/o/logo%2F%5Bfloney%5Dillust_logo_dev.png?alt=media&token=8cf3c91f-ea08-4453-a2a0-82844d31ebb3",
+      payload: {
+        "version": version + " (" + build + ")"
+      },
+      slack_url: "https://hooks.slack.com/services/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"
+    )
+  end
+
+  lane :send do
+   version = get_version_number(
+        xcodeproj: "Floney.xcodeproj",
+        target: "Floney"
+    )
+    build = get_build_number(xcodeproj: "Floney.xcodeproj") 
+    slack(
+      message: "Floney-Prod 배포",
+      username: "Floney",
+      icon_url: "https://firebasestorage.googleapis.com/v0/b/floney.appspot.com/o/logo%2F%5Bfloney%5D%20illust%20ver.svg?alt=media&token=c2387430-34fe-48a5-9fcb-3564813ef098",
+      payload: {
+        "Version": version + " (" + build + ")"
+      },
+      slack_url: "https://hooks.slack.com/services/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"
+    )
+  
+  end 
+
+
+  error do |lane, exception, options|
+    version = get_version_number(
+	xcodeproj: "Floney.xcodeproj", 
+	target: "Floney"
+    )
+    build = get_build_number(xcodeproj: "Floney.xcodeproj") 
+
+
+    slack(
+      message: "에러 발생 : #{exception}",
+      username: "Floney-Dev",
+      icon_url: "https://firebasestorage.googleapis.com/v0/b/floney.appspot.com/o/logo%2F%5Bfloney%5Dillust_logo_dev.png?alt=media&token=8cf3c91f-ea08-4453-a2a0-82844d31ebb3",
+      success: false,
+      payload: {
+        "version": version + " (" + build + ")"
+      },
+      slack_url: "https://hooks.slack.com/services/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"
+      )
+  end
+end
