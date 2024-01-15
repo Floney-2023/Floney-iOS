@@ -267,6 +267,7 @@ struct SetBudgetBottomSheet: View {
     @Binding var month : Int
     @ObservedObject var viewModel : SettingBookViewModel
     @State var budget : String = ""
+    @State var realBudget : String = ""
     var body: some View{
         ZStack(alignment: .bottom) {
             if (isShowing) {
@@ -294,7 +295,7 @@ struct SetBudgetBottomSheet: View {
                             
                         }
                         .onTapGesture {
-                            budget = "0"
+                            budget = ""
                         }
                     }
                     .padding(.horizontal,scaler.scaleWidth(4))
@@ -304,7 +305,12 @@ struct SetBudgetBottomSheet: View {
                         TextFieldLarge(label: $label, content: $budget)
                             .frame(height: buttonHeight)
                         ButtonLarge(label: "저장하기", background: .primary1, textColor: .white, strokeColor: .primary1,  fontWeight: .bold, action: {
-                            if viewModel.onlyNumberValid(input: budget, budgetAssetType: .budget) {
+                            if budget.isEmpty {
+                                realBudget = "0"
+                            } else {
+                                realBudget = budget
+                            }
+                            if viewModel.onlyNumberValid(input: realBudget, budgetAssetType: .budget) {
                                 isShowing = false
                             }
                         })
