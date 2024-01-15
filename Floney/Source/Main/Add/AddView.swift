@@ -112,36 +112,6 @@ struct AddView: View {
    
                         MoneyTextField(text: $money, placeholder: "금액을 입력하세요")
                             .frame(height: scaler.scaleHeight(38))
-                        /*
-                            .onReceive(Just(money)) { value in
-                                let trimmedValue = value.filter { "0"..."9" ~= $0 || $0 == "." }
-                                let components = trimmedValue.split(separator: ".")
-                                // 소수점이 없는 경우
-                                if components.count == 1 {
-                                    if let doubleValue = Double(trimmedValue), doubleValue < 100_000_000_000 {
-                                        money = formatNumber(trimmedValue)  // 콤마로 구분하여 형식화
-                                    } else if trimmedValue.last == "." {
-                                        money = formatNumber(String(trimmedValue.dropLast())) + "."  // Allow values like "123."
-                                    } else if Double(trimmedValue) != nil {
-                                        money = formatNumber(String(trimmedValue.dropLast()))
-                                    }
-                                }
-                                // 소수점이 하나만 있고 둘째 자리까지 입력된 경우
-                                else if components.count == 2 && components[1].count <= 2 {
-                                    let rawValue = String(components[0]) + "." + components[1]
-                                    money = formatNumber(rawValue)
-                                }
-                                // 소수점이 둘째 자리 이후로 입력된 경우
-                                else if components.count == 2 && components[1].count > 2 {
-                                    let rawValue = String(components[0]) + "." + components[1].prefix(2)
-                                    money = formatNumber(rawValue)
-                                }
-                                // 두 개 이상의 소수점이 포함된 경우
-                                else {
-                                    let rawValue = String(components.dropLast().joined(separator: "."))
-                                    money = formatNumber(rawValue)
-                                }
-                            }*/
                             .onReceive(Just(money)) { value in
                                 var processedValue = value.filter { "0"..."9" ~= $0 || $0 == "." }
                                 
@@ -257,11 +227,15 @@ struct AddView: View {
                         }
                         .frame(height: scaler.scaleHeight(58))
                         .onTapGesture {
-                            self.root = toggleType
-                            viewModel.root = self.root
-                            viewModel.getCategory()
-                            
-                            self.isShowingBottomSheet.toggle()
+                            // 먼저 키보드를 내립니다
+                            UIApplication.shared.endEditing(true)
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                self.root = toggleType
+                                viewModel.root = self.root
+                                viewModel.getCategory()
+                                
+                                self.isShowingBottomSheet.toggle()
+                            }
                         }
 
                         
@@ -332,10 +306,6 @@ struct AddView: View {
                                 print(viewModel.description)
                                 print(viewModel.except)
                                 viewModel.postLines()
-                               // buttonHandler.setupAction {
-                                //    viewModel.postLines()
-                                //}
-                               // buttonHandler.click()
                      
                             }
                             

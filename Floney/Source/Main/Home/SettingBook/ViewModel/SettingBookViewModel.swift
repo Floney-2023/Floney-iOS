@@ -41,7 +41,13 @@ class SettingBookViewModel : ObservableObject {
     @Published var startDay = ""
     @Published var carryOver = true
     @Published var stateOfCarryOver = false
-    @Published var changedName = ""
+    @Published var changedName = "" {
+        didSet {
+            if changedName.count > 10 {
+                changedName = String(changedName.prefix(10))
+            }
+        }
+    }
     @Published var encryptedImageUrl : String = ""
     @Published var profileStatus = true {
         didSet {
@@ -69,7 +75,7 @@ class SettingBookViewModel : ObservableObject {
     //MARK: Budget
     @Published var budget : Double = 0
     @Published var yearlyData: [Int: [MonthlyAmount]] = [:]
-    @Published var selectedYear: Int = 2023 {
+    @Published var selectedYear: Int = Calendar.current.component(.year, from: Date()) {
         didSet {
             getBudget()
         }
