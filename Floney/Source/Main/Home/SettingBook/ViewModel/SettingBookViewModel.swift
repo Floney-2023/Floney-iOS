@@ -75,7 +75,7 @@ class SettingBookViewModel : ObservableObject {
     //MARK: Budget
     @Published var budget : Double = 0
     @Published var yearlyData: [Int: [MonthlyAmount]] = [:]
-    @Published var selectedYear: Int = 2023 {
+    @Published var selectedYear: Int = Calendar.current.component(.year, from: Date()) {
         didSet {
             getBudget()
         }
