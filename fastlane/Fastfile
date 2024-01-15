@@ -32,7 +32,7 @@ default_platform(:ios)
       message: "Testflight 배포",
       username: "Floney",
       icon_url: "https://firebasestorage.googleapis.com/v0/b/floney.appspot.com/o/logo%2F%5Bfloney%5D%20illust%20ver.svg?alt=media&token=c2387430-34fe-48a5-9fcb-3564813ef098",
-      slack_url: "https://hooks.slack.com/services/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"
+      slack_url: "https://hooks.slack.com/services/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"
     )
   end
 
@@ -62,7 +62,7 @@ default_platform(:ios)
       payload: {
         "version": version + " (" + build + ")"
       },
-      slack_url: "https://hooks.slack.com/services/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"
+      slack_url: "https://hooks.slack.com/services/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"
     )
   end
 
@@ -76,12 +76,12 @@ default_platform(:ios)
   	when :develop
     	username = "Floney-Dev"
     	icon_url = "https://firebasestorage.googleapis.com/v0/b/floney.appspot.com/o/logo%2F%5Bfloney%5Dillust_logo_dev.png?alt=media&token=8cf3c91f-ea08-4453-a2a0-82844d31ebb3"
-    	slack_url = "https://hooks.slack.com/services/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"
+    	slack_url = "https://hooks.slack.com/services/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"
         
 	when :testflight
   	username = "Floney",
       	icon_url = "https://firebasestorage.googleapis.com/v0/b/floney.appspot.com/o/logo%2F%5Bfloney%5D%20illust%20ver.svg?alt=media&token=c2387430-34fe-48a5-9fcb-3564813ef098"
-      	slack_url = "https://hooks.slack.com/services/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"
+      	slack_url = "https://hooks.slack.com/services/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"
       	end
 
 	# Slack 메시지 보내기
