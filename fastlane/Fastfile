@@ -93,7 +93,7 @@ default_platform(:ios)
         
 	when :testflight
   	username: "Floney",
-      	icon_url: "https://firebasestorage.googleapis.com/v0/b/floney.appspot.com/o/logo%2F%5Bfloney%5D%20illust%20ver.svg?alt=media&token=c2387430-34fe-48a5-9fcb-3564813ef098",
+      	icon_url: "https://firebasestorage.googleapis.com/v0/b/floney.appspot.com/o/logo%2F%5Bfloney%5D%20illust%20ver.svg?alt=media&token=c2387430-34fe-48a5-9fcb-3564813ef098"
       	slack_url: "https://hooks.slack.com/services/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"
       	end
 
