@@ -89,12 +89,12 @@ default_platform(:ios)
   	when :develop
     	username = "Floney-Dev"
     	icon_url = "https://firebasestorage.googleapis.com/v0/b/floney.appspot.com/o/logo%2F%5Bfloney%5Dillust_logo_dev.png?alt=media&token=8cf3c91f-ea08-4453-a2a0-82844d31ebb3"
-    	slack_url: "https://hooks.slack.com/services/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"
+    	slack_url = "https://hooks.slack.com/services/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"
         
 	when :testflight
-  	username: "Floney",
-      	icon_url: "https://firebasestorage.googleapis.com/v0/b/floney.appspot.com/o/logo%2F%5Bfloney%5D%20illust%20ver.svg?alt=media&token=c2387430-34fe-48a5-9fcb-3564813ef098"
-      	slack_url: "https://hooks.slack.com/services/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"
+  	username = "Floney",
+      	icon_url = "https://firebasestorage.googleapis.com/v0/b/floney.appspot.com/o/logo%2F%5Bfloney%5D%20illust%20ver.svg?alt=media&token=c2387430-34fe-48a5-9fcb-3564813ef098"
+      	slack_url = "https://hooks.slack.com/services/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"
       	end
 
 	# Slack 메시지 보내기
