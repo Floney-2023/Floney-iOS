@@ -266,7 +266,6 @@ struct SetBudgetBottomSheet: View {
     @Binding var isShowing: Bool
     @Binding var month : Int
     @ObservedObject var viewModel : SettingBookViewModel
-    @State var budget : String = ""
     @State var realBudget : String = ""
     var body: some View{
         ZStack(alignment: .bottom) {
@@ -275,7 +274,6 @@ struct SetBudgetBottomSheet: View {
                     .opacity(0.7)
                     .ignoresSafeArea()
                     .onTapGesture {
-                        budget = ""
                         isShowing.toggle()
                     }
                 VStack(spacing: scaler.scaleHeight(20)) {
@@ -295,20 +293,20 @@ struct SetBudgetBottomSheet: View {
                             
                         }
                         .onTapGesture {
-                            budget = ""
+                            viewModel.currentBudget = ""
                         }
                     }
                     .padding(.horizontal,scaler.scaleWidth(4))
                     .padding(.top, scaler.scaleHeight(24))
                     
                     VStack(spacing : scaler.scaleHeight(20)) {
-                        TextFieldLarge(label: $label, content: $budget)
+                        TextFieldLarge(label: $label, content: $viewModel.currentBudget)
                             .frame(height: buttonHeight)
                         ButtonLarge(label: "저장하기", background: .primary1, textColor: .white, strokeColor: .primary1,  fontWeight: .bold, action: {
-                            if budget.isEmpty {
+                            if viewModel.currentBudget.isEmpty {
                                 realBudget = "0"
                             } else {
-                                realBudget = budget
+                                realBudget = viewModel.currentBudget
                             }
                             if viewModel.onlyNumberValid(input: realBudget, budgetAssetType: .budget) {
                                 isShowing = false
@@ -331,7 +329,6 @@ struct SetBudgetBottomSheet: View {
         .ignoresSafeArea()
         .animation(.easeInOut, value: isShowing)
         .onAppear {
-            budget = ""
             NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: .main) { (notification) in
                 let value = notification.userInfo![UIResponder.keyboardFrameEndUserInfoKey] as! CGRect
                 let height = value.height
