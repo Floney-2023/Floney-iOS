@@ -1923,7 +1923,7 @@
 				CODE_SIGN_ENTITLEMENTS = Floney/Floney.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 34;
+				CURRENT_PROJECT_VERSION = 35;
 				DEVELOPMENT_ASSET_PATHS = "\"Floney/Preview Content\"";
 				DEVELOPMENT_TEAM = 949V9B6RLN;
 				ENABLE_PREVIEWS = YES;
@@ -2059,7 +2059,7 @@
 				CODE_SIGN_ENTITLEMENTS = Floney/Floney.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 34;
+				CURRENT_PROJECT_VERSION = 35;
 				DEVELOPMENT_ASSET_PATHS = "\"Floney/Preview Content\"";
 				DEVELOPMENT_TEAM = 949V9B6RLN;
 				ENABLE_PREVIEWS = YES;
