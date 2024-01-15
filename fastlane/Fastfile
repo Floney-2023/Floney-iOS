@@ -17,7 +17,7 @@ default_platform(:ios)
 
  platform :ios do
   desc "build app and upload to testflight"
-  lane :beta do
+  lane :testflight do
     get_certificates
     get_provisioning_profile
     increment_build_number(
@@ -66,33 +66,7 @@ default_platform(:ios)
     )
   end
 
-  lane :send do
-   version = get_version_number(
-        xcodeproj: "Floney.xcodeproj",
-        target: "Floney"
-    )
-    build = get_build_number(xcodeproj: "Floney.xcodeproj") 
-    slack(
-      message: "Floney-Prod 배포",
-      username: "Floney",
-      icon_url: "https://firebasestorage.googleapis.com/v0/b/floney.appspot.com/o/logo%2F%5Bfloney%5D%20illust%20ver.svg?alt=media&token=c2387430-34fe-48a5-9fcb-3564813ef098",
-      payload: {
-        "Version": version + " (" + build + ")"
-      },
-      slack_url: "https://hooks.slack.com/services/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"
-    )
-  
-  end 
-
-
   error do |lane, exception, options|
-    version = get_version_number(
-	xcodeproj: "Floney.xcodeproj", 
-	target: "Floney"
-    )
-    build = get_build_number(xcodeproj: "Floney.xcodeproj") 
-
-
     slack(
       message: "에러 발생 : #{exception}",
       username: "Floney-Dev",
@@ -103,5 +77,34 @@ default_platform(:ios)
       },
       slack_url: "https://hooks.slack.com/services/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"
       )
+  end
+
+  error do |lane, exception, options|
+  	# 기본값 설정
+    	username = ""
+    	icon_url = ""
+    	slack_url = ""
+
+	case lane
+  	when :develop
+    	username = "Floney-Dev"
+    	icon_url = "https://firebasestorage.googleapis.com/v0/b/floney.appspot.com/o/logo%2F%5Bfloney%5Dillust_logo_dev.png?alt=media&token=8cf3c91f-ea08-4453-a2a0-82844d31ebb3"
+    	slack_url: "https://hooks.slack.com/services/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"
+        
+	when :testflight
+  	username: "Floney",
+      	icon_url: "https://firebasestorage.googleapis.com/v0/b/floney.appspot.com/o/logo%2F%5Bfloney%5D%20illust%20ver.svg?alt=media&token=c2387430-34fe-48a5-9fcb-3564813ef098",
+      	slack_url: "https://hooks.slack.com/services/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"
+      	end
+
+	# Slack 메시지 보내기
+    	slack(
+        	message: "에러 발생 : #{exception}",
+        	username: username,
+        	icon_url: icon_url,
+       		success: false,
+        	slack_url: slack_url
+    	)
+  
   end
 end
