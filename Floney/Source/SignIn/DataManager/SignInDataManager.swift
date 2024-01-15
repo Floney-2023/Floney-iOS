@@ -13,7 +13,6 @@ protocol SignInProtocol {
     func kakaoSignIn(_ token:String) -> AnyPublisher<DataResponse<SignInResponse, NetworkError>, Never>
     func googleSignIn(_ token:String) -> AnyPublisher<DataResponse<SignInResponse, NetworkError>, Never>
     func appleSignIn(_ token:String) -> AnyPublisher<DataResponse<SignInResponse, NetworkError>, Never>
-
     func checkKakao(_ token:String) -> AnyPublisher<Bool, Error>
     func checkgoogle(_ token:String) -> AnyPublisher<Bool, Error>
     func checkApple(_ token:String) -> AnyPublisher<Bool, Error>
@@ -24,9 +23,7 @@ class SignIn {
     static let shared: SignInProtocol = SignIn()
     private init() { }
 }
-
 extension SignIn: SignInProtocol {
-    
     func postSignIn(_ parameters:SignInRequest) -> AnyPublisher<DataResponse<SignInResponse, NetworkError>, Never> {
         //  let url = URL(string: "Your_URL")!
         let url = "\(Constant.BASE_URL)/users/login"
