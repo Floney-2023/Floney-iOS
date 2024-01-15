@@ -62,21 +62,8 @@ default_platform(:ios)
       payload: {
         "version": version + " (" + build + ")"
       },
-      slack_url: "https://hooks.slack.com/services/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"
+      slack_url: "https://hooks.slack.com/services/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"
     )
-  end
-
-  error do |lane, exception, options|
-    slack(
-      message: "에러 발생 : #{exception}",
-      username: "Floney-Dev",
-      icon_url: "https://firebasestorage.googleapis.com/v0/b/floney.appspot.com/o/logo%2F%5Bfloney%5Dillust_logo_dev.png?alt=media&token=8cf3c91f-ea08-4453-a2a0-82844d31ebb3",
-      success: false,
-      payload: {
-        "version": version + " (" + build + ")"
-      },
-      slack_url: "https://hooks.slack.com/services/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"
-      )
   end
 
   error do |lane, exception, options|
@@ -89,7 +76,7 @@ default_platform(:ios)
   	when :develop
     	username = "Floney-Dev"
     	icon_url = "https://firebasestorage.googleapis.com/v0/b/floney.appspot.com/o/logo%2F%5Bfloney%5Dillust_logo_dev.png?alt=media&token=8cf3c91f-ea08-4453-a2a0-82844d31ebb3"
-    	slack_url = "https://hooks.slack.com/services/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"
+    	slack_url = "https://hooks.slack.com/services/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"
         
 	when :testflight
   	username = "Floney",
