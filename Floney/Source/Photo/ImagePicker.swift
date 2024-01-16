@@ -43,8 +43,10 @@ struct PhotoPicker: UIViewControllerRepresentable {
                 itemProvider.loadObject(ofClass: UIImage.self) { [weak self] image, error in
                     DispatchQueue.main.async {
                         if let image = image as? UIImage {
-                            self?.parent.image = image
-                            self?.parent.onPick(image)
+                            let fixedOrientationImage = image.fixOrientation() // 이미지 방향 수정
+                            let croppedImage = fixedOrientationImage?.croppedToSquare() // 이미지를 정사각형으로 크롭
+                            self?.parent.image = croppedImage
+                            self?.parent.onPick(croppedImage)
                             self?.parent.presentationMode.wrappedValue.dismiss()
                         }
                     }
@@ -61,36 +63,38 @@ struct CameraView: UIViewControllerRepresentable {
     @Environment(\.presentationMode) var presentationMode
     var onCapture: (UIImage?) -> Void  // New closure parameter
     
-
+    
     func makeUIViewController(context: Context) -> UIImagePickerController {
         let picker = UIImagePickerController()
         picker.delegate = context.coordinator
         picker.sourceType = .camera
         return picker
     }
-
+    
     func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {}
-
+    
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
     }
-
+    
     class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
         let parent: CameraView
-
+        
         init(_ parent: CameraView) {
             self.parent = parent
         }
-
+        
         func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
             if let image = info[.originalImage] as? UIImage {
-                parent.image = image
+                let fixedOrientationImage = image.fixOrientation() // 이미지 방향 수정
+                let croppedImage = fixedOrientationImage?.croppedToSquare() // 이미지를 정사각형으로 크롭
+                parent.image = croppedImage
                 parent.onCapture(image)
                 parent.presentationMode.wrappedValue.dismiss()
             }
             
         }
-
+        
         func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
             parent.presentationMode.wrappedValue.dismiss()
         }
