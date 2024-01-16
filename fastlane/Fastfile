@@ -17,14 +17,18 @@ default_platform(:ios)
 
  platform :ios do
   desc "build app and upload to testflight"
-  lane :testflight do
+  lane :beta do
     get_certificates
     get_provisioning_profile
     increment_build_number(
         build_number: latest_testflight_build_number + 1
     )
     build_app(
-	scheme: "Floney"
+	workspace: "Floney.xcworkspace",
+	scheme: "Floney",
+	configuration: "Release",
+      	export_method: "app-store",
+	output_name: "Floney"
 	)
     pilot(api_key_path: "fastlane/823296ZXV3.json")
     #upload_to_testflight
@@ -32,7 +36,7 @@ default_platform(:ios)
       message: "Testflight 배포",
       username: "Floney",
       icon_url: "https://firebasestorage.googleapis.com/v0/b/floney.appspot.com/o/logo%2F%5Bfloney%5D%20illust%20ver.svg?alt=media&token=c2387430-34fe-48a5-9fcb-3564813ef098",
-      slack_url: "https://hooks.slack.com/services/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"
+      slack_url: "https://hooks.slack.com/services/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"
     )
   end
 
@@ -62,7 +66,7 @@ default_platform(:ios)
       payload: {
         "version": version + " (" + build + ")"
       },
-      slack_url: "https://hooks.slack.com/services/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"
+      slack_url: "https://hooks.slack.com/services/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"
     )
   end
 
@@ -76,12 +80,12 @@ default_platform(:ios)
   	when :develop
     	username = "Floney-Dev"
     	icon_url = "https://firebasestorage.googleapis.com/v0/b/floney.appspot.com/o/logo%2F%5Bfloney%5Dillust_logo_dev.png?alt=media&token=8cf3c91f-ea08-4453-a2a0-82844d31ebb3"
-    	slack_url = "https://hooks.slack.com/services/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"
+    	slack_url = "https://hooks.slack.com/services/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"
         
-	when :testflight
-  	username = "Floney",
+	when :beta
+  	username = "Floney"
       	icon_url = "https://firebasestorage.googleapis.com/v0/b/floney.appspot.com/o/logo%2F%5Bfloney%5D%20illust%20ver.svg?alt=media&token=c2387430-34fe-48a5-9fcb-3564813ef098"
-      	slack_url = "https://hooks.slack.com/services/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"
+      	slack_url = "https://hooks.slack.com/services/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"
       	end
 
 	# Slack 메시지 보내기
