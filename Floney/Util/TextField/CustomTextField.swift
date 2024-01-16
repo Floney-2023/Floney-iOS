@@ -37,7 +37,7 @@ struct CustomTextField: UIViewRepresentable {
     }
 
     func makeUIView(context: Context) -> UITextField {
-        let textField = FixedSizeTextField(width: self.width)//UITextField()
+        let textField = FixedSizeTextField(width: self.width)
         textField.translatesAutoresizingMaskIntoConstraints = false // Auto Layout 사용 설정
         textField.delegate = context.coordinator
         
@@ -73,17 +73,18 @@ struct CustomTextField: UIViewRepresentable {
         return textField
     }
     
-    
+
     func updateUIView(_ uiView: UITextField, context: Context) {
         uiView.text = text
         uiView.placeholder = placeholder
         uiView.backgroundColor = backgroundColor
-        
         // Add border and cornerRadius
         uiView.layer.borderColor = strokeColor.cgColor
         uiView.layer.borderWidth = 1.0
         uiView.layer.cornerRadius = cornerRadius
-
+        if let fixedSizeTextField = uiView as? FixedSizeTextField {
+            fixedSizeTextField.addWonLabelIfNeeded(isCenterAligned: alignment == .center, textIsEmpty: text.isEmpty)
+        }
     }
     
     func makeCoordinator() -> Coordinator {
@@ -114,7 +115,11 @@ struct CustomTextField: UIViewRepresentable {
 class FixedSizeTextField: UITextField {
     let scaler = Scaler.shared
     var fixedWidth: CGFloat
-
+    var textFont: UIFont {
+        .pretendardFont(.regular, size: scaler.scaleWidth(14))
+    }
+    var color: UIColor = .greyScale2
+    
     // Designated initializer with a width parameter
     init(width: CGFloat) {
         self.fixedWidth = width
@@ -130,8 +135,37 @@ class FixedSizeTextField: UITextField {
     private func commonInit() {
         // Additional common setup can be done here if needed
     }
-
+    
     override var intrinsicContentSize: CGSize {
         return CGSize(width: scaler.scaleWidth(fixedWidth), height: scaler.scaleHeight(46))
     }
+    func addWonLabelIfNeeded(isCenterAligned: Bool, textIsEmpty: Bool) {
+        if isCenterAligned && !textIsEmpty {
+            let padding: CGFloat = 20 // 원하는 만큼의 패딩 값을 설정하세요.
+            let labelWidth: CGFloat = 40 // "원" 레이블의 너비를 설정하세요.
+            
+            // "원" 레이블을 위한 컨테이너 뷰
+            let wonLabelContainer = UIView(frame: CGRect(x: 0, y: 0, width: labelWidth + padding, height: frame.height))
+            let wonLabel = UILabel()
+            wonLabel.text = CurrencyManager.shared.currentCurrency
+            wonLabel.font = textFont
+            wonLabel.textColor = color
+            wonLabel.frame = CGRect(x: padding, y: 0, width: labelWidth, height: frame.height)
+            wonLabelContainer.addSubview(wonLabel)
+            
+            rightView = wonLabelContainer
+            rightViewMode = .always
+            
+            // 텍스트가 중앙에 위치하도록 왼쪽에도 동일한 크기의 뷰 추가
+            let leftPaddingView = UIView(frame: CGRect(x: 0, y: 0, width: labelWidth + padding, height: frame.height))
+            leftView = leftPaddingView
+            leftViewMode = .always
+        } else {
+            rightView = nil
+            rightViewMode = .never
+            leftView = nil
+            leftViewMode = .never
+        }
+    }
+    
 }
