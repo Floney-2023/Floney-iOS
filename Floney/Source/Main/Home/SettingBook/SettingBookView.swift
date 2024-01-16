@@ -360,7 +360,7 @@ struct SettingBookView: View {
                 leftView: { BackButton() }
                 )
             .onAppear{
-                viewModel.getBookInfo()
+                viewModel.getBookInfo()   
             }
             .sheet(isPresented: $onShareSheet) {
                 if let url = viewModel.shareUrl {

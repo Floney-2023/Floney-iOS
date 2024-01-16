@@ -367,6 +367,11 @@ struct SetInitialAssetBottomSheet: View {
                         initialAsset = ""
                         isShowing.toggle()
                     }
+                    .onAppear {
+                        Task {
+                            self.initialAsset = await viewModel.getAsset() > 0 ? viewModel.getAsset().formattedString : ""
+                        }
+                    }
                 VStack(spacing:scaler.scaleHeight(12)) {
                     HStack {
                         VStack(alignment: .leading) {
@@ -404,7 +409,6 @@ struct SetInitialAssetBottomSheet: View {
                     VStack(spacing : scaler.scaleHeight(20)) {
                         TextFieldLarge(label: $label, content: $initialAsset)
                             .frame(height: buttonHeight)
-                        
                         ButtonLarge(label: "저장하기",background: .primary1, textColor: .white, strokeColor: .primary1,  fontWeight: .bold, action: {
                             if initialAsset.isEmpty {
                                 self.realinitialAsset = "0"
@@ -448,6 +452,7 @@ struct SetInitialAssetBottomSheet: View {
             NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
         }
     }
+
 }
 
 //MARK: 이월 설정 bottom sheet
