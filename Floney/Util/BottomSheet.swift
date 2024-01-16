@@ -356,6 +356,7 @@ struct SetInitialAssetBottomSheet: View {
     @Binding var isShowing: Bool
     @ObservedObject var viewModel : SettingBookViewModel
     @State var initialAsset : String = ""
+    @State var realinitialAsset : String = ""
     var body: some View{
         ZStack(alignment: .bottom) {
             if (isShowing) {
@@ -365,6 +366,11 @@ struct SetInitialAssetBottomSheet: View {
                     .onTapGesture {
                         initialAsset = ""
                         isShowing.toggle()
+                    }
+                    .onAppear {
+                        Task {
+                            self.initialAsset = await viewModel.getAsset() > 0 ? viewModel.getAsset().formattedString : ""
+                        }
                     }
                 VStack(spacing:scaler.scaleHeight(12)) {
                     HStack {
@@ -385,7 +391,7 @@ struct SetInitialAssetBottomSheet: View {
                               .background(Color.greyScale6)
                         }
                         .onTapGesture {
-                            initialAsset = "0"
+                            initialAsset = ""
                         }
                     }
                     .padding(.top,scaler.scaleHeight(24))
@@ -403,9 +409,14 @@ struct SetInitialAssetBottomSheet: View {
                     VStack(spacing : scaler.scaleHeight(20)) {
                         TextFieldLarge(label: $label, content: $initialAsset)
                             .frame(height: buttonHeight)
-                        
                         ButtonLarge(label: "저장하기",background: .primary1, textColor: .white, strokeColor: .primary1,  fontWeight: .bold, action: {
-                            if viewModel.onlyNumberValid(input: initialAsset, budgetAssetType: .asset) {
+                            if initialAsset.isEmpty {
+                                self.realinitialAsset = "0"
+                            } else {
+                                self.realinitialAsset = self.initialAsset
+                            }
+                            if viewModel.onlyNumberValid(input: realinitialAsset, budgetAssetType: .asset) {
+                                initialAsset = ""
                                 isShowing = false
                             }
                         })
@@ -441,6 +452,7 @@ struct SetInitialAssetBottomSheet: View {
             NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
         }
     }
+
 }
 
 //MARK: 이월 설정 bottom sheet

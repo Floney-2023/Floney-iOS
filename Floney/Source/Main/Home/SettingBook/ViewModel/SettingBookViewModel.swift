@@ -82,8 +82,14 @@ class SettingBookViewModel : ObservableObject {
     }
     @Published var budgetDate = ""
     @Published var currentBudget : String = ""
+    
+    @Published var initialAsset: Double = 0
     private var cancellableSet: Set<AnyCancellable> = []
+    
+    
     var dataManager: SettingBookProtocol
+    
+    var assetDataManager : AnalysisProtocol = AnalysisService.shared
     
     init( dataManager: SettingBookProtocol = SettingBookService.shared) {
         self.dataManager = dataManager
@@ -137,6 +143,57 @@ class SettingBookViewModel : ObservableObject {
                 }
             }.store(in: &cancellableSet)
     }
+    func getAssetResponse(request: BudgetAssetRequest) async -> Result<AssetResponse, Error> {
+        await withCheckedContinuation { continuation in
+            self.assetDataManager.analysisAsset(request)
+                .sink { completion in
+                    switch completion {
+                    case .failure(let error):
+                        continuation.resume(returning: .failure(error))
+                    case .finished:
+                        break
+                    }
+                } receiveValue: { response in
+                    switch response.result {
+                    case .success(let assetResponse):
+                        continuation.resume(returning: .success(assetResponse))
+                    case .failure(let error):
+                        continuation.resume(returning: .failure(error))
+                    }
+                }
+                .store(in: &self.cancellableSet)
+        }
+    }
+                   
+    func getAsset() async -> Double {
+        let selectedDate = Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        let dateString = dateFormatter.string(from: selectedDate)
+        let components = Calendar.current.dateComponents([.year, .month], from: selectedDate)
+        var date = ""
+        if let year = components.year, let month = components.month {
+            date = "\(year)-\(String(format: "%02d", month))-01"
+        }
+        let bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
+        let request = BudgetAssetRequest(bookKey: bookKey, date: date)
+
+        do {
+            let result = await getAssetResponse(request: request)
+            switch result {
+            case .success(let assetResponse):
+                return assetResponse.initAsset ?? 0
+            case .failure(let error):
+                print("네트워크 요청 실패: \(error)")
+                return 0
+            }
+        } catch {
+            print("에러 발생: \(error)")
+            return 0
+        }
+    }
+
+
     //MARK: server
     func getBookInfo() {
         bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""

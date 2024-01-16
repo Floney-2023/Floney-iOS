@@ -161,10 +161,12 @@ class FixedSizeTextField: UITextField {
             leftView = leftPaddingView
             leftViewMode = .always
         } else {
-            rightView = nil
-            rightViewMode = .never
-            leftView = nil
-            leftViewMode = .never
+            if isCenterAligned {
+                rightView = nil
+                rightViewMode = .never
+                leftView = nil
+                leftViewMode = .never
+            }
         }
     }
     
