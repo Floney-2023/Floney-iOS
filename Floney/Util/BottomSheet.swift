@@ -356,6 +356,7 @@ struct SetInitialAssetBottomSheet: View {
     @Binding var isShowing: Bool
     @ObservedObject var viewModel : SettingBookViewModel
     @State var initialAsset : String = ""
+    @State var realinitialAsset : String = ""
     var body: some View{
         ZStack(alignment: .bottom) {
             if (isShowing) {
@@ -385,7 +386,7 @@ struct SetInitialAssetBottomSheet: View {
                               .background(Color.greyScale6)
                         }
                         .onTapGesture {
-                            initialAsset = "0"
+                            initialAsset = ""
                         }
                     }
                     .padding(.top,scaler.scaleHeight(24))
@@ -405,7 +406,13 @@ struct SetInitialAssetBottomSheet: View {
                             .frame(height: buttonHeight)
                         
                         ButtonLarge(label: "저장하기",background: .primary1, textColor: .white, strokeColor: .primary1,  fontWeight: .bold, action: {
-                            if viewModel.onlyNumberValid(input: initialAsset, budgetAssetType: .asset) {
+                            if initialAsset.isEmpty {
+                                self.realinitialAsset = "0"
+                            } else {
+                                self.realinitialAsset = self.initialAsset
+                            }
+                            if viewModel.onlyNumberValid(input: realinitialAsset, budgetAssetType: .asset) {
+                                initialAsset = ""
                                 isShowing = false
                             }
                         })
