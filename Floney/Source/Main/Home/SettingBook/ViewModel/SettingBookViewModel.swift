@@ -332,7 +332,9 @@ class SettingBookViewModel : ObservableObject {
     
     func onlyNumberValid(input: String, budgetAssetType : BudgetAssetType) -> Bool {
         print("예산 인풋 : \(input)")
-        if let doubleValue = Double(input) {
+        let newValue = input.replacingOccurrences(of: ",", with: "")
+
+        if let doubleValue = Double(newValue) {
             // 변환 성공
             print("변환 성공")
             print(doubleValue) // 출력: 3200.4
