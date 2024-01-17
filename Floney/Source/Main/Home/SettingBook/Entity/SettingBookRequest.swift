@@ -48,22 +48,10 @@ struct DownloadExcelRequest : Encodable {
     var currentDate : String
 }
 
-enum ExcelDurationType {
-    case THIS_MONTH
-    case LAST_MONTH
-    case ONE_YEAR
-    case ALL
-    
-    var value: String {
-        switch self {
-        case .THIS_MONTH:
-            return "THIS_MONTH"
-        case .LAST_MONTH:
-            return "LAST_MONTH"
-        case .ONE_YEAR:
-            return "ONE_YEAR"
-        case .ALL:
-            return "ALL"
-        }
-    }
+enum ExcelDurationType: String {
+    case thisMonth = "THIS_MONTH"
+    case lastMonth = "LAST_MONTH"
+    case oneYear = "ONE_YEAR"
+    case lastYear = "LAST_YEAR"
+    case all = "ALL"
 }

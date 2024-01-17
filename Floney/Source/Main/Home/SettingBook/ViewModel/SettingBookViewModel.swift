@@ -71,9 +71,15 @@ class SettingBookViewModel : ObservableObject {
     //MARK: Excel
     @Published var excelURL : URL?
     @Published var shareExcelStatus = false
-    @Published var excelDuration : ExcelDurationType = ExcelDurationType.ALL
-    
-    
+    @Published var selectedExcelDuration : ExcelDurationType = ExcelDurationType.all
+    let durationOptions = ["이번달", "저번달", "올해", "작년","전체"]
+    let durationMapping: [String: ExcelDurationType] = [
+        "이번달": .thisMonth,
+        "저번달": .lastMonth,
+        "올해": .oneYear,
+        "작년": .lastYear,
+        "전체": .all
+    ]
     //MARK: Budget
     @Published var budget : Double = 0
     @Published var yearlyData: [Int: [MonthlyAmount]] = [:]
@@ -688,8 +694,8 @@ class SettingBookViewModel : ObservableObject {
     
     func downloadExcelFile() {
         bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
-        let currentDate = self.formattedDate(for: self.excelDuration)
-        let request = DownloadExcelRequest(bookKey: bookKey, excelDuration: excelDuration.value, currentDate: currentDate)
+        let currentDate = self.formattedDate(for: selectedExcelDuration)
+        let request = DownloadExcelRequest(bookKey: bookKey, excelDuration: selectedExcelDuration.rawValue, currentDate: currentDate)
         let cancellable = dataManager.downloadExcelFile(parameters: request)
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { completion in
@@ -710,7 +716,12 @@ class SettingBookViewModel : ObservableObject {
             })
             .store(in: &cancellableSet)
     }
-
+    
+    func handleUserSelection(_ selection: String) {
+        if let durationType = durationMapping[selection] {
+            self.selectedExcelDuration = durationType
+        }
+    }
     func formattedDate(for type: ExcelDurationType) -> String {
         let calendar = Calendar.current
         let now = Date()
@@ -718,24 +729,32 @@ class SettingBookViewModel : ObservableObject {
         dateFormatter.dateFormat = "yyyy-MM-dd"
 
         switch type {
-        case .THIS_MONTH:
+        case .thisMonth:
             let startOfMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: now))!
             return dateFormatter.string(from: startOfMonth)
 
-        case .LAST_MONTH:
+        case .lastMonth:
             var dateComponents = DateComponents()
             dateComponents.month = -1
             let startOfLastMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: calendar.date(byAdding: dateComponents, to: now)!))!
             return dateFormatter.string(from: startOfLastMonth)
 
-        case .ONE_YEAR:
+        case .oneYear:
             var startOfYearComponents = calendar.dateComponents([.year], from: now)
             startOfYearComponents.month = 1
             startOfYearComponents.day = 1
             let startOfYear = calendar.date(from: startOfYearComponents)!
             return dateFormatter.string(from: startOfYear)
+            
+        case .lastYear:
+            var startOfLastYearComponents = calendar.dateComponents([.year], from: now)
+            startOfLastYearComponents.year! -= 1  // 년도를 하나 감소
+            startOfLastYearComponents.month = 1
+            startOfLastYearComponents.day = 1
+            let startOfLastYear = calendar.date(from: startOfLastYearComponents)!
+            return dateFormatter.string(from: startOfLastYear)
 
-        case .ALL:
+        case .all:
             return dateFormatter.string(from: now)
         }
     }

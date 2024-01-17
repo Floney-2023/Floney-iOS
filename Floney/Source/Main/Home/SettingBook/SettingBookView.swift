@@ -35,6 +35,8 @@ struct SettingBookView: View {
     @State var exitMessage = "가계부를 나갈 시 내가 참여한 모든 내역이 삭제됩니다. 정말 나가시겠습니까?"
     @State var isShowingEditCategory = false
     
+    @State var isShowingExcelDutationBottomSheet = false
+    
     var body: some View {
         ZStack {
             ScrollView {
@@ -312,7 +314,7 @@ struct SettingBookView: View {
                         }
                         .frame(height:scaler.scaleHeight(48))
                         .onTapGesture {
-                            viewModel.downloadExcelFile()
+                            self.isShowingExcelDutationBottomSheet = true
                         }
                         
                         HStack {
@@ -407,6 +409,8 @@ struct SettingBookView: View {
             CarriedOverBottomSheet(isShowing: $isShowingCarriedOver, viewModel:viewModel)
             
             ShareBookBottomSheet(viewModel: viewModel, isShowing: $isShowingShareBook, onShareSheet: $onShareSheet)
+            
+            SetExcelDurationBottomSheet(viewModel: viewModel, isShowing: $isShowingExcelDutationBottomSheet)
         }
  
     }
