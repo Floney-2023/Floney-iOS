@@ -1465,7 +1465,7 @@ struct SetExcelDurationBottomSheet: View {
                 //MARK: content
                 VStack(spacing:scaler.scaleHeight(18)) {
                     HStack {
-                        Text("기간 설정")
+                        Text("엑셀 내보내기")
                             .foregroundColor(.greyScale1)
                             .font(.pretendardFont(.bold,size:scaler.scaleWidth(18)))
                         Spacer()
