@@ -22,7 +22,7 @@ protocol SettingBookProtocol {
     func deleteBook(parameters: BookInfoRequest) -> AnyPublisher<Void, NetworkError>
     func resetBook(parameters: BookInfoRequest) -> AnyPublisher<Void, NetworkError>
     func setCarryOver(parameters: SetCarryOver) -> AnyPublisher<Void, NetworkError>
-    func downloadExcelFile(bookKey : String) -> AnyPublisher<URL, Error>
+    func downloadExcelFile(parameters: DownloadExcelRequest) -> AnyPublisher<URL, Error>
     func setCurrency(_ parameters:SetCurrencyRequest) -> AnyPublisher<DataResponse<SetCurrencyResponse, NetworkError>, Never>
     func getBudget(_ parameters:GetBudgetRequest) -> AnyPublisher<DataResponse<GetBudgetResponse, NetworkError>, Never>
 }
@@ -53,16 +53,13 @@ extension SettingBookService: SettingBookProtocol {
         .receive(on: DispatchQueue.main)
         .eraseToAnyPublisher()
     }
-    
+    /*
     func downloadExcelFile(bookKey: String) -> AnyPublisher<URL, Error> {
         let url = "\(Constant.BASE_URL)/books/excel?bookKey=\(bookKey)"
         let token = Keychain.getKeychainValue(forKey: .accessToken) ?? ""
-        print("download excel : \n\(token)")
-        // HTTP 헤더 설정
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(token)"
         ]
-        
         return Future<URL, Error> { promise in
             guard let url = URL(string: url) else {
                 promise(.failure(NSError(domain: "Invalid URL", code: 400, userInfo: nil)))
@@ -74,9 +71,6 @@ extension SettingBookService: SettingBookProtocol {
                 let filePath = tempDir.appendingPathComponent(UUID().uuidString).appendingPathExtension("xlsx")
                 return (filePath, [.removePreviousFile, .createIntermediateDirectories])
             }
-            
-            
-            
             AF.download(url, headers: headers,to: destination)
                 .downloadProgress { progress in
                     print("Download Progress: \(progress.fractionCompleted)")
@@ -89,6 +83,43 @@ extension SettingBookService: SettingBookProtocol {
                         promise(.success(filePath))
                     } else {
                         promise(.failure(NSError(domain: "Unknown Error", code: 500, userInfo: nil)))
+                    }
+                }
+        }
+        .eraseToAnyPublisher()
+    }*/
+
+    func downloadExcelFile(parameters: DownloadExcelRequest) -> AnyPublisher<URL, Error> {
+        let url = "\(Constant.BASE_URL)/books/excel"
+        let token = Keychain.getKeychainValue(forKey: .accessToken) ?? ""
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(token)",
+            "Content-Type": "application/json"
+        ]
+        return Future<URL, Error> { promise in
+            AF.request(url,
+                       method: .post,
+                       parameters: parameters,
+                       encoder: JSONParameterEncoder(),
+                       headers: headers)
+                .validate()
+                .responseData { response in
+                    switch response.result {
+                    case .success(let data):
+                        let tempDir = FileManager.default.temporaryDirectory
+                        let contentDisposition = response.response?.headers.value(for: "Content-Disposition")
+                        print("contentDisposition : \(contentDisposition)")
+                        print("filenameFromContentDisposition : \(contentDisposition?.filenameFromContentDisposition())")
+                        let filename = contentDisposition?.filenameFromContentDisposition() ?? UUID().uuidString
+                        let fileURL = tempDir.appendingPathComponent(filename).appendingPathExtension("xlsx")
+                        do {
+                            try data.write(to: fileURL)
+                            promise(.success(fileURL))
+                        } catch {
+                            promise(.failure(error))
+                        }
+                    case .failure(let error):
+                        promise(.failure(error))
                     }
                 }
         }
@@ -513,3 +544,18 @@ extension SettingBookService: SettingBookProtocol {
     
 }
 
+extension String {
+    func filenameFromContentDisposition() -> String? {
+        // 정규 표현식을 사용하여 'filename' 이후의 문자열 추출
+        let pattern = "filename\\*=?([^;\\n]*)"
+        let regex = try? NSRegularExpression(pattern: pattern, options: [])
+        let nsString = self as NSString
+        
+        if let match = regex?.firstMatch(in: self, options: [], range: NSRange(location: 0, length: nsString.length)),
+           let range = Range(match.range(at: 1), in: self) {
+            let filename = nsString.substring(with: match.range(at: 1))
+            return filename.trimmingCharacters(in: CharacterSet(charactersIn: "\""))
+        }
+        return nil
+    }
+}

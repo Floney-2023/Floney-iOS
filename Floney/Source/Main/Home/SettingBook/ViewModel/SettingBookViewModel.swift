@@ -71,6 +71,8 @@ class SettingBookViewModel : ObservableObject {
     //MARK: Excel
     @Published var excelURL : URL?
     @Published var shareExcelStatus = false
+    @Published var excelDuration : ExcelDurationType = ExcelDurationType.ALL
+    
     
     //MARK: Budget
     @Published var budget : Double = 0
@@ -686,12 +688,13 @@ class SettingBookViewModel : ObservableObject {
     
     func downloadExcelFile() {
         bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
-        let cancellable = dataManager.downloadExcelFile(bookKey: bookKey)
+        let currentDate = self.formattedDate(for: self.excelDuration)
+        let request = DownloadExcelRequest(bookKey: bookKey, excelDuration: excelDuration.value, currentDate: currentDate)
+        let cancellable = dataManager.downloadExcelFile(parameters: request)
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { completion in
                 switch completion {
                 case .finished:
-                    
                     break
                 case .failure(let error):
                     //x self.createAlert(with: error)
@@ -701,13 +704,42 @@ class SettingBookViewModel : ObservableObject {
                     })
                 }
             }, receiveValue: { localFileURL in
-                
                 print("Excel file saved to:", localFileURL)
                 self.excelURL = localFileURL
                 self.shareExcelStatus = true
             })
             .store(in: &cancellableSet)
     }
+
+    func formattedDate(for type: ExcelDurationType) -> String {
+        let calendar = Calendar.current
+        let now = Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+
+        switch type {
+        case .THIS_MONTH:
+            let startOfMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: now))!
+            return dateFormatter.string(from: startOfMonth)
+
+        case .LAST_MONTH:
+            var dateComponents = DateComponents()
+            dateComponents.month = -1
+            let startOfLastMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: calendar.date(byAdding: dateComponents, to: now)!))!
+            return dateFormatter.string(from: startOfLastMonth)
+
+        case .ONE_YEAR:
+            var startOfYearComponents = calendar.dateComponents([.year], from: now)
+            startOfYearComponents.month = 1
+            startOfYearComponents.day = 1
+            let startOfYear = calendar.date(from: startOfYearComponents)!
+            return dateFormatter.string(from: startOfYear)
+
+        case .ALL:
+            return dateFormatter.string(from: now)
+        }
+    }
+
     //MARK: 방장 필터
     func hostFilter() {
         // role이 "방장"이고, me가 true인 요소를 필터링합니다.
