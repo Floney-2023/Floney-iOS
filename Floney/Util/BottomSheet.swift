@@ -1117,16 +1117,13 @@ struct CalendarBottomSheet: View {
                     .onTapGesture {
                         isShowing.toggle()
                     }
-                
                 MonthView(viewModel: viewModel, isShowing: $isShowing, pickerPresented: $pickerPresented)
-                
             }
             
         } //
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
         .ignoresSafeArea()
         .animation(.easeInOut, value: isShowing)
-        
         PickerBottomSheet(showingTab: $showingTab, isShowing: $pickerPresented, yearMonth: $viewModel.yearMonth)
     }
     
@@ -1348,7 +1345,6 @@ struct PickerBottomSheet: View {
     @Binding var showingTab : Bool
     @Binding var isShowing : Bool
     @Binding var yearMonth : YearMonthDuration
-    //@ObservedObject var viewModel : CalculateViewModel
     let years = Array(2000...2099)
     let months = Array(1...12)
     
@@ -1445,3 +1441,148 @@ struct YearBottomSheet: View {
     
 }
 
+//MARK: 캘린더 bottom sheet
+struct AddCalendarBottomSheet: View {
+    let buttonHeight: CGFloat = 46
+    @Binding var isShowing : Bool
+    @ObservedObject var viewModel : AddViewModel
+    @State var pickerPresented = false
+    @State var showingTab = false
+    var body: some View {
+        ZStack(alignment: .bottom) {
+            if (isShowing) {
+                Color.black
+                    .opacity(0.7)
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        isShowing.toggle()
+                        viewModel.convertStringToDate(viewModel.selectedDateStr)
+                    }
+                AddMonthView(viewModel: viewModel, isShowing: $isShowing, pickerPresented: $pickerPresented)
+            }
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
+        .ignoresSafeArea()
+        .animation(.easeInOut, value: isShowing)
+        PickerBottomSheet(showingTab: $showingTab, isShowing: $pickerPresented, yearMonth: $viewModel.presentedYearMonth)
+    }
+
+}
+
+struct AddMonthView: View {
+    @ObservedObject var viewModel : AddViewModel
+    @Binding var isShowing : Bool
+    @Binding var pickerPresented : Bool
+    
+    private var dateFormatter : DateFormatter {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "YYYY-MM-dd"
+        return formatter
+    }
+    private var yearAndMonthFormatter: DateFormatter {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "YYYY.MM"
+        return formatter
+    }
+    var body: some View {
+        @State var weeks = viewModel.daysList
+        VStack {
+            HStack {
+                Image("icon_left")
+                    .onTapGesture {
+                        // 한달 전으로 이동
+                        viewModel.presentedDate = Calendar.current.date(byAdding: .month, value: -1, to: viewModel.presentedDate) ?? viewModel.presentedDate
+                }
+                Spacer()
+                
+                Button(action: {
+                    self.pickerPresented = true
+                }) {
+                    Text("\(yearAndMonthFormatter.string(from:viewModel.presentedDate))")
+                        .font(.pretendardFont(.semiBold, size: 22))
+                        .foregroundColor(.greyScale2)
+                }
+                
+                Spacer()
+                
+                Image("icon_right")
+                    .onTapGesture {
+                        // 한달 후로 이동
+                        viewModel.presentedDate = Calendar.current.date(byAdding: .month, value: 1, to: viewModel.presentedDate) ?? viewModel.presentedDate
+                    }
+            }
+            //MARK: 요일
+            HStack {
+                ForEach(viewModel.daysOfTheWeek, id: \.self) { day in
+                    Text(day)
+                        .frame(maxWidth: .infinity)
+                        .font(.pretendardFont(.regular, size: 14))
+                        .foregroundColor(.greyScale6)
+                }
+            }
+            .padding(.top, 20)
+            .padding(.bottom, 15)
+            
+            //MARK: 날짜
+            ForEach(viewModel.daysList.indices, id: \.self) { i in
+                AddWeek(viewModel: viewModel, days: $weeks[i])
+            }
+            Spacer()
+            //MARK: 선택하기 버튼
+            Button {
+                viewModel.convertDateToString(viewModel.selectedDate)
+                isShowing = false
+            } label: {
+                Text("선택")
+                    .padding()
+                    .withNextButtonFormmating(.primary1)
+            }
+        }
+        .frame(height: 490)
+        .frame(maxWidth: .infinity)
+        .padding(.horizontal, 20)
+        .padding(.bottom, 44)
+        .padding(.top, 24)
+        .transition(.move(edge: .bottom))
+        .background(
+            Color(.white)
+        )
+        .cornerRadius(12, corners: [.topLeft, .topRight])
+        .onChange(of: viewModel.daysList) { newValue in
+            weeks = newValue
+        }
+    }
+    
+}
+
+//MARK: 일주일씩 그리기
+struct AddWeek: View {
+    @ObservedObject var viewModel : AddViewModel
+    @Binding var days : [Date]
+    let colWidth = UIScreen.main.bounds.width / 7
+    
+    var body: some View {
+        ZStack {
+            HStack(spacing: 0) {
+                ForEach(days, id: \.self) { value in
+                    VStack(spacing: 0) {
+                        if value.day > 0 {
+                            Text("\(value.day)")
+                                .font(.pretendardFont(.regular,size: 14))
+                                .foregroundColor(viewModel.selectedDate == value ? .white : viewModel.presentedDate.month == value.month ? .greyScale2 : .greyScale7)
+                        }
+                    }
+                    .padding(10)
+                    .frame(width: (UIScreen.main.bounds.width - 48) / 7)
+                    .frame(height: 40)
+                    .background(viewModel.selectedDate == value ? Color.primary5 : Color.clear)
+                    .clipShape(Circle())
+                    .onTapGesture {
+                        viewModel.selectedDate = value
+                    }
+                    
+                }
+            }
+        }
+    }
+}
