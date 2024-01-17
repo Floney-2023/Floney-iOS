@@ -543,19 +543,3 @@ extension SettingBookService: SettingBookProtocol {
     
     
 }
-
-extension String {
-    func filenameFromContentDisposition() -> String? {
-        // 정규 표현식을 사용하여 'filename' 이후의 문자열 추출
-        let pattern = "filename\\*=?([^;\\n]*)"
-        let regex = try? NSRegularExpression(pattern: pattern, options: [])
-        let nsString = self as NSString
-        
-        if let match = regex?.firstMatch(in: self, options: [], range: NSRange(location: 0, length: nsString.length)),
-           let range = Range(match.range(at: 1), in: self) {
-            let filename = nsString.substring(with: match.range(at: 1))
-            return filename.trimmingCharacters(in: CharacterSet(charactersIn: "\""))
-        }
-        return nil
-    }
-}
