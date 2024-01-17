@@ -610,7 +610,7 @@ struct CategoryBottomSheet: View {
                         isShowing.toggle()
                     }
                 //MARK: content
-                VStack(spacing:scaler.scaleHeight(18)) {
+                VStack(spacing:scaler.scaleHeight(12)) {
                     HStack {
                         Text(root == "자산" ? "자산" : "분류")
                             .foregroundColor(.greyScale1)
@@ -628,6 +628,7 @@ struct CategoryBottomSheet: View {
                         
                     }
                     .padding(.top,scaler.scaleHeight(24))
+                    .padding(.bottom,scaler.scaleHeight(6))
                     
                     CategoryFlowLayout(root: $root,
                                        categories: $categories,
@@ -638,8 +639,9 @@ struct CategoryBottomSheet: View {
                                        isShowing: $isShowing,
                                        selectedAssetIndex: $selectedAssetIndex,
                                        selectedCategoryIndex: $selectedCategoryIndex
-                                       )
-                    Spacer()
+                    )
+                    
+                    //Spacer()
                     ButtonLarge(label: "저장하기",background: .primary1, textColor: .white, strokeColor: .primary1,  fontWeight: .bold, action: {
                         if root == "자산" {
                             self.isSelectedAssetTypeIndex = selectedAssetIndex
@@ -688,11 +690,13 @@ struct CategoryFlowLayout: View {
     @Binding var selectedCategoryIndex : Int
     
     var body: some View {
+        
         VStack(alignment: .leading) {
             GeometryReader { geometry in
                 self.generateContent(in: geometry)
             }
         }
+        
     }
     private func generateContent(in g: GeometryProxy) -> some View {
         var width = CGFloat.zero
@@ -701,43 +705,46 @@ struct CategoryFlowLayout: View {
             scaler.scaleHeight(12)
         }
         
-        return ZStack(alignment: .topLeading) {
-            ForEach(self.categories.indices, id: \.self) { index in
-                CategoryButton(
-                    label: self.categories[index],
-                    isSelected: root == "자산" ? selectedAssetIndex == index : selectedCategoryIndex == index,
-                    action: {
-        
-                        if root == "자산" {
-                            selectedAssetIndex = index
-                        } else {
-                            selectedCategoryIndex = index
+        return 
+        ScrollView(showsIndicators:false) {
+            ZStack(alignment: .topLeading) {
+                ForEach(self.categories.indices, id: \.self) { index in
+                    CategoryButton(
+                        label: self.categories[index],
+                        isSelected: root == "자산" ? selectedAssetIndex == index : selectedCategoryIndex == index,
+                        action: {
+                            
+                            if root == "자산" {
+                                selectedAssetIndex = index
+                            } else {
+                                selectedCategoryIndex = index
+                            }
                         }
-                    }
-                )
-                .padding([.horizontal],scaler.scaleWidth(4))
-                .alignmentGuide(.leading, computeValue: { d in
-                    if (abs(width - d.width) > g.size.width)
-                    {
-                        width = 0
-                        height -= d.height + verticalSpacing
-                    }
-                    let result = width
-                    if index < self.categories.count - 1 {
-                        width -= d.width
-                    } else {
-                        width = 0
-                    }
-                    return result
-                })
-                .alignmentGuide(.top, computeValue: { _ in
-                    let result = height
-                    if width == 0 {
-                        //if the item is the last in the row
-                        height = 0
-                    }
-                    return result
-                })
+                    )
+                    .padding([.horizontal],scaler.scaleWidth(4))
+                    .alignmentGuide(.leading, computeValue: { d in
+                        if (abs(width - d.width) > g.size.width)
+                        {
+                            width = 0
+                            height -= d.height + verticalSpacing
+                        }
+                        let result = width
+                        if index < self.categories.count - 1 {
+                            width -= d.width
+                        } else {
+                            width = 0
+                        }
+                        return result
+                    })
+                    .alignmentGuide(.top, computeValue: { _ in
+                        let result = height
+                        if width == 0 {
+                            //if the item is the last in the row
+                            height = 0
+                        }
+                        return result
+                    })
+                }
             }
         }
     }
