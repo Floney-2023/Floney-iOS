@@ -72,6 +72,7 @@ struct AddView: View {
     }
 
     @State var writer = ""
+    @State var isShowingCalendarBottomSheet = false
 
     var formattedValue: Double? {
             let valueWithoutCommas = money.replacingOccurrences(of: ",", with: "")
@@ -137,7 +138,6 @@ struct AddView: View {
                                         processedValue = "99999999999"
                                     }
                                 }
-
                                 money = formatNumber(processedValue)
                             }
                     } // 금액 VStack
@@ -176,10 +176,7 @@ struct AddView: View {
                     .disabled(mode == "check" ? true : false)
                     .frame(maxWidth: .infinity)
                     .frame(height:scaler.scaleHeight(38))
-                    .cornerRadius(10)
-                    
-                    
-                    
+
                     //MARK: 날짜/자산/분류/내용/제외여부
                     VStack(spacing:0) {
                         if !keyboardResponder.isKeyboardVisible {
@@ -188,10 +185,13 @@ struct AddView: View {
                                     .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
                                     .foregroundColor(.greyScale4)
                                 Spacer()
-                                Text("\(date)")
+                                Text("\(viewModel.selectedDateStr)")
                                     .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
                                     .foregroundColor(.greyScale2)
                             }.frame(height: scaler.scaleHeight(58))
+                                .onTapGesture {
+                                    self.isShowingCalendarBottomSheet = true
+                                }
                             
                             
                             HStack {
@@ -287,7 +287,6 @@ struct AddView: View {
                         Button {
                             if viewModel.isVaildAdd(money: money, asset: assetType, category: category) {
                                 viewModel.money = money // 금액
-                                viewModel.lineDate = date // 날짜
                                 viewModel.flow = toggleType // 수입, 지출, 이체
                                 viewModel.asset = assetType // 자산 타입
                                 viewModel.line = category // 분류 타입
@@ -297,14 +296,6 @@ struct AddView: View {
                                     viewModel.description = content // 내용
                                 }
                                 viewModel.except = toggleOnOff // 제외 여부
-                                
-                                print(viewModel.money)
-                                print(viewModel.lineDate)
-                                print(viewModel.flow)
-                                print(viewModel.asset)
-                                print(viewModel.line)
-                                print(viewModel.description)
-                                print(viewModel.except)
                                 viewModel.postLines()
                      
                             }
@@ -347,7 +338,6 @@ struct AddView: View {
                                 
                                 viewModel.bookLineKey = lineId // PK
                                 viewModel.money = money // 금액
-                                viewModel.lineDate = date // 날짜
                                 viewModel.flow = toggleType // 수입, 지출, 이체
                                 viewModel.asset = assetType // 자산 타입
                                 viewModel.line = category // 분류 타입
@@ -357,14 +347,6 @@ struct AddView: View {
                                     viewModel.description = content // 내용
                                 }
                                 viewModel.except = toggleOnOff // 제외 여부
-                                
-                                print(viewModel.money)
-                                print(viewModel.lineDate)
-                                print(viewModel.flow)
-                                print(viewModel.asset)
-                                print(viewModel.line)
-                                print(viewModel.description)
-                                print(viewModel.except)
                                 viewModel.changeLine()
                                 
                             }
@@ -389,14 +371,7 @@ struct AddView: View {
             .edgesIgnoringSafeArea(.bottom)
             .onAppear(perform : UIApplication.shared.hideKeyboard)
             .onAppear{
-                print(mode)
-                print(date)
-                print(money)
-                print(assetType)
-                print(category)
-                print(content)
-                print(toggleOnOff)
-
+                viewModel.convertStringToDate(date)
             }
             .onChange(of: viewModel.successAdd) { newValue in
                 self.isPresented = false
@@ -404,6 +379,8 @@ struct AddView: View {
             
             CustomAlertView(message: AlertManager.shared.message, type: $alertManager.buttontType, isPresented: $alertManager.showAlert)
             CategoryBottomSheet(root: $root, categories: $viewModel.categories, isShowing: $isShowingBottomSheet, isSelectedAssetTypeIndex: $isSelectedAssetTypeIndex, isSelectedAssetType: $assetType, isSelectedCategoryIndex: $isSelectedCategoryIndex, isSelectedCategory: $category, isShowingEditCategory: $isShowingEditCategory)
+            
+            AddCalendarBottomSheet(isShowing: $isShowingCalendarBottomSheet, viewModel: viewModel)
             
             //MARK: alert
             if showAlert {
