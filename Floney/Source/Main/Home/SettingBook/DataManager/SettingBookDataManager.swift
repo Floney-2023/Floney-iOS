@@ -53,41 +53,6 @@ extension SettingBookService: SettingBookProtocol {
         .receive(on: DispatchQueue.main)
         .eraseToAnyPublisher()
     }
-    /*
-    func downloadExcelFile(bookKey: String) -> AnyPublisher<URL, Error> {
-        let url = "\(Constant.BASE_URL)/books/excel?bookKey=\(bookKey)"
-        let token = Keychain.getKeychainValue(forKey: .accessToken) ?? ""
-        let headers: HTTPHeaders = [
-            "Authorization": "Bearer \(token)"
-        ]
-        return Future<URL, Error> { promise in
-            guard let url = URL(string: url) else {
-                promise(.failure(NSError(domain: "Invalid URL", code: 400, userInfo: nil)))
-                return
-            }
-            
-            let destination: DownloadRequest.Destination = { _, _ in
-                let tempDir = FileManager.default.temporaryDirectory
-                let filePath = tempDir.appendingPathComponent(UUID().uuidString).appendingPathExtension("xlsx")
-                return (filePath, [.removePreviousFile, .createIntermediateDirectories])
-            }
-            AF.download(url, headers: headers,to: destination)
-                .downloadProgress { progress in
-                    print("Download Progress: \(progress.fractionCompleted)")
-                }
-                .response { response in
-                    if let error = response.error {
-                        promise(.failure(error))
-                    } else if let filePath = response.fileURL {
-                        print(filePath)
-                        promise(.success(filePath))
-                    } else {
-                        promise(.failure(NSError(domain: "Unknown Error", code: 500, userInfo: nil)))
-                    }
-                }
-        }
-        .eraseToAnyPublisher()
-    }*/
 
     func downloadExcelFile(parameters: DownloadExcelRequest) -> AnyPublisher<URL, Error> {
         let url = "\(Constant.BASE_URL)/books/excel"
