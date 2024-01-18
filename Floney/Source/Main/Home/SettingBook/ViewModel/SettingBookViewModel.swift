@@ -71,7 +71,7 @@ class SettingBookViewModel : ObservableObject {
     //MARK: Excel
     @Published var excelURL : URL?
     @Published var shareExcelStatus = false
-    @Published var selectedExcelDuration : ExcelDurationType = ExcelDurationType.all
+    @Published var selectedExcelDuration : ExcelDurationType = ExcelDurationType.thisMonth
     let durationOptions = ["이번달", "저번달", "올해", "작년","전체"]
     let durationMapping: [String: ExcelDurationType] = [
         "이번달": .thisMonth,
@@ -696,6 +696,7 @@ class SettingBookViewModel : ObservableObject {
         bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
         let currentDate = self.formattedDate(for: selectedExcelDuration)
         let request = DownloadExcelRequest(bookKey: bookKey, excelDuration: selectedExcelDuration.rawValue, currentDate: currentDate)
+        print(request)
         let cancellable = dataManager.downloadExcelFile(parameters: request)
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { completion in
@@ -734,10 +735,7 @@ class SettingBookViewModel : ObservableObject {
             return dateFormatter.string(from: startOfMonth)
 
         case .lastMonth:
-            var dateComponents = DateComponents()
-            dateComponents.month = -1
-            let startOfLastMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: calendar.date(byAdding: dateComponents, to: now)!))!
-            return dateFormatter.string(from: startOfLastMonth)
+            return dateFormatter.string(from: now)
 
         case .oneYear:
             var startOfYearComponents = calendar.dateComponents([.year], from: now)
@@ -747,12 +745,7 @@ class SettingBookViewModel : ObservableObject {
             return dateFormatter.string(from: startOfYear)
             
         case .lastYear:
-            var startOfLastYearComponents = calendar.dateComponents([.year], from: now)
-            startOfLastYearComponents.year! -= 1  // 년도를 하나 감소
-            startOfLastYearComponents.month = 1
-            startOfLastYearComponents.day = 1
-            let startOfLastYear = calendar.date(from: startOfLastYearComponents)!
-            return dateFormatter.string(from: startOfLastYear)
+            return dateFormatter.string(from: now)
 
         case .all:
             return dateFormatter.string(from: now)

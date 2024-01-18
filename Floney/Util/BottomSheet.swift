@@ -1460,6 +1460,7 @@ struct SetExcelDurationBottomSheet: View {
                     .opacity(0.7)
                     .ignoresSafeArea()
                     .onTapGesture {
+                        viewModel.selectedExcelDuration = .thisMonth
                         isShowing.toggle()
                     }
                 //MARK: content
