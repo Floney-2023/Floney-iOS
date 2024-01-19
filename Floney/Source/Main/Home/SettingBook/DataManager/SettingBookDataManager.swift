@@ -22,7 +22,7 @@ protocol SettingBookProtocol {
     func deleteBook(parameters: BookInfoRequest) -> AnyPublisher<Void, NetworkError>
     func resetBook(parameters: BookInfoRequest) -> AnyPublisher<Void, NetworkError>
     func setCarryOver(parameters: SetCarryOver) -> AnyPublisher<Void, NetworkError>
-    func downloadExcelFile(bookKey : String) -> AnyPublisher<URL, Error>
+    func downloadExcelFile(parameters: DownloadExcelRequest) -> AnyPublisher<URL, Error>
     func setCurrency(_ parameters:SetCurrencyRequest) -> AnyPublisher<DataResponse<SetCurrencyResponse, NetworkError>, Never>
     func getBudget(_ parameters:GetBudgetRequest) -> AnyPublisher<DataResponse<GetBudgetResponse, NetworkError>, Never>
 }
@@ -53,42 +53,38 @@ extension SettingBookService: SettingBookProtocol {
         .receive(on: DispatchQueue.main)
         .eraseToAnyPublisher()
     }
-    
-    func downloadExcelFile(bookKey: String) -> AnyPublisher<URL, Error> {
-        let url = "\(Constant.BASE_URL)/books/excel?bookKey=\(bookKey)"
+
+    func downloadExcelFile(parameters: DownloadExcelRequest) -> AnyPublisher<URL, Error> {
+        let url = "\(Constant.BASE_URL)/books/excel"
         let token = Keychain.getKeychainValue(forKey: .accessToken) ?? ""
-        print("download excel : \n\(token)")
-        // HTTP 헤더 설정
         let headers: HTTPHeaders = [
-            "Authorization": "Bearer \(token)"
+            "Authorization": "Bearer \(token)",
+            "Content-Type": "application/json"
         ]
-        
         return Future<URL, Error> { promise in
-            guard let url = URL(string: url) else {
-                promise(.failure(NSError(domain: "Invalid URL", code: 400, userInfo: nil)))
-                return
-            }
-            
-            let destination: DownloadRequest.Destination = { _, _ in
-                let tempDir = FileManager.default.temporaryDirectory
-                let filePath = tempDir.appendingPathComponent(UUID().uuidString).appendingPathExtension("xlsx")
-                return (filePath, [.removePreviousFile, .createIntermediateDirectories])
-            }
-            
-            
-            
-            AF.download(url, headers: headers,to: destination)
-                .downloadProgress { progress in
-                    print("Download Progress: \(progress.fractionCompleted)")
-                }
-                .response { response in
-                    if let error = response.error {
+            AF.request(url,
+                       method: .post,
+                       parameters: parameters,
+                       encoder: JSONParameterEncoder(),
+                       headers: headers)
+                .validate()
+                .responseData { response in
+                    switch response.result {
+                    case .success(let data):
+                        let tempDir = FileManager.default.temporaryDirectory
+                        let contentDisposition = response.response?.headers.value(for: "Content-Disposition")
+                        print("contentDisposition : \(contentDisposition)")
+                        print("filenameFromContentDisposition : \(contentDisposition?.filenameFromContentDisposition())")
+                        let filename = contentDisposition?.filenameFromContentDisposition() ?? UUID().uuidString
+                        let fileURL = tempDir.appendingPathComponent(filename).appendingPathExtension("xlsx")
+                        do {
+                            try data.write(to: fileURL)
+                            promise(.success(fileURL))
+                        } catch {
+                            promise(.failure(error))
+                        }
+                    case .failure(let error):
                         promise(.failure(error))
-                    } else if let filePath = response.fileURL {
-                        print(filePath)
-                        promise(.success(filePath))
-                    } else {
-                        promise(.failure(NSError(domain: "Unknown Error", code: 500, userInfo: nil)))
                     }
                 }
         }
@@ -512,4 +508,3 @@ extension SettingBookService: SettingBookProtocol {
     
     
 }
-

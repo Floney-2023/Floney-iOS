@@ -71,7 +71,15 @@ class SettingBookViewModel : ObservableObject {
     //MARK: Excel
     @Published var excelURL : URL?
     @Published var shareExcelStatus = false
-    
+    @Published var selectedExcelDuration : ExcelDurationType = ExcelDurationType.thisMonth
+    let durationOptions = ["이번달", "저번달", "올해", "작년","전체"]
+    let durationMapping: [String: ExcelDurationType] = [
+        "이번달": .thisMonth,
+        "저번달": .lastMonth,
+        "올해": .oneYear,
+        "작년": .lastYear,
+        "전체": .all
+    ]
     //MARK: Budget
     @Published var budget : Double = 0
     @Published var yearlyData: [Int: [MonthlyAmount]] = [:]
@@ -686,12 +694,14 @@ class SettingBookViewModel : ObservableObject {
     
     func downloadExcelFile() {
         bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
-        let cancellable = dataManager.downloadExcelFile(bookKey: bookKey)
+        let currentDate = self.formattedDate(for: selectedExcelDuration)
+        let request = DownloadExcelRequest(bookKey: bookKey, excelDuration: selectedExcelDuration.rawValue, currentDate: currentDate)
+        print(request)
+        let cancellable = dataManager.downloadExcelFile(parameters: request)
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { completion in
                 switch completion {
                 case .finished:
-                    
                     break
                 case .failure(let error):
                     //x self.createAlert(with: error)
@@ -701,13 +711,47 @@ class SettingBookViewModel : ObservableObject {
                     })
                 }
             }, receiveValue: { localFileURL in
-                
                 print("Excel file saved to:", localFileURL)
                 self.excelURL = localFileURL
                 self.shareExcelStatus = true
             })
             .store(in: &cancellableSet)
     }
+    
+    func handleUserSelection(_ selection: String) {
+        if let durationType = durationMapping[selection] {
+            self.selectedExcelDuration = durationType
+        }
+    }
+    func formattedDate(for type: ExcelDurationType) -> String {
+        let calendar = Calendar.current
+        let now = Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+
+        switch type {
+        case .thisMonth:
+            let startOfMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: now))!
+            return dateFormatter.string(from: startOfMonth)
+
+        case .lastMonth:
+            return dateFormatter.string(from: now)
+
+        case .oneYear:
+            var startOfYearComponents = calendar.dateComponents([.year], from: now)
+            startOfYearComponents.month = 1
+            startOfYearComponents.day = 1
+            let startOfYear = calendar.date(from: startOfYearComponents)!
+            return dateFormatter.string(from: startOfYear)
+            
+        case .lastYear:
+            return dateFormatter.string(from: now)
+
+        case .all:
+            return dateFormatter.string(from: now)
+        }
+    }
+
     //MARK: 방장 필터
     func hostFilter() {
         // role이 "방장"이고, me가 true인 요소를 필터링합니다.

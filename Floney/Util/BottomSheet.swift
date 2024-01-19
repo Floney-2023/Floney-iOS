@@ -705,7 +705,7 @@ struct CategoryFlowLayout: View {
             scaler.scaleHeight(12)
         }
         
-        return 
+        return
         ScrollView(showsIndicators:false) {
             ZStack(alignment: .topLeading) {
                 ForEach(self.categories.indices, id: \.self) { index in
@@ -1589,6 +1589,121 @@ struct AddWeek: View {
                     }
                     
                 }
+            }
+        }
+    }
+}
+
+struct SetExcelDurationBottomSheet: View {
+    let scaler = Scaler.shared
+    var buttonHeight: CGFloat {
+        scaler.scaleHeight(46)
+    }
+    @ObservedObject var viewModel : SettingBookViewModel
+    @Binding var isShowing: Bool
+    var body: some View{
+        ZStack(alignment: .bottom) {
+            if (isShowing) {
+                //MARK: Background
+                Color.black
+                    .opacity(0.7)
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        viewModel.selectedExcelDuration = .thisMonth
+                        isShowing.toggle()
+                    }
+                //MARK: content
+                VStack(spacing:scaler.scaleHeight(18)) {
+                    HStack {
+                        Text("엑셀 내보내기")
+                            .foregroundColor(.greyScale1)
+                            .font(.pretendardFont(.bold,size:scaler.scaleWidth(18)))
+                        Spacer()
+                    }
+                    .padding(.top,scaler.scaleHeight(24))
+                    
+                    SetExcelDurationFlowLayout(
+                        viewModel:viewModel,
+                        isShowing: $isShowing
+                    )
+                    Spacer()
+                    ButtonLarge(label: "저장하기",background: .primary1, textColor: .white, strokeColor: .primary1,  fontWeight: .bold, action: {
+                        viewModel.downloadExcelFile()
+                        isShowing.toggle()
+                    })
+                    .frame(height: buttonHeight)
+  
+                }
+                .padding(.horizontal, scaler.scaleWidth(20))
+                .padding(.bottom, scaler.scaleHeight(30))
+                .transition(.move(edge: .bottom))
+                .background(
+                    Color(.white)
+                )
+                .cornerRadius(12, corners: [.topLeft, .topRight])
+                .frame(height: UIScreen.main.bounds.height / 2) // Screen height is divided by 2
+
+            } // if
+        } //ZStack
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
+        .ignoresSafeArea()
+        .animation(.easeInOut, value: isShowing)
+    }
+}
+
+struct SetExcelDurationFlowLayout: View {
+    let scaler = Scaler.shared
+    @ObservedObject var viewModel : SettingBookViewModel
+    @State private var totalWidth = CGFloat.zero
+    @Binding var isShowing: Bool
+    @State var selectedDurationIndex : Int = 0
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            GeometryReader { geometry in
+                self.generateContent(in: geometry)
+            }
+        }
+    }
+    private func generateContent(in g: GeometryProxy) -> some View {
+        var width = CGFloat.zero
+        var height = CGFloat.zero
+        var verticalSpacing: CGFloat {
+            scaler.scaleHeight(12)
+        }
+        return ZStack(alignment: .topLeading) {
+            ForEach(viewModel.durationOptions.indices, id: \.self) { index in
+                CategoryButton(
+                    label: viewModel.durationOptions[index],
+                    isSelected: selectedDurationIndex == index,
+                    action: {
+                        selectedDurationIndex = index
+                        viewModel.handleUserSelection(viewModel.durationOptions[index])
+                    }
+                )
+                .padding([.horizontal],scaler.scaleWidth(4))
+                .alignmentGuide(.leading, computeValue: { d in
+                    if (abs(width - d.width) > g.size.width)
+                    {
+                        width = 0
+                        height -= d.height + verticalSpacing
+                    }
+                    let result = width
+                    if index < viewModel.durationOptions.count - 1 {
+                        width -= d.width
+                    } else {
+                        width = 0
+                    }
+                    return result
+                })
+                .alignmentGuide(.top, computeValue: { _ in
+                    let result = height
+                    if width == 0 {
+                        //if the item is the last in the row
+                        height = 0
+                    }
+                    return result
+                })
             }
         }
     }
