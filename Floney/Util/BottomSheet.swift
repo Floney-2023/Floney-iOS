@@ -642,7 +642,7 @@ struct CategoryBottomSheet: View {
                     )
                     
                     //Spacer()
-                    ButtonLarge(label: "저장하기",background: .primary1, textColor: .white, strokeColor: .primary1,  fontWeight: .bold, action: {
+                    ButtonLarge(label: "확인",background: .primary1, textColor: .white, strokeColor: .primary1,  fontWeight: .bold, action: {
                         if root == "자산" {
                             self.isSelectedAssetTypeIndex = selectedAssetIndex
                             isSelectedAssetType = categories[selectedAssetIndex]
@@ -1627,7 +1627,7 @@ struct SetExcelDurationBottomSheet: View {
                         isShowing: $isShowing
                     )
                     Spacer()
-                    ButtonLarge(label: "저장하기",background: .primary1, textColor: .white, strokeColor: .primary1,  fontWeight: .bold, action: {
+                    ButtonLarge(label: "내보내기",background: .primary1, textColor: .white, strokeColor: .primary1,  fontWeight: .bold, action: {
                         viewModel.downloadExcelFile()
                         isShowing.toggle()
                     })
