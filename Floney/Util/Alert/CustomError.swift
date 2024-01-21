@@ -38,12 +38,13 @@ enum ServerError: String, CustomError {
     case NOT_FOUND_BOOK_USER = "B006"
     case NOT_FOUND_BOOK_LINE = "B007"
     case ALREADY_JOIN = "B008"
+    case ALREADY_EXIST = "B011"
     case NOT_SUBSCRIBE = "S001"
     case LIMIT = "S002"
     case SETTLEMENT_NOT_FOUND = "ST001"
     case OUTCOME_USER_NOT_FOUND = "ST002"
     case SERVER_ERROR = "0"
-    
+        
     var errorMessage: String {
         switch self {
         case .USER_FOUND: // 이미 가입함
@@ -108,6 +109,8 @@ enum ServerError: String, CustomError {
             return "알 수 없는 오류입니다. 다시 시도해 주세요."
         case .CODE_INVALID: // 인증 코드 만료
             return "유효 시간이 초과되었습니다. 다시 시도해 주세요."
+        case .ALREADY_EXIST:
+            return "이미 존재하는 분류항목입니다."
         }
     }
 }
