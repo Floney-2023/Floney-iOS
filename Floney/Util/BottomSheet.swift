@@ -746,6 +746,7 @@ struct CategoryFlowLayout: View {
                     })
                 }
             }
+            .padding(.top, 1)
         }
     }
 }

@@ -176,6 +176,7 @@ struct AddView: View {
                     .disabled(mode == "check" ? true : false)
                     .frame(maxWidth: .infinity)
                     .frame(height:scaler.scaleHeight(38))
+                    .cornerRadius(10)
 
                     //MARK: 날짜/자산/분류/내용/제외여부
                     VStack(spacing:0) {
