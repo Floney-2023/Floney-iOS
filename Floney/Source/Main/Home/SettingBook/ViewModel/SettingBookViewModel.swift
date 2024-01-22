@@ -735,7 +735,8 @@ class SettingBookViewModel : ObservableObject {
             return dateFormatter.string(from: startOfMonth)
 
         case .lastMonth:
-            return dateFormatter.string(from: now)
+            let startOfMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: now))!
+            return dateFormatter.string(from: startOfMonth)
 
         case .oneYear:
             var startOfYearComponents = calendar.dateComponents([.year], from: now)
