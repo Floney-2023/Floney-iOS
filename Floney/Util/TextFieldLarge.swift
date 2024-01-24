@@ -21,44 +21,6 @@ struct TextFieldLarge: View {
             }
             .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
     }
-    /*
-    func validateAndFormatAmount(budget: String) -> String {
-        // 숫자와 소수점만 허용
-        let filteredAmount = budget.filter { "0123456789.".contains($0) }
-        if (filteredAmount.first == "0" && filteredAmount.count > 1) {
-            return ""
-        }
-
-        // 최대 금액 검증
-        if CurrencyManager.shared.hasDecimalPoint {
-            guard let value = Double(filteredAmount), filteredAmount.count > 11 else {
-                return ""
-            }
-            return formatAmount(value)
-        
-        } else {
-            guard let value = Int(filteredAmount), filteredAmount.count > 11 else {
-                return ""
-            }
-            return formatAmount(value)
-        }
-    }
-
-    func formatAmount(_ value: Any) -> String {
-        let numberFormatter = NumberFormatter()
-        numberFormatter.numberStyle = .decimal
-        numberFormatter.maximumFractionDigits = CurrencyManager.shared.hasDecimalPoint ? 0 : 2
-
-        if let doubleValue = value as? Double {
-            return numberFormatter.string(from: NSNumber(value: doubleValue)) ?? ""
-        } else if let intValue = value as? Int {
-            return numberFormatter.string(from: NSNumber(value: intValue)) ?? ""
-        } else {
-            // 적절한 숫자 타입이 아닌 경우
-            return ""
-        }
-    }*/
-    
     func validateAndFormatAmount(budget: String) -> String {
         // 숫자와 소수점만 허용
         let filteredAmount = budget.filter { "0123456789.".contains($0) }
