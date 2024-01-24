@@ -30,6 +30,7 @@ enum ServerError: String, CustomError {
     case INVALID_OAUTH_TOKEN = "U016"
     case SAME_PASSWORD = "U017"
     case CODE_INVALID = "U018"
+    case OLD_PASSWORD_INVALID = "U022"
     case NOT_FOUND_BOOK = "B001"
     case MAX_MEMBER = "B002"
     case NOT_FOUND_CATEGORY = "B003"
@@ -111,6 +112,8 @@ enum ServerError: String, CustomError {
             return "유효 시간이 초과되었습니다. 다시 시도해 주세요."
         case .ALREADY_EXIST:
             return "이미 존재하는 분류항목입니다."
+        case .OLD_PASSWORD_INVALID:
+            return "현재 비밀번호를 확인해 주세요."
         }
     }
 }
