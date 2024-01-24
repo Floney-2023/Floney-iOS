@@ -132,8 +132,6 @@ struct AddCategoryView: View {
                     if viewModel.isValidCategoryName() {
                         viewModel.root = self.root[selectedIndex]
                         viewModel.postCategory()
-                        isShowingAdd = false
-                        
                     }
                     
                 } label: {
@@ -160,12 +158,17 @@ struct AddCategoryView: View {
                 rightView: {
                     Image("icon_close")
                         .onTapGesture {
+                            viewModel.newCategoryName = ""
                             isShowingAdd = false
                         }
                 }
             )
-
             .onAppear(perform : UIApplication.shared.hideKeyboard)
+            .onChange(of: viewModel.successAddCategory) { newValue in
+                viewModel.newCategoryName = ""
+                self.isShowingAdd = false
+                viewModel.successAddCategory = false
+            }
             
             if AlertManager.shared.showAlert {
                 CustomAlertView(message: alertManager.message, type: $alertManager.buttontType, isPresented: $alertManager.showAlert)

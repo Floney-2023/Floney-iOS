@@ -267,6 +267,7 @@ struct SetBudgetBottomSheet: View {
     @Binding var month : Int
     @ObservedObject var viewModel : SettingBookViewModel
     @State var budget : String = ""
+    @State var realBudget : String = ""
     var body: some View{
         ZStack(alignment: .bottom) {
             if (isShowing) {
@@ -276,6 +277,9 @@ struct SetBudgetBottomSheet: View {
                     .onTapGesture {
                         budget = ""
                         isShowing.toggle()
+                    }
+                    .onAppear {
+                        budget = viewModel.setBudgetDate(month: month)
                     }
                 VStack(spacing: scaler.scaleHeight(20)) {
                     HStack(alignment:.center) {
@@ -294,7 +298,7 @@ struct SetBudgetBottomSheet: View {
                             
                         }
                         .onTapGesture {
-                            budget = "0"
+                            budget = ""
                         }
                     }
                     .padding(.horizontal,scaler.scaleWidth(4))
@@ -304,7 +308,12 @@ struct SetBudgetBottomSheet: View {
                         TextFieldLarge(label: $label, content: $budget)
                             .frame(height: buttonHeight)
                         ButtonLarge(label: "저장하기", background: .primary1, textColor: .white, strokeColor: .primary1,  fontWeight: .bold, action: {
-                            if viewModel.onlyNumberValid(input: budget, budgetAssetType: .budget) {
+                            if budget.isEmpty {
+                                realBudget = "0"
+                            } else {
+                                realBudget = budget
+                            }
+                            if viewModel.onlyNumberValid(input: realBudget, budgetAssetType: .budget) {
                                 isShowing = false
                             }
                         })
@@ -325,7 +334,6 @@ struct SetBudgetBottomSheet: View {
         .ignoresSafeArea()
         .animation(.easeInOut, value: isShowing)
         .onAppear {
-            budget = ""
             NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: .main) { (notification) in
                 let value = notification.userInfo![UIResponder.keyboardFrameEndUserInfoKey] as! CGRect
                 let height = value.height
@@ -353,6 +361,7 @@ struct SetInitialAssetBottomSheet: View {
     @Binding var isShowing: Bool
     @ObservedObject var viewModel : SettingBookViewModel
     @State var initialAsset : String = ""
+    @State var realinitialAsset : String = ""
     var body: some View{
         ZStack(alignment: .bottom) {
             if (isShowing) {
@@ -362,6 +371,11 @@ struct SetInitialAssetBottomSheet: View {
                     .onTapGesture {
                         initialAsset = ""
                         isShowing.toggle()
+                    }
+                    .onAppear {
+                        Task {
+                            self.initialAsset = await viewModel.getAsset() > 0 ? viewModel.getAsset().formattedString : ""
+                        }
                     }
                 VStack(spacing:scaler.scaleHeight(12)) {
                     HStack {
@@ -382,7 +396,7 @@ struct SetInitialAssetBottomSheet: View {
                               .background(Color.greyScale6)
                         }
                         .onTapGesture {
-                            initialAsset = "0"
+                            initialAsset = ""
                         }
                     }
                     .padding(.top,scaler.scaleHeight(24))
@@ -400,9 +414,14 @@ struct SetInitialAssetBottomSheet: View {
                     VStack(spacing : scaler.scaleHeight(20)) {
                         TextFieldLarge(label: $label, content: $initialAsset)
                             .frame(height: buttonHeight)
-                        
                         ButtonLarge(label: "저장하기",background: .primary1, textColor: .white, strokeColor: .primary1,  fontWeight: .bold, action: {
-                            if viewModel.onlyNumberValid(input: initialAsset, budgetAssetType: .asset) {
+                            if initialAsset.isEmpty {
+                                self.realinitialAsset = "0"
+                            } else {
+                                self.realinitialAsset = self.initialAsset
+                            }
+                            if viewModel.onlyNumberValid(input: realinitialAsset, budgetAssetType: .asset) {
+                                initialAsset = ""
                                 isShowing = false
                             }
                         })
@@ -438,6 +457,7 @@ struct SetInitialAssetBottomSheet: View {
             NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
         }
     }
+
 }
 
 //MARK: 이월 설정 bottom sheet
@@ -595,7 +615,7 @@ struct CategoryBottomSheet: View {
                         isShowing.toggle()
                     }
                 //MARK: content
-                VStack(spacing:scaler.scaleHeight(18)) {
+                VStack(spacing:scaler.scaleHeight(12)) {
                     HStack {
                         Text(root == "자산" ? "자산" : "분류")
                             .foregroundColor(.greyScale1)
@@ -613,6 +633,7 @@ struct CategoryBottomSheet: View {
                         
                     }
                     .padding(.top,scaler.scaleHeight(24))
+                    .padding(.bottom,scaler.scaleHeight(6))
                     
                     CategoryFlowLayout(root: $root,
                                        categories: $categories,
@@ -623,9 +644,10 @@ struct CategoryBottomSheet: View {
                                        isShowing: $isShowing,
                                        selectedAssetIndex: $selectedAssetIndex,
                                        selectedCategoryIndex: $selectedCategoryIndex
-                                       )
-                    Spacer()
-                    ButtonLarge(label: "저장하기",background: .primary1, textColor: .white, strokeColor: .primary1,  fontWeight: .bold, action: {
+                    )
+                    
+                    //Spacer()
+                    ButtonLarge(label: "확인",background: .primary1, textColor: .white, strokeColor: .primary1,  fontWeight: .bold, action: {
                         if root == "자산" {
                             self.isSelectedAssetTypeIndex = selectedAssetIndex
                             isSelectedAssetType = categories[selectedAssetIndex]
@@ -673,11 +695,13 @@ struct CategoryFlowLayout: View {
     @Binding var selectedCategoryIndex : Int
     
     var body: some View {
+        
         VStack(alignment: .leading) {
             GeometryReader { geometry in
                 self.generateContent(in: geometry)
             }
         }
+        
     }
     private func generateContent(in g: GeometryProxy) -> some View {
         var width = CGFloat.zero
@@ -686,44 +710,48 @@ struct CategoryFlowLayout: View {
             scaler.scaleHeight(12)
         }
         
-        return ZStack(alignment: .topLeading) {
-            ForEach(self.categories.indices, id: \.self) { index in
-                CategoryButton(
-                    label: self.categories[index],
-                    isSelected: root == "자산" ? selectedAssetIndex == index : selectedCategoryIndex == index,
-                    action: {
-        
-                        if root == "자산" {
-                            selectedAssetIndex = index
-                        } else {
-                            selectedCategoryIndex = index
+        return
+        ScrollView(showsIndicators:false) {
+            ZStack(alignment: .topLeading) {
+                ForEach(self.categories.indices, id: \.self) { index in
+                    CategoryButton(
+                        label: self.categories[index],
+                        isSelected: root == "자산" ? selectedAssetIndex == index : selectedCategoryIndex == index,
+                        action: {
+                            
+                            if root == "자산" {
+                                selectedAssetIndex = index
+                            } else {
+                                selectedCategoryIndex = index
+                            }
                         }
-                    }
-                )
-                .padding([.horizontal],scaler.scaleWidth(4))
-                .alignmentGuide(.leading, computeValue: { d in
-                    if (abs(width - d.width) > g.size.width)
-                    {
-                        width = 0
-                        height -= d.height + verticalSpacing
-                    }
-                    let result = width
-                    if index < self.categories.count - 1 {
-                        width -= d.width
-                    } else {
-                        width = 0
-                    }
-                    return result
-                })
-                .alignmentGuide(.top, computeValue: { _ in
-                    let result = height
-                    if width == 0 {
-                        //if the item is the last in the row
-                        height = 0
-                    }
-                    return result
-                })
+                    )
+                    .padding([.horizontal],scaler.scaleWidth(4))
+                    .alignmentGuide(.leading, computeValue: { d in
+                        if (abs(width - d.width) > g.size.width)
+                        {
+                            width = 0
+                            height -= d.height + verticalSpacing
+                        }
+                        let result = width
+                        if index < self.categories.count - 1 {
+                            width -= d.width
+                        } else {
+                            width = 0
+                        }
+                        return result
+                    })
+                    .alignmentGuide(.top, computeValue: { _ in
+                        let result = height
+                        if width == 0 {
+                            //if the item is the last in the row
+                            height = 0
+                        }
+                        return result
+                    })
+                }
             }
+            .padding(.top, 1)
         }
     }
 }
@@ -1102,16 +1130,13 @@ struct CalendarBottomSheet: View {
                     .onTapGesture {
                         isShowing.toggle()
                     }
-                
                 MonthView(viewModel: viewModel, isShowing: $isShowing, pickerPresented: $pickerPresented)
-                
             }
             
         } //
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
         .ignoresSafeArea()
         .animation(.easeInOut, value: isShowing)
-        
         PickerBottomSheet(showingTab: $showingTab, isShowing: $pickerPresented, yearMonth: $viewModel.yearMonth)
     }
     
@@ -1333,7 +1358,6 @@ struct PickerBottomSheet: View {
     @Binding var showingTab : Bool
     @Binding var isShowing : Bool
     @Binding var yearMonth : YearMonthDuration
-    //@ObservedObject var viewModel : CalculateViewModel
     let years = Array(2000...2099)
     let months = Array(1...12)
     
@@ -1430,3 +1454,263 @@ struct YearBottomSheet: View {
     
 }
 
+//MARK: 캘린더 bottom sheet
+struct AddCalendarBottomSheet: View {
+    let buttonHeight: CGFloat = 46
+    @Binding var isShowing : Bool
+    @ObservedObject var viewModel : AddViewModel
+    @State var pickerPresented = false
+    @State var showingTab = false
+    var body: some View {
+        ZStack(alignment: .bottom) {
+            if (isShowing) {
+                Color.black
+                    .opacity(0.7)
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        isShowing.toggle()
+                        viewModel.convertStringToDate(viewModel.selectedDateStr)
+                    }
+                AddMonthView(viewModel: viewModel, isShowing: $isShowing, pickerPresented: $pickerPresented)
+            }
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
+        .ignoresSafeArea()
+        .animation(.easeInOut, value: isShowing)
+        PickerBottomSheet(showingTab: $showingTab, isShowing: $pickerPresented, yearMonth: $viewModel.presentedYearMonth)
+    }
+
+}
+
+struct AddMonthView: View {
+    @ObservedObject var viewModel : AddViewModel
+    @Binding var isShowing : Bool
+    @Binding var pickerPresented : Bool
+    
+    private var dateFormatter : DateFormatter {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "YYYY-MM-dd"
+        return formatter
+    }
+    private var yearAndMonthFormatter: DateFormatter {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "YYYY.MM"
+        return formatter
+    }
+    var body: some View {
+        @State var weeks = viewModel.daysList
+        VStack {
+            HStack {
+                Image("icon_left")
+                    .onTapGesture {
+                        // 한달 전으로 이동
+                        viewModel.presentedDate = Calendar.current.date(byAdding: .month, value: -1, to: viewModel.presentedDate) ?? viewModel.presentedDate
+                }
+                Spacer()
+                
+                Button(action: {
+                    self.pickerPresented = true
+                }) {
+                    Text("\(yearAndMonthFormatter.string(from:viewModel.presentedDate))")
+                        .font(.pretendardFont(.semiBold, size: 22))
+                        .foregroundColor(.greyScale2)
+                }
+                
+                Spacer()
+                
+                Image("icon_right")
+                    .onTapGesture {
+                        // 한달 후로 이동
+                        viewModel.presentedDate = Calendar.current.date(byAdding: .month, value: 1, to: viewModel.presentedDate) ?? viewModel.presentedDate
+                    }
+            }
+            //MARK: 요일
+            HStack {
+                ForEach(viewModel.daysOfTheWeek, id: \.self) { day in
+                    Text(day)
+                        .frame(maxWidth: .infinity)
+                        .font(.pretendardFont(.regular, size: 14))
+                        .foregroundColor(.greyScale6)
+                }
+            }
+            .padding(.top, 20)
+            .padding(.bottom, 15)
+            
+            //MARK: 날짜
+            ForEach(viewModel.daysList.indices, id: \.self) { i in
+                AddWeek(viewModel: viewModel, days: $weeks[i])
+            }
+            Spacer()
+            //MARK: 선택하기 버튼
+            Button {
+                viewModel.convertDateToString(viewModel.selectedDate)
+                isShowing = false
+            } label: {
+                Text("선택")
+                    .padding()
+                    .withNextButtonFormmating(.primary1)
+            }
+        }
+        .frame(height: 490)
+        .frame(maxWidth: .infinity)
+        .padding(.horizontal, 20)
+        .padding(.bottom, 44)
+        .padding(.top, 24)
+        .transition(.move(edge: .bottom))
+        .background(
+            Color(.white)
+        )
+        .cornerRadius(12, corners: [.topLeft, .topRight])
+        .onChange(of: viewModel.daysList) { newValue in
+            weeks = newValue
+        }
+    }
+    
+}
+
+//MARK: 일주일씩 그리기
+struct AddWeek: View {
+    @ObservedObject var viewModel : AddViewModel
+    @Binding var days : [Date]
+    let colWidth = UIScreen.main.bounds.width / 7
+    
+    var body: some View {
+        ZStack {
+            HStack(spacing: 0) {
+                ForEach(days, id: \.self) { value in
+                    VStack(spacing: 0) {
+                        if value.day > 0 {
+                            Text("\(value.day)")
+                                .font(.pretendardFont(.regular,size: 14))
+                                .foregroundColor(viewModel.selectedDate == value ? .white : viewModel.presentedDate.month == value.month ? .greyScale2 : .greyScale7)
+                        }
+                    }
+                    .padding(10)
+                    .frame(width: (UIScreen.main.bounds.width - 48) / 7)
+                    .frame(height: 40)
+                    .background(viewModel.selectedDate == value ? Color.primary5 : Color.clear)
+                    .clipShape(Circle())
+                    .onTapGesture {
+                        viewModel.selectedDate = value
+                    }
+                    
+                }
+            }
+        }
+    }
+}
+
+struct SetExcelDurationBottomSheet: View {
+    let scaler = Scaler.shared
+    var buttonHeight: CGFloat {
+        scaler.scaleHeight(46)
+    }
+    @ObservedObject var viewModel : SettingBookViewModel
+    @Binding var isShowing: Bool
+    var body: some View{
+        ZStack(alignment: .bottom) {
+            if (isShowing) {
+                //MARK: Background
+                Color.black
+                    .opacity(0.7)
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        viewModel.selectedExcelDuration = .thisMonth
+                        isShowing.toggle()
+                    }
+                //MARK: content
+                VStack(spacing:scaler.scaleHeight(18)) {
+                    HStack {
+                        Text("엑셀 내보내기")
+                            .foregroundColor(.greyScale1)
+                            .font(.pretendardFont(.bold,size:scaler.scaleWidth(18)))
+                        Spacer()
+                    }
+                    .padding(.top,scaler.scaleHeight(24))
+                    
+                    SetExcelDurationFlowLayout(
+                        viewModel:viewModel,
+                        isShowing: $isShowing
+                    )
+                    Spacer()
+                    ButtonLarge(label: "내보내기",background: .primary1, textColor: .white, strokeColor: .primary1,  fontWeight: .bold, action: {
+                        viewModel.downloadExcelFile()
+                        isShowing.toggle()
+                    })
+                    .frame(height: buttonHeight)
+  
+                }
+                .padding(.horizontal, scaler.scaleWidth(20))
+                .padding(.bottom, scaler.scaleHeight(30))
+                .transition(.move(edge: .bottom))
+                .background(
+                    Color(.white)
+                )
+                .cornerRadius(12, corners: [.topLeft, .topRight])
+                .frame(height: UIScreen.main.bounds.height / 2) // Screen height is divided by 2
+
+            } // if
+        } //ZStack
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
+        .ignoresSafeArea()
+        .animation(.easeInOut, value: isShowing)
+    }
+}
+
+struct SetExcelDurationFlowLayout: View {
+    let scaler = Scaler.shared
+    @ObservedObject var viewModel : SettingBookViewModel
+    @State private var totalWidth = CGFloat.zero
+    @Binding var isShowing: Bool
+    @State var selectedDurationIndex : Int = 0
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            GeometryReader { geometry in
+                self.generateContent(in: geometry)
+            }
+        }
+    }
+    private func generateContent(in g: GeometryProxy) -> some View {
+        var width = CGFloat.zero
+        var height = CGFloat.zero
+        var verticalSpacing: CGFloat {
+            scaler.scaleHeight(12)
+        }
+        return ZStack(alignment: .topLeading) {
+            ForEach(viewModel.durationOptions.indices, id: \.self) { index in
+                CategoryButton(
+                    label: viewModel.durationOptions[index],
+                    isSelected: selectedDurationIndex == index,
+                    action: {
+                        selectedDurationIndex = index
+                        viewModel.handleUserSelection(viewModel.durationOptions[index])
+                    }
+                )
+                .padding([.horizontal],scaler.scaleWidth(4))
+                .alignmentGuide(.leading, computeValue: { d in
+                    if (abs(width - d.width) > g.size.width)
+                    {
+                        width = 0
+                        height -= d.height + verticalSpacing
+                    }
+                    let result = width
+                    if index < viewModel.durationOptions.count - 1 {
+                        width -= d.width
+                    } else {
+                        width = 0
+                    }
+                    return result
+                })
+                .alignmentGuide(.top, computeValue: { _ in
+                    let result = height
+                    if width == 0 {
+                        //if the item is the last in the row
+                        height = 0
+                    }
+                    return result
+                })
+            }
+        }
+    }
+}

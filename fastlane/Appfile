@@ -2,7 +2,7 @@ for_lane :develop do
 	app_identifier("com.SCDore.Floney-Dev") # 개발용 Bundle ID
 end
 
-for_lane :release do
+for_lane :beta do
 	app_identifier("com.SCDore.Floney") # The bundle identifier of your app
 end
 apple_id("scdore.team@gmail.com") # Your Apple Developer Portal username

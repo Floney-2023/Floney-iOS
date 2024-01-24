@@ -241,19 +241,6 @@ class AnalysisViewModel : ObservableObject {
     func analysisAsset(date: String) {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
-        //var assetMonth = 0
-        //var assetYear = 0
-        //let date = dateFormatter.date(from: date) //{
-            //let calendar = Calendar.current
-           // let components = calendar.dateComponents([.year,.month], from: date)
-           // if let month = components.month {
-           //     print(month) // 출력: 2
-           //     assetMonth = month
-           // }
-           // if let year = components.year {
-           //     assetYear = year
-           // }
-        //}
         var date = ""
 
         let dateString = dateFormatter.string(from: selectedDate)
@@ -279,9 +266,7 @@ class AnalysisViewModel : ObservableObject {
                 } else {
                     LoadingManager.shared.update(showLoading: false, loadingType: .progressLoading)
                     var asset = dataResponse.value ?? AssetResponse(difference: 0, initAsset: 0, currentAsset: 0, assetInfo: [:])
-                    //asset.month = assetMonth  // 해당 월을 AssetResponse에 저장합니다.
-                    //asset.year = assetYear
-                    //if date == self.selectedDateStr {
+
                     let assetInfoDictionary = asset.assetInfo  // 예: [String: AssetInfo] 타입의 딕셔너리
 
                     self.assetList = assetInfoDictionary.compactMap { key, value in
@@ -321,12 +306,9 @@ class AnalysisViewModel : ObservableObject {
                         }
                         return modifiedInfo
                     }
-
-                    print(self.assetList)
                     self.difference = dataResponse.value?.difference ?? 0
                     self.currentAsset = dataResponse.value?.currentAsset ?? 0
                     self.initAsset = dataResponse.value?.initAsset ?? 0
-                   // }
                 }
             }.store(in: &cancellableSet)
     }

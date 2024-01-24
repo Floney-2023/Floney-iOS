@@ -21,7 +21,7 @@ class AddViewModel: ObservableObject {
     //MARK: line
     @Published var lineResult : LinesResponse = LinesResponse(money: 0, flow: "", asset: "", line: "", lineDate: "", description: "", except: false, nickname: "")
     @Published var money = ""
-    @Published var lineDate = ""
+    //@Published var lineDate = ""
     @Published var flow = ""
     @Published var asset = ""
     @Published var line = ""
@@ -43,9 +43,26 @@ class AddViewModel: ObservableObject {
     }
 
     @Published var deleteCategoryName = ""
-    
     //MARK: delete line
     @Published var bookLineKey : Int = 0
+    
+    //MARK: calendar
+    @Published var daysOfTheWeek = ["일","월","화","수","목","금","토"]
+    // 메인으로 선택된 날짜 -> 이 날짜에 의해 좌우됨.
+    @Published var selectedDate: Date = Date()
+    @Published var selectedDateStr: String = ""
+    @Published var presentedDate : Date = Date() {
+        didSet {
+            extractDate()
+        }
+    }
+    @Published var presentedYearMonth : YearMonthDuration = YearMonthDuration(year: Date().year, month: Date().month) {
+        didSet {
+            presentedDate = Date.from(year: presentedYearMonth.year, month: presentedYearMonth.month)
+        }
+    }
+    @Published var daysList : [[Date]] = [[]]
+    @Published var successAddCategory = false
 
     private var cancellableSet: Set<AnyCancellable> = []
     var dataManager: AddProtocol
@@ -53,6 +70,64 @@ class AddViewModel: ObservableObject {
     init( dataManager: AddProtocol = AddService.shared) {
         self.dataManager = dataManager
     }
+    // 이차원 배열 달력
+    func extractDate() {
+        var days = daysInMonth()
+        var result = [[Date]]()
+        days.forEach {
+            if result.isEmpty || result.last?.count == 7 {
+                result.append([$0])
+            } else {
+                result[result.count - 1].append($0)
+            }
+        }
+        self.daysList = result
+    }
+    func daysInMonth() -> [Date] {
+        var dates = [Date]()
+        
+        let calendar = Calendar.current
+        var components = calendar.dateComponents([.year, .month], from: presentedDate)
+        components.day = 1
+        
+        let firstDayOfMonth = calendar.date(from: components)!
+        let firstWeekday = calendar.component(.weekday, from: firstDayOfMonth)
+        let offsetDays = (firstWeekday - calendar.firstWeekday + 7) % 7
+        
+        if let startDay = calendar.date(byAdding: .day, value: -offsetDays, to: firstDayOfMonth),
+           let rangeOfMonth = calendar.range(of: .day, in: .month, for: firstDayOfMonth) {
+            for i in 0..<(rangeOfMonth.count + offsetDays) {
+                if let date = calendar.date(byAdding: .day, value: i, to: startDay) {
+                    dates.append(date)
+                }
+            }
+        }
+        while dates.count % 7 != 0 {
+            if let date = calendar.date(byAdding: .day, value: 1, to: dates.last!) {
+                dates.append(date)
+            }
+        }
+        return dates
+    }
+    
+    func convertStringToDate(_ dateString: String){
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        dateFormatter.locale = Locale.current
+        selectedDateStr = dateString
+        selectedDate = dateFormatter.date(from: dateString) ?? Date()
+        presentedDate = selectedDate
+        
+        print("selectedDate : \(selectedDate)")
+        print("selectedDateStr : \(selectedDateStr)")
+    }
+    func convertDateToString(_ date: Date) {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        dateFormatter.locale = Locale.current
+        selectedDateStr = dateFormatter.string(from: date)
+    }
+
     func isValidCategoryName() -> Bool {
         if newCategoryName.isEmpty {
             alertManager.handleError(InputValidationError.categoryNameEmpty)
@@ -122,7 +197,7 @@ class AddViewModel: ObservableObject {
         } else {
             print("Cannot convert to Double")
         }
-        let request = LinesRequest(bookKey: bookKey, money: moneyDouble, lineDate: lineDate, flow: flow, asset: asset, line: line, description: description, except: except, nickname: nickname)
+        let request = LinesRequest(bookKey: bookKey, money: moneyDouble, lineDate: selectedDateStr, flow: flow, asset: asset, line: line, description: description, except: except, nickname: nickname)
         print("내역 추가 request : \(request)")
         dataManager.postLines(request)
             .sink { (dataResponse) in
@@ -161,10 +236,9 @@ class AddViewModel: ObservableObject {
                     print(dataResponse.error)
                 } else {
                     self.isApiCalling = false
-                    print("--카테고리 추가 성공--")
-                    print(dataResponse.value)
                     self.getCategory()
-                    self.successAdd = true
+                    self.successAddCategory = true
+                    self.alertManager.update(showAlert: true, message: "추가 완료되었습니다.", buttonType: .green)
                 }
             }.store(in: &cancellableSet)
     }
@@ -230,7 +304,7 @@ class AddViewModel: ObservableObject {
         } else {
             print("Cannot convert to Double")
         }
-        let request = ChangeLineRequest(lineId: bookLineKey, bookKey: bookKey, money: moneyDouble, lineDate: lineDate, flow: flow, asset: asset, line: line, description: description, except: except, nickname: nickname)
+        let request = ChangeLineRequest(lineId: bookLineKey, bookKey: bookKey, money: moneyDouble, lineDate: selectedDateStr, flow: flow, asset: asset, line: line, description: description, except: except, nickname: nickname)
         print("내역 수정 request : \(request)")
         dataManager.changeLine(parameters: request)
             .sink {(dataResponse) in

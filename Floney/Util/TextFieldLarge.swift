@@ -16,33 +16,45 @@ struct TextFieldLarge: View {
         
         CustomTextField(text: $content, placeholder: label, keyboardType: .decimalPad, alignment: .center, placeholderColor: .greyScale6)
             .onReceive(Just(content)) { newValue in
-                content = formatBudget(content, hasDecimal: CurrencyManager.shared.hasDecimalPoint)
+                //content = formatBudget(content, hasDecimal: CurrencyManager.shared.hasDecimalPoint)
+                content = validateAndFormatAmount(budget: content)
             }
             .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
     }
-    
-    
-    private func formatBudget(_ budget: String, hasDecimal: Bool) -> String {
-        if hasDecimal {
-            return formatDecimal(budget, maxDigits: 9, maxDecimalPlaces: 2)
+    func validateAndFormatAmount(budget: String) -> String {
+        // 숫자와 소수점만 허용
+        let filteredAmount = budget.filter { "0123456789.".contains($0) }
+        
+        if (filteredAmount.first == "0" && filteredAmount.count > 1) {
+            return ""
+        }
+        // 11자리를 초과하는 경우, 앞에서부터 11자리만 취함
+        let trimmedAmount = String(filteredAmount.prefix(11))
+
+        // CurrencyManager에 따라 Double 또는 Int로 처리
+        if CurrencyManager.shared.hasDecimalPoint {
+            guard let value = Double(trimmedAmount) else { return "" }
+            return formatAmount(value)
         } else {
-            return formatInteger(budget, maxDigits: 11)
+            guard let value = Int(trimmedAmount) else { return "" }
+            return formatAmount(value)
         }
     }
-    
-    private func formatDecimal(_ budget: String, maxDigits: Int, maxDecimalPlaces: Int) -> String {
-        let numberComponents = budget.components(separatedBy: ".")
-        let decimalPart = numberComponents.count > 1 ? String(numberComponents[1].prefix(maxDecimalPlaces)) : ""
-        let integerPart = String(numberComponents[0].prefix(maxDigits))
-        
-        return numberComponents.count > 1 ? "\(integerPart).\(decimalPart)" : integerPart
+
+    func formatAmount(_ value: Any) -> String {
+        let numberFormatter = NumberFormatter()
+        numberFormatter.numberStyle = .decimal
+        numberFormatter.maximumFractionDigits = CurrencyManager.shared.hasDecimalPoint ? 0 : 2
+
+        if let doubleValue = value as? Double {
+            return numberFormatter.string(from: NSNumber(value: doubleValue)) ?? ""
+        } else if let intValue = value as? Int {
+            return numberFormatter.string(from: NSNumber(value: intValue)) ?? ""
+        } else {
+            return ""
+        }
     }
-    
-    private func formatInteger(_ budget: String, maxDigits: Int) -> String {
-        // 숫자만 추출
-        let numbersOnly = budget.filter { $0.isNumber }
-        // 최대 길이까지 잘라내기
-        return String(numbersOnly.prefix(maxDigits))
-    }
+     
+     
 }
 

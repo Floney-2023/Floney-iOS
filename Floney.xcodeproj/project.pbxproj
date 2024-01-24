@@ -37,6 +37,7 @@
 		2F1614922A0F971B0029E9A9 /* DayLinesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1614912A0F971B0029E9A9 /* DayLinesView.swift */; };
 		2F1614942A0FABBE0029E9A9 /* CustomAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1614932A0FABBE0029E9A9 /* CustomAlert.swift */; };
 		2F1614972A1370B90029E9A9 /* SignInWithAppleCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1614962A1370B90029E9A9 /* SignInWithAppleCoordinator.swift */; };
+		2F1838502B57D26A00C5601A /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F18384F2B57D26A00C5601A /* String.swift */; };
 		2F1A74B32ACBF966004FE3D6 /* NotiRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1A74B22ACBF965004FE3D6 /* NotiRequest.swift */; };
 		2F1A74B62ACBFAAA004FE3D6 /* NotiDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1A74B52ACBFAAA004FE3D6 /* NotiDataManager.swift */; };
 		2F1A74B92ACBFB96004FE3D6 /* NotiViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1A74B82ACBFB96004FE3D6 /* NotiViewModel.swift */; };
@@ -244,6 +245,7 @@
 		2F1614932A0FABBE0029E9A9 /* CustomAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAlert.swift; sourceTree = "<group>"; };
 		2F1614952A136FC60029E9A9 /* Floney.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Floney.entitlements; sourceTree = "<group>"; };
 		2F1614962A1370B90029E9A9 /* SignInWithAppleCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInWithAppleCoordinator.swift; sourceTree = "<group>"; };
+		2F18384F2B57D26A00C5601A /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		2F1A74B22ACBF965004FE3D6 /* NotiRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotiRequest.swift; sourceTree = "<group>"; };
 		2F1A74B52ACBFAAA004FE3D6 /* NotiDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotiDataManager.swift; sourceTree = "<group>"; };
 		2F1A74B82ACBFB96004FE3D6 /* NotiViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotiViewModel.swift; sourceTree = "<group>"; };
@@ -998,6 +1000,7 @@
 				2F531AD12AB1596600862014 /* UIFont.swift */,
 				2F5FB62B2AB6BCF800750FAB /* Double.swift */,
 				2F5FB62F2AB7040200750FAB /* UINavigationController.swift */,
+				2F18384F2B57D26A00C5601A /* String.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -1733,6 +1736,7 @@
 				2F76885C2AA35A9400862A88 /* NotificationManager.swift in Sources */,
 				2FF25C8F29E7EE9D00737346 /* BottomSheet.swift in Sources */,
 				2FF724882A654AC7008B9333 /* BookExistenceResponse.swift in Sources */,
+				2F1838502B57D26A00C5601A /* String.swift in Sources */,
 				2FE7B2E42AB2141C00B83345 /* UnsubscribeView.swift in Sources */,
 				2F9258722B160F93002513AB /* SettingResponse.swift in Sources */,
 				2F1A74BD2ACD77B4004FE3D6 /* SuccessSignoutView.swift in Sources */,

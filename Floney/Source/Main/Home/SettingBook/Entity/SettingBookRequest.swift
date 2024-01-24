@@ -41,3 +41,17 @@ struct SetCurrencyRequest : Encodable {
     var requestCurrency : String
     var bookKey : String
 }
+
+struct DownloadExcelRequest : Encodable {
+    var bookKey : String
+    var excelDuration : String
+    var currentDate : String
+}
+
+enum ExcelDurationType: String {
+    case thisMonth = "THIS_MONTH"
+    case lastMonth = "LAST_MONTH"
+    case oneYear = "ONE_YEAR"
+    case lastYear = "LAST_YEAR"
+    case all = "ALL"
+}

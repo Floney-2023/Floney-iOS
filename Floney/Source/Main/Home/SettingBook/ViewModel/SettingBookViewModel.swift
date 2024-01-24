@@ -71,7 +71,15 @@ class SettingBookViewModel : ObservableObject {
     //MARK: Excel
     @Published var excelURL : URL?
     @Published var shareExcelStatus = false
-    
+    @Published var selectedExcelDuration : ExcelDurationType = ExcelDurationType.thisMonth
+    let durationOptions = ["이번달", "저번달", "올해", "작년","전체"]
+    let durationMapping: [String: ExcelDurationType] = [
+        "이번달": .thisMonth,
+        "저번달": .lastMonth,
+        "올해": .oneYear,
+        "작년": .lastYear,
+        "전체": .all
+    ]
     //MARK: Budget
     @Published var budget : Double = 0
     @Published var yearlyData: [Int: [MonthlyAmount]] = [:]
@@ -81,8 +89,14 @@ class SettingBookViewModel : ObservableObject {
         }
     }
     @Published var budgetDate = ""
+    
+    @Published var initialAsset: Double = 0
     private var cancellableSet: Set<AnyCancellable> = []
+    
+    
     var dataManager: SettingBookProtocol
+    
+    var assetDataManager : AnalysisProtocol = AnalysisService.shared
     
     init( dataManager: SettingBookProtocol = SettingBookService.shared) {
         self.dataManager = dataManager
@@ -136,6 +150,57 @@ class SettingBookViewModel : ObservableObject {
                 }
             }.store(in: &cancellableSet)
     }
+    func getAssetResponse(request: BudgetAssetRequest) async -> Result<AssetResponse, Error> {
+        await withCheckedContinuation { continuation in
+            self.assetDataManager.analysisAsset(request)
+                .sink { completion in
+                    switch completion {
+                    case .failure(let error):
+                        continuation.resume(returning: .failure(error))
+                    case .finished:
+                        break
+                    }
+                } receiveValue: { response in
+                    switch response.result {
+                    case .success(let assetResponse):
+                        continuation.resume(returning: .success(assetResponse))
+                    case .failure(let error):
+                        continuation.resume(returning: .failure(error))
+                    }
+                }
+                .store(in: &self.cancellableSet)
+        }
+    }
+                   
+    func getAsset() async -> Double {
+        let selectedDate = Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        let dateString = dateFormatter.string(from: selectedDate)
+        let components = Calendar.current.dateComponents([.year, .month], from: selectedDate)
+        var date = ""
+        if let year = components.year, let month = components.month {
+            date = "\(year)-\(String(format: "%02d", month))-01"
+        }
+        let bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
+        let request = BudgetAssetRequest(bookKey: bookKey, date: date)
+
+        do {
+            let result = await getAssetResponse(request: request)
+            switch result {
+            case .success(let assetResponse):
+                return assetResponse.initAsset ?? 0
+            case .failure(let error):
+                print("네트워크 요청 실패: \(error)")
+                return 0
+            }
+        } catch {
+            print("에러 발생: \(error)")
+            return 0
+        }
+    }
+
+
     //MARK: server
     func getBookInfo() {
         bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
@@ -309,17 +374,31 @@ class SettingBookViewModel : ObservableObject {
     }
     
     // 예산 date
-    func setBudgetDate(month: Int) {
+    func setBudgetDate(month: Int) -> String {
         if month < 10 {
             self.budgetDate = "\(selectedYear)-0\(month)-01"
         } else if month >= 10 {
             self.budgetDate = "\(selectedYear)-\(month)-01"
         }
+        if let mayAmount = self.yearlyData[self.selectedYear]?.first(where: { $0.month == month }) {
+            let amount = mayAmount.amount
+            if amount > 0 {
+                return amount.formattedString
+            } else {
+                return ""
+            }
+        } else {
+            // 해당 월에 대한 데이터가 없는 경우의 처리
+            
+        }
+        return ""
     }
     
     func onlyNumberValid(input: String, budgetAssetType : BudgetAssetType) -> Bool {
         print("예산 인풋 : \(input)")
-        if let doubleValue = Double(input) {
+        let newValue = input.replacingOccurrences(of: ",", with: "")
+
+        if let doubleValue = Double(newValue) {
             // 변환 성공
             print("변환 성공")
             print(doubleValue) // 출력: 3200.4
@@ -614,12 +693,14 @@ class SettingBookViewModel : ObservableObject {
     
     func downloadExcelFile() {
         bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
-        let cancellable = dataManager.downloadExcelFile(bookKey: bookKey)
+        let currentDate = self.formattedDate(for: selectedExcelDuration)
+        let request = DownloadExcelRequest(bookKey: bookKey, excelDuration: selectedExcelDuration.rawValue, currentDate: currentDate)
+        print(request)
+        let cancellable = dataManager.downloadExcelFile(parameters: request)
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { completion in
                 switch completion {
                 case .finished:
-                    
                     break
                 case .failure(let error):
                     //x self.createAlert(with: error)
@@ -629,13 +710,48 @@ class SettingBookViewModel : ObservableObject {
                     })
                 }
             }, receiveValue: { localFileURL in
-                
                 print("Excel file saved to:", localFileURL)
                 self.excelURL = localFileURL
                 self.shareExcelStatus = true
             })
             .store(in: &cancellableSet)
     }
+    
+    func handleUserSelection(_ selection: String) {
+        if let durationType = durationMapping[selection] {
+            self.selectedExcelDuration = durationType
+        }
+    }
+    func formattedDate(for type: ExcelDurationType) -> String {
+        let calendar = Calendar.current
+        let now = Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+
+        switch type {
+        case .thisMonth:
+            let startOfMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: now))!
+            return dateFormatter.string(from: startOfMonth)
+
+        case .lastMonth:
+            let startOfMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: now))!
+            return dateFormatter.string(from: startOfMonth)
+
+        case .oneYear:
+            var startOfYearComponents = calendar.dateComponents([.year], from: now)
+            startOfYearComponents.month = 1
+            startOfYearComponents.day = 1
+            let startOfYear = calendar.date(from: startOfYearComponents)!
+            return dateFormatter.string(from: startOfYear)
+            
+        case .lastYear:
+            return dateFormatter.string(from: now)
+
+        case .all:
+            return dateFormatter.string(from: now)
+        }
+    }
+
     //MARK: 방장 필터
     func hostFilter() {
         // role이 "방장"이고, me가 true인 요소를 필터링합니다.

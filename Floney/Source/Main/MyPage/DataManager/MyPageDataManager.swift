@@ -13,7 +13,7 @@ protocol MyPageProtocol {
     func getMyPage() -> AnyPublisher<DataResponse<MyPageResponse, NetworkError>, Never>
     func changeProfile(img: String) -> AnyPublisher<Void, NetworkError>
     func changeNickname(nickname: String) -> AnyPublisher<Void, NetworkError>
-    func changePassword(password: String) -> AnyPublisher<Void, NetworkError>
+    func changePassword(parameters: ChangePasswordRequest) -> AnyPublisher<Void, NetworkError>
     func logout() -> AnyPublisher<Void, NetworkError>
     func checkPassword(_ password: String) -> AnyPublisher<Void, NetworkError>
     func signout(_ parameters : SignOutRequest) -> AnyPublisher<DataResponse<SignoutResponse, NetworkError>, Never>
@@ -177,10 +177,10 @@ extension MyPage: MyPageProtocol {
         .eraseToAnyPublisher()
         
     }
-    func changePassword(password: String) -> AnyPublisher<Void, NetworkError> {
+    func changePassword(parameters: ChangePasswordRequest) -> AnyPublisher<Void, NetworkError> {
         let url = "\(Constant.BASE_URL)/users/password"
         let token = Keychain.getKeychainValue(forKey: .accessToken) ?? ""
-        let parameters = ChangePasswordRequest(newPassword: password)
+        let parameters = parameters
         print("change password : \n\(token)\n url: \(url)")
         return AF.request(url,
                           method: .put,
