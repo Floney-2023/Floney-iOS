@@ -55,6 +55,7 @@ struct ChangePasswordView: View {
                     .padding(scaler.scaleWidth(20))
                     .withNextButtonFormmating(.primary1)
                     .onTapGesture {
+                        hideKeyboard()
                         if viewModel.isValidInputs() {
                             viewModel.changePassword()
                         }
