@@ -24,21 +24,19 @@ struct TextFieldLarge: View {
     func validateAndFormatAmount(budget: String) -> String {
         // 숫자와 소수점만 허용
         let filteredAmount = budget.filter { "0123456789.".contains($0) }
+        
         if (filteredAmount.first == "0" && filteredAmount.count > 1) {
             return ""
         }
+        // 11자리를 초과하는 경우, 앞에서부터 11자리만 취함
+        let trimmedAmount = String(filteredAmount.prefix(11))
 
-        // 최대 금액 검증
+        // CurrencyManager에 따라 Double 또는 Int로 처리
         if CurrencyManager.shared.hasDecimalPoint {
-            guard let value = Double(filteredAmount), value <= 999_999_999.99 else {
-                return ""
-            }
+            guard let value = Double(trimmedAmount) else { return "" }
             return formatAmount(value)
-        
         } else {
-            guard let value = Int(filteredAmount), value <= 99_999_999_999 else {
-                return ""
-            }
+            guard let value = Int(trimmedAmount) else { return "" }
             return formatAmount(value)
         }
     }
@@ -53,9 +51,10 @@ struct TextFieldLarge: View {
         } else if let intValue = value as? Int {
             return numberFormatter.string(from: NSNumber(value: intValue)) ?? ""
         } else {
-            // 적절한 숫자 타입이 아닌 경우
             return ""
         }
     }
+     
+     
 }
 

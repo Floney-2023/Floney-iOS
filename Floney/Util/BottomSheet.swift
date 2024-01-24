@@ -266,6 +266,7 @@ struct SetBudgetBottomSheet: View {
     @Binding var isShowing: Bool
     @Binding var month : Int
     @ObservedObject var viewModel : SettingBookViewModel
+    @State var budget : String = ""
     @State var realBudget : String = ""
     var body: some View{
         ZStack(alignment: .bottom) {
@@ -274,7 +275,11 @@ struct SetBudgetBottomSheet: View {
                     .opacity(0.7)
                     .ignoresSafeArea()
                     .onTapGesture {
+                        budget = ""
                         isShowing.toggle()
+                    }
+                    .onAppear {
+                        budget = viewModel.setBudgetDate(month: month)
                     }
                 VStack(spacing: scaler.scaleHeight(20)) {
                     HStack(alignment:.center) {
@@ -293,20 +298,20 @@ struct SetBudgetBottomSheet: View {
                             
                         }
                         .onTapGesture {
-                            viewModel.currentBudget = ""
+                            budget = ""
                         }
                     }
                     .padding(.horizontal,scaler.scaleWidth(4))
                     .padding(.top, scaler.scaleHeight(24))
                     
                     VStack(spacing : scaler.scaleHeight(20)) {
-                        TextFieldLarge(label: $label, content: $viewModel.currentBudget)
+                        TextFieldLarge(label: $label, content: $budget)
                             .frame(height: buttonHeight)
                         ButtonLarge(label: "저장하기", background: .primary1, textColor: .white, strokeColor: .primary1,  fontWeight: .bold, action: {
-                            if viewModel.currentBudget.isEmpty {
+                            if budget.isEmpty {
                                 realBudget = "0"
                             } else {
-                                realBudget = viewModel.currentBudget
+                                realBudget = budget
                             }
                             if viewModel.onlyNumberValid(input: realBudget, budgetAssetType: .budget) {
                                 isShowing = false

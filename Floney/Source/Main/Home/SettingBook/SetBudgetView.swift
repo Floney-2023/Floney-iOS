@@ -63,7 +63,9 @@ struct SetBudgetView: View {
                                 .cornerRadius(12)
                                 .onTapGesture {
                                     month = monthlyAmount.month
-                                    viewModel.setBudgetDate(month: monthlyAmount.month)
+                                    //viewModel.setBudgetDate(month: monthlyAmount.month)
+                                    
+                                    
                                     setBudgetBottonSheet = true
                                 }
                                 

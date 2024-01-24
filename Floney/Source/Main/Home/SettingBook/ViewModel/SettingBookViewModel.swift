@@ -89,7 +89,6 @@ class SettingBookViewModel : ObservableObject {
         }
     }
     @Published var budgetDate = ""
-    @Published var currentBudget : String = ""
     
     @Published var initialAsset: Double = 0
     private var cancellableSet: Set<AnyCancellable> = []
@@ -375,7 +374,7 @@ class SettingBookViewModel : ObservableObject {
     }
     
     // 예산 date
-    func setBudgetDate(month: Int) {
+    func setBudgetDate(month: Int) -> String {
         if month < 10 {
             self.budgetDate = "\(selectedYear)-0\(month)-01"
         } else if month >= 10 {
@@ -384,15 +383,15 @@ class SettingBookViewModel : ObservableObject {
         if let mayAmount = self.yearlyData[self.selectedYear]?.first(where: { $0.month == month }) {
             let amount = mayAmount.amount
             if amount > 0 {
-                self.currentBudget = amount.formattedString
+                return amount.formattedString
             } else {
-                self.currentBudget = ""
+                return ""
             }
         } else {
             // 해당 월에 대한 데이터가 없는 경우의 처리
             
         }
-        print(self.currentBudget)
+        return ""
     }
     
     func onlyNumberValid(input: String, budgetAssetType : BudgetAssetType) -> Bool {
