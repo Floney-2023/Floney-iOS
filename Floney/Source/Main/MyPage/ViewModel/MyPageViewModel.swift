@@ -197,7 +197,8 @@ final class MyPageViewModel: ObservableObject {
         return true
     }
     func changePassword() {
-        dataManager.changePassword(password: newPassword)
+        let request = ChangePasswordRequest(newPassword: newPassword, oldPassword: currentPassword)
+        dataManager.changePassword(parameters: request)
             .sink { completion in
 
                 switch completion {

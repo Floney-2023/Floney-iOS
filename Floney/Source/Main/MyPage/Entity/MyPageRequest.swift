@@ -17,6 +17,7 @@ struct SignOutRequest : Encodable {
 }
 struct ChangePasswordRequest:Encodable {
     var newPassword:String
+    var oldPassword: String
 }
 struct CheckPasswordRequest : Encodable {
     var password: String
