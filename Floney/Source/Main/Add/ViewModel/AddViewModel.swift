@@ -236,10 +236,9 @@ class AddViewModel: ObservableObject {
                     print(dataResponse.error)
                 } else {
                     self.isApiCalling = false
-                    print("--카테고리 추가 성공--")
-                    print(dataResponse.value)
                     self.getCategory()
                     self.successAddCategory = true
+                    self.alertManager.update(showAlert: true, message: "추가 완료되었습니다.", buttonType: .green)
                 }
             }.store(in: &cancellableSet)
     }
