@@ -62,6 +62,7 @@ class AddViewModel: ObservableObject {
         }
     }
     @Published var daysList : [[Date]] = [[]]
+    @Published var successAddCategory = false
 
     private var cancellableSet: Set<AnyCancellable> = []
     var dataManager: AddProtocol
@@ -238,7 +239,7 @@ class AddViewModel: ObservableObject {
                     print("--카테고리 추가 성공--")
                     print(dataResponse.value)
                     self.getCategory()
-                    self.successAdd = true
+                    self.successAddCategory = true
                 }
             }.store(in: &cancellableSet)
     }
