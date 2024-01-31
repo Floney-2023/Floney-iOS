@@ -1927,7 +1927,7 @@
 				CODE_SIGN_ENTITLEMENTS = Floney/Floney.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 35;
+				CURRENT_PROJECT_VERSION = 40;
 				DEVELOPMENT_ASSET_PATHS = "\"Floney/Preview Content\"";
 				DEVELOPMENT_TEAM = 949V9B6RLN;
 				ENABLE_PREVIEWS = YES;
@@ -1949,7 +1949,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.4;
+				MARKETING_VERSION = 1.1.0;
 				NEW_SETTING1 = "";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -2063,13 +2063,13 @@
 				CODE_SIGN_ENTITLEMENTS = Floney/Floney.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 35;
+				CURRENT_PROJECT_VERSION = 40;
 				DEVELOPMENT_ASSET_PATHS = "\"Floney/Preview Content\"";
 				DEVELOPMENT_TEAM = 949V9B6RLN;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Floney/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Floney;
+				INFOPLIST_KEY_CFBundleDisplayName = "Floney-Dev";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				INFOPLIST_KEY_NSCameraUsageDescription = "floney가 사진 촬영을 통한 프로필 사진 등록을 위해 카메라 접근을 허용합니다.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "floney가 프로필 사진 등록을 위해 라이브러리에 접근하도록 허용합니다.";
@@ -2084,7 +2084,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.4;
+				MARKETING_VERSION = 1.1.0;
 				NEW_SETTING1 = "";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
