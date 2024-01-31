@@ -28,4 +28,5 @@ target 'Floney' do
   pod 'SwiftJWT'
   
   pod 'Kingfisher'
+  pod 'Google-Mobile-Ads-SDK'
 end
