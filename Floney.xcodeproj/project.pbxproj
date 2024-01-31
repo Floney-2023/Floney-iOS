@@ -59,6 +59,7 @@
 		2F3886962A9D15F100FCED6D /* QA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F3886952A9D15F100FCED6D /* QA.swift */; };
 		2F3886982A9F4A1200FCED6D /* AppLinkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F3886972A9F4A1200FCED6D /* AppLinkManager.swift */; };
 		2F38869A2A9F5E9100FCED6D /* AnyTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F3886992A9F5E9100FCED6D /* AnyTransition.swift */; };
+		2F3FBA842B6A3DAB00AB0063 /* GADBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F3FBA832B6A3DAB00AB0063 /* GADBanner.swift */; };
 		2F531AC92AAF348700862014 /* LoadingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F531AC82AAF348700862014 /* LoadingManager.swift */; };
 		2F531ACC2AAF4C9200862014 /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F531ACB2AAF4C9200862014 /* UIImage.swift */; };
 		2F531ACE2AB05E6800862014 /* SetBudgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F531ACD2AB05E6800862014 /* SetBudgetView.swift */; };
@@ -267,6 +268,7 @@
 		2F3886952A9D15F100FCED6D /* QA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QA.swift; sourceTree = "<group>"; };
 		2F3886972A9F4A1200FCED6D /* AppLinkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLinkManager.swift; sourceTree = "<group>"; };
 		2F3886992A9F5E9100FCED6D /* AnyTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyTransition.swift; sourceTree = "<group>"; };
+		2F3FBA832B6A3DAB00AB0063 /* GADBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GADBanner.swift; sourceTree = "<group>"; };
 		2F531AC82AAF348700862014 /* LoadingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingManager.swift; sourceTree = "<group>"; };
 		2F531ACB2AAF4C9200862014 /* UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
 		2F531ACD2AB05E6800862014 /* SetBudgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetBudgetView.swift; sourceTree = "<group>"; };
@@ -981,6 +983,7 @@
 				2FD7F3AB29B1E39D00B99CAA /* Extension */,
 				2F9258682B10F3D9002513AB /* WebView.swift */,
 				2F20C4B82B2056BA007DBA36 /* ButtonClickHandler.swift */,
+				2F3FBA832B6A3DAB00AB0063 /* GADBanner.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -1619,6 +1622,7 @@
 				2F7688572AA329A000862A88 /* OnboardingView.swift in Sources */,
 				2FE23F6F2A4173E4009FA8CA /* AddViewModel.swift in Sources */,
 				2F28C2D82A4ED61B00894F67 /* SettingBookViewModel.swift in Sources */,
+				2F3FBA842B6A3DAB00AB0063 /* GADBanner.swift in Sources */,
 				2FB3DA722A5C867200E1486D /* ExpenseView.swift in Sources */,
 				2FB3DA852A5D7AFC00E1486D /* AddCategoryView.swift in Sources */,
 				2FF724962A6A9123008B9333 /* ImageLoader.swift in Sources */,
