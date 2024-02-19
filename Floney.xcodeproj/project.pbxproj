@@ -352,6 +352,7 @@
 		2FD7F3C629B1E50300B99CAA /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
 		2FD7F3C829B1E52C00B99CAA /* SplashScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreenView.swift; sourceTree = "<group>"; };
 		2FD7F3CA29B1E5C500B99CAA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		2FDE3F6C2B83A5AA00963807 /* libGoogleDataTransport.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libGoogleDataTransport.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		2FE23F5D2A336CF5009FA8CA /* PermissionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionManager.swift; sourceTree = "<group>"; };
 		2FE23F5F2A39AADA009FA8CA /* CryptManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptManager.swift; sourceTree = "<group>"; };
 		2FE23F612A39B981009FA8CA /* FirebaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseManager.swift; sourceTree = "<group>"; };
@@ -1461,6 +1462,7 @@
 		38979A95844287E695B1B7F9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2FDE3F6C2B83A5AA00963807 /* libGoogleDataTransport.a */,
 				2F9258642B0DF054002513AB /* libz.tbd */,
 				2FAD93062A94B76F00285C25 /* StoreKit.framework */,
 				2FB7A9765F0AFDECAA60C226 /* libPods-Floney.a */,
@@ -1824,7 +1826,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = NO;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
@@ -1887,7 +1889,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = NO;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
@@ -1931,6 +1933,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"Floney/Preview Content\"";
 				DEVELOPMENT_TEAM = 949V9B6RLN;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Floney/Info.plist;
@@ -2038,7 +2041,7 @@
 					"\"UserNotifications\"",
 					"-weak_framework",
 					"\"WebKit\"",
-					"-ld64",
+					"-ld_classic",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.SCDore.Floney-Dev";
 				PRODUCT_NAME = "$(TARGET_NAME)-Dev";
@@ -2067,6 +2070,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"Floney/Preview Content\"";
 				DEVELOPMENT_TEAM = 949V9B6RLN;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Floney/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Floney;
@@ -2173,7 +2177,7 @@
 					"\"UserNotifications\"",
 					"-weak_framework",
 					"\"WebKit\"",
-					"-ld64",
+					"-ld_classic",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.SCDore.Floney;
 				PRODUCT_NAME = "$(TARGET_NAME)";

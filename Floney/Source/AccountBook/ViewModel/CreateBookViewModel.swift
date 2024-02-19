@@ -47,6 +47,8 @@ class CreateBookViewModel: ObservableObject {
     
     @Published var selectedImage : UIImage? 
     
+    @Published var isApiCalling = false
+    
     private var cancellableSet: Set<AnyCancellable> = []
     var dataManager: CreateBookProtocol
     var changeProfileManager : SettingBookProtocol = SettingBookService.shared
@@ -62,10 +64,13 @@ class CreateBookViewModel: ObservableObject {
         return true
     }
     func createBook(lazyUploadProfile : Bool) {
+        guard !isApiCalling else { return }
+        isApiCalling = true
         let request = CreateBookRequest(name: bookName, profileImg: profileImg)
         print(request)
         dataManager.createBook(request)
             .sink { (dataResponse) in
+                self.isApiCalling = false
                 if dataResponse.error != nil {
                     self.createAlert(with: dataResponse.error!, retryRequest: {
                         self.createBook(lazyUploadProfile: lazyUploadProfile)
@@ -115,9 +120,12 @@ class CreateBookViewModel: ObservableObject {
     }
 
     func joinBook() {
+        guard !isApiCalling else { return }
+        isApiCalling = true
         let request = InviteBookRequest(code: bookCode)
         dataManager.bookInfoByCodeBook(bookCode: bookCode)
             .sink { (dataResponse) in
+                self.isApiCalling = false
                 if dataResponse.error != nil {
                     self.createAlert(with: dataResponse.error!, retryRequest: {
                         self.bookInfoByCode()
