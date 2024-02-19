@@ -7,6 +7,8 @@
 import SwiftUI
 import Kingfisher
 struct HomeView: View {
+    @Environment(\.scenePhase) private var scenePhase
+    
     var bookService = BookExistenceViewModel.shared
     let scaler = Scaler.shared
     @StateObject var alertManager = AlertManager.shared
@@ -110,6 +112,15 @@ struct HomeView: View {
             viewModel.getCalendar()
             viewModel.getDayLines()
         }
+        .onChange(of: scenePhase) { newScenePhase in
+            switch newScenePhase {
+            case .active:
+                viewModel.getCalendar()
+            default:
+                break
+            }
+        }
+
     }
 }
 //MARK: 총지출/총수입
