@@ -7,11 +7,11 @@
 import SwiftUI
 import Kingfisher
 struct HomeView: View {
+    private let adCoordinator = AdCoordinator()
     var bookService = BookExistenceViewModel.shared
     let scaler = Scaler.shared
     @StateObject var alertManager = AlertManager.shared
     @StateObject var viewModel = CalendarViewModel()
-    //var encryptionManager = CryptManager()
     var profileManager = ProfileManager.shared
     @Binding var showingTabbar : Bool
     @Binding var mainAddViewStatus : Bool
@@ -35,7 +35,7 @@ struct HomeView: View {
                         .frame(width: scaler.scaleWidth(82), height: scaler.scaleHeight(19))
                         .padding(.top, scaler.scaleHeight(24))
                     Spacer()
-                    NavigationLink(destination: SettingBookView(showingTabbar: $showingTabbar, isOnSettingBook: $isOnSettingBook),isActive: $isOnSettingBook){
+                    NavigationLink(destination: SettingBookView(showingTabbar: $showingTabbar, isOnSettingBook: $isOnSettingBook), isActive: $isOnSettingBook){
                         if let bookUrl = viewModel.bookProfileImage {
                             let url = URL(string : bookUrl)
                             KFImage(url)
@@ -55,8 +55,12 @@ struct HomeView: View {
                                 .overlay(Circle().stroke(Color.greyScale10, lineWidth: scaler.scaleWidth(1)))
                                 .padding(.top, scaler.scaleHeight(16))
                                 .onTapGesture {
-                                    self.showingTabbar = false
-                                    self.isOnSettingBook = true
+                                    adCoordinator.showAd()
+                                    adCoordinator.onAdDismiss = {
+                                        self.showingTabbar = false // 광고가 닫힌 후 탭바를 숨기는 로직
+                                        self.isOnSettingBook = true
+                                    }
+                                    
                                 }
                         } else {
                             Image("book_profile_34")
@@ -67,15 +71,17 @@ struct HomeView: View {
                                 .overlay(Circle().stroke(Color.greyScale10, lineWidth: scaler.scaleWidth(1)))
                                 .padding(.top, scaler.scaleHeight(16))
                                 .onTapGesture {
-                                    self.showingTabbar = false
-                                    self.isOnSettingBook = true
+                                    adCoordinator.showAd()
+                                    adCoordinator.onAdDismiss = {
+                                        self.showingTabbar = false // 광고가 닫힌 후 탭바를 숨기는 로직
+                                        self.isOnSettingBook = true
+                                    }
                                 }
                         }
                     }
                 }
                 .padding(.horizontal, scaler.scaleWidth(20))
                 
-                // MARK: 캘린더 뷰 - viewModel로 상태 추적
                 CustomCalendarView(viewModel: viewModel, isShowingMonthPicker: $isShowingMonthPicker, isShowingBottomSheet: $isShowingBottomSheet,isShowingAddView: $isShowingAddView)
             }
             VStack{
@@ -96,13 +102,11 @@ struct HomeView: View {
             if isShowingBottomSheet {
                 DayLinesBottomSheet(viewModel: viewModel, isShowing: $isShowingBottomSheet, isShowingAddView: $isShowingAddView)
             }
-            
         }.fullScreenCover(isPresented: $isShowingAddView) {
             NavigationView {
                 AddView.init(isPresented: $isShowingAddView, date: viewModel.selectedDateStr)
             }.navigationViewStyle(.stack)
         }
-
         .onAppear {
             self.showingTabbar = true
         }
