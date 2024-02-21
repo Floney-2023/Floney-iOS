@@ -75,15 +75,19 @@ struct HomeView: View {
                 }
                 .padding(.horizontal, scaler.scaleWidth(20))
                 
-                // ScrollView(showsIndicators: false)
-                // {
                 // MARK: 캘린더 뷰 - viewModel로 상태 추적
                 CustomCalendarView(viewModel: viewModel, isShowingMonthPicker: $isShowingMonthPicker, isShowingBottomSheet: $isShowingBottomSheet,isShowingAddView: $isShowingAddView)
-                    //.disabled(bookService.bookDisabled)
-                // }
-                
             }
-       
+            VStack{
+                Spacer()
+                GADBanner()
+                    .frame(width: UIScreen.main.bounds.width, height: 50, alignment: .center)
+                    .padding(.bottom, scaler.scaleHeight(76))
+                    
+            }
+            .background(Color.clear)
+            .ignoresSafeArea()
+        
             // MARK: Month Year Picker
             if isShowingMonthPicker {
                 MonthYearPickerBottomSheet(viewModel: viewModel, availableChangeTabbarStatus: true, showingTab: $showingTabbar, isShowing: $isShowingMonthPicker)
