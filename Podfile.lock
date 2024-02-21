@@ -219,9 +219,9 @@ PODS:
   - AppAuth/Core (1.6.2)
   - AppAuth/ExternalUserAgent (1.6.2):
     - AppAuth/Core
-  - AppsFlyerFramework (6.12.2):
-    - AppsFlyerFramework/Main (= 6.12.2)
-  - AppsFlyerFramework/Main (6.12.2)
+  - AppsFlyerFramework (6.12.3):
+    - AppsFlyerFramework/Main (= 6.12.3)
+  - AppsFlyerFramework/Main (6.12.3)
   - BlueCryptor (1.0.32)
   - BlueECC (1.2.5)
   - BlueRSA (1.0.200)
@@ -359,18 +359,18 @@ PODS:
     - AppAuth/Core (~> 1.6)
     - GTMSessionFetcher/Core (< 4.0, >= 1.5)
   - GTMSessionFetcher/Core (1.7.2)
-  - KakaoSDKAuth (2.19.0):
-    - KakaoSDKCommon (= 2.19.0)
-  - KakaoSDKCommon (2.19.0):
-    - KakaoSDKCommon/Common (= 2.19.0)
-    - KakaoSDKCommon/Network (= 2.19.0)
-  - KakaoSDKCommon/Common (2.19.0)
-  - KakaoSDKCommon/Network (2.19.0):
+  - KakaoSDKAuth (2.20.0):
+    - KakaoSDKCommon (= 2.20.0)
+  - KakaoSDKCommon (2.20.0):
+    - KakaoSDKCommon/Common (= 2.20.0)
+    - KakaoSDKCommon/Network (= 2.20.0)
+  - KakaoSDKCommon/Common (2.20.0)
+  - KakaoSDKCommon/Network (2.20.0):
     - Alamofire (~> 5.1)
-    - KakaoSDKCommon/Common (= 2.19.0)
-  - KakaoSDKUser (2.19.0):
-    - KakaoSDKAuth (= 2.19.0)
-  - Kingfisher (7.10.0)
+    - KakaoSDKCommon/Common (= 2.20.0)
+  - KakaoSDKUser (2.20.0):
+    - KakaoSDKAuth (= 2.20.0)
+  - Kingfisher (7.10.2)
   - KituraContracts (1.2.1):
     - LoggerAPI (~> 1.7)
   - leveldb-library (1.22.2)
@@ -383,7 +383,7 @@ PODS:
   - nanopb/decode (1.30906.0)
   - nanopb/encode (1.30906.0)
   - PromisesObjC (1.2.12)
-  - Protobuf (3.25.1)
+  - Protobuf (3.25.2)
   - SwiftJWT (3.6.200):
     - BlueCryptor (~> 1.0)
     - BlueECC (~> 1.1)
@@ -463,7 +463,7 @@ SPEC CHECKSUMS:
   abseil: 6c8eb7892aefa08d929b39f9bb108e5367e3228f
   Alamofire: 3ca42e259043ee0dc5c0cdd76c4bc568b8e42af7
   AppAuth: 3bb1d1cd9340bd09f5ed189fb00b1cc28e1e8570
-  AppsFlyerFramework: 6eb4d89d2eb9a6632317f1055b359d9fd85fd5ff
+  AppsFlyerFramework: fdc5c2fa3a3cfcd62eae58dfba4b8f59c6c77219
   BlueCryptor: b0aee3d9b8f367b49b30de11cda90e1735571c24
   BlueECC: 0d18e93347d3ec6d41416de21c1ffa4d4cd3c2cc
   BlueRSA: dfeef51db96bcc4edec654956c1581adbda4e6a3
@@ -490,20 +490,20 @@ SPEC CHECKSUMS:
   gRPC-Core: 4afa11bfbedf7cdecd04de535a9e046893404ed5
   GTMAppAuth: 99fb010047ba3973b7026e45393f51f27ab965ae
   GTMSessionFetcher: 5595ec75acf5be50814f81e9189490412bad82ba
-  KakaoSDKAuth: a1b4c416e54fbfdf086db8591405a17f88ffea64
-  KakaoSDKCommon: d642a52ccf618036478643694212c072d5eceea6
-  KakaoSDKUser: f21d7c3baf7cf2d08784cafc97aa9d49f2141624
-  Kingfisher: a18f05d3b6d37d8650ee4a3e61d57a28fc6207f6
+  KakaoSDKAuth: 02742f4681af6da8c4aa7b0f71df98ca9e7df834
+  KakaoSDKCommon: 060a8085733a215a048f9bf9b39a846d1be1daee
+  KakaoSDKUser: 0594b37675fb634304da3ecc83830c0ec84ceef5
+  Kingfisher: 99edc495d3b7607e6425f0d6f6847b2abd6d716d
   KituraContracts: e845e60dc8627ad0a76fa55ef20a45451d8f830b
   leveldb-library: f03246171cce0484482ec291f88b6d563699ee06
   LoggerAPI: ad9c4a6f1e32f518fdb43a1347ac14d765ab5e3d
   Logging: beeb016c9c80cf77042d62e83495816847ef108b
   nanopb: 59317e09cf1f1a0af72f12af412d54edf52603fc
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
-  Protobuf: d94761c33f1239c0a43a0817ca1a5f7f7c900241
+  Protobuf: 34db13339da0d02d64fa8a2ac6a124cfcc603703
   SwiftJWT: 88c412708f58c169d431d344c87bc79a87c830ae
   SwiftKeychainWrapper: 807ba1d63c33a7d0613288512399cd1eda1e470c
 
-PODFILE CHECKSUM: 1f8f9cafa318709d822d9f11456de898c7ae93af
+PODFILE CHECKSUM: 3eb30461365214607bde2e0595d7a8d32bb2d18b
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.12.0
