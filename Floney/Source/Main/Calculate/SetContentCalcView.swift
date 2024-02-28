@@ -9,6 +9,7 @@ import SwiftUI
 
 struct SetContentCalcView: View {
     private let adCoordinator = AdCoordinator()
+    private let rewardedAdCoordinator = RewardedAdCoordinator()
     let scaler = Scaler.shared
     @Binding var isShowingTabbar : Bool
     @Binding var isShowingCalc : Bool
@@ -150,11 +151,15 @@ struct SetContentCalcView: View {
                                 LoadingManager.shared.update(showLoading: true, loadingType: .floneyLoading)
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                                     LoadingManager.shared.update(showLoading: false, loadingType: .floneyLoading)
-                                    
-                                    adCoordinator.showAd()
-                                    adCoordinator.onAdDismiss = {
+                                    if rewardedAdCoordinator.canShowAd() {
+                                        adCoordinator.showAd()
+                                        adCoordinator.onAdDismiss = {
+                                            pageCount = 4
+                                        }
+                                    } else {
                                         pageCount = 4
                                     }
+                                    
                                 }
                             }
                         }
