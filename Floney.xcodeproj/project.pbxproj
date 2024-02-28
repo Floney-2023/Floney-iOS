@@ -69,6 +69,7 @@
 		2F5738A22B400CEC00BE7530 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2FAD93082A94BA5A00285C25 /* GoogleService-Info.plist */; };
 		2F5738A32B400D0200BE7530 /* GoogleService-Info-dev.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2F57389F2B400B5400BE7530 /* GoogleService-Info-dev.plist */; };
 		2F5A06922B85C70900BA46EC /* AdCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5A06912B85C70900BA46EC /* AdCoordinator.swift */; };
+		2F5A06942B85EBE000BA46EC /* AdTimerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5A06932B85EBE000BA46EC /* AdTimerViewModel.swift */; };
 		2F5FB62C2AB6BCF800750FAB /* Double.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5FB62B2AB6BCF800750FAB /* Double.swift */; };
 		2F5FB62E2AB6FDD000750FAB /* CustomNavigationBarModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5FB62D2AB6FDD000750FAB /* CustomNavigationBarModifier.swift */; };
 		2F5FB6302AB7040200750FAB /* UINavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5FB62F2AB7040200750FAB /* UINavigationController.swift */; };
@@ -278,6 +279,7 @@
 		2F531AD42AB15AD600862014 /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
 		2F57389F2B400B5400BE7530 /* GoogleService-Info-dev.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info-dev.plist"; path = "../../../../../../../../Desktop/GoogleService-Info-dev.plist"; sourceTree = "<group>"; };
 		2F5A06912B85C70900BA46EC /* AdCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdCoordinator.swift; sourceTree = "<group>"; };
+		2F5A06932B85EBE000BA46EC /* AdTimerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdTimerViewModel.swift; sourceTree = "<group>"; };
 		2F5FB62B2AB6BCF800750FAB /* Double.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Double.swift; sourceTree = "<group>"; };
 		2F5FB62D2AB6FDD000750FAB /* CustomNavigationBarModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavigationBarModifier.swift; sourceTree = "<group>"; };
 		2F5FB62F2AB7040200750FAB /* UINavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UINavigationController.swift; sourceTree = "<group>"; };
@@ -572,6 +574,7 @@
 			isa = PBXGroup;
 			children = (
 				2F1614852A0A76A50029E9A9 /* MyPageViewModel.swift */,
+				2F5A06932B85EBE000BA46EC /* AdTimerViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -1736,6 +1739,7 @@
 				2FE23F692A417372009FA8CA /* CategoryRequest.swift in Sources */,
 				2FFA303229EEAF6000412F83 /* SignInRequest.swift in Sources */,
 				2FB3DA762A5C86D800E1486D /* BudgetView.swift in Sources */,
+				2F5A06942B85EBE000BA46EC /* AdTimerViewModel.swift in Sources */,
 				2FEB62262AF7E9B8007357EF /* InactiveAlertView.swift in Sources */,
 				2F76886A2AA7C09700862A88 /* RecentBookKeyManager.swift in Sources */,
 				2F531AD22AB1596600862014 /* UIFont.swift in Sources */,
