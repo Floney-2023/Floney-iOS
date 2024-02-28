@@ -8,6 +8,7 @@ import SwiftUI
 import Kingfisher
 struct HomeView: View {
     private let adCoordinator = AdCoordinator()
+    private let rewardedAdCoordinator = RewardedAdCoordinator()
     var bookService = BookExistenceViewModel.shared
     let scaler = Scaler.shared
     @StateObject var alertManager = AlertManager.shared
@@ -55,10 +56,18 @@ struct HomeView: View {
                                 .overlay(Circle().stroke(Color.greyScale10, lineWidth: scaler.scaleWidth(1)))
                                 .padding(.top, scaler.scaleHeight(16))
                                 .onTapGesture {
-                                    adCoordinator.showAd()
-                                    adCoordinator.onAdDismiss = {
+                                    if rewardedAdCoordinator.canShowAd() {
+                                        adCoordinator.showAd()
+                                        adCoordinator.onAdDismiss = {
+                                            self.showingTabbar = false // 광고가 닫힌 후 탭바를 숨기는 로직
+                                            self.isOnSettingBook = true
+                                        }
+                                    }
+                                    else {
+                                        
                                         self.showingTabbar = false // 광고가 닫힌 후 탭바를 숨기는 로직
                                         self.isOnSettingBook = true
+                                        
                                     }
                                     
                                 }
@@ -84,15 +93,17 @@ struct HomeView: View {
                 
                 CustomCalendarView(viewModel: viewModel, isShowingMonthPicker: $isShowingMonthPicker, isShowingBottomSheet: $isShowingBottomSheet,isShowingAddView: $isShowingAddView)
             }
-            VStack{
-                Spacer()
-                GADBanner()
-                    .frame(width: UIScreen.main.bounds.width, height: 50, alignment: .center)
-                    .padding(.bottom, scaler.scaleHeight(76))
+            if rewardedAdCoordinator.canShowAd() {
+                VStack{
+                    Spacer()
+                    GADBanner()
+                        .frame(width: UIScreen.main.bounds.width, height: 50, alignment: .center)
+                        .padding(.bottom, scaler.scaleHeight(76))
                     
+                }
+                .background(Color.clear)
+                .ignoresSafeArea()
             }
-            .background(Color.clear)
-            .ignoresSafeArea()
         
             // MARK: Month Year Picker
             if isShowingMonthPicker {
