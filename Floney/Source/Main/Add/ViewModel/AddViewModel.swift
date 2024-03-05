@@ -244,10 +244,9 @@ class AddViewModel: ObservableObject {
     }
     
     func deleteCategory() {
-        
         bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
-        let request = DeleteCategoryRequest(bookKey: bookKey, root: root, name: deleteCategoryName)
-        dataManager.deleteCategory(parameters: request)
+        let request = DeleteCategoryRequest(parent: root, name: deleteCategoryName)
+        dataManager.deleteCategory(parameters: request,bookKey: bookKey)
             .sink { [weak self] completion in
                 guard let self = self else {return}
                 switch completion {

@@ -19,7 +19,7 @@ struct AddCategoryRequest: Encodable {
 }
 
 struct DeleteCategoryRequest : Encodable {
-    var bookKey : String
-    var root : String
+    //var bookKey : String
+    var parent : String
     var name : String
 }
