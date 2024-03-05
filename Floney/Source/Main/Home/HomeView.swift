@@ -396,7 +396,7 @@ struct MonthCalendar: View {
                                                     ForEach(viewModel.expenses, id: \.self) { (expense: CalendarExpenses) in
                                                         if viewModel.extractYearMonth(from: viewModel.selectedDateStr) {
                                                             let extractedDay = viewModel.extractDay(from: expense.date)
-                                                            let assetType = expense.assetType
+                                                            let assetType = expense.categoryType
                                                             let money = expense.money
                                                             
                                                             if extractedDay == day && assetType == "OUTCOME" && money > 0 {

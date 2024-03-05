@@ -32,17 +32,24 @@ struct DayLinesResponse: Decodable{
 struct DayLinesResults: Decodable, Hashable {
     var id : Int
     var money : Double
-    var img : String? // null일 수 있음
-    var category : [String]
-    var assetType : String
-    var content : String
+    //var img : String? // null일 수 있음
+    //var category : [String]
+    //var assetType : String
+    //var content : String
+    var description: String
     var exceptStatus : Bool
-    var userNickName : String
+    var lineCategory: String
+    var lineSubCategory: String
+    var assetSubCategory: String
+    var writerEmail: String
+    var writerNickname: String
+    var writerProfileImg: String?
+    //var userNickName : String
 }
 
 struct DayTotalExpenses: Decodable {
     var money : Double
-    var assetType : String
+    var categoryType : String
 }
 
 struct CarryOverInfo : Decodable {
