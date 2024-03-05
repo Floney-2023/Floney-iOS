@@ -26,7 +26,7 @@ extension AddService: AddProtocol {
     func getCategory(_ parameters:CategoryRequest) -> AnyPublisher<DataResponse<[CategoryResponse], NetworkError>, Never> {
         let bookKey = parameters.bookKey
         let root = parameters.root
-        let urlString = "\(Constant.BASE_URL)/books/categories?bookKey=\(bookKey)&root=\(root)"
+        let urlString = "\(Constant.BASE_URL)/books/\(bookKey)/categories?parent=\(root)"
         print("\(urlString)")
         let encodedString = urlString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
         let url = URL(string: encodedString!)!
