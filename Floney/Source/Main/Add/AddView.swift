@@ -73,6 +73,7 @@ struct AddView: View {
 
     @State var writer = ""
     @State var isShowingCalendarBottomSheet = false
+    @State var isShowingRepeatDurationBottomSheet = false
 
     var formattedValue: Double? {
             let valueWithoutCommas = money.replacingOccurrences(of: ",", with: "")
@@ -84,7 +85,7 @@ struct AddView: View {
         ZStack {
             VStack(spacing:0) {
                 //MARK: Top
-                HStack {
+                HStack(alignment:.top) {
                     Image("icon_close")
                         .resizable()
                         .frame(width: scaler.scaleWidth(24), height : scaler.scaleWidth(24))
@@ -96,10 +97,44 @@ struct AddView: View {
                             }
                         }
                     Spacer()
+                    if mode == "add" {
+                        Group {
+                            if viewModel.repeatDuration == .none {
+                                VStack(spacing:2) {
+                                    
+                                    Image("icon_repeat")
+                                        .resizable()
+                                        .frame(width: scaler.scaleWidth(24), height : scaler.scaleWidth(24))
+                                    Text("")
+                                        .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(12)))
+                                        .foregroundColor(.primary1)
+                                }
+                            } else {
+                                VStack(spacing:2) {
+                                    Image("icon_repeat_green")
+                                        .resizable()
+                                        .frame(width: scaler.scaleWidth(24), height : scaler.scaleWidth(24))
+                                    Text(viewModel.selectedRepeat)
+                                        .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(12)))
+                                        .foregroundColor(.primary1)
+                                }
+                            }
+                        }
+                        .onTapGesture {
+                            isShowingRepeatDurationBottomSheet = true
+                        }
+                    } else if mode == "check" {
+                        if viewModel.repeatDuration != .none {
+                            Text(viewModel.selectedRepeat)
+                                .font(.pretendardFont(.regular, size: scaler.scaleWidth(14)))
+                                .foregroundColor(.greyScale6)
+                        }
+                    }
                 }
+                .frame(height: scaler.scaleHeight(38))
                 .padding(.top, scaler.scaleHeight(22))
                 .padding(.bottom, scaler.scaleHeight(52))
-                .padding(.leading, scaler.scaleWidth(20))
+                .padding(.horizontal, scaler.scaleWidth(20))
 
                 VStack(spacing:scaler.scaleHeight(16)){
                     //MARK: 금액
@@ -383,6 +418,7 @@ struct AddView: View {
             
             AddCalendarBottomSheet(isShowing: $isShowingCalendarBottomSheet, viewModel: viewModel)
             
+            RepeatDurationBottomSheet(viewModel: viewModel, selectedDurationIndex: viewModel.selectedDurationIndex, isShowing: $isShowingRepeatDurationBottomSheet)
             //MARK: alert
             if showAlert {
                 AlertView(isPresented: $showAlert, title: $title, message: $message) {
