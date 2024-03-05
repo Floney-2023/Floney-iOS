@@ -37,6 +37,8 @@ struct SettingBookView: View {
     
     @State var isShowingExcelDutationBottomSheet = false
     
+    @State var isShowingRepeatLineView = false
+    
     var body: some View {
         ZStack {
             ScrollView {
@@ -194,31 +196,45 @@ struct SettingBookView: View {
                                 .foregroundColor(.greyScale1)
                             Spacer()
                         }
-                        
-                        HStack {
-                            Text("이월 설정")
-                                .font(.pretendardFont(.regular, size: scaler.scaleWidth(14)))
-                                .foregroundColor(.greyScale2)
-                            Spacer()
-                            if viewModel.carryOver {
-                                Text("이월 있음")
-                                    .padding(scaler.scaleWidth(6))
-                                    .font(.pretendardFont(.bold, size: scaler.scaleWidth(10)))
-                                    .foregroundColor(.primary2)
-                                    .background(Color.primary10)
-                                    .cornerRadius(8)
-                            } else {
-                                Text("이월 없음")
-                                    .padding(scaler.scaleWidth(6))
-                                    .font(.pretendardFont(.bold, size: scaler.scaleWidth(10)))
+                        VStack(spacing:0) {
+                            HStack {
+                                Text("이월 설정")
+                                    .font(.pretendardFont(.regular, size: scaler.scaleWidth(14)))
                                     .foregroundColor(.greyScale2)
-                                    .background(Color.background2)
-                                    .cornerRadius(8)
+                                Spacer()
+                                if viewModel.carryOver {
+                                    Text("이월 있음")
+                                        .padding(scaler.scaleWidth(6))
+                                        .font(.pretendardFont(.bold, size: scaler.scaleWidth(10)))
+                                        .foregroundColor(.primary2)
+                                        .background(Color.primary10)
+                                        .cornerRadius(8)
+                                } else {
+                                    Text("이월 없음")
+                                        .padding(scaler.scaleWidth(6))
+                                        .font(.pretendardFont(.bold, size: scaler.scaleWidth(10)))
+                                        .foregroundColor(.greyScale2)
+                                        .background(Color.background2)
+                                        .cornerRadius(8)
+                                }
                             }
-                        }
-                        .frame(height:scaler.scaleHeight(46))
-                        .onTapGesture {
-                            self.isShowingCarriedOver.toggle()
+                            .frame(height:scaler.scaleHeight(46))
+                            .onTapGesture {
+                                self.isShowingCarriedOver.toggle()
+                            }
+                            
+                            NavigationLink(destination :ManageRepeatLineView( isShowing: $isShowingRepeatLineView), isActive: $isShowingRepeatLineView) {
+                                HStack {
+                                    Text("반복 내역 설정")
+                                        .font(.pretendardFont(.regular, size: scaler.scaleWidth(14)))
+                                        .foregroundColor(.greyScale2)
+                                    Spacer()
+                                }
+                                .frame(height:scaler.scaleHeight(46))
+                                .onTapGesture {
+                                    self.isShowingRepeatLineView.toggle()
+                                }
+                            }
                         }
 
                         if viewModel.role == "방장" {
