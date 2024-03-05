@@ -18,7 +18,7 @@ struct CalendarResponse: Decodable {
 struct CalendarExpenses: Decodable, Hashable {
     var date: String
     var money: Double
-    var assetType: String
+    var categoryType: String
 }
 
 //MARK: 일별내역 조회 결과
