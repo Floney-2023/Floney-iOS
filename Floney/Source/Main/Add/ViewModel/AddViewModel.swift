@@ -223,8 +223,8 @@ class AddViewModel: ObservableObject {
         guard !isApiCalling else { return }
         isApiCalling = true
         bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
-        let request = AddCategoryRequest(bookKey: bookKey, parent: root, name: newCategoryName)
-        dataManager.postCategory(request)
+        let request = AddCategoryRequest(parent: root, name: newCategoryName)
+        dataManager.postCategory(request, bookKey: bookKey)
             .sink { (dataResponse) in
                 
                 if dataResponse.error != nil {

@@ -13,7 +13,7 @@ struct CategoryRequest: Encodable {
 }
 
 struct AddCategoryRequest: Encodable {
-    var bookKey: String
+    //var bookKey: String
     var parent : String
     var name : String
 }
