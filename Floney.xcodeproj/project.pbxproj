@@ -1485,7 +1485,6 @@
 		38979A95844287E695B1B7F9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				2FDE3F6C2B83A5AA00963807 /* libGoogleDataTransport.a */,
 				2F9258642B0DF054002513AB /* libz.tbd */,
 				2FAD93062A94B76F00285C25 /* StoreKit.framework */,
 				2FB7A9765F0AFDECAA60C226 /* libPods-Floney.a */,
@@ -1755,11 +1754,8 @@
 				2FE23F692A417372009FA8CA /* CategoryRequest.swift in Sources */,
 				2FFA303229EEAF6000412F83 /* SignInRequest.swift in Sources */,
 				2FB3DA762A5C86D800E1486D /* BudgetView.swift in Sources */,
-<<<<<<< HEAD
 				2F5A06942B85EBE000BA46EC /* AdTimerViewModel.swift in Sources */,
-=======
 				2F4DBDB72B9781580070760B /* ManageRepeatLineDataManager.swift in Sources */,
->>>>>>> develop
 				2FEB62262AF7E9B8007357EF /* InactiveAlertView.swift in Sources */,
 				2F76886A2AA7C09700862A88 /* RecentBookKeyManager.swift in Sources */,
 				2F531AD22AB1596600862014 /* UIFont.swift in Sources */,
@@ -1963,17 +1959,10 @@
 				CLANG_WARN_STRICT_PROTOTYPES = NO;
 				CODE_SIGN_ENTITLEMENTS = Floney/Floney.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-<<<<<<< HEAD
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 42;
-=======
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 41;
->>>>>>> develop
 				DEVELOPMENT_ASSET_PATHS = "\"Floney/Preview Content\"";
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 949V9B6RLN;
+				DEVELOPMENT_TEAM = 949V9B6RLN;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -1994,11 +1983,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-<<<<<<< HEAD
-				MARKETING_VERSION = 1.1.0;
-=======
 				MARKETING_VERSION = 1.1.1;
->>>>>>> develop
 				NEW_SETTING1 = "";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -2092,7 +2077,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.SCDore.Floney-Dev";
 				PRODUCT_NAME = "$(TARGET_NAME)-Dev";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Floney-dev";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -2114,11 +2098,7 @@
 				CODE_SIGN_ENTITLEMENTS = Floney/Floney.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-<<<<<<< HEAD
 				CURRENT_PROJECT_VERSION = 42;
-=======
-				CURRENT_PROJECT_VERSION = 41;
->>>>>>> develop
 				DEVELOPMENT_ASSET_PATHS = "\"Floney/Preview Content\"";
 				DEVELOPMENT_TEAM = 949V9B6RLN;
 				ENABLE_PREVIEWS = YES;
@@ -2140,11 +2120,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-<<<<<<< HEAD
-				MARKETING_VERSION = 1.1.0;
-=======
 				MARKETING_VERSION = 1.1.1;
->>>>>>> develop
 				NEW_SETTING1 = "";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
