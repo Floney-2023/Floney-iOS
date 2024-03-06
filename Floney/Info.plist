@@ -31,6 +31,8 @@
 	</array>
 	<key>FirebaseAppDelegateProxyEnabled</key>
 	<string>NO</string>
+	<key>GADApplicationIdentifier</key>
+	<string>ca-app-pub-8361265242086915~5808753465</string>
 	<key>GIDClientID</key>
 	<string>${GOOGLE_CLIENT_ID}.apps.googleusercontent.com</string>
 	<key>KAKAO_NATIVE_APP_KEY</key>

@@ -17,16 +17,15 @@ import AdSupport
 import AppTrackingTransparency
 import AuthenticationServices
 import GoogleSignInSwift
+import GoogleMobileAds
 
 class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate {
     var ConversionData: [AnyHashable: Any]? = nil
     var deferred_deep_link_processed_flag:Bool = false
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-                KakaoSDK.initSDK(appKey: Secret.KAKAO_NATIVE_APP_KEY, loggingEnable:false)
+        KakaoSDK.initSDK(appKey: Secret.KAKAO_NATIVE_APP_KEY, loggingEnable:false)
         
-        // firebase 초기화
-        //FirebaseApp.configure()
         var fileName = "GoogleService-Info"
 #if DEBUG
         fileName = fileName + "-dev"
@@ -34,6 +33,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate {
         let filePath = Bundle.main.path(forResource: fileName, ofType: "plist")!
         let options: FirebaseOptions? = FirebaseOptions.init(contentsOfFile: filePath)
         FirebaseApp.configure(options: options!)
+        GADMobileAds.sharedInstance().start(completionHandler: nil)
         
         
         // fcm delegate

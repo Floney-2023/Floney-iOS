@@ -59,6 +59,7 @@
 		2F3886962A9D15F100FCED6D /* QA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F3886952A9D15F100FCED6D /* QA.swift */; };
 		2F3886982A9F4A1200FCED6D /* AppLinkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F3886972A9F4A1200FCED6D /* AppLinkManager.swift */; };
 		2F38869A2A9F5E9100FCED6D /* AnyTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F3886992A9F5E9100FCED6D /* AnyTransition.swift */; };
+		2F3FBA842B6A3DAB00AB0063 /* GADBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F3FBA832B6A3DAB00AB0063 /* GADBanner.swift */; };
 		2F4DBDB32B977EB70070760B /* ManageRepeatLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4DBDB22B977EB70070760B /* ManageRepeatLineView.swift */; };
 		2F4DBDB52B97813B0070760B /* ManageRepeatLineViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4DBDB42B97813B0070760B /* ManageRepeatLineViewModel.swift */; };
 		2F4DBDB72B9781580070760B /* ManageRepeatLineDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4DBDB62B9781580070760B /* ManageRepeatLineDataManager.swift */; };
@@ -72,6 +73,8 @@
 		2F531AD52AB15AD600862014 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F531AD42AB15AD600862014 /* CustomTextField.swift */; };
 		2F5738A22B400CEC00BE7530 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2FAD93082A94BA5A00285C25 /* GoogleService-Info.plist */; };
 		2F5738A32B400D0200BE7530 /* GoogleService-Info-dev.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2F57389F2B400B5400BE7530 /* GoogleService-Info-dev.plist */; };
+		2F5A06922B85C70900BA46EC /* AdCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5A06912B85C70900BA46EC /* AdCoordinator.swift */; };
+		2F5A06942B85EBE000BA46EC /* AdTimerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5A06932B85EBE000BA46EC /* AdTimerViewModel.swift */; };
 		2F5FB62C2AB6BCF800750FAB /* Double.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5FB62B2AB6BCF800750FAB /* Double.swift */; };
 		2F5FB62E2AB6FDD000750FAB /* CustomNavigationBarModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5FB62D2AB6FDD000750FAB /* CustomNavigationBarModifier.swift */; };
 		2F5FB6302AB7040200750FAB /* UINavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5FB62F2AB7040200750FAB /* UINavigationController.swift */; };
@@ -272,6 +275,7 @@
 		2F3886952A9D15F100FCED6D /* QA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QA.swift; sourceTree = "<group>"; };
 		2F3886972A9F4A1200FCED6D /* AppLinkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLinkManager.swift; sourceTree = "<group>"; };
 		2F3886992A9F5E9100FCED6D /* AnyTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyTransition.swift; sourceTree = "<group>"; };
+		2F3FBA832B6A3DAB00AB0063 /* GADBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GADBanner.swift; sourceTree = "<group>"; };
 		2F4DBDB22B977EB70070760B /* ManageRepeatLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageRepeatLineView.swift; sourceTree = "<group>"; };
 		2F4DBDB42B97813B0070760B /* ManageRepeatLineViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageRepeatLineViewModel.swift; sourceTree = "<group>"; };
 		2F4DBDB62B9781580070760B /* ManageRepeatLineDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageRepeatLineDataManager.swift; sourceTree = "<group>"; };
@@ -284,6 +288,8 @@
 		2F531AD12AB1596600862014 /* UIFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIFont.swift; sourceTree = "<group>"; };
 		2F531AD42AB15AD600862014 /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
 		2F57389F2B400B5400BE7530 /* GoogleService-Info-dev.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info-dev.plist"; path = "../../../../../../../../Desktop/GoogleService-Info-dev.plist"; sourceTree = "<group>"; };
+		2F5A06912B85C70900BA46EC /* AdCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdCoordinator.swift; sourceTree = "<group>"; };
+		2F5A06932B85EBE000BA46EC /* AdTimerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdTimerViewModel.swift; sourceTree = "<group>"; };
 		2F5FB62B2AB6BCF800750FAB /* Double.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Double.swift; sourceTree = "<group>"; };
 		2F5FB62D2AB6FDD000750FAB /* CustomNavigationBarModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavigationBarModifier.swift; sourceTree = "<group>"; };
 		2F5FB62F2AB7040200750FAB /* UINavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UINavigationController.swift; sourceTree = "<group>"; };
@@ -362,7 +368,6 @@
 		2FD7F3C629B1E50300B99CAA /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
 		2FD7F3C829B1E52C00B99CAA /* SplashScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreenView.swift; sourceTree = "<group>"; };
 		2FD7F3CA29B1E5C500B99CAA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		2FDE3F6C2B83A5AA00963807 /* libGoogleDataTransport.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libGoogleDataTransport.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		2FE23F5D2A336CF5009FA8CA /* PermissionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionManager.swift; sourceTree = "<group>"; };
 		2FE23F5F2A39AADA009FA8CA /* CryptManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptManager.swift; sourceTree = "<group>"; };
 		2FE23F612A39B981009FA8CA /* FirebaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseManager.swift; sourceTree = "<group>"; };
@@ -579,6 +584,7 @@
 			isa = PBXGroup;
 			children = (
 				2F1614852A0A76A50029E9A9 /* MyPageViewModel.swift */,
+				2F5A06932B85EBE000BA46EC /* AdTimerViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -997,6 +1003,8 @@
 				2FD7F3AB29B1E39D00B99CAA /* Extension */,
 				2F9258682B10F3D9002513AB /* WebView.swift */,
 				2F20C4B82B2056BA007DBA36 /* ButtonClickHandler.swift */,
+				2F3FBA832B6A3DAB00AB0063 /* GADBanner.swift */,
+				2F5A06912B85C70900BA46EC /* AdCoordinator.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -1636,6 +1644,7 @@
 				2F7688572AA329A000862A88 /* OnboardingView.swift in Sources */,
 				2FE23F6F2A4173E4009FA8CA /* AddViewModel.swift in Sources */,
 				2F28C2D82A4ED61B00894F67 /* SettingBookViewModel.swift in Sources */,
+				2F3FBA842B6A3DAB00AB0063 /* GADBanner.swift in Sources */,
 				2FB3DA722A5C867200E1486D /* ExpenseView.swift in Sources */,
 				2FB3DA852A5D7AFC00E1486D /* AddCategoryView.swift in Sources */,
 				2FF724962A6A9123008B9333 /* ImageLoader.swift in Sources */,
@@ -1646,6 +1655,7 @@
 				2FAC54512AF47E0900298377 /* AnnouncementView.swift in Sources */,
 				2FEA2B6429B73CE700DE8E54 /* ServiceAgreementView.swift in Sources */,
 				2FE23F6D2A4173D7009FA8CA /* AddDataManager.swift in Sources */,
+				2F5A06922B85C70900BA46EC /* AdCoordinator.swift in Sources */,
 				2F146A642A14B5BD0089AB3D /* TokenReissueResponse.swift in Sources */,
 				2FFDC36C2A00089F00BE4C1B /* NetworkError.swift in Sources */,
 				2FE23F712A4187CC009FA8CA /* LinesRequest.swift in Sources */,
@@ -1745,7 +1755,11 @@
 				2FE23F692A417372009FA8CA /* CategoryRequest.swift in Sources */,
 				2FFA303229EEAF6000412F83 /* SignInRequest.swift in Sources */,
 				2FB3DA762A5C86D800E1486D /* BudgetView.swift in Sources */,
+<<<<<<< HEAD
+				2F5A06942B85EBE000BA46EC /* AdTimerViewModel.swift in Sources */,
+=======
 				2F4DBDB72B9781580070760B /* ManageRepeatLineDataManager.swift in Sources */,
+>>>>>>> develop
 				2FEB62262AF7E9B8007357EF /* InactiveAlertView.swift in Sources */,
 				2F76886A2AA7C09700862A88 /* RecentBookKeyManager.swift in Sources */,
 				2F531AD22AB1596600862014 /* UIFont.swift in Sources */,
@@ -1946,11 +1960,17 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				BUNDLE_ID_SUFFIX = "-Dev";
 				BUNDLE_NAME = "Floney-Dev";
+				CLANG_WARN_STRICT_PROTOTYPES = NO;
 				CODE_SIGN_ENTITLEMENTS = Floney/Floney.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
+<<<<<<< HEAD
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 42;
+=======
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 41;
+>>>>>>> develop
 				DEVELOPMENT_ASSET_PATHS = "\"Floney/Preview Content\"";
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 949V9B6RLN;
@@ -1974,7 +1994,11 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+<<<<<<< HEAD
+				MARKETING_VERSION = 1.1.0;
+=======
 				MARKETING_VERSION = 1.1.1;
+>>>>>>> develop
 				NEW_SETTING1 = "";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -2086,17 +2110,22 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				BUNDLE_ID_SUFFIX = "";
 				BUNDLE_NAME = Floney;
+				CLANG_WARN_STRICT_PROTOTYPES = NO;
 				CODE_SIGN_ENTITLEMENTS = Floney/Floney.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+<<<<<<< HEAD
+				CURRENT_PROJECT_VERSION = 42;
+=======
 				CURRENT_PROJECT_VERSION = 41;
+>>>>>>> develop
 				DEVELOPMENT_ASSET_PATHS = "\"Floney/Preview Content\"";
 				DEVELOPMENT_TEAM = 949V9B6RLN;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Floney/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Floney;
+				INFOPLIST_KEY_CFBundleDisplayName = "Floney-Dev";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				INFOPLIST_KEY_NSCameraUsageDescription = "floney가 사진 촬영을 통한 프로필 사진 등록을 위해 카메라 접근을 허용합니다.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "floney가 프로필 사진 등록을 위해 라이브러리에 접근하도록 허용합니다.";
@@ -2111,7 +2140,11 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+<<<<<<< HEAD
+				MARKETING_VERSION = 1.1.0;
+=======
 				MARKETING_VERSION = 1.1.1;
+>>>>>>> develop
 				NEW_SETTING1 = "";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
