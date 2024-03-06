@@ -77,9 +77,15 @@ struct HomeView: View {
                                 .overlay(Circle().stroke(Color.greyScale10, lineWidth: scaler.scaleWidth(1)))
                                 .padding(.top, scaler.scaleHeight(16))
                                 .onTapGesture {
-                                    adCoordinator.showAd()
-                                    adCoordinator.onAdDismiss = {
-                                        self.showingTabbar = false // 광고가 닫힌 후 탭바를 숨기는 로직
+                                    if rewardedAdCoordinator.canShowAd() && adCoordinator.canShowHomeAd() {
+                                        adCoordinator.showAd()
+                                        adCoordinator.onAdDismiss = {
+                                            self.showingTabbar = false
+                                            self.isOnSettingBook = true
+                                        }
+                                    }
+                                    else {
+                                        self.showingTabbar = false
                                         self.isOnSettingBook = true
                                     }
                                 }

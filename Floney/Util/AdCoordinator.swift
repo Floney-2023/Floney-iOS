@@ -12,11 +12,12 @@ import GoogleMobileAds
 
 class AdCoordinator: NSObject, GADFullScreenContentDelegate {
     var interstitial: GADInterstitialAd?
-    var pageType: String
+    var pageType: String?
     var onAdDismiss: (() -> Void)?
     
-    override init() {
+    init(pageType: String?) {
         super.init()
+        self.pageType = pageType
         loadInterstitialAd()
     }
     private func loadInterstitialAd() {
@@ -56,7 +57,6 @@ class AdCoordinator: NSObject, GADFullScreenContentDelegate {
         
         let currentTime = Date()
         let elapsedTime = currentTime.timeIntervalSince(lastAdWatchTime)
-        print(elapsedTime)
         return elapsedTime >= 600
     }
     func canShowSettlementAd() -> Bool {
@@ -64,7 +64,6 @@ class AdCoordinator: NSObject, GADFullScreenContentDelegate {
             // 광고 시청 기록이 없는 경우
             return true
         }
-        
         let currentTime = Date()
         let elapsedTime = currentTime.timeIntervalSince(lastAdWatchTime)
         return elapsedTime >= 600
@@ -87,6 +86,7 @@ class AdCoordinator: NSObject, GADFullScreenContentDelegate {
     
     func adWillPresentFullScreenContent(_ ad: GADFullScreenPresentingAd) {
         print("\(#function) called")
+        self.saveAdWatchTime()
     }
     
     func adWillDismissFullScreenContent(_ ad: GADFullScreenPresentingAd) {
@@ -96,7 +96,6 @@ class AdCoordinator: NSObject, GADFullScreenContentDelegate {
     
     func adDidDismissFullScreenContent(_ ad: GADFullScreenPresentingAd) {
         print("\(#function) called")
-        self.saveAdWatchTime()
         onAdDismiss?() // 광고가 닫힐 때 콜백 호출
         loadInterstitialAd() // 광고를 다시 로드
     }
@@ -148,7 +147,6 @@ class RewardedAdCoordinator: NSObject, GADFullScreenContentDelegate {
         
         let currentTime = Date()
         let elapsedTime = currentTime.timeIntervalSince(lastAdWatchTime)
-        print(elapsedTime)
         // 6시간(21600초)이 경과했는지 확인
         return elapsedTime >= 21600
     }
