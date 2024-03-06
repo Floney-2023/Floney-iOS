@@ -12,6 +12,7 @@ import GoogleMobileAds
 
 class AdCoordinator: NSObject, GADFullScreenContentDelegate {
     var interstitial: GADInterstitialAd?
+    var pageType: String
     var onAdDismiss: (() -> Void)?
     
     override init() {
@@ -36,10 +37,39 @@ class AdCoordinator: NSObject, GADFullScreenContentDelegate {
         guard let fullScreenAd = interstitial else {
             return print("Ad wasn't ready")
         }
-        
         // View controller is an optional parameter. Pass in nil.
         fullScreenAd.present(fromRootViewController: nil)
     }
+    func saveAdWatchTime() {
+        let currentTime = Date()
+        if pageType == "HOME" {
+            UserDefaults.standard.set(currentTime, forKey: "lastHomeAdWatchTime")
+        } else if pageType == "SETTLEMENT" {
+            UserDefaults.standard.set(currentTime, forKey: "lastSettlementAdWatchTime")
+        }
+    }
+    func canShowHomeAd() -> Bool {
+        guard let lastAdWatchTime = UserDefaults.standard.object(forKey: "lastHomeAdWatchTime") as? Date else {
+            // 광고 시청 기록이 없는 경우
+            return true
+        }
+        
+        let currentTime = Date()
+        let elapsedTime = currentTime.timeIntervalSince(lastAdWatchTime)
+        print(elapsedTime)
+        return elapsedTime >= 600
+    }
+    func canShowSettlementAd() -> Bool {
+        guard let lastAdWatchTime = UserDefaults.standard.object(forKey: "lastSettlementAdWatchTime") as? Date else {
+            // 광고 시청 기록이 없는 경우
+            return true
+        }
+        
+        let currentTime = Date()
+        let elapsedTime = currentTime.timeIntervalSince(lastAdWatchTime)
+        return elapsedTime >= 600
+    }
+
     
     // MARK: - GADFullScreenContentDelegate methods
     
@@ -61,10 +91,12 @@ class AdCoordinator: NSObject, GADFullScreenContentDelegate {
     
     func adWillDismissFullScreenContent(_ ad: GADFullScreenPresentingAd) {
         print("\(#function) called")
+        
     }
     
     func adDidDismissFullScreenContent(_ ad: GADFullScreenPresentingAd) {
         print("\(#function) called")
+        self.saveAdWatchTime()
         onAdDismiss?() // 광고가 닫힐 때 콜백 호출
         loadInterstitialAd() // 광고를 다시 로드
     }

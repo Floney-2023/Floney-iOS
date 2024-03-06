@@ -7,7 +7,7 @@
 import SwiftUI
 import Kingfisher
 struct HomeView: View {
-    private let adCoordinator = AdCoordinator()
+    private let adCoordinator = AdCoordinator(pageType: "HOME")
     private let rewardedAdCoordinator = RewardedAdCoordinator()
     var bookService = BookExistenceViewModel.shared
     let scaler = Scaler.shared
@@ -56,20 +56,17 @@ struct HomeView: View {
                                 .overlay(Circle().stroke(Color.greyScale10, lineWidth: scaler.scaleWidth(1)))
                                 .padding(.top, scaler.scaleHeight(16))
                                 .onTapGesture {
-                                    if rewardedAdCoordinator.canShowAd() {
+                                    if rewardedAdCoordinator.canShowAd() && adCoordinator.canShowHomeAd() {
                                         adCoordinator.showAd()
                                         adCoordinator.onAdDismiss = {
-                                            self.showingTabbar = false // 광고가 닫힌 후 탭바를 숨기는 로직
+                                            self.showingTabbar = false
                                             self.isOnSettingBook = true
                                         }
                                     }
                                     else {
-                                        
-                                        self.showingTabbar = false // 광고가 닫힌 후 탭바를 숨기는 로직
+                                        self.showingTabbar = false
                                         self.isOnSettingBook = true
-                                        
                                     }
-                                    
                                 }
                         } else {
                             Image("book_profile_34")
