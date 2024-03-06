@@ -38,40 +38,53 @@ struct HomeView: View {
                         .padding(.top, scaler.scaleHeight(24))
                     Spacer()
                     NavigationLink(destination: SettingBookView(showingTabbar: $showingTabbar, isOnSettingBook: $isOnSettingBook),isActive: $isOnSettingBook){
-                        if let bookUrl = viewModel.bookProfileImage {
-                            let url = URL(string : bookUrl)
-                            KFImage(url)
-                                .placeholder { //플레이스 홀더 설정
-                                    Image("book_profile_34")
-                                }.retry(maxCount: 3, interval: .seconds(5)) //재시도
-                                .onSuccess { success in //성공
-                                    print("succes: \(success)")
-                                }
-                                .onFailure { error in //실패
-                                    print("failure: \(error)")
-                                }
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(width: scaler.scaleWidth(34), height: scaler.scaleWidth(34))
-                                .clipShape(Circle())
-                                .overlay(Circle().stroke(Color.greyScale10, lineWidth: scaler.scaleWidth(1)))
-                                .padding(.top, scaler.scaleHeight(16))
-                                .onTapGesture {
-                                    self.showingTabbar = false
-                                    self.isOnSettingBook = true
-                                }
-                        } else {
-                            Image("book_profile_34")
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(width: scaler.scaleWidth(34), height: scaler.scaleWidth(34))
-                                .clipShape(Circle())
-                                .overlay(Circle().stroke(Color.greyScale10, lineWidth: scaler.scaleWidth(1)))
-                                .padding(.top, scaler.scaleHeight(16))
-                                .onTapGesture {
-                                    self.showingTabbar = false
-                                    self.isOnSettingBook = true
-                                }
+                        HStack(alignment: .center, spacing:4) {
+                            HStack(spacing:-2) {
+                                Text(viewModel.bookInfoResult.bookName)
+                                    .foregroundColor(.white)
+                                    .font(.pretendardFont(.semiBold, size: 11))
+                                    .padding(.horizontal, 8)
+                                    .padding(.vertical, 6)
+                                    .background(Color.primary4)
+                                    .cornerRadius(4)
+                                Image("img_polygon")
+                            }
+                            .padding(.top, scaler.scaleHeight(18))
+                            if let bookUrl = viewModel.bookProfileImage {
+                                let url = URL(string : bookUrl)
+                                KFImage(url)
+                                    .placeholder { //플레이스 홀더 설정
+                                        Image("book_profile_34")
+                                    }.retry(maxCount: 3, interval: .seconds(5)) //재시도
+                                    .onSuccess { success in //성공
+                                        print("succes: \(success)")
+                                    }
+                                    .onFailure { error in //실패
+                                        print("failure: \(error)")
+                                    }
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width: scaler.scaleWidth(34), height: scaler.scaleWidth(34))
+                                    .clipShape(Circle())
+                                    .overlay(Circle().stroke(Color.greyScale10, lineWidth: scaler.scaleWidth(1)))
+                                    .padding(.top, scaler.scaleHeight(16))
+                                    .onTapGesture {
+                                        self.showingTabbar = false
+                                        self.isOnSettingBook = true
+                                    }
+                            } else {
+                                Image("book_profile_34")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width: scaler.scaleWidth(34), height: scaler.scaleWidth(34))
+                                    .clipShape(Circle())
+                                    .overlay(Circle().stroke(Color.greyScale10, lineWidth: scaler.scaleWidth(1)))
+                                    .padding(.top, scaler.scaleHeight(16))
+                                    .onTapGesture {
+                                        self.showingTabbar = false
+                                        self.isOnSettingBook = true
+                                    }
+                            }
                         }
                     }
                 }

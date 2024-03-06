@@ -1,0 +1,17 @@
+<svg width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="8" height="8" fill="#E9E9E9"/>
+<g id="6_[Ver.2.0.0]&#237;&#153;&#136;_01-1_default &#236;&#186;&#152;&#235;&#166;&#176;&#235;&#141;&#148;" clip-path="url(#clip0_114_210)">
+<rect width="360" height="780" transform="translate(-294 -71)" fill="#FAFAFA"/>
+<g id="tooltip">
+<g id="chip">
+<rect x="-100" y="-7" width="102" height="23" rx="4" fill="#135D42"/>
+</g>
+<path id="Polygon 1" d="M8 4L0.5 7.4641L0.5 0.535898L8 4Z" fill="#135D42"/>
+</g>
+</g>
+<defs>
+<clipPath id="clip0_114_210">
+<rect width="360" height="780" fill="white" transform="translate(-294 -71)"/>
+</clipPath>
+</defs>
+</svg>
