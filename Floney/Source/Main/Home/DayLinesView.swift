@@ -222,37 +222,30 @@ struct DayLinesDetailView : View {
                                     }
                                     if let line = viewModel.dayLines[index] {
                                         VStack(alignment: .leading, spacing:scaler.scaleHeight(8)) {
-                                            Text("\(line.content)")
+                                            Text("\(line.description)")
                                                 .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(14)))
                                                 .foregroundColor(.greyScale2)
                                             HStack(spacing:0) {
-                                                ForEach(Array(line.category.enumerated()), id: \.element) { categoryIndex, category in
-                                                    Text("\(category)")
-                                                        .font(.pretendardFont(.medium, size: scaler.scaleWidth(12)))
-                                                        .foregroundColor(.greyScale6)
-                                                    // 마지막 요소가 아닐 경우에만 점을 추가
-                                                    if categoryIndex < line.category.count - 1 {
-                                                        Text(" ‧ ")
-                                                            .font(.pretendardFont(.medium, size: scaler.scaleWidth(12)))
-                                                            .foregroundColor(.greyScale6)
-                                                    }
-                                                }
-                                                
+                                                Text("\(line.assetSubCategory)")
+                                                Text(" ‧ ")
+                                                Text("\(line.lineSubCategory)")
                                             }
+                                            .font(.pretendardFont(.medium, size: scaler.scaleWidth(12)))
+                                            .foregroundColor(.greyScale6)
                                         }
                                         
                                         Spacer()
                                         
-                                        if line.assetType == "INCOME" {
+                                        if line.lineCategory == "INCOME" {
                                             Text("+\(line.money.formattedString)")
                                                 .font(.pretendardFont(.semiBold, size:scaler.scaleWidth(16)))
                                                 .foregroundColor(.greyScale2)
-                                        } else if line.assetType == "OUTCOME" {
+                                        } else if line.lineCategory == "OUTCOME" {
                                             Text("-\(line.money.formattedString)")
                                                 .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(16)))
                                                 .foregroundColor(.greyScale2)
                                             
-                                        } else if line.assetType == "BANK" {
+                                        } else if line.lineCategory == "BANK" {
                                             Text("-\(line.money.formattedString)")
                                                 .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(16)))
                                                 .foregroundColor(.greyScale2)
@@ -266,13 +259,13 @@ struct DayLinesDetailView : View {
                                     self.selectedIndex = index
                                     
                                     if let line = viewModel.dayLines[selectedIndex] {
-                                        if viewModel.dayLines[index]?.assetType == "OUTCOME" {
+                                        if viewModel.dayLines[index]?.lineCategory == "OUTCOME" {
                                             selectedToggleTypeIndex = 0
                                             selectedToggleType = "지출"
-                                        } else if viewModel.dayLines[index]?.assetType == "INCOME" {
+                                        } else if viewModel.dayLines[index]?.lineCategory == "INCOME" {
                                             selectedToggleTypeIndex = 1
                                             selectedToggleType = "수입"
-                                        } else if viewModel.dayLines[index]?.assetType == "BANK" {
+                                        } else if viewModel.dayLines[index]?.lineCategory == "BANK" {
                                             selectedToggleTypeIndex = 2
                                             selectedToggleType = "이체"
                                         }
@@ -296,11 +289,11 @@ struct DayLinesDetailView : View {
                                                 selectedOptions : selectedToggleTypeIndex,
                                                 date : viewModel.selectedDateStr,
                                                 money: String(line.money.formattedString),
-                                                assetType : line.category[0],
-                                                category: line.category[1],
-                                                content : line.content,
+                                                assetType : line.assetSubCategory,
+                                                category: line.lineSubCategory,
+                                                content : line.description,
                                                 toggleOnOff: line.exceptStatus,
-                                                writer: line.userNickName
+                                                writer: line.writerNickname
                                             )
                                         }
                                         .transition(.moveAndFade)

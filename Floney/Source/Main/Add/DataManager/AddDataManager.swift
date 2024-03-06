@@ -11,8 +11,8 @@ import Combine
 protocol AddProtocol {
     func getCategory(_ parameters:CategoryRequest) -> AnyPublisher<DataResponse<[CategoryResponse], NetworkError>, Never>
     func postLines(_ parameters:LinesRequest) -> AnyPublisher<DataResponse<LinesResponse, NetworkError>, Never>
-    func postCategory(_ parameters:AddCategoryRequest) -> AnyPublisher<DataResponse<AddCategoryResponse, NetworkError>, Never>
-    func deleteCategory(parameters: DeleteCategoryRequest) -> AnyPublisher<Void, NetworkError>
+    func postCategory(_ parameters:AddCategoryRequest, bookKey: String) -> AnyPublisher<DataResponse<AddCategoryResponse, NetworkError>, Never>
+    func deleteCategory(parameters: DeleteCategoryRequest,bookKey: String) -> AnyPublisher<Void, NetworkError>
     func deleteLine(parameters: DeleteLineRequest) -> AnyPublisher<Void, NetworkError>
     func changeLine(parameters: ChangeLineRequest) -> AnyPublisher<DataResponse<LinesResponse, NetworkError>, Never>
 }
@@ -26,7 +26,7 @@ extension AddService: AddProtocol {
     func getCategory(_ parameters:CategoryRequest) -> AnyPublisher<DataResponse<[CategoryResponse], NetworkError>, Never> {
         let bookKey = parameters.bookKey
         let root = parameters.root
-        let urlString = "\(Constant.BASE_URL)/books/categories?bookKey=\(bookKey)&root=\(root)"
+        let urlString = "\(Constant.BASE_URL)/books/\(bookKey)/categories?parent=\(root)"
         print("\(urlString)")
         let encodedString = urlString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
         let url = URL(string: encodedString!)!
@@ -68,8 +68,8 @@ extension AddService: AddProtocol {
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
     }
-    func postCategory(_ parameters:AddCategoryRequest) -> AnyPublisher<DataResponse<AddCategoryResponse, NetworkError>, Never> {
-        let url = "\(Constant.BASE_URL)/books/categories"
+    func postCategory(_ parameters:AddCategoryRequest, bookKey: String) -> AnyPublisher<DataResponse<AddCategoryResponse, NetworkError>, Never> {
+        let url = "\(Constant.BASE_URL)/books/\(bookKey)/categories"
         print("\(url)")
         let token = Keychain.getKeychainValue(forKey: .accessToken) ?? ""
         return AF.request(url,
@@ -88,7 +88,7 @@ extension AddService: AddProtocol {
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
     }
-    func deleteCategory(parameters: DeleteCategoryRequest) -> AnyPublisher<Void, NetworkError> {
+    func deleteCategory(parameters: DeleteCategoryRequest, bookKey: String) -> AnyPublisher<Void, NetworkError> {
         let url = "\(Constant.BASE_URL)/books/categories"
        
         let token = Keychain.getKeychainValue(forKey: .accessToken) ?? ""

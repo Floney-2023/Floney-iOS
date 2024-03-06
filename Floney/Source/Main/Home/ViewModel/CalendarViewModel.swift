@@ -100,7 +100,7 @@ class CalendarViewModel: ObservableObject {
                             if let year = components.year, let month = components.month {
                                 let firstDayOfMonthString = "\(year)-\(String(format: "%02d", month))-01"
                                 
-                                if let index = self.expenses.firstIndex(where: { $0.date == firstDayOfMonthString && $0.assetType == "INCOME" }) {
+                                if let index = self.expenses.firstIndex(where: { $0.date == firstDayOfMonthString && $0.categoryType == "INCOME" }) {
                                     self.expenses[index].money += Double(self.result.carryOverInfo.carryOverMoney)
                                 }
                             }
@@ -113,7 +113,7 @@ class CalendarViewModel: ObservableObject {
                             if let year = components.year, let month = components.month {
                                 let firstDayOfMonthString = "\(year)-\(String(format: "%02d", month))-01"
                                 
-                                if let index = self.expenses.firstIndex(where: { $0.date == firstDayOfMonthString && $0.assetType == "OUTCOME" }) {
+                                if let index = self.expenses.firstIndex(where: { $0.date == firstDayOfMonthString && $0.categoryType == "OUTCOME" }) {
                                     self.expenses[index].money += Double(abs(self.result.carryOverInfo.carryOverMoney))
                                 }
                             }
@@ -143,15 +143,15 @@ class CalendarViewModel: ObservableObject {
                     self.dayLinesTotalIncome = 0
                     self.dayLinesTotalOutcome = 0
                     for asset in self.dayLinesResult.totalExpense {
-                        if asset?.assetType == "INCOME" {
+                        if asset?.categoryType == "INCOME" {
                             self.dayLinesTotalIncome = asset!.money
-                        } else if asset?.assetType == "OUTCOME" {
+                        } else if asset?.categoryType == "OUTCOME" {
                             self.dayLinesTotalOutcome = asset!.money
                         }
                     }
                     self.dayLines = self.dayLinesResult.dayLinesResponse
                     self.seeProfileImg = self.dayLinesResult.seeProfileImg
-                    self.userImages = self.dayLines.compactMap { $0?.img }
+                    self.userImages = self.dayLines.compactMap { $0?.writerProfileImg }
                     
                     print(self.dayLinesResult.carryOverInfo)
                     self.dayLineCarryOver = self.dayLinesResult.carryOverInfo
