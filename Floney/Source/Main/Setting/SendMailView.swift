@@ -141,7 +141,7 @@ struct MailView: UIViewControllerRepresentable {
         vc.setToRecipients(["floney.team@gmail.com"])
 
         // 기본 내용 설정
-        let emailBody = "안녕하세요, 궁금한 점을 문의드립니다."
+        let emailBody = "[사용자 정보]\n간편 로그인 유무 및 종류 :\n가입한 이메일 :\n가계부 이름 :\n\n안녕하세요, 궁금한 점을 문의드립니다."
         vc.setMessageBody(emailBody, isHTML: false)
         return vc
     }

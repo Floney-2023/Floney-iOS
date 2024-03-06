@@ -28,6 +28,18 @@ class AddViewModel: ObservableObject {
     @Published var description = ""
     @Published var except = false
     @Published var nickname = ""
+    @Published var repeatDuration : RepeatDurationType = RepeatDurationType.none
+    @Published var selectedRepeat: String = "없음"
+    @Published var selectedDurationIndex: Int = 0
+    let durationOptions = ["없음", "매일", "매주", "매달", "주중", "주말"]
+    let durationMapping: [String: RepeatDurationType] = [
+        "없음": .none,
+        "매일": .everyday,
+        "매주": .week,
+        "매달": .month,
+        "주중": .weekday,
+        "주말": .weekend
+    ]
     
     //MARK: category
     @Published var categoryResult : [CategoryResponse] = []
@@ -197,7 +209,7 @@ class AddViewModel: ObservableObject {
         } else {
             print("Cannot convert to Double")
         }
-        let request = LinesRequest(bookKey: bookKey, money: moneyDouble, lineDate: selectedDateStr, flow: flow, asset: asset, line: line, description: description, except: except, nickname: nickname)
+        let request = LinesRequest(bookKey: bookKey, money: moneyDouble, lineDate: selectedDateStr, flow: flow, asset: asset, line: line, description: description, except: except, nickname: nickname, repeatDuration: repeatDuration.rawValue)
         print("내역 추가 request : \(request)")
         dataManager.postLines(request)
             .sink { (dataResponse) in
@@ -219,12 +231,19 @@ class AddViewModel: ObservableObject {
                 }
             }.store(in: &cancellableSet)
     }
+    func handleUserSelection(_ selection: String, index: Int) {
+        if let durationType = durationMapping[selection] {
+            self.repeatDuration = durationType
+            self.selectedRepeat = selection
+            self.selectedDurationIndex = index
+        }
+    }
     func postCategory() {
         guard !isApiCalling else { return }
         isApiCalling = true
         bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
-        let request = AddCategoryRequest(bookKey: bookKey, parent: root, name: newCategoryName)
-        dataManager.postCategory(request)
+        let request = AddCategoryRequest(parent: root, name: newCategoryName)
+        dataManager.postCategory(request, bookKey: bookKey)
             .sink { (dataResponse) in
                 
                 if dataResponse.error != nil {
@@ -244,10 +263,9 @@ class AddViewModel: ObservableObject {
     }
     
     func deleteCategory() {
-        
         bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
-        let request = DeleteCategoryRequest(bookKey: bookKey, root: root, name: deleteCategoryName)
-        dataManager.deleteCategory(parameters: request)
+        let request = DeleteCategoryRequest(parent: root, name: deleteCategoryName)
+        dataManager.deleteCategory(parameters: request,bookKey: bookKey)
             .sink { [weak self] completion in
                 guard let self = self else {return}
                 switch completion {

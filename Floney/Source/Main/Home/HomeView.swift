@@ -9,6 +9,7 @@ import Kingfisher
 struct HomeView: View {
     private let adCoordinator = AdCoordinator(pageType: "HOME")
     private let rewardedAdCoordinator = RewardedAdCoordinator()
+    @Environment(\.scenePhase) private var scenePhase
     var bookService = BookExistenceViewModel.shared
     let scaler = Scaler.shared
     @StateObject var alertManager = AlertManager.shared
@@ -36,59 +37,74 @@ struct HomeView: View {
                         .frame(width: scaler.scaleWidth(82), height: scaler.scaleHeight(19))
                         .padding(.top, scaler.scaleHeight(24))
                     Spacer()
-                    NavigationLink(destination: SettingBookView(showingTabbar: $showingTabbar, isOnSettingBook: $isOnSettingBook), isActive: $isOnSettingBook){
-                        if let bookUrl = viewModel.bookProfileImage {
-                            let url = URL(string : bookUrl)
-                            KFImage(url)
-                                .placeholder { //플레이스 홀더 설정
-                                    Image("book_profile_34")
-                                }.retry(maxCount: 3, interval: .seconds(5)) //재시도
-                                .onSuccess { success in //성공
-                                    print("succes: \(success)")
-                                }
-                                .onFailure { error in //실패
-                                    print("failure: \(error)")
-                                }
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(width: scaler.scaleWidth(34), height: scaler.scaleWidth(34))
-                                .clipShape(Circle())
-                                .overlay(Circle().stroke(Color.greyScale10, lineWidth: scaler.scaleWidth(1)))
-                                .padding(.top, scaler.scaleHeight(16))
-                                .onTapGesture {
-                                    if rewardedAdCoordinator.canShowAd() && adCoordinator.canShowHomeAd() {
-                                        adCoordinator.showAd()
-                                        adCoordinator.onAdDismiss = {
+                    NavigationLink(destination: SettingBookView(showingTabbar: $showingTabbar, isOnSettingBook: $isOnSettingBook),isActive: $isOnSettingBook){
+                        HStack(alignment: .center, spacing:4) {
+                            HStack(spacing:-2) {
+                                Text(viewModel.bookInfoResult.bookName)
+                                    .foregroundColor(.white)
+                                    .font(.pretendardFont(.semiBold, size: 11))
+                                    .padding(.horizontal, 8)
+                                    .padding(.vertical, 6)
+                                    .background(Color.primary4)
+                                    .cornerRadius(4)
+                                Image("img_polygon")
+                            }
+                            .padding(.top, scaler.scaleHeight(18))
+                            if let bookUrl = viewModel.bookProfileImage {
+                                let url = URL(string : bookUrl)
+                                KFImage(url)
+                                    .placeholder { //플레이스 홀더 설정
+                                        Image("book_profile_34")
+                                    }.retry(maxCount: 3, interval: .seconds(5)) //재시도
+                                    .onSuccess { success in //성공
+                                        print("succes: \(success)")
+                                    }
+                                    .onFailure { error in //실패
+                                        print("failure: \(error)")
+                                    }
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width: scaler.scaleWidth(34), height: scaler.scaleWidth(34))
+                                    .clipShape(Circle())
+                                    .overlay(Circle().stroke(Color.greyScale10, lineWidth: scaler.scaleWidth(1)))
+                                    .padding(.top, scaler.scaleHeight(16))
+                                    .onTapGesture {
+                                        if rewardedAdCoordinator.canShowAd() && adCoordinator.canShowHomeAd() {
+                                            adCoordinator.showAd()
+                                            adCoordinator.onAdDismiss = {
+                                                self.showingTabbar = false
+                                                self.isOnSettingBook = true
+                                            }
+                                        }
+                                        else {
                                             self.showingTabbar = false
                                             self.isOnSettingBook = true
                                         }
+
                                     }
-                                    else {
-                                        self.showingTabbar = false
-                                        self.isOnSettingBook = true
-                                    }
-                                }
-                        } else {
-                            Image("book_profile_34")
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(width: scaler.scaleWidth(34), height: scaler.scaleWidth(34))
-                                .clipShape(Circle())
-                                .overlay(Circle().stroke(Color.greyScale10, lineWidth: scaler.scaleWidth(1)))
-                                .padding(.top, scaler.scaleHeight(16))
-                                .onTapGesture {
-                                    if rewardedAdCoordinator.canShowAd() && adCoordinator.canShowHomeAd() {
-                                        adCoordinator.showAd()
-                                        adCoordinator.onAdDismiss = {
+                            } else {
+                                Image("book_profile_34")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width: scaler.scaleWidth(34), height: scaler.scaleWidth(34))
+                                    .clipShape(Circle())
+                                    .overlay(Circle().stroke(Color.greyScale10, lineWidth: scaler.scaleWidth(1)))
+                                    .padding(.top, scaler.scaleHeight(16))
+                                    .onTapGesture {
+                                        if rewardedAdCoordinator.canShowAd() && adCoordinator.canShowHomeAd() {
+                                            adCoordinator.showAd()
+                                            adCoordinator.onAdDismiss = {
+                                                self.showingTabbar = false
+                                                self.isOnSettingBook = true
+                                            }
+                                        }
+                                        else {
                                             self.showingTabbar = false
                                             self.isOnSettingBook = true
                                         }
+
                                     }
-                                    else {
-                                        self.showingTabbar = false
-                                        self.isOnSettingBook = true
-                                    }
-                                }
+                            }
                         }
                     }
                 }
@@ -132,6 +148,15 @@ struct HomeView: View {
             viewModel.getCalendar()
             viewModel.getDayLines()
         }
+        .onChange(of: scenePhase) { newScenePhase in
+            switch newScenePhase {
+            case .active:
+                viewModel.getCalendar()
+            default:
+                break
+            }
+        }
+
     }
 }
 //MARK: 총지출/총수입
@@ -407,7 +432,7 @@ struct MonthCalendar: View {
                                                     ForEach(viewModel.expenses, id: \.self) { (expense: CalendarExpenses) in
                                                         if viewModel.extractYearMonth(from: viewModel.selectedDateStr) {
                                                             let extractedDay = viewModel.extractDay(from: expense.date)
-                                                            let assetType = expense.assetType
+                                                            let assetType = expense.categoryType
                                                             let money = expense.money
                                                             
                                                             if extractedDay == day && assetType == "OUTCOME" && money > 0 {
