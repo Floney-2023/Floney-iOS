@@ -76,6 +76,7 @@ struct AddView: View {
     @State var isShowingCalendarBottomSheet = false
     @State var isShowingRepeatDurationBottomSheet = false
     @State var presentActionSheet = false
+    @State var repeatDuration : String?
 
     var formattedValue: Double? {
             let valueWithoutCommas = money.replacingOccurrences(of: ",", with: "")
@@ -126,10 +127,12 @@ struct AddView: View {
                             isShowingRepeatDurationBottomSheet = true
                         }
                     } else if mode == "check" {
-                        if viewModel.repeatDuration != .none {
-                            Text(viewModel.selectedRepeat)
-                                .font(.pretendardFont(.regular, size: scaler.scaleWidth(14)))
-                                .foregroundColor(.greyScale6)
+                        if let repeatDuration = self.repeatDuration {
+                            if repeatDuration != RepeatDurationType.none.rawValue {
+                                Text(viewModel.durationMappingText[repeatDuration]!)
+                                    .font(.pretendardFont(.regular, size: scaler.scaleWidth(14)))
+                                    .foregroundColor(.greyScale6)
+                            }
                         }
                     }
                 }
@@ -362,7 +365,7 @@ struct AddView: View {
                                 viewModel.bookLineKey = lineId // PK
                                 viewModel.deleteLine()
                             } else {
-                                
+                                presentActionSheet = true
                             }
                                 
                         } label: {
@@ -444,6 +447,7 @@ struct AddView: View {
             }
             
             CustomAlertView(message: AlertManager.shared.message, type: $alertManager.buttontType, isPresented: $alertManager.showAlert)
+            
             CategoryBottomSheet(root: $root, categories: $viewModel.categories, isShowing: $isShowingBottomSheet, isSelectedAssetTypeIndex: $isSelectedAssetTypeIndex, isSelectedAssetType: $assetType, isSelectedCategoryIndex: $isSelectedCategoryIndex, isSelectedCategory: $category, isShowingEditCategory: $isShowingEditCategory)
             
             AddCalendarBottomSheet(isShowing: $isShowingCalendarBottomSheet, viewModel: viewModel)

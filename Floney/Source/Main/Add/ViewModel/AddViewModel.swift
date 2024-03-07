@@ -40,6 +40,14 @@ class AddViewModel: ObservableObject {
         "주중": .weekday,
         "주말": .weekend
     ]
+    let durationMappingText: [String: String] = [
+        RepeatDurationType.none.rawValue: "없음",
+        RepeatDurationType.everyday.rawValue: "매일",
+        RepeatDurationType.week.rawValue: "매주",
+        RepeatDurationType.month.rawValue: "매달",
+        RepeatDurationType.weekday.rawValue: "주중",
+        RepeatDurationType.weekend.rawValue: "주말"
+    ]
     
     //MARK: category
     @Published var categoryResult : [CategoryResponse] = []
@@ -197,7 +205,7 @@ class AddViewModel: ObservableObject {
     func postLines() {
         guard !isApiCalling else { return }
         isApiCalling = true
-        
+        LoadingManager.shared.update(showLoading: true, loadingType: .floneyLoading)
         bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
         nickname = Keychain.getKeychainValue(forKey: .userNickname) ?? ""
         var moneyDouble : Double = 0
@@ -213,15 +221,22 @@ class AddViewModel: ObservableObject {
         print("내역 추가 request : \(request)")
         dataManager.postLines(request)
             .sink { (dataResponse) in
-                
                 if dataResponse.error != nil {
+                    LoadingManager.shared.update(showLoading: false, loadingType: .floneyLoading)
                     self.isApiCalling = false
-                    self.createAlert(with: dataResponse.error!, retryRequest: {
-                        self.postLines()
-                    })
-                    // 에러 처리
-                    print(dataResponse.error)
+                    if let urlError = dataResponse.error?.asAFError?.underlyingError as? URLError, urlError.code == .timedOut {
+                        // 메인 스레드에서 UI 업데이트
+                        DispatchQueue.main.async {
+                            AlertManager.shared.update(showAlert: true, message: "요청한 시간이 초과되었습니다. 인터넷 연결을 확인하거나 나중에 다시 시도해주세요.", buttonType: .red)
+                        }
+                    } else {
+                        // 다른 종류의 에러 처리
+                        self.createAlert(with: dataResponse.error!, retryRequest: {
+                            self.postLines()
+                        })
+                    }
                 } else {
+                    LoadingManager.shared.update(showLoading: false, loadingType: .floneyLoading)
                     self.isApiCalling = false
                     self.lineResult = dataResponse.value!
                     print("--성공--")
