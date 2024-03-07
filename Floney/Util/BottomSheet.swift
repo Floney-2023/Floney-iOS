@@ -1000,8 +1000,9 @@ struct DayLinesBottomSheet: View {
                                                         category: line.lineSubCategory,
                                                         content : line.description,
                                                         toggleOnOff: line.exceptStatus,
-                                                        writer: line.writerNickname
-                                                    )               
+                                                        writer: line.writerNickname,
+                                                        repeatDuration: line.repeatDuration
+                                                    )
                                                 }
                                                 .transition(.moveAndFade)
                                                 .navigationViewStyle(.stack)

@@ -91,7 +91,7 @@ struct ManageRepeatLineView: View {
                                                     self.deleteAlert = true
                                                 }
                                         }
-                                        VStack(spacing:8) {
+                                        VStack(alignment: .leading, spacing:8) {
                                             Text("\(repeatLine.description)")
                                                 .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(14)))
                                                 .foregroundColor(.greyScale2)
@@ -116,9 +116,7 @@ struct ManageRepeatLineView: View {
                                     Divider()
                                         .foregroundColor(.greyScale11)
                                 }
-                      
                             }
-                            
                         }
                         .padding(.top, scaler.scaleHeight(16))
                         .padding(.horizontal,scaler.scaleWidth(22))

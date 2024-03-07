@@ -54,6 +54,7 @@ class ManageRepeatLineViewModel : ObservableObject {
                 case .finished:
                     print("반복 내역 삭제 성공")
                 case .failure(let error):
+                    print(error)
                     self.createAlert(with: error, retryRequest: {
                         self.deleteRepeatLine(repeatLineId: repeatLineId)
                     })
@@ -72,6 +73,7 @@ class ManageRepeatLineViewModel : ObservableObject {
                 case .finished:
                     print("반복 내역 모두 삭제 성공")
                 case .failure(let error):
+                    print(error)
                     self.createAlert(with: error, retryRequest: {
                         self.deleteAllRepeatLine(bookLineKey: bookLineKey)
                     })

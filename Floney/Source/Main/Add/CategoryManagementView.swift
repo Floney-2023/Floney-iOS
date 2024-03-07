@@ -96,14 +96,14 @@ struct CategoryManagementView: View {
                                     //Spacer()
                                     HStack(spacing:scaler.scaleWidth(12)) {
                                         if editState {
-                                            if !(viewModel.categoryStates[i]) {
-                                                Image("icon_delete")
-                                                    .onTapGesture {
-                                                        viewModel.deleteCategoryName = viewModel.categories[i]
-                                                        message = "'\(viewModel.deleteCategoryName)' 항목을 삭제하시겠습니까?\n해당 항목으로 작성된 모든 내역이 삭제됩니다."
-                                                        self.deleteAlert = true
-                                                    }
-                                            }
+                                            
+                                            Image("icon_delete")
+                                                .onTapGesture {
+                                                    viewModel.deleteCategoryName = viewModel.categories[i]
+                                                    message = "'\(viewModel.deleteCategoryName)' 항목을 삭제하시겠습니까?\n해당 항목으로 작성된 모든 내역이 삭제됩니다."
+                                                    self.deleteAlert = true
+                                                }
+                                            
                                         }
                                         Text("\(viewModel.categories[i])")
                                             .padding(.leading, scaler.scaleWidth(12))

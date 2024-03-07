@@ -89,7 +89,7 @@ extension AddService: AddProtocol {
             .eraseToAnyPublisher()
     }
     func deleteCategory(parameters: DeleteCategoryRequest, bookKey: String) -> AnyPublisher<Void, NetworkError> {
-        let url = "\(Constant.BASE_URL)/books/categories"
+        let url = "\(Constant.BASE_URL)/books/\(bookKey)/categories"
        
         let token = Keychain.getKeychainValue(forKey: .accessToken) ?? ""
         

@@ -271,11 +271,8 @@ struct DayLinesDetailView : View {
                                         }
                                         
                                     }
-                                    //DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                                     LoadingManager.shared.update(showLoading: false, loadingType: .progressLoading)
                                     self.showingDetail = true
-                                   // }
-                                    
                                 }
                                 .frame(height: scaler.scaleHeight(34))
                                 .fullScreenCover(isPresented: $showingDetail) {
@@ -293,7 +290,8 @@ struct DayLinesDetailView : View {
                                                 category: line.lineSubCategory,
                                                 content : line.description,
                                                 toggleOnOff: line.exceptStatus,
-                                                writer: line.writerNickname
+                                                writer: line.writerNickname,
+                                                repeatDuration: line.repeatDuration
                                             )
                                         }
                                         .transition(.moveAndFade)
