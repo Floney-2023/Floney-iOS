@@ -172,9 +172,8 @@ struct ManageRepeatLineView: View {
             )
             if deleteAlert {
                 FloneyAlertView(isPresented: $deleteAlert, title:$title, message: $message, leftButtonText:"삭제하기") {
-                    viewModel.deleteAllRepeatLine(bookLineKey: self.selectedRepeatLineId)
+                    viewModel.deleteRepeatLine(repeatLineId: self.selectedRepeatLineId)
                 }
-                
             }
         }
     }

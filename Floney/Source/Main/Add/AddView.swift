@@ -362,7 +362,7 @@ struct AddView: View {
                     HStack(spacing:0) {
                         Button {
                             if viewModel.repeatDuration != RepeatDurationType.none {
-                                viewModel.bookLineKey = lineId // PK
+                                viewModel.bookLineKey = lineId
                                 viewModel.deleteLine()
                             } else {
                                 presentActionSheet = true
@@ -430,7 +430,8 @@ struct AddView: View {
                         .default(
                             Text("이 내역만 삭제"),
                             action: {
-                                repeatLineViewModel.deleteRepeatLine(repeatLineId: lineId)
+                                viewModel.bookLineKey = lineId
+                                viewModel.deleteLine()
                             }
                         ),
                         .default(
