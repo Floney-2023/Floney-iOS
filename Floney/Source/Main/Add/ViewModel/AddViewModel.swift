@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import Alamofire
 class AddViewModel: ObservableObject {
     var fcmManager = FCMDataManager()
     var tokenViewModel = TokenReissueViewModel()
@@ -224,13 +225,9 @@ class AddViewModel: ObservableObject {
                 if dataResponse.error != nil {
                     LoadingManager.shared.update(showLoading: false, loadingType: .floneyLoading)
                     self.isApiCalling = false
-                    if let urlError = dataResponse.error?.asAFError?.underlyingError as? URLError, urlError.code == .timedOut {
-                        // 메인 스레드에서 UI 업데이트
-                        DispatchQueue.main.async {
-                            AlertManager.shared.update(showAlert: true, message: "요청한 시간이 초과되었습니다. 인터넷 연결을 확인하거나 나중에 다시 시도해주세요.", buttonType: .red)
-                        }
+                    if dataResponse.error!.initialError.isSessionTaskError {
+                        AlertManager.shared.update(showAlert: true, message: "요청한 시간이 초과되었습니다.", buttonType: .red)
                     } else {
-                        // 다른 종류의 에러 처리
                         self.createAlert(with: dataResponse.error!, retryRequest: {
                             self.postLines()
                         })
@@ -293,10 +290,18 @@ class AddViewModel: ObservableObject {
                     self.getCategory()
                 case .failure(let error):
                     self.isApiCalling = false
-                    self.createAlert(with: error, retryRequest: {
-                        self.deleteCategory()
-                    })
+                    //self.createAlert(with: error, retryRequest: {
+                    //    self.deleteCategory()
+                    //})
                     print("Error deleting category: \(error)")
+                    if error.initialError.isSessionTaskError {
+                        AlertManager.shared.update(showAlert: true, message: "요청한 시간이 초과되었습니다.", buttonType: .red)
+                    } else {
+                        // 다른 종류의 에러 처리
+                        self.createAlert(with: error, retryRequest: {
+                            self.deleteCategory()
+                        })
+                    }
                 }
             } receiveValue: { data in
                 // TODO: Handle the received data if necessary.
