@@ -952,7 +952,7 @@ struct DayLinesBottomSheet: View {
                                                         .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(16)))
                                                         .foregroundColor(.greyScale2)
                                                     
-                                                } else if line.lineCategory == "BANK" {
+                                                } else if line.lineCategory == "TRANSFER" {
                                                     Text("-\(line.money.formattedString)")
                                                         .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(16)))
                                                         .foregroundColor(.greyScale2)
@@ -972,7 +972,7 @@ struct DayLinesBottomSheet: View {
                                                 } else if viewModel.dayLines[index]?.lineCategory == "INCOME" {
                                                     selectedToggleTypeIndex = 1
                                                     selectedToggleType = "수입"
-                                                } else if viewModel.dayLines[index]?.lineCategory == "BANK" {
+                                                } else if viewModel.dayLines[index]?.lineCategory == "TRANSFER" {
                                                     selectedToggleTypeIndex = 2
                                                     selectedToggleType = "이체"
                                                 }
