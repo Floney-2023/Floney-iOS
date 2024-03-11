@@ -45,9 +45,9 @@ enum RepeatDurationType: String {
     
     func description() -> String {
         switch self {
-        case .everyday: return "1일"
-        case .week: return "1주일"
-        case .month: return "1개월"
+        case .everyday: return "매일"
+        case .week: return "매주"
+        case .month: return "매달"
         case .weekday: return "주중"
         case .weekend: return "주말"
         case .none:
