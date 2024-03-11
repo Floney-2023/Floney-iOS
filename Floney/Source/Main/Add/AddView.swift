@@ -67,6 +67,8 @@ struct AddView: View {
     @State var isShowingRepeatDurationBottomSheet = false
     @State var presentActionSheet = false
     @State var repeatDuration : String?
+    @State private var secondsElapsed = 1
+    @State private var timer: Timer?
 
     var formattedValue: Double? {
             let valueWithoutCommas = money.replacingOccurrences(of: ",", with: "")
@@ -328,9 +330,9 @@ struct AddView: View {
                                 }
                                 viewModel.except = toggleOnOff // 제외 여부
                                 viewModel.postLines()
-                     
+                                startTimer()
                             }
-                            
+                                                        
                         } label: {
                             Text("저장하기")
                                 .frame(height:scaler.scaleHeight(66))
@@ -409,6 +411,9 @@ struct AddView: View {
                 viewModel.convertStringToDate(date)
                 setOriginalValue()
             }
+            .onDisappear {
+                self.stopTimer()
+            }
             .onChange(of: viewModel.successAdd) { newValue in
                 self.isPresented = false
             }
@@ -429,8 +434,9 @@ struct AddView: View {
                         ),
                         .default(
                             Text("이후 모든 내역 삭제"),
-                            action: {  
+                            action: {
                                 repeatLineViewModel.deleteAllRepeatLine(bookLineKey: lineId)
+                                startTimer()
                             }
                         ),
                         .cancel(
@@ -453,6 +459,33 @@ struct AddView: View {
                     self.isPresented = false
                 }
             }
+            
+            if mode == "add" && viewModel.repeatDuration != .none && viewModel.isApiCalling {
+                LoadingView()
+                ZStack {
+                    VStack {
+                        Spacer()
+                        Text("\(secondsElapsed) 초 경과")
+                            .foregroundColor(.white)
+                            .font(.pretendardFont(.medium,size:18))
+                            .padding(.bottom, 60)
+                    }
+                }
+            }
+            
+            if mode == "check" && repeatLineViewModel.isApiCalling {
+                LoadingView()
+                ZStack {
+                    VStack {
+                        Spacer()
+                        Text("\(secondsElapsed) 초 경과")
+                            .foregroundColor(.white)
+                            .font(.pretendardFont(.medium,size:18))
+                            .padding(.bottom, 60)
+                    }
+                }
+            }
+
 
             NavigationLink(destination: CategoryManagementView(isShowingEditCategory: $isShowingEditCategory), isActive: $isShowingEditCategory) {
                 EmptyView()
@@ -487,6 +520,19 @@ struct AddView: View {
         }
         return string
     }
+    func startTimer() {
+        secondsElapsed = 1
+        timer?.invalidate() // 기존 타이머가 있다면 중지
+        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+            DispatchQueue.main.async {
+                self.secondsElapsed += 1
+            }
+        }
+    }
+    
+    func stopTimer() {
+        timer?.invalidate()
+        timer = nil
     func checkForChangesAndShowAlert() {
         if date != originalDate ||
             money != originalMoney ||

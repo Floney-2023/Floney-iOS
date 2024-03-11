@@ -13,6 +13,7 @@ class ManageRepeatLineViewModel : ObservableObject {
     @Published var tokenViewModel = TokenReissueViewModel()
     @Published var categoryType = ""
     @Published var repeatLineList : [RepeatLineResponse] = []
+    @Published var isApiCalling: Bool = false
     
     @Published var isApiCalling: Bool = false
     @Published var successStatus: Bool = false
@@ -56,6 +57,7 @@ class ManageRepeatLineViewModel : ObservableObject {
                     self.successStatus = true
                     self.alertManager.update(showAlert: true, message: "삭제가 완료되었습니다.", buttonType: .green)
                     print("반복 내역 삭제 성공")
+                    self.getRepeatLine()
                 case .failure(let error):
                     print(error)
                     self.isApiCalling = false
