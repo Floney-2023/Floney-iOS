@@ -9,16 +9,14 @@ import Foundation
 import Combine
 
 class ManageRepeatLineViewModel : ObservableObject {
-#if DEBUG
-    let projectMode = "dev"
-#else
-    let projectMode = "prod"
-#endif
+    var alertManager = AlertManager.shared
     @Published var tokenViewModel = TokenReissueViewModel()
     @Published var categoryType = ""
     @Published var repeatLineList : [RepeatLineResponse] = []
     @Published var isApiCalling: Bool = false
     
+    @Published var isApiCalling: Bool = false
+    @Published var successStatus: Bool = false
     private var cancellableSet: Set<AnyCancellable> = []
     var dataManager: ManageRepeatLineProtocol
     
@@ -56,6 +54,8 @@ class ManageRepeatLineViewModel : ObservableObject {
                 switch completion {
                 case .finished:
                     self.isApiCalling = false
+                    self.successStatus = true
+                    self.alertManager.update(showAlert: true, message: "삭제가 완료되었습니다.", buttonType: .green)
                     print("반복 내역 삭제 성공")
                     self.getRepeatLine()
                 case .failure(let error):
@@ -80,6 +80,8 @@ class ManageRepeatLineViewModel : ObservableObject {
                 switch completion {
                 case .finished:
                     self.isApiCalling = false
+                    self.successStatus = true
+                    self.alertManager.update(showAlert: true, message: "삭제가 완료되었습니다.", buttonType: .green)
                     print("반복 내역 모두 삭제 성공")
                 case .failure(let error):
                     print(error)
