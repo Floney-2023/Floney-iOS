@@ -23,7 +23,7 @@ struct AddView: View {
     @State var isShowingBottomSheet = false
     @State var isShowingEditCategory = false
     @State var moneyMaxLength = 11
-    @State var maxLength = 12
+    @State var maxLength = 20
     @State var isSelectedAssetTypeIndex = 0
     @State var isSelectedCategoryIndex = 0
     @State var root = "" // 자산, 지출, 수입, 이체
