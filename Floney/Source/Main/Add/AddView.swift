@@ -351,13 +351,12 @@ struct AddView: View {
                     //MARK: 삭제/저장하기 버튼
                     HStack(spacing:0) {
                         Button {
-                            if viewModel.repeatDuration != RepeatDurationType.none {
-                                viewModel.bookLineKey = lineId // PK
+                            if self.repeatDuration == RepeatDurationType.none.rawValue {
+                                viewModel.bookLineKey = lineId
                                 viewModel.deleteLine()
                             } else {
                                 presentActionSheet = true
                             }
-                                
                         } label: {
                             Text("삭제")
                                 .frame(width: scaler.scaleWidth(118))
@@ -413,6 +412,9 @@ struct AddView: View {
             .onChange(of: viewModel.successAdd) { newValue in
                 self.isPresented = false
             }
+            .onChange(of: repeatLineViewModel.successStatus) { newValue in
+                self.isPresented = false
+            }
             .actionSheet(isPresented: $presentActionSheet) {
                 ActionSheet(
                     title: Text("이 내역을 삭제하시겠습니까? 반복되는 내역입니다."),
@@ -421,7 +423,8 @@ struct AddView: View {
                         .default(
                             Text("이 내역만 삭제"),
                             action: {
-                                repeatLineViewModel.deleteRepeatLine(repeatLineId: lineId)
+                                viewModel.bookLineKey = lineId
+                                viewModel.deleteLine()
                             }
                         ),
                         .default(
