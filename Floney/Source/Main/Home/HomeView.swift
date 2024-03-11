@@ -301,8 +301,11 @@ struct CustomCalendarView: View {
             .padding(.bottom, scaler.scaleHeight(16))
             
             if viewModel.selectedView == 0 {
-                MonthCalendar(viewModel: viewModel, isShowingMonthPicker: $isShowingMonthPicker, isShowingBottomSheet: $isShowingBottomSheet)
-                    .padding(.horizontal, scaler.scaleWidth(20))
+                ScrollView(showsIndicators: false) {
+                    MonthCalendar(viewModel: viewModel, isShowingMonthPicker: $isShowingMonthPicker, isShowingBottomSheet: $isShowingBottomSheet)
+                        .padding(.horizontal, scaler.scaleWidth(20))
+                        .padding(.bottom, scaler.scaleHeight(70))
+                }
             } else if viewModel.selectedView == 1 {
                 DayLinesView(date: $viewModel.dayLinesDate, isShowingAddView: $isShowingAddView, viewModel: viewModel)
                     .padding(.horizontal, scaler.scaleWidth(20))
