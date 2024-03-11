@@ -361,13 +361,12 @@ struct AddView: View {
                     //MARK: 삭제/저장하기 버튼
                     HStack(spacing:0) {
                         Button {
-                            if viewModel.repeatDuration != RepeatDurationType.none {
+                            if self.repeatDuration == RepeatDurationType.none.rawValue {
                                 viewModel.bookLineKey = lineId
                                 viewModel.deleteLine()
                             } else {
                                 presentActionSheet = true
                             }
-                                
                         } label: {
                             Text("삭제")
                                 .frame(width: scaler.scaleWidth(118))
@@ -420,6 +419,9 @@ struct AddView: View {
                 viewModel.convertStringToDate(date)
             }
             .onChange(of: viewModel.successAdd) { newValue in
+                self.isPresented = false
+            }
+            .onChange(of: repeatLineViewModel.successStatus) { newValue in
                 self.isPresented = false
             }
             .actionSheet(isPresented: $presentActionSheet) {
