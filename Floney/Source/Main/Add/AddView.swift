@@ -38,39 +38,29 @@ struct AddView: View {
     @ObservedObject var alertManager = AlertManager.shared
 
     @State var date : String = "2023-06-20"
-    @State var money : String = "" {
-        didSet {
-            self.changedStatus = true
-        }
-    }
-
+    @State var originalDate: String = ""
+    @State var money : String = ""
+    let defaultMoney: String = ""
+    @State var originalMoney: String = ""
     let numberFormatter: NumberFormatter = {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
         return formatter
     }()
-    @State var assetType = "자산을 선택하세요" {
-        didSet {
-            self.changedStatus = true
-        }
-    }
-    @State var category = "분류를 선택하세요" {
-        didSet {
-            self.changedStatus = true
-        }
-    }
+    @State var assetType = "자산을 선택하세요"
+    let defaultAssetType: String = "자산을 선택하세요"
+    @State var originalAssetType: String = ""
+    @State var category = "분류를 선택하세요"
+    let defaultCategory: String = "분류를 선택하세요"
+    @State var originalCategory: String = ""
 
-    @State var content = "" {
-        didSet {
-            self.changedStatus = true
-        }
-    }
+    @State var content = ""
+    let defaultContent: String = ""
+    @State var originalContent: String = ""
 
-    @State var toggleOnOff = false {
-        didSet {
-            self.changedStatus = true
-        }
-    }
+    @State var toggleOnOff = false
+    let defaultToggleOnOff: Bool = false
+    @State var originalToggleOnOff: Bool = false
 
     @State var writer = ""
     @State var isShowingCalendarBottomSheet = false
@@ -93,10 +83,10 @@ struct AddView: View {
                         .resizable()
                         .frame(width: scaler.scaleWidth(24), height : scaler.scaleWidth(24))
                         .onTapGesture {
-                            if changedStatus {
-                                self.showAlert = true
-                            } else {
-                                self.isPresented.toggle()
+                            if mode == "add" {
+                                self.checkForChangesWithDefaultAndShowAlert()
+                            } else if mode == "check" {
+                                self.checkForChangesAndShowAlert()
                             }
                         }
                     Spacer()
@@ -418,6 +408,7 @@ struct AddView: View {
             .onAppear(perform : UIApplication.shared.hideKeyboard)
             .onAppear{
                 viewModel.convertStringToDate(date)
+                setOriginalValue()
             }
             .onChange(of: viewModel.successAdd) { newValue in
                 self.isPresented = false
@@ -492,6 +483,40 @@ struct AddView: View {
             return formatter.string(from: number) ?? ""
         }
         return string
+    }
+    func checkForChangesAndShowAlert() {
+        if date != originalDate ||
+            money != originalMoney ||
+            content != originalContent ||
+            assetType != originalAssetType ||
+            category != originalCategory ||
+            toggleOnOff != originalToggleOnOff {
+            // 변경된 값이 있으면 알러트 표시
+            self.showAlert = true
+        } else {
+            self.isPresented.toggle()
+        }
+    }
+    func checkForChangesWithDefaultAndShowAlert() {
+        if date != originalDate ||
+            money != defaultMoney ||
+            content != defaultContent ||
+            assetType != defaultAssetType ||
+            category != defaultCategory ||
+            toggleOnOff != defaultToggleOnOff {
+            // 변경된 값이 있으면 알러트 표시
+            self.showAlert = true
+        } else {
+            self.isPresented.toggle()
+        }
+    }
+    func setOriginalValue() {
+        self.originalDate = self.date
+        self.originalMoney = self.money
+        self.originalContent = self.content
+        self.originalAssetType = self.assetType
+        self.originalCategory = self.category
+        self.originalToggleOnOff = self.toggleOnOff
     }
 }
 
