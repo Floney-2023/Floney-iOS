@@ -21,13 +21,14 @@ struct CategoryManagementView: View {
     @State var deleteAlert = false
     @State var title = "분류항목 삭제"
     @State var message = ""
-    
     @State var modifyAlert = false
     @State var modifyTitle = "잠깐!"
     @State var modifyMessage = "수정된 내용이 저장되지 않았습니다.\n그대로 나가시겠습니까?"
-    
-    
     @State var showAddButton = true
+    
+    @State private var secondsElapsed = 1
+    @State private var timer: Timer?
+    
     var body: some View {
         ZStack {
             VStack(spacing:0) {
@@ -134,6 +135,9 @@ struct CategoryManagementView: View {
                 viewModel.root = "자산"
                 viewModel.getCategory()
             }
+            .onDisappear {
+                stopTimer()
+            }
             .onChange(of: selectedOptions) { newValue in
                 viewModel.root = options[newValue]
                 viewModel.getCategory()
@@ -201,6 +205,7 @@ struct CategoryManagementView: View {
             if deleteAlert {
                 FloneyAlertView(isPresented: $deleteAlert, title:$title, message: $message, leftButtonText:"삭제하기") {
                     viewModel.deleteCategory()
+                    startTimer()
                 }
                 
             }
@@ -211,8 +216,35 @@ struct CategoryManagementView: View {
                     self.presentationMode.wrappedValue.dismiss()
                 }
             }
+            if viewModel.isApiCalling {
+                LoadingView()
+                ZStack {
+                    VStack {
+                        Spacer()
+                        Text("\(secondsElapsed) 초 경과")
+                            .foregroundColor(.white)
+                            .font(.pretendardFont(.medium,size:18))
+                            .padding(.bottom, 60)
+                    }
+                }
+            }
+            
         }// ZStack
       
+    }
+    func startTimer() {
+        secondsElapsed = 1
+        timer?.invalidate() // 기존 타이머가 있다면 중지
+        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+            DispatchQueue.main.async {
+                self.secondsElapsed += 1
+            }
+        }
+    }
+    
+    func stopTimer() {
+        timer?.invalidate()
+        timer = nil
     }
 }
 

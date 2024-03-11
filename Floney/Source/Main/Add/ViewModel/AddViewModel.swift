@@ -278,6 +278,8 @@ class AddViewModel: ObservableObject {
     }
     
     func deleteCategory() {
+        guard !isApiCalling else { return }
+        isApiCalling = true
         bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
         let request = DeleteCategoryRequest(parent: root, name: deleteCategoryName)
         dataManager.deleteCategory(parameters: request,bookKey: bookKey)
@@ -286,8 +288,11 @@ class AddViewModel: ObservableObject {
                 switch completion {
                 case .finished:
                     print(" successfully category delete.")
+                    self.alertManager.update(showAlert: true, message: "삭제가 완료되었습니다.", buttonType: .green)
+                    self.isApiCalling = false
                     self.getCategory()
                 case .failure(let error):
+                    self.isApiCalling = false
                     self.createAlert(with: error, retryRequest: {
                         self.deleteCategory()
                     })
