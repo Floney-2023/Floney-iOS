@@ -7,7 +7,7 @@
 
 import Foundation
 import Combine
-
+import Alamofire
 class ManageRepeatLineViewModel : ObservableObject {
     var alertManager = AlertManager.shared
     @Published var tokenViewModel = TokenReissueViewModel()
@@ -59,9 +59,16 @@ class ManageRepeatLineViewModel : ObservableObject {
                 case .failure(let error):
                     print(error)
                     self.isApiCalling = false
-                    self.createAlert(with: error, retryRequest: {
-                        self.deleteRepeatLine(repeatLineId: repeatLineId)
-                    })
+                    //self.createAlert(with: error, retryRequest: {
+                    //    self.deleteRepeatLine(repeatLineId: repeatLineId)
+                    //})
+                    if error.initialError.isSessionTaskError {
+                        AlertManager.shared.update(showAlert: true, message: "요청한 시간이 초과되었습니다.", buttonType: .red)
+                    } else {
+                        self.createAlert(with: error, retryRequest: {
+                            self.deleteRepeatLine(repeatLineId: repeatLineId)
+                        })
+                    }
                 }
             } receiveValue: { data in
                 
@@ -84,9 +91,16 @@ class ManageRepeatLineViewModel : ObservableObject {
                 case .failure(let error):
                     print(error)
                     self.isApiCalling = false
-                    self.createAlert(with: error, retryRequest: {
-                        self.deleteAllRepeatLine(bookLineKey: bookLineKey)
-                    })
+                    //self.createAlert(with: error, retryRequest: {
+                    //    self.deleteAllRepeatLine(bookLineKey: bookLineKey)
+                    //})
+                    if error.initialError.isSessionTaskError {
+                        AlertManager.shared.update(showAlert: true, message: "요청한 시간이 초과되었습니다.", buttonType: .red)
+                    } else {
+                        self.createAlert(with: error, retryRequest: {
+                            self.deleteAllRepeatLine(bookLineKey: bookLineKey)
+                        })
+                    }
                 }
             } receiveValue: { data in
                 
