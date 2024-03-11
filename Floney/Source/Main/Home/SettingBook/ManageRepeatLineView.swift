@@ -18,6 +18,8 @@ struct ManageRepeatLineView: View {
     @State var deleteAlert = false
     @State var title = "반복 내역 삭제"
     @State var message = "반복 내역을 삭제하시겠습니까?\n해당 반복의 모든 내역이 삭제됩니다."
+    @State private var secondsElapsed = 1
+    @State private var timer: Timer?
     var body: some View {
         ZStack {
             VStack(spacing:0) {
@@ -129,6 +131,9 @@ struct ManageRepeatLineView: View {
             .onAppear{
                 viewModel.categoryType = "OUTCOME"
                 viewModel.getRepeatLine()            }
+            .onDisappear {
+                stopTimer()
+            }
             .onChange(of: selectedOptions) { newValue in
                 if options[newValue] == "지출" {
                     viewModel.categoryType = "OUTCOME"
@@ -172,11 +177,37 @@ struct ManageRepeatLineView: View {
             )
             if deleteAlert {
                 FloneyAlertView(isPresented: $deleteAlert, title:$title, message: $message, leftButtonText:"삭제하기") {
-                    viewModel.deleteAllRepeatLine(bookLineKey: self.selectedRepeatLineId)
+                    viewModel.deleteRepeatLine(repeatLineId: self.selectedRepeatLineId)
+                    startTimer()
                 }
-                
+            }
+            if viewModel.isApiCalling {
+                LoadingView()
+                ZStack {
+                    VStack {
+                        Spacer()
+                        Text("\(secondsElapsed) 초 경과")
+                            .foregroundColor(.white)
+                            .font(.pretendardFont(.medium,size:18))
+                            .padding(.bottom, 60)
+                    }
+                }
             }
         }
+    }
+    func startTimer() {
+        secondsElapsed = 1
+        timer?.invalidate() // 기존 타이머가 있다면 중지
+        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+            DispatchQueue.main.async {
+                self.secondsElapsed += 1
+            }
+        }
+    }
+    
+    func stopTimer() {
+        timer?.invalidate()
+        timer = nil
     }
 }
 

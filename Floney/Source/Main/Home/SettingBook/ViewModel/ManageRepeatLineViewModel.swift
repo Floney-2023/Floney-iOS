@@ -17,6 +17,7 @@ class ManageRepeatLineViewModel : ObservableObject {
     @Published var tokenViewModel = TokenReissueViewModel()
     @Published var categoryType = ""
     @Published var repeatLineList : [RepeatLineResponse] = []
+    @Published var isApiCalling: Bool = false
     
     private var cancellableSet: Set<AnyCancellable> = []
     var dataManager: ManageRepeatLineProtocol
@@ -47,14 +48,19 @@ class ManageRepeatLineViewModel : ObservableObject {
     }
     
     func deleteRepeatLine(repeatLineId: Int) {
+        guard !isApiCalling else { return }
+        isApiCalling = true
         let request = DeleteRepeatLineRequest(repeatLineId: repeatLineId)
         dataManager.deleteRepeatLine(parameters: request)
             .sink { completion in
                 switch completion {
                 case .finished:
+                    self.isApiCalling = false
                     print("반복 내역 삭제 성공")
+                    self.getRepeatLine()
                 case .failure(let error):
                     print(error)
+                    self.isApiCalling = false
                     self.createAlert(with: error, retryRequest: {
                         self.deleteRepeatLine(repeatLineId: repeatLineId)
                     })
@@ -66,14 +72,18 @@ class ManageRepeatLineViewModel : ObservableObject {
     }
     
     func deleteAllRepeatLine(bookLineKey: Int) {
+        guard !isApiCalling else { return }
+        isApiCalling = true
         let request = DeleteAllRepeatLineRequest(bookLineKey: bookLineKey)
         dataManager.deleteAllRepeatLine(parameters: request)
             .sink { completion in
                 switch completion {
                 case .finished:
+                    self.isApiCalling = false
                     print("반복 내역 모두 삭제 성공")
                 case .failure(let error):
                     print(error)
+                    self.isApiCalling = false
                     self.createAlert(with: error, retryRequest: {
                         self.deleteAllRepeatLine(bookLineKey: bookLineKey)
                     })
