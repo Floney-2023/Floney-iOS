@@ -533,6 +533,7 @@ struct AddView: View {
     func stopTimer() {
         timer?.invalidate()
         timer = nil
+    }
     func checkForChangesAndShowAlert() {
         if date != originalDate ||
             money != originalMoney ||

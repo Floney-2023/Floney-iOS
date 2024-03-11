@@ -612,6 +612,11 @@ struct CategoryBottomSheet: View {
                     .opacity(0.7)
                     .ignoresSafeArea()
                     .onTapGesture {
+                        if root == "자산" {
+                            selectedAssetIndex = isSelectedAssetTypeIndex
+                        } else {
+                            selectedCategoryIndex = isSelectedCategoryIndex
+                        }
                         isShowing.toggle()
                     }
                 //MARK: content

@@ -14,8 +14,6 @@ class ManageRepeatLineViewModel : ObservableObject {
     @Published var categoryType = ""
     @Published var repeatLineList : [RepeatLineResponse] = []
     @Published var isApiCalling: Bool = false
-    
-    @Published var isApiCalling: Bool = false
     @Published var successStatus: Bool = false
     private var cancellableSet: Set<AnyCancellable> = []
     var dataManager: ManageRepeatLineProtocol
