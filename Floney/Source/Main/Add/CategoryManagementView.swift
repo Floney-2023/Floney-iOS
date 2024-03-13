@@ -217,16 +217,7 @@ struct CategoryManagementView: View {
                 }
             }
             if viewModel.isApiCalling {
-                LoadingView()
-                ZStack {
-                    VStack {
-                        Spacer()
-                        Text("\(secondsElapsed) 초 경과")
-                            .foregroundColor(.white)
-                            .font(.pretendardFont(.medium,size:18))
-                            .padding(.bottom, 60)
-                    }
-                }
+                CircularProgressView()
             }
             
         }// ZStack
@@ -253,3 +244,4 @@ struct CategoryManagementView_Previews: PreviewProvider {
         CategoryManagementView(isShowingEditCategory: .constant(true))
     }
 }
+
