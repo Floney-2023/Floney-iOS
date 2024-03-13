@@ -267,18 +267,15 @@ class AnalysisViewModel : ObservableObject {
                     LoadingManager.shared.update(showLoading: false, loadingType: .progressLoading)
                     var asset = dataResponse.value ?? AssetResponse(difference: 0, initAsset: 0, currentAsset: 0, assetInfo: [:])
 
-                    let assetInfoDictionary = asset.assetInfo  // 예: [String: AssetInfo] 타입의 딕셔너리
+                    let assetInfoDictionary = asset.assetInfo  // 예: [String: Double] 타입의 딕셔너리
 
                     self.assetList = assetInfoDictionary.compactMap { key, value in
                         let dateFormatter = DateFormatter()
-                        dateFormatter.dateFormat = "yyyy-MM-dd"
+                        dateFormatter.dateFormat = "yyyy-MM"
 
                         guard let date = dateFormatter.date(from: key) else { return nil }
-                        let monthFormatter = DateFormatter()
-                        monthFormatter.dateFormat = "yyyy-MM"
-
-                        let monthString = monthFormatter.string(from: date)
-                        return Asset(assetMoney: value.assetMoney,month: monthString)
+                        let monthString = dateFormatter.string(from: date)
+                        return Asset(assetMoney: value,month: monthString)
                     }
                     // assetList 정렬
                     self.assetList.sort { first, second in

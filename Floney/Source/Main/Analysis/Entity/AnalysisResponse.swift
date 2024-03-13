@@ -7,11 +7,6 @@
 
 import Foundation
 
-struct AssetData : Decodable, Hashable{
-    let month: String
-    let amount: Double
-}
-
 struct ExpenseIncomeResponse: Decodable, Hashable {
     var total : Double
     var differance : Double
@@ -28,18 +23,12 @@ struct BudgetResponse: Decodable {
     var leftMoney : Double
     var initBudget : Double
 }
+
 struct AssetResponse: Decodable {
     var difference : Double
     var initAsset : Double
     var currentAsset : Double
-    var assetInfo: [String: AssetInfo]
-    //var month : Int?
-    //var year : Int?
-}
-
-struct AssetInfo : Decodable, Hashable {
-    var assetMoney : Double
-    var date : String
+    var assetInfo: [String: Double]
 }
 
 struct Asset : Hashable {
