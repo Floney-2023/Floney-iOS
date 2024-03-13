@@ -55,6 +55,12 @@ class AddViewModel: ObservableObject {
     @Published var categories : [String] = ["현금", "체크카드","신용카드","은행"]
     @Published var categoryStates : [Bool] = []
     @Published var root = ""
+    let sortAssetOrder = ["현금", "체크카드", "신용카드", "은행"]
+    let sortOutcomeOrder = ["식비", "카페/간식", "교통", "주거/통신", "의료/건강", "문화", "여행/숙박", "생활", "패션/미용", "육아", "교육", "경조사", "기타", "미분류"]
+    let sortIncomeOrder =  ["급여", "부수입", "용돈", "금융소득", "사업소득", "상여금", "기타", "미분류"]
+    let sortTransferOrder = ["이체","저축","현금", "투자", "보험", "카드대금", "대출", "기타", "미분류"]
+        
+    
     @Published var newCategoryName = "" {
         didSet {
             if newCategoryName.count > 6 {
@@ -189,15 +195,31 @@ class AddViewModel: ObservableObject {
                     print("--성공--")
                     print(self.categoryResult)
                     DispatchQueue.main.async {
-                        self.categories = []
+                        var category: [String] = []
                         self.categoryStates = []
                         for i in self.categoryResult {
-                            self.categories.append(i.name)
+                            category.append(i.name)
                             self.categoryStates.append(i.default)
-                            print(i.name)
                         }
-                        print(self.categories)
-                        print(self.categoryStates)
+                        var sortOrder: [String] = []
+                        if self.root == "자산" {
+                            sortOrder = self.sortAssetOrder
+                        } else if self.root == "지출" {
+                            sortOrder = self.sortOutcomeOrder
+                        } else if self.root == "수입" {
+                            sortOrder = self.sortIncomeOrder
+                        } else if self.root == "이체" {
+                            sortOrder = self.sortTransferOrder
+                        }
+                        var sortedCategories: [String] {
+                            let orderedCategories = category.filter { sortOrder.contains($0) }
+                                .sorted { sortOrder.firstIndex(of: $0)! < sortOrder.firstIndex(of: $1)! }
+                            let additionalCategories = category.filter { !sortOrder.contains($0) }
+                                .sorted(by: <)
+
+                            return orderedCategories + additionalCategories
+                        }
+                        self.categories = sortedCategories
                     }
                     
                 }
