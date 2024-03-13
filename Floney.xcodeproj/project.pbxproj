@@ -130,6 +130,7 @@
 		2FC3B1DD2A274FF200572804 /* TextFieldLarge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC3B1DC2A274FF200572804 /* TextFieldLarge.swift */; };
 		2FC3B1DF2A2DC80500572804 /* CategoryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC3B1DE2A2DC80500572804 /* CategoryButton.swift */; };
 		2FC3B1E22A321B1F00572804 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC3B1E12A321B1E00572804 /* ImagePicker.swift */; };
+		2FCA4A492BA1C6A600E21067 /* CircularProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCA4A482BA1C6A600E21067 /* CircularProgressView.swift */; };
 		2FD7F39C29B1E26D00B99CAA /* FloneyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD7F39B29B1E26D00B99CAA /* FloneyApp.swift */; };
 		2FD7F39E29B1E26D00B99CAA /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD7F39D29B1E26D00B99CAA /* ContentView.swift */; };
 		2FD7F3A029B1E26E00B99CAA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2FD7F39F29B1E26E00B99CAA /* Assets.xcassets */; };
@@ -347,6 +348,7 @@
 		2FC3B1DC2A274FF200572804 /* TextFieldLarge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldLarge.swift; sourceTree = "<group>"; };
 		2FC3B1DE2A2DC80500572804 /* CategoryButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryButton.swift; sourceTree = "<group>"; };
 		2FC3B1E12A321B1E00572804 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
+		2FCA4A482BA1C6A600E21067 /* CircularProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularProgressView.swift; sourceTree = "<group>"; };
 		2FD7F39829B1E26D00B99CAA /* Floney-Dev.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Floney-Dev.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2FD7F39B29B1E26D00B99CAA /* FloneyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloneyApp.swift; sourceTree = "<group>"; };
 		2FD7F39D29B1E26D00B99CAA /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -696,6 +698,7 @@
 				2FB3DA862A5DB59E00E1486D /* LoadingView.swift */,
 				2FAD93022A8A15B700285C25 /* ProgressLoadingView.swift */,
 				2F531AC82AAF348700862014 /* LoadingManager.swift */,
+				2FCA4A482BA1C6A600E21067 /* CircularProgressView.swift */,
 			);
 			path = Loading;
 			sourceTree = "<group>";
@@ -1693,6 +1696,7 @@
 				2F20C4B92B2056BA007DBA36 /* ButtonClickHandler.swift in Sources */,
 				2F16146B2A0804B90029E9A9 /* CreateBookResponse.swift in Sources */,
 				2F1614602A07F4DC0029E9A9 /* BookCodeResponse.swift in Sources */,
+				2FCA4A492BA1C6A600E21067 /* CircularProgressView.swift in Sources */,
 				2FAD93052A8A35F800285C25 /* AlertManager.swift in Sources */,
 				2F28C2DC2A4ED64500894F67 /* SettingBookResponse.swift in Sources */,
 				2FC3B1DD2A274FF200572804 /* TextFieldLarge.swift in Sources */,
