@@ -239,14 +239,10 @@ class AnalysisViewModel : ObservableObject {
     }
     
     func analysisAsset(date: String) {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
         var date = ""
-
-        let dateString = dateFormatter.string(from: selectedDate)
         let components = Calendar.current.dateComponents([.year, .month], from: selectedDate)
         if let year = components.year, let month = components.month {
-            date = "\(year)-\(String(format: "%02d", month))-01"
+            date = "\(year)-\(String(format: "%02d", month))"
         }
         let bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
         let request = BudgetAssetRequest(bookKey: bookKey, date: date)
