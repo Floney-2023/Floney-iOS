@@ -16,6 +16,7 @@ struct AddView: View {
     @State var showAlert = false
     @State var title = "잠깐!"
     @State var message = "수정된 내용이 저장되지 않았습니다.\n그대로 나가시겠습니까?"
+    @State var alertStatus = "modify"
     
     @State var currency = CurrencyManager.shared.currentCurrencyUnit
     
@@ -85,6 +86,9 @@ struct AddView: View {
                         .resizable()
                         .frame(width: scaler.scaleWidth(24), height : scaler.scaleWidth(24))
                         .onTapGesture {
+                            title = "잠깐!"
+                            message = "수정된 내용이 저장되지 않았습니다.\n그대로 나가시겠습니까?"
+                            alertStatus = "modify"
                             if mode == "add" {
                                 self.checkForChangesWithDefaultAndShowAlert()
                             } else if mode == "check" {
@@ -354,8 +358,10 @@ struct AddView: View {
                     HStack(spacing:0) {
                         Button {
                             if self.repeatDuration == RepeatDurationType.none.rawValue {
-                                viewModel.bookLineKey = lineId
-                                viewModel.deleteLine()
+                                title = "삭제하기"
+                                message = "삭제 하시겠습니까?"
+                                alertStatus = "delete"
+                                self.showAlert = true 
                             } else {
                                 presentActionSheet = true
                             }
@@ -456,7 +462,12 @@ struct AddView: View {
             //MARK: alert
             if showAlert {
                 AlertView(isPresented: $showAlert, title: $title, message: $message) {
-                    self.isPresented = false
+                    if alertStatus == "modify" {
+                        self.isPresented = false
+                    } else {
+                        viewModel.bookLineKey = lineId
+                        viewModel.deleteLine()
+                    }
                 }
             }
             
