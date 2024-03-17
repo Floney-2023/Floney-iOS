@@ -19,19 +19,19 @@ struct CircularProgressView: View {
             ZStack {
                 // 프로그레스 바의 배경 원
                 Circle()
-                    .stroke(lineWidth: 20.0)
+                    .stroke(lineWidth: 10.0)
                     .opacity(0.3)
                     .foregroundColor(Color.greyScale8)
 
                 // 프로그레스 바의 진행 원
                 Circle()
                     .trim(from: 0.0, to: CGFloat(min(self.progress / 100.0, 1.0)))
-                    .stroke(style: StrokeStyle(lineWidth: 20.0, lineCap: .round, lineJoin: .round))
+                    .stroke(style: StrokeStyle(lineWidth: 10.0, lineCap: .round, lineJoin: .round))
                     .foregroundColor(Color.primary1)
                     .rotationEffect(Angle(degrees: 270.0))
                     .animation(.linear, value: progress)
             }
-            .frame(width: 150.0, height: 150.0)
+            .frame(width: 52.0, height: 52.0)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.black.opacity(0.7))
@@ -39,7 +39,8 @@ struct CircularProgressView: View {
         .onReceive(timer) { _ in
             self.progress += 1
             if self.progress >= 100 {
-                self.timer.upstream.connect().cancel() // 100에 도달하면 타이머 종료
+                progress = 0.0
+                //self.timer.upstream.connect().cancel() // 100에 도달하면 타이머 종료
             }
         }
         .onDisappear {
