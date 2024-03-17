@@ -20,9 +20,9 @@ struct DayLinesView: View {
         }
         .background(Color.clear)
         .onAppear{
-            print("date : \(date)")
             viewModel.dayLinesDate = viewModel.selectedDateStr
             viewModel.getDayLines()
+            viewModel.getBookInfo()
         }
         .onChange(of: isShowingAddView) { newValue in
             viewModel.getDayLines()
