@@ -958,7 +958,7 @@ struct DayLinesBottomSheet: View {
                                                         .foregroundColor(.greyScale2)
                                                     
                                                 } else if line.lineCategory == "TRANSFER" {
-                                                    Text("-\(line.money.formattedString)")
+                                                    Text("\(line.money.formattedString)")
                                                         .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(16)))
                                                         .foregroundColor(.greyScale2)
                                                     
