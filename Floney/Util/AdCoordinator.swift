@@ -11,6 +11,11 @@ import GoogleMobileAds
 
 
 class AdCoordinator: NSObject, GADFullScreenContentDelegate {
+#if DEBUG
+    let adUnitID = "ca-app-pub-3940256099942544/5135589807"
+#else
+    let adUnitID = "ca-app-pub-8361265242086915/8103059528"
+#endif
     var interstitial: GADInterstitialAd?
     var pageType: String?
     var onAdDismiss: (() -> Void)?
@@ -22,7 +27,7 @@ class AdCoordinator: NSObject, GADFullScreenContentDelegate {
     }
     private func loadInterstitialAd() {
         let request = GADRequest()
-        var adUnitID: String = "ca-app-pub-3940256099942544/5135589807"
+        var adUnitID: String = adUnitID
         
         GADInterstitialAd.load(withAdUnitID: adUnitID, request: request) { (ad, error) in
             if let error = error {
@@ -102,6 +107,11 @@ class AdCoordinator: NSObject, GADFullScreenContentDelegate {
 }
 
 class RewardedAdCoordinator: NSObject, GADFullScreenContentDelegate {
+#if DEBUG
+    let adUnitID = "ca-app-pub-3940256099942544/1712485313"
+#else
+    let adUnitID = "ca-app-pub-8361265242086915/1092289422"
+#endif
     private var rewardedAd: GADRewardedAd?
     var onAdDismiss: (() -> Void)?
     
@@ -111,7 +121,7 @@ class RewardedAdCoordinator: NSObject, GADFullScreenContentDelegate {
     }
     private func loadInterstitialAd() {
         let request = GADRequest()
-        var adUnitID: String = "ca-app-pub-3940256099942544/1712485313"
+        var adUnitID: String = adUnitID
         
         GADRewardedAd.load(withAdUnitID: adUnitID, request: request) { (ad, error) in
             if let error = error {
