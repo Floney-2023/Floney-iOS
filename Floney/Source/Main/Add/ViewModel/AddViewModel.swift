@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import Alamofire
 class AddViewModel: ObservableObject {
     var fcmManager = FCMDataManager()
     var tokenViewModel = TokenReissueViewModel()
@@ -28,12 +29,38 @@ class AddViewModel: ObservableObject {
     @Published var description = ""
     @Published var except = false
     @Published var nickname = ""
+    @Published var repeatDuration : RepeatDurationType = RepeatDurationType.none
+    @Published var selectedRepeat: String = "없음"
+    @Published var selectedDurationIndex: Int = 0
+    let durationOptions = ["없음", "매일", "매주", "매달", "주중", "주말"]
+    let durationMapping: [String: RepeatDurationType] = [
+        "없음": .none,
+        "매일": .everyday,
+        "매주": .week,
+        "매달": .month,
+        "주중": .weekday,
+        "주말": .weekend
+    ]
+    let durationMappingText: [String: String] = [
+        RepeatDurationType.none.rawValue: "없음",
+        RepeatDurationType.everyday.rawValue: "매일",
+        RepeatDurationType.week.rawValue: "매주",
+        RepeatDurationType.month.rawValue: "매달",
+        RepeatDurationType.weekday.rawValue: "주중",
+        RepeatDurationType.weekend.rawValue: "주말"
+    ]
     
     //MARK: category
     @Published var categoryResult : [CategoryResponse] = []
     @Published var categories : [String] = ["현금", "체크카드","신용카드","은행"]
     @Published var categoryStates : [Bool] = []
     @Published var root = ""
+    let sortAssetOrder = ["현금", "체크카드", "신용카드", "은행"]
+    let sortOutcomeOrder = ["식비", "카페/간식", "교통", "주거/통신", "의료/건강", "문화", "여행/숙박", "생활", "패션/미용", "육아", "교육", "경조사", "기타", "미분류"]
+    let sortIncomeOrder =  ["급여", "부수입", "용돈", "금융소득", "사업소득", "상여금", "기타", "미분류"]
+    let sortTransferOrder = ["이체","저축","현금", "투자", "보험", "카드대금", "대출", "기타", "미분류"]
+        
+    
     @Published var newCategoryName = "" {
         didSet {
             if newCategoryName.count > 6 {
@@ -168,15 +195,31 @@ class AddViewModel: ObservableObject {
                     print("--성공--")
                     print(self.categoryResult)
                     DispatchQueue.main.async {
-                        self.categories = []
+                        var category: [String] = []
                         self.categoryStates = []
                         for i in self.categoryResult {
-                            self.categories.append(i.name)
+                            category.append(i.name)
                             self.categoryStates.append(i.default)
-                            print(i.name)
                         }
-                        print(self.categories)
-                        print(self.categoryStates)
+                        var sortOrder: [String] = []
+                        if self.root == "자산" {
+                            sortOrder = self.sortAssetOrder
+                        } else if self.root == "지출" {
+                            sortOrder = self.sortOutcomeOrder
+                        } else if self.root == "수입" {
+                            sortOrder = self.sortIncomeOrder
+                        } else if self.root == "이체" {
+                            sortOrder = self.sortTransferOrder
+                        }
+                        var sortedCategories: [String] {
+                            let orderedCategories = category.filter { sortOrder.contains($0) }
+                                .sorted { sortOrder.firstIndex(of: $0)! < sortOrder.firstIndex(of: $1)! }
+                            let additionalCategories = category.filter { !sortOrder.contains($0) }
+                                .sorted(by: <)
+
+                            return orderedCategories + additionalCategories
+                        }
+                        self.categories = sortedCategories
                     }
                     
                 }
@@ -185,7 +228,7 @@ class AddViewModel: ObservableObject {
     func postLines() {
         guard !isApiCalling else { return }
         isApiCalling = true
-        
+        LoadingManager.shared.update(showLoading: true, loadingType: .floneyLoading)
         bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
         nickname = Keychain.getKeychainValue(forKey: .userNickname) ?? ""
         var moneyDouble : Double = 0
@@ -197,19 +240,22 @@ class AddViewModel: ObservableObject {
         } else {
             print("Cannot convert to Double")
         }
-        let request = LinesRequest(bookKey: bookKey, money: moneyDouble, lineDate: selectedDateStr, flow: flow, asset: asset, line: line, description: description, except: except, nickname: nickname)
+        let request = LinesRequest(bookKey: bookKey, money: moneyDouble, lineDate: selectedDateStr, flow: flow, asset: asset, line: line, description: description, except: except, nickname: nickname, repeatDuration: repeatDuration.rawValue)
         print("내역 추가 request : \(request)")
         dataManager.postLines(request)
             .sink { (dataResponse) in
-                
                 if dataResponse.error != nil {
+                    LoadingManager.shared.update(showLoading: false, loadingType: .floneyLoading)
                     self.isApiCalling = false
-                    self.createAlert(with: dataResponse.error!, retryRequest: {
-                        self.postLines()
-                    })
-                    // 에러 처리
-                    print(dataResponse.error)
+                    if dataResponse.error!.initialError.isSessionTaskError {
+                        AlertManager.shared.update(showAlert: true, message: "요청한 시간이 초과되었습니다.", buttonType: .red)
+                    } else {
+                        self.createAlert(with: dataResponse.error!, retryRequest: {
+                            self.postLines()
+                        })
+                    }
                 } else {
+                    LoadingManager.shared.update(showLoading: false, loadingType: .floneyLoading)
                     self.isApiCalling = false
                     self.lineResult = dataResponse.value!
                     print("--성공--")
@@ -219,12 +265,19 @@ class AddViewModel: ObservableObject {
                 }
             }.store(in: &cancellableSet)
     }
+    func handleUserSelection(_ selection: String, index: Int) {
+        if let durationType = durationMapping[selection] {
+            self.repeatDuration = durationType
+            self.selectedRepeat = selection
+            self.selectedDurationIndex = index
+        }
+    }
     func postCategory() {
         guard !isApiCalling else { return }
         isApiCalling = true
         bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
-        let request = AddCategoryRequest(bookKey: bookKey, parent: root, name: newCategoryName)
-        dataManager.postCategory(request)
+        let request = AddCategoryRequest(parent: root, name: newCategoryName)
+        dataManager.postCategory(request, bookKey: bookKey)
             .sink { (dataResponse) in
                 
                 if dataResponse.error != nil {
@@ -244,21 +297,33 @@ class AddViewModel: ObservableObject {
     }
     
     func deleteCategory() {
-        
+        guard !isApiCalling else { return }
+        isApiCalling = true
         bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
-        let request = DeleteCategoryRequest(bookKey: bookKey, root: root, name: deleteCategoryName)
-        dataManager.deleteCategory(parameters: request)
+        let request = DeleteCategoryRequest(parent: root, name: deleteCategoryName)
+        dataManager.deleteCategory(parameters: request,bookKey: bookKey)
             .sink { [weak self] completion in
                 guard let self = self else {return}
                 switch completion {
                 case .finished:
                     print(" successfully category delete.")
+                    self.alertManager.update(showAlert: true, message: "삭제가 완료되었습니다.", buttonType: .green)
+                    self.isApiCalling = false
                     self.getCategory()
                 case .failure(let error):
-                    self.createAlert(with: error, retryRequest: {
-                        self.deleteCategory()
-                    })
+                    self.isApiCalling = false
+                    //self.createAlert(with: error, retryRequest: {
+                    //    self.deleteCategory()
+                    //})
                     print("Error deleting category: \(error)")
+                    if error.initialError.isSessionTaskError {
+                        AlertManager.shared.update(showAlert: true, message: "요청한 시간이 초과되었습니다.", buttonType: .red)
+                    } else {
+                        // 다른 종류의 에러 처리
+                        self.createAlert(with: error, retryRequest: {
+                            self.deleteCategory()
+                        })
+                    }
                 }
             } receiveValue: { data in
                 // TODO: Handle the received data if necessary.

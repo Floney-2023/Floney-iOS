@@ -1,34 +1,25 @@
 //
-//  CategoryManagementView.swift
+//  ManageRepeatLineView.swift
 //  Floney
 //
-//  Created by 남경민 on 2023/07/11.
+//  Created by 남경민 on 3/6/24.
 //
-
 import SwiftUI
-
-struct CategoryManagementView: View {
+import Combine
+struct ManageRepeatLineView: View {
     let scaler = Scaler.shared
     @Environment(\.presentationMode) var presentationMode
-    var options = ["자산", "지출", "수입", "이체"]
     @State private var selectedOptions = 0
-    @State var list = ["현금", "체크카드", "신용카드", "은행"]
-    @State var state = [true, true, true, false]
-    @State var isShowingAdd = false
-    @Binding var isShowingEditCategory : Bool
+    @State private var selectedRepeatLineId = 0
+    var options = ["지출", "수입", "이체"]
+    @Binding var isShowing : Bool
     @State var editState = false
-    @StateObject var viewModel = AddViewModel()
+    @StateObject var viewModel = ManageRepeatLineViewModel()
     @State var deleteAlert = false
-    @State var title = "분류항목 삭제"
-    @State var message = ""
-    @State var modifyAlert = false
-    @State var modifyTitle = "잠깐!"
-    @State var modifyMessage = "수정된 내용이 저장되지 않았습니다.\n그대로 나가시겠습니까?"
-    @State var showAddButton = true
-    
+    @State var title = "반복 내역 삭제"
+    @State var message = "반복 내역을 삭제하시겠습니까?\n해당 반복의 모든 내역이 삭제됩니다."
     @State private var secondsElapsed = 1
     @State private var timer: Timer?
-    
     var body: some View {
         ZStack {
             VStack(spacing:0) {
@@ -36,10 +27,10 @@ struct CategoryManagementView: View {
                     VStack(alignment:.leading, spacing: 0){
                         HStack{
                             VStack(alignment:.leading, spacing: scaler.scaleHeight(16)) {
-                                Text("분류 항목 관리")
+                                Text("반복 내역")
                                     .font(.pretendardFont(.bold,size:scaler.scaleWidth(24)))
                                     .foregroundColor(.greyScale1)
-                                Text("가계부를 적을 때 선택하는 항목들을\n추가, 삭제 할 수 있어요")
+                                Text("반복 기능을 통해\n편하게 기록해 보세요")
                                     .lineSpacing(4)
                                     .font(.pretendardFont(.medium,size: scaler.scaleWidth(13)))
                                     .foregroundColor(.greyScale6)
@@ -48,12 +39,12 @@ struct CategoryManagementView: View {
                             
                             Rectangle()
                                 .foregroundColor(.clear)
-                                .frame(width:scaler.scaleWidth(86), height:scaler.scaleHeight(76))
+                                .frame(width:scaler.scaleWidth(76), height:scaler.scaleHeight(76))
                                 .background(
-                                    Image("category_management")
+                                    Image("illust_repeat")
                                         .resizable()
                                         .aspectRatio(contentMode: .fill)
-                                        .frame(width:scaler.scaleWidth(86), height:scaler.scaleHeight(76))
+                                        .frame(width:scaler.scaleWidth(76), height:scaler.scaleHeight(76))
                       
                                 )
                             
@@ -92,33 +83,42 @@ struct CategoryManagementView: View {
                     
                     ScrollView(showsIndicators: false) {
                         VStack(alignment: .leading) {
-                            ForEach(viewModel.categories.indices, id: \.self) { i in
+                            ForEach(viewModel.repeatLineList, id: \.self) { (repeatLine:RepeatLineResponse) in
                                 VStack(alignment: .leading, spacing:0) {
-                                    //Spacer()
                                     HStack(spacing:scaler.scaleWidth(12)) {
                                         if editState {
-                                            
                                             Image("icon_delete")
                                                 .onTapGesture {
-                                                    viewModel.deleteCategoryName = viewModel.categories[i]
-                                                    message = "'\(viewModel.deleteCategoryName)' 항목을 삭제하시겠습니까?\n해당 항목으로 작성된 모든 내역이 삭제됩니다."
+                                                    selectedRepeatLineId = repeatLine.id
                                                     self.deleteAlert = true
                                                 }
-                                            
                                         }
-                                        Text("\(viewModel.categories[i])")
-                                            .padding(.leading, scaler.scaleWidth(12))
-                                            .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
+                                        VStack(alignment: .leading, spacing:8) {
+                                            Text("\(repeatLine.description)")
+                                                .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(14)))
+                                                .foregroundColor(.greyScale2)
+                                            HStack(spacing:0) {
+                                                Text(repeatLine.repeatDurationDescription ?? "")
+                                                Text(" ‧ ")
+                                                Text("\(repeatLine.assetSubCategory)")
+                                                Text(" ‧ ")
+                                                Text("\(repeatLine.lineSubCategory)")
+                                            }
+                                            .font(.pretendardFont(.medium, size: scaler.scaleWidth(12)))
+                                            .foregroundColor(.greyScale6)
+                                        }
+                                        .padding(.leading, scaler.scaleWidth(12))
+                                        Spacer()
+                                        Text(repeatLine.money.formattedString)
+                                            .font(.pretendardFont(.bold, size: scaler.scaleWidth(16)))
                                             .foregroundColor(.greyScale2)
+                                            .padding(.trailing, scaler.scaleWidth(12))
                                     }
-                                    .frame(height: scaler.scaleHeight(58))
-                                    //Spacer()
+                                    .frame(height: scaler.scaleHeight(66))
                                     Divider()
                                         .foregroundColor(.greyScale11)
                                 }
-                      
                             }
-                            
                         }
                         .padding(.top, scaler.scaleHeight(16))
                         .padding(.horizontal,scaler.scaleWidth(22))
@@ -127,42 +127,36 @@ struct CategoryManagementView: View {
                 } // VStack
                 .padding(.top, scaler.scaleHeight(32))
             } // VStack
-            .fullScreenCover(isPresented: $isShowingAdd) {
-                AddCategoryView(isShowingAdd: $isShowingAdd, viewModel: viewModel)
-            }
             .edgesIgnoringSafeArea(.bottom)
             .onAppear{
-                viewModel.root = "자산"
-                viewModel.getCategory()
-            }
+                viewModel.categoryType = "OUTCOME"
+                viewModel.getRepeatLine()            }
             .onDisappear {
                 stopTimer()
             }
             .onChange(of: selectedOptions) { newValue in
-                viewModel.root = options[newValue]
-                viewModel.getCategory()
-            }
-            .onChange(of: isShowingAdd) { newValue in
-                viewModel.getCategory()
+                if options[newValue] == "지출" {
+                    viewModel.categoryType = "OUTCOME"
+                } else if options[newValue] == "수입"{
+                    viewModel.categoryType = "INCOME"
+                } else if options[newValue] == "이체"{
+                    viewModel.categoryType = "TRANSFER"
+                }
+                viewModel.getRepeatLine()
             }
             .customNavigationBar(
                 leftView: {
-                Image("icon_back")
-                    .onTapGesture {
-                        if editState {
-                            modifyAlert = true
-                        } else {
-                            isShowingEditCategory = false
+                    Image("icon_back")
+                        .onTapGesture {
+                            isShowing = false
                             self.presentationMode.wrappedValue.dismiss()
-                        }
-                    }
+                                                }
                 },
                 rightView: {
                     Group {
                         if editState {
                             Button {
                                 self.editState = false
-                                self.showAddButton = true
                             } label: {
                                 Text("완료")
                                     .font(.pretendardFont(.regular,size:scaler.scaleWidth(14)))
@@ -172,7 +166,6 @@ struct CategoryManagementView: View {
                         } else {
                             Button {
                                 self.editState = true
-                                self.showAddButton = false
                             } label: {
                                 Text("편집")
                                     .font(.pretendardFont(.regular,size:scaler.scaleWidth(14)))
@@ -182,46 +175,16 @@ struct CategoryManagementView: View {
                     }
                 }
             )
-            if showAddButton {
-                VStack {
-                    Spacer()
-                    Button {
-                        isShowingAdd = true
-                    } label: {
-                        Text("추가하기")
-                            .frame(maxWidth: .infinity)
-                            .frame(height:scaler.scaleHeight(66))
-                            .font(.pretendardFont(.bold, size:scaler.scaleWidth(14)))
-                            .foregroundColor(.white)
-                            .padding(.bottom, scaler.scaleHeight(10))
-                    }
-                        .frame(maxWidth: .infinity)
-                        .frame(height:scaler.scaleHeight(66))
-                        .background(Color.primary1)
-                }
-                .edgesIgnoringSafeArea(.bottom)
-            }
-            
             if deleteAlert {
                 FloneyAlertView(isPresented: $deleteAlert, title:$title, message: $message, leftButtonText:"삭제하기") {
-                    viewModel.deleteCategory()
+                    viewModel.deleteRepeatLine(repeatLineId: self.selectedRepeatLineId)
                     startTimer()
-                }
-                
-            }
-            //MARK: alert
-            if modifyAlert {
-                AlertView(isPresented: $modifyAlert, title: $modifyTitle, message: $modifyMessage) {
-                    isShowingEditCategory = false
-                    self.presentationMode.wrappedValue.dismiss()
                 }
             }
             if viewModel.isApiCalling {
-                CircularProgressView()
+                LoadingView()
             }
-            
-        }// ZStack
-      
+        }
     }
     func startTimer() {
         secondsElapsed = 1
@@ -239,9 +202,8 @@ struct CategoryManagementView: View {
     }
 }
 
-struct CategoryManagementView_Previews: PreviewProvider {
+struct ManageRepeatLineView_Previews: PreviewProvider {
     static var previews: some View {
-        CategoryManagementView(isShowingEditCategory: .constant(true))
+        ManageRepeatLineView(isShowing: .constant(true))
     }
 }
-

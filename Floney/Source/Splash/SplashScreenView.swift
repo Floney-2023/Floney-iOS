@@ -90,7 +90,6 @@ struct SplashScreenView: View {
                 }
                 if userSession.signoutStatus {
                     SuccessSignoutView()
-                    
                 }
             }
         } else {

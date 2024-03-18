@@ -612,6 +612,11 @@ struct CategoryBottomSheet: View {
                     .opacity(0.7)
                     .ignoresSafeArea()
                     .onTapGesture {
+                        if root == "자산" {
+                            selectedAssetIndex = isSelectedAssetTypeIndex
+                        } else {
+                            selectedCategoryIndex = isSelectedCategoryIndex
+                        }
                         isShowing.toggle()
                     }
                 //MARK: content
@@ -928,39 +933,32 @@ struct DayLinesBottomSheet: View {
                                             }
                                             if let line = viewModel.dayLines[index] {
                                                 VStack(alignment: .leading, spacing:scaler.scaleHeight(8)) {
-                                                    Text("\(line.content)")
+                                                    Text("\(line.description)")
                                                         .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(14)))
                                                         .foregroundColor(.greyScale2)
+                                                    
                                                     HStack(spacing:0) {
-                                                        ForEach(Array(line.category.enumerated()), id: \.element) { categoryIndex, category in
-                                                            Text("\(category)")
-                                                                .font(.pretendardFont(.medium, size: scaler.scaleWidth(12)))
-                                                                .foregroundColor(.greyScale6)
-                                                            // 마지막 요소가 아닐 경우에만 점을 추가
-                                                            if categoryIndex < line.category.count - 1 {
-                                                                Text(" ‧ ")
-                                                                    .font(.pretendardFont(.medium, size: scaler.scaleWidth(12)))
-                                                                    .foregroundColor(.greyScale6)
-                                                            }
-                                                        }
-                                                        
-                                                        
+                                                        Text("\(line.assetSubCategory)")
+                                                        Text(" ‧ ")
+                                                        Text("\(line.lineSubCategory)")
                                                     }
+                                                    .font(.pretendardFont(.medium, size: scaler.scaleWidth(12)))
+                                                    .foregroundColor(.greyScale6)
                                                 }
                                                 
                                                 Spacer()
                                                 
-                                                if line.assetType == "INCOME" {
+                                                if line.lineCategory == "INCOME" {
                                                     Text("+\(line.money.formattedString)")
                                                         .font(.pretendardFont(.semiBold, size:scaler.scaleWidth(16)))
                                                         .foregroundColor(.greyScale2)
-                                                } else if line.assetType == "OUTCOME" {
+                                                } else if line.lineCategory == "OUTCOME" {
                                                     Text("-\(line.money.formattedString)")
                                                         .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(16)))
                                                         .foregroundColor(.greyScale2)
                                                     
-                                                } else if line.assetType == "BANK" {
-                                                    Text("-\(line.money.formattedString)")
+                                                } else if line.lineCategory == "TRANSFER" {
+                                                    Text("\(line.money.formattedString)")
                                                         .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(16)))
                                                         .foregroundColor(.greyScale2)
                                                     
@@ -973,13 +971,13 @@ struct DayLinesBottomSheet: View {
                                             self.selectedIndex = index
                                             
                                             if let line = viewModel.dayLines[selectedIndex] {
-                                                if viewModel.dayLines[index]?.assetType == "OUTCOME" {
+                                                if viewModel.dayLines[index]?.lineCategory == "OUTCOME" {
                                                     selectedToggleTypeIndex = 0
                                                     selectedToggleType = "지출"
-                                                } else if viewModel.dayLines[index]?.assetType == "INCOME" {
+                                                } else if viewModel.dayLines[index]?.lineCategory == "INCOME" {
                                                     selectedToggleTypeIndex = 1
                                                     selectedToggleType = "수입"
-                                                } else if viewModel.dayLines[index]?.assetType == "BANK" {
+                                                } else if viewModel.dayLines[index]?.lineCategory == "TRANSFER" {
                                                     selectedToggleTypeIndex = 2
                                                     selectedToggleType = "이체"
                                                 }
@@ -1003,13 +1001,13 @@ struct DayLinesBottomSheet: View {
                                                         selectedOptions : selectedToggleTypeIndex,
                                                         date : viewModel.selectedDateStr,
                                                         money: String(line.money.formattedString),
-                                                        assetType : line.category[0],
-                                                        category: line.category[1],
-                                                        content : line.content,
+                                                        assetType : line.assetSubCategory,
+                                                        category: line.lineSubCategory,
+                                                        content : line.description,
                                                         toggleOnOff: line.exceptStatus,
-                                                        writer: line.userNickName
+                                                        writer: line.writerNickname,
+                                                        repeatDuration: line.repeatDuration
                                                     )
-                                                                                                        
                                                 }
                                                 .transition(.moveAndFade)
                                                 .navigationViewStyle(.stack)
@@ -1714,3 +1712,121 @@ struct SetExcelDurationFlowLayout: View {
         }
     }
 }
+
+struct RepeatDurationBottomSheet: View {
+    let scaler = Scaler.shared
+    var buttonHeight: CGFloat {
+        scaler.scaleHeight(46)
+    }
+    @ObservedObject var viewModel : AddViewModel
+    @State var selectedDurationIndex: Int = 0
+    @Binding var isShowing: Bool
+    var body: some View{
+        ZStack(alignment: .bottom) {
+            if (isShowing) {
+                //MARK: Background
+                Color.black
+                    .opacity(0.7)
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        selectedDurationIndex = viewModel.selectedDurationIndex
+                        isShowing.toggle()
+                    }
+                //MARK: content
+                VStack(spacing:scaler.scaleHeight(18)) {
+                    HStack {
+                        Text("반복 설정")
+                            .foregroundColor(.greyScale1)
+                            .font(.pretendardFont(.bold,size:scaler.scaleWidth(18)))
+                        Spacer()
+                    }
+                    .padding(.top,scaler.scaleHeight(24))
+                    
+                    RepeatDurationFlowLayout(
+                        viewModel: viewModel,
+                        isShowing: $isShowing,
+                        selectedDurationIndex: $selectedDurationIndex
+                    )
+                    Spacer()
+                    ButtonLarge(label: "확인",background: .primary1, textColor: .white, strokeColor: .primary1,  fontWeight: .bold, action: {
+                        viewModel.handleUserSelection(viewModel.durationOptions[selectedDurationIndex], index: selectedDurationIndex)
+                        isShowing.toggle()
+                        
+                    })
+                    .frame(height: buttonHeight)
+  
+                }
+                .padding(.horizontal, scaler.scaleWidth(20))
+                .padding(.bottom, scaler.scaleHeight(30))
+                .transition(.move(edge: .bottom))
+                .background(
+                    Color(.white)
+                )
+                .cornerRadius(12, corners: [.topLeft, .topRight])
+                .frame(height: UIScreen.main.bounds.height / 2) // Screen height is divided by 2
+
+            } // if
+        } //ZStack
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
+        .ignoresSafeArea()
+        .animation(.easeInOut, value: isShowing)
+    }
+}
+
+struct RepeatDurationFlowLayout: View {
+    let scaler = Scaler.shared
+    @ObservedObject var viewModel : AddViewModel
+    @State private var totalWidth = CGFloat.zero
+    @Binding var isShowing: Bool
+    @Binding var selectedDurationIndex : Int
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            GeometryReader { geometry in
+                self.generateContent(in: geometry)
+            }
+        }
+    }
+    private func generateContent(in g: GeometryProxy) -> some View {
+        var width = CGFloat.zero
+        var height = CGFloat.zero
+        var verticalSpacing: CGFloat {
+            scaler.scaleHeight(12)
+        }
+        return ZStack(alignment: .topLeading) {
+            ForEach(viewModel.durationOptions.indices, id: \.self) { index in
+                CategoryButton(
+                    label: viewModel.durationOptions[index],
+                    isSelected: selectedDurationIndex == index,
+                    action: {
+                        selectedDurationIndex = index
+                    }
+                )
+                .padding([.horizontal],scaler.scaleWidth(4))
+                .alignmentGuide(.leading, computeValue: { d in
+                    if (abs(width - d.width) > g.size.width)
+                    {
+                        width = 0
+                        height -= d.height + verticalSpacing
+                    }
+                    let result = width
+                    if index < viewModel.durationOptions.count - 1 {
+                        width -= d.width
+                    } else {
+                        width = 0
+                    }
+                    return result
+                })
+                .alignmentGuide(.top, computeValue: { _ in
+                    let result = height
+                    if width == 0 {
+                        //if the item is the last in the row
+                        height = 0
+                    }
+                    return result
+                })
+            }
+        }
+    }
+}
+

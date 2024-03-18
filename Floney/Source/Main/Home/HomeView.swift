@@ -7,13 +7,13 @@
 import SwiftUI
 import Kingfisher
 struct HomeView: View {
+    private let adCoordinator = AdCoordinator(pageType: "HOME")
+    private let rewardedAdCoordinator = RewardedAdCoordinator()
     @Environment(\.scenePhase) private var scenePhase
-    
     var bookService = BookExistenceViewModel.shared
     let scaler = Scaler.shared
     @StateObject var alertManager = AlertManager.shared
     @StateObject var viewModel = CalendarViewModel()
-    //var encryptionManager = CryptManager()
     var profileManager = ProfileManager.shared
     @Binding var showingTabbar : Bool
     @Binding var mainAddViewStatus : Bool
@@ -38,54 +38,92 @@ struct HomeView: View {
                         .padding(.top, scaler.scaleHeight(24))
                     Spacer()
                     NavigationLink(destination: SettingBookView(showingTabbar: $showingTabbar, isOnSettingBook: $isOnSettingBook),isActive: $isOnSettingBook){
-                        if let bookUrl = viewModel.bookProfileImage {
-                            let url = URL(string : bookUrl)
-                            KFImage(url)
-                                .placeholder { //플레이스 홀더 설정
-                                    Image("book_profile_34")
-                                }.retry(maxCount: 3, interval: .seconds(5)) //재시도
-                                .onSuccess { success in //성공
-                                    print("succes: \(success)")
-                                }
-                                .onFailure { error in //실패
-                                    print("failure: \(error)")
-                                }
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(width: scaler.scaleWidth(34), height: scaler.scaleWidth(34))
-                                .clipShape(Circle())
-                                .overlay(Circle().stroke(Color.greyScale10, lineWidth: scaler.scaleWidth(1)))
-                                .padding(.top, scaler.scaleHeight(16))
-                                .onTapGesture {
-                                    self.showingTabbar = false
-                                    self.isOnSettingBook = true
-                                }
-                        } else {
-                            Image("book_profile_34")
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(width: scaler.scaleWidth(34), height: scaler.scaleWidth(34))
-                                .clipShape(Circle())
-                                .overlay(Circle().stroke(Color.greyScale10, lineWidth: scaler.scaleWidth(1)))
-                                .padding(.top, scaler.scaleHeight(16))
-                                .onTapGesture {
-                                    self.showingTabbar = false
-                                    self.isOnSettingBook = true
-                                }
+                        HStack(alignment: .center, spacing:4) {
+                            HStack(spacing:-2) {
+                                Text(viewModel.bookInfoResult.bookName)
+                                    .foregroundColor(.white)
+                                    .font(.pretendardFont(.semiBold, size: 11))
+                                    .padding(.horizontal, 8)
+                                    .padding(.vertical, 6)
+                                    .background(Color.primary4)
+                                    .cornerRadius(4)
+                                Image("img_polygon")
+                            }
+                            .padding(.top, scaler.scaleHeight(18))
+                            if let bookUrl = viewModel.bookProfileImage {
+                                let url = URL(string : bookUrl)
+                                KFImage(url)
+                                    .placeholder { //플레이스 홀더 설정
+                                        Image("book_profile_34")
+                                    }.retry(maxCount: 3, interval: .seconds(5)) //재시도
+                                    .onSuccess { success in //성공
+                                        print("succes: \(success)")
+                                    }
+                                    .onFailure { error in //실패
+                                        print("failure: \(error)")
+                                    }
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width: scaler.scaleWidth(34), height: scaler.scaleWidth(34))
+                                    .clipShape(Circle())
+                                    .overlay(Circle().stroke(Color.greyScale10, lineWidth: scaler.scaleWidth(1)))
+                                    .padding(.top, scaler.scaleHeight(16))
+                                    .onTapGesture {
+                                        if rewardedAdCoordinator.canShowAd() && adCoordinator.canShowHomeAd() {
+                                            adCoordinator.showAd()
+                                            adCoordinator.onAdDismiss = {
+                                                self.showingTabbar = false
+                                                self.isOnSettingBook = true
+                                            }
+                                        }
+                                        else {
+                                            self.showingTabbar = false
+                                            self.isOnSettingBook = true
+                                        }
+
+                                    }
+                            } else {
+                                Image("book_profile_34")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width: scaler.scaleWidth(34), height: scaler.scaleWidth(34))
+                                    .clipShape(Circle())
+                                    .overlay(Circle().stroke(Color.greyScale10, lineWidth: scaler.scaleWidth(1)))
+                                    .padding(.top, scaler.scaleHeight(16))
+                                    .onTapGesture {
+                                        if rewardedAdCoordinator.canShowAd() && adCoordinator.canShowHomeAd() {
+                                            adCoordinator.showAd()
+                                            adCoordinator.onAdDismiss = {
+                                                self.showingTabbar = false
+                                                self.isOnSettingBook = true
+                                            }
+                                        }
+                                        else {
+                                            self.showingTabbar = false
+                                            self.isOnSettingBook = true
+                                        }
+
+                                    }
+                            }
                         }
                     }
                 }
                 .padding(.horizontal, scaler.scaleWidth(20))
                 
-                // ScrollView(showsIndicators: false)
-                // {
-                // MARK: 캘린더 뷰 - viewModel로 상태 추적
                 CustomCalendarView(viewModel: viewModel, isShowingMonthPicker: $isShowingMonthPicker, isShowingBottomSheet: $isShowingBottomSheet,isShowingAddView: $isShowingAddView)
-                    //.disabled(bookService.bookDisabled)
-                // }
-                
             }
-       
+            if rewardedAdCoordinator.canShowAd() {
+                VStack{
+                    Spacer()
+                    GADBanner()
+                        .frame(width: UIScreen.main.bounds.width, height: 50, alignment: .center)
+                        .padding(.bottom, scaler.scaleHeight(76))
+                    
+                }
+                .background(Color.clear)
+                .ignoresSafeArea()
+            }
+        
             // MARK: Month Year Picker
             if isShowingMonthPicker {
                 MonthYearPickerBottomSheet(viewModel: viewModel, availableChangeTabbarStatus: true, showingTab: $showingTabbar, isShowing: $isShowingMonthPicker)
@@ -94,13 +132,11 @@ struct HomeView: View {
             if isShowingBottomSheet {
                 DayLinesBottomSheet(viewModel: viewModel, isShowing: $isShowingBottomSheet, isShowingAddView: $isShowingAddView)
             }
-            
         }.fullScreenCover(isPresented: $isShowingAddView) {
             NavigationView {
                 AddView.init(isPresented: $isShowingAddView, date: viewModel.selectedDateStr)
             }.navigationViewStyle(.stack)
         }
-
         .onAppear {
             self.showingTabbar = true
         }
@@ -265,8 +301,11 @@ struct CustomCalendarView: View {
             .padding(.bottom, scaler.scaleHeight(16))
             
             if viewModel.selectedView == 0 {
-                MonthCalendar(viewModel: viewModel, isShowingMonthPicker: $isShowingMonthPicker, isShowingBottomSheet: $isShowingBottomSheet)
-                    .padding(.horizontal, scaler.scaleWidth(20))
+                ScrollView(showsIndicators: false) {
+                    MonthCalendar(viewModel: viewModel, isShowingMonthPicker: $isShowingMonthPicker, isShowingBottomSheet: $isShowingBottomSheet)
+                        .padding(.horizontal, scaler.scaleWidth(20))
+                        .padding(.bottom, scaler.scaleHeight(70))
+                }
             } else if viewModel.selectedView == 1 {
                 DayLinesView(date: $viewModel.dayLinesDate, isShowingAddView: $isShowingAddView, viewModel: viewModel)
                     .padding(.horizontal, scaler.scaleWidth(20))
@@ -396,7 +435,7 @@ struct MonthCalendar: View {
                                                     ForEach(viewModel.expenses, id: \.self) { (expense: CalendarExpenses) in
                                                         if viewModel.extractYearMonth(from: viewModel.selectedDateStr) {
                                                             let extractedDay = viewModel.extractDay(from: expense.date)
-                                                            let assetType = expense.assetType
+                                                            let assetType = expense.categoryType
                                                             let money = expense.money
                                                             
                                                             if extractedDay == day && assetType == "OUTCOME" && money > 0 {

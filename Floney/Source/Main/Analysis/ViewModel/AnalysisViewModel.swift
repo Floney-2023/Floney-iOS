@@ -239,14 +239,10 @@ class AnalysisViewModel : ObservableObject {
     }
     
     func analysisAsset(date: String) {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
         var date = ""
-
-        let dateString = dateFormatter.string(from: selectedDate)
         let components = Calendar.current.dateComponents([.year, .month], from: selectedDate)
         if let year = components.year, let month = components.month {
-            date = "\(year)-\(String(format: "%02d", month))-01"
+            date = "\(year)-\(String(format: "%02d", month))"
         }
         let bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
         let request = BudgetAssetRequest(bookKey: bookKey, date: date)
@@ -267,18 +263,15 @@ class AnalysisViewModel : ObservableObject {
                     LoadingManager.shared.update(showLoading: false, loadingType: .progressLoading)
                     var asset = dataResponse.value ?? AssetResponse(difference: 0, initAsset: 0, currentAsset: 0, assetInfo: [:])
 
-                    let assetInfoDictionary = asset.assetInfo  // 예: [String: AssetInfo] 타입의 딕셔너리
+                    let assetInfoDictionary = asset.assetInfo  // 예: [String: Double] 타입의 딕셔너리
 
                     self.assetList = assetInfoDictionary.compactMap { key, value in
                         let dateFormatter = DateFormatter()
-                        dateFormatter.dateFormat = "yyyy-MM-dd"
+                        dateFormatter.dateFormat = "yyyy-MM"
 
                         guard let date = dateFormatter.date(from: key) else { return nil }
-                        let monthFormatter = DateFormatter()
-                        monthFormatter.dateFormat = "yyyy-MM"
-
-                        let monthString = monthFormatter.string(from: date)
-                        return Asset(assetMoney: value.assetMoney,month: monthString)
+                        let monthString = dateFormatter.string(from: date)
+                        return Asset(assetMoney: value,month: monthString)
                     }
                     // assetList 정렬
                     self.assetList.sort { first, second in

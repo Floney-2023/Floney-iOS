@@ -11,10 +11,12 @@ struct AddView: View {
     let scaler = Scaler.shared
     var buttonHandler = ButtonClickHandler()
     @StateObject var viewModel = AddViewModel()
+    @StateObject var repeatLineViewModel = ManageRepeatLineViewModel()
     @State var changedStatus = false
     @State var showAlert = false
     @State var title = "잠깐!"
     @State var message = "수정된 내용이 저장되지 않았습니다.\n그대로 나가시겠습니까?"
+    @State var alertStatus = "modify"
     
     @State var currency = CurrencyManager.shared.currentCurrencyUnit
     
@@ -22,7 +24,7 @@ struct AddView: View {
     @State var isShowingBottomSheet = false
     @State var isShowingEditCategory = false
     @State var moneyMaxLength = 11
-    @State var maxLength = 12
+    @State var maxLength = 20
     @State var isSelectedAssetTypeIndex = 0
     @State var isSelectedCategoryIndex = 0
     @State var root = "" // 자산, 지출, 수입, 이체
@@ -37,42 +39,37 @@ struct AddView: View {
     @ObservedObject var alertManager = AlertManager.shared
 
     @State var date : String = "2023-06-20"
-    @State var money : String = "" {
-        didSet {
-            self.changedStatus = true
-        }
-    }
-
+    @State var originalDate: String = ""
+    @State var money : String = ""
+    let defaultMoney: String = ""
+    @State var originalMoney: String = ""
     let numberFormatter: NumberFormatter = {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
         return formatter
     }()
-    @State var assetType = "자산을 선택하세요" {
-        didSet {
-            self.changedStatus = true
-        }
-    }
-    @State var category = "분류를 선택하세요" {
-        didSet {
-            self.changedStatus = true
-        }
-    }
+    @State var assetType = "자산을 선택하세요"
+    let defaultAssetType: String = "자산을 선택하세요"
+    @State var originalAssetType: String = ""
+    @State var category = "분류를 선택하세요"
+    let defaultCategory: String = "분류를 선택하세요"
+    @State var originalCategory: String = ""
 
-    @State var content = "" {
-        didSet {
-            self.changedStatus = true
-        }
-    }
+    @State var content = ""
+    let defaultContent: String = ""
+    @State var originalContent: String = ""
 
-    @State var toggleOnOff = false {
-        didSet {
-            self.changedStatus = true
-        }
-    }
+    @State var toggleOnOff = false
+    let defaultToggleOnOff: Bool = false
+    @State var originalToggleOnOff: Bool = false
 
     @State var writer = ""
     @State var isShowingCalendarBottomSheet = false
+    @State var isShowingRepeatDurationBottomSheet = false
+    @State var presentActionSheet = false
+    @State var repeatDuration : String?
+    @State private var secondsElapsed = 1
+    @State private var timer: Timer?
 
     var formattedValue: Double? {
             let valueWithoutCommas = money.replacingOccurrences(of: ",", with: "")
@@ -84,22 +81,61 @@ struct AddView: View {
         ZStack {
             VStack(spacing:0) {
                 //MARK: Top
-                HStack {
+                HStack(alignment:.top) {
                     Image("icon_close")
                         .resizable()
                         .frame(width: scaler.scaleWidth(24), height : scaler.scaleWidth(24))
                         .onTapGesture {
-                            if changedStatus {
-                                self.showAlert = true
-                            } else {
-                                self.isPresented.toggle()
+                            title = "잠깐!"
+                            message = "수정된 내용이 저장되지 않았습니다.\n그대로 나가시겠습니까?"
+                            alertStatus = "modify"
+                            if mode == "add" {
+                                self.checkForChangesWithDefaultAndShowAlert()
+                            } else if mode == "check" {
+                                self.checkForChangesAndShowAlert()
                             }
                         }
                     Spacer()
+                    if mode == "add" {
+                        Group {
+                            if viewModel.repeatDuration == .none {
+                                VStack(spacing:2) {
+                                    
+                                    Image("icon_repeat")
+                                        .resizable()
+                                        .frame(width: scaler.scaleWidth(24), height : scaler.scaleWidth(24))
+                                    Text("")
+                                        .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(12)))
+                                        .foregroundColor(.primary1)
+                                }
+                            } else {
+                                VStack(spacing:2) {
+                                    Image("icon_repeat_green")
+                                        .resizable()
+                                        .frame(width: scaler.scaleWidth(24), height : scaler.scaleWidth(24))
+                                    Text(viewModel.selectedRepeat)
+                                        .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(12)))
+                                        .foregroundColor(.primary1)
+                                }
+                            }
+                        }
+                        .onTapGesture {
+                            isShowingRepeatDurationBottomSheet = true
+                        }
+                    } else if mode == "check" {
+                        if let repeatDuration = self.repeatDuration {
+                            if repeatDuration != RepeatDurationType.none.rawValue {
+                                Text(viewModel.durationMappingText[repeatDuration]!)
+                                    .font(.pretendardFont(.regular, size: scaler.scaleWidth(14)))
+                                    .foregroundColor(.greyScale6)
+                            }
+                        }
+                    }
                 }
+                .frame(height: scaler.scaleHeight(38))
                 .padding(.top, scaler.scaleHeight(22))
                 .padding(.bottom, scaler.scaleHeight(52))
-                .padding(.leading, scaler.scaleWidth(20))
+                .padding(.horizontal, scaler.scaleWidth(20))
 
                 VStack(spacing:scaler.scaleHeight(16)){
                     //MARK: 금액
@@ -298,9 +334,9 @@ struct AddView: View {
                                 }
                                 viewModel.except = toggleOnOff // 제외 여부
                                 viewModel.postLines()
-                     
+                                startTimer()
                             }
-                            
+                                                        
                         } label: {
                             Text("저장하기")
                                 .frame(height:scaler.scaleHeight(66))
@@ -321,8 +357,14 @@ struct AddView: View {
                     //MARK: 삭제/저장하기 버튼
                     HStack(spacing:0) {
                         Button {
-                            viewModel.bookLineKey = lineId // PK
-                            viewModel.deleteLine()
+                            if self.repeatDuration == RepeatDurationType.none.rawValue {
+                                title = "삭제하기"
+                                message = "삭제 하시겠습니까?"
+                                alertStatus = "delete"
+                                self.showAlert = true 
+                            } else {
+                                presentActionSheet = true
+                            }
                         } label: {
                             Text("삭제")
                                 .frame(width: scaler.scaleWidth(118))
@@ -373,22 +415,70 @@ struct AddView: View {
             .onAppear(perform : UIApplication.shared.hideKeyboard)
             .onAppear{
                 viewModel.convertStringToDate(date)
+                setOriginalValue()
+            }
+            .onDisappear {
+                self.stopTimer()
             }
             .onChange(of: viewModel.successAdd) { newValue in
                 self.isPresented = false
             }
+            .onChange(of: repeatLineViewModel.successStatus) { newValue in
+                self.isPresented = false
+            }
+            .actionSheet(isPresented: $presentActionSheet) {
+                ActionSheet(
+                    title: Text("이 내역을 삭제하시겠습니까? 반복되는 내역입니다."),
+                    message: nil,
+                    buttons: [
+                        .default(
+                            Text("이 내역만 삭제"),
+                            action: {
+                                viewModel.bookLineKey = lineId
+                                viewModel.deleteLine()
+                            }
+                        ),
+                        .default(
+                            Text("이후 모든 내역 삭제"),
+                            action: {
+                                repeatLineViewModel.deleteAllRepeatLine(bookLineKey: lineId)
+                                startTimer()
+                            }
+                        ),
+                        .cancel(
+                            Text("취소")
+                        )
+                    ]
+                )
+            }
             
             CustomAlertView(message: AlertManager.shared.message, type: $alertManager.buttontType, isPresented: $alertManager.showAlert)
+            
             CategoryBottomSheet(root: $root, categories: $viewModel.categories, isShowing: $isShowingBottomSheet, isSelectedAssetTypeIndex: $isSelectedAssetTypeIndex, isSelectedAssetType: $assetType, isSelectedCategoryIndex: $isSelectedCategoryIndex, isSelectedCategory: $category, isShowingEditCategory: $isShowingEditCategory)
             
             AddCalendarBottomSheet(isShowing: $isShowingCalendarBottomSheet, viewModel: viewModel)
             
+            RepeatDurationBottomSheet(viewModel: viewModel, selectedDurationIndex: viewModel.selectedDurationIndex, isShowing: $isShowingRepeatDurationBottomSheet)
             //MARK: alert
             if showAlert {
                 AlertView(isPresented: $showAlert, title: $title, message: $message) {
-                    self.isPresented = false
+                    if alertStatus == "modify" {
+                        self.isPresented = false
+                    } else {
+                        viewModel.bookLineKey = lineId
+                        viewModel.deleteLine()
+                    }
                 }
             }
+            
+            if mode == "add" && viewModel.repeatDuration != .none && viewModel.isApiCalling {
+                LoadingView()
+            }
+            
+            if mode == "check" && repeatLineViewModel.isApiCalling {
+                LoadingView()
+            }
+
 
             NavigationLink(destination: CategoryManagementView(isShowingEditCategory: $isShowingEditCategory), isActive: $isShowingEditCategory) {
                 EmptyView()
@@ -422,6 +512,55 @@ struct AddView: View {
             return formatter.string(from: number) ?? ""
         }
         return string
+    }
+    func startTimer() {
+        secondsElapsed = 1
+        timer?.invalidate() // 기존 타이머가 있다면 중지
+        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+            DispatchQueue.main.async {
+                self.secondsElapsed += 1
+            }
+        }
+    }
+    
+    func stopTimer() {
+        timer?.invalidate()
+        timer = nil
+    }
+    func checkForChangesAndShowAlert() {
+        if date != originalDate ||
+            money != originalMoney ||
+            content != originalContent ||
+            assetType != originalAssetType ||
+            category != originalCategory ||
+            toggleOnOff != originalToggleOnOff {
+            // 변경된 값이 있으면 알러트 표시
+            self.showAlert = true
+        } else {
+            self.isPresented.toggle()
+        }
+    }
+    func checkForChangesWithDefaultAndShowAlert() {
+        if date != originalDate ||
+            money != defaultMoney ||
+            content != defaultContent ||
+            assetType != defaultAssetType ||
+            category != defaultCategory ||
+            toggleOnOff != defaultToggleOnOff {
+            // 변경된 값이 있으면 알러트 표시
+            self.showAlert = true
+        } else {
+            self.isPresented.toggle()
+        }
+    }
+        
+    func setOriginalValue() {
+        self.originalDate = self.date
+        self.originalMoney = self.money
+        self.originalContent = self.content
+        self.originalAssetType = self.assetType
+        self.originalCategory = self.category
+        self.originalToggleOnOff = self.toggleOnOff
     }
 }
 

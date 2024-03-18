@@ -8,25 +8,13 @@
 import SwiftUI
 
 struct SetContentCalcView: View {
+    private let adCoordinator = AdCoordinator(pageType: "SETTLEMENT")
+    private let rewardedAdCoordinator = RewardedAdCoordinator()
     let scaler = Scaler.shared
     @Binding var isShowingTabbar : Bool
     @Binding var isShowingCalc : Bool
     @State var currency = CurrencyManager.shared.currentCurrency
     @ObservedObject var viewModel : CalculateViewModel
-    /*
-    @State var list : [SettlementResponse] = [
-        SettlementResponse(money: 6000, category: ["체크카드","카페/간식"], assetType: "OUTCOME", content: "Cake", userEmail: "", img: nil, isSelected: true),
-        SettlementResponse(money: 4500, category: ["체크카드","카페/간식"], assetType: "OUTCOME", content: "커피",userEmail: "", img: nil, isSelected: false),
-        SettlementResponse(money: 6000, category: ["체크카드","카페/간식"], assetType: "OUTCOME", content: "Cake", userEmail: "", img: nil, isSelected: true),
-        SettlementResponse(money: 4500, category: ["체크카드","카페/간식"], assetType: "OUTCOME", content: "커피",userEmail: "", img: nil, isSelected: false),
-        SettlementResponse(money: 6000, category: ["체크카드","카페/간식"], assetType: "OUTCOME", content: "Cake", userEmail: "", img: nil, isSelected: true),
-        SettlementResponse(money: 4500, category: ["체크카드","카페/간식"], assetType: "OUTCOME", content: "커피",userEmail: "", img: nil, isSelected: false),
-        SettlementResponse(money: 6000, category: ["체크카드","카페/간식"], assetType: "OUTCOME", content: "Cake", userEmail: "", img: nil, isSelected: true),
-        SettlementResponse(money: 4500, category: ["체크카드","카페/간식"], assetType: "OUTCOME", content: "커피",userEmail: "", img: nil, isSelected: false),
-        SettlementResponse(money: 6000, category: ["체크카드","카페/간식"], assetType: "OUTCOME", content: "Cake", userEmail: "", img: nil, isSelected: true),
-        SettlementResponse(money: 4500, category: ["체크카드","카페/간식"], assetType: "OUTCOME", content: "커피",userEmail: "", img: nil, isSelected: false)
-        
-    ]*/
     @Binding var pageCount : Int
     var pageCountAll = 4
     
@@ -149,7 +137,15 @@ struct SetContentCalcView: View {
                                 LoadingManager.shared.update(showLoading: true, loadingType: .floneyLoading)
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                                     LoadingManager.shared.update(showLoading: false, loadingType: .floneyLoading)
-                                    pageCount = 4
+                                    if rewardedAdCoordinator.canShowAd() && adCoordinator.canShowSettlementAd() {
+                                        adCoordinator.showAd()
+                                        adCoordinator.onAdDismiss = {
+                                            pageCount = 4
+                                        }
+                                    } else {
+                                        pageCount = 4
+                                    }
+                                    
                                 }
                             }
                         }

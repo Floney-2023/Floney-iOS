@@ -180,7 +180,7 @@ class SettingBookViewModel : ObservableObject {
         let components = Calendar.current.dateComponents([.year, .month], from: selectedDate)
         var date = ""
         if let year = components.year, let month = components.month {
-            date = "\(year)-\(String(format: "%02d", month))-01"
+            date = "\(year)-\(String(format: "%02d", month))"
         }
         let bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
         let request = BudgetAssetRequest(bookKey: bookKey, date: date)
