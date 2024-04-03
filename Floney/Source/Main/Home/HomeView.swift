@@ -68,20 +68,6 @@ struct HomeView: View {
                                     .clipShape(Circle())
                                     .overlay(Circle().stroke(Color.greyScale10, lineWidth: scaler.scaleWidth(1)))
                                     .padding(.top, scaler.scaleHeight(16))
-                                    .onTapGesture {
-                                        if rewardedAdCoordinator.canShowAd() && adCoordinator.canShowHomeAd() {
-                                            adCoordinator.showAd()
-                                            adCoordinator.onAdDismiss = {
-                                                self.showingTabbar = false
-                                                self.isOnSettingBook = true
-                                            }
-                                        }
-                                        else {
-                                            self.showingTabbar = false
-                                            self.isOnSettingBook = true
-                                        }
-
-                                    }
                             } else {
                                 Image("book_profile_34")
                                     .resizable()
@@ -90,21 +76,23 @@ struct HomeView: View {
                                     .clipShape(Circle())
                                     .overlay(Circle().stroke(Color.greyScale10, lineWidth: scaler.scaleWidth(1)))
                                     .padding(.top, scaler.scaleHeight(16))
-                                    .onTapGesture {
-                                        if rewardedAdCoordinator.canShowAd() && adCoordinator.canShowHomeAd() {
-                                            adCoordinator.showAd()
-                                            adCoordinator.onAdDismiss = {
-                                                self.showingTabbar = false
-                                                self.isOnSettingBook = true
-                                            }
-                                        }
-                                        else {
-                                            self.showingTabbar = false
-                                            self.isOnSettingBook = true
-                                        }
-
-                                    }
+                                
                             }
+                        }
+                        .onTapGesture {
+                            /*
+                            if rewardedAdCoordinator.canShowAd() && adCoordinator.canShowHomeAd() {
+                                adCoordinator.showAd()
+                                adCoordinator.onAdDismiss = {
+                                    self.showingTabbar = false
+                                    self.isOnSettingBook = true
+                                }
+                            }
+                            else {*/
+                                self.showingTabbar = false
+                                self.isOnSettingBook = true
+                            //}
+
                         }
                     }
                 }
@@ -112,6 +100,7 @@ struct HomeView: View {
                 
                 CustomCalendarView(viewModel: viewModel, isShowingMonthPicker: $isShowingMonthPicker, isShowingBottomSheet: $isShowingBottomSheet,isShowingAddView: $isShowingAddView)
             }
+            /*
             if rewardedAdCoordinator.canShowAd() {
                 VStack{
                     Spacer()
@@ -122,7 +111,7 @@ struct HomeView: View {
                 }
                 .background(Color.clear)
                 .ignoresSafeArea()
-            }
+            }*/
         
             // MARK: Month Year Picker
             if isShowingMonthPicker {
