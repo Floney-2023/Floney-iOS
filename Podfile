@@ -19,6 +19,7 @@ target 'Floney' do
   pod 'Firebase/Messaging' 
   pod 'FirebaseStorage'
   pod 'FirebaseStorageSwift'
+  pod 'Firebase/RemoteConfig'
 
   pod 'GoogleSignIn'
   pod 'BoringSSL-GRPC', :modular_headers => false

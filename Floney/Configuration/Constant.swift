@@ -14,4 +14,6 @@ struct Constant {
 #else
     static let BASE_URL = "https://floney-server.site"
 #endif
+    
+    static let appID = "id6462989500"
 }
