@@ -54,6 +54,7 @@
 		2F28C2E22A556BC100894F67 /* SetContentCalcView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F28C2E12A556BC100894F67 /* SetContentCalcView.swift */; };
 		2F28C2E42A55723900894F67 /* CompleteCalcView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F28C2E32A55723900894F67 /* CompleteCalcView.swift */; };
 		2F28C2E72A55814200894F67 /* CalculateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F28C2E62A55814200894F67 /* CalculateViewModel.swift */; };
+		2F2C63FD2BBD3C4E005E8132 /* AppVersionCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F2C63FC2BBD3C4E005E8132 /* AppVersionCheck.swift */; };
 		2F3886902A98F83C00FCED6D /* LineModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F38868F2A98F83C00FCED6D /* LineModel.swift */; };
 		2F3886932A9D088C00FCED6D /* SubscriptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F3886922A9D088C00FCED6D /* SubscriptionView.swift */; };
 		2F3886962A9D15F100FCED6D /* QA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F3886952A9D15F100FCED6D /* QA.swift */; };
@@ -271,6 +272,7 @@
 		2F28C2E12A556BC100894F67 /* SetContentCalcView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetContentCalcView.swift; sourceTree = "<group>"; };
 		2F28C2E32A55723900894F67 /* CompleteCalcView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompleteCalcView.swift; sourceTree = "<group>"; };
 		2F28C2E62A55814200894F67 /* CalculateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculateViewModel.swift; sourceTree = "<group>"; };
+		2F2C63FC2BBD3C4E005E8132 /* AppVersionCheck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppVersionCheck.swift; sourceTree = "<group>"; };
 		2F38868F2A98F83C00FCED6D /* LineModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineModel.swift; sourceTree = "<group>"; };
 		2F3886922A9D088C00FCED6D /* SubscriptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionView.swift; sourceTree = "<group>"; };
 		2F3886952A9D15F100FCED6D /* QA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QA.swift; sourceTree = "<group>"; };
@@ -1008,6 +1010,7 @@
 				2F20C4B82B2056BA007DBA36 /* ButtonClickHandler.swift */,
 				2F3FBA832B6A3DAB00AB0063 /* GADBanner.swift */,
 				2F5A06912B85C70900BA46EC /* AdCoordinator.swift */,
+				2F2C63FC2BBD3C4E005E8132 /* AppVersionCheck.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -1811,6 +1814,7 @@
 				2FEA2BBA29BA066100DE8E54 /* AnalysisView.swift in Sources */,
 				2FD7F3C929B1E52C00B99CAA /* SplashScreenView.swift in Sources */,
 				2F1A74B62ACBFAAA004FE3D6 /* NotiDataManager.swift in Sources */,
+				2F2C63FD2BBD3C4E005E8132 /* AppVersionCheck.swift in Sources */,
 				2FF7247E2A5F0EC4008B9333 /* Date.swift in Sources */,
 				2F28C2E02A55689000894F67 /* SetPeriodCalcView.swift in Sources */,
 				2FB3DA6E2A5C264800E1486D /* SettlementRequest.swift in Sources */,
@@ -1964,7 +1968,7 @@
 				CODE_SIGN_ENTITLEMENTS = Floney/Floney.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 42;
+				CURRENT_PROJECT_VERSION = 50;
 				DEVELOPMENT_ASSET_PATHS = "\"Floney/Preview Content\"";
 				DEVELOPMENT_TEAM = 949V9B6RLN;
 				ENABLE_PREVIEWS = YES;
@@ -1987,7 +1991,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.1;
+				MARKETING_VERSION = 2.0.1;
 				NEW_SETTING1 = "";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -2102,7 +2106,7 @@
 				CODE_SIGN_ENTITLEMENTS = Floney/Floney.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 42;
+				CURRENT_PROJECT_VERSION = 50;
 				DEVELOPMENT_ASSET_PATHS = "\"Floney/Preview Content\"";
 				DEVELOPMENT_TEAM = 949V9B6RLN;
 				ENABLE_PREVIEWS = YES;
@@ -2124,7 +2128,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.1;
+				MARKETING_VERSION = 2.0.1;
 				NEW_SETTING1 = "";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
