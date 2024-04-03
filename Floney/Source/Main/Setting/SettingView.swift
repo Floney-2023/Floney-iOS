@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SettingView: View {
     let scaler = Scaler.shared
-
+    let version = AppVersionCheck.appVersion ?? "1.0.0"
     var body: some View {
         VStack(spacing:0) {
             NavigationLink(destination : SettingNotiView()) {
@@ -33,7 +33,7 @@ struct SettingView: View {
                 .frame(height: scaler.scaleHeight(54))
             }
             HStack {
-                Text("Version 1.1")
+                Text("Version \(version)")
                     .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
                     .foregroundColor(.greyScale2)
                 Spacer()
