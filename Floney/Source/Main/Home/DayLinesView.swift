@@ -225,13 +225,25 @@ struct DayLinesDetailView : View {
                                             Text("\(line.description)")
                                                 .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(14)))
                                                 .foregroundColor(.greyScale2)
-                                            HStack(spacing:0) {
-                                                Text("\(line.assetSubCategory)")
-                                                Text(" ‧ ")
-                                                Text("\(line.lineSubCategory)")
+                                            HStack(spacing:8) {
+                                                if line.repeatDuration != RepeatDurationType.none.rawValue {
+                                                    Text("반복")
+                                                        .padding(.horizontal ,scaler.scaleWidth(6))
+                                                        .padding(.vertical,scaler.scaleWidth(4))
+                                                        .font(.pretendardFont(.bold, size: scaler.scaleWidth(10)))
+                                                        .foregroundColor(.primary2)
+                                                        .background(Color.primary10)
+                                                        .cornerRadius(6)
+                                                }
+                                                HStack(spacing:0) {
+                                                    Text("\(line.assetSubCategory)")
+                                                    Text(" ‧ ")
+                                                    Text("\(line.lineSubCategory)")
+                                                }
+                                                .font(.pretendardFont(.medium, size: scaler.scaleWidth(12)))
+                                                .foregroundColor(.greyScale6)
+                                                Spacer()
                                             }
-                                            .font(.pretendardFont(.medium, size: scaler.scaleWidth(12)))
-                                            .foregroundColor(.greyScale6)
                                         }
                                         
                                         Spacer()
