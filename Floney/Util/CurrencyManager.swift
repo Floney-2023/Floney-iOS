@@ -74,7 +74,7 @@ class CurrencyManager: ObservableObject {
         case "PHP":
             currentCurrency = "₱"
             hasDecimalPoint = true
-        case "THE":
+        case "THB":
             currentCurrency = "฿"
             hasDecimalPoint = true
         case "IDR":
@@ -96,7 +96,7 @@ class CurrencyManager: ObservableObject {
             currentCurrency = "Fr"
             hasDecimalPoint = true
         case "INR":
-            currentCurrency = "฿"
+            currentCurrency = "₹"
             hasDecimalPoint = true
         case "PLN":
             currentCurrency = "zł"
@@ -114,9 +114,5 @@ class CurrencyManager: ObservableObject {
             currentCurrency = "원"  // 혹은 기본값으로 다른 문자열을 반환
             hasDecimalPoint = false
         }
-        
-        print("Currency :", currentCurrency)
-        print("has decimal point :", hasDecimalPoint)
     }
-    
 }

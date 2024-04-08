@@ -15,7 +15,9 @@ struct SetCurrencyUnitView: View {
     @State var title = "가계부가 초기화됩니다"
     @State var message = ""
     @State var selectedUnit = ""
-    @State var currencyUnits = ["KRW(원)","USD($)","EUR(€)","JPY(¥)","CNY(¥)","GBP(£)"]
+    @State var currencyUnits = ["KRW(원)","USD($)","EUR(€)","JPY(¥)","CNY(¥)","GBP(£)",
+                                "VND(đ)", "PHP(₱)", "THB(฿)", "IDR(Rp)", "MYR(RM)", "TRY(₺)", "RUB(₽)", "HUF(Ft)", "CHF(Fr)", "INR(₹)", "PLN(zł)", "CZK(Kč)", "DKK(kr)", "NGN(₦)"
+]
     @State var isSelected = 0
     @State var newCurrency : String = ""
 
