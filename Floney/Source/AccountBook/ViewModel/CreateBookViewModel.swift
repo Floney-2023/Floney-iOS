@@ -149,7 +149,7 @@ class CreateBookViewModel: ObservableObject {
                                 Keychain.setKeychain(self.bookName, forKey: .bookName)
                                 let fcmManager = FCMDataManager()
                                 fcmManager.fetchTokensFromDatabase(bookKey: self.result.bookKey, title: "플로니", body: "\(Keychain.getKeychainValue(forKey: .userNickname) ?? "")님이 \(self.bookName)의 가계부에 들어왔어요.", completion: {})
-                                self.postNoti(title: "플로니", body: "\(Keychain.getKeychainValue(forKey: .userNickname) ?? "")님이 \(self.bookName)의 가계부에 들어왔어요.", imgUrl: "icon_join")
+                                self.postNoti(title: "플로니", body: "\(Keychain.getKeychainValue(forKey: .userNickname) ?? "")님이 \(self.bookName)의 가계부에 들어왔어요.", imgUrl: "icon_noti_join")
                                 self.isNextToEnterBook = true
                             }
                         }.store(in: &self.cancellableSet)
@@ -185,7 +185,7 @@ class CreateBookViewModel: ObservableObject {
                         Keychain.setKeychain(self.bookName, forKey: .bookName)
                         let fcmManager = FCMDataManager()
                         fcmManager.fetchTokensFromDatabase(bookKey: self.result.bookKey, title: "플로니", body: "\(Keychain.getKeychainValue(forKey: .userNickname) ?? "")님이 \(self.bookName)의 가계부에 들어왔어요.",completion: {})
-                        self.postNoti(title: "플로니", body: "\(Keychain.getKeychainValue(forKey: .userNickname) ?? "")님이 \(self.bookName)의 가계부에 들어왔어요.", imgUrl: "icon_join")
+                        self.postNoti(title: "플로니", body: "\(Keychain.getKeychainValue(forKey: .userNickname) ?? "")님이 \(self.bookName)의 가계부에 들어왔어요.", imgUrl: "icon_noti_join")
                         
                         BookExistenceViewModel.shared.getBookExistence()
                     }

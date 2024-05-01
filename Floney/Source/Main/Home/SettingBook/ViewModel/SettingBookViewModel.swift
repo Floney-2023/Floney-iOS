@@ -483,7 +483,7 @@ class SettingBookViewModel : ObservableObject {
                     }
 
                     dispatchGroup.enter()
-                    self.postNoti(title: "플로니", body: "\(Keychain.getKeychainValue(forKey: .userNickname) ?? "")님이 \(self.bookName)의 가계부를 나갔어요.", imgUrl: "icon_exit") {
+                    self.postNoti(title: "플로니", body: "\(Keychain.getKeychainValue(forKey: .userNickname) ?? "")님이 \(self.bookName)의 가계부를 나갔어요.", imgUrl: "icon_noti_exit") {
                         dispatchGroup.leave()
                     }
                     dispatchGroup.enter()

@@ -133,7 +133,7 @@ class CalculateViewModel : ObservableObject {
                 } else {
                     print("--정산 요청 성공--")
                     self.fcmManager.fetchTokensFromDatabase(bookKey: bookKey, title: "플로니", body: "\(bookName)의 가계부를 정산해보세요!",completion: {})
-                    self.postNoti(title: "플로니", body: "\(bookName)의 가계부를 정산해보세요!", imgUrl: "noti_settlement")
+                    self.postNoti(title: "플로니", body: "\(bookName)의 가계부를 정산해보세요!", imgUrl: "icon_noti_settlement")
                     self.settlementResult = dataResponse.value!
                     print(self.settlementResult)
                     self.userCount = self.settlementResult.userCount
