@@ -99,23 +99,42 @@ struct AddView: View {
                     if mode == "add" {
                         Group {
                             if viewModel.repeatDuration == .none {
-                                VStack(spacing:2) {
-                                    
-                                    Image("icon_repeat")
-                                        .resizable()
-                                        .frame(width: scaler.scaleWidth(24), height : scaler.scaleWidth(24))
-                                    Text("")
-                                        .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(12)))
-                                        .foregroundColor(.primary1)
+                                HStack(spacing:10) {
+                                    VStack(spacing:2) {
+                                        Image("icon_favorites")
+                                            .resizable()
+                                            .frame(width: scaler.scaleWidth(24), height : scaler.scaleWidth(24))
+                                        Text("")
+                                            .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(12)))
+                                            .foregroundColor(.primary1)
+                                    }
+                                    VStack(spacing:2) {
+                                        Image("icon_repeat")
+                                            .resizable()
+                                            .frame(width: scaler.scaleWidth(24), height : scaler.scaleWidth(24))
+                                        Text("")
+                                            .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(12)))
+                                            .foregroundColor(.primary1)
+                                    }
                                 }
                             } else {
-                                VStack(spacing:2) {
-                                    Image("icon_repeat_green")
-                                        .resizable()
-                                        .frame(width: scaler.scaleWidth(24), height : scaler.scaleWidth(24))
-                                    Text(viewModel.selectedRepeat)
-                                        .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(12)))
-                                        .foregroundColor(.primary1)
+                                HStack(spacing:10) {
+                                    VStack(spacing:2) {
+                                        Image("icon_favorites")
+                                            .resizable()
+                                            .frame(width: scaler.scaleWidth(24), height : scaler.scaleWidth(24))
+                                        Text("")
+                                            .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(12)))
+                                            .foregroundColor(.primary1)
+                                    }
+                                    VStack(spacing:2) {
+                                        Image("icon_repeat_green")
+                                            .resizable()
+                                            .frame(width: scaler.scaleWidth(24), height : scaler.scaleWidth(24))
+                                        Text(viewModel.selectedRepeat)
+                                            .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(12)))
+                                            .foregroundColor(.primary1)
+                                    }
                                 }
                             }
                         }
