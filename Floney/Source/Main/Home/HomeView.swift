@@ -80,7 +80,7 @@ struct HomeView: View {
                             }
                         }
                         .onTapGesture {
-                            /*
+                            
                             if rewardedAdCoordinator.canShowAd() && adCoordinator.canShowHomeAd() {
                                 adCoordinator.showAd()
                                 adCoordinator.onAdDismiss = {
@@ -88,10 +88,10 @@ struct HomeView: View {
                                     self.isOnSettingBook = true
                                 }
                             }
-                            else {*/
+                            else {
                                 self.showingTabbar = false
                                 self.isOnSettingBook = true
-                            //}
+                            }
 
                         }
                     }
@@ -100,7 +100,7 @@ struct HomeView: View {
                 
                 CustomCalendarView(viewModel: viewModel, isShowingMonthPicker: $isShowingMonthPicker, isShowingBottomSheet: $isShowingBottomSheet,isShowingAddView: $isShowingAddView)
             }
-            /*
+            
             if rewardedAdCoordinator.canShowAd() {
                 VStack{
                     Spacer()
@@ -111,7 +111,7 @@ struct HomeView: View {
                 }
                 .background(Color.clear)
                 .ignoresSafeArea()
-            }*/
+            }
         
             // MARK: Month Year Picker
             if isShowingMonthPicker {
