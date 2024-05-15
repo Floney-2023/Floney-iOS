@@ -106,6 +106,7 @@ struct HomeView: View {
                     Spacer()
                     GADBanner()
                         .frame(width: UIScreen.main.bounds.width, height: 50, alignment: .center)
+                        .frame(minWidth: UIScreen.main.bounds.width)
                         .padding(.bottom, scaler.scaleHeight(76))
                     
                 }
