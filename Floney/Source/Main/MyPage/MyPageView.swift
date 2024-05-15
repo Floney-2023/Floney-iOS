@@ -170,13 +170,14 @@ struct MyPageView: View {
                         } else {*/
                             HStack(spacing:scaler.scaleWidth(12)){
                                 VStack {
+                                    
                                     HStack {
-                                        Text("앱스토어에서\n별점을 남겨주세요") //광고 제거하기
+                                        Text("광고 제거하기") //앱스토어에서\n별점을 남겨주세요
                                             .font(.pretendardFont(.bold, size: scaler.scaleWidth(14)))
                                             .foregroundColor(.greyScale2)
                                         Spacer()
                                     }
-                                    /*
+                                    
                                     Spacer()
                                     HStack {
                                         VStack(alignment: .leading, spacing: scaler.scaleHeight(5)) {
@@ -188,9 +189,9 @@ struct MyPageView: View {
                                                 .foregroundColor(.greyScale3)
                                         }
                                         Spacer()
-                                    }*/
+                                    }
                                     Spacer()
-                                    Text("리뷰쓰기") // 광고 보기
+                                    Text("광고 보기") // 광고 보기
                                         .font(.pretendardFont(.regular, size: scaler.scaleWidth(12)))
                                         .foregroundColor(.greyScale3)
                                         
