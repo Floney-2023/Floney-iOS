@@ -137,15 +137,15 @@ struct SetContentCalcView: View {
                                 LoadingManager.shared.update(showLoading: true, loadingType: .floneyLoading)
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                                     LoadingManager.shared.update(showLoading: false, loadingType: .floneyLoading)
-                                    /*
+                                    
                                     if rewardedAdCoordinator.canShowAd() && adCoordinator.canShowSettlementAd() {
                                         adCoordinator.showAd()
                                         adCoordinator.onAdDismiss = {
                                             pageCount = 4
                                         }
-                                    } else {*/
+                                    } else {
                                         pageCount = 4
-                                    //}
+                                    }
                                     
                                 }
                             }
