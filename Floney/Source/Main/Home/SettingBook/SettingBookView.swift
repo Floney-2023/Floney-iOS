@@ -235,6 +235,19 @@ struct SettingBookView: View {
                                     self.isShowingRepeatLineView.toggle()
                                 }
                             }
+                            
+                            NavigationLink(destination :ManageRepeatLineView( isShowing: $isShowingRepeatLineView), isActive: $isShowingRepeatLineView) {
+                                HStack {
+                                    Text("즐겨찾기 내역 설정")
+                                        .font(.pretendardFont(.regular, size: scaler.scaleWidth(14)))
+                                        .foregroundColor(.greyScale2)
+                                    Spacer()
+                                }
+                                .frame(height:scaler.scaleHeight(46))
+                                .onTapGesture {
+                                    self.isShowingRepeatLineView.toggle()
+                                }
+                            }
                         }
 
                         if viewModel.role == "방장" {

@@ -12,6 +12,11 @@
 		2F146A622A14B5AF0089AB3D /* TokenReissueRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F146A612A14B5AF0089AB3D /* TokenReissueRequest.swift */; };
 		2F146A642A14B5BD0089AB3D /* TokenReissueResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F146A632A14B5BD0089AB3D /* TokenReissueResponse.swift */; };
 		2F146A6A2A14B6980089AB3D /* TokenReissueViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F146A692A14B6980089AB3D /* TokenReissueViewModel.swift */; };
+		2F15523C2BFCBCA900639F9D /* ManageFavoriteLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F15523B2BFCBCA900639F9D /* ManageFavoriteLineView.swift */; };
+		2F15523E2BFCBFC700639F9D /* ManageFavoriteLineViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F15523D2BFCBFC700639F9D /* ManageFavoriteLineViewModel.swift */; };
+		2F1552402BFCBFFD00639F9D /* ManageFavoriteLineDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F15523F2BFCBFFD00639F9D /* ManageFavoriteLineDataManager.swift */; };
+		2F1552422BFCC07000639F9D /* ManageFavoriteLineRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1552412BFCC07000639F9D /* ManageFavoriteLineRequest.swift */; };
+		2F1552442BFCC0AD00639F9D /* ManageFavoriteLineResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1552432BFCC0AD00639F9D /* ManageFavoriteLineResponse.swift */; };
 		2F1614552A07CFE20029E9A9 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1614542A07CFE20029E9A9 /* Keychain.swift */; };
 		2F1614572A07F2A60029E9A9 /* EnterBookCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1614562A07F2A60029E9A9 /* EnterBookCodeView.swift */; };
 		2F1614592A07F3880029E9A9 /* EnterBookView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1614582A07F3880029E9A9 /* EnterBookView.swift */; };
@@ -228,6 +233,11 @@
 		2F146A612A14B5AF0089AB3D /* TokenReissueRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenReissueRequest.swift; sourceTree = "<group>"; };
 		2F146A632A14B5BD0089AB3D /* TokenReissueResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenReissueResponse.swift; sourceTree = "<group>"; };
 		2F146A692A14B6980089AB3D /* TokenReissueViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenReissueViewModel.swift; sourceTree = "<group>"; };
+		2F15523B2BFCBCA900639F9D /* ManageFavoriteLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageFavoriteLineView.swift; sourceTree = "<group>"; };
+		2F15523D2BFCBFC700639F9D /* ManageFavoriteLineViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageFavoriteLineViewModel.swift; sourceTree = "<group>"; };
+		2F15523F2BFCBFFD00639F9D /* ManageFavoriteLineDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageFavoriteLineDataManager.swift; sourceTree = "<group>"; };
+		2F1552412BFCC07000639F9D /* ManageFavoriteLineRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageFavoriteLineRequest.swift; sourceTree = "<group>"; };
+		2F1552432BFCC0AD00639F9D /* ManageFavoriteLineResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageFavoriteLineResponse.swift; sourceTree = "<group>"; };
 		2F1614542A07CFE20029E9A9 /* Keychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
 		2F1614562A07F2A60029E9A9 /* EnterBookCodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterBookCodeView.swift; sourceTree = "<group>"; };
 		2F1614582A07F3880029E9A9 /* EnterBookView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterBookView.swift; sourceTree = "<group>"; };
@@ -640,6 +650,7 @@
 			children = (
 				2F28C2D72A4ED61B00894F67 /* SettingBookViewModel.swift */,
 				2F4DBDB42B97813B0070760B /* ManageRepeatLineViewModel.swift */,
+				2F15523D2BFCBFC700639F9D /* ManageFavoriteLineViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -649,6 +660,7 @@
 			children = (
 				2F28C2D52A4ED60E00894F67 /* SettingBookDataManager.swift */,
 				2F4DBDB62B9781580070760B /* ManageRepeatLineDataManager.swift */,
+				2F15523F2BFCBFFD00639F9D /* ManageFavoriteLineDataManager.swift */,
 			);
 			path = DataManager;
 			sourceTree = "<group>";
@@ -661,6 +673,8 @@
 				2FE7B2EB2AB4400300B83345 /* Budget.swift */,
 				2F4DBDB82B97816D0070760B /* ManageRepeatLineRequest.swift */,
 				2F4DBDBA2B97817D0070760B /* ManageRepeatLineResponse.swift */,
+				2F1552412BFCC07000639F9D /* ManageFavoriteLineRequest.swift */,
+				2F1552432BFCC0AD00639F9D /* ManageFavoriteLineResponse.swift */,
 			);
 			path = Entity;
 			sourceTree = "<group>";
@@ -906,6 +920,7 @@
 				2FC3B1D82A25F9F200572804 /* SetBookProfileImageView.swift */,
 				2FAD92FE2A8335C900285C25 /* SetCurrencyUnitView.swift */,
 				2F4DBDB22B977EB70070760B /* ManageRepeatLineView.swift */,
+				2F15523B2BFCBCA900639F9D /* ManageFavoriteLineView.swift */,
 			);
 			path = SettingBook;
 			sourceTree = "<group>";
@@ -1716,10 +1731,12 @@
 				2F146A622A14B5AF0089AB3D /* TokenReissueRequest.swift in Sources */,
 				2FFA302629EE81C000412F83 /* CreateBookView.swift in Sources */,
 				2FE7B2EC2AB4400300B83345 /* Budget.swift in Sources */,
+				2F15523C2BFCBCA900639F9D /* ManageFavoriteLineView.swift in Sources */,
 				2F0D01182A03CEB600DAF21D /* SignUpViewModel.swift in Sources */,
 				2FF724992A6D5164008B9333 /* NotificationView.swift in Sources */,
 				2FEA2BA729B8969E00DE8E54 /* WelcomeView.swift in Sources */,
 				2FF25C9929E80D7E00737346 /* SetBookNameView.swift in Sources */,
+				2F1552442BFCC0AD00639F9D /* ManageFavoriteLineResponse.swift in Sources */,
 				2F531ACC2AAF4C9200862014 /* UIImage.swift in Sources */,
 				2F76884A2AA1E1C400862A88 /* IAPHelper.swift in Sources */,
 				2F16145E2A07F4CA0029E9A9 /* BookCodeRequest.swift in Sources */,
@@ -1792,6 +1809,7 @@
 				2FF724942A67D6D7008B9333 /* ProfileManager.swift in Sources */,
 				2F3886962A9D15F100FCED6D /* QA.swift in Sources */,
 				2FE23F732A4187DA009FA8CA /* LinesResponse.swift in Sources */,
+				2F1552422BFCC07000639F9D /* ManageFavoriteLineRequest.swift in Sources */,
 				2FD7F39C29B1E26D00B99CAA /* FloneyApp.swift in Sources */,
 				2FC3B1E22A321B1F00572804 /* ImagePicker.swift in Sources */,
 				2F1614622A07F5FE0029E9A9 /* SendBookCodeViewModel.swift in Sources */,
@@ -1804,6 +1822,7 @@
 				2F1A74B32ACBF966004FE3D6 /* NotiRequest.swift in Sources */,
 				2FB3DA7E2A5C92F700E1486D /* AnalysisViewModel.swift in Sources */,
 				2F28C2DA2A4ED63900894F67 /* SettingBookRequest.swift in Sources */,
+				2F1552402BFCBFFD00639F9D /* ManageFavoriteLineDataManager.swift in Sources */,
 				2F1614782A0A32AF0029E9A9 /* CalendarResponse.swift in Sources */,
 				2FE7B2EA2AB32F1A00B83345 /* ContentTextField.swift in Sources */,
 				2FD7F3B629B1E42400B99CAA /* Constant.swift in Sources */,
@@ -1811,6 +1830,7 @@
 				2FB3DA6C2A5C25FD00E1486D /* CalculateDataManager.swift in Sources */,
 				2F76886C2AA7DA5900862A88 /* CurrencyManager.swift in Sources */,
 				2FE7B2E22AB1D6CF00B83345 /* CustomError.swift in Sources */,
+				2F15523E2BFCBFC700639F9D /* ManageFavoriteLineViewModel.swift in Sources */,
 				2FEA2BBA29BA066100DE8E54 /* AnalysisView.swift in Sources */,
 				2FD7F3C929B1E52C00B99CAA /* SplashScreenView.swift in Sources */,
 				2F1A74B62ACBFAAA004FE3D6 /* NotiDataManager.swift in Sources */,
