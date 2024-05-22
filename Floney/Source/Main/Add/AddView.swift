@@ -24,6 +24,7 @@ struct AddView: View {
     @Binding var isPresented: Bool
     @State var isShowingBottomSheet = false
     @State var isShowingEditCategory = false
+    @State var isShowingFavorite = false
     @State var moneyMaxLength = 11
     @State var maxLength = 20
     @State var isSelectedAssetTypeIndex = 0
@@ -506,7 +507,7 @@ struct AddView: View {
                         .default(
                             Text("즐겨찾기 내역 보기"),
                             action: {
-                                
+                                self.isShowingFavorite = true
                             }
                         ),
                         .cancel(
@@ -545,6 +546,10 @@ struct AddView: View {
 
 
             NavigationLink(destination: CategoryManagementView(isShowingEditCategory: $isShowingEditCategory), isActive: $isShowingEditCategory) {
+                EmptyView()
+            }
+            
+            NavigationLink(destination: ManageFavoriteLineView(isShowing: $isShowingFavorite), isActive: $isShowingFavorite) {
                 EmptyView()
             }
         } // ZStack

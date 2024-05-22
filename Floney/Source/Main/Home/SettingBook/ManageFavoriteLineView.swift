@@ -17,12 +17,23 @@ struct ManageFavoriteLineView: View {
     @State var editState = false
     @StateObject var viewModel = ManageFavoriteLineViewModel()
     @State var deleteAlert = false
+    @State var addAlert = false
     @State var title = "삭제하기"
     @State var message = "삭제하시겠습니까?"
     @State private var secondsElapsed = 1
     @State private var timer: Timer?
     @State var showAddButton = true
     @State var isShowingAdd = false
+    @State var showAddView = false
+    
+    @State var id = 0
+    @State var selectedToggleType = ""
+    @State var selectedToggleTypeIndex = 0
+    @State var money : Double = 0.0
+    @State var lineCategory = ""
+    @State var assetSubCategory = ""
+    @State var lineSubCategory = ""
+    @State var description = ""
     var body: some View {
         ZStack {
             VStack(spacing:0) {
@@ -106,6 +117,8 @@ struct ManageFavoriteLineView: View {
                                                 Image("icon_delete")
                                                     .onTapGesture {
                                                         selectedFavoriteLineId = favoriteLine.id
+                                                        title = "삭제하기"
+                                                        message = "삭제하시겠습니까?"
                                                         self.deleteAlert = true
                                                     }
                                             }
@@ -131,6 +144,29 @@ struct ManageFavoriteLineView: View {
                                         .frame(height: scaler.scaleHeight(66))
                                         Divider()
                                             .foregroundColor(.greyScale11)
+                                    }
+                                    .onTapGesture {
+                                        title = "즐겨찾기"
+                                        message = "해당 내역을 불러오겠습니까?"
+                                        lineCategory = favoriteLine.lineCategoryName
+                                        money = favoriteLine.money
+                                        assetSubCategory = favoriteLine.assetSubcategoryName
+                                        lineSubCategory = favoriteLine.lineSubcategoryName
+                                        description = favoriteLine.description
+                                        
+                                        if lineCategory == "지출" {
+                                            selectedToggleTypeIndex = 0
+                                            selectedToggleType = "지출"
+                                        } else if lineCategory == "수입" {
+                                            selectedToggleTypeIndex = 1
+                                            selectedToggleType = "수입"
+                                        } else if lineCategory == "이체" {
+                                            selectedToggleTypeIndex = 2
+                                            selectedToggleType = "이체"
+                                        }
+
+                                        
+                                        addAlert = true
                                     }
                                 }
                             }
@@ -196,6 +232,22 @@ struct ManageFavoriteLineView: View {
                     }
                 }
             )
+            .fullScreenCover(isPresented: $showAddView) {
+                NavigationView {
+                    AddView(
+                        isPresented: $showAddView,
+                        mode : "add",
+                        toggleType : selectedToggleType, // 지출, 수입, 이체
+                        selectedOptions : selectedToggleTypeIndex,
+                        money: String(money.formattedString),
+                        assetType : assetSubCategory,
+                        category: lineSubCategory,
+                        content : description
+                    )
+                }
+                .transition(.moveAndFade)
+                .navigationViewStyle(.stack)
+            }
             if showAddButton {
                 VStack {
                     Spacer()
@@ -218,6 +270,11 @@ struct ManageFavoriteLineView: View {
             if deleteAlert {
                 AlertView(isPresented: $deleteAlert, title: $title, message: $message, okColor: .alertBlue) {
                     viewModel.deleteFavoriteLine(favoriteLineId: selectedFavoriteLineId)
+                }
+            }
+            if addAlert {
+                AlertView(isPresented: $addAlert, title: $title, message: $message, okColor: .alertBlue) {
+                    showAddView = true
                 }
             }
         }
