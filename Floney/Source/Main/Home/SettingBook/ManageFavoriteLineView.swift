@@ -11,7 +11,7 @@ struct ManageFavoriteLineView: View {
     let scaler = Scaler.shared
     @Environment(\.presentationMode) var presentationMode
     @State private var selectedOptions = 0
-    @State private var selectedRepeatLineId = 0
+    @State private var selectedFavoriteLineId = 0
     var options = ["지출", "수입", "이체"]
     @Binding var isShowing : Bool
     @State var editState = false
@@ -105,7 +105,7 @@ struct ManageFavoriteLineView: View {
                                             if editState {
                                                 Image("icon_delete")
                                                     .onTapGesture {
-                                                        selectedRepeatLineId = favoriteLine.id
+                                                        selectedFavoriteLineId = favoriteLine.id
                                                         self.deleteAlert = true
                                                     }
                                             }
@@ -217,11 +217,8 @@ struct ManageFavoriteLineView: View {
             }
             if deleteAlert {
                 AlertView(isPresented: $deleteAlert, title: $title, message: $message, okColor: .alertBlue) {
-                    //delete
+                    viewModel.deleteFavoriteLine(favoriteLineId: selectedFavoriteLineId)
                 }
-            }
-            if viewModel.isApiCalling {
-                LoadingView()
             }
         }
     }

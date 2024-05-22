@@ -11,6 +11,7 @@ import Combine
 protocol ManageFavoriteLineProtocol {
     func getFavoriteLine(_ parameters:FavoriteLineRequest) -> AnyPublisher<DataResponse<[FavoriteLineResponse], NetworkError>, Never>
     func addFavoriteLine(_ parameters:AddFavoriteLineRequest, bookKey: String) -> AnyPublisher<DataResponse<FavoriteLineResponse, NetworkError>, Never>
+    func deleteFavoriteLine(parameters: DeleteFavoriteLineRequest) -> AnyPublisher<Void, NetworkError>
 }
 
 class ManageFavoriteLineService {
@@ -59,5 +60,40 @@ extension ManageFavoriteLineService: ManageFavoriteLineProtocol {
             }
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
+    }
+    
+    func deleteFavoriteLine(parameters: DeleteFavoriteLineRequest) -> AnyPublisher<Void, NetworkError> {
+        let favoriteId = parameters.favoriteId
+        let url = "\(Constant.BASE_URL)/books/\(parameters.bookKey)/favorites/\(favoriteId)"
+        let token = Keychain.getKeychainValue(forKey: .accessToken) ?? ""
+        return AF.request(url,
+                          method: .delete,
+                          parameters: nil,
+                          encoding : JSONEncoding.default,
+                          headers: ["Authorization":"Bearer \(token)"])
+        .validate()
+        .publishData()
+        .tryMap { result in
+            if let statusCode = result.response?.statusCode {
+                print("Status Code: \(statusCode)")
+                if statusCode == 204 {
+                    return
+                } else {
+                    // Handle error based on status code
+                    let backendError = result.data.flatMap { try? JSONDecoder().decode(BackendError.self, from: $0)}
+                    if let backendError = backendError {
+                        throw NetworkError(initialError: result.error!, backendError: backendError)
+                    } else {
+                        throw NetworkError(initialError: result.error!, backendError: nil)
+                    }
+                }
+            } else {
+                throw NetworkError(initialError: result.error!, backendError: nil)
+            }
+        }
+        .mapError { error in
+            return error as! NetworkError
+        }
+        .eraseToAnyPublisher()
     }
 }

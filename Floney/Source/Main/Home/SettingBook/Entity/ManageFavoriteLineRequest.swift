@@ -18,3 +18,8 @@ struct AddFavoriteLineRequest : Encodable {
     var lineSubcategoryName: String
     var assetSubcategoryName: String
 }
+
+struct DeleteFavoriteLineRequest: Encodable {
+    let bookKey: String
+    let favoriteId: Int
+}

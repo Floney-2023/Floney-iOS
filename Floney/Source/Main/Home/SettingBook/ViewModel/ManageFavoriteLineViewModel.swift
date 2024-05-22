@@ -102,6 +102,34 @@ class ManageFavoriteLineViewModel : ObservableObject {
                 }
             }.store(in: &cancellableSet)
     }
+    
+    func deleteFavoriteLine(favoriteLineId: Int) {
+        guard !isApiCalling else { return }
+        isApiCalling = true
+        bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
+        let request = DeleteFavoriteLineRequest(bookKey: bookKey, favoriteId: favoriteLineId)
+        dataManager.deleteFavoriteLine(parameters: request)
+            .sink { completion in
+                switch completion {
+                case .finished:
+                    self.isApiCalling = false
+                    self.successStatus = true
+                    self.alertManager.update(showAlert: true, message: "삭제가 완료되었습니다.", buttonType: .green)
+                    self.getFavoriteLine()
+                case .failure(let error):
+                    print(error)
+                    self.isApiCalling = false
+                    
+                    self.createAlert(with: error, retryRequest: {
+                        self.deleteFavoriteLine(favoriteLineId: favoriteLineId)
+                    })
+                    
+                }
+            } receiveValue: { data in
+                
+            }
+            .store(in: &cancellableSet)
+    }
 
     
     func createAlert( with error: NetworkError, retryRequest: @escaping () -> Void) {
