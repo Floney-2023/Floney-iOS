@@ -181,6 +181,9 @@ struct ManageFavoriteLineView: View {
             .fullScreenCover(isPresented: $isShowingAdd) {
                 AddFavoriteLineView(viewModel: viewModel,isPresented: $isShowingAdd)
             }
+            .onChange(of: isShowingAdd) { newValue in
+                viewModel.getFavoriteLine()
+            }
             .edgesIgnoringSafeArea(.bottom)
             .onAppear{
                 viewModel.categoryType = "OUTCOME"
