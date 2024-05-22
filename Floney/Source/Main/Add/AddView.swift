@@ -12,6 +12,7 @@ struct AddView: View {
     var buttonHandler = ButtonClickHandler()
     @StateObject var viewModel = AddViewModel()
     @StateObject var repeatLineViewModel = ManageRepeatLineViewModel()
+    @StateObject var favoriteViewModel = ManageFavoriteLineViewModel()
     @State var changedStatus = false
     @State var showAlert = false
     @State var title = "잠깐!"
@@ -23,6 +24,7 @@ struct AddView: View {
     @Binding var isPresented: Bool
     @State var isShowingBottomSheet = false
     @State var isShowingEditCategory = false
+    @State var isShowingFavorite = false
     @State var moneyMaxLength = 11
     @State var maxLength = 20
     @State var isSelectedAssetTypeIndex = 0
@@ -70,6 +72,8 @@ struct AddView: View {
     @State var repeatDuration : String?
     @State private var secondsElapsed = 1
     @State private var timer: Timer?
+    
+    @State var presentFavoriteActionSheet = false
 
     var formattedValue: Double? {
             let valueWithoutCommas = money.replacingOccurrences(of: ",", with: "")
@@ -99,28 +103,56 @@ struct AddView: View {
                     if mode == "add" {
                         Group {
                             if viewModel.repeatDuration == .none {
-                                VStack(spacing:2) {
-                                    
-                                    Image("icon_repeat")
-                                        .resizable()
-                                        .frame(width: scaler.scaleWidth(24), height : scaler.scaleWidth(24))
-                                    Text("")
-                                        .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(12)))
-                                        .foregroundColor(.primary1)
+                                HStack(spacing:10) {
+                                    VStack(spacing:2) {
+                                        Image("icon_favorites")
+                                            .resizable()
+                                            .frame(width: scaler.scaleWidth(24), height : scaler.scaleWidth(24))
+                                        Text("")
+                                            .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(12)))
+                                            .foregroundColor(.primary1)
+                                    }
+                                    .onTapGesture {
+                                        presentFavoriteActionSheet = true
+                                    }
+                                    VStack(spacing:2) {
+                                        Image("icon_repeat")
+                                            .resizable()
+                                            .frame(width: scaler.scaleWidth(24), height : scaler.scaleWidth(24))
+                                        Text("")
+                                            .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(12)))
+                                            .foregroundColor(.primary1)
+                                    }
+                                    .onTapGesture {
+                                        isShowingRepeatDurationBottomSheet = true
+                                    }
                                 }
                             } else {
-                                VStack(spacing:2) {
-                                    Image("icon_repeat_green")
-                                        .resizable()
-                                        .frame(width: scaler.scaleWidth(24), height : scaler.scaleWidth(24))
-                                    Text(viewModel.selectedRepeat)
-                                        .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(12)))
-                                        .foregroundColor(.primary1)
+                                HStack(spacing:10) {
+                                    VStack(spacing:2) {
+                                        Image("icon_favorites")
+                                            .resizable()
+                                            .frame(width: scaler.scaleWidth(24), height : scaler.scaleWidth(24))
+                                        Text("")
+                                            .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(12)))
+                                            .foregroundColor(.primary1)
+                                    }
+                                    .onTapGesture {
+                                        presentFavoriteActionSheet = true
+                                    }
+                                    VStack(spacing:2) {
+                                        Image("icon_repeat_green")
+                                            .resizable()
+                                            .frame(width: scaler.scaleWidth(24), height : scaler.scaleWidth(24))
+                                        Text(viewModel.selectedRepeat)
+                                            .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(12)))
+                                            .foregroundColor(.primary1)
+                                    }
+                                    .onTapGesture {
+                                        isShowingRepeatDurationBottomSheet = true
+                                    }
                                 }
                             }
-                        }
-                        .onTapGesture {
-                            isShowingRepeatDurationBottomSheet = true
                         }
                     } else if mode == "check" {
                         if let repeatDuration = self.repeatDuration {
@@ -378,7 +410,6 @@ struct AddView: View {
                         .background(Color.greyScale2)
                         Button {
                             if viewModel.isVaildAdd(money: money, asset: assetType, category: category) {
-                                
                                 viewModel.bookLineKey = lineId // PK
                                 viewModel.money = money // 금액
                                 viewModel.flow = toggleType // 수입, 지출, 이체
@@ -451,6 +482,40 @@ struct AddView: View {
                     ]
                 )
             }
+            .actionSheet(isPresented: $presentFavoriteActionSheet) {
+                ActionSheet(
+                    title: Text("즐겨찾기에 추가하시겠습니까?"),
+                    message: nil,
+                    buttons: [
+                        .default(
+                            Text("즐겨찾기에 추가"),
+                            action: {
+                                if favoriteViewModel.isVaildAdd(money: money, asset: assetType, category: category) {
+                                    favoriteViewModel.money = money
+                                    favoriteViewModel.lineCategoryName = toggleType
+                                    favoriteViewModel.lineSubcategoryName = category
+                                    favoriteViewModel.assetSubcategoryName = assetType
+                                    if content.isEmpty {
+                                        favoriteViewModel.description = category
+                                    } else {
+                                        favoriteViewModel.description = content // 내용
+                                    }
+                                    favoriteViewModel.addFavoriteLine()
+                                }
+                            }
+                        ),
+                        .default(
+                            Text("즐겨찾기 내역 보기"),
+                            action: {
+                                self.isShowingFavorite = true
+                            }
+                        ),
+                        .cancel(
+                            Text("취소")
+                        )
+                    ]
+                )
+            }
             
             CustomAlertView(message: AlertManager.shared.message, type: $alertManager.buttontType, isPresented: $alertManager.showAlert)
             
@@ -481,6 +546,10 @@ struct AddView: View {
 
 
             NavigationLink(destination: CategoryManagementView(isShowingEditCategory: $isShowingEditCategory), isActive: $isShowingEditCategory) {
+                EmptyView()
+            }
+            
+            NavigationLink(destination: ManageFavoriteLineView(isShowing: $isShowingFavorite), isActive: $isShowingFavorite) {
                 EmptyView()
             }
         } // ZStack

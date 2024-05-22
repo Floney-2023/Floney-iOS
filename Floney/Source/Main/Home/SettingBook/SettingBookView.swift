@@ -38,7 +38,7 @@ struct SettingBookView: View {
     @State var isShowingExcelDutationBottomSheet = false
     
     @State var isShowingRepeatLineView = false
-    
+    @State var isShowingFavoriteLineView = false
     var body: some View {
         ZStack {
             ScrollView {
@@ -233,6 +233,19 @@ struct SettingBookView: View {
                                 .frame(height:scaler.scaleHeight(46))
                                 .onTapGesture {
                                     self.isShowingRepeatLineView.toggle()
+                                }
+                            }
+                            
+                            NavigationLink(destination :ManageFavoriteLineView(isShowing: $isShowingFavoriteLineView), isActive: $isShowingFavoriteLineView) {
+                                HStack {
+                                    Text("즐겨찾기 내역 설정")
+                                        .font(.pretendardFont(.regular, size: scaler.scaleWidth(14)))
+                                        .foregroundColor(.greyScale2)
+                                    Spacer()
+                                }
+                                .frame(height:scaler.scaleHeight(46))
+                                .onTapGesture {
+                                    self.isShowingFavoriteLineView.toggle()
                                 }
                             }
                         }
