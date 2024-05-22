@@ -12,6 +12,7 @@ struct AddView: View {
     var buttonHandler = ButtonClickHandler()
     @StateObject var viewModel = AddViewModel()
     @StateObject var repeatLineViewModel = ManageRepeatLineViewModel()
+    @StateObject var favoriteViewModel = ManageFavoriteLineViewModel()
     @State var changedStatus = false
     @State var showAlert = false
     @State var title = "잠깐!"
@@ -70,6 +71,8 @@ struct AddView: View {
     @State var repeatDuration : String?
     @State private var secondsElapsed = 1
     @State private var timer: Timer?
+    
+    @State var presentFavoriteActionSheet = false
 
     var formattedValue: Double? {
             let valueWithoutCommas = money.replacingOccurrences(of: ",", with: "")
@@ -108,6 +111,9 @@ struct AddView: View {
                                             .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(12)))
                                             .foregroundColor(.primary1)
                                     }
+                                    .onTapGesture {
+                                        presentFavoriteActionSheet = true
+                                    }
                                     VStack(spacing:2) {
                                         Image("icon_repeat")
                                             .resizable()
@@ -115,6 +121,9 @@ struct AddView: View {
                                         Text("")
                                             .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(12)))
                                             .foregroundColor(.primary1)
+                                    }
+                                    .onTapGesture {
+                                        isShowingRepeatDurationBottomSheet = true
                                     }
                                 }
                             } else {
@@ -127,6 +136,9 @@ struct AddView: View {
                                             .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(12)))
                                             .foregroundColor(.primary1)
                                     }
+                                    .onTapGesture {
+                                        presentFavoriteActionSheet = true
+                                    }
                                     VStack(spacing:2) {
                                         Image("icon_repeat_green")
                                             .resizable()
@@ -135,11 +147,11 @@ struct AddView: View {
                                             .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(12)))
                                             .foregroundColor(.primary1)
                                     }
+                                    .onTapGesture {
+                                        isShowingRepeatDurationBottomSheet = true
+                                    }
                                 }
                             }
-                        }
-                        .onTapGesture {
-                            isShowingRepeatDurationBottomSheet = true
                         }
                     } else if mode == "check" {
                         if let repeatDuration = self.repeatDuration {
@@ -397,7 +409,6 @@ struct AddView: View {
                         .background(Color.greyScale2)
                         Button {
                             if viewModel.isVaildAdd(money: money, asset: assetType, category: category) {
-                                
                                 viewModel.bookLineKey = lineId // PK
                                 viewModel.money = money // 금액
                                 viewModel.flow = toggleType // 수입, 지출, 이체
@@ -462,6 +473,40 @@ struct AddView: View {
                             action: {
                                 repeatLineViewModel.deleteAllRepeatLine(bookLineKey: lineId)
                                 startTimer()
+                            }
+                        ),
+                        .cancel(
+                            Text("취소")
+                        )
+                    ]
+                )
+            }
+            .actionSheet(isPresented: $presentFavoriteActionSheet) {
+                ActionSheet(
+                    title: Text("즐겨찾기에 추가하시겠습니까?"),
+                    message: nil,
+                    buttons: [
+                        .default(
+                            Text("즐겨찾기에 추가"),
+                            action: {
+                                if favoriteViewModel.isVaildAdd(money: money, asset: assetType, category: category) {
+                                    favoriteViewModel.money = money
+                                    favoriteViewModel.lineCategoryName = toggleType
+                                    favoriteViewModel.lineSubcategoryName = category
+                                    favoriteViewModel.assetSubcategoryName = assetType
+                                    if content.isEmpty {
+                                        favoriteViewModel.description = category
+                                    } else {
+                                        favoriteViewModel.description = content // 내용
+                                    }
+                                    favoriteViewModel.addFavoriteLine()
+                                }
+                            }
+                        ),
+                        .default(
+                            Text("즐겨찾기 내역 보기"),
+                            action: {
+                                
                             }
                         ),
                         .cancel(

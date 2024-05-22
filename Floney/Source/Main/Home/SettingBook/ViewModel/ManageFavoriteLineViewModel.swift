@@ -97,7 +97,7 @@ class ManageFavoriteLineViewModel : ObservableObject {
                 } else {
                     LoadingManager.shared.update(showLoading: false, loadingType: .floneyLoading)
                     self.isApiCalling = false
-                    self.alertManager.update(showAlert: true, message: "저장이 완료되었습니다.", buttonType: .green)
+                    self.alertManager.update(showAlert: true, message: "즐겨찾기에 추가되었습니다.", buttonType: .green)
                     self.successAdd = true
                 }
             }.store(in: &cancellableSet)
