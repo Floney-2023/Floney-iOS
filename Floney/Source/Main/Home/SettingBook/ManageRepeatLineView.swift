@@ -14,6 +14,7 @@ struct ManageRepeatLineView: View {
     var options = ["지출", "수입", "이체"]
     @Binding var isShowing : Bool
     @State var editState = false
+    @State var showEditButton = true
     @StateObject var viewModel = ManageRepeatLineViewModel()
     @State var deleteAlert = false
     @State var title = "반복 내역 삭제"
@@ -45,7 +46,7 @@ struct ManageRepeatLineView: View {
                                         .resizable()
                                         .aspectRatio(contentMode: .fill)
                                         .frame(width:scaler.scaleWidth(76), height:scaler.scaleHeight(76))
-                      
+                                    
                                 )
                             
                         }
@@ -81,48 +82,67 @@ struct ManageRepeatLineView: View {
                     .cornerRadius(8)
                     .padding(.horizontal,scaler.scaleWidth(20))
                     
-                    ScrollView(showsIndicators: false) {
-                        VStack(alignment: .leading) {
-                            ForEach(viewModel.repeatLineList, id: \.self) { (repeatLine:RepeatLineResponse) in
-                                VStack(alignment: .leading, spacing:0) {
-                                    HStack(spacing:scaler.scaleWidth(12)) {
-                                        if editState {
-                                            Image("icon_delete")
-                                                .onTapGesture {
-                                                    selectedRepeatLineId = repeatLine.id
-                                                    self.deleteAlert = true
-                                                }
-                                        }
-                                        VStack(alignment: .leading, spacing:8) {
-                                            Text("\(repeatLine.description)")
-                                                .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(14)))
-                                                .foregroundColor(.greyScale2)
-                                            HStack(spacing:0) {
-                                                Text(repeatLine.repeatDurationDescription ?? "")
-                                                Text(" ‧ ")
-                                                Text("\(repeatLine.assetSubCategory)")
-                                                Text(" ‧ ")
-                                                Text("\(repeatLine.lineSubCategory)")
+                    if viewModel.repeatLineList.count == 0 {
+                        VStack(spacing:scaler.scaleHeight(10)) {
+                            Image("no_line")
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: scaler.scaleWidth(38), height: scaler.scaleWidth(64))
+                            Text("내역이 없습니다.")
+                                .font(.pretendardFont(.medium, size: scaler.scaleWidth(12)))
+                                .foregroundColor(.greyScale6)
+                        }
+                        .padding(.top, scaler.scaleHeight(156))
+                        .onAppear {
+                            self.showEditButton = false
+                        }
+                    } else {
+                        ScrollView(showsIndicators: false) {
+                            VStack(alignment: .leading) {
+                                ForEach(viewModel.repeatLineList, id: \.self) { (repeatLine:RepeatLineResponse) in
+                                    VStack(alignment: .leading, spacing:0) {
+                                        HStack(spacing:scaler.scaleWidth(12)) {
+                                            if editState {
+                                                Image("icon_delete")
+                                                    .onTapGesture {
+                                                        selectedRepeatLineId = repeatLine.id
+                                                        self.deleteAlert = true
+                                                    }
                                             }
-                                            .font(.pretendardFont(.medium, size: scaler.scaleWidth(12)))
-                                            .foregroundColor(.greyScale6)
+                                            VStack(alignment: .leading, spacing:8) {
+                                                Text("\(repeatLine.description)")
+                                                    .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(14)))
+                                                    .foregroundColor(.greyScale2)
+                                                HStack(spacing:0) {
+                                                    Text(repeatLine.repeatDurationDescription ?? "")
+                                                    Text(" ‧ ")
+                                                    Text("\(repeatLine.assetSubCategory)")
+                                                    Text(" ‧ ")
+                                                    Text("\(repeatLine.lineSubCategory)")
+                                                }
+                                                .font(.pretendardFont(.medium, size: scaler.scaleWidth(12)))
+                                                .foregroundColor(.greyScale6)
+                                            }
+                                            .padding(.leading, scaler.scaleWidth(12))
+                                            Spacer()
+                                            Text(repeatLine.money.formattedString)
+                                                .font(.pretendardFont(.bold, size: scaler.scaleWidth(16)))
+                                                .foregroundColor(.greyScale2)
+                                                .padding(.trailing, scaler.scaleWidth(12))
                                         }
-                                        .padding(.leading, scaler.scaleWidth(12))
-                                        Spacer()
-                                        Text(repeatLine.money.formattedString)
-                                            .font(.pretendardFont(.bold, size: scaler.scaleWidth(16)))
-                                            .foregroundColor(.greyScale2)
-                                            .padding(.trailing, scaler.scaleWidth(12))
+                                        .frame(height: scaler.scaleHeight(66))
+                                        Divider()
+                                            .foregroundColor(.greyScale11)
                                     }
-                                    .frame(height: scaler.scaleHeight(66))
-                                    Divider()
-                                        .foregroundColor(.greyScale11)
                                 }
                             }
+                            .padding(.top, scaler.scaleHeight(16))
+                            .padding(.horizontal,scaler.scaleWidth(22))
+                            .padding(.bottom,  scaler.scaleHeight(64))
                         }
-                        .padding(.top, scaler.scaleHeight(16))
-                        .padding(.horizontal,scaler.scaleWidth(22))
-                        .padding(.bottom,  scaler.scaleHeight(64))
+                        .onAppear {
+                            self.showEditButton = true
+                        }
                     }
                 } // VStack
                 .padding(.top, scaler.scaleHeight(32))
@@ -154,23 +174,29 @@ struct ManageRepeatLineView: View {
                 },
                 rightView: {
                     Group {
-                        if editState {
-                            Button {
-                                self.editState = false
-                            } label: {
-                                Text("완료")
-                                    .font(.pretendardFont(.regular,size:scaler.scaleWidth(14)))
-                                    .foregroundColor(.greyScale2)
+                        if showEditButton {
+                            Group {
+                                if editState {
+                                    Button {
+                                        self.editState = false
+                                    } label: {
+                                        Text("완료")
+                                            .font(.pretendardFont(.regular,size:scaler.scaleWidth(14)))
+                                            .foregroundColor(.greyScale2)
+                                    }
+                                    
+                                } else {
+                                    Button {
+                                        self.editState = true
+                                    } label: {
+                                        Text("편집")
+                                            .font(.pretendardFont(.regular,size:scaler.scaleWidth(14)))
+                                            .foregroundColor(.greyScale2)
+                                    }
+                                }
                             }
-                            
                         } else {
-                            Button {
-                                self.editState = true
-                            } label: {
-                                Text("편집")
-                                    .font(.pretendardFont(.regular,size:scaler.scaleWidth(14)))
-                                    .foregroundColor(.greyScale2)
-                            }
+                            EmptyView()
                         }
                     }
                 }

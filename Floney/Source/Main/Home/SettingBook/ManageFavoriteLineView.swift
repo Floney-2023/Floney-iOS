@@ -15,6 +15,7 @@ struct ManageFavoriteLineView: View {
     var options = ["지출", "수입", "이체"]
     @Binding var isShowing : Bool
     @State var editState = false
+    @State var showEditButton = true
     @StateObject var viewModel = ManageFavoriteLineViewModel()
     @State var deleteAlert = false
     @State var addAlert = false
@@ -106,8 +107,10 @@ struct ManageFavoriteLineView: View {
                                 .foregroundColor(.greyScale6)
                         }
                         .padding(.top, scaler.scaleHeight(156))
-                    }
-                    else {
+                        .onAppear {
+                            self.showEditButton = false
+                        }
+                    } else {
                         ScrollView(showsIndicators: false) {
                             VStack(alignment: .leading) {
                                 ForEach(viewModel.favoriteLineList, id: \.self) { (favoriteLine:FavoriteLineResponse) in
@@ -164,8 +167,6 @@ struct ManageFavoriteLineView: View {
                                             selectedToggleTypeIndex = 2
                                             selectedToggleType = "이체"
                                         }
-
-                                        
                                         addAlert = true
                                     }
                                 }
@@ -173,6 +174,9 @@ struct ManageFavoriteLineView: View {
                             .padding(.top, scaler.scaleHeight(16))
                             .padding(.horizontal,scaler.scaleWidth(22))
                             .padding(.bottom,  scaler.scaleHeight(64))
+                        }
+                        .onAppear {
+                            self.showEditButton = true
                         }
                     }
                 } // VStack
@@ -212,25 +216,31 @@ struct ManageFavoriteLineView: View {
                 },
                 rightView: {
                     Group {
-                        if editState {
-                            Button {
-                                self.editState = false
-                                self.showAddButton = true
-                            } label: {
-                                Text("완료")
-                                    .font(.pretendardFont(.regular,size:scaler.scaleWidth(14)))
-                                    .foregroundColor(.greyScale2)
+                        if showEditButton {
+                            Group {
+                                if editState {
+                                    Button {
+                                        self.editState = false
+                                        self.showAddButton = true
+                                    } label: {
+                                        Text("완료")
+                                            .font(.pretendardFont(.regular,size:scaler.scaleWidth(14)))
+                                            .foregroundColor(.greyScale2)
+                                    }
+                                    
+                                } else {
+                                    Button {
+                                        self.editState = true
+                                        self.showAddButton = false
+                                    } label: {
+                                        Text("편집")
+                                            .font(.pretendardFont(.regular,size:scaler.scaleWidth(14)))
+                                            .foregroundColor(.greyScale2)
+                                    }
+                                }
                             }
-                            
                         } else {
-                            Button {
-                                self.editState = true
-                                self.showAddButton = false
-                            } label: {
-                                Text("편집")
-                                    .font(.pretendardFont(.regular,size:scaler.scaleWidth(14)))
-                                    .foregroundColor(.greyScale2)
-                            }
+                            EmptyView()
                         }
                     }
                 }
