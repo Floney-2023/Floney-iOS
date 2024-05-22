@@ -17,6 +17,7 @@
 		2F1552402BFCBFFD00639F9D /* ManageFavoriteLineDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F15523F2BFCBFFD00639F9D /* ManageFavoriteLineDataManager.swift */; };
 		2F1552422BFCC07000639F9D /* ManageFavoriteLineRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1552412BFCC07000639F9D /* ManageFavoriteLineRequest.swift */; };
 		2F1552442BFCC0AD00639F9D /* ManageFavoriteLineResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1552432BFCC0AD00639F9D /* ManageFavoriteLineResponse.swift */; };
+		2F1552462BFE025100639F9D /* AddFavoriteLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1552452BFE025100639F9D /* AddFavoriteLineView.swift */; };
 		2F1614552A07CFE20029E9A9 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1614542A07CFE20029E9A9 /* Keychain.swift */; };
 		2F1614572A07F2A60029E9A9 /* EnterBookCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1614562A07F2A60029E9A9 /* EnterBookCodeView.swift */; };
 		2F1614592A07F3880029E9A9 /* EnterBookView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1614582A07F3880029E9A9 /* EnterBookView.swift */; };
@@ -238,6 +239,7 @@
 		2F15523F2BFCBFFD00639F9D /* ManageFavoriteLineDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageFavoriteLineDataManager.swift; sourceTree = "<group>"; };
 		2F1552412BFCC07000639F9D /* ManageFavoriteLineRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageFavoriteLineRequest.swift; sourceTree = "<group>"; };
 		2F1552432BFCC0AD00639F9D /* ManageFavoriteLineResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageFavoriteLineResponse.swift; sourceTree = "<group>"; };
+		2F1552452BFE025100639F9D /* AddFavoriteLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFavoriteLineView.swift; sourceTree = "<group>"; };
 		2F1614542A07CFE20029E9A9 /* Keychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
 		2F1614562A07F2A60029E9A9 /* EnterBookCodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterBookCodeView.swift; sourceTree = "<group>"; };
 		2F1614582A07F3880029E9A9 /* EnterBookView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterBookView.swift; sourceTree = "<group>"; };
@@ -921,6 +923,7 @@
 				2FAD92FE2A8335C900285C25 /* SetCurrencyUnitView.swift */,
 				2F4DBDB22B977EB70070760B /* ManageRepeatLineView.swift */,
 				2F15523B2BFCBCA900639F9D /* ManageFavoriteLineView.swift */,
+				2F1552452BFE025100639F9D /* AddFavoriteLineView.swift */,
 			);
 			path = SettingBook;
 			sourceTree = "<group>";
@@ -1782,6 +1785,7 @@
 				2F4DBDB72B9781580070760B /* ManageRepeatLineDataManager.swift in Sources */,
 				2FEB62262AF7E9B8007357EF /* InactiveAlertView.swift in Sources */,
 				2F76886A2AA7C09700862A88 /* RecentBookKeyManager.swift in Sources */,
+				2F1552462BFE025100639F9D /* AddFavoriteLineView.swift in Sources */,
 				2F531AD22AB1596600862014 /* UIFont.swift in Sources */,
 				2FF724802A5F1D1E008B9333 /* YearMonthPicker.swift in Sources */,
 				2FAD93012A83431400285C25 /* FloneyAlertView.swift in Sources */,

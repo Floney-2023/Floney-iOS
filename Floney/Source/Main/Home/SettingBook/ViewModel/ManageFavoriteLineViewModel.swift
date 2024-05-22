@@ -11,11 +11,22 @@ import Alamofire
 class ManageFavoriteLineViewModel : ObservableObject {
     var alertManager = AlertManager.shared
     @Published var tokenViewModel = TokenReissueViewModel()
+    @Published var bookKey = ""
     @Published var categoryType = ""
     @Published var favoriteLineList : [FavoriteLineResponse] = []
     @Published var isApiCalling: Bool = false
     @Published var successStatus: Bool = false
     private var cancellableSet: Set<AnyCancellable> = []
+    
+    @Published var successAdd = false
+    
+    @Published var money = ""
+    @Published var lineCategoryName = ""
+    @Published var assetSubcategoryName = ""
+    @Published var lineSubcategoryName = ""
+    @Published var description = ""
+
+    
     var dataManager: ManageFavoriteLineProtocol
     
     init(dataManager: ManageFavoriteLineProtocol = ManageFavoriteLineService.shared) {
@@ -25,17 +36,74 @@ class ManageFavoriteLineViewModel : ObservableObject {
     func getFavoriteLine() {
         let bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
         let request = FavoriteLineRequest(bookKey: bookKey, categoryType: categoryType)
+        print(request)
         dataManager.getFavoriteLine(request)
             .sink { (dataResponse) in
+                print(dataResponse)
                 if dataResponse.error != nil {
                     self.createAlert(with: dataResponse.error!, retryRequest: {
                         self.getFavoriteLine()
                     })
                 } else {
                     self.favoriteLineList = dataResponse.value!
+                    
                 }
             }.store(in: &cancellableSet)
     }
+    
+    func isVaildAdd(money: String, asset: String, category: String) -> Bool {
+        if money.isEmpty || money == "0" {
+            alertManager.handleError(InputValidationError.moneyEmpty)
+            return false
+        }
+        if asset == "자산을 선택하세요" {
+            alertManager.handleError(InputValidationError.assetTypeEmpty)
+            return false
+        }
+        if category == "분류를 선택하세요" {
+            alertManager.handleError(InputValidationError.categoryTypeEmpty)
+            return false
+        }
+        return true
+    }
+    
+    func addFavoriteLine() {
+        guard !isApiCalling else { return }
+        isApiCalling = true
+        LoadingManager.shared.update(showLoading: true, loadingType: .floneyLoading)
+        bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
+        var moneyDouble : Double = 0
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        if let number = formatter.number(from: money) {
+            moneyDouble = number.doubleValue
+            print(moneyDouble)  // 출력: 4500.0
+        } else {
+            print("Cannot convert to Double")
+        }
+        let request = AddFavoriteLineRequest(money: moneyDouble, description: description, lineCategoryName: lineCategoryName, lineSubcategoryName: lineSubcategoryName, assetSubcategoryName: assetSubcategoryName)
+        dataManager.addFavoriteLine(request, bookKey: bookKey)
+            .sink { (dataResponse) in
+                if dataResponse.error != nil {
+                    LoadingManager.shared.update(showLoading: false, loadingType: .floneyLoading)
+                    self.isApiCalling = false
+                    if dataResponse.error!.initialError.isSessionTaskError {
+                        AlertManager.shared.update(showAlert: true, message: "요청한 시간이 초과되었습니다.", buttonType: .red)
+                    } else {
+                        self.createAlert(with: dataResponse.error!, retryRequest: {
+                            self.addFavoriteLine()
+                        })
+                    }
+                } else {
+                    LoadingManager.shared.update(showLoading: false, loadingType: .floneyLoading)
+                    self.isApiCalling = false
+                    self.alertManager.update(showAlert: true, message: "저장이 완료되었습니다.", buttonType: .green)
+                    self.successAdd = true
+                }
+            }.store(in: &cancellableSet)
+    }
+
+    
     func createAlert( with error: NetworkError, retryRequest: @escaping () -> Void) {
         //loadingError = error.backendError == nil ? error.initialError.localizedDescription : error.backendError!.message
         if let backendError = error.backendError {

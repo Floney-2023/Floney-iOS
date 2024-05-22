@@ -10,8 +10,8 @@ import Foundation
 struct FavoriteLineResponse: Decodable, Hashable {
     let id: Int
     let description: String
-    let lineCagtegoryName: String
-    let lineSubCategory: String
-    let assetSubCategory: String
+    let lineCategoryName: String
+    let lineSubcategoryName: String
+    let assetSubcategoryName: String
     let money: Double
 }

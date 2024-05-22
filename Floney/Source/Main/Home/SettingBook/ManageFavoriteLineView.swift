@@ -21,6 +21,8 @@ struct ManageFavoriteLineView: View {
     @State var message = "삭제하시겠습니까?"
     @State private var secondsElapsed = 1
     @State private var timer: Timer?
+    @State var showAddButton = true
+    @State var isShowingAdd = false
     var body: some View {
         ZStack {
             VStack(spacing:0) {
@@ -82,52 +84,67 @@ struct ManageFavoriteLineView: View {
                     .cornerRadius(8)
                     .padding(.horizontal,scaler.scaleWidth(20))
                     
-                    ScrollView(showsIndicators: false) {
-                        VStack(alignment: .leading) {
-                            ForEach(viewModel.repeatLineList, id: \.self) { (repeatLine:RepeatLineResponse) in
-                                VStack(alignment: .leading, spacing:0) {
-                                    HStack(spacing:scaler.scaleWidth(12)) {
-                                        if editState {
-                                            Image("icon_delete")
-                                                .onTapGesture {
-                                                    selectedRepeatLineId = repeatLine.id
-                                                    self.deleteAlert = true
-                                                }
-                                        }
-                                        VStack(alignment: .leading, spacing:8) {
-                                            Text("\(repeatLine.description)")
-                                                .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(14)))
-                                                .foregroundColor(.greyScale2)
-                                            HStack(spacing:0) {
-                                                Text(repeatLine.repeatDurationDescription ?? "")
-                                                Text(" ‧ ")
-                                                Text("\(repeatLine.assetSubCategory)")
-                                                Text(" ‧ ")
-                                                Text("\(repeatLine.lineSubCategory)")
+                    if viewModel.favoriteLineList.count == 0 {
+                        VStack(spacing:scaler.scaleHeight(10)) {
+                            Image("no_line")
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: scaler.scaleWidth(38), height: scaler.scaleWidth(64))
+                            Text("내역이 없습니다.")
+                                .font(.pretendardFont(.medium, size: scaler.scaleWidth(12)))
+                                .foregroundColor(.greyScale6)
+                        }
+                        .padding(.top, scaler.scaleHeight(156))
+                    }
+                    else {
+                        ScrollView(showsIndicators: false) {
+                            VStack(alignment: .leading) {
+                                ForEach(viewModel.favoriteLineList, id: \.self) { (favoriteLine:FavoriteLineResponse) in
+                                    VStack(alignment: .leading, spacing:0) {
+                                        HStack(spacing:scaler.scaleWidth(12)) {
+                                            if editState {
+                                                Image("icon_delete")
+                                                    .onTapGesture {
+                                                        selectedRepeatLineId = favoriteLine.id
+                                                        self.deleteAlert = true
+                                                    }
                                             }
-                                            .font(.pretendardFont(.medium, size: scaler.scaleWidth(12)))
-                                            .foregroundColor(.greyScale6)
+                                            VStack(alignment: .leading, spacing:8) {
+                                                Text("\(favoriteLine.description)")
+                                                    .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(14)))
+                                                    .foregroundColor(.greyScale2)
+                                                HStack(spacing:0) {
+                                                    Text("\(favoriteLine.assetSubcategoryName)")
+                                                    Text(" ‧ ")
+                                                    Text("\(favoriteLine.lineSubcategoryName)")
+                                                }
+                                                .font(.pretendardFont(.medium, size: scaler.scaleWidth(12)))
+                                                .foregroundColor(.greyScale6)
+                                            }
+                                            .padding(.leading, scaler.scaleWidth(12))
+                                            Spacer()
+                                            Text(favoriteLine.money.formattedString)
+                                                .font(.pretendardFont(.bold, size: scaler.scaleWidth(16)))
+                                                .foregroundColor(.greyScale2)
+                                                .padding(.trailing, scaler.scaleWidth(12))
                                         }
-                                        .padding(.leading, scaler.scaleWidth(12))
-                                        Spacer()
-                                        Text(repeatLine.money.formattedString)
-                                            .font(.pretendardFont(.bold, size: scaler.scaleWidth(16)))
-                                            .foregroundColor(.greyScale2)
-                                            .padding(.trailing, scaler.scaleWidth(12))
+                                        .frame(height: scaler.scaleHeight(66))
+                                        Divider()
+                                            .foregroundColor(.greyScale11)
                                     }
-                                    .frame(height: scaler.scaleHeight(66))
-                                    Divider()
-                                        .foregroundColor(.greyScale11)
                                 }
                             }
+                            .padding(.top, scaler.scaleHeight(16))
+                            .padding(.horizontal,scaler.scaleWidth(22))
+                            .padding(.bottom,  scaler.scaleHeight(64))
                         }
-                        .padding(.top, scaler.scaleHeight(16))
-                        .padding(.horizontal,scaler.scaleWidth(22))
-                        .padding(.bottom,  scaler.scaleHeight(64))
                     }
                 } // VStack
                 .padding(.top, scaler.scaleHeight(32))
             } // VStack
+            .fullScreenCover(isPresented: $isShowingAdd) {
+                AddFavoriteLineView(viewModel: viewModel,isPresented: $isShowingAdd)
+            }
             .edgesIgnoringSafeArea(.bottom)
             .onAppear{
                 viewModel.categoryType = "OUTCOME"
@@ -144,7 +161,7 @@ struct ManageFavoriteLineView: View {
                 } else if options[newValue] == "이체"{
                     viewModel.categoryType = "TRANSFER"
                 }
-                viewModel.getRepeatLine()
+                viewModel.getFavoriteLine()
             }
             .customNavigationBar(
                 leftView: {
@@ -159,6 +176,7 @@ struct ManageFavoriteLineView: View {
                         if editState {
                             Button {
                                 self.editState = false
+                                self.showAddButton = true
                             } label: {
                                 Text("완료")
                                     .font(.pretendardFont(.regular,size:scaler.scaleWidth(14)))
@@ -168,6 +186,7 @@ struct ManageFavoriteLineView: View {
                         } else {
                             Button {
                                 self.editState = true
+                                self.showAddButton = false
                             } label: {
                                 Text("편집")
                                     .font(.pretendardFont(.regular,size:scaler.scaleWidth(14)))
@@ -177,8 +196,27 @@ struct ManageFavoriteLineView: View {
                     }
                 }
             )
+            if showAddButton {
+                VStack {
+                    Spacer()
+                    Button {
+                        isShowingAdd = true
+                    } label: {
+                        Text("추가하기")
+                            .frame(maxWidth: .infinity)
+                            .frame(height:scaler.scaleHeight(66))
+                            .font(.pretendardFont(.bold, size:scaler.scaleWidth(14)))
+                            .foregroundColor(.white)
+                            .padding(.bottom, scaler.scaleHeight(10))
+                    }
+                        .frame(maxWidth: .infinity)
+                        .frame(height:scaler.scaleHeight(66))
+                        .background(Color.primary1)
+                }
+                .edgesIgnoringSafeArea(.bottom)
+            }
             if deleteAlert {
-                AlertView(isPresented: $deleteAlert, title: title, message: message, okColor: .alertBlue) {
+                AlertView(isPresented: $deleteAlert, title: $title, message: $message, okColor: .alertBlue) {
                     //delete
                 }
             }
