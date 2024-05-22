@@ -655,10 +655,14 @@ struct CategoryBottomSheet: View {
                     ButtonLarge(label: "확인",background: .primary1, textColor: .white, strokeColor: .primary1,  fontWeight: .bold, action: {
                         if root == "자산" {
                             self.isSelectedAssetTypeIndex = selectedAssetIndex
-                            isSelectedAssetType = categories[selectedAssetIndex]
+                            if !categories.isEmpty {
+                                isSelectedAssetType = categories[selectedAssetIndex]
+                            }
                         } else {
                             self.isSelectedCategoryIndex = selectedCategoryIndex
-                            isSelectedCategory = categories[selectedCategoryIndex]
+                            if !categories.isEmpty {
+                                isSelectedCategory = categories[selectedCategoryIndex]
+                            }
                         }
                         isShowing.toggle()
                     })
