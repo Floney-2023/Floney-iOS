@@ -478,12 +478,12 @@ class SettingBookViewModel : ObservableObject {
 
                     dispatchGroup.enter()
                     let fcmManager = FCMDataManager()
-                    fcmManager.fetchTokensFromDatabase(bookKey: self.bookKey, title: "플로니", body: "\(Keychain.getKeychainValue(forKey: .userNickname) ?? "")님이 \(self.bookName)의 가계부를 나갔어요.") {
+                    fcmManager.fetchTokensFromDatabase(bookKey: self.bookKey, title: "플로니", body: "\(Keychain.getKeychainValue(forKey: .userNickname) ?? "")님이 \(self.bookName) 가계부를 나갔어요.") {
                         dispatchGroup.leave()
                     }
 
                     dispatchGroup.enter()
-                    self.postNoti(title: "플로니", body: "\(Keychain.getKeychainValue(forKey: .userNickname) ?? "")님이 \(self.bookName)의 가계부를 나갔어요.", imgUrl: "icon_noti_exit") {
+                    self.postNoti(title: "플로니", body: "\(Keychain.getKeychainValue(forKey: .userNickname) ?? "")님이 \(self.bookName) 가계부를 나갔어요.", imgUrl: "icon_noti_exit") {
                         dispatchGroup.leave()
                     }
                     dispatchGroup.enter()
