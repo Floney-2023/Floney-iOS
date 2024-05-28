@@ -113,6 +113,7 @@ struct AddView: View {
                                             .foregroundColor(.primary1)
                                     }
                                     .onTapGesture {
+                                        presentActionSheet = true
                                         presentFavoriteActionSheet = true
                                     }
                                     VStack(spacing:2) {
@@ -138,6 +139,7 @@ struct AddView: View {
                                             .foregroundColor(.primary1)
                                     }
                                     .onTapGesture {
+                                        presentActionSheet = true
                                         presentFavoriteActionSheet = true
                                     }
                                     VStack(spacing:2) {
@@ -396,6 +398,7 @@ struct AddView: View {
                                 self.showAlert = true 
                             } else {
                                 presentActionSheet = true
+                                presentFavoriteActionSheet = false
                             }
                         } label: {
                             Text("삭제")
@@ -458,63 +461,66 @@ struct AddView: View {
                 self.isPresented = false
             }
             .actionSheet(isPresented: $presentActionSheet) {
-                ActionSheet(
-                    title: Text("이 내역을 삭제하시겠습니까? 반복되는 내역입니다."),
-                    message: nil,
-                    buttons: [
-                        .default(
-                            Text("이 내역만 삭제"),
-                            action: {
-                                viewModel.bookLineKey = lineId
-                                viewModel.deleteLine()
-                            }
-                        ),
-                        .default(
-                            Text("이후 모든 내역 삭제"),
-                            action: {
-                                repeatLineViewModel.deleteAllRepeatLine(bookLineKey: lineId)
-                                startTimer()
-                            }
-                        ),
-                        .cancel(
-                            Text("취소")
-                        )
-                    ]
-                )
-            }
-            .actionSheet(isPresented: $presentFavoriteActionSheet) {
-                ActionSheet(
-                    title: Text("즐겨찾기에 추가하시겠습니까?"),
-                    message: nil,
-                    buttons: [
-                        .default(
-                            Text("즐겨찾기에 추가"),
-                            action: {
-                                if favoriteViewModel.isVaildAdd(money: money, asset: assetType, category: category) {
-                                    favoriteViewModel.money = money
-                                    favoriteViewModel.lineCategoryName = toggleType
-                                    favoriteViewModel.lineSubcategoryName = category
-                                    favoriteViewModel.assetSubcategoryName = assetType
-                                    if content.isEmpty {
-                                        favoriteViewModel.description = category
-                                    } else {
-                                        favoriteViewModel.description = content // 내용
+                if presentFavoriteActionSheet {
+                    ActionSheet(
+                        title: Text("즐겨찾기에 추가하시겠습니까?"),
+                        message: nil,
+                        buttons: [
+                            .default(
+                                Text("즐겨찾기에 추가"),
+                                action: {
+                                    if favoriteViewModel.isVaildAdd(money: money, asset: assetType, category: category) {
+                                        favoriteViewModel.money = money
+                                        favoriteViewModel.lineCategoryName = toggleType
+                                        favoriteViewModel.lineSubcategoryName = category
+                                        favoriteViewModel.assetSubcategoryName = assetType
+                                        if content.isEmpty {
+                                            favoriteViewModel.description = category
+                                        } else {
+                                            favoriteViewModel.description = content // 내용
+                                        }
+                                        favoriteViewModel.addFavoriteLine()
                                     }
-                                    favoriteViewModel.addFavoriteLine()
                                 }
-                            }
-                        ),
-                        .default(
-                            Text("즐겨찾기 내역 보기"),
-                            action: {
-                                self.isShowingFavorite = true
-                            }
-                        ),
-                        .cancel(
-                            Text("취소")
-                        )
-                    ]
-                )
+                            ),
+                            .default(
+                                Text("즐겨찾기 내역 보기"),
+                                action: {
+                                    self.isShowingFavorite = true
+                                }
+                            ),
+                            .cancel(
+                                Text("취소")
+                            )
+                        ]
+                    )
+                } else {
+                    ActionSheet(
+                        title: Text("이 내역을 삭제하시겠습니까? 반복되는 내역입니다."),
+                        message: nil,
+                        buttons: [
+                            .default(
+                                Text("이 내역만 삭제"),
+                                action: {
+                                    viewModel.bookLineKey = lineId
+                                    viewModel.deleteLine()
+                                }
+                            ),
+                            .default(
+                                Text("이후 모든 내역 삭제"),
+                                action: {
+                                    repeatLineViewModel.deleteAllRepeatLine(bookLineKey: lineId)
+                                    startTimer()
+                                }
+                            ),
+                            .cancel(
+                                Text("취소")
+                            )
+                        ]
+                    )
+                }
+                
+
             }
             
             CustomAlertView(message: AlertManager.shared.message, type: $alertManager.buttontType, isPresented: $alertManager.showAlert)
