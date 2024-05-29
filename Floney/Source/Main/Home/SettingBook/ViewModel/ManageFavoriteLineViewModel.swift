@@ -68,6 +68,10 @@ class ManageFavoriteLineViewModel : ObservableObject {
     }
     
     func addFavoriteLine() {
+        guard self.favoriteLineList.count < 5 else {
+            self.alertManager.update(showAlert: true, message: "즐겨찾기 개수가 초과되었습니다.", buttonType: .red)
+            return
+        }
         guard !isApiCalling else { return }
         isApiCalling = true
         LoadingManager.shared.update(showLoading: true, loadingType: .floneyLoading)
