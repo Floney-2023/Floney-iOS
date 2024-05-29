@@ -130,7 +130,9 @@ struct ManageFavoriteLineView: View {
                                                     .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(14)))
                                                     .foregroundColor(.greyScale2)
                                                 HStack(spacing:0) {
-                                                    Text("\(favoriteLine.assetSubcategoryName)")
+                                                    Text(favoriteLine.description.count > 10
+                                                         ? String(favoriteLine.description.prefix(10)) + ".."
+                                                         : favoriteLine.description)
                                                     Text(" ‧ ")
                                                     Text("\(favoriteLine.lineSubcategoryName)")
                                                 }
