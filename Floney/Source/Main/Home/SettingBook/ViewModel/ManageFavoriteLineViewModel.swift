@@ -141,7 +141,12 @@ class ManageFavoriteLineViewModel : ObservableObject {
                 return
             }
             if error.backendError?.code != "U006" && error.backendError?.code != "B001"{
-                AlertManager.shared.handleError(serverError)
+                if error.backendError?.code == "B014" {
+                    let message = "\(self.lineCategoryName) 즐겨찾기 개수가 초과되었습니다."
+                    AlertManager.shared.update(showAlert: true, message: message, buttonType: .red)
+                } else {
+                    AlertManager.shared.handleError(serverError)
+                }
             }
             // 에러코드에 따른 추가 로직
             if let errorCode = error.backendError?.code {
