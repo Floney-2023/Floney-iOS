@@ -602,6 +602,7 @@ struct CategoryBottomSheet: View {
     @Binding var isSelectedCategoryIndex : Int
     @Binding var isSelectedCategory : String
     @Binding var isShowingEditCategory : Bool
+    @State var showEditText = true
     @State var selectedAssetIndex = 0
     @State var selectedCategoryIndex = 0
     var body: some View{
@@ -627,13 +628,15 @@ struct CategoryBottomSheet: View {
                             .font(.pretendardFont(.bold,size:scaler.scaleWidth(18)))
                         Spacer()
                         
-                        Button  {
-                            isShowingEditCategory = true
- 
-                        } label: {
-                            Text("편집")
-                                .foregroundColor(.greyScale4)
-                                .font(.pretendardFont(.regular,size: scaler.scaleWidth(14)))
+                        if showEditText {
+                            Button  {
+                                isShowingEditCategory = true
+                                
+                            } label: {
+                                Text("편집")
+                                    .foregroundColor(.greyScale4)
+                                    .font(.pretendardFont(.regular,size: scaler.scaleWidth(14)))
+                            }
                         }
                         
                     }
