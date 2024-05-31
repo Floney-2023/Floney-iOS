@@ -66,11 +66,11 @@ struct AddFavoriteLineView: View {
         ZStack {
             VStack(spacing:0) {
                 //MARK: Top
-                HStack(alignment:.top) {
-                    Spacer()
+                HStack(alignment:.center) {
                     Text("즐겨찾기 추가")
                         .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(16)))
                         .foregroundColor(.greyScale1)
+                        .padding(.leading, scaler.scaleWidth(117))
                     Spacer()
                     Image("icon_close")
                         .resizable()
@@ -81,9 +81,10 @@ struct AddFavoriteLineView: View {
                             alertStatus = "modify"
                             self.checkForChangesWithDefaultAndShowAlert()
                         }
+
                 }
                 .frame(height: scaler.scaleHeight(38))
-                .padding(.top, scaler.scaleHeight(22))
+                .padding(.top, scaler.scaleHeight(18))
                 .padding(.bottom, scaler.scaleHeight(52))
                 .padding(.horizontal, scaler.scaleWidth(20))
 
