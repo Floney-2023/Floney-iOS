@@ -14,6 +14,7 @@ class ManageFavoriteLineViewModel : ObservableObject {
     @Published var bookKey = ""
     @Published var categoryType = ""
     @Published var favoriteLineList : [FavoriteLineResponse] = []
+    @Published var checkedFavoriteLineList : [FavoriteLineResponse] = []
     @Published var isApiCalling: Bool = false
     @Published var successStatus: Bool = false
     private var cancellableSet: Set<AnyCancellable> = []
@@ -25,7 +26,7 @@ class ManageFavoriteLineViewModel : ObservableObject {
     @Published var assetSubcategoryName = ""
     @Published var lineSubcategoryName = ""
     @Published var description = ""
-
+    @Published var exceptStatus = false
     
     var dataManager: ManageFavoriteLineProtocol
     
@@ -68,10 +69,6 @@ class ManageFavoriteLineViewModel : ObservableObject {
     }
     
     func addFavoriteLine() {
-        guard self.favoriteLineList.count < 5 else {
-            self.alertManager.update(showAlert: true, message: "즐겨찾기 개수가 초과되었습니다.", buttonType: .red)
-            return
-        }
         guard !isApiCalling else { return }
         isApiCalling = true
         LoadingManager.shared.update(showLoading: true, loadingType: .floneyLoading)
@@ -85,7 +82,7 @@ class ManageFavoriteLineViewModel : ObservableObject {
         } else {
             print("Cannot convert to Double")
         }
-        let request = AddFavoriteLineRequest(money: moneyDouble, description: description, lineCategoryName: lineCategoryName, lineSubcategoryName: lineSubcategoryName, assetSubcategoryName: assetSubcategoryName)
+        let request = AddFavoriteLineRequest(money: moneyDouble, description: description, lineCategoryName: lineCategoryName, lineSubcategoryName: lineSubcategoryName, assetSubcategoryName: assetSubcategoryName, exceptStatus: exceptStatus)
         dataManager.addFavoriteLine(request, bookKey: bookKey)
             .sink { (dataResponse) in
                 if dataResponse.error != nil {
@@ -101,8 +98,8 @@ class ManageFavoriteLineViewModel : ObservableObject {
                 } else {
                     LoadingManager.shared.update(showLoading: false, loadingType: .floneyLoading)
                     self.isApiCalling = false
+                    self.successAdd.toggle()
                     self.alertManager.update(showAlert: true, message: "즐겨찾기에 추가되었습니다.", buttonType: .green)
-                    self.successAdd = true
                 }
             }.store(in: &cancellableSet)
     }
@@ -171,7 +168,6 @@ class ManageFavoriteLineViewModel : ObservableObject {
         } else {
             // BackendError 없이 NetworkError만 발생한 경우
             //showAlert(message: "네트워크 오류가 발생했습니다.")
-            
         }
     }
     

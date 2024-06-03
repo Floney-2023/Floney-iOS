@@ -236,7 +236,7 @@ struct SettingBookView: View {
                                 }
                             }
                             
-                            NavigationLink(destination :ManageFavoriteLineView(isShowing: $isShowingFavoriteLineView), isActive: $isShowingFavoriteLineView) {
+                            NavigationLink(destination :ManageFavoriteLineView(isShowing: $isShowingFavoriteLineView, root: .bookSetting), isActive: $isShowingFavoriteLineView) {
                                 HStack {
                                     Text("즐겨찾기 내역 설정")
                                         .font(.pretendardFont(.regular, size: scaler.scaleWidth(14)))

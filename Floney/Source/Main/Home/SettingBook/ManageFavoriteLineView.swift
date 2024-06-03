@@ -14,6 +14,7 @@ struct ManageFavoriteLineView: View {
     @State private var selectedFavoriteLineId = 0
     var options = ["지출", "수입", "이체"]
     @Binding var isShowing : Bool
+    @State var root : FavoriteRootType = .bookSetting
     @State var editState = false
     @State var showEditButton = true
     @StateObject var viewModel = ManageFavoriteLineViewModel()
@@ -151,25 +152,27 @@ struct ManageFavoriteLineView: View {
                                             .foregroundColor(.greyScale11)
                                     }
                                     .onTapGesture {
-                                        title = "즐겨찾기"
-                                        message = "해당 내역을 불러오겠습니까?"
-                                        lineCategory = favoriteLine.lineCategoryName
-                                        money = favoriteLine.money
-                                        assetSubCategory = favoriteLine.assetSubcategoryName
-                                        lineSubCategory = favoriteLine.lineSubcategoryName
-                                        description = favoriteLine.description
-                                        
-                                        if lineCategory == "지출" {
-                                            selectedToggleTypeIndex = 0
-                                            selectedToggleType = "지출"
-                                        } else if lineCategory == "수입" {
-                                            selectedToggleTypeIndex = 1
-                                            selectedToggleType = "수입"
-                                        } else if lineCategory == "이체" {
-                                            selectedToggleTypeIndex = 2
-                                            selectedToggleType = "이체"
+                                        if root == .addLine {
+                                            title = "즐겨찾기"
+                                            message = "해당 내역을 불러오겠습니까?"
+                                            lineCategory = favoriteLine.lineCategoryName
+                                            money = favoriteLine.money
+                                            assetSubCategory = favoriteLine.assetSubcategoryName
+                                            lineSubCategory = favoriteLine.lineSubcategoryName
+                                            description = favoriteLine.description
+                                            
+                                            if lineCategory == "지출" {
+                                                selectedToggleTypeIndex = 0
+                                                selectedToggleType = "지출"
+                                            } else if lineCategory == "수입" {
+                                                selectedToggleTypeIndex = 1
+                                                selectedToggleType = "수입"
+                                            } else if lineCategory == "이체" {
+                                                selectedToggleTypeIndex = 2
+                                                selectedToggleType = "이체"
+                                            }
+                                            addAlert = true
                                         }
-                                        addAlert = true
                                     }
                                 }
                             }
@@ -311,5 +314,5 @@ struct ManageFavoriteLineView: View {
 }
 
 #Preview {
-    ManageFavoriteLineView(isShowing: .constant(true))
+    ManageFavoriteLineView(isShowing: .constant(true), root: .addLine)
 }

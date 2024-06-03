@@ -555,7 +555,7 @@ struct AddView: View {
                 EmptyView()
             }
             
-            NavigationLink(destination: ManageFavoriteLineView(isShowing: $isShowingFavorite), isActive: $isShowingFavorite) {
+            NavigationLink(destination: ManageFavoriteLineView(isShowing: $isShowingFavorite, root: .addLine), isActive: $isShowingFavorite) {
                 EmptyView()
             }
         } // ZStack

@@ -256,7 +256,7 @@ struct AddFavoriteLineView: View {
                             } else {
                                 viewModel.description = content // 내용
                             }
-                            //viewModel.except = toggleOnOff // 제외 여부
+                            viewModel.exceptStatus = toggleOnOff // 제외 여부
                             viewModel.addFavoriteLine()
                         }
                         
