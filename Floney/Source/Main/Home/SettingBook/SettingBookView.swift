@@ -410,6 +410,9 @@ struct SettingBookView: View {
             .onAppear{
                 viewModel.getBookInfo()   
             }
+            .onDisappear {
+                CurrencyManager.shared.getCurrency()
+            }
             .sheet(isPresented: $onShareSheet) {
                 if let url = viewModel.shareUrl {
                     ActivityView(activityItems: [url])
