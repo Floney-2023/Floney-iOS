@@ -200,7 +200,6 @@ class AddViewModel: ObservableObject {
                     }
                 }
                 self.showEditButton = combinedCategories.count != 0
-                print("combinedCategories \(combinedCategories)")
                 if combinedCategories.count == 0 {
                     self.showAddButton = true
                     self.editState = false

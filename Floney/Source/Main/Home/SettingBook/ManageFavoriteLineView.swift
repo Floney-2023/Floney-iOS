@@ -16,7 +16,6 @@ struct ManageFavoriteLineView: View {
     var options = ["지출", "수입", "이체"]
     @Binding var isShowing : Bool
     @State var root : FavoriteRootType = .bookSetting
-    @State var editState = false
     @StateObject var viewModel = ManageFavoriteLineViewModel()
     @State var deleteAlert = false
     @State var addAlert = false
@@ -24,7 +23,6 @@ struct ManageFavoriteLineView: View {
     @State var message = "삭제하시겠습니까?"
     @State private var secondsElapsed = 1
     @State private var timer: Timer?
-    @State var showAddButton = true
     @State var isShowingAdd = false
     @State var showAddView = false
     
@@ -117,7 +115,7 @@ struct ManageFavoriteLineView: View {
                                 ForEach(viewModel.favoriteLineList, id: \.self) { (favoriteLine:FavoriteLineResponse) in
                                     VStack(alignment: .leading, spacing:0) {
                                         HStack(spacing:scaler.scaleWidth(12)) {
-                                            if editState {
+                                            if viewModel.editState {
                                                 Image("icon_delete")
                                                     .onTapGesture {
                                                         selectedFavoriteLineId = favoriteLine.id
@@ -153,7 +151,7 @@ struct ManageFavoriteLineView: View {
                                     }
                                     .background(Color.white)
                                     .onTapGesture {
-                                        if root == .addLine && !editState {
+                                        if root == .addLine && !viewModel.editState {
                                             title = "즐겨찾기"
                                             message = "해당 내역을 불러오겠습니까?"
                                             lineCategory = favoriteLine.lineCategoryName
@@ -222,10 +220,10 @@ struct ManageFavoriteLineView: View {
                     Group {
                         if viewModel.showEditButton {
                             Group {
-                                if editState {
+                                if viewModel.editState {
                                     Button {
-                                        self.editState = false
-                                        self.showAddButton = true
+                                        viewModel.editState = false
+                                        viewModel.showAddButton = true
                                     } label: {
                                         Text("완료")
                                             .font(.pretendardFont(.regular,size:scaler.scaleWidth(14)))
@@ -234,8 +232,8 @@ struct ManageFavoriteLineView: View {
                                     
                                 } else {
                                     Button {
-                                        self.editState = true
-                                        self.showAddButton = false
+                                        viewModel.editState = true
+                                        viewModel.showAddButton = false
                                     } label: {
                                         Text("편집")
                                             .font(.pretendardFont(.regular,size:scaler.scaleWidth(14)))
@@ -266,7 +264,7 @@ struct ManageFavoriteLineView: View {
                 .transition(.moveAndFade)
                 .navigationViewStyle(.stack)
             }*/
-            if showAddButton {
+            if viewModel.showAddButton {
                 VStack {
                     Spacer()
                     Button {

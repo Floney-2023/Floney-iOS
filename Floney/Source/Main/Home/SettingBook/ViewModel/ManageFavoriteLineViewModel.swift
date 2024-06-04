@@ -29,6 +29,8 @@ class ManageFavoriteLineViewModel : ObservableObject {
     @Published var exceptStatus = false
     @Published var isShowingAdd = false
     @Published var showEditButton = true
+    @Published var editState = false
+    @Published var showAddButton = true
     var dataManager: ManageFavoriteLineProtocol
     
     init(dataManager: ManageFavoriteLineProtocol = ManageFavoriteLineService.shared) {
@@ -74,7 +76,6 @@ class ManageFavoriteLineViewModel : ObservableObject {
                 }
                 
                 self.checkedFavoriteLineList = combinedFavoriteLines
-                print("--------------------------\n\(combinedFavoriteLines)\n------------------------")
                 if type == "checkCounting" {
                     self.isShowingAdd = combinedFavoriteLines.count < 15
                     if combinedFavoriteLines.count >= 15 {
@@ -84,6 +85,10 @@ class ManageFavoriteLineViewModel : ObservableObject {
                     }
                 } else {
                     self.showEditButton = combinedFavoriteLines.count != 0
+                    if combinedFavoriteLines.count == 0 {
+                        self.showAddButton = true
+                        self.editState = false
+                    }
                 }
             }
             .store(in: &cancellableSet)
