@@ -37,6 +37,7 @@ struct FindPasswordView: View {
                         .padding()
                         .withNextButtonFormmating(.primary1)
                         .onTapGesture {
+                            hideKeyboard()
                             if viewModel.checkValidation(email: email) {
                                 LoadingManager.shared.update(showLoading: true, loadingType: .floneyLoading)
                                 viewModel.findPassword(email: email)

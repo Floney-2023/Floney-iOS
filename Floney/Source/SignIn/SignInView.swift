@@ -40,6 +40,7 @@ struct SignInView: View {
                             .padding(scaler.scaleHeight(16))
                             .withNextButtonFormmating(.primary1)
                             .onTapGesture {
+                                hideKeyboard()
                                 signInViewModel.postSignIn()
                             }
 
