@@ -10,10 +10,12 @@ import SwiftUI
 struct ManageFavoriteLineView: View {
     let scaler = Scaler.shared
     @Environment(\.presentationMode) var presentationMode
+    @ObservedObject var alertManager = AlertManager.shared
     @State private var selectedOptions = 0
     @State private var selectedFavoriteLineId = 0
     var options = ["지출", "수입", "이체"]
     @Binding var isShowing : Bool
+    @State var root : FavoriteRootType = .bookSetting
     @State var editState = false
     @State var showEditButton = true
     @StateObject var viewModel = ManageFavoriteLineViewModel()
@@ -27,14 +29,17 @@ struct ManageFavoriteLineView: View {
     @State var isShowingAdd = false
     @State var showAddView = false
     
-    @State var id = 0
-    @State var selectedToggleType = ""
-    @State var selectedToggleTypeIndex = 0
-    @State var money : Double = 0.0
-    @State var lineCategory = ""
-    @State var assetSubCategory = ""
-    @State var lineSubCategory = ""
-    @State var description = ""
+    @State var id : Int = 0
+    @Binding var selectedToggleType : String
+    @Binding var selectedToggleTypeIndex : Int
+    @Binding var strMoney : String
+    @State var money: Double = 0
+    @Binding var lineCategory : String
+    @Binding var assetSubCategory : String
+    @Binding var lineSubCategory : String
+    @Binding var description : String
+    @Binding var exceptStatus : Bool
+    
     var body: some View {
         ZStack {
             VStack(spacing:0) {
@@ -107,9 +112,6 @@ struct ManageFavoriteLineView: View {
                                 .foregroundColor(.greyScale6)
                         }
                         .padding(.top, scaler.scaleHeight(156))
-                        .onAppear {
-                            self.showEditButton = false
-                        }
                     } else {
                         ScrollView(showsIndicators: false) {
                             VStack(alignment: .leading) {
@@ -126,11 +128,13 @@ struct ManageFavoriteLineView: View {
                                                     }
                                             }
                                             VStack(alignment: .leading, spacing:8) {
-                                                Text("\(favoriteLine.description)")
+                                                Text(favoriteLine.description.count > 10
+                                                     ? String(favoriteLine.description.prefix(10)) + ".."
+                                                     : favoriteLine.description)
                                                     .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(14)))
                                                     .foregroundColor(.greyScale2)
                                                 HStack(spacing:0) {
-                                                    Text("\(favoriteLine.assetSubcategoryName)")
+                                                    Text(favoriteLine.assetSubcategoryName)
                                                     Text(" ‧ ")
                                                     Text("\(favoriteLine.lineSubcategoryName)")
                                                 }
@@ -148,26 +152,29 @@ struct ManageFavoriteLineView: View {
                                         Divider()
                                             .foregroundColor(.greyScale11)
                                     }
+                                    .background(Color.white)
                                     .onTapGesture {
-                                        title = "즐겨찾기"
-                                        message = "해당 내역을 불러오겠습니까?"
-                                        lineCategory = favoriteLine.lineCategoryName
-                                        money = favoriteLine.money
-                                        assetSubCategory = favoriteLine.assetSubcategoryName
-                                        lineSubCategory = favoriteLine.lineSubcategoryName
-                                        description = favoriteLine.description
-                                        
-                                        if lineCategory == "지출" {
-                                            selectedToggleTypeIndex = 0
-                                            selectedToggleType = "지출"
-                                        } else if lineCategory == "수입" {
-                                            selectedToggleTypeIndex = 1
-                                            selectedToggleType = "수입"
-                                        } else if lineCategory == "이체" {
-                                            selectedToggleTypeIndex = 2
-                                            selectedToggleType = "이체"
+                                        if root == .addLine && !editState {
+                                            title = "즐겨찾기"
+                                            message = "해당 내역을 불러오겠습니까?"
+                                            lineCategory = favoriteLine.lineCategoryName
+                                            money = favoriteLine.money
+                                            assetSubCategory = favoriteLine.assetSubcategoryName
+                                            lineSubCategory = favoriteLine.lineSubcategoryName
+                                            description = favoriteLine.description
+                                            
+                                            if lineCategory == "지출" {
+                                                selectedToggleTypeIndex = 0
+                                                selectedToggleType = "지출"
+                                            } else if lineCategory == "수입" {
+                                                selectedToggleTypeIndex = 1
+                                                selectedToggleType = "수입"
+                                            } else if lineCategory == "이체" {
+                                                selectedToggleTypeIndex = 2
+                                                selectedToggleType = "이체"
+                                            }
+                                            addAlert = true
                                         }
-                                        addAlert = true
                                     }
                                 }
                             }
@@ -175,22 +182,20 @@ struct ManageFavoriteLineView: View {
                             .padding(.horizontal,scaler.scaleWidth(22))
                             .padding(.bottom,  scaler.scaleHeight(64))
                         }
-                        .onAppear {
-                            self.showEditButton = true
-                        }
                     }
                 } // VStack
                 .padding(.top, scaler.scaleHeight(32))
             } // VStack
-            .fullScreenCover(isPresented: $isShowingAdd) {
-                AddFavoriteLineView(viewModel: viewModel,isPresented: $isShowingAdd)
+            .fullScreenCover(isPresented: $viewModel.isShowingAdd) {
+                AddFavoriteLineView(viewModel: viewModel,isPresented: $viewModel.isShowingAdd)
             }
-            .onChange(of: isShowingAdd) { newValue in
+            .onChange(of: viewModel.isShowingAdd) { newValue in
                 viewModel.getFavoriteLine()
             }
             .edgesIgnoringSafeArea(.bottom)
             .onAppear{
                 viewModel.categoryType = "OUTCOME"
+                viewModel.fetchAllCategoriesAndCheck(type: "checkEditStatus")
                 viewModel.getFavoriteLine()
             }
             .onDisappear {
@@ -216,7 +221,7 @@ struct ManageFavoriteLineView: View {
                 },
                 rightView: {
                     Group {
-                        if showEditButton {
+                        if viewModel.showEditButton {
                             Group {
                                 if editState {
                                     Button {
@@ -245,6 +250,7 @@ struct ManageFavoriteLineView: View {
                     }
                 }
             )
+            /*
             .fullScreenCover(isPresented: $showAddView) {
                 NavigationView {
                     AddView(
@@ -260,12 +266,12 @@ struct ManageFavoriteLineView: View {
                 }
                 .transition(.moveAndFade)
                 .navigationViewStyle(.stack)
-            }
+            }*/
             if showAddButton {
                 VStack {
                     Spacer()
                     Button {
-                        isShowingAdd = true
+                        viewModel.fetchAllCategoriesAndCheck(type: "checkCounting")
                     } label: {
                         Text("추가하기")
                             .frame(maxWidth: .infinity)
@@ -287,9 +293,11 @@ struct ManageFavoriteLineView: View {
             }
             if addAlert {
                 AlertView(isPresented: $addAlert, title: $title, message: $message, okColor: .alertBlue) {
-                    showAddView = true
+                    strMoney = String(money.formattedString)
+                    isShowing = false
                 }
             }
+            CustomAlertView(message: AlertManager.shared.message, type: $alertManager.buttontType, isPresented: $alertManager.showAlert)
         }
     }
     func startTimer() {
@@ -306,8 +314,4 @@ struct ManageFavoriteLineView: View {
         timer?.invalidate()
         timer = nil
     }
-}
-
-#Preview {
-    ManageFavoriteLineView(isShowing: .constant(true))
 }

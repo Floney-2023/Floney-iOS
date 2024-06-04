@@ -554,8 +554,16 @@ struct AddView: View {
             NavigationLink(destination: CategoryManagementView(isShowingEditCategory: $isShowingEditCategory), isActive: $isShowingEditCategory) {
                 EmptyView()
             }
-            
-            NavigationLink(destination: ManageFavoriteLineView(isShowing: $isShowingFavorite), isActive: $isShowingFavorite) {
+            NavigationLink(destination: ManageFavoriteLineView(isShowing: $isShowingFavorite,
+                                                               root: .addLine,
+                                                               selectedToggleType : $toggleType,
+                                                               selectedToggleTypeIndex : $selectedOptions,
+                                                               strMoney : $money,
+                                                               lineCategory : $toggleType,
+                                                               assetSubCategory : $assetType,
+                                                               lineSubCategory: $category,
+                                                               description: $content,
+                                                               exceptStatus: $toggleOnOff), isActive: $isShowingFavorite) {
                 EmptyView()
             }
         } // ZStack

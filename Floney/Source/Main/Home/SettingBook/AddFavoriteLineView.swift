@@ -66,11 +66,11 @@ struct AddFavoriteLineView: View {
         ZStack {
             VStack(spacing:0) {
                 //MARK: Top
-                HStack(alignment:.top) {
-                    Spacer()
+                HStack(alignment:.center) {
                     Text("즐겨찾기 추가")
                         .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(16)))
                         .foregroundColor(.greyScale1)
+                        .padding(.leading, scaler.scaleWidth(117))
                     Spacer()
                     Image("icon_close")
                         .resizable()
@@ -81,9 +81,10 @@ struct AddFavoriteLineView: View {
                             alertStatus = "modify"
                             self.checkForChangesWithDefaultAndShowAlert()
                         }
+
                 }
                 .frame(height: scaler.scaleHeight(38))
-                .padding(.top, scaler.scaleHeight(22))
+                .padding(.top, scaler.scaleHeight(18))
                 .padding(.bottom, scaler.scaleHeight(52))
                 .padding(.horizontal, scaler.scaleWidth(20))
 
@@ -250,12 +251,12 @@ struct AddFavoriteLineView: View {
                             viewModel.lineCategoryName = toggleType // 수입, 지출, 이체
                             viewModel.assetSubcategoryName = assetType // 자산 타입
                             viewModel.lineSubcategoryName = category // 분류 타입
+                            viewModel.exceptStatus = toggleOnOff // 제외 여부
                             if content.isEmpty {
                                 viewModel.description = category
                             } else {
                                 viewModel.description = content // 내용
                             }
-                            //viewModel.except = toggleOnOff // 제외 여부
                             viewModel.addFavoriteLine()
                         }
                         
@@ -282,7 +283,7 @@ struct AddFavoriteLineView: View {
             }
             CustomAlertView(message: AlertManager.shared.message, type: $alertManager.buttontType, isPresented: $alertManager.showAlert)
             
-            CategoryBottomSheet(root: $root, categories: $categoryViewModel.categories, isShowing: $isShowingBottomSheet, isSelectedAssetTypeIndex: $isSelectedAssetTypeIndex, isSelectedAssetType: $assetType, isSelectedCategoryIndex: $isSelectedCategoryIndex, isSelectedCategory: $category, isShowingEditCategory: $isShowingEditCategory)
+            CategoryBottomSheet(root: $root, categories: $categoryViewModel.categories, isShowing: $isShowingBottomSheet, isSelectedAssetTypeIndex: $isSelectedAssetTypeIndex, isSelectedAssetType: $assetType, isSelectedCategoryIndex: $isSelectedCategoryIndex, isSelectedCategory: $category, isShowingEditCategory: $isShowingEditCategory, showEditText: false)
             
             //MARK: alert
             if showAlert {

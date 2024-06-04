@@ -14,4 +14,5 @@ struct FavoriteLineResponse: Decodable, Hashable {
     let lineSubcategoryName: String
     let assetSubcategoryName: String
     let money: Double
+    let exceptStatus: Bool
 }

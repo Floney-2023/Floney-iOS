@@ -14,6 +14,7 @@ class ManageFavoriteLineViewModel : ObservableObject {
     @Published var bookKey = ""
     @Published var categoryType = ""
     @Published var favoriteLineList : [FavoriteLineResponse] = []
+    @Published var checkedFavoriteLineList : [FavoriteLineResponse] = []
     @Published var isApiCalling: Bool = false
     @Published var successStatus: Bool = false
     private var cancellableSet: Set<AnyCancellable> = []
@@ -25,8 +26,9 @@ class ManageFavoriteLineViewModel : ObservableObject {
     @Published var assetSubcategoryName = ""
     @Published var lineSubcategoryName = ""
     @Published var description = ""
-
-    
+    @Published var exceptStatus = false
+    @Published var isShowingAdd = false
+    @Published var showEditButton = true
     var dataManager: ManageFavoriteLineProtocol
     
     init(dataManager: ManageFavoriteLineProtocol = ManageFavoriteLineService.shared) {
@@ -46,9 +48,45 @@ class ManageFavoriteLineViewModel : ObservableObject {
                     })
                 } else {
                     self.favoriteLineList = dataResponse.value!
-                    
                 }
             }.store(in: &cancellableSet)
+    }
+
+    func getFavoriteLine(categoryType: String) -> AnyPublisher<DataResponse<[FavoriteLineResponse], NetworkError>, Never> {
+        let bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
+        let request = FavoriteLineRequest(bookKey: bookKey, categoryType: categoryType)
+        return dataManager.getFavoriteLine(request)
+    }
+        
+    func fetchAllCategoriesAndCheck(type: String ) {
+        let categories = ["INCOME", "OUTCOME", "TRANSFER"]
+        let publishers = categories.map { getFavoriteLine(categoryType: $0) }
+        
+        Publishers.MergeMany(publishers)
+            .collect()
+            .sink { dataResponses in
+                var combinedFavoriteLines: [FavoriteLineResponse] = []
+                
+                for dataResponse in dataResponses {
+                    if case .success(let favoriteLines) = dataResponse.result {
+                        combinedFavoriteLines.append(contentsOf: favoriteLines)
+                    }
+                }
+                
+                self.checkedFavoriteLineList = combinedFavoriteLines
+                print("--------------------------\n\(combinedFavoriteLines)\n------------------------")
+                if type == "checkCounting" {
+                    self.isShowingAdd = combinedFavoriteLines.count < 15
+                    if combinedFavoriteLines.count >= 15 {
+                        let message = "즐겨찾기 개수가 초과되었습니다."
+                        print(message)
+                        AlertManager.shared.update(showAlert: true, message: message, buttonType: .red)
+                    }
+                } else {
+                    self.showEditButton = combinedFavoriteLines.count != 0
+                }
+            }
+            .store(in: &cancellableSet)
     }
     
     func isVaildAdd(money: String, asset: String, category: String) -> Bool {
@@ -81,7 +119,7 @@ class ManageFavoriteLineViewModel : ObservableObject {
         } else {
             print("Cannot convert to Double")
         }
-        let request = AddFavoriteLineRequest(money: moneyDouble, description: description, lineCategoryName: lineCategoryName, lineSubcategoryName: lineSubcategoryName, assetSubcategoryName: assetSubcategoryName)
+        let request = AddFavoriteLineRequest(money: moneyDouble, description: description, lineCategoryName: lineCategoryName, lineSubcategoryName: lineSubcategoryName, assetSubcategoryName: assetSubcategoryName, exceptStatus: exceptStatus)
         dataManager.addFavoriteLine(request, bookKey: bookKey)
             .sink { (dataResponse) in
                 if dataResponse.error != nil {
@@ -97,8 +135,9 @@ class ManageFavoriteLineViewModel : ObservableObject {
                 } else {
                     LoadingManager.shared.update(showLoading: false, loadingType: .floneyLoading)
                     self.isApiCalling = false
+                    self.successAdd.toggle()
                     self.alertManager.update(showAlert: true, message: "즐겨찾기에 추가되었습니다.", buttonType: .green)
-                    self.successAdd = true
+                    self.fetchAllCategoriesAndCheck(type: "checkEditStatus")
                 }
             }.store(in: &cancellableSet)
     }
@@ -116,6 +155,7 @@ class ManageFavoriteLineViewModel : ObservableObject {
                     self.successStatus = true
                     self.alertManager.update(showAlert: true, message: "삭제가 완료되었습니다.", buttonType: .green)
                     self.getFavoriteLine()
+                    self.fetchAllCategoriesAndCheck(type: "checkEditStatus")
                 case .failure(let error):
                     print(error)
                     self.isApiCalling = false
@@ -130,7 +170,6 @@ class ManageFavoriteLineViewModel : ObservableObject {
             }
             .store(in: &cancellableSet)
     }
-
     
     func createAlert( with error: NetworkError, retryRequest: @escaping () -> Void) {
         //loadingError = error.backendError == nil ? error.initialError.localizedDescription : error.backendError!.message
@@ -141,7 +180,12 @@ class ManageFavoriteLineViewModel : ObservableObject {
                 return
             }
             if error.backendError?.code != "U006" && error.backendError?.code != "B001"{
-                AlertManager.shared.handleError(serverError)
+                if error.backendError?.code == "B014" {
+                    let message = "\(self.lineCategoryName) 즐겨찾기 개수가 초과되었습니다."
+                    AlertManager.shared.update(showAlert: true, message: message, buttonType: .red)
+                } else {
+                    AlertManager.shared.handleError(serverError)
+                }
             }
             // 에러코드에 따른 추가 로직
             if let errorCode = error.backendError?.code {
@@ -162,7 +206,6 @@ class ManageFavoriteLineViewModel : ObservableObject {
         } else {
             // BackendError 없이 NetworkError만 발생한 경우
             //showAlert(message: "네트워크 오류가 발생했습니다.")
-            
         }
     }
     
