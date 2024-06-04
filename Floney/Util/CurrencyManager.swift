@@ -47,7 +47,6 @@ class CurrencyManager: ObservableObject {
             }
         }
     }
-    
     func currencySymbol() {
         switch currentCurrencyUnit {
         case "KRW":
