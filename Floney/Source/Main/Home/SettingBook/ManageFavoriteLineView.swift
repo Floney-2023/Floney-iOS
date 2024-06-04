@@ -17,7 +17,6 @@ struct ManageFavoriteLineView: View {
     @Binding var isShowing : Bool
     @State var root : FavoriteRootType = .bookSetting
     @State var editState = false
-    @State var showEditButton = true
     @StateObject var viewModel = ManageFavoriteLineViewModel()
     @State var deleteAlert = false
     @State var addAlert = false
