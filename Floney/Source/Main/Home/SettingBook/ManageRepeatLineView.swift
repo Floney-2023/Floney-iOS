@@ -150,6 +150,7 @@ struct ManageRepeatLineView: View {
             .edgesIgnoringSafeArea(.bottom)
             .onAppear{
                 viewModel.categoryType = "OUTCOME"
+                viewModel.fetchAllCategoriesAndCheck()
                 viewModel.getRepeatLine()            }
             .onDisappear {
                 stopTimer()
@@ -174,7 +175,7 @@ struct ManageRepeatLineView: View {
                 },
                 rightView: {
                     Group {
-                        if showEditButton {
+                        if viewModel.showEditButton {
                             Group {
                                 if editState {
                                     Button {
