@@ -15,6 +15,7 @@ class ManageRepeatLineViewModel : ObservableObject {
     @Published var repeatLineList : [RepeatLineResponse] = []
     @Published var isApiCalling: Bool = false
     @Published var successStatus: Bool = false
+    @Published var showEditButton = true
     private var cancellableSet: Set<AnyCancellable> = []
     var dataManager: ManageRepeatLineProtocol
     
@@ -42,6 +43,30 @@ class ManageRepeatLineViewModel : ObservableObject {
                 }
             }.store(in: &cancellableSet)
     }
+    func getRepeatLine(categoryType: String) -> AnyPublisher<DataResponse<[RepeatLineResponse], NetworkError>, Never> {
+        let bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
+        let request = RepeatLineRequest(bookKey: bookKey, categoryType: categoryType)
+        return dataManager.getRepeatLine(request)
+    }
+        
+    func fetchAllCategoriesAndCheck() {
+        let categories = ["INCOME", "OUTCOME", "TRANSFER"]
+        let publishers = categories.map { getRepeatLine(categoryType: $0) }
+        
+        Publishers.MergeMany(publishers)
+            .collect()
+            .sink { dataResponses in
+                var combinedRepeatLines: [RepeatLineResponse] = []
+                
+                for dataResponse in dataResponses {
+                    if case .success(let repeatLines) = dataResponse.result {
+                        combinedRepeatLines.append(contentsOf: repeatLines)
+                    }
+                }
+                self.showEditButton = combinedRepeatLines.count != 0
+            }
+            .store(in: &cancellableSet)
+    }
     
     func deleteRepeatLine(repeatLineId: Int) {
         guard !isApiCalling else { return }
@@ -55,6 +80,7 @@ class ManageRepeatLineViewModel : ObservableObject {
                     self.successStatus = true
                     self.alertManager.update(showAlert: true, message: "삭제가 완료되었습니다.", buttonType: .green)
                     print("반복 내역 삭제 성공")
+                    self.fetchAllCategoriesAndCheck()
                     self.getRepeatLine()
                 case .failure(let error):
                     print(error)

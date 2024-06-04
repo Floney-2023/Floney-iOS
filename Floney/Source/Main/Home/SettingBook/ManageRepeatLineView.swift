@@ -14,7 +14,6 @@ struct ManageRepeatLineView: View {
     var options = ["지출", "수입", "이체"]
     @Binding var isShowing : Bool
     @State var editState = false
-    @State var showEditButton = true
     @StateObject var viewModel = ManageRepeatLineViewModel()
     @State var deleteAlert = false
     @State var title = "반복 내역 삭제"
@@ -93,9 +92,6 @@ struct ManageRepeatLineView: View {
                                 .foregroundColor(.greyScale6)
                         }
                         .padding(.top, scaler.scaleHeight(156))
-                        .onAppear {
-                            self.showEditButton = false
-                        }
                     } else {
                         ScrollView(showsIndicators: false) {
                             VStack(alignment: .leading) {
@@ -140,9 +136,6 @@ struct ManageRepeatLineView: View {
                             .padding(.horizontal,scaler.scaleWidth(22))
                             .padding(.bottom,  scaler.scaleHeight(64))
                         }
-                        .onAppear {
-                            self.showEditButton = true
-                        }
                     }
                 } // VStack
                 .padding(.top, scaler.scaleHeight(32))
@@ -150,6 +143,7 @@ struct ManageRepeatLineView: View {
             .edgesIgnoringSafeArea(.bottom)
             .onAppear{
                 viewModel.categoryType = "OUTCOME"
+                viewModel.fetchAllCategoriesAndCheck()
                 viewModel.getRepeatLine()            }
             .onDisappear {
                 stopTimer()
@@ -174,7 +168,7 @@ struct ManageRepeatLineView: View {
                 },
                 rightView: {
                     Group {
-                        if showEditButton {
+                        if viewModel.showEditButton {
                             Group {
                                 if editState {
                                     Button {
