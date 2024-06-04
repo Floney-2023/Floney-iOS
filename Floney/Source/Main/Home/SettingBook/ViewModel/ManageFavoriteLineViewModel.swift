@@ -28,6 +28,7 @@ class ManageFavoriteLineViewModel : ObservableObject {
     @Published var description = ""
     @Published var exceptStatus = false
     @Published var isShowingAdd = false
+    @Published var showEditButton = true
     var dataManager: ManageFavoriteLineProtocol
     
     init(dataManager: ManageFavoriteLineProtocol = ManageFavoriteLineService.shared) {
@@ -57,7 +58,7 @@ class ManageFavoriteLineViewModel : ObservableObject {
         return dataManager.getFavoriteLine(request)
     }
         
-    func fetchAllCategoriesAndCheck() {
+    func fetchAllCategoriesAndCheck(type: String ) {
         let categories = ["INCOME", "OUTCOME", "TRANSFER"]
         let publishers = categories.map { getFavoriteLine(categoryType: $0) }
         
@@ -74,11 +75,15 @@ class ManageFavoriteLineViewModel : ObservableObject {
                 
                 self.checkedFavoriteLineList = combinedFavoriteLines
                 print("--------------------------\n\(combinedFavoriteLines)\n------------------------")
-                self.isShowingAdd = combinedFavoriteLines.count < 15
-                if combinedFavoriteLines.count >= 15 {
-                    let message = "즐겨찾기 개수가 초과되었습니다."
-                    print(message)
-                    AlertManager.shared.update(showAlert: true, message: message, buttonType: .red)
+                if type == "checkCounting" {
+                    self.isShowingAdd = combinedFavoriteLines.count < 15
+                    if combinedFavoriteLines.count >= 15 {
+                        let message = "즐겨찾기 개수가 초과되었습니다."
+                        print(message)
+                        AlertManager.shared.update(showAlert: true, message: message, buttonType: .red)
+                    }
+                } else {
+                    self.showEditButton = combinedFavoriteLines.count != 0
                 }
             }
             .store(in: &cancellableSet)
@@ -132,6 +137,7 @@ class ManageFavoriteLineViewModel : ObservableObject {
                     self.isApiCalling = false
                     self.successAdd.toggle()
                     self.alertManager.update(showAlert: true, message: "즐겨찾기에 추가되었습니다.", buttonType: .green)
+                    self.fetchAllCategoriesAndCheck(type: "checkEditStatus")
                 }
             }.store(in: &cancellableSet)
     }
@@ -149,6 +155,7 @@ class ManageFavoriteLineViewModel : ObservableObject {
                     self.successStatus = true
                     self.alertManager.update(showAlert: true, message: "삭제가 완료되었습니다.", buttonType: .green)
                     self.getFavoriteLine()
+                    self.fetchAllCategoriesAndCheck(type: "checkEditStatus")
                 case .failure(let error):
                     print(error)
                     self.isApiCalling = false

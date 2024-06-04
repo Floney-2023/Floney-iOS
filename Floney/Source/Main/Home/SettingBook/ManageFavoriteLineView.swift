@@ -109,9 +109,6 @@ struct ManageFavoriteLineView: View {
                                 .foregroundColor(.greyScale6)
                         }
                         .padding(.top, scaler.scaleHeight(156))
-                        .onAppear {
-                            self.showEditButton = false
-                        }
                     } else {
                         ScrollView(showsIndicators: false) {
                             VStack(alignment: .leading) {
@@ -182,9 +179,6 @@ struct ManageFavoriteLineView: View {
                             .padding(.horizontal,scaler.scaleWidth(22))
                             .padding(.bottom,  scaler.scaleHeight(64))
                         }
-                        .onAppear {
-                            self.showEditButton = true
-                        }
                     }
                 } // VStack
                 .padding(.top, scaler.scaleHeight(32))
@@ -198,6 +192,7 @@ struct ManageFavoriteLineView: View {
             .edgesIgnoringSafeArea(.bottom)
             .onAppear{
                 viewModel.categoryType = "OUTCOME"
+                viewModel.fetchAllCategoriesAndCheck(type: "checkEditStatus")
                 viewModel.getFavoriteLine()
             }
             .onDisappear {
@@ -223,7 +218,7 @@ struct ManageFavoriteLineView: View {
                 },
                 rightView: {
                     Group {
-                        if showEditButton {
+                        if viewModel.showEditButton {
                             Group {
                                 if editState {
                                     Button {
@@ -272,7 +267,7 @@ struct ManageFavoriteLineView: View {
                 VStack {
                     Spacer()
                     Button {
-                        viewModel.fetchAllCategoriesAndCheck()
+                        viewModel.fetchAllCategoriesAndCheck(type: "checkCounting")
                     } label: {
                         Text("추가하기")
                             .frame(maxWidth: .infinity)
