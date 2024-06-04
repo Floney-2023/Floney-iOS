@@ -151,8 +151,9 @@ struct ManageFavoriteLineView: View {
                                         Divider()
                                             .foregroundColor(.greyScale11)
                                     }
+                                    .background(Color.white)
                                     .onTapGesture {
-                                        if root == .addLine {
+                                        if root == .addLine && !editState {
                                             title = "즐겨찾기"
                                             message = "해당 내역을 불러오겠습니까?"
                                             lineCategory = favoriteLine.lineCategoryName
