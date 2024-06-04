@@ -127,13 +127,13 @@ struct ManageFavoriteLineView: View {
                                                     }
                                             }
                                             VStack(alignment: .leading, spacing:8) {
-                                                Text("\(favoriteLine.description)")
+                                                Text(favoriteLine.description.count > 10
+                                                     ? String(favoriteLine.description.prefix(10)) + ".."
+                                                     : favoriteLine.description)
                                                     .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(14)))
                                                     .foregroundColor(.greyScale2)
                                                 HStack(spacing:0) {
-                                                    Text(favoriteLine.description.count > 10
-                                                         ? String(favoriteLine.description.prefix(10)) + ".."
-                                                         : favoriteLine.description)
+                                                    Text(favoriteLine.assetSubcategoryName)
                                                     Text(" ‧ ")
                                                     Text("\(favoriteLine.lineSubcategoryName)")
                                                 }
