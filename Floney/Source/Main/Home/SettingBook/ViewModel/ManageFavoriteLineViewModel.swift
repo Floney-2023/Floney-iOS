@@ -27,7 +27,7 @@ class ManageFavoriteLineViewModel : ObservableObject {
     @Published var lineSubcategoryName = ""
     @Published var description = ""
     @Published var exceptStatus = false
-    
+    @Published var isShowingAdd = false
     var dataManager: ManageFavoriteLineProtocol
     
     init(dataManager: ManageFavoriteLineProtocol = ManageFavoriteLineService.shared) {
@@ -47,9 +47,41 @@ class ManageFavoriteLineViewModel : ObservableObject {
                     })
                 } else {
                     self.favoriteLineList = dataResponse.value!
-                    
                 }
             }.store(in: &cancellableSet)
+    }
+
+    func getFavoriteLine(categoryType: String) -> AnyPublisher<DataResponse<[FavoriteLineResponse], NetworkError>, Never> {
+        let bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
+        let request = FavoriteLineRequest(bookKey: bookKey, categoryType: categoryType)
+        return dataManager.getFavoriteLine(request)
+    }
+        
+    func fetchAllCategoriesAndCheck() {
+        let categories = ["INCOME", "OUTCOME", "TRANSFER"]
+        let publishers = categories.map { getFavoriteLine(categoryType: $0) }
+        
+        Publishers.MergeMany(publishers)
+            .collect()
+            .sink { dataResponses in
+                var combinedFavoriteLines: [FavoriteLineResponse] = []
+                
+                for dataResponse in dataResponses {
+                    if case .success(let favoriteLines) = dataResponse.result {
+                        combinedFavoriteLines.append(contentsOf: favoriteLines)
+                    }
+                }
+                
+                self.checkedFavoriteLineList = combinedFavoriteLines
+                print("--------------------------\n\(combinedFavoriteLines)\n------------------------")
+                self.isShowingAdd = combinedFavoriteLines.count < 15
+                if combinedFavoriteLines.count >= 15 {
+                    let message = "즐겨찾기 개수가 초과되었습니다."
+                    print(message)
+                    AlertManager.shared.update(showAlert: true, message: message, buttonType: .red)
+                }
+            }
+            .store(in: &cancellableSet)
     }
     
     func isVaildAdd(money: String, asset: String, category: String) -> Bool {
@@ -131,7 +163,6 @@ class ManageFavoriteLineViewModel : ObservableObject {
             }
             .store(in: &cancellableSet)
     }
-
     
     func createAlert( with error: NetworkError, retryRequest: @escaping () -> Void) {
         //loadingError = error.backendError == nil ? error.initialError.localizedDescription : error.backendError!.message

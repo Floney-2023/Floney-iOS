@@ -10,6 +10,7 @@ import SwiftUI
 struct ManageFavoriteLineView: View {
     let scaler = Scaler.shared
     @Environment(\.presentationMode) var presentationMode
+    @ObservedObject var alertManager = AlertManager.shared
     @State private var selectedOptions = 0
     @State private var selectedFavoriteLineId = 0
     var options = ["지출", "수입", "이체"]
@@ -188,10 +189,10 @@ struct ManageFavoriteLineView: View {
                 } // VStack
                 .padding(.top, scaler.scaleHeight(32))
             } // VStack
-            .fullScreenCover(isPresented: $isShowingAdd) {
-                AddFavoriteLineView(viewModel: viewModel,isPresented: $isShowingAdd)
+            .fullScreenCover(isPresented: $viewModel.isShowingAdd) {
+                AddFavoriteLineView(viewModel: viewModel,isPresented: $viewModel.isShowingAdd)
             }
-            .onChange(of: isShowingAdd) { newValue in
+            .onChange(of: viewModel.isShowingAdd) { newValue in
                 viewModel.getFavoriteLine()
             }
             .edgesIgnoringSafeArea(.bottom)
@@ -271,7 +272,7 @@ struct ManageFavoriteLineView: View {
                 VStack {
                     Spacer()
                     Button {
-                        isShowingAdd = true
+                        viewModel.fetchAllCategoriesAndCheck()
                     } label: {
                         Text("추가하기")
                             .frame(maxWidth: .infinity)
@@ -296,6 +297,7 @@ struct ManageFavoriteLineView: View {
                     showAddView = true
                 }
             }
+            CustomAlertView(message: AlertManager.shared.message, type: $alertManager.buttontType, isPresented: $alertManager.showAlert)
         }
     }
     func startTimer() {
