@@ -251,12 +251,12 @@ struct AddFavoriteLineView: View {
                             viewModel.lineCategoryName = toggleType // 수입, 지출, 이체
                             viewModel.assetSubcategoryName = assetType // 자산 타입
                             viewModel.lineSubcategoryName = category // 분류 타입
+                            viewModel.exceptStatus = toggleOnOff // 제외 여부
                             if content.isEmpty {
                                 viewModel.description = category
                             } else {
                                 viewModel.description = content // 내용
                             }
-                            viewModel.exceptStatus = toggleOnOff // 제외 여부
                             viewModel.addFavoriteLine()
                         }
                         
