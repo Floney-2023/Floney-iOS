@@ -29,14 +29,17 @@ struct ManageFavoriteLineView: View {
     @State var isShowingAdd = false
     @State var showAddView = false
     
-    @State var id = 0
-    @State var selectedToggleType = ""
-    @State var selectedToggleTypeIndex = 0
-    @State var money : Double = 0.0
-    @State var lineCategory = ""
-    @State var assetSubCategory = ""
-    @State var lineSubCategory = ""
-    @State var description = ""
+    @State var id : Int = 0
+    @Binding var selectedToggleType : String
+    @Binding var selectedToggleTypeIndex : Int
+    @Binding var strMoney : String
+    @State var money: Double = 0
+    @Binding var lineCategory : String
+    @Binding var assetSubCategory : String
+    @Binding var lineSubCategory : String
+    @Binding var description : String
+    @Binding var exceptStatus : Bool
+    
     var body: some View {
         ZStack {
             VStack(spacing:0) {
@@ -247,6 +250,7 @@ struct ManageFavoriteLineView: View {
                     }
                 }
             )
+            /*
             .fullScreenCover(isPresented: $showAddView) {
                 NavigationView {
                     AddView(
@@ -262,7 +266,7 @@ struct ManageFavoriteLineView: View {
                 }
                 .transition(.moveAndFade)
                 .navigationViewStyle(.stack)
-            }
+            }*/
             if showAddButton {
                 VStack {
                     Spacer()
@@ -289,7 +293,8 @@ struct ManageFavoriteLineView: View {
             }
             if addAlert {
                 AlertView(isPresented: $addAlert, title: $title, message: $message, okColor: .alertBlue) {
-                    showAddView = true
+                    strMoney = String(money.formattedString)
+                    isShowing = false
                 }
             }
             CustomAlertView(message: AlertManager.shared.message, type: $alertManager.buttontType, isPresented: $alertManager.showAlert)
@@ -309,8 +314,4 @@ struct ManageFavoriteLineView: View {
         timer?.invalidate()
         timer = nil
     }
-}
-
-#Preview {
-    ManageFavoriteLineView(isShowing: .constant(true), root: .addLine)
 }
