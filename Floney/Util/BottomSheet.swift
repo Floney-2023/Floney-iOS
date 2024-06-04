@@ -1075,7 +1075,7 @@ struct PasswordBottomSheet: View{
         scaler.scaleHeight(46)
     }
     @Binding var isShowing : Bool
-    @Binding var isShowingLogin : Bool
+    @Binding var isShowingFindPassword : Bool
     var body: some View{
         ZStack(alignment: .bottom) {
             if (isShowing) {
@@ -1107,7 +1107,7 @@ struct PasswordBottomSheet: View{
                         
                         ButtonLarge(label: "다시 로그인하기",background: .primary1, textColor: .white, strokeColor: .primary1,  fontWeight: .bold, action: {
                             isShowing = false
-                            isShowingLogin = true
+                            isShowingFindPassword = false
                         })
                         .frame(width: scaler.scaleWidth(320))
                         .frame(height: buttonHeight)
