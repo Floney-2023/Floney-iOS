@@ -9,7 +9,8 @@ import SwiftUI
 
 struct FindPasswordView: View {
     let scaler = Scaler.shared
-    @State var email = ""
+    @Binding var isShowing : Bool
+    @Binding var email : String
     @StateObject var viewModel = SignInViewModel()
     @StateObject var alertManager = AlertManager.shared
     @ObservedObject var loadingManager = LoadingManager.shared
@@ -54,16 +55,10 @@ struct FindPasswordView: View {
                 CustomAlertView(message: AlertManager.shared.message, type: $alertManager.buttontType, isPresented: $alertManager.showAlert)
             }
             
-            PasswordBottomSheet(isShowing: $viewModel.isShowingBottomSheet, isShowingLogin: $viewModel.isShowingLogin)
+            PasswordBottomSheet(isShowing: $viewModel.isShowingBottomSheet, isShowingFindPassword: $isShowing)
             
 
         }
         .onAppear(perform : UIApplication.shared.hideKeyboard)
-    }
-}
-
-struct FindPasswordView_Previews: PreviewProvider {
-    static var previews: some View {
-        FindPasswordView()
     }
 }

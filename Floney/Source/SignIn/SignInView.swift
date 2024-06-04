@@ -16,6 +16,7 @@ struct SignInView: View {
     var scaler = Scaler.shared
     @StateObject var signInViewModel = SignInViewModel()
     @StateObject var signUpViewModel = SignUpViewModel()
+    @State var isShowingFindPassword = false
     var body: some View {
         NavigationView {
             ZStack {
@@ -43,7 +44,7 @@ struct SignInView: View {
                             }
 
                         HStack(spacing:scaler.scaleWidth(76)) {
-                            NavigationLink(destination: FindPasswordView()){
+                            NavigationLink(destination: FindPasswordView(isShowing: $isShowingFindPassword, email: $signInViewModel.email), isActive: $isShowingFindPassword){
                                 VStack(spacing:0) {
                                     Text("비밀번호 찾기")
                                         .font(.pretendardFont(.regular, size: scaler.scaleWidth(12)))
@@ -52,7 +53,9 @@ struct SignInView: View {
                                       .foregroundColor(.clear)
                                       .frame(width: scaler.scaleWidth(66), height: scaler.scaleWidth(0.7))
                                       .background(Color.greyScale6)
-                                    
+                                }
+                                .onTapGesture {
+                                    isShowingFindPassword = true
                                 }
                             }
 

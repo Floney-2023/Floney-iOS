@@ -42,7 +42,6 @@ class SignInViewModel: ObservableObject {
     @Published var hasJoined: Bool = false
     @Published var authToken = ""
     @Published var isShowingBottomSheet = false
-    @Published var isShowingLogin = false
     
     private var cancellableSet: Set<AnyCancellable> = []
     var dataManager: SignInProtocol
