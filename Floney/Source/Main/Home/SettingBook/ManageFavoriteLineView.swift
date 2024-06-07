@@ -159,7 +159,7 @@ struct ManageFavoriteLineView: View {
                                             assetSubCategory = favoriteLine.assetSubcategoryName
                                             lineSubCategory = favoriteLine.lineSubcategoryName
                                             description = favoriteLine.description
-                                            
+                                            exceptStatus = favoriteLine.exceptStatus
                                             if lineCategory == "지출" {
                                                 selectedToggleTypeIndex = 0
                                                 selectedToggleType = "지출"
