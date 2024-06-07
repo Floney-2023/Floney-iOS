@@ -38,7 +38,15 @@ struct SettingBookView: View {
     @State var isShowingExcelDutationBottomSheet = false
     
     @State var isShowingRepeatLineView = false
+    @State var isShowingFavoriteLineView = false
     
+    @State var toggleType = ""
+    @State var selectedOptions = 0
+    @State var money = ""
+    @State var assetType = ""
+    @State var category = ""
+    @State var content = ""
+    @State var toggleOnOff = false
     var body: some View {
         ZStack {
             ScrollView {
@@ -235,6 +243,28 @@ struct SettingBookView: View {
                                     self.isShowingRepeatLineView.toggle()
                                 }
                             }
+                           
+                            NavigationLink(destination : ManageFavoriteLineView(isShowing: $isShowingFavoriteLineView,
+                                                                                root: .bookSetting,
+                                                                                selectedToggleType : $toggleType,
+                                                                                selectedToggleTypeIndex : $selectedOptions,
+                                                                                strMoney : $money,
+                                                                                lineCategory : $toggleType,
+                                                                                assetSubCategory : $assetType,
+                                                                                lineSubCategory: $category,
+                                                                                description: $content,
+                                                                                exceptStatus: $toggleOnOff), isActive: $isShowingFavoriteLineView) {
+                                HStack {
+                                    Text("즐겨찾기 내역 설정")
+                                        .font(.pretendardFont(.regular, size: scaler.scaleWidth(14)))
+                                        .foregroundColor(.greyScale2)
+                                    Spacer()
+                                }
+                                .frame(height:scaler.scaleHeight(46))
+                                .onTapGesture {
+                                    self.isShowingFavoriteLineView.toggle()
+                                }
+                            }
                         }
 
                         if viewModel.role == "방장" {
@@ -379,6 +409,9 @@ struct SettingBookView: View {
                 )
             .onAppear{
                 viewModel.getBookInfo()   
+            }
+            .onDisappear {
+                CurrencyManager.shared.getCurrency()
             }
             .sheet(isPresented: $onShareSheet) {
                 if let url = viewModel.shareUrl {

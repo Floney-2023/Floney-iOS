@@ -149,11 +149,10 @@ class CalendarViewModel: ObservableObject {
                             self.dayLinesTotalOutcome = asset!.money
                         }
                     }
-                    self.dayLines = self.dayLinesResult.dayLinesResponse
+                    self.dayLines = self.sortDayLinesResults(self.dayLinesResult.dayLinesResponse)
                     self.seeProfileImg = self.dayLinesResult.seeProfileImg
                     self.userImages = self.dayLines.compactMap { $0?.writerProfileImg }
                     
-                    print(self.dayLinesResult.carryOverInfo)
                     self.dayLineCarryOver = self.dayLinesResult.carryOverInfo
                     if self.dayLineCarryOver.carryOverStatus {
                         if self.dayLineCarryOver.carryOverMoney > 0 {
@@ -166,6 +165,15 @@ class CalendarViewModel: ObservableObject {
                 }
                 
             }.store(in: &cancellableSet)
+    }
+    // 정렬 함수 정의
+    func sortDayLinesResults(_ array: [DayLinesResults?]) -> [DayLinesResults?] {
+        return array.sorted { lhs, rhs in
+            guard let lhs = lhs, let rhs = rhs else {
+                return false
+            }
+            return lhs.repeatDuration != "NONE" && rhs.repeatDuration == "NONE"
+        }
     }
     //MARK: server
     func getBookInfo() {

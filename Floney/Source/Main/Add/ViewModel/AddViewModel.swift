@@ -53,7 +53,6 @@ class AddViewModel: ObservableObject {
     //MARK: category
     @Published var categoryResult : [CategoryResponse] = []
     @Published var categories : [String] = ["현금", "체크카드","신용카드","은행"]
-    @Published var categoryStates : [Bool] = []
     @Published var root = ""
     let sortAssetOrder = ["현금", "체크카드", "신용카드", "은행"]
     let sortOutcomeOrder = ["식비", "카페/간식", "교통", "주거/통신", "의료/건강", "문화", "여행/숙박", "생활", "패션/미용", "육아", "교육", "경조사", "기타", "미분류"]
@@ -90,6 +89,9 @@ class AddViewModel: ObservableObject {
     }
     @Published var daysList : [[Date]] = [[]]
     @Published var successAddCategory = false
+    @Published var showEditButton = true
+    @Published var editState = false
+    @Published var showAddButton = true
 
     private var cancellableSet: Set<AnyCancellable> = []
     var dataManager: AddProtocol
@@ -177,7 +179,33 @@ class AddViewModel: ObservableObject {
         }
         return true
     }
-    
+    func getCategory(root: String) -> AnyPublisher<DataResponse<[CategoryResponse], NetworkError>, Never> {
+        let bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
+        let request = CategoryRequest(bookKey: bookKey, root: root)
+        return dataManager.getCategory(request)
+    }
+    func fetchAllCategoriesAndCheck() {
+        let categories = ["자산", "수입", "지출", "이체"]
+        let publishers = categories.map { getCategory(root: $0) }
+        
+        Publishers.MergeMany(publishers)
+            .collect()
+            .sink { dataResponses in
+                var combinedCategories: [CategoryResponse] = []
+                
+                for dataResponse in dataResponses {
+                    if case .success(let categories) = dataResponse.result {
+                        combinedCategories.append(contentsOf: categories)
+                    }
+                }
+                self.showEditButton = combinedCategories.count != 0
+                if combinedCategories.count == 0 {
+                    self.showAddButton = true
+                    self.editState = false
+                }
+            }
+            .store(in: &cancellableSet)
+    }
     //MARK: server
     func getCategory() {
         bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
@@ -196,10 +224,8 @@ class AddViewModel: ObservableObject {
                     print(self.categoryResult)
                     DispatchQueue.main.async {
                         var category: [String] = []
-                        self.categoryStates = []
                         for i in self.categoryResult {
                             category.append(i.name)
-                            self.categoryStates.append(i.default)
                         }
                         var sortOrder: [String] = []
                         if self.root == "자산" {
@@ -289,6 +315,7 @@ class AddViewModel: ObservableObject {
                     print(dataResponse.error)
                 } else {
                     self.isApiCalling = false
+                    self.fetchAllCategoriesAndCheck()
                     self.getCategory()
                     self.successAddCategory = true
                     self.alertManager.update(showAlert: true, message: "추가 완료되었습니다.", buttonType: .green)
@@ -309,6 +336,7 @@ class AddViewModel: ObservableObject {
                     print(" successfully category delete.")
                     self.alertManager.update(showAlert: true, message: "삭제가 완료되었습니다.", buttonType: .green)
                     self.isApiCalling = false
+                    self.fetchAllCategoriesAndCheck()
                     self.getCategory()
                 case .failure(let error):
                     self.isApiCalling = false

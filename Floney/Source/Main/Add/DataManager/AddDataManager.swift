@@ -109,8 +109,6 @@ extension AddService: AddProtocol {
                 } else {
                     // Handle error based on status code
                     let backendError = result.data.flatMap { try? JSONDecoder().decode(BackendError.self, from: $0)}
-
-                    
                     if let backendError = backendError {
                         throw NetworkError(initialError: result.error!, backendError: backendError)
                     } else {

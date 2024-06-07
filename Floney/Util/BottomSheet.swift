@@ -602,6 +602,7 @@ struct CategoryBottomSheet: View {
     @Binding var isSelectedCategoryIndex : Int
     @Binding var isSelectedCategory : String
     @Binding var isShowingEditCategory : Bool
+    @State var showEditText = true
     @State var selectedAssetIndex = 0
     @State var selectedCategoryIndex = 0
     var body: some View{
@@ -627,13 +628,15 @@ struct CategoryBottomSheet: View {
                             .font(.pretendardFont(.bold,size:scaler.scaleWidth(18)))
                         Spacer()
                         
-                        Button  {
-                            isShowingEditCategory = true
- 
-                        } label: {
-                            Text("편집")
-                                .foregroundColor(.greyScale4)
-                                .font(.pretendardFont(.regular,size: scaler.scaleWidth(14)))
+                        if showEditText {
+                            Button  {
+                                isShowingEditCategory = true
+                                
+                            } label: {
+                                Text("편집")
+                                    .foregroundColor(.greyScale4)
+                                    .font(.pretendardFont(.regular,size: scaler.scaleWidth(14)))
+                            }
                         }
                         
                     }
@@ -655,10 +658,14 @@ struct CategoryBottomSheet: View {
                     ButtonLarge(label: "확인",background: .primary1, textColor: .white, strokeColor: .primary1,  fontWeight: .bold, action: {
                         if root == "자산" {
                             self.isSelectedAssetTypeIndex = selectedAssetIndex
-                            isSelectedAssetType = categories[selectedAssetIndex]
+                            if !categories.isEmpty {
+                                isSelectedAssetType = categories[selectedAssetIndex]
+                            }
                         } else {
                             self.isSelectedCategoryIndex = selectedCategoryIndex
-                            isSelectedCategory = categories[selectedCategoryIndex]
+                            if !categories.isEmpty {
+                                isSelectedCategory = categories[selectedCategoryIndex]
+                            }
                         }
                         isShowing.toggle()
                     })
@@ -937,13 +944,25 @@ struct DayLinesBottomSheet: View {
                                                         .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(14)))
                                                         .foregroundColor(.greyScale2)
                                                     
-                                                    HStack(spacing:0) {
-                                                        Text("\(line.assetSubCategory)")
-                                                        Text(" ‧ ")
-                                                        Text("\(line.lineSubCategory)")
+                                                    HStack(spacing:8) {
+                                                        if line.repeatDuration != RepeatDurationType.none.rawValue {
+                                                            Text("반복")
+                                                                .padding(.horizontal ,scaler.scaleWidth(6))
+                                                                .padding(.vertical,scaler.scaleWidth(4))
+                                                                .font(.pretendardFont(.bold, size: scaler.scaleWidth(10)))
+                                                                .foregroundColor(.primary2)
+                                                                .background(Color.primary10)
+                                                                .cornerRadius(6)
+                                                        }
+                                                        HStack(spacing:0) {
+                                                            Text("\(line.assetSubCategory)")
+                                                            Text(" ‧ ")
+                                                            Text("\(line.lineSubCategory)")
+                                                        }
+                                                        .font(.pretendardFont(.medium, size: scaler.scaleWidth(12)))
+                                                        .foregroundColor(.greyScale6)
+                                                        Spacer()
                                                     }
-                                                    .font(.pretendardFont(.medium, size: scaler.scaleWidth(12)))
-                                                    .foregroundColor(.greyScale6)
                                                 }
                                                 
                                                 Spacer()
@@ -1056,7 +1075,7 @@ struct PasswordBottomSheet: View{
         scaler.scaleHeight(46)
     }
     @Binding var isShowing : Bool
-    @Binding var isShowingLogin : Bool
+    @Binding var isShowingFindPassword : Bool
     var body: some View{
         ZStack(alignment: .bottom) {
             if (isShowing) {
@@ -1088,7 +1107,7 @@ struct PasswordBottomSheet: View{
                         
                         ButtonLarge(label: "다시 로그인하기",background: .primary1, textColor: .white, strokeColor: .primary1,  fontWeight: .bold, action: {
                             isShowing = false
-                            isShowingLogin = true
+                            isShowingFindPassword = false
                         })
                         .frame(width: scaler.scaleWidth(320))
                         .frame(height: buttonHeight)

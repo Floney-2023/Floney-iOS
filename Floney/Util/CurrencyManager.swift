@@ -47,7 +47,6 @@ class CurrencyManager: ObservableObject {
             }
         }
     }
-    
     func currencySymbol() {
         switch currentCurrencyUnit {
         case "KRW":
@@ -68,13 +67,51 @@ class CurrencyManager: ObservableObject {
         case "GBP":
             currentCurrency = "£"
             hasDecimalPoint = true
+        case "VND":
+            currentCurrency = "đ"
+            hasDecimalPoint = false
+        case "PHP":
+            currentCurrency = "₱"
+            hasDecimalPoint = true
+        case "THB":
+            currentCurrency = "฿"
+            hasDecimalPoint = true
+        case "IDR":
+            currentCurrency = "Rp"
+            hasDecimalPoint = true
+        case "MYR":
+            currentCurrency = "RM"
+            hasDecimalPoint = true
+        case "TRY":
+            currentCurrency = "₺"
+            hasDecimalPoint = true
+        case "RUB":
+            currentCurrency = "₽"
+            hasDecimalPoint = true
+        case "HUF":
+            currentCurrency = "Ft"
+            hasDecimalPoint = true
+        case "CHF":
+            currentCurrency = "Fr"
+            hasDecimalPoint = true
+        case "INR":
+            currentCurrency = "₹"
+            hasDecimalPoint = true
+        case "PLN":
+            currentCurrency = "zł"
+            hasDecimalPoint = true
+        case "CZK":
+            currentCurrency = "Kč"
+            hasDecimalPoint = true
+        case "DKK":
+            currentCurrency = "kr"
+            hasDecimalPoint = true
+        case "NGN":
+            currentCurrency = "₦"
+            hasDecimalPoint = true
         default:
             currentCurrency = "원"  // 혹은 기본값으로 다른 문자열을 반환
             hasDecimalPoint = false
         }
-        
-        print("Currency :", currentCurrency)
-        print("has decimal point :", hasDecimalPoint)
     }
-    
 }

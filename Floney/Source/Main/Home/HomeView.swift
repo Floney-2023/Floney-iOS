@@ -153,7 +153,7 @@ struct HomeView: View {
 struct TotalView: View {
     let scaler = Scaler.shared
     @ObservedObject var viewModel : CalendarViewModel
-    @State var currency = CurrencyManager.shared.currentCurrency
+    //@State var currency = CurrencyManager.shared.currentCurrency
     var body: some View {
         HStack(spacing: 0){
             HStack {
@@ -162,7 +162,7 @@ struct TotalView: View {
                         .font(.pretendardFont(.medium, size:scaler.scaleWidth(12)))
                         .foregroundColor(.white)
                     
-                    Text("\(viewModel.totalOutcome.formattedString)\(currency)")
+                    Text("\(viewModel.totalOutcome.formattedString)\(CurrencyManager.shared.currentCurrency)")
                         .foregroundColor(.white)
                         .font(viewModel.totalOutcome < 1000000000 ? Font.pretendardFont(.semiBold, size:scaler.scaleWidth(18)) : Font.pretendardFont(.semiBold, size:scaler.scaleWidth(15)))
                 }
@@ -177,7 +177,7 @@ struct TotalView: View {
                     Text("총수입")
                         .font(.pretendardFont(.medium, size: scaler.scaleWidth(12)))
                         .foregroundColor(.white)
-                    Text("\(viewModel.totalIncome.formattedString)\(currency)")
+                    Text("\(viewModel.totalIncome.formattedString)\(CurrencyManager.shared.currentCurrency)")
                         .foregroundColor(.white)
                         .font(viewModel.totalIncome < 1000000000 ? Font.pretendardFont(.semiBold, size:scaler.scaleWidth(18)) : Font.pretendardFont(.semiBold, size:scaler.scaleWidth(15)))
                 }
@@ -486,6 +486,7 @@ struct MonthCalendar: View {
                 .background(Color.white)
                 .cornerRadius(12)
                 .onAppear {
+                    CurrencyManager.shared.getCurrency()
                     viewModel.getCalendar()
                     viewModel.getBookInfo()
                 }

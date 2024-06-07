@@ -40,6 +40,7 @@ enum ServerError: String, CustomError {
     case NOT_FOUND_BOOK_LINE = "B007"
     case ALREADY_JOIN = "B008"
     case ALREADY_EXIST = "B011"
+    case MAX_FAVORITE = "B014"
     case NOT_SUBSCRIBE = "S001"
     case LIMIT = "S002"
     case SETTLEMENT_NOT_FOUND = "ST001"
@@ -112,6 +113,8 @@ enum ServerError: String, CustomError {
             return "유효 시간이 초과되었습니다. 다시 시도해 주세요."
         case .ALREADY_EXIST:
             return "이미 존재하는 분류항목입니다."
+        case .MAX_FAVORITE:
+            return "즐겨찾기 개수가 초과되었습니다."
         case .OLD_PASSWORD_INVALID:
             return "현재 비밀번호를 확인해 주세요."
         }

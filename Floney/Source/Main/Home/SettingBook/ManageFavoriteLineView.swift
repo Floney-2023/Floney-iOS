@@ -1,25 +1,42 @@
 //
-//  ManageRepeatLineView.swift
+//  ManageFavoriteLineView.swift
 //  Floney
 //
-//  Created by 남경민 on 3/6/24.
+//  Created by 남경민 on 5/21/24.
 //
+
 import SwiftUI
-import Combine
-struct ManageRepeatLineView: View {
+
+struct ManageFavoriteLineView: View {
     let scaler = Scaler.shared
     @Environment(\.presentationMode) var presentationMode
+    @ObservedObject var alertManager = AlertManager.shared
     @State private var selectedOptions = 0
-    @State private var selectedRepeatLineId = 0
+    @State private var selectedFavoriteLineId = 0
     var options = ["지출", "수입", "이체"]
     @Binding var isShowing : Bool
-    @State var editState = false
-    @StateObject var viewModel = ManageRepeatLineViewModel()
+    @State var root : FavoriteRootType = .bookSetting
+    @StateObject var viewModel = ManageFavoriteLineViewModel()
     @State var deleteAlert = false
-    @State var title = "반복 내역 삭제"
-    @State var message = "반복 내역을 삭제하시겠습니까?\n해당 반복의 모든 내역이 삭제됩니다."
+    @State var addAlert = false
+    @State var title = "삭제하기"
+    @State var message = "삭제하시겠습니까?"
     @State private var secondsElapsed = 1
     @State private var timer: Timer?
+    @State var isShowingAdd = false
+    @State var showAddView = false
+    
+    @State var id : Int = 0
+    @Binding var selectedToggleType : String
+    @Binding var selectedToggleTypeIndex : Int
+    @Binding var strMoney : String
+    @State var money: Double = 0
+    @Binding var lineCategory : String
+    @Binding var assetSubCategory : String
+    @Binding var lineSubCategory : String
+    @Binding var description : String
+    @Binding var exceptStatus : Bool
+    
     var body: some View {
         ZStack {
             VStack(spacing:0) {
@@ -27,10 +44,10 @@ struct ManageRepeatLineView: View {
                     VStack(alignment:.leading, spacing: 0){
                         HStack{
                             VStack(alignment:.leading, spacing: scaler.scaleHeight(16)) {
-                                Text("반복 내역")
+                                Text("즐겨찾기")
                                     .font(.pretendardFont(.bold,size:scaler.scaleWidth(24)))
                                     .foregroundColor(.greyScale1)
-                                Text("반복 기능을 통해\n편하게 기록해 보세요")
+                                Text("자주 사용하는 내역을\n즐겨찾기로 편하게 기록해 보세요")
                                     .lineSpacing(4)
                                     .font(.pretendardFont(.medium,size: scaler.scaleWidth(13)))
                                     .foregroundColor(.greyScale6)
@@ -41,11 +58,11 @@ struct ManageRepeatLineView: View {
                                 .foregroundColor(.clear)
                                 .frame(width:scaler.scaleWidth(76), height:scaler.scaleHeight(76))
                                 .background(
-                                    Image("illust_repeat")
+                                    Image("illust_favorites")
                                         .resizable()
                                         .aspectRatio(contentMode: .fill)
                                         .frame(width:scaler.scaleWidth(76), height:scaler.scaleHeight(76))
-                                    
+                      
                                 )
                             
                         }
@@ -81,7 +98,7 @@ struct ManageRepeatLineView: View {
                     .cornerRadius(8)
                     .padding(.horizontal,scaler.scaleWidth(20))
                     
-                    if viewModel.repeatLineList.count == 0 {
+                    if viewModel.favoriteLineList.count == 0 {
                         VStack(spacing:scaler.scaleHeight(10)) {
                             Image("no_line")
                                 .resizable()
@@ -95,33 +112,35 @@ struct ManageRepeatLineView: View {
                     } else {
                         ScrollView(showsIndicators: false) {
                             VStack(alignment: .leading) {
-                                ForEach(viewModel.repeatLineList, id: \.self) { (repeatLine:RepeatLineResponse) in
+                                ForEach(viewModel.favoriteLineList, id: \.self) { (favoriteLine:FavoriteLineResponse) in
                                     VStack(alignment: .leading, spacing:0) {
                                         HStack(spacing:scaler.scaleWidth(12)) {
-                                            if editState {
+                                            if viewModel.editState {
                                                 Image("icon_delete")
                                                     .onTapGesture {
-                                                        selectedRepeatLineId = repeatLine.id
+                                                        selectedFavoriteLineId = favoriteLine.id
+                                                        title = "삭제하기"
+                                                        message = "삭제하시겠습니까?"
                                                         self.deleteAlert = true
                                                     }
                                             }
                                             VStack(alignment: .leading, spacing:8) {
-                                                Text("\(repeatLine.description)")
+                                                Text(favoriteLine.description.count > 10
+                                                     ? String(favoriteLine.description.prefix(10)) + ".."
+                                                     : favoriteLine.description)
                                                     .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(14)))
                                                     .foregroundColor(.greyScale2)
                                                 HStack(spacing:0) {
-                                                    Text(repeatLine.repeatDurationDescription ?? "")
+                                                    Text(favoriteLine.assetSubcategoryName)
                                                     Text(" ‧ ")
-                                                    Text("\(repeatLine.assetSubCategory)")
-                                                    Text(" ‧ ")
-                                                    Text("\(repeatLine.lineSubCategory)")
+                                                    Text("\(favoriteLine.lineSubcategoryName)")
                                                 }
                                                 .font(.pretendardFont(.medium, size: scaler.scaleWidth(12)))
                                                 .foregroundColor(.greyScale6)
                                             }
                                             .padding(.leading, scaler.scaleWidth(12))
                                             Spacer()
-                                            Text(repeatLine.money.formattedString)
+                                            Text(favoriteLine.money.formattedString)
                                                 .font(.pretendardFont(.bold, size: scaler.scaleWidth(16)))
                                                 .foregroundColor(.greyScale2)
                                                 .padding(.trailing, scaler.scaleWidth(12))
@@ -129,6 +148,30 @@ struct ManageRepeatLineView: View {
                                         .frame(height: scaler.scaleHeight(66))
                                         Divider()
                                             .foregroundColor(.greyScale11)
+                                    }
+                                    .background(Color.white)
+                                    .onTapGesture {
+                                        if root == .addLine && !viewModel.editState {
+                                            title = "즐겨찾기"
+                                            message = "해당 내역을 불러오겠습니까?"
+                                            lineCategory = favoriteLine.lineCategoryName
+                                            money = favoriteLine.money
+                                            assetSubCategory = favoriteLine.assetSubcategoryName
+                                            lineSubCategory = favoriteLine.lineSubcategoryName
+                                            description = favoriteLine.description
+                                            exceptStatus = favoriteLine.exceptStatus
+                                            if lineCategory == "지출" {
+                                                selectedToggleTypeIndex = 0
+                                                selectedToggleType = "지출"
+                                            } else if lineCategory == "수입" {
+                                                selectedToggleTypeIndex = 1
+                                                selectedToggleType = "수입"
+                                            } else if lineCategory == "이체" {
+                                                selectedToggleTypeIndex = 2
+                                                selectedToggleType = "이체"
+                                            }
+                                            addAlert = true
+                                        }
                                     }
                                 }
                             }
@@ -140,11 +183,18 @@ struct ManageRepeatLineView: View {
                 } // VStack
                 .padding(.top, scaler.scaleHeight(32))
             } // VStack
+            .fullScreenCover(isPresented: $viewModel.isShowingAdd) {
+                AddFavoriteLineView(viewModel: viewModel,isPresented: $viewModel.isShowingAdd)
+            }
+            .onChange(of: viewModel.isShowingAdd) { newValue in
+                viewModel.getFavoriteLine()
+            }
             .edgesIgnoringSafeArea(.bottom)
             .onAppear{
                 viewModel.categoryType = "OUTCOME"
-                viewModel.fetchAllCategoriesAndCheck()
-                viewModel.getRepeatLine()            }
+                viewModel.fetchAllCategoriesAndCheck(type: "checkEditStatus")
+                viewModel.getFavoriteLine()
+            }
             .onDisappear {
                 stopTimer()
             }
@@ -156,7 +206,7 @@ struct ManageRepeatLineView: View {
                 } else if options[newValue] == "이체"{
                     viewModel.categoryType = "TRANSFER"
                 }
-                viewModel.getRepeatLine()
+                viewModel.getFavoriteLine()
             }
             .customNavigationBar(
                 leftView: {
@@ -170,9 +220,10 @@ struct ManageRepeatLineView: View {
                     Group {
                         if viewModel.showEditButton {
                             Group {
-                                if editState {
+                                if viewModel.editState {
                                     Button {
-                                        self.editState = false
+                                        viewModel.editState = false
+                                        viewModel.showAddButton = true
                                     } label: {
                                         Text("완료")
                                             .font(.pretendardFont(.regular,size:scaler.scaleWidth(14)))
@@ -181,7 +232,8 @@ struct ManageRepeatLineView: View {
                                     
                                 } else {
                                     Button {
-                                        self.editState = true
+                                        viewModel.editState = true
+                                        viewModel.showAddButton = false
                                     } label: {
                                         Text("편집")
                                             .font(.pretendardFont(.regular,size:scaler.scaleWidth(14)))
@@ -195,15 +247,54 @@ struct ManageRepeatLineView: View {
                     }
                 }
             )
+            /*
+            .fullScreenCover(isPresented: $showAddView) {
+                NavigationView {
+                    AddView(
+                        isPresented: $showAddView,
+                        mode : "add",
+                        toggleType : selectedToggleType, // 지출, 수입, 이체
+                        selectedOptions : selectedToggleTypeIndex,
+                        money: String(money.formattedString),
+                        assetType : assetSubCategory,
+                        category: lineSubCategory,
+                        content : description
+                    )
+                }
+                .transition(.moveAndFade)
+                .navigationViewStyle(.stack)
+            }*/
+            if viewModel.showAddButton {
+                VStack {
+                    Spacer()
+                    Button {
+                        viewModel.fetchAllCategoriesAndCheck(type: "checkCounting")
+                    } label: {
+                        Text("추가하기")
+                            .frame(maxWidth: .infinity)
+                            .frame(height:scaler.scaleHeight(66))
+                            .font(.pretendardFont(.bold, size:scaler.scaleWidth(14)))
+                            .foregroundColor(.white)
+                            .padding(.bottom, scaler.scaleHeight(10))
+                    }
+                        .frame(maxWidth: .infinity)
+                        .frame(height:scaler.scaleHeight(66))
+                        .background(Color.primary1)
+                }
+                .edgesIgnoringSafeArea(.bottom)
+            }
             if deleteAlert {
-                FloneyAlertView(isPresented: $deleteAlert, title:$title, message: $message, leftButtonText:"삭제하기") {
-                    viewModel.deleteRepeatLine(repeatLineId: self.selectedRepeatLineId)
-                    startTimer()
+                AlertView(isPresented: $deleteAlert, title: $title, message: $message, okColor: .alertBlue) {
+                    viewModel.deleteFavoriteLine(favoriteLineId: selectedFavoriteLineId)
                 }
             }
-            if viewModel.isApiCalling {
-                LoadingView()
+            if addAlert {
+                AlertView(isPresented: $addAlert, title: $title, message: $message, okColor: .alertBlue) {
+                    strMoney = String(money.formattedString)
+                    isShowing = false
+                }
             }
+            CustomAlertView(message: AlertManager.shared.message, type: $alertManager.buttontType, isPresented: $alertManager.showAlert)
         }
     }
     func startTimer() {
@@ -219,11 +310,5 @@ struct ManageRepeatLineView: View {
     func stopTimer() {
         timer?.invalidate()
         timer = nil
-    }
-}
-
-struct ManageRepeatLineView_Previews: PreviewProvider {
-    static var previews: some View {
-        ManageRepeatLineView(isShowing: .constant(true))
     }
 }

@@ -97,6 +97,13 @@ final class NotiViewModel: ObservableObject {
                     if let notiList = dataResponse.value {
                         let updatedNotiList = notiList.map { noti -> NotiResponse in
                             var modifiedNoti = noti
+                            if modifiedNoti.imgUrl == "icon_exit" {
+                                modifiedNoti.imgUrl = "icon_noti_exit"
+                            } else if modifiedNoti.imgUrl == "icon_join" {
+                                modifiedNoti.imgUrl = "icon_noti_join"
+                            } else if modifiedNoti.imgUrl == "noti_settlement" {
+                                modifiedNoti.imgUrl = "icon_noti_settlement"
+                            }
                             modifiedNoti.date = self.convertUTCDateToLocalDate(utcDateStr: noti.date)
                             return modifiedNoti
                         }

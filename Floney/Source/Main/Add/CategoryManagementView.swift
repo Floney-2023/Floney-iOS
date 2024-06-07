@@ -16,7 +16,6 @@ struct CategoryManagementView: View {
     @State var state = [true, true, true, false]
     @State var isShowingAdd = false
     @Binding var isShowingEditCategory : Bool
-    @State var editState = false
     @StateObject var viewModel = AddViewModel()
     @State var deleteAlert = false
     @State var title = "분류항목 삭제"
@@ -24,7 +23,6 @@ struct CategoryManagementView: View {
     @State var modifyAlert = false
     @State var modifyTitle = "잠깐!"
     @State var modifyMessage = "수정된 내용이 저장되지 않았습니다.\n그대로 나가시겠습니까?"
-    @State var showAddButton = true
     
     @State private var secondsElapsed = 1
     @State private var timer: Timer?
@@ -89,40 +87,50 @@ struct CategoryManagementView: View {
                     .frame(height:scaler.scaleHeight(38))
                     .cornerRadius(8)
                     .padding(.horizontal,scaler.scaleWidth(20))
-                    
-                    ScrollView(showsIndicators: false) {
-                        VStack(alignment: .leading) {
-                            ForEach(viewModel.categories.indices, id: \.self) { i in
-                                VStack(alignment: .leading, spacing:0) {
-                                    //Spacer()
-                                    HStack(spacing:scaler.scaleWidth(12)) {
-                                        if editState {
-                                            
-                                            Image("icon_delete")
-                                                .onTapGesture {
-                                                    viewModel.deleteCategoryName = viewModel.categories[i]
-                                                    message = "'\(viewModel.deleteCategoryName)' 항목을 삭제하시겠습니까?\n해당 항목으로 작성된 모든 내역이 삭제됩니다."
-                                                    self.deleteAlert = true
-                                                }
-                                            
-                                        }
-                                        Text("\(viewModel.categories[i])")
-                                            .padding(.leading, scaler.scaleWidth(12))
-                                            .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
-                                            .foregroundColor(.greyScale2)
-                                    }
-                                    .frame(height: scaler.scaleHeight(58))
-                                    //Spacer()
-                                    Divider()
-                                        .foregroundColor(.greyScale11)
-                                }
-                      
-                            }
-                            
+                    if viewModel.categories.count == 0 {
+                        VStack(spacing:scaler.scaleHeight(10)) {
+                            Image("no_line")
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: scaler.scaleWidth(38), height: scaler.scaleWidth(64))
+                            Text("내역이 없습니다.")
+                                .font(.pretendardFont(.medium, size: scaler.scaleWidth(12)))
+                                .foregroundColor(.greyScale6)
                         }
-                        .padding(.top, scaler.scaleHeight(16))
-                        .padding(.horizontal,scaler.scaleWidth(22))
-                        .padding(.bottom,  scaler.scaleHeight(64))
+                        .padding(.top, scaler.scaleHeight(156))
+                    } else {
+                        ScrollView(showsIndicators: false) {
+                            VStack(alignment: .leading) {
+                                ForEach(viewModel.categories.indices, id: \.self) { i in
+                                    VStack(alignment: .leading, spacing:0) {
+                                        //Spacer()
+                                        HStack(spacing:scaler.scaleWidth(12)) {
+                                            if viewModel.editState {
+                                                Image("icon_delete")
+                                                    .onTapGesture {
+                                                        viewModel.deleteCategoryName = viewModel.categories[i]
+                                                        message = "'\(viewModel.deleteCategoryName)' 항목을 삭제하시겠습니까?\n해당 항목으로 작성된 모든 내역이 삭제됩니다."
+                                                        self.deleteAlert = true
+                                                    }
+                                            }
+                                            Text("\(viewModel.categories[i])")
+                                                .padding(.leading, scaler.scaleWidth(12))
+                                                .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
+                                                .foregroundColor(.greyScale2)
+                                        }
+                                        .frame(height: scaler.scaleHeight(58))
+                                        //Spacer()
+                                        Divider()
+                                            .foregroundColor(.greyScale11)
+                                    }
+                                    
+                                }
+                                
+                            }
+                            .padding(.top, scaler.scaleHeight(16))
+                            .padding(.horizontal,scaler.scaleWidth(22))
+                            .padding(.bottom,  scaler.scaleHeight(64))
+                        }
                     }
                 } // VStack
                 .padding(.top, scaler.scaleHeight(32))
@@ -133,6 +141,7 @@ struct CategoryManagementView: View {
             .edgesIgnoringSafeArea(.bottom)
             .onAppear{
                 viewModel.root = "자산"
+                viewModel.fetchAllCategoriesAndCheck()
                 viewModel.getCategory()
             }
             .onDisappear {
@@ -149,7 +158,7 @@ struct CategoryManagementView: View {
                 leftView: {
                 Image("icon_back")
                     .onTapGesture {
-                        if editState {
+                        if viewModel.editState {
                             modifyAlert = true
                         } else {
                             isShowingEditCategory = false
@@ -159,30 +168,36 @@ struct CategoryManagementView: View {
                 },
                 rightView: {
                     Group {
-                        if editState {
-                            Button {
-                                self.editState = false
-                                self.showAddButton = true
-                            } label: {
-                                Text("완료")
-                                    .font(.pretendardFont(.regular,size:scaler.scaleWidth(14)))
-                                    .foregroundColor(.greyScale2)
+                        if viewModel.showEditButton {
+                            Group {
+                                if viewModel.editState {
+                                    Button {
+                                        viewModel.editState = false
+                                        viewModel.showAddButton = true
+                                    } label: {
+                                        Text("완료")
+                                            .font(.pretendardFont(.regular,size:scaler.scaleWidth(14)))
+                                            .foregroundColor(.greyScale2)
+                                    }
+                                    
+                                } else {
+                                    Button {
+                                        viewModel.editState = true
+                                        viewModel.showAddButton = false
+                                    } label: {
+                                        Text("편집")
+                                            .font(.pretendardFont(.regular,size:scaler.scaleWidth(14)))
+                                            .foregroundColor(.greyScale2)
+                                    }
+                                }
                             }
-                            
                         } else {
-                            Button {
-                                self.editState = true
-                                self.showAddButton = false
-                            } label: {
-                                Text("편집")
-                                    .font(.pretendardFont(.regular,size:scaler.scaleWidth(14)))
-                                    .foregroundColor(.greyScale2)
-                            }
+                            EmptyView()
                         }
                     }
                 }
             )
-            if showAddButton {
+            if viewModel.showAddButton {
                 VStack {
                     Spacer()
                     Button {
