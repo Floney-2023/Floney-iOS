@@ -53,7 +53,6 @@ class AddViewModel: ObservableObject {
     //MARK: category
     @Published var categoryResult : [CategoryResponse] = []
     @Published var categories : [String] = ["현금", "체크카드","신용카드","은행"]
-    @Published var categoryStates : [Bool] = []
     @Published var root = ""
     let sortAssetOrder = ["현금", "체크카드", "신용카드", "은행"]
     let sortOutcomeOrder = ["식비", "카페/간식", "교통", "주거/통신", "의료/건강", "문화", "여행/숙박", "생활", "패션/미용", "육아", "교육", "경조사", "기타", "미분류"]
@@ -225,10 +224,8 @@ class AddViewModel: ObservableObject {
                     print(self.categoryResult)
                     DispatchQueue.main.async {
                         var category: [String] = []
-                        self.categoryStates = []
                         for i in self.categoryResult {
                             category.append(i.name)
-                            self.categoryStates.append(i.default)
                         }
                         var sortOrder: [String] = []
                         if self.root == "자산" {
