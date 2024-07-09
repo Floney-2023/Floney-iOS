@@ -8,9 +8,8 @@
 import Foundation
 
 struct Constant {
-    //static let BASE_URL = "https://floney-dev-server.site"
 #if DEBUG
-    static let BASE_URL = "https://floney-dev-server.site"
+    static let BASE_URL = "https://floney-dev.site"
 #else
     static let BASE_URL = "https://floney-server.site"
 #endif
