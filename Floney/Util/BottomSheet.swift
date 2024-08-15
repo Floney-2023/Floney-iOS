@@ -533,13 +533,12 @@ struct CarriedOverBottomSheet: View {
                     .padding(.horizontal, scaler.scaleWidth(4))
                     HStack {
                         Button {
-                            //self.onOff = false
                             viewModel.setCarryOver(status: false)
                         } label: {
                             Text("OFF")
                                 .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
                                 .foregroundColor(viewModel.carryOver ? .greyScale8 : .primary2)
-                                .frame(alignment: .center)
+                                .frame(maxWidth: .infinity, alignment: .center)
                         }
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, scaler.scaleHeight(16))
@@ -550,13 +549,12 @@ struct CarriedOverBottomSheet: View {
                         .frame(height: buttonHeight)
                         
                         Button {
-                            //self.onOff = true
                             viewModel.setCarryOver(status: true)
                         } label: {
                             Text("ON")
                                 .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
                                 .foregroundColor(viewModel.carryOver ? .primary2 : .greyScale8)
-                                .frame(alignment: .center)
+                                .frame(maxWidth: .infinity, alignment: .center)
                         }
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, scaler.scaleHeight(16))
