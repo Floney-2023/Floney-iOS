@@ -29,13 +29,8 @@ struct SetProfileImageView: View {
     @State private var onPhotoLibrary = false
     // 프로필 이미지 변화 확정 여부
     @State private var profileChanged = false
-    @State private var selectedUIImage: UIImage? = nil {
-        didSet {
-            self.changedStatus = true
-        }
-    }
+    @State private var selectedUIImage: UIImage? = nil
     let email = Keychain.getKeychainValue(forKey: .email) ?? ""
-
     var body: some View {
         ZStack {
             VStack(spacing:scaler.scaleHeight(20)) {
@@ -80,6 +75,7 @@ struct SetProfileImageView: View {
                     .onTapGesture {
                         viewModel.randomNumStr = nil
                         viewModel.userPreviewImage124 = UIImage(named: "user_profile_124")
+                        changedStatus = true
                     }
                 Spacer()
 
@@ -137,6 +133,7 @@ struct SetProfileImageView: View {
                         self.selectedUIImage = selectedImage.resized(to: CGSize(width: scaler.scaleWidth(124), height: scaler.scaleWidth(124)))
                         viewModel.userPreviewImage124 = selectedImage.resized(to: CGSize(width: scaler.scaleWidth(124), height: scaler.scaleWidth(124)))
                         viewModel.randomNumStr = nil
+                        self.changedStatus = true
                     }
                     self.onCamera = false
                 }
@@ -148,6 +145,7 @@ struct SetProfileImageView: View {
                         self.selectedUIImage = selectedImage.resized(to: CGSize(width: scaler.scaleWidth(124), height: scaler.scaleWidth(124)))
                         viewModel.userPreviewImage124 = selectedImage.resized(to: CGSize(width: scaler.scaleWidth(124), height: scaler.scaleWidth(124)))
                         viewModel.randomNumStr = nil
+                        self.changedStatus = true
                     }
                     self.onPhotoLibrary = false
                 }
@@ -169,6 +167,7 @@ struct SetProfileImageView: View {
                             Text("랜덤 이미지"),
                             action: {
                                 viewModel.setRandomProfileImage()
+                                self.changedStatus = true
                             }
                         ),
                         .cancel(
