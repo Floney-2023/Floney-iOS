@@ -611,7 +611,7 @@ struct AddView: View {
         timer = nil
     }
     func checkForChangesAndShowAlert() {
-        if date != originalDate ||
+        if viewModel.selectedDateStr != originalDate ||
             money != originalMoney ||
             content != originalContent ||
             assetType != originalAssetType ||
@@ -624,7 +624,7 @@ struct AddView: View {
         }
     }
     func checkForChangesWithDefaultAndShowAlert() {
-        if date != originalDate ||
+        if viewModel.selectedDateStr != originalDate ||
             money != defaultMoney ||
             content != defaultContent ||
             assetType != defaultAssetType ||
