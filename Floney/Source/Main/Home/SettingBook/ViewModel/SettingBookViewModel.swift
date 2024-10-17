@@ -91,6 +91,7 @@ class SettingBookViewModel : ObservableObject {
     @Published var budgetDate = ""
     
     @Published var initialAsset: Double = 0
+    @Published var isApiCalling: Bool = false
     private var cancellableSet: Set<AnyCancellable> = []
     
     
@@ -349,13 +350,14 @@ class SettingBookViewModel : ObservableObject {
     }
     // 예산 설정
     func setBudget() {
+        guard !isApiCalling else { return }
+        isApiCalling = true
         bookKey = Keychain.getKeychainValue(forKey: .bookKey) ?? ""
-        
         let request = SetBudgetRequest(bookKey: bookKey, budget: budget, date: budgetDate)
         dataManager.setBudget(parameters: request)
             .sink { [weak self] completion in
                 guard let self = self else {return}
-                
+                self.isApiCalling = false
                 switch completion {
                 case .finished:
                     print("Setting Budget successfully changed.")

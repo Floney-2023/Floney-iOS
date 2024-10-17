@@ -36,7 +36,7 @@ class SignUpViewModel: ObservableObject {
     @Published var isNextToUserInfo = false
    // @Published var isNext = false
     @Published var otpCode = ""
-
+    @Published var isApiCalling = false
     private var cancellableSet: Set<AnyCancellable> = []
     var dataManager: SignUpProtocol
     
@@ -45,7 +45,6 @@ class SignUpViewModel: ObservableObject {
     }
     init(dataManager: SignUpProtocol = SignUp.shared, email: String, authToken: String, nickname: String, providerStatus: ProviderType) {
         self.dataManager = dataManager
-        
         self.email = email
         self.authToken = authToken
         self.nickname = nickname
@@ -53,11 +52,12 @@ class SignUpViewModel: ObservableObject {
     }
     
     func postSignUp() {
+        guard !isApiCalling else { return }
+        isApiCalling = true
         let request = SignUpRequest(email: email, password: password, nickname: nickname, receiveMarketing: marketingAgree)
         dataManager.postSignUp(request)
             .sink { (dataResponse) in
-    
-                
+                self.isApiCalling = false
                 if dataResponse.error != nil {
                     self.createAlert(with: dataResponse.error!, retryRequest: {
                         self.postSignUp()
@@ -65,26 +65,23 @@ class SignUpViewModel: ObservableObject {
                     print(dataResponse.error)
                 } else {
                     self.result = dataResponse.value!
-           
                     self.setToken()
                     if (AuthenticationService.shared.isUserLoggedIn == false) {
                         self.setEmailPassword(provider: .email)
                         AuthenticationService.shared.logIn()
-                        
                     }
-                    print("--성공--")
-                    print(self.result)
                     BookExistenceViewModel.shared.getBookExistence()
                 }
             }.store(in: &cancellableSet)
     }
     //MARK: 카카오로 가입하기
     func kakaoSignUp() {
+        guard !isApiCalling else { return }
+        isApiCalling = true
         let request = SNSSignUpRequest(email: email,nickname: nickname, receiveMarketing: marketingAgree)
         dataManager.kakaoSignUp(request, authToken)
             .sink {  (dataResponse) in
-                
-                
+                self.isApiCalling = false
                 if dataResponse.error != nil {
                     self.createAlert(with: dataResponse.error!, retryRequest: {
                         self.kakaoSignUp()
@@ -92,15 +89,12 @@ class SignUpViewModel: ObservableObject {
                     print(dataResponse.error)
                 } else {
                     self.result = dataResponse.value!
-                    
                     self.setToken()
                     if (AuthenticationService.shared.isUserLoggedIn == false) {
                         self.setEmailPassword(provider: .kakao)
                         AuthenticationService.shared.logIn()
                         
                     }
-                    print("--성공--")
-                    print(self.result)
                     BookExistenceViewModel.shared.getBookExistence()
                 }
             }.store(in: &cancellableSet)
@@ -110,7 +104,6 @@ class SignUpViewModel: ObservableObject {
         let request = SNSSignUpRequest(email: email, nickname: nickname, receiveMarketing: marketingAgree)
         dataManager.googleSignUp(request, authToken)
             .sink { (dataResponse) in
-                                
                 if dataResponse.error != nil {
                     self.createAlert(with: dataResponse.error!, retryRequest: {
                         self.googleSignUp()
@@ -136,8 +129,6 @@ class SignUpViewModel: ObservableObject {
         let request = SNSSignUpRequest(email: email, nickname: nickname, receiveMarketing: marketingAgree)
         dataManager.appleSignUp(request, authToken)
             .sink {  (dataResponse) in
-
-                
                 if dataResponse.error != nil {
                     self.createAlert(with: dataResponse.error!, retryRequest: {
                         self.appleSignUp()
@@ -163,7 +154,7 @@ class SignUpViewModel: ObservableObject {
         Keychain.setKeychain(self.result.accessToken, forKey: .accessToken)
         Keychain.setKeychain(self.result.refreshToken, forKey: .refreshToken)
     }
-    //MARK: 자동로그인을 위한 email, password 저장하기
+
     func setEmailPassword(provider : ProviderType) {
         Keychain.setKeychain(email, forKey: .email)
         Keychain.setKeychain(nickname, forKey: .userNickname)
@@ -187,7 +178,6 @@ class SignUpViewModel: ObservableObject {
         let request = AuthEmailRequest(email: email)
         dataManager.authEmail(request)
             .sink { completion in
-                
                 switch completion {
                 case .finished:
                     print("call auth email successfully changed.")
