@@ -227,6 +227,7 @@ struct SettingBookView: View {
                                 }
                             }
                             .frame(height:scaler.scaleHeight(46))
+                            .background(Color.white)
                             .onTapGesture {
                                 self.isShowingCarriedOver.toggle()
                             }
