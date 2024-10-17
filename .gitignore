@@ -110,4 +110,8 @@ iOSInjectionProject/
 
 .DS_Store
 Secret/
+Constant.swift
+Release/
+Debug/
+*.xcconfig
 
