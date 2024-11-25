@@ -11,6 +11,7 @@ import KakaoSDKAuth
 import KakaoSDKUser
 import GoogleSignIn
 import GoogleSignInSwift
+import FirebaseRemoteConfig
 
 @main
 struct FloneyApp: App {
@@ -22,7 +23,7 @@ struct FloneyApp: App {
                 .onOpenURL { url in
                     // Handle the URL
                     print("오픈하자마자 url : \(url)")
-                
+                    
                     if (AuthApi.isKakaoTalkLoginUrl(url)) {
                         _ = AuthController.handleOpenUrl(url: url)
                     } else {
@@ -46,6 +47,7 @@ struct FloneyApp: App {
                     switch newScenePhase {
                     case .active:
                         checkForUpdates()
+                        //fetchMaintenanceTime()
                     default:
                         break
                     }
@@ -96,5 +98,66 @@ struct FloneyApp: App {
             return
         }
         topVC.present(alert, animated: true, completion: nil)
+    }
+    
+    func fetchMaintenanceTime() {
+        let remoteConfig = RemoteConfig.remoteConfig()
+        
+        // Remote Config 설정 초기화
+        let settings = RemoteConfigSettings()
+        settings.minimumFetchInterval = 600 
+        remoteConfig.configSettings = settings
+        
+        remoteConfig.fetchAndActivate { status, error in
+            if let error = error {
+                print("Remote Config fetch error: \(error)")
+                return
+            }
+            
+            // 시작 및 종료 시간 파싱
+            if let startTimeString = remoteConfig["ios_maintenance_start_time"].stringValue,
+               let endTimeString = remoteConfig["ios_maintenance_end_time"].stringValue {
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+                print(startTimeString)
+                print(endTimeString)
+                if let startDate = dateFormatter.date(from: startTimeString),
+                   let endDate = dateFormatter.date(from: endTimeString) {
+                    self.checkMaintenancePeriod(startDate: startDate, endDate: endDate)
+                }
+            }
+        }
+    }
+    
+    // 현재 시간이 중단 시간에 포함되는지 확인하고 팝업 표시
+    func checkMaintenancePeriod(startDate: Date, endDate: Date) {
+        print("checkmaintenanceperiod")
+        let currentDate = Date()
+        print("startDate=\(startDate)")
+        print(endDate)
+        print(currentDate)
+        if currentDate >= startDate && currentDate <= endDate {
+            print("해당 시간 안에 있음")
+            self.showMaintenancePopup()
+        }
+    }
+    
+    func showMaintenancePopup() {
+        let alert = UIAlertController(
+            title: "앱 일시 중단 알림",
+            message: "원활한 앱 사용을 위해 앱 점검을 진행합니다. 2024.11.14 22:00 - 2024.11.15 09:00 동안 앱 사용이 불가하니 양해 부탁드립니다.",
+            preferredStyle: .alert
+        )
+        
+        let updateAction = UIAlertAction(title: "확인", style: .default) { _ in
+            
+        }
+        alert.addAction(updateAction)
+        DispatchQueue.main.async {
+            guard let topVC = Utilities.shared.topViewController() else {
+                return
+            }
+            topVC.present(alert, animated: true, completion: nil)
+        }
     }
 }
