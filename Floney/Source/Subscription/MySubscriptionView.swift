@@ -113,7 +113,7 @@ struct MySubscriptionView: View {
                 }
             } else {
                 Button {
-                    IAPManager.shared.buyProduct(productID)
+                    //IAPManager.shared.buyProduct(productID)
                 } label: {
                     Text("다시 시작하기")
                         .font(.pretendardFont(.semiBold, size: scaler.scaleWidth(13)))

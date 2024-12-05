@@ -13,15 +13,7 @@ class SubscriptionViewModel: ObservableObject {
     @Published var dismissSubscribe = false
     @Published var remainingPeriod = 0
     @Published var expiresDate = "2020-09-09"
-    @Published var productPrice = IAPManager.shared.productList[0].price
     @Published var renewalStatus = false
-    private var priceFormatter : NumberFormatter {
-        let priceFormatter = NumberFormatter()
-        priceFormatter.numberStyle = .currency
-        priceFormatter.locale = IAPManager.shared.productList[0].priceLocale
-        return priceFormatter
-    }
-    
     @Published var subscriptionInfo: IAPInfoResponse?
     @Published var formattedPrice = ""
     
@@ -30,7 +22,7 @@ class SubscriptionViewModel: ObservableObject {
     
     init( dataManager: SubscriptionProtocol = SubscriptionService.shared) {
         self.dataManager = dataManager
-        self.getSubscriptionInfo()
+        //self.getSubscriptionInfo()
     }
     
     func getSubscriptionInfo() {
@@ -46,9 +38,9 @@ class SubscriptionViewModel: ObservableObject {
                 switch response.result {
                 case .success(let info):
                     self?.subscriptionInfo = info
-                    if let price = self?.productPrice {
-                        self?.formattedPrice = self?.priceFormatter.string(from: price) ?? ""
-                    }
+//                    if let price = self?.productPrice {
+//                        //self?.formattedPrice = self?.priceFormatter.string(from: price) ?? ""
+//                    }
                     if let date = Date(fromISO8601: info.expiresDate) {
                         let dateFormatter = DateFormatter()
                         dateFormatter.dateFormat = "yyyy-MM-dd"
@@ -83,6 +75,30 @@ class SubscriptionViewModel: ObservableObject {
             })
             .store(in: &cancellableSet)
     }
+    func postTransactionId(id: Int) {
+        dataManager.postTransactionId(id:id)
+            .sink(receiveCompletion: { [weak self] completion in
+                switch completion {
+                case .finished:
+                    break
+                case .failure(let error):
+                    print(error)
+                }
+            }, receiveValue: { [weak self] response in
+                switch response.result {
+                case .success(let info):
+                    print("transaction 유효성 = \(response)")
+                    
+                case .failure(let error):
+                    print(error)
+                    self?.createAlert(with: error, retryRequest: {
+                        self?.postTransactionId(id: id)
+                    })
+                }
+            })
+            .store(in: &cancellableSet)
+    }
+
     func createAlert( with error: NetworkError, retryRequest: @escaping () -> Void) {
         //loadingError = error.backendError == nil ? error.initialError.localizedDescription : error.backendError!.message
         if let backendError = error.backendError {
@@ -131,3 +147,4 @@ extension Date {
         }
     }
 }
+

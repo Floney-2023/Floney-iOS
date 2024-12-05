@@ -12,3 +12,8 @@ struct QA: Identifiable{
     let question: String
     let answer: String
 }
+struct TransactionResponse: Decodable {
+    let isValid: Bool
+    let valid: Bool
+
+}
