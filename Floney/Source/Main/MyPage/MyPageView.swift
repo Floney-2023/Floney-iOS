@@ -31,19 +31,19 @@ struct MyPageView: View {
     
     //@State var productPrice = IAPManager.shared.productList[0].price
     /*
-    private var priceFormatter : NumberFormatter {
-        let priceFormatter = NumberFormatter()
-        priceFormatter.numberStyle = .currency
-        priceFormatter.locale = IAPManager.shared.productList[0].priceLocale
-        return priceFormatter
-    }*/
+     private var priceFormatter : NumberFormatter {
+     let priceFormatter = NumberFormatter()
+     priceFormatter.numberStyle = .currency
+     priceFormatter.locale = IAPManager.shared.productList[0].priceLocale
+     return priceFormatter
+     }*/
     var body: some View {
         //@State var formattedPrice = priceFormatter.string(from: productPrice)
         ZStack {
             VStack(spacing:scaler.scaleHeight(26)) {
                 HStack(spacing:scaler.scaleWidth(8)) {
                     Text("마이페이지")
-                        //.padding(.horizontal, scaler.scaleWidth(4))
+                    //.padding(.horizontal, scaler.scaleWidth(4))
                         .font(.pretendardFont(.bold, size:scaler.scaleWidth(22)))
                         .foregroundColor(.greyScale1)
                     Spacer()
@@ -53,7 +53,7 @@ struct MyPageView: View {
                             .resizable()
                             .aspectRatio(contentMode: .fill)
                             .frame(width: scaler.scaleWidth(32),height: scaler.scaleWidth(32))
-                   
+                        
                             .onTapGesture {
                                 showingTabbar = false
                                 isShowingNotiView = true
@@ -107,7 +107,7 @@ struct MyPageView: View {
                                             }
                                             .resizable()
                                             .aspectRatio(contentMode: .fill)
-                
+                                        
                                             .frame(width: scaler.scaleWidth(36), height: scaler.scaleWidth(36))
                                             .clipShape(Circle())
                                             .overlay(Circle().stroke(Color.greyScale10, lineWidth: scaler.scaleWidth(1)))
@@ -123,7 +123,7 @@ struct MyPageView: View {
                                         .padding(.leading, scaler.scaleWidth(20))
                                         .padding(.vertical, scaler.scaleWidth(20))
                                 }
-
+                                
                                 VStack(alignment: .leading, spacing:scaler.scaleHeight(8)){
                                     Text("\(viewModel.nickname)")
                                         .font(.pretendardFont(.bold, size: scaler.scaleWidth(14)))
@@ -149,104 +149,123 @@ struct MyPageView: View {
                             }
                         }
                         /*
-                        if viewModel.subscribe {
+                         if viewModel.subscribe {
+                         Button {
+                         self.isNextToMySubscription = true
+                         } label: {
+                         Text("구독 정보 보기")
+                         .frame(height: scaler.scaleHeight(46))
+                         .frame(maxWidth: .infinity)
+                         .padding()
+                         .font(.pretendardFont(.semiBold, size:scaler.scaleWidth(13)))
+                         .foregroundColor(.greyScale12)
+                         
+                         }
+                         .frame(height: scaler.scaleHeight(46))
+                         .frame(maxWidth: .infinity)
+                         .foregroundColor(.greyScale12)
+                         .background(Color.greyScale2)
+                         .cornerRadius(12)
+                         
+                         } else {*/
+                        NavigationLink(destination: SubscriptionView(mypageViewModel:viewModel, iapManager: IAPManager(), isActive : $isNextToSubscription,showingTabbar: $showingTabbar), isActive: $isNextToSubscription) {
                             Button {
-                                self.isNextToMySubscription = true
+                                self.isNextToSubscription = true
+                                showingTabbar = false
                             } label: {
-                                Text("구독 정보 보기")
+                                Text("Floney Plus+ 구독하기")
                                     .frame(height: scaler.scaleHeight(46))
                                     .frame(maxWidth: .infinity)
                                     .padding()
                                     .font(.pretendardFont(.semiBold, size:scaler.scaleWidth(13)))
-                                    .foregroundColor(.greyScale12)
+                                    .foregroundColor(.white)
                                 
                             }
                             .frame(height: scaler.scaleHeight(46))
                             .frame(maxWidth: .infinity)
-                            .foregroundColor(.greyScale12)
+                            .foregroundColor(.white)
                             .background(Color.greyScale2)
                             .cornerRadius(12)
-                            
-                        } else {*/
-                            HStack(spacing:scaler.scaleWidth(12)){
+                        }
+                        HStack(spacing:scaler.scaleWidth(12)){
+                            VStack {
+                                HStack {
+                                    Text("앱스토어에서\n별점을 남겨주세요") //광고 제거하기
+                                        .font(.pretendardFont(.bold, size: scaler.scaleWidth(14)))
+                                        .foregroundColor(.greyScale2)
+                                    Spacer()
+                                }
+                                /*
+                                 Spacer()
+                                 HStack {
+                                 VStack(alignment: .leading, spacing: scaler.scaleHeight(5)) {
+                                 Text("남은 시간")
+                                 .font(.pretendardFont(.medium, size: scaler.scaleWidth(12)))
+                                 .foregroundColor(.greyScale7)
+                                 Text(adTimerViewModel.remainingTimeString)
+                                 .font(.pretendardFont(.bold, size: scaler.scaleWidth(24)))
+                                 .foregroundColor(.greyScale3)
+                                 }
+                                 Spacer()
+                                 }*/
+                                Spacer()
+                                Text("리뷰쓰기") // 광고 보기
+                                    .font(.pretendardFont(.regular, size: scaler.scaleWidth(12)))
+                                    .foregroundColor(.greyScale3)
+                                
+                            }
+                            .padding(scaler.scaleWidth(20))
+                            .frame(maxWidth: .infinity)
+                            .frame(height: scaler.scaleHeight(150))
+                            .background(Color.greyScale12)
+                            .cornerRadius(12)
+                            .onTapGesture {
+                                //adCoordinator.showAd()
+                                
+                                if let url = URL(string: reviewURL),
+                                   UIApplication.shared.canOpenURL(url) {
+                                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                                }
+                            }
+                            //NavigationLink(destination: SubscriptionView(mypageViewModel:viewModel,isActive : $isNextToSubscription,showingTabbar: $showingTabbar), isActive: $isNextToSubscription) {
+                            Link(destination: URL(string: "https://m.cafe.naver.com/ca-fe/web/cafes/31054271/menus/5")!) {
                                 VStack {
                                     HStack {
-                                        Text("앱스토어에서\n별점을 남겨주세요") //광고 제거하기
-                                            .font(.pretendardFont(.bold, size: scaler.scaleWidth(14)))
-                                            .foregroundColor(.greyScale2)
+                                        VStack(alignment:.leading, spacing: 4) {
+                                            Text("플로니는 여러분의")
+                                            Text("다양한 의견을")
+                                            Text("기다리고 있어요")
+                                        }
+                                        .font(.pretendardFont(.bold, size: scaler.scaleWidth(14)))
+                                        .foregroundColor(.white)
                                         Spacer()
                                     }
-                                    /*
+                                    
                                     Spacer()
-                                    HStack {
-                                        VStack(alignment: .leading, spacing: scaler.scaleHeight(5)) {
-                                            Text("남은 시간")
-                                                .font(.pretendardFont(.medium, size: scaler.scaleWidth(12)))
-                                                .foregroundColor(.greyScale7)
-                                            Text(adTimerViewModel.remainingTimeString)
-                                                .font(.pretendardFont(.bold, size: scaler.scaleWidth(24)))
-                                                .foregroundColor(.greyScale3)
-                                        }
-                                        Spacer()
-                                    }*/
-                                    Spacer()
-                                    Text("리뷰쓰기") // 광고 보기
-                                        .font(.pretendardFont(.regular, size: scaler.scaleWidth(12)))
-                                        .foregroundColor(.greyScale3)
-                                        
+                                    Text("제안하기")
+                                        .font(.pretendardFont(.medium, size: scaler.scaleWidth(12)))
+                                        .foregroundColor(.background3)
+                                    
                                 }
                                 .padding(scaler.scaleWidth(20))
                                 .frame(maxWidth: .infinity)
                                 .frame(height: scaler.scaleHeight(150))
-                                .background(Color.greyScale12)
-                                .cornerRadius(12)
-                                .onTapGesture {
-                                    //adCoordinator.showAd()
-                            
-                                    if let url = URL(string: reviewURL),
-                                           UIApplication.shared.canOpenURL(url) {
-                                           UIApplication.shared.open(url, options: [:], completionHandler: nil)
-                                       }
-                                }
-                                //NavigationLink(destination: SubscriptionView(mypageViewModel:viewModel,isActive : $isNextToSubscription,showingTabbar: $showingTabbar), isActive: $isNextToSubscription) {
-                                Link(destination: URL(string: "https://m.cafe.naver.com/ca-fe/web/cafes/31054271/menus/5")!) {
-                                    VStack {
-                                        HStack {
-                                            VStack(alignment:.leading, spacing: 4) {
-                                                Text("플로니는 여러분의")
-                                                Text("다양한 의견을")
-                                                Text("기다리고 있어요")
-                                            }
-                                            .font(.pretendardFont(.bold, size: scaler.scaleWidth(14)))
-                                            .foregroundColor(.white)
-                                            Spacer()
-                                        }
-                                        
-                                        Spacer()
-                                        Text("제안하기")
-                                            .font(.pretendardFont(.medium, size: scaler.scaleWidth(12)))
-                                            .foregroundColor(.background3)
-                                        
-                                    }
-                                    .padding(scaler.scaleWidth(20))
-                                    .frame(maxWidth: .infinity)
-                                    .frame(height: scaler.scaleHeight(150))
-                                    .background(
-                                        LinearGradient(
-                                            stops: [
-                                                Gradient.Stop(color: Color(red: 0.6, green: 0.9, blue: 0.79), location: 0.00),
-                                                Gradient.Stop(color: Color(red: 0.24, green: 0.91, blue: 0.67), location: 1.00),
-                                            ],
-                                            startPoint: UnitPoint(x: 0.96, y: 0.03),
-                                            endPoint: UnitPoint(x: 0.05, y: 1)
-                                        )
+                                .background(
+                                    LinearGradient(
+                                        stops: [
+                                            Gradient.Stop(color: Color(red: 0.6, green: 0.9, blue: 0.79), location: 0.00),
+                                            Gradient.Stop(color: Color(red: 0.24, green: 0.91, blue: 0.67), location: 1.00),
+                                        ],
+                                        startPoint: UnitPoint(x: 0.96, y: 0.03),
+                                        endPoint: UnitPoint(x: 0.05, y: 1)
                                     )
-                                    .cornerRadius(12)
-    
-                                }
-                                //}
+                                )
+                                .cornerRadius(12)
+                                
                             }
-                       // }
+                            //}
+                        }
+                        // }
                     }
                     
                     VStack(spacing:scaler.scaleHeight(22)) {
@@ -280,7 +299,7 @@ struct MyPageView: View {
                                             .frame(width: scaler.scaleWidth(36), height: scaler.scaleWidth(36))
                                             .overlay(Circle().stroke(Color.greyScale10, lineWidth: 1))
                                             .padding(scaler.scaleWidth(20))
-                                     
+                                        
                                     } else {
                                         Image("book_profile_36")
                                             .resizable()
@@ -289,7 +308,7 @@ struct MyPageView: View {
                                             .frame(width: scaler.scaleWidth(36), height: scaler.scaleWidth(36))
                                             .padding(scaler.scaleWidth(20))
                                     }
-
+                                    
                                     VStack(alignment: .leading, spacing:scaler.scaleHeight(8)){
                                         Text("\(book.name)")
                                             .font(.pretendardFont(.bold, size: scaler.scaleWidth(14)))
@@ -305,11 +324,11 @@ struct MyPageView: View {
                                     } else {
                                         Image("icon_check_circle_disabled")
                                             .padding(scaler.scaleWidth(20))
-                                            
+                                        
                                     }
                                 }
                                 .background(Color.greyScale12)
-                            .cornerRadius(12)
+                                .cornerRadius(12)
                                 .onTapGesture {
                                     LoadingManager.shared.update(showLoading: true, loadingType: .floneyLoading)
                                     DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
@@ -335,7 +354,7 @@ struct MyPageView: View {
                                         .stroke(Color.greyScale9, style:StrokeStyle(lineWidth: 1, dash: [6]))
                                 )
                             }
-                                
+                            
                         }
                     }.padding(.top, scaler.scaleHeight(32))
                     
@@ -377,16 +396,16 @@ struct MyPageView: View {
                             .frame(height: scaler.scaleHeight(56))
                             .onTapGesture {
                                 if let url = URL(string: reviewURL),
-                                       UIApplication.shared.canOpenURL(url) {
-                                        UIApplication.shared.open(url, options: [:], completionHandler: nil)
-                                    }
+                                   UIApplication.shared.canOpenURL(url) {
+                                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                                }
                             }
                             NavigationLink(destination: WebView(urlString: "https://cafe.naver.com/floney/4").customNavigationBar(
                                 leftView: { BackButtonBlack() },
                                 centerView: { Text("개인정보 처리방침")
                                         .font(.pretendardFont(.semiBold, size:scaler.scaleWidth(16)))
                                     .foregroundColor(.greyScale1)}
-                                )) {
+                            )) {
                                 HStack {
                                     Text("개인정보 처리방침")
                                         .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
@@ -401,7 +420,7 @@ struct MyPageView: View {
                                 centerView: { Text("이용 약관")
                                         .font(.pretendardFont(.semiBold, size:scaler.scaleWidth(16)))
                                     .foregroundColor(.greyScale1)}
-                                )) {
+                            )) {
                                 HStack {
                                     Text("이용 약관")
                                         .font(.pretendardFont(.medium, size: scaler.scaleWidth(14)))
@@ -418,41 +437,38 @@ struct MyPageView: View {
                     .padding(.leading, scaler.scaleWidth(4))
                     .padding(.bottom,scaler.scaleHeight(100))
                     /*
-                    if viewModel.subscribe {
-                        HStack {
-                            VStack {
-                                Text("구독 해지")
-                                    .font(.pretendardFont(.regular, size: scaler.scaleWidth(12)))
-                                    .foregroundColor(.greyScale6)
-                                Divider()
-                                    .padding(EdgeInsets(top: -10, leading: 0, bottom: 0, trailing: 0))
-                                    .frame(width: 50,height: 1.0)
-                                    .foregroundColor(.greyScale6)
-                                
-                            }
-                            Spacer()
-                        }
-                        .padding(.leading, scaler.scaleWidth(4))
-                        .padding(.top, scaler.scaleHeight(24))
-                        .onTapGesture {
-                            self.showingTabbar = false
-                            self.isNextToUnSubscription = true
-                        }
-                    }*/
+                     if viewModel.subscribe {
+                     HStack {
+                     VStack {
+                     Text("구독 해지")
+                     .font(.pretendardFont(.regular, size: scaler.scaleWidth(12)))
+                     .foregroundColor(.greyScale6)
+                     Divider()
+                     .padding(EdgeInsets(top: -10, leading: 0, bottom: 0, trailing: 0))
+                     .frame(width: 50,height: 1.0)
+                     .foregroundColor(.greyScale6)
+                     
+                     }
+                     Spacer()
+                     }
+                     .padding(.leading, scaler.scaleWidth(4))
+                     .padding(.top, scaler.scaleHeight(24))
+                     .onTapGesture {
+                     self.showingTabbar = false
+                     self.isNextToUnSubscription = true
+                     }
+                     }*/
                     
                 } // scroll view
                 .padding(.horizontal,scaler.scaleWidth(20))
- 
+                
             } // vstack
             .padding(.top,scaler.scaleHeight(26))
             .onAppear{
-                //if viewModel.subscribe {
-                //    IAPManager.shared.verifyReceipt()
-                //}
                 viewModel.getMyPage()
                 showingTabbar = true
                 adTimerViewModel.calculateRemainingTime()
-                                    
+                
             }
             .frame(maxHeight:.infinity)
             .edgesIgnoringSafeArea(.bottom)
@@ -469,8 +485,8 @@ struct MyPageView: View {
             NavigationLink(destination : EnterBookCodeView(), isActive: $isNextToEnterCode) {
                 EmptyView()
             }
-           
-
+            
+            
         } // ZStack
         .frame(maxHeight:.infinity)
         .edgesIgnoringSafeArea(.bottom)
